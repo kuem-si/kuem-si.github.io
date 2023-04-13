@@ -1,4 +1,20 @@
-# 🚀 AstroWind
+## Development requirements
+
+- Nodejs: https://nodejs.org/
+- Update npm:
+```console
+npm install -g npm@latest
+```
+
+## Run development
+```console
+npm run dev
+```
+
+## Deploy
+Each commit to this repository triggers GitHub Action which builds and deploy webpage.
+
+<!-- # 🚀 AstroWind
 
 <img src="https://raw.githubusercontent.com/onwidget/.github/main/resources/astrowind/lighthouse-score.png" align="right"
      alt="AstroWind Lighthouse Score" width="100" height="358">
@@ -255,4 +271,4 @@ Initially created by [onWidget](https://onwidget.com) and maintained by a commun
 
 ## License
 
-**AstroWind** is licensed under the MIT license — see the [LICENSE](./LICENSE.md) file for details.
+**AstroWind** is licensed under the MIT license — see the [LICENSE](./LICENSE.md) file for details. -->
