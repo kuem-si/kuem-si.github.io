@@ -7,7 +7,7 @@ const CONFIG = {
   basePathname: '/',
   trailingSlash: false,
 
-  title: 'Kuem - Software developer experts from Slovenia',
+  title: 'Kuem d.o.o. - Software developer experts from Slovenia',
   description:
     'Hire us!',
   defaultImage: defaultImage,
