@@ -56,6 +56,19 @@ export const headerData = {
       text: 'Blog',
       href: getBlogPermalink(),
     },
+    {
+      text: 'Language',
+      links: [
+        {
+          text: 'English',
+          href: getPermalink('/')
+        },
+        {
+          text: 'Slovenian',
+          href: getPermalink('/sl')
+        }
+      ]
+    },
   ],
   actions: [
     // { type: 'button', text: 'Download', href: 'https://github.com/onwidget/astrowind' }
