@@ -7,6 +7,11 @@ npm install -g npm@latest
 ```
 
 ## Run development
+Create localized files
+```console
+npx astro-i18next generate
+```
+Run webpage
 ```console
 npm run dev
 ```
