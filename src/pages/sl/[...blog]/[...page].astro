@@ -8,7 +8,7 @@ import Pagination from "~/components/blog/Pagination.astro";
 import { fetchPosts } from "~/utils/blog";
 import { BLOG_BASE } from "~/utils/permalinks";
 
-changeLanguage("en");
+changeLanguage("sl");
 
 export async function getStaticPaths({ paginate }) {
     if (BLOG?.disabled || BLOG?.list?.disabled)

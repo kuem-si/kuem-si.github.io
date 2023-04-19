@@ -13,6 +13,8 @@ import { readingTimeRemarkPlugin } from './src/utils/frontmatter.mjs';
 
 import { SITE } from './src/config.mjs';
 
+import astroI18next from "astro-i18next";
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const whenExternalScripts = (items = []) =>
@@ -30,6 +32,7 @@ export default defineConfig({
   },
 
   integrations: [
+    astroI18next(),
     tailwind({
       config: {
         applyBaseStyles: false,

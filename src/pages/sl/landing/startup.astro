@@ -2,42 +2,32 @@
 import { changeLanguage } from "i18next";
 import Layout from "~/layouts/PageLayout.astro";
 import Header from "~/components/widgets/Header.astro";
-import Hero2 from "~/components/widgets/Hero2.astro";
+import Hero from "~/components/widgets/Hero.astro";
 import CallToAction from "~/components/widgets/CallToAction.astro";
+import { headerData } from "~/data";
 
-changeLanguage("en");
+changeLanguage("sl");
 
 const meta = {
-    title: "Mobile App Landing Page",
+    title: "Startup Landing Page",
 };
 ---
 
 <Layout {meta}>
-  <Fragment slot="announcement"></Fragment>
   <Fragment slot="header">
     <Header
-      links={[]}
-      actions={[
-        {
-          type: "ghost",
-          text: 'Login',
-          href: '#',
-        },
-        {
-          type: "primary",
-          text: 'Sign Up',
-          href: '#',
-        },
-      ]}
+      {...headerData}
+      showRssFeed
+      showToggleTheme
+      position="left"
     />
   </Fragment>
 
   <!-- Hero2 Widget ******************* -->
 
-  <Hero2
+  <Hero
     callToAction={{ text: 'Get template', href: 'https://github.com/onwidget/astrowind', icon: 'tabler:download' }}
     callToAction2={{ text: 'Learn more', href: '#features' }}
-    image={{ src: import('~/assets/images/hero.png'), alt: 'AstroWind Hero Image' }}
   >
     <Fragment slot="title">
       Free template for <span class="hidden lg:inline">create your website <br />with</span>
@@ -52,7 +42,11 @@ const meta = {
       <span class="block mb-1 sm:hidden font-bold text-blue-600">AstroWind: Production-ready.</span> Suitable for Startups,
       Small Business, Sass Websites, Professional Portfolios, Marketing Websites, Landing Pages & Blogs.
     </Fragment>
-  </Hero2>
+
+    <Fragment slot="image">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/dsTXcSeAZq8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="width:100%"></iframe>
+    </Fragment>
+  </Hero>
 
   <!-- CallToAction Widget *********** -->
 
