@@ -3,44 +3,49 @@ import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 export const headerData = {
   links: [
     {
-      text: 'Landing',
+      text: 'Products',
       links: [
         {
-          text: 'Sass',
+          text: 'IotPlatform',
           href: getPermalink('/landing/saas'),
         },
         {
-          text: 'Startup',
+          text: 'QMStack',
           href: getPermalink('/landing/startup'),
         },
         {
-          text: 'Mobile App',
+          text: 'QMCloud',
           href: getPermalink('/landing/mobile-app'),
         },
       ],
     },
     {
-      text: 'Pages',
+      text: 'Services',
       links: [
         {
-          text: 'Features',
+          text: 'Custom Software Development',
           href: '#',
         },
         {
-          text: 'Pricing',
+          text: 'Infrastructure Planning',
           href: '#',
         },
         {
-          text: 'About us',
+          text: 'Architecture Design',
           href: '#',
         },
+      ],
+    },
+    {
+      text: 'About Us',
+      links: [
         {
-          text: 'Contact',
-          href: '#',
-        },
-        {
-          text: 'Terms',
+          text: 'About Us',
           href: getPermalink('/terms'),
+        },
+        {
+          text: 'References',
+          href: '#',
         },
         {
           text: 'Privacy policy',
@@ -49,11 +54,7 @@ export const headerData = {
       ],
     },
     {
-      text: 'Widgets',
-      href: '#',
-    },
-    {
-      text: 'Blog',
+      text: 'Contact',
       href: getBlogPermalink(),
     },
     {
