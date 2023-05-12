@@ -87,7 +87,6 @@ export const footerData = {
         { text: 'Enterprise', href: '#' },
         { text: 'Customer stories', href: '#' },
         { text: 'Pricing', href: '#' },
-        { text: 'Resources', href: '#' },
       ],
     },
     {
