@@ -6,56 +6,59 @@ export const headerData = {
       text: 'Products',
       links: [
         {
-          text: 'IotPlatform',
-          href: getPermalink('/landing/saas'),
+          text: 'KuApp',
+          // href: getPermalink('/landing/saas'),
+          href: getPermalink('/kuapp'),
         },
-        {
-          text: 'QMStack',
-          href: getPermalink('/landing/startup'),
-        },
-        {
-          text: 'QMCloud',
-          href: getPermalink('/landing/mobile-app'),
-        },
+        // {
+        //   text: 'QMStack',
+        //   href: getPermalink('/landing/startup'),
+        // },
+        // {
+        //   text: 'QMCloud',
+        //   href: getPermalink('/landing/mobile-app'),
+        // },
       ],
     },
     {
       text: 'Services',
       links: [
         {
-          text: 'Custom Software Development',
-          href: '#',
+          text: 'Software Design & Development',
+          href: getPermalink('/software-design-development'),
         },
         {
-          text: 'Infrastructure Planning',
-          href: '#',
+          text: 'Software Architecture and Consulting',
+          href: getPermalink('/software-architecture-consulting'),
         },
         {
-          text: 'Architecture Design',
-          href: '#',
+          text: 'DevOps',
+          href: getPermalink('/devops'),
         },
       ],
     },
     {
-      text: 'About Us',
+      text: 'About',
       links: [
         {
           text: 'About Us',
-          href: getPermalink('/terms'),
+          // href: getPermalink('/terms'),
+          href: getPermalink('/about'),
         },
         {
           text: 'References',
-          href: '#',
+          href: getPermalink('/references'),
         },
-        {
-          text: 'Privacy policy',
-          href: getPermalink('/privacy'),
-        },
+        // {
+        //   text: 'Privacy policy',
+        //   href: getPermalink('/privacy'),
+        // },
       ],
     },
     {
       text: 'Contact',
-      href: getBlogPermalink(),
+      // href: getBlogPermalink(),
+      href: getPermalink('/contact'),
     },
     {
       text: 'Language',
@@ -77,55 +80,55 @@ export const headerData = {
 };
   
 export const footerData = {
-  links: [
-    {
-      title: 'Product',
-      links: [
-        { text: 'Features', href: '#' },
-        { text: 'Security', href: '#' },
-        { text: 'Team', href: '#' },
-        { text: 'Enterprise', href: '#' },
-        { text: 'Customer stories', href: '#' },
-        { text: 'Pricing', href: '#' },
-      ],
-    },
-    {
-      title: 'Platform',
-      links: [
-        { text: 'Developer API', href: '#' },
-        { text: 'Partners', href: '#' },
-        { text: 'Atom', href: '#' },
-        { text: 'Electron', href: '#' },
-        { text: 'AstroWind Desktop', href: '#' },
-      ],
-    },
-    {
-      title: 'Support',
-      links: [
-        { text: 'Docs', href: '#' },
-        { text: 'Community Forum', href: '#' },
-        { text: 'Professional Services', href: '#' },
-        { text: 'Skills', href: '#' },
-        { text: 'Status', href: '#' },
-      ],
-    },
-    {
-      title: 'Company',
-      links: [
-        { text: 'About', href: '#' },
-        { text: 'Blog', href: '#' },
-        { text: 'Careers', href: '#' },
-        { text: 'Press', href: '#' },
-        { text: 'Inclusion', href: '#' },
-        { text: 'Social Impact', href: '#' },
-        { text: 'Shop', href: '#' },
-      ],
-    },
-  ],
-  secondaryLinks: [
-    { text: 'Terms', href: getPermalink('/terms') },
-    { text: 'Privacy Policy', href: getPermalink('/privacy') },
-  ],
+  // links: [
+  //   {
+  //     title: 'Product',
+  //     links: [
+  //       { text: 'Features', href: '#' },
+  //       { text: 'Security', href: '#' },
+  //       { text: 'Team', href: '#' },
+  //       { text: 'Enterprise', href: '#' },
+  //       { text: 'Customer stories', href: '#' },
+  //       { text: 'Pricing', href: '#' },
+  //     ],
+  //   },
+  //   {
+  //     title: 'Platform',
+  //     links: [
+  //       { text: 'Developer API', href: '#' },
+  //       { text: 'Partners', href: '#' },
+  //       { text: 'Atom', href: '#' },
+  //       { text: 'Electron', href: '#' },
+  //       { text: 'AstroWind Desktop', href: '#' },
+  //     ],
+  //   },
+  //   {
+  //     title: 'Support',
+  //     links: [
+  //       { text: 'Docs', href: '#' },
+  //       { text: 'Community Forum', href: '#' },
+  //       { text: 'Professional Services', href: '#' },
+  //       { text: 'Skills', href: '#' },
+  //       { text: 'Status', href: '#' },
+  //     ],
+  //   },
+  //   {
+  //     title: 'Company',
+  //     links: [
+  //       { text: 'About', href: '#' },
+  //       { text: 'Blog', href: '#' },
+  //       { text: 'Careers', href: '#' },
+  //       { text: 'Press', href: '#' },
+  //       { text: 'Inclusion', href: '#' },
+  //       { text: 'Social Impact', href: '#' },
+  //       { text: 'Shop', href: '#' },
+  //     ],
+  //   },
+  // ],
+  // secondaryLinks: [
+  //   { text: 'Terms', href: getPermalink('/terms') },
+  //   { text: 'Privacy Policy', href: getPermalink('/privacy') },
+  // ],
   socialLinks: [
     { ariaLabel: 'LinkedIn', icon: 'tabler:brand-linkedin', href: 'https://www.linkedin.com/company/kuemsi' },
     // { ariaLabel: 'Twitter', icon: 'tabler:brand-twitter', href: '#' },
