@@ -60,19 +60,19 @@ export const headerData = {
       // href: getBlogPermalink(),
       href: getPermalink('/contact'),
     },
-    {
-      text: 'Language',
-      links: [
-        {
-          text: 'English',
-          href: getPermalink('/')
-        },
-        {
-          text: 'Slovenian',
-          href: getPermalink('/sl')
-        }
-      ]
-    },
+    // {
+    //   text: 'Language',
+    //   links: [
+    //     {
+    //       text: 'English',
+    //       href: getPermalink('/')
+    //     },
+    //     {
+    //       text: 'Slovenian',
+    //       href: getPermalink('/sl')
+    //     }
+    //   ]
+    // },
   ],
   actions: [
     // { type: 'button', text: 'Download', href: 'https://github.com/onwidget/astrowind' }

@@ -1,0 +1,34 @@
+---
+import { Icon } from 'astro-icon';
+
+import { SITE } from '~/config.mjs';
+
+export interface Props {
+  label?: string;
+  class?: string;
+  siIconName?: string;
+  siIconClass?: string;
+  enIconName?: string;
+  enIconClass?: string;
+}
+
+const {
+  label = 'Toggle between SI and EN language',
+  class:
+    className = 'text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center',
+  siIconClass = 'w-6 h-6',
+  siIconName = 'flagpack:si',
+  enIconClass = 'w-6 h-6',
+  enIconName = 'flagpack:gb-ukm',
+} = Astro.props;
+---
+
+{
+  
+    <a type="button" class={className} aria-label={label} href="/sl">
+      SI
+    </a>
+    <a type="button" class={className} aria-label={label} href="/">
+      EN
+    </a>
+}
