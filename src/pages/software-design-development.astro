@@ -26,7 +26,7 @@ const meta = {
 <Layout {meta}>
   <!-- Hero Widget ******************* -->
 
-  <Hero
+  <!-- <Hero
     callToAction={{ text: 'Get template', href: 'https://github.com/onwidget/astrowind', icon: 'tabler:download' }}
     callToAction2={{ text: 'Learn more', href: '#features' }}
     image={{ src: import('~/assets/images/hero.png'), alt: 'AstroWind Hero Image' }}
@@ -44,15 +44,15 @@ const meta = {
       <span class="block mb-1 sm:hidden font-bold text-blue-600">AstroWind: Production-ready.</span> Suitable for Startups,
       Small Business, Sass Websites, Professional Portfolios, Marketing Websites, Landing Pages & Blogs.
     </Fragment>
-  </Hero>
+  </Hero> -->
 
   <!-- Note Widget ******************* -->
 
-  <Note />
+  <!-- <Note /> -->
 
   <!-- Features Widget *************** -->
 
-  <Features
+  <!-- <Features
     highlight="Features"
     title="What you get with AstroWind"
     subtitle="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque rem aperiam, eaque ipsa quae."
@@ -98,11 +98,11 @@ const meta = {
         },
       ],
     ]}
-  />
+  /> -->
 
   <!-- Content Widget **************** -->
 
-  <Content
+  <!-- <Content
     highlight="Inside template"
     title="And what's inside? ..."
     items={[
@@ -132,11 +132,11 @@ const meta = {
       Ne dicta praesent ocurreret has, diam theophrastus at pro. Eos etiam regione ut, persius eripuit quo id. Sit te euismod
       tacimates.
     </Fragment>
-  </Content>
+  </Content> -->
 
   <!-- Content Widget **************** -->
 
-  <Content
+  <!-- <Content
     isReversed
     isAfterContent
     items={[
@@ -163,45 +163,47 @@ const meta = {
       src: import('~/assets/images/vintage.jpg'),
       alt: 'Vintage Image',
     }}
-  />
+  /> -->
 
   <!-- Steps Widget ****************** -->
 
   <Steps
-    title="Get your dream website up and running in no time with AstroWind."
+    title="Vaše želje uresničimo s koraki uspešnega sodelovanja in razvoja."
     items={[
       {
-        title: 'Step 1: <span class="font-medium">Download</span>',
+        title: '1. korak: <span class="font-medium">Spoznavni sestanek</span>',
         description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sagittis, quam nec venenatis lobortis, mirisus tempus nulla, sed porttitor est nibh at nulla. Praesent placerat enim ut ex tincidunt vehicula.',
+          'Na spoznavnem sestanku bomo z našo ekipo pridobili vpogled v vaše potrebe in cilje. Skupaj bomo oblikovali načrt za razvoj, ki bo izpolnil vaše zahteve in prispeval k uspehu vašega podjetja.',
+        icon: 'tabler:users',
+      },
+      {
+        title: '2. korak: <span class="font-medium">Posvetovanje</em>',
+        description:
+          'Skupno sestajanje v rednih sestankih za sodelovanje pri razvoju rešitve. Na teh sestankih bomo pregledali napredek projekta, obravnavali vaše povratne informacije ter se dogovarjali o morebitnih prilagoditvah ali dodatnih zahtevah. Skozi tesno sodelovanje zagotovimo, da bo razvoj rešitve ustrezal vašim pričakovanjem in potrebam.',
+        icon: 'tabler:message',
+      },
+      {
+        title: '3. korak: <span class="font-medium">Razvoj</span>',
+        description:
+          'Faza razvoja, kjer naša ekipa razvijalcev ustvari rešitev glede na vaše zahteve in specifikacije. Med tem procesom bomo tesno sodelovali, zagotavljali redno komunikacijo ter vas obveščali o napredku in morebitnih izzivih, da bomo skupaj dosegli uspešen razvoj rešitve. Naš cilj je zagotoviti kakovostno in pravočasno izvedbo, ki izpolni vaše pričakovanje.',
+        icon: 'tabler:keyboard',
+      },
+      {
+        title: 'Dostava, postavitev in vzdrževanje',
+        description:
+          'Po uspešnem razvoju rešitve bomo poskrbeli za dostavo in postavitev v vaše okolje. Naša ekipa bo strokovno namestila ter integrirala rešitev, zagotavljajoč nemoteno delovanje v skladu z vašimi sistemi. Poleg tega bomo nudili tudi vzdrževanje, ki vključuje odpravljanje težav, posodobitve in podporo za zanesljivo delovanje rešitve tudi v prihodnosti.',
         icon: 'tabler:package',
-      },
-      {
-        title: 'Step 2: <span class="font-medium">Add content</em>',
-        description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sagittis, quam nec venenatis lobortis, mirisus tempus nulla, sed porttitor est nibh at nulla.',
-        icon: 'tabler:letter-case',
-      },
-      {
-        title: 'Step 3: <span class="font-medium">Customize styles</span>',
-        description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sagittis, quam nec venenatis lobortis, mirisus tempus nulla, sed porttitor est nibh at nulla. Praesent placerat enim ut ex tincidunt vehicula. Fusce sit amet dui tellus.',
-        icon: 'tabler:paint',
-      },
-      {
-        title: 'Ready!',
-        icon: 'tabler:check',
       },
     ]}
     image={{
-      src: import('~/assets/images/creativity.jpg'),
+      src: import('~/assets/images/software-design.jpg'),
       alt: 'Steps image',
     }}
   />
 
   <!-- Features2 Widget ************** -->
 
-  <Features2
+  <!-- <Features2
     title="Most used widgets"
     subtitle="Provides frequently used components for building websites using Tailwind CSS"
     highlight="Components"
@@ -261,20 +263,18 @@ const meta = {
         icon: 'icon-park:page-template',
       },
     ]}
-  />
+  /> -->
 
   <!-- HighlightedPosts Widget ******* -->
 
   <LatestPosts
-    title="Find out more content in our Blog"
-    information={`The blog is used to display AstroWind documentation.
-			Each new article will be an important step that you will need to know to be an expert in creating a website using Astro + Tailwind CSS.
-			Astro is a very interesting technology. Thanks.
+    title="Tehnologije"
+    information={`Pri razvoju custom rešitev se poslužujemo širokega nabora tehnologij, prilagojenih glede na specifične potrebe projekta. Naša ekipa strokovnjakov je vešča uporabe različnih programskih jezikov, okvirjev, platform, baz podatkov ter tehnologij za mobilne aplikacije, kar nam omogoča ustvarjanje prilagodljivih in skalabilnih rešitev.
 		`}
     postIds={[
-      'get-started-website-with-astro-tailwind-css.md',
-      'how-to-customize-astrowind-to-your-brand.md',
-      'useful-resources-to-create-websites.md',
+      'abp-description-post.md',
+      'postgresql-description-post.md',
+      '',
       'astrowind-template-in-depth.md',
     ]}
   />
@@ -282,42 +282,42 @@ const meta = {
   <!-- FAQs Widget ******************* -->
 
   <FAQs
-    title="Frequently Asked Questions"
-    subtitle="Duis turpis dui, fringilla mattis sem nec, fringilla euismod neque. Morbi tincidunt lacus nec tortor scelerisque pulvinar."
-    highlight="FAQs"
+    title="Pogosto postavljena vprašanja"
+    subtitle=""
+    highlight="FAQ"
     items={[
       [
         {
-          question: 'What do I need to start?',
+          question: 'Kaj rabite za začetek?',
           answer:
-            'Space, the final frontier. These are the voyages of the Starship Enterprise. Its five-year mission: to explore strange new worlds. Many say exploration is part of our destiny, but it’s actually our duty to future generations.',
+            'Idejo in dobro poznavanje tematike.',
         },
         {
-          question: 'How to install the Astro + Tailwind CSS template?',
+          question: 'Kako stopite z nami v kontakt?',
           answer:
-            "Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows. Some pilots get picked and become television programs. Some don't, become nothing. She starred in one of the ones that became nothing.",
+            "Napišite nam sporočilo z vašimi željami in odgovorili vam bomo v najkrajšem možnem času.",
         },
         {
-          question: "What's something that you don't understand?",
+          question: "Koliko sestankov imate na voljo?",
           answer:
-            "A flower in my garden, a mystery in my panties. Heart attack never stopped old Big Bear. I didn't even know we were calling him Big Bear.",
+            "V sklopu načrtovanja in razvoja programske opreme imate na voljo 2 brezplačna enourna sestanka. Po tem se vsak nadaljni sestanek obračuna po veljavnem ceniku.",
         },
       ],
       [
         {
-          question: "What's an example of when you changed your mind?",
+          question: "Koliko časa približno vzame celoten postopek?",
           answer:
-            "Michael Knight a young loner on a crusade to champion the cause of the innocent. The helpless. The powerless in a world of criminals who operate above the law. Here he comes Here comes Speed Racer. He's a demon on wheels.",
+            "Ker je vsak projekt unikaten, lahko traja celotna zgodba nekaj tednov in lahko tudi do več mesecev.",
         },
         {
-          question: 'What is something that you would like to try again?',
+          question: 'Ali ponujamo tudi storitve postavitve v oblaku?',
           answer:
-            "A business big enough that it could be listed on the NASDAQ goes belly up. Disappears! It ceases to exist without me. No, you clearly don't know who you're talking to, so let me clue you in.",
+            "Po dogovoru vam programsko opremo lahko naložimo na vaše strežnike, ali pa v naš oblak.",
         },
         {
-          question: 'If you could only ask one question to each person you meet, what would that question be?',
+          question: 'Zaposlitev',
           answer:
-            "This is not about revenge. This is about justice. A lot of things can change in twelve years, Admiral. Well, that's certainly good to know. About four years. I got tired of hearing how young I looked.",
+            "Ker se vedno potrebuje dodatno pomoč pri razvoju, nudimo več možnosti sodelovanja. Stopite z nami v kontakt!",
         },
       ],
     ]}
@@ -327,10 +327,10 @@ const meta = {
 
   <Stats
     items={[
-      { name: 'Downloads', value: '132K' },
-      { name: 'Stars', value: '24.8K' },
-      { name: 'Forks', value: '10.3K' },
-      { name: 'Users', value: '48.4K' },
+      { name: 'Izkušenj', value: '12+ let' },
+      { name: 'Celovitih Rešitev', value: '10+' },
+      { name: 'Članov Ekipe', value: '6' },
+      { name: 'Nabor Tehnologij', value: '20+' },
     ]}
   />
 
@@ -338,18 +338,17 @@ const meta = {
 
   <CallToAction
     callToAction={{
-      text: 'Get template',
-      href: 'https://github.com/onwidget/astrowind',
-      icon: 'tabler:download',
+      text: 'Stopite z nami v kontakt!',
+      href: '/contact',
+      icon: 'tabler:at',
     }}
   >
     <Fragment slot="title">
-      Astro + <br class="block sm:hidden" /><span class="sm:whitespace-nowrap">Tailwind CSS</span>
+      Kuem d.o.o. <br class="block sm:hidden" /><span class="sm:whitespace-nowrap"> Dev</span>
     </Fragment>
 
     <Fragment slot="subtitle">
-      Be very surprised by these huge fake numbers you are seeing on this page. <br class="hidden md:inline" />Don't
-      waste more time! :P
+      Ne odlašajte z nadgradnjo vašega sistema ali uresničitvijo vaših sanj. <br class="hidden md:inline" />
     </Fragment>
   </CallToAction>
 </Layout>
