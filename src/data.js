@@ -32,8 +32,8 @@ export const headerData = {
           href: getPermalink('/software-architecture-consulting'),
         },
         {
-          text: 'DevOps',
-          href: getPermalink('/devops'),
+          text: 'DevOps & Platform Engineering',
+          href: getPermalink('/devops-platform-engineering'),
         },
       ],
     },
