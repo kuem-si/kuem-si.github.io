@@ -24,6 +24,39 @@ const meta = {
 ---
 
 <Layout {meta}>
+  <Content
+    isReversed
+    highlight=""
+    title=""
+    items={[
+      {
+        title: 'Optimalno prilagajanje digitalizaciji in optimizaciji poslovnih procesov',
+        description:
+          'Optimalno prilagajanje izvajanju poslovnim procesom zvišuje učinkovitost uporabnikom in s tem povezano večjo konkurenčnostjo na globalnem trgu.',
+      },
+      {
+        title: 'Hitrejše sledenje spremembam',
+        description:
+          'V veliko tržnih segmentih različnih panog se trg hitro spreminja. Z programsko opremo po meri se lahko lažje in hitreje implementira spremembe ter ostaja v optimalni konkurenčnosti.',
+      },
+      {
+        title: 'Boljša povezljivost z zunanjimi sistemi',
+        description:
+          'Ena pomembnejših prednosti, ki jih prinaša namenska programska oprema je možnost komuniciranja z drugimi sistemi, ki opravljajo druge namenske naloge. Avtomatizirana izmenjava je ključ do boljšega celostnega poslovanja in zmanjševanja človeških napak.',
+      },
+    ]}
+    image={{
+      src: import('~/assets/images/caos.jpg'),
+      alt: 'Colorful Image',
+    }}
+  >
+    <Fragment slot="content">
+      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Prednosti razvoja po meri oz. na ključ</h3>
+      Pretirano posplošena programska oprema s seboj prinese tudi slabosti kot so večja kompleksnost pri uporabi, neoptimalno prilagajanje vsem procesom, ki se izvajajo v ekosistemu,
+      (pre)kompleksna konfiguracija ter druge.<br />
+      Rešitev je programska oprema na ključ, ki prinaša:
+    </Fragment>
+  </Content>
   <!-- Hero Widget ******************* -->
 
   <!-- <Hero
