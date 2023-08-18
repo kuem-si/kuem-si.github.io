@@ -24,7 +24,40 @@ const meta = {
 ---
 
 <Layout {meta}>
-  <!-- Hero Widget ******************* -->
+  <Features
+    highlight="Produkti in storitve"
+    title="Ponudba rešitev in storitev"
+    subtitle="Kuem združuje izkušene strokovnjake z dolgoletnimi izkušnjami in sodelovanju na najrazličnejših kompleksnih programskih rešitvah."
+    items={[
+      [
+        {
+          title: 'KuIoT',
+          description:
+            'Moderna splošnonamenska IoT platforma namenjena nadzoru pametnih naprav preko različnih omrežnih tehnologij (LoRa, NB-IoT,...).',
+          icon: 'tabler:brand-tailwind'
+        },
+        {
+          title: 'Svetovanje in arhitektura',
+          description:
+            'Dobro zasnovana programska rešitev pomeni manj težav s skalabilnostjo v prihodnosti.',
+          icon: 'tabler:components',
+        }
+      ],
+      [
+        {
+          title: 'Razvoj programske opreme in integracij na ključ',
+          description:
+            'Največje optimizacije pri digitalizaciji poslovnih procesov in izmenjavah podatkov se dosega z namensko napisano programsko opremo.',
+          icon: 'tabler:rocket',
+        },
+        {
+          title: 'DevOps & Platform Engineering',
+          description:
+            'Pomagamo vam vzpostaviti celotno razvojno okolje.',
+          icon: 'tabler:arrows-right-left',
+        }
+      ],
+    ]}
+  />
 
-  
 </Layout>
