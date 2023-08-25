@@ -3,7 +3,7 @@ import defaultImage from './assets/images/default.png';
 const CONFIG = {
   name: 'Kuem',
 
-  origin: 'https://kuem-si.github.io',
+  origin: 'https://www.kuem.si',
   basePathname: '/',
   trailingSlash: false,
 
