@@ -6,9 +6,9 @@ export const headerData = {
       text: 'Products',
       links: [
         {
-          text: 'KuIoT',
+          text: 'Nexavia',
           // href: getPermalink('/landing/saas'),
-          href: getPermalink('/kuiot'),
+          href: getPermalink('/nexavia'),
         },
         // {
         //   text: 'QMStack',
