@@ -12,6 +12,6 @@ export default defineConfig({
     skipInline: false,
     drafts: true,
   },
-   site: 'https://new.kuem.si',
+   site: 'https://www.kuem.si',
   integrations: [tailwind(),    sitemap(), mdx()]
 });
