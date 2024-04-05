@@ -1,0 +1,45 @@
+---
+import { getCollection } from "astro:content";
+const allPosts = await getCollection("customers");
+import CustomerEntries from "../../components/customers/CustomerEntries.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Blurgradienttop from "../../components/assets/Blurgradienttop.astro";
+---
+<BaseLayout>
+  <section class="relative">
+   <Blurgradienttop />
+    <div
+      class="max-w-7xl px-8 md:px-12 lg:px-32 mx-auto py-12 relative space-y-24 lg:pt-56"
+    >
+      <div class="max-w-2xl mx-auto lg:text-center">
+        <div>
+          <span class="text-white font-medium tracking-widest text-xs uppercase"
+            >Our beloved customers
+          </span>
+          <p class="mt-8 text-3xl font-normal tracking-tight text-white">
+            Meet our customers
+          </p>
+          <p class="text-base mt-2 text-vulcan-300 max-w-sm mx-auto">
+            Navy powers thousands of high-impact product teams. From next-gen
+            startups who reach for the stars to established greats who change
+            the world.
+          </p>
+        </div>
+      </div>
+      <div
+        class="grid grid-cols-2 lg:text-center gap-6 mt-12 list-none lg:grid-cols-3 lg:gap-12 lg:mt-24"
+      >
+      {
+            allPosts
+              .slice()  
+              .map((post) => (
+                <CustomerEntries
+                  url={"/customers/" + post.slug}
+                   logo={post.data.logo.url}
+                />
+              ))
+          }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

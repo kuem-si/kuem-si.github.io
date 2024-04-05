@@ -1,0 +1,20 @@
+---
+const { category, url, icon } = Astro.props;
+---
+<li>
+  <a
+    href={url}
+    class="hover:shadow-xl duration-200 items-center bg-gradient-to-b from-indigo-500 via-indigo-500/5 rounded-3xl inline-flex p-[0.060rem] shadow-2xl text-center bg-vulcan-900 h-full w-full"
+  >
+    <div
+      class="flex flex-col items-center justify-between w-full h-full px-8 py-8 bg-vulcan-900 rounded-3xl"
+    >
+        <img  class="w-6 h-6 " src={icon} alt={category} />
+
+
+      <p class="mt-4 text-lg font-medium text-white lg:text-xl">
+        {category}
+      </p>
+    </div>
+  </a>
+</li>

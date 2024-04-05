@@ -1,0 +1,63 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getLangFromUrl, useTranslations, useTranslatedPath, getRouteFromUrl } from '../../i18n/utils';
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section>
+    <div
+        x-data="{annual: false}"
+        class="relative items-center w-full px-4 py-32 mx-auto md:px-12 lg:px-16 max-w-7xl lg:py-36">
+    
+        <div
+        class="relative my-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-3 max-w-7xl lg:mx-auto xl:grid-cols-2">
+        <section
+            class="order-first p-[0.060rem] rounded-3xl shadow-2xl shadow-vulcan-950 bg-gradient-to-b from-indigo-500 via-indigo-500/5 lg:order-none h-64">
+            <div
+            class="grid items-center justify-center w-full grid-cols-1 p-6 bg-vulcan-900 lg:p-8 rounded-t-3xl">
+            <div>
+                <h2 class="text-lg text-white">
+                    {t("global:basicdata")}
+                </h2>
+                <p class="mt-4 text-xl text-vulcan-300">KUEM, informacijske rešitve, d.o.o.</p>
+                <p class="mt-4 text-base text-vulcan-300">
+                    Ulica Istrskega odreda 27A<br />
+                    6215 Divača<br />
+                    {t("global.slovenia")}
+                </p>
+            </div>
+            </div>
+        </section>
+        <section
+            class="order-first p-[0.060rem] rounded-3xl shadow-2xl shadow-vulcan-950 bg-gradient-to-b from-indigo-500 via-indigo-500/5 lg:order-none h-64">
+            <div
+            class="grid items-center justify-center w-full grid-cols-1 p-6 bg-vulcan-900 lg:p-8 rounded-t-3xl">
+            <div>
+                <h2 class="text-lg text-white">
+                {t("nav.contact")}
+                </h2>
+                <p class="mt-4 text-base text-vulcan-300">info@kuem.si</p>
+                <!-- <p class="mt-4 text-base text-vulcan-300">+386 5 763 11 18</p> -->
+                <p class="mt-4 text-base text-vulcan-300">&nbsp;</p>
+                <p class="mt-4 text-base text-vulcan-300">&nbsp;</p>
+            </div>
+            </div>
+        </section>
+        </div>
+
+        <section
+            class="order-first p-[0.060rem] rounded-3xl shadow-2xl shadow-vulcan-950 bg-gradient-to-b from-indigo-500 via-indigo-500/5 lg:order-none h-auto">
+            <div
+            class="grid items-center justify-center w-full grid-cols-1 p-6 bg-vulcan-900 lg:p-8 rounded-t-3xl">
+            <div>
+                <p class="mt-4 text-xl text-vulcan-300">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2787.4834890803504!2d13.968201276639101!3d45.68126841892884!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x477b3f5740125f4d%3A0xd434a9b7180e2ba7!2sKuem%2C%20d.o.o.!5e0!3m2!1sen!2ssi!4v1712060493380!5m2!1sen!2ssi"
+                    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+                </p>
+            </div>
+            </div>
+        </section>
+    </div>
+    </section>

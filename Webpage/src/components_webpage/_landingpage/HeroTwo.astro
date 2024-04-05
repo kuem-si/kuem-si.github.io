@@ -1,0 +1,50 @@
+---
+import Verticalgrid from "../assets/Verticalgrid.astro";
+import Blurgradientleft from "../assets/Blurgradientleft.astro";
+import { getLangFromUrl, useTranslations, useTranslatedPath, getRouteFromUrl } from '../../i18n/utils';
+import { languages } from '../../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
+const route = getRouteFromUrl(Astro.url);
+---
+
+<section class="relative">
+  <Verticalgrid />
+  <section>
+    <Blurgradientleft />
+    <div
+      class="relative items-center w-full px-5 py-24 mx-auto md:px-12 lg:px-16 max-w-7xl lg:pb-32 lg:pt-56"
+    >
+      <div class="text-left sm:text-center">
+        <p
+          class="text-transparent bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-500 bg-clip-text"
+        >
+        {t('landingpage:maincompanytitle')}
+        </p>
+        <p
+          class="mt-12 text-4xl font-normal text-balance tracking-tighter text-white sm:text-5xl"
+        >
+          {t('landingpage:maincompanytitledescription')}
+        </p>
+        <p class="max-w-2xl mx-auto mt-4 text-vulcan-300">
+          {t('landingpage:maincompanytitledescriptioninformation')}
+        </p>
+
+        <div
+          class="flex flex-col justify-center max-w-xl gap-2 mx-auto mt-12 sm:flex-row"
+        >
+          <a
+            href="#solutionsandservicesoffer"
+            title="link to  page"
+            aria-label="your label"
+            class="rounded-lg px-4 py-2 text-sm font-semibold transition-all flex items-center justify-center text-white bg-gradient-to-b from-white/[.105] to-white/[.15] hover:to-white/[.25] h-10 ring-1 ring-inset ring-white/20"
+            >{t('global:moreinfo')}</a
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+</section>

@@ -1,0 +1,130 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+const { frontmatter } = Astro.props;
+---
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const headings = document.querySelectorAll(
+      ".prose-styles h1,.prose-styles h2, .prose-styles h3"
+    );
+    const tocContainer = document.getElementById("table-of-contents");
+    if (tocContainer && headings.length > 0) {
+      const tocList = document.createElement("ul");
+      tocList.classList.add("text-sm", "[&>*:nth-child(1)]:uppercase");
+      headings.forEach((heading) => {
+        const listItem = document.createElement("li");
+        listItem.classList.add("py-1");
+        const link = document.createElement("a");
+        link.textContent = heading.textContent;
+        link.href = `#${heading.id}`;
+        link.classList.add(
+          "text-xs",
+          "text-white",
+          "hover:underline",
+          "hover:text-accent-600"
+        );
+        listItem.appendChild(link);
+        tocList.appendChild(listItem);
+      });
+      tocContainer.appendChild(tocList);
+      tocContainer.classList.remove("hidden");
+    }
+  });
+</script>
+<BaseLayout>
+  <section class="relative overflow-x-hidden">
+    <svg
+      class="absolute blur-3xl right-0 top-0 opacity-80"
+      width="50%"
+      height="100%"
+      viewBox="0 0 400 400"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clip-path="url(#clip0_17_60)">
+        <g filter="url(#filter0_f_17_60)">
+          <path d="M128.6 0H0V322.2L332.5 211.5L128.6 0Z" fill="#4D07E3"></path>
+          <path d="M0 322.2V400H240H320L332.5 211.5L0 322.2Z" fill="#4C00FF"
+          ></path>
+          <path d="M320 400H400V78.75L332.5 211.5L320 400Z" fill="#B5BFF1"
+          ></path>
+          <path d="M400 0H128.6L332.5 211.5L400 78.75V0Z" fill="#7fcef3"></path>
+        </g>
+      </g>
+      <defs>
+        <filter
+          id="filter0_f_17_60"
+          x="-159.933"
+          y="-159.933"
+          width="719.867"
+          height="719.867"
+          filterUnits="userSpaceOnUse"
+          color-interpolation-filters="sRGB"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="BackgroundImageFix"
+            result="shape"></feBlend>
+          <feGaussianBlur
+            stdDeviation="79.9667"
+            result="effect1_foregroundBlur_17_60"></feGaussianBlur>
+        </filter>
+      </defs>
+    </svg>
+    <div
+      class="max-w-7xl px-8 md:px-12 relative lg:px-32 mx-auto py-32 lg:pt-56"
+    >
+      <div class="max-w-3xl">
+        <div class="items-center inline-flex space-x-1 w-full">
+          <p class="font-medium text-white text-sm">
+            Written by: {frontmatter.author}
+          </p>
+          <span aria-hidden="true">·</span>
+          <time
+            class="flex text-vulcan-300 text-sm"
+            datetime={frontmatter.pubDate.toString().slice(0, 10)}
+            >{frontmatter.pubDate.toString().slice(0, 10)}</time
+          >
+        </div>
+        <p class="text-4xl mt-4 font-normal tracking-tighter text-white">
+          {frontmatter.title}
+        </p>
+        <p class="mt-2 text-base text-vulcan-300">{frontmatter.description}</p>
+        <ul class="flex flex-wrap gap-2 mt-12" role="list">
+          {
+            frontmatter.tags.map((tag) => (
+              <a href={`/tags/${tag}`}>
+                {" "}
+                <li class=" flex items-center justify-center h-8 text-xs px-4 py-2 font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700">
+                  {tag}
+                </li>
+              </a>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+  <section class="relative">
+    <div class="max-w-7xl px-8 md:px-12 lg:px-32 mx-auto py-12 relative">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
+        <div class="lg:col-span-1 lg:mt-6">
+          <div class="top-64 hidden lg:block sticky">
+            <h3 class="text-white uppercase pb-3">Table of contents</h3>
+            <div id="table-of-contents" class="mt-3">
+              <!-- Your table of contents content here -->
+            </div>
+          </div>
+        </div>
+        <div class="lg:col-span-3">
+          <div class="prose-styles">
+            <slot />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

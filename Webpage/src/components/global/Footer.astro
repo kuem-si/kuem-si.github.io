@@ -1,0 +1,202 @@
+---
+import Blurgradientleft from "../assets/Blurgradientleft.astro";
+import { getLangFromUrl, useTranslations, useTranslatedPath, getRouteFromUrl } from '../../i18n/utils';
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<footer class="relative border-t bg-vulcan-900 border-white/5">
+  <Blurgradientleft />
+  <div class="relative px-8 py-12 mx-auto max-w-7xl md:px-12 lg:px-32 lg:py-24">
+    <div class="xl:grid xl:grid-cols-4 xl:gap-8 space-y-12 lg:space-y-0">
+      <div class="text-white">
+        <div class="inline-flex items-center gap-3">
+          <!-- <svg
+            class="h-3"
+            viewBox="0 0 78 30"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18.5147 0C15.4686 0 12.5473 1.21005 10.3934 3.36396L3.36396 10.3934C1.21005 12.5473 0 15.4686 0 18.5147C0 24.8579 5.14214 30 11.4853 30C14.5314 30 17.4527 28.7899 19.6066 26.636L24.4689 21.7737C24.469 21.7738 24.4689 21.7736 24.4689 21.7737L38.636 7.6066C39.6647 6.57791 41.0599 6 42.5147 6C44.9503 6 47.0152 7.58741 47.7311 9.78407L52.2022 5.31296C50.1625 2.11834 46.586 0 42.5147 0C39.4686 0 36.5473 1.21005 34.3934 3.36396L15.364 22.3934C14.3353 23.4221 12.9401 24 11.4853 24C8.45584 24 6 21.5442 6 18.5147C6 17.0599 6.57791 15.6647 7.6066 14.636L14.636 7.6066C15.6647 6.57791 17.0599 6 18.5147 6C20.9504 6 23.0152 7.58748 23.7311 9.78421L28.2023 5.31307C26.1626 2.1184 22.5861 0 18.5147 0Z"
+              class="ccustom"
+              fill="#ffffff"></path>
+            <path
+              d="M39.364 22.3934C38.3353 23.4221 36.9401 24 35.4853 24C33.05 24 30.9853 22.413 30.2692 20.2167L25.7982 24.6877C27.838 27.8819 31.4143 30 35.4853 30C38.5314 30 41.4527 28.7899 43.6066 26.636L62.636 7.6066C63.6647 6.57791 65.0599 6 66.5147 6C69.5442 6 72 8.45584 72 11.4853C72 12.9401 71.4221 14.3353 70.3934 15.364L63.364 22.3934C62.3353 23.4221 60.9401 24 59.4853 24C57.0498 24 54.985 22.4127 54.269 20.2162L49.798 24.6873C51.8377 27.8818 55.4141 30 59.4853 30C62.5314 30 65.4527 28.7899 67.6066 26.636L74.636 19.6066C76.7899 17.4527 78 14.5314 78 11.4853C78 5.14214 72.8579 0 66.5147 0C63.4686 0 60.5473 1.21005 58.3934 3.36396L39.364 22.3934Z"
+              class="ccustom"
+              fill="#ffffff"></path>
+          </svg>
+          <p class="uppercase">{t('kuem')}</p> -->
+          <svg class="h-9" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+              viewBox="0 0 425.2 212.6" style="enable-background:new 0 0 425.2 212.6;" xml:space="http://www.w3.org/2000/svg">
+            <style type="text/css">
+              .st0{fill:#3D3D3D;}
+              .st1{fill:#85331F;}
+              .st2{fill:#4A8B75;}
+              .st3{fill:#4886A8;}
+              .st4{fill:#A2443F;}
+              .st5{fill:#40869A;}
+              .st6{fill:#204456;}
+              .st7{fill:#FFFFFF;}
+            </style>
+            <g id="PODLAGA">
+            </g>
+            <g id="VSEBINA">
+              <path class="st7" d="M69.07,141.15V71.45h19.14v26.51l21.21-26.51h21.6l-25.33,31.22l27.1,38.49h-21.99l-17.28-25.62l-5.3,5.5
+                v20.13H69.07z"/>
+              <path class="st7" d="M172.54,141.15c-5.56,0-10.29-0.93-14.19-2.8c-3.9-1.87-7.04-4.43-9.43-7.71c-2.39-3.27-4.14-6.99-5.25-11.14
+                c-1.11-4.16-1.67-8.49-1.67-13.01V71.45h13.55v35.05c0,2.88,0.28,5.68,0.83,8.39c0.55,2.72,1.49,5.15,2.8,7.31
+                c1.31,2.16,3.04,3.86,5.2,5.11c2.16,1.24,4.84,1.87,8.05,1.87c3.27,0,6-0.64,8.2-1.91c2.19-1.28,3.93-2.99,5.2-5.15
+                c1.28-2.16,2.21-4.6,2.8-7.31c0.59-2.71,0.88-5.48,0.88-8.3V71.45h13.45v35.05c0,4.78-0.57,9.26-1.72,13.45
+                c-1.15,4.19-2.95,7.87-5.4,11.04c-2.45,3.18-5.61,5.66-9.47,7.46C182.52,140.25,177.91,141.15,172.54,141.15z"/>
+              <path class="st7" d="M269.83,135.06v6.09H223V71.45h45.95v6.09h-39.07v25.13h34.07v5.79h-34.07v26.61H269.83z"/>
+              <path class="st7" d="M352.69,141.15V78.32l-29.26,49.38h-2.36l-29.26-49.38v62.83h-3.44V71.45h3.14l30.73,51.84l30.73-51.84h3.14
+                v69.71H352.69z"/>
+            </g>
+            </svg>
+        </div>
+        <p class="mt-2 text-sm text-vulcan-300">
+          <span class="mt-6 text-sm font-normal text-vulcan-300">
+            <script>document.getElementById('footer-copyright-year').appendChild(document.createTextNode(new Date().getFullYear()))</script>
+            © <span id="footer-copyright-year"></span> {t('kuemdoo')} <br /> {t('footer:allrightsreserved')}
+          </span>
+        </p>
+      </div>
+      <div class="grid grid-cols-2 gap-8 xl:col-span-3">
+        <div class="md:grid md:grid-cols-2 md:gap-8">
+          <div>
+            <h3 class="text-white">{t('nav.contact')}</h3>
+            <ul role="list" class="mt-4 space-y-2">
+              <li>
+                <a
+                  href="mailto:info@kuem.si"
+                  title="link to  page"
+                  aria-label="your label"
+                  class="inline-flex items-center text-sm text-vulcan-300 hover:text-white"
+                  ><span
+                  class="items-center inline-flex font-medium text-indigo-400 bg-vulcan-800 px-3 py-0.5 rounded-full text-xs"
+                  >E: </span>&nbsp;info@kuem.si</a
+                >
+              </li>
+
+              <!-- <li>
+                <span
+                  class="items-center inline-flex font-medium text-indigo-400 bg-vulcan-800 px-3 py-0.5 rounded-full text-xs"
+                  >T: </span>
+                <span class="text-sm text-vulcan-300 hover:text-white">+386 5 763 11 18</span>
+              </li> -->
+            </ul>
+          </div>
+          <div class="mt-12 md:mt-0">
+            <h3 class="text-white">{t('global:support')}</h3>
+            <ul role="list" class="mt-4 space-y-2">
+              <li>
+                <!-- <a
+                  href="https://helpdesk.kuem.si"
+                  title="link to  page"
+                  aria-label="your label"
+                  class="text-sm text-vulcan-300 hover:text-white"
+                >
+                  {t('global:helpdesk')}
+                </a> -->
+                <span class="text-sm text-vulcan-300 hover:text-white">{t('global:helpdesk')}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="md:grid md:grid-cols-2 md:gap-8">
+          <div>
+            <h3 class="text-white">{t('global:company')}</h3>
+            <ul role="list" class="mt-4 space-y-2">
+              <li>
+                <!-- <a
+                  href="https://helpdesk.kuem.si"
+                  title="link to  page"
+                  aria-label="your label"
+                  class="text-sm text-vulcan-300 hover:text-white"
+                >
+                  {t('global:legal')}
+                </a> -->
+                <span class="text-sm text-vulcan-300 hover:text-white">{t('global:legal')}</span>
+              </li>
+              <li>
+                <!-- <a
+                  href="https://helpdesk.kuem.si"
+                  title="link to  page"
+                  aria-label="your label"
+                  class="text-sm text-vulcan-300 hover:text-white"
+                >
+                  {t('global:legal')}
+                </a> -->
+                <span class="text-sm text-vulcan-300 hover:text-white">&nbsp;</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-12 md:mt-0">
+            <h3 class="text-white">{t('footer:socialnetworks')}</h3>
+            <ul role="list" class="mt-4 space-y-2">
+              <li>
+                <a
+                  href="https://www.linkedin.com/company/kuemsi"
+                  title="link to  page"
+                  aria-label="your label"
+                  target="_blank"
+                  class="text-sm text-vulcan-300 hover:text-white"
+                >
+                  {t('linkedin')}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/kuem-si"
+                  title="link to  page"
+                  aria-label="your label"
+                  target="_blank"
+                  class="text-sm text-vulcan-300 hover:text-white"
+                >
+                  {t('github')}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- <footer class="bg-vulcan-900">
+  <div class="relative px-8 pb-24 mx-auto max-w-7xl md:px-12 lg:px-32">
+    <div
+      class="pt-12 border-t lg:flex lg:items-center lg:justify-between border-white/5"
+    >
+      <div>
+        <h3 class="text-white">Subscribe to Navy news</h3>
+        <p class="mt-2 text-sm font-normal text-vulcan-300">
+          The latest nonsense news, articles, and resources, sent to your
+          spam-box daily.
+        </p>
+      </div>
+      <form class="mt-6 sm:flex sm:max-w-md lg:mt-0">
+        <label for="email" class="sr-only">Email address</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          placeholder="Enter your email"
+          aria-placeholder="Enter your email"
+          autocomplete="email"
+          required
+          class="block w-full h-10 px-4 py-2 text-sm text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+        />
+        <div class="mt-4 sm:ml-2 sm:mt-0 sm:flex-shrink-0">
+          <button
+            type="submit"
+            class="flex items-center justify-center w-auto h-10 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+            >Subscribe</button
+          >
+        </div>
+      </form>
+    </div>
+  </div>
+</footer> -->

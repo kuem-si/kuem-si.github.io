@@ -1,0 +1,471 @@
+<section>
+  <div class="px-8 py-24 mx-auto max-w-7xl md:px-12 lg:px-32 lg:pt-56">
+    <div class="justify-center max-w-3xl">
+      <p class="text-3xl font-normal tracking-tight text-white">Forms</p>
+    </div>
+    <div class="mt-12 space-y-24">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div>
+          <div class="pb-5 border-b border-vulcan-800">
+            <h3 class="text-base font-semibold leading-6 text-white">
+              Checkboxes
+            </h3>
+          </div>
+          <div class="inline-flex flex-wrap items-center w-full gap-2 mt-10">
+            <fieldset>
+              <legend class="sr-only">Word</legend>
+              <div class="space-y-5">
+                <div class="relative flex items-start">
+                  <div class="flex h-6 items-center">
+                    <input
+                      id="comments"
+                      aria-describedby="comments-description"
+                      name="comments"
+                      type="checkbox"
+                      class="w-4 h-4 text-indigo-500 bg-vulcan-900 border-indigo-300 rounded focus:ring-white focus:border-white"
+                    />
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label for="comments" class="font-medium text-white"
+                      >Default</label
+                    >
+                  </div>
+                </div>
+                <div class="relative flex items-start">
+                  <div class="flex h-6 items-center">
+                    <input
+                      id="text"
+                      aria-describedby="#"
+                      name="text"
+                      type="checkbox"
+                      class="w-4 h-4 text-indigo-500 bg-vulcan-900 border-indigo-300 rounded focus:ring-white focus:border-white"
+                    />
+                  </div>
+                  <div class="ml-3 text-sm gap-2 flex">
+                    <label for="#" class="font-medium text-white">Default</label
+                    >
+                    <span id="#" class="text-vulcan-300"
+                      >With support text.</span
+                    >
+                  </div>
+                </div>
+                <div class="relative flex items-start opacity-50">
+                  <div class="flex h-6 items-center">
+                    <input
+                      id="text"
+                      aria-describedby="#"
+                      name="text"
+                      type="checkbox"
+                      disabled
+                      class="w-4 h-4 text-indigo-500 cursor-not-allowed disabled:opacity-50 bg-vulcan-900 border-indigo-300 rounded focus:ring-white focus:border-white"
+                    />
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label for="#" class="font-medium text-white"
+                      >Disabled</label
+                    >
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+
+        <div>
+          <div class="pb-5 border-b border-vulcan-800">
+            <h3 class="text-base font-semibold leading-6 text-white">
+              Radio buttons
+            </h3>
+          </div>
+          <div class="inline-flex flex-wrap items-center w-full gap-2 mt-10">
+            <fieldset>
+              <legend class="sr-only">Word</legend>
+              <div class="space-y-5">
+                <div class="flex items-center">
+                  <input
+                    id="#"
+                    name="#"
+                    type="radio"
+                    class="border-indigo-300 text-indigo-500 focus:ring-indigo-500 bg-vulcan-900 focus:ring-offset-vulcan-900"
+                  />
+                  <label
+                    for="#"
+                    class="ml-3 block text-sm font-medium leading-6 text-white"
+                    >Default</label
+                  >
+                </div>
+                <div class="flex items-center">
+                  <input
+                    id="#"
+                    name="#"
+                    type="radio"
+                    class="h-4 w-4 border-indigo-300 text-indigo-500 focus:ring-indigo-500 bg-vulcan-900 focus:ring-offset-vulcan-900"
+                  />
+                  <div class="ml-3 text-sm gap-2 flex">
+                    <label for="#" class="font-medium text-white">Default</label
+                    >
+                    <span id="#" class="text-vulcan-300"
+                      >With support text.</span
+                    >
+                  </div>
+                </div>
+                <div class="flex items-center opacity-50">
+                  <input
+                    id="#"
+                    name="#"
+                    type="radio"
+                    class="cursor-not-allowed disabled:opacity-50 border-indigo-300 text-indigo-500 focus:ring-indigo-500 bg-vulcan-900 focus:ring-offset-vulcan-900"
+                  />
+                  <label
+                    for="#"
+                    class="ml-3 block text-sm font-medium leading-6 text-white"
+                    >Default</label
+                  >
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <div>
+          <div class="pb-5 border-b border-vulcan-800">
+            <h3 class="text-base font-semibold leading-6 text-white">Toggle</h3>
+          </div>
+          <div class="inline-flex flex-wrap w-full gap-2 mt-10">
+            <div class="space-y-5">
+              <div
+                x-data="{ value: false }"
+                class="flex items-center gap-2"
+                x-id="['toggle-label']"
+              >
+                <input
+                  type="hidden"
+                  name="sendNotifications"
+                  :value="value"
+                  value="false"
+                /><!-- Label -->
+                <div class="ml-3 text-sm flex order-last">
+                  <label
+                    @click="$refs.toggle.click(); $refs.toggle.focus()"
+                    :id="$id('toggle-label')"
+                    id="toggle-label-1"
+                    for="#"
+                    class="font-medium text-white">Default</label
+                  >
+                </div>
+                <!-- Button -->
+                <button
+                  x-ref="toggle"
+                  @click="value = ! value"
+                  type="button"
+                  role="switch"
+                  :aria-checked="value"
+                  :aria-labelledby="$id('toggle-label')"
+                  :class="value ? 'bg-indigo-400' : 'bg-vulcan-900'"
+                  class="relative ml-4 inline-flex w-10 rounded-full py-1 transition bg-indigo-500 border border-indigo-300"
+                  aria-checked="false"
+                  aria-labelledby="toggle-label-1"
+                  ><span
+                    :class="value ? 'translate-x-7' : 'translate-x-1'"
+                    class="bg-white h-2 w-2 rounded-full transition shadow-md translate-x-1"
+                    aria-hidden="true"></span></button
+                >
+              </div>
+              <div
+                x-data="{ value: false }"
+                class="flex items-center gap-2"
+                x-id="['toggle-label']"
+              >
+                <input
+                  type="hidden"
+                  name="sendNotifications"
+                  :value="value"
+                  value="false"
+                /><!-- Label -->
+                <div class="ml-3 text-sm gap-2 flex order-last">
+                  <label
+                    @click="$refs.toggle.click(); $refs.toggle.focus()"
+                    :id="$id('toggle-label')"
+                    id="toggle-label-1"
+                    for="#"
+                    class="font-medium text-white">Default</label
+                  >
+                  <span id="#" class="text-vulcan-300">With support text.</span>
+                </div>
+                <!-- Button -->
+                <button
+                  x-ref="toggle"
+                  @click="value = ! value"
+                  type="button"
+                  role="switch"
+                  :aria-checked="value"
+                  :aria-labelledby="$id('toggle-label')"
+                  :class="value ? 'bg-indigo-400' : 'bg-vulcan-900'"
+                  class="relative ml-4 inline-flex w-10 rounded-full py-1 transition bg-indigo-500 border border-indigo-300"
+                  aria-checked="false"
+                  aria-labelledby="toggle-label-1"
+                  ><span
+                    :class="value ? 'translate-x-7' : 'translate-x-1'"
+                    class="bg-white h-2 w-2 rounded-full transition shadow-md translate-x-1"
+                    aria-hidden="true"></span></button
+                >
+              </div>
+              <div
+                x-data="{ value: false }"
+                class="flex items-center gap-2 opacity-50"
+                x-id="['toggle-label']"
+              >
+                <input
+                  class="cursor-not-allowed disabled:opacity-50"
+                  type="hidden"
+                  name="sendNotifications"
+                  :value="value"
+                  value="false"
+                /><!-- Label -->
+                <div class="ml-3 text-sm flex order-last">
+                  <label
+                    @click="$refs.toggle.click(); $refs.toggle.focus()"
+                    :id="$id('toggle-label')"
+                    id="toggle-label-1"
+                    for="#"
+                    class="font-medium text-white">Default</label
+                  >
+                </div>
+                <!-- Button -->
+                <button
+                  x-ref="toggle"
+                  @click="value = ! value"
+                  type="button"
+                  role="switch"
+                  :aria-checked="value"
+                  :aria-labelledby="$id('toggle-label')"
+                  :class="value ? 'bg-indigo-400' : 'bg-vulcan-900'"
+                  class="relative ml-4 inline-flex w-10 rounded-full cursor-not-allowed disabled:opacity-50 py-1 transition bg-indigo-500 border border-indigo-300"
+                  aria-checked="false"
+                  aria-labelledby="toggle-label-1"
+                  ><span
+                    :class="value ? 'translate-x-7' : 'translate-x-1'"
+                    class="bg-white h-2 w-2 rounded-full transition shadow-md translate-x-1"
+                    aria-hidden="true"></span></button
+                >
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="pb-5 border-b border-vulcan-800">
+          <h3 class="text-base font-semibold leading-6 text-white">Default</h3>
+        </div>
+        <div
+          class="flex-wrap grid grid-cols-1 md:grid-cols-2 items-start w-full gap-12 mt-10"
+        >
+          <div class="w-full">
+            <label for="full_name" class="block text-sm text-white">
+              Name</label
+            >
+            <input
+              type="text"
+              name="name"
+              id="name"
+              required
+              class="block w-full px-4 py-2 mt-4 border bg-transparent border-vulcan-800 rounded-lg appearance-none text-indigo-300 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+            />
+            <div class="text-sm mt-1 hidden">
+              Please provide your full name.
+            </div>
+          </div>
+          <div class="w-full">
+            <label class="block text-sm font-medium text-white" name="message"
+              >Text area</label
+            >
+            <div class="mt-1">
+              <textarea
+                class="block w-full mt-4 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+                rows="4"></textarea>
+            </div>
+          </div>
+          <div class="w-full">
+            <label class="block text-sm font-medium text-white" name="email"
+              >Email</label
+            >
+            <input
+              class="block w-full mt-4 h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+              placeholder="email@example.com"
+              autocomplete="off"
+              type="email"
+            />
+            <p class="mt-2 text-xs text-vulcan-300" id="email-description">
+              We are so going to spam you.
+            </p>
+          </div>
+
+          <div class="w-full">
+            <label for="email" class="block text-sm font-medium text-white"
+              >Email passed</label
+            >
+            <div class="relative mt-4">
+              <input
+                type="email"
+                name="email"
+                id="email"
+                class="block w-full pr-10 h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+                placeholder="you@example.com"
+                value="lexington"
+                aria-invalid="true"
+                aria-describedby="email-error"
+              />
+              <div
+                class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon icon-tabler icon-tabler-circle-check h-5 w-5 text-success-500"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+                  <path d="M9 12l2 2l4 -4"></path>
+                </svg>
+              </div>
+            </div>
+            <p class="mt-2 text-sm text-success-600" id="email-error">
+              Well done!
+            </p>
+          </div>
+          <div class="w-full">
+            <label for="email" class="block text-sm font-medium text-white"
+              >Email error</label
+            >
+            <div class="relative mt-4">
+              <input
+                type="email"
+                name="email"
+                id="email"
+                class="block w-full pr-10 h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+                placeholder="you@example.com"
+                value="lexington"
+                aria-invalid="true"
+                aria-describedby="email-error"
+              />
+              <div
+                class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon icon-tabler icon-tabler-alert-circle h-5 w-5 text-danger-500"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+                  <path d="M12 8v4"></path>
+                  <path d="M12 16h.01"></path>
+                </svg>
+              </div>
+            </div>
+            <p class="mt-2 text-sm text-danger-600" id="email-error">
+              Not a valid email address.
+            </p>
+          </div>
+          <div class="w-full">
+            <label for="search" class="block text-sm font-medium text-white"
+              >Search anything</label
+            >
+            <div class="relative flex items-center mt-4">
+              <input
+                type="text"
+                name="search"
+                id="search"
+                placeholder="search for anything..."
+                class="block w-full h-10 px-4 py-3 text-indigo-300 border rounded-lg appearance-none bg-vulcan-900 border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm pr-14"
+              />
+              <div class="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
+                <kbd
+                  class="inline-flex items-center px-1 font-sans text-xs text-gray-400 rounded"
+                  >⌘K</kbd
+                >
+              </div>
+            </div>
+          </div>
+          <div class="w-full">
+            <label
+              for="cover-photo"
+              class="block text-sm font-medium text-white">Upload</label
+            >
+            <div
+              class="mt-4 flex justify-center rounded-lg border border-vulcan-800 px-6 py-10 hover:border-indigo-300 duration-300 group"
+            >
+              <div class="text-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon icon-tabler icon-tabler-file-upload mx-auto h-10 w-10 text-vulcan-500 duration-300 group-hover:text-indigo-300"
+                  viewBox="0 0 24 24"
+                  stroke-width="1"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                  <path
+                    d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"
+                  ></path>
+                  <path d="M12 11v6"></path>
+                  <path d="M9.5 13.5l2.5 -2.5l2.5 2.5"></path>
+                </svg>
+                <div
+                  class="mt-4 flex text-xs leading-6 text-vulcan-30 items-center text-vulcan-300"
+                >
+                  <label
+                    for="file-upload"
+                    class="relative cursor-pointer flex items-center justify-center h-8 p-2 text-xs text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700"
+                  >
+                    <span>Upload a file</span>
+                    <input
+                      id="file-upload"
+                      name="file-upload"
+                      type="file"
+                      class="sr-only"
+                    />
+                  </label>
+                  <p class="pl-1">or drag and drop</p>
+                </div>
+                <p class="text-xs mt-4 text-vulcan-300">
+                  PNG, JPG, GIF up to 10MB
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="">
+            <label for="location" class="block text-sm font-medium text-white"
+              >Select</label
+            >
+            <select
+              id="location"
+              name="location"
+              class="mt-4 pl-3 block w-full pr-10 h-10 px-4 py-1 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+            >
+              <option>Åland islands</option>
+              <option selected>Alicante</option>
+              <option>Milano</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

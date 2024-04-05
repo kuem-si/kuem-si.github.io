@@ -1,0 +1,40 @@
+---
+const logos = [
+  {
+    image: "/logos/basecamp.svg",
+  },
+  {
+    image: "/logos/contentfull.svg",
+  },
+  {
+    image: "/logos/notion.svg",
+  },
+  {
+    image: "/logos/dribbble.svg",
+  },
+  {
+    image: "/logos/notion.svg",
+  },
+  {
+    image: "/logos/spotify.svg",
+  },
+  {
+    image: "/logos/spacex.svg",
+  },
+  {
+    image: "/logos/zoom.svg",
+  },
+];
+---
+
+<section class="bg-vulcan-900 border-y border-white/5">
+  <div class="grid grid-cols-2 gap-0.5 md:grid-cols-4 gap-y-12 max-w-7xl md:px-12 lg:px-24 lg:py-12 mx-auto">
+    {
+      logos.map((logos) => (
+        <div class="flex col-span-1 px-8">
+          <img class="max-h-12" src={logos.image} alt=" logo" />
+        </div>
+      ))
+    }
+  </div>
+</section>

@@ -1,0 +1,100 @@
+---
+import RoundedGrid from "../assets/RoundedGrid.astro";
+---
+
+<section class="relative items-center justify-center lg:h-svh overflow-hidden">
+  <RoundedGrid />
+  <div
+    class="relative flex items-center justify-center px-8 lg:h-svh py-32 md:flex-none md:px-28 sm:justify-center"
+  >
+    <div class="w-full max-w-md mx-auto md:max-w-sm md:px-0 sm:px-4">
+      <div class="flex flex-col">
+        <div>
+          <h2 class="text-3xl font-normal tracking-tight text-white">
+            Let's get started!
+          </h2>
+          <p class="mt-2 text-sm text-vulcan-300">
+            Complete the details below so I can process your request and then
+            schedule a time to discuss your goals.
+          </p>
+        </div>
+      </div>
+      <form>
+        <input autocomplete="false" name="hidden" style="display: none" />
+        <input
+          name="_redirect"
+          type="hidden"
+          value="https://jamstacker.studio/thankyou"
+        />
+        <div class="mt-4 space-y-6">
+          <div>
+            <label for="name" class="block mb-3 text-sm font-medium text-white"
+              >First name</label
+            >
+            <input
+              id="name"
+              name="name"
+              type="text"
+              placeholder="Your name"
+              aria-placeholder="your name"
+              class="block w-full h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+            />
+          </div>
+          <div class="col-span-full">
+            <label
+              for="company"
+              class="block mb-3 text-sm font-medium text-white"
+              >What is the name of your company / organisation?</label
+            >
+            <input
+              id="company"
+              name="company"
+              type="text"
+              placeholder="Your company"
+              aria-placeholder="your company"
+              class="block w-full h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+            />
+          </div>
+          <div class="col-span-full">
+            <label for="email" class="block mb-3 text-sm font-medium text-white"
+              >How shall we contact you?</label
+            >
+            <input
+              id="name"
+              name="name"
+              type="text"
+              placeholder="email@example.com"
+              aria-placeholder="email@example.com"
+              autocomplete="given-name"
+              class="block w-full h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+            />
+          </div>
+          <div>
+            <label
+              for="message"
+              class="block mb-3 text-sm font-medium text-white"
+              >Project details</label
+            >
+            <div class="mt-1">
+              <textarea
+                id="message"
+                placeholder="What are you working on?"
+                aria-placeholder="What are you working on?"
+                rows="4"
+                class="block w-full px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+              ></textarea>
+            </div>
+          </div>
+          <div class="col-span-full">
+            <button
+              type="submit"
+              class="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+            >
+              Submit your request
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,1260 @@
+<section class="">
+  <div class="px-8 py-24 mx-auto max-w-7xl md:px-12 lg:px-32 lg:pt-56">
+    <div class="justify-center max-w-3xl">
+      <p class="text-3xl font-normal tracking-tight text-white">Dropdowns</p>
+    </div>
+    <div class="mt-12 space-y-24">
+      <div>
+        <div class="pb-5 border-b border-white/5 lg:mt-24">
+          <h3 class="text-base font-semibold leading-6 text-white">
+            With text
+          </h3>
+        </div>
+        <div class="inline-flex flex-wrap items-center w-full gap-2 mt-10">
+          <div
+            @click.away="open = false"
+            class="relative"
+            x-data="{ open: false }"
+          >
+            <button
+              @click="open = !open"
+              class="inline-flex items-center justify-between h-10 gap-2 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+            >
+              <span>With down Dropdown</span>
+              <svg
+                :class="{'rotate-180': open, 'rotate-0': !open}"
+                xmlns="http://www.w3.org/2000/svg"
+                class="inline h-4 transition-transform duration-200 transform rotate-0 icon icon-tabler icon-tabler-chevron-down"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M6 9l6 6l6 -6"></path>
+              </svg>
+            </button>
+            <div
+              x-show="open"
+              style="display: none;"
+              x-transition:enter="transition ease-out duration-100"
+              x-transition:enter-start="transform opacity-0 scale-95"
+              x-transition:enter-end="transform opacity-100 scale-100"
+              x-transition:leave="transition ease-in duration-75"
+              x-transition:leave-start="transform opacity-100 scale-100"
+              x-transition:leave-end="transform opacity-0 scale-95"
+              class="absolute right-0 z-10 w-full mt-2 origin-top-right rounded-xl bg-gradient-to-b from-indigo-500 via-indigo-500/ ring-1 ring-inset ring-white/5 focus:outline-none p-[0.060rem]"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="menu-button"
+              tabindex="-1"
+            >
+              <div class="py-1 bg-vulcan-900 rounded-xl" role="none">
+                <button
+                  type="button"
+                  class="block text-left px-4 py-2 text-sm text-white hover:text-indigo-400"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-0"
+                  >Overview
+                </button>
+                <button
+                  type="button"
+                  class="block px-4 py-2 text-sm text-white hover:text-indigo-400"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-2">Components</button
+                >
+                <form
+                  method="POST"
+                  action="#"
+                  role="none"
+                  class="border-t border-white/5"
+                >
+                  <button
+                    type="submit"
+                    class="block px-4 py-2 text-sm text-white hover:text-indigo-400"
+                    role="menuitem"
+                    tabindex="-1"
+                    id="menu-item-3">Sign out</button
+                  >
+                </form>
+              </div>
+            </div>
+          </div>
+          <div
+            @click.away="open = false"
+            class="relative"
+            x-data="{ open: false }"
+          >
+            <div
+              x-show="open"
+              x-transition:enter="transition ease-out duration-100"
+              x-transition:enter-start="transform opacity-0 scale-95"
+              x-transition:enter-end="transform opacity-100 scale-100"
+              x-transition:leave="transition ease-in duration-75"
+              x-transition:leave-start="transform opacity-100 scale-100"
+              x-transition:leave-end="transform opacity-0 scale-95"
+              class="bottom-0 origin-top-right absolute left-0 mb-11 -mr-1 w-full rounded-xl bg-gradient-to-b from-indigo-500 via-indigo-500/ ring-1 ring-inset ring-white/5 focus:outline-none p-[0.060rem]"
+            >
+              <div class="py-1 relative bg-vulcan-900 rounded-xl">
+                <button
+                  type="button"
+                  class="block text-left px-4 py-2 text-sm text-white hover:text-indigo-400"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-0"
+                  >Overview
+                </button>
+                <button
+                  type="button"
+                  class="block px-4 py-2 text-sm text-white hover:text-indigo-400"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-2">Components</button
+                >
+                <form
+                  method="POST"
+                  action="#"
+                  role="none"
+                  class="border-t border-white/5"
+                >
+                  <button
+                    type="submit"
+                    class="block px-4 py-2 text-sm text-white hover:text-indigo-400"
+                    role="menuitem"
+                    tabindex="-1"
+                    id="menu-item-3">Sign out</button
+                  >
+                </form>
+              </div>
+            </div>
+            <div>
+              <button
+                @click="open = !open"
+                class="inline-flex items-center justify-between h-10 gap-2 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+              >
+                With drop up
+                <svg
+                  :class="{'rotate-180': open, 'rotate-0': !open}"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="inline h-4 transition-transform duration-200 transform rotate-0 icon icon-tabler icon-tabler-chevron-down"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M6 9l6 6l6 -6"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="pb-5 border-b border-white/5 lg:mt-24">
+          <h3 class="text-base font-semibold leading-6 text-white">
+            Only icon
+          </h3>
+        </div>
+        <div class="inline-flex flex-wrap items-center w-full gap-2 mt-10">
+          <div
+            @click.away="open = false"
+            class="relative"
+            x-data="{ open: false }"
+          >
+            <button
+              @click="open = !open"
+              class="inline-flex items-center justify-between h-10 p-3 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+            >
+              <svg
+                :class="{'rotate-180': open, 'rotate-0': !open}"
+                xmlns="http://www.w3.org/2000/svg"
+                class="inline h-4 transition-transform duration-200 transform rotate-0 icon icon-tabler icon-tabler-chevron-down"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M6 9l6 6l6 -6"></path>
+              </svg>
+            </button>
+            <div
+              x-show="open"
+              style="display: none;"
+              x-transition:enter="transition ease-out duration-100"
+              x-transition:enter-start="transform opacity-0 scale-95"
+              x-transition:enter-end="transform opacity-100 scale-100"
+              x-transition:leave="transition ease-in duration-75"
+              x-transition:leave-start="transform opacity-100 scale-100"
+              x-transition:leave-end="transform opacity-0 scale-95"
+              class="absolute right-0 z-10 w-auto mt-2 origin-top-right rounded-xl bg-gradient-to-b from-indigo-500 via-indigo-500/ ring-1 ring-inset ring-white/5 focus:outline-none p-[0.060rem]"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="menu-button"
+              tabindex="-1"
+            >
+              <div class="py-1 bg-vulcan-900 rounded-xl" role="none">
+                <button
+                  type="button"
+                  class="block text-left px-4 py-2 text-sm text-white hover:text-indigo-400"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-0"
+                  >Overview
+                </button>
+                <button
+                  type="button"
+                  class="block px-4 py-2 text-sm text-white hover:text-indigo-400"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-2">Components</button
+                >
+                <form
+                  method="POST"
+                  action="#"
+                  role="none"
+                  class="border-t border-white/5"
+                >
+                  <button
+                    type="submit"
+                    class="block px-4 py-2 text-sm text-white hover:text-indigo-400"
+                    role="menuitem"
+                    tabindex="-1"
+                    id="menu-item-3">Sign out</button
+                  >
+                </form>
+              </div>
+            </div>
+          </div>
+          <div
+            @click.away="open = false"
+            class="relative"
+            x-data="{ open: false }"
+          >
+            <div
+              x-show="open"
+              x-transition:enter="transition ease-out duration-100"
+              x-transition:enter-start="transform opacity-0 scale-95"
+              x-transition:enter-end="transform opacity-100 scale-100"
+              x-transition:leave="transition ease-in duration-75"
+              x-transition:leave-start="transform opacity-100 scale-100"
+              x-transition:leave-end="transform opacity-0 scale-95"
+              class="bottom-0 origin-top-right absolute left-0 mb-11 -mr-1 w-auto rounded-xl bg-gradient-to-b from-indigo-500 via-indigo-500/ ring-1 ring-inset ring-white/5 focus:outline-none p-[0.060rem]"
+            >
+              <div class="py-1 relative bg-vulcan-900 rounded-xl">
+                <button
+                  type="button"
+                  class="block text-left px-4 py-2 text-sm text-white hover:text-indigo-400"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-0"
+                  >Overview
+                </button>
+                <button
+                  type="button"
+                  class="block px-4 py-2 text-sm text-white hover:text-indigo-400"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-2">Components</button
+                >
+                <form
+                  method="POST"
+                  action="#"
+                  role="none"
+                  class="border-t border-white/5"
+                >
+                  <button
+                    type="submit"
+                    class="block px-4 py-2 text-sm text-white hover:text-indigo-400"
+                    role="menuitem"
+                    tabindex="-1"
+                    id="menu-item-3">Sign out</button
+                  >
+                </form>
+              </div>
+            </div>
+            <div>
+              <button
+                @click="open = !open"
+                class="inline-flex items-center justify-between h-10 p-3 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+              >
+                <svg
+                  :class="{'rotate-180': open, 'rotate-0': !open}"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="inline h-4 transition-transform duration-200 transform rotate-0 icon icon-tabler icon-tabler-chevron-down"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M6 9l6 6l6 -6"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="pb-5 border-b border-white/5 lg:mt-24">
+          <h3 class="text-base font-semibold leading-6 text-white">
+            With icons
+          </h3>
+        </div>
+        <div class="inline-flex flex-wrap items-center w-full gap-2 mt-10">
+          <div
+            @click.away="open = false"
+            class="relative"
+            x-data="{ open: false }"
+          >
+            <button
+              @click="open = !open"
+              class="inline-flex items-center justify-between h-10 gap-2 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+            >
+              <span>With left icon</span>
+              <svg
+                :class="{'rotate-180': open, 'rotate-0': !open}"
+                xmlns="http://www.w3.org/2000/svg"
+                class="inline h-4 transition-transform duration-200 transform rotate-0 icon icon-tabler icon-tabler-chevron-down"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M6 9l6 6l6 -6"></path>
+              </svg>
+            </button>
+            <div
+              x-show="open"
+              style="display: none;"
+              x-transition:enter="transition ease-out duration-100"
+              x-transition:enter-start="transform opacity-0 scale-95"
+              x-transition:enter-end="transform opacity-100 scale-100"
+              x-transition:leave="transition ease-in duration-75"
+              x-transition:leave-start="transform opacity-100 scale-100"
+              x-transition:leave-end="transform opacity-0 scale-95"
+              class="absolute right-0 z-10 w-auto mt-2 origin-top-right rounded-xl bg-gradient-to-b from-indigo-500 via-indigo-500/ ring-1 ring-inset ring-white/5 focus:outline-none p-[0.060rem]"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="menu-button"
+              tabindex="-1"
+            >
+              <div class="py-1 bg-vulcan-900 rounded-xl" role="none">
+                <button
+                  type="button"
+                  class="items-center gap-2 inline-flex text-left px-4 py-2 text-sm text-white hover:text-indigo-400"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-0"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 icon icon-tabler icon-tabler-components"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                    <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                    <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                    <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                  </svg>
+                   Overview
+                </button>
+                <button
+                  type="button"
+                  class="items-center gap-2 inline-flex text-left px-4 py-2 text-sm text-white hover:text-indigo-400"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 icon icon-tabler icon-tabler-components"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                    <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                    <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                    <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                  </svg>
+                   Components</button
+                >
+                <form
+                  method="POST"
+                  action="#"
+                  role="none"
+                  class="border-t border-white/5"
+                >
+                  <button
+                    type="submit"
+                    class="block px-4 py-2 text-sm text-white hover:text-indigo-400"
+                    role="menuitem"
+                    tabindex="-1"
+                    id="menu-item-3">Sign out</button
+                  >
+                </form>
+              </div>
+            </div>
+          </div>
+          <div
+            @click.away="open = false"
+            class="relative"
+            x-data="{ open: false }"
+          >
+            <button
+              @click="open = !open"
+              class="inline-flex items-center justify-between h-10 gap-2 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+            >
+              <span>With right icon</span>
+              <svg
+                :class="{'rotate-180': open, 'rotate-0': !open}"
+                xmlns="http://www.w3.org/2000/svg"
+                class="inline h-4 transition-transform duration-200 transform rotate-0 icon icon-tabler icon-tabler-chevron-down"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M6 9l6 6l6 -6"></path>
+              </svg>
+            </button>
+            <div
+              x-show="open"
+              style="display: none;"
+              x-transition:enter="transition ease-out duration-100"
+              x-transition:enter-start="transform opacity-0 scale-95"
+              x-transition:enter-end="transform opacity-100 scale-100"
+              x-transition:leave="transition ease-in duration-75"
+              x-transition:leave-start="transform opacity-100 scale-100"
+              x-transition:leave-end="transform opacity-0 scale-95"
+              class="absolute right-0 z-10 w-auto mt-2 origin-top-right rounded-xl bg-gradient-to-b from-indigo-500 via-indigo-500/ ring-1 ring-inset ring-white/5 focus:outline-none p-[0.060rem]"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="menu-button"
+              tabindex="-1"
+            >
+              <div class="py-1 bg-vulcan-900 rounded-xl" role="none">
+                <button
+                  type="button"
+                  class="items-center gap-2 inline-flex text-left px-4 py-2 text-sm text-white hover:text-indigo-400"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-0"
+                >
+                  Overview
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 icon icon-tabler icon-tabler-components"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                    <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                    <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                    <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="items-center gap-2 inline-flex text-left px-4 py-2 text-sm text-white hover:text-indigo-400"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-2"
+                >
+                  Components
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 icon icon-tabler icon-tabler-components"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                    <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                    <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                    <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                  </svg>
+                </button>
+                <form
+                  method="POST"
+                  action="#"
+                  role="none"
+                  class="border-t border-white/5"
+                >
+                  <button
+                    type="submit"
+                    class="block px-4 py-2 text-sm text-white hover:text-indigo-400"
+                    role="menuitem"
+                    tabindex="-1"
+                    id="menu-item-3">Sign out</button
+                  >
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="pb-5 border-b border-white/5 lg:mt-24">
+          <h3 class="text-base font-semibold leading-6 text-white">
+            With menu
+          </h3>
+        </div>
+        <div class="inline-flex flex-wrap items-center w-full gap-2 mt-10">
+          <div
+            @click.away="open = false"
+            class="relative mx-auto"
+            x-data="{ open: false }"
+          >
+            <button
+              @click="open = !open"
+              class="inline-flex items-center justify-between h-10 gap-2 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+            >
+              <span>With menu</span>
+              <svg
+                :class="{'rotate-180': open, 'rotate-0': !open}"
+                xmlns="http://www.w3.org/2000/svg"
+                class="inline h-4 transition-transform duration-200 transform rotate-0 icon icon-tabler icon-tabler-chevron-down"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M6 9l6 6l6 -6"></path>
+              </svg>
+            </button>
+            <div
+              x-show="open"
+              style="display: none;"
+              x-transition:enter="transition ease-out duration-100"
+              x-transition:enter-start="transform opacity-0 scale-95"
+              x-transition:enter-end="transform opacity-100 scale-100"
+              x-transition:leave="transition ease-in duration-75"
+              x-transition:leave-start="transform opacity-100 scale-100"
+              x-transition:leave-end="transform opacity-0 scale-95"
+              class="absolute right-0 z-10 mt-2 origin-top-right left-1/2 flex w-screen max-w-sm -translate-x-1/2 rounded-3xl bg-gradient-to-b from-indigo-500 via-indigo-500/ ring-1 ring-inset ring-white/5 focus:outline-none p-[0.060rem]"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="menu-button"
+              tabindex="-1"
+            >
+              <div
+                class="w-screen max-w-3xl bg-vulcan-900 rounded-3xl flex-auto overflow-hidden text-sm leading-6 shadow-lg"
+              >
+                <div class="p-4">
+                  <div
+                    class="group relative flex gap-x-6 rounded-lg p-4 duration-300"
+                  >
+                    <div
+                      class="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-vulcan-900 group-hover:bg-indigo-500 duration-300 text-white ring-1 ring-vulcan-800"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 icon icon-tabler icon-tabler-components"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                        ></path>
+                        <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <a href="#_" class="font-semibold text-white">
+                        Navigation item
+                        <span class="absolute inset-0"></span>
+                      </a>
+                      <p
+                        class="mt-1 text-vulcan-300 group-hover:text-indigo-300"
+                      >
+                        Here goes the description
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    class="group relative flex gap-x-6 rounded-lg p-4 duration-300"
+                  >
+                    <div
+                      class="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-vulcan-900 group-hover:bg-indigo-500 duration-300 text-white ring-1 ring-vulcan-800"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 icon icon-tabler icon-tabler-components"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                        ></path>
+                        <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <a href="#_" class="font-semibold text-white">
+                        Navigation item
+                        <span class="absolute inset-0"></span>
+                      </a>
+                      <p
+                        class="mt-1 text-vulcan-300 group-hover:text-indigo-300"
+                      >
+                        Here goes the description
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="pb-5 border-b border-white/5 lg:mt-24">
+          <h3 class="text-base font-semibold leading-6 text-white">
+            With grid menu
+          </h3>
+        </div>
+        <div class="inline-flex flex-wrap items-center w-full gap-2 mt-10">
+          <div
+            @click.away="open = false"
+            class="relative mx-auto"
+            x-data="{ open: false }"
+          >
+            <button
+              @click="open = !open"
+              class="inline-flex items-center justify-between h-10 gap-2 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+            >
+              <span>With menu</span>
+              <svg
+                :class="{'rotate-180': open, 'rotate-0': !open}"
+                xmlns="http://www.w3.org/2000/svg"
+                class="inline h-4 transition-transform duration-200 transform rotate-0 icon icon-tabler icon-tabler-chevron-down"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M6 9l6 6l6 -6"></path>
+              </svg>
+            </button>
+            <div
+              x-show="open"
+              style="display: none;"
+              x-transition:enter="transition ease-out duration-100"
+              x-transition:enter-start="transform opacity-0 scale-95"
+              x-transition:enter-end="transform opacity-100 scale-100"
+              x-transition:leave="transition ease-in duration-75"
+              x-transition:leave-start="transform opacity-100 scale-100"
+              x-transition:leave-end="transform opacity-0 scale-95"
+              class="absolute right-0 z-10 mt-2 origin-top-right left-1/2 flex w-screen max-w-sm md:max-w-5xl -translate-x-1/2 rounded-3xl bg-gradient-to-b from-indigo-500 via-indigo-500/ ring-1 ring-inset ring-white/5 focus:outline-none p-[0.060rem]"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="menu-button"
+              tabindex="-1"
+            >
+              <div
+                class="w-screen max-w-7xl bg-vulcan-900 rounded-3xl flex-auto overflow-hidden text-sm leading-6 shadow-lg"
+              >
+                <div class="p-4 grid grid-cols-1 lg:grid-cols-3 gap-2">
+                  <div
+                    class="group relative flex gap-x-6 rounded-lg p-4 duration-300"
+                  >
+                    <div
+                      class="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-vulcan-900 group-hover:bg-indigo-500 duration-300 text-white ring-1 ring-vulcan-800"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 icon icon-tabler icon-tabler-components"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                        ></path>
+                        <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <a href="#_" class="font-semibold text-white">
+                        Navigation item
+                        <span class="absolute inset-0"></span>
+                      </a>
+                      <p
+                        class="mt-1 text-vulcan-300 group-hover:text-indigo-300"
+                      >
+                        Here goes the description
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    class="group relative flex gap-x-6 rounded-lg p-4 duration-300"
+                  >
+                    <div
+                      class="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-vulcan-900 group-hover:bg-indigo-500 duration-300 text-white ring-1 ring-vulcan-800"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 icon icon-tabler icon-tabler-components"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                        ></path>
+                        <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <a href="#_" class="font-semibold text-white">
+                        Navigation item
+                        <span class="absolute inset-0"></span>
+                      </a>
+                      <p
+                        class="mt-1 text-vulcan-300 group-hover:text-indigo-300"
+                      >
+                        Here goes the description
+                      </p>
+                    </div>
+                  </div>
+                   <div
+                    class="group relative flex gap-x-6 rounded-lg p-4 duration-300"
+                  >
+                    <div
+                      class="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-vulcan-900 group-hover:bg-indigo-500 duration-300 text-white ring-1 ring-vulcan-800"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 icon icon-tabler icon-tabler-components"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                        ></path>
+                        <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <a href="#_" class="font-semibold text-white">
+                        Navigation item
+                        <span class="absolute inset-0"></span>
+                      </a>
+                      <p
+                        class="mt-1 text-vulcan-300 group-hover:text-indigo-300"
+                      >
+                        Here goes the description
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    class="group relative flex gap-x-6 rounded-lg p-4 duration-300"
+                  >
+                    <div
+                      class="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-vulcan-900 group-hover:bg-indigo-500 duration-300 text-white ring-1 ring-vulcan-800"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 icon icon-tabler icon-tabler-components"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                        ></path>
+                        <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <a href="#_" class="font-semibold text-white">
+                        Navigation item
+                        <span class="absolute inset-0"></span>
+                      </a>
+                      <p
+                        class="mt-1 text-vulcan-300 group-hover:text-indigo-300"
+                      >
+                        Here goes the description
+                      </p>
+                    </div>
+                  </div>
+                   <div
+                    class="group relative flex gap-x-6 rounded-lg p-4 duration-300"
+                  >
+                    <div
+                      class="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-vulcan-900 group-hover:bg-indigo-500 duration-300 text-white ring-1 ring-vulcan-800"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 icon icon-tabler icon-tabler-components"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                        ></path>
+                        <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <a href="#_" class="font-semibold text-white">
+                        Navigation item
+                        <span class="absolute inset-0"></span>
+                      </a>
+                      <p
+                        class="mt-1 text-vulcan-300 group-hover:text-indigo-300"
+                      >
+                        Here goes the description
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    class="group relative flex gap-x-6 rounded-lg p-4 duration-300"
+                  >
+                    <div
+                      class="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-vulcan-900 group-hover:bg-indigo-500 duration-300 text-white ring-1 ring-vulcan-800"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 icon icon-tabler icon-tabler-components"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                        ></path>
+                        <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                        <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <a href="#_" class="font-semibold text-white">
+                        Navigation item
+                        <span class="absolute inset-0"></span>
+                      </a>
+                      <p
+                        class="mt-1 text-vulcan-300 group-hover:text-indigo-300"
+                      >
+                        Here goes the description
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="pb-5 border-b border-white/5 lg:mt-24">
+          <h3 class="text-base font-semibold leading-6 text-white">
+            With full width grid and blog menu
+          </h3>
+        </div>
+        <div class="inline-flex flex-wrap items-center w-full gap-2 mt-10">
+          <div
+            @click.away="open = false"
+            class="relative mx-auto"
+            x-data="{ open: false }"
+          >
+            <button
+              @click="open = !open"
+              class="inline-flex items-center justify-between h-10 gap-2 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+            >
+              <span>With menu</span>
+              <svg
+                :class="{'rotate-180': open, 'rotate-0': !open}"
+                xmlns="http://www.w3.org/2000/svg"
+                class="inline h-4 transition-transform duration-200 transform rotate-0 icon icon-tabler icon-tabler-chevron-down"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M6 9l6 6l6 -6"></path>
+              </svg>
+            </button>
+            <div
+              x-show="open"
+              style="display: none;"
+              x-transition:enter="transition ease-out duration-100"
+              x-transition:enter-start="transform opacity-0 scale-95"
+              x-transition:enter-end="transform opacity-100 scale-100"
+              x-transition:leave="transition ease-in duration-75"
+              x-transition:leave-start="transform opacity-100 scale-100"
+              x-transition:leave-end="transform opacity-0 scale-95"
+              class="absolute right-0 z-10 mt-2 origin-top-right left-1/2 flex w-screen max-w-sm md:max-w-5xl -translate-x-1/2 rounded-3xl bg-gradient-to-b from-indigo-500 via-indigo-500/ ring-1 ring-inset ring-white/5 focus:outline-none p-[0.060rem]"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="menu-button"
+              tabindex="-1"
+            >
+              <div
+                class="w-screen max-w-7xl bg-vulcan-900 rounded-3xl flex-auto overflow-hidden text-sm leading-6 shadow-lg"
+              >
+                <div
+                  class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2"
+                >
+                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+                    <div
+                      class="group relative flex gap-x-6 rounded-lg p-4 duration-300"
+                    >
+                      <div
+                        class="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-vulcan-900 group-hover:bg-indigo-500 duration-300 text-white ring-1 ring-vulcan-800"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="w-4 icon icon-tabler icon-tabler-components"
+                          viewBox="0 0 24 24"
+                          stroke-width="2"
+                          stroke="currentColor"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                          ></path>
+                          <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                          <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                          <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                          <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                        </svg>
+                      </div>
+                      <div>
+                        <a href="#_" class="font-semibold text-white">
+                          Navigation item
+                          <span class="absolute inset-0"></span>
+                        </a>
+                        <p
+                          class="mt-1 text-vulcan-300 group-hover:text-indigo-300"
+                        >
+                          Here goes the description
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      class="group relative flex gap-x-6 rounded-lg p-4 duration-300"
+                    >
+                      <div
+                        class="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-vulcan-900 group-hover:bg-indigo-500 duration-300 text-white ring-1 ring-vulcan-800"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="w-4 icon icon-tabler icon-tabler-components"
+                          viewBox="0 0 24 24"
+                          stroke-width="2"
+                          stroke="currentColor"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                          ></path>
+                          <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                          <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                          <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                          <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                        </svg>
+                      </div>
+                      <div>
+                        <a href="#_" class="font-semibold text-white">
+                          Navigation item
+                          <span class="absolute inset-0"></span>
+                        </a>
+                        <p
+                          class="mt-1 text-vulcan-300 group-hover:text-indigo-300"
+                        >
+                          Here goes the description
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      class="group relative flex gap-x-6 rounded-lg p-4 duration-300"
+                    >
+                      <div
+                        class="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-vulcan-900 group-hover:bg-indigo-500 duration-300 text-white ring-1 ring-vulcan-800"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="w-4 icon icon-tabler icon-tabler-components"
+                          viewBox="0 0 24 24"
+                          stroke-width="2"
+                          stroke="currentColor"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                          ></path>
+                          <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                          <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                          <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                          <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                        </svg>
+                      </div>
+                      <div>
+                        <a href="#_" class="font-semibold text-white">
+                          Navigation item
+                          <span class="absolute inset-0"></span>
+                        </a>
+                        <p
+                          class="mt-1 text-vulcan-300 group-hover:text-indigo-300"
+                        >
+                          Here goes the description
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      class="group relative flex gap-x-6 rounded-lg p-4 duration-300"
+                    >
+                      <div
+                        class="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-vulcan-900 group-hover:bg-indigo-500 duration-300 text-white ring-1 ring-vulcan-800"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="w-4 icon icon-tabler icon-tabler-components"
+                          viewBox="0 0 24 24"
+                          stroke-width="2"
+                          stroke="currentColor"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                          ></path>
+                          <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                          <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                          <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                          <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                        </svg>
+                      </div>
+                      <div>
+                        <a href="#_" class="font-semibold text-white">
+                          Navigation item
+                          <span class="absolute inset-0"></span>
+                        </a>
+                        <p
+                          class="mt-1 text-vulcan-300 group-hover:text-indigo-300"
+                        >
+                          Here goes the description
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      class="group relative flex gap-x-6 rounded-lg p-4 duration-300"
+                    >
+                      <div
+                        class="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-vulcan-900 group-hover:bg-indigo-500 duration-300 text-white ring-1 ring-vulcan-800"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="w-4 icon icon-tabler icon-tabler-components"
+                          viewBox="0 0 24 24"
+                          stroke-width="2"
+                          stroke="currentColor"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                          ></path>
+                          <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                          <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                          <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                          <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                        </svg>
+                      </div>
+                      <div>
+                        <a href="#_" class="font-semibold text-white">
+                          Navigation item
+                          <span class="absolute inset-0"></span>
+                        </a>
+                        <p
+                          class="mt-1 text-vulcan-300 group-hover:text-indigo-300"
+                        >
+                          Here goes the description
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      class="group relative flex gap-x-6 rounded-lg p-4 duration-300"
+                    >
+                      <div
+                        class="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-vulcan-900 group-hover:bg-indigo-500 duration-300 text-white ring-1 ring-vulcan-800"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="w-4 icon icon-tabler icon-tabler-components"
+                          viewBox="0 0 24 24"
+                          stroke-width="2"
+                          stroke="currentColor"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                          ></path>
+                          <path d="M3 12l3 3l3 -3l-3 -3z"></path>
+                          <path d="M15 12l3 3l3 -3l-3 -3z"></path>
+                          <path d="M9 6l3 3l3 -3l-3 -3z"></path>
+                          <path d="M9 18l3 3l3 -3l-3 -3z"></path>
+                        </svg>
+                      </div>
+                      <div>
+                        <a href="#_" class="font-semibold text-white">
+                          Navigation item
+                          <span class="absolute inset-0"></span>
+                        </a>
+                        <p
+                          class="mt-1 text-vulcan-300 group-hover:text-indigo-300"
+                        >
+                          Here goes the description
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-2 gap-y-10 p-4">
+                    <div class="col-span-full  border-b border-vulcan-800">
+                      <a
+                          href="/blog/blog-one"
+                          class="flex items-center justify-between w-full text-sm text-white transition-all hover:text-indigo-400"
+                          >Read more on our blog<span>&rarr;</span> </a
+                        >
+                    </div>
+                    <div
+                      class="group aspect-h-1 aspect-w-1 relative overflow-hidden rounded-xl"
+                    >
+                      <img
+                        src="https://cdn.dribbble.com/userupload/2616394/file/original-2a7dd7cd243c0dd5b4639753c6d452d1.png?compress=1&resize=2048x1534"
+                        alt="#"
+                        class="object-cover object-center group-hover:opacity-75 rounded-b-xl"
+                      />
+                      <div class="flex flex-col justify-end">
+                        <div class="bg-opacity-60 pt-4 text-base sm:text-sm">
+                          <a href="#_" class="font-medium text-white">
+                            <span class="absolute inset-0" aria-hidden="true"
+                            ></span>
+                             Why you should take time for yourself
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="group aspect-h-1 aspect-w-1 relative overflow-hidden rounded-xl"
+                    >
+                      <img
+                        src="https://cdn.dribbble.com/userupload/2668235/file/original-f0b4be53dab5224ed5e38b293c7d9411.jpg?compress=1&resize=1504x1128"
+                        alt="#_"
+                        class="object-cover object-center group-hover:opacity-75 rounded-b-xl"
+                      />
+                      <div class="flex flex-col justify-end">
+                        <div class="bg-opacity-60 pt-4 text-base sm:text-sm">
+                          <a href="#_" class="font-medium text-white">
+                            <span class="absolute inset-0" aria-hidden="true"
+                            ></span>
+                             How to improve your writing skills
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,880 @@
+<section class="relative">
+  <div class="px-8 py-24 mx-auto max-w-7xl md:px-12 lg:px-32 lg:pt-56">
+    <div class="justify-center max-w-3xl">
+      <p class="text-3xl font-normal tracking-tight text-white">Modals</p>
+    </div>
+    <div class="mt-12 space-y-24">
+
+      <div>
+        <div class="pb-5 border-b border-vulcan-800">
+          <h3 class="text-base font-semibold leading-6 text-white">
+            Modal variations
+          </h3>
+        </div>
+        <div
+          class="inline-flex flex-wrap items-center w-full gap-2 mt-10 relative"
+        >
+          <div x-data="{ open: false }" class="flex justify-center">
+            <!-- Trigger -->
+            <span x-on:click="open = true">
+              <button
+                type="button"
+                class="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700"
+              >
+                Informative
+              </button>
+            </span>
+            <!-- Modal -->
+            <div
+              x-show="open"
+              style="display: none"
+              x-on:keydown.escape.prevent.stop="open = false"
+              role="dialog"
+              aria-modal="true"
+              x-id="['modal-title']"
+              :aria-labelledby="$id('modal-title')"
+              class="fixed inset-0 z-50 w-screen overflow-y-auto"
+            >
+              <!-- Overlay -->
+              <div
+                x-show="open"
+                x-transition.opacity
+                class="fixed inset-0 bg-vulcan-950 bg-opacity-50"
+              >
+              </div>
+              <!-- Panel -->
+              <div
+                x-show="open"
+                x-transition
+                x-on:click="open = false"
+                class="relative flex min-h-screen items-center justify-center p-4"
+              >
+                <div
+                  x-on:click.stop
+                  x-trap.noscroll.inert="open"
+                  class="relative w-full max-w-xl overflow-y-auto bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-3xl p-[0.060rem]"
+                >
+                  <div class="bg-vulcan-900 rounded-3xl p-10">
+                    <div>
+                      <!-- Title -->
+                      <h2
+                        class="text-lg font-medium text-white lg:text-xl"
+                        :id="$id('modal-title')"
+                      >
+                        Terms and agreements
+                      </h2>
+                      <!-- Content -->
+                      <p class="mt-2 text-vulcan-300 text-sm">
+                        By using this service, you are agreeing to the following
+                        terms and conditions. You must accept and abide by these
+                        terms. This service is intended for personal,
+                        non-commercial use. We are dedicated to protecting your
+                        privacy, and you can find further information on how we
+                        handle your data in our Privacy Policy.
+                      </p>
+                    </div>
+                    <!-- Buttons -->
+                    <div
+                      class="mt-8 flex space-x-2 border-t border-vulcan-800 pt-4"
+                    >
+                      <button
+                        type="button"
+                        x-on:click="open = false"
+                        class="flex items-center justify-center h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700 ml-auto"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        x-on:click="open = false"
+                        class="flex items-center justify-center h-10 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+                      >
+                        I agree
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div x-data="{ open: false }" class="flex justify-center">
+            <!-- Trigger -->
+            <span x-on:click="open = true">
+              <button
+                type="button"
+                class="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700"
+              >
+                State
+              </button>
+            </span>
+            <!-- Modal -->
+            <div
+              x-show="open"
+              style="display: none"
+              x-on:keydown.escape.prevent.stop="open = false"
+              role="dialog"
+              aria-modal="true"
+              x-id="['modal-title']"
+              :aria-labelledby="$id('modal-title')"
+              class="fixed inset-0 z-50 w-screen overflow-y-auto"
+            >
+              <!-- Overlay -->
+              <div
+                x-show="open"
+                x-transition.opacity
+                class="fixed inset-0 bg-vulcan-950 bg-opacity-50"
+              >
+              </div>
+              <!-- Panel -->
+              <div
+                x-show="open"
+                x-transition
+                x-on:click="open = false"
+                class="relative flex min-h-screen items-center justify-center p-4"
+              >
+                <div
+                  x-on:click.stop
+                  x-trap.noscroll.inert="open"
+                  class="relative w-full max-w-xl overflow-y-auto bg-gradient-to-b from-danger-950 to-danger-800 shadow-2xl rounded-3xl p-[0.060rem]"
+                >
+                  <div class="bg-vulcan-900 rounded-3xl p-10">
+                    <div>
+                      <!-- Title -->
+                      <h2
+                        class="text-lg font-medium text-white lg:text-xl inline-flex items-center gap-2"
+                        :id="$id('modal-title')"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="icon w-5 h-5 icon-tabler icon-tabler-alert-triangle text-danger-600"
+                          viewBox="0 0 24 24"
+                          stroke-width="2"
+                          stroke="currentColor"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                          ></path>
+                          <path d="M12 9v4"></path>
+                          <path
+                            d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"
+                          ></path>
+                          <path d="M12 16h.01"></path>
+                        </svg>
+                         Deactivate account
+                      </h2>
+                      <!-- Content -->
+                      <p class="mt-2 text-vulcan-300 text-sm">
+                        Are you sure you want to deactivate your account? All of
+                        your data will be permanently removed from our servers
+                        forever. This action cannot be undone.
+                      </p>
+                    </div>
+                    <!-- Buttons -->
+                    <div
+                      class="mt-8 flex space-x-2 border-t border-vulcan-800 pt-4"
+                    >
+                      <button
+                        type="button"
+                        x-on:click="open = false"
+                        class="flex items-center justify-center h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700 ml-auto"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        x-on:click="open = false"
+                        class="flex items-center justify-center h-10 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg bg-danger-700 hover:bg-danger-600"
+                      >
+                        Deactivate
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div x-data="{ open: false }" class="flex justify-center">
+            <!-- Trigger -->
+            <span x-on:click="open = true">
+              <button
+                type="button"
+                class="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700"
+              >
+                Sign in
+              </button>
+            </span>
+            <!-- Modal -->
+            <div
+              x-show="open"
+              style="display: none"
+              x-on:keydown.escape.prevent.stop="open = false"
+              role="dialog"
+              aria-modal="true"
+              x-id="['modal-title']"
+              :aria-labelledby="$id('modal-title')"
+              class="fixed inset-0 z-50 w-screen overflow-y-auto"
+            >
+              <!-- Overlay -->
+              <div
+                x-show="open"
+                x-transition.opacity
+                class="fixed inset-0 bg-vulcan-950 bg-opacity-50"
+              >
+              </div>
+              <!-- Panel -->
+              <div
+                x-show="open"
+                x-transition
+                x-on:click="open = false"
+                class="relative flex min-h-screen items-center justify-center p-4"
+              >
+                <div
+                  x-on:click.stop
+                  x-trap.noscroll.inert="open"
+                  class="relative w-full max-w-sm overflow-y-auto bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-3xl p-[0.060rem]"
+                >
+                  <div class="bg-vulcan-900 rounded-3xl p-10">
+                    <div class="flex flex-col text-center">
+                      <div>
+                        <p class="text-lg font-medium text-white lg:text-xl">
+                          Log in to Navy.
+                        </p>
+                        <div class="py-3">
+                          <span class="relative z-0 inline-flex w-full mt-3"
+                            ><button
+                              class="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700"
+                              type="button"
+                              ><span>Log in with</span>
+                              <span class="order-first mr-3"
+                                ><svg
+                                  fill="none"
+                                  height="24"
+                                  viewBox="0 0 32 32"
+                                  width="24"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  ><path
+                                    d="M30.0014 16.3109C30.0014 15.1598 29.9061 14.3198 29.6998 13.4487H16.2871V18.6442H24.1601C24.0014 19.9354 23.1442 21.8798 21.2394 23.1864L21.2127 23.3604L25.4536 26.58L25.7474 26.6087C28.4458 24.1665 30.0014 20.5731 30.0014 16.3109Z"
+                                    fill="#4285F4"></path><path
+                                    d="M16.2862 30C20.1433 30 23.3814 28.7555 25.7465 26.6089L21.2386 23.1865C20.0322 24.011 18.4132 24.5866 16.2862 24.5866C12.5085 24.5866 9.30219 22.1444 8.15923 18.7688L7.9917 18.7827L3.58202 22.1272L3.52435 22.2843C5.87353 26.8577 10.6989 30 16.2862 30Z"
+                                    fill="#34A853"></path><path
+                                    d="M8.16007 18.7688C7.85848 17.8977 7.68395 16.9643 7.68395 15.9999C7.68395 15.0354 7.85849 14.1021 8.1442 13.231L8.13621 13.0455L3.67126 9.64734L3.52518 9.71544C2.55696 11.6132 2.0014 13.7444 2.0014 15.9999C2.0014 18.2555 2.55696 20.3865 3.52518 22.2843L8.16007 18.7688Z"
+                                    fill="#FBBC05"></path><path
+                                    d="M16.2863 7.4133C18.9688 7.4133 20.7783 8.54885 21.8101 9.4978L25.8418 5.64C23.3657 3.38445 20.1434 2 16.2863 2C10.699 2 5.87354 5.1422 3.52435 9.71549L8.14339 13.2311C9.30223 9.85555 12.5086 7.4133 16.2863 7.4133Z"
+                                    fill="#EB4335"></path>
+                                </svg>
+                              </span>
+                            </button>
+                          </span>
+                          <div class="relative py-3">
+                            <div
+                              class="absolute inset-0 flex items-center"
+                              aria-hidden="true"
+                            >
+                              <div class="w-full border-t border-white/5"></div>
+                            </div><div class="relative flex justify-center">
+                              <span
+                                class="px-2 text-sm text-white bg-vulcan-900"
+                                >Or continue with</span
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <form action="#_">
+                      <input
+                        name="hidden"
+                        autocomplete="false"
+                        style="display:none"
+                      />
+                      <input name="_redirect" type="hidden" value="#" />
+                      <div class="space-y-3">
+                        <div class="">
+                          <label
+                            name="name"
+                            class="block mb-3 text-sm font-medium text-white sr-only"
+                          >
+                            First name
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Your name"
+                            class="block w-full h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+                          />
+                        </div><div class="col-span-full">
+                          <label
+                            class="block mb-3 text-sm font-medium text-white sr-only"
+                            name="company">Password</label
+                          >
+                          <input
+                            class="block w-full h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+                            placeholder="Type password here..."
+                            type="password"
+                          />
+                        </div><div class="flex items-center justify-between">
+                          <div class="flex items-center">
+                            <input
+                              class="w-4 h-4 text-indigo-500 bg-vulcan-900 border-indigo-300 rounded focus:ring-white focus:border-white"
+                              type="checkbox"
+                              id="remember-me"
+                              name="remember-me"
+                            />
+                            <label
+                              class="block ml-2 text-sm font-medium leading-tight text-white"
+                              for="remember-me">Remember me</label
+                            >
+                          </div><div class="text-sm">
+                            <a
+                              class="font-medium text-white hover:text-indigo-300"
+                              href="#">Forgot your password?</a
+                            >
+                          </div>
+                        </div>
+                        <div class="col-span-full">
+                          <a
+                            class="flex items-center justify-center h-10 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+                            href="#"
+                            >Sign in
+                          </a>
+                        </div>
+                      </div>
+                      <div class="mt-3">
+                        <p
+                          class="mx-auto text-sm font-medium leading-tight text-center text-white"
+                        >
+                          Not a have a password? <a
+                            class="ml-3 text-indigo-300 hover:text-white"
+                            href="/signup">Sign up now</a
+                          >
+                        </p>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div x-data="{ open: false }" class="flex justify-center">
+            <!-- Trigger -->
+            <span x-on:click="open = true">
+              <button
+                type="button"
+                class="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700"
+              >
+                Sign up
+              </button>
+            </span>
+            <!-- Modal -->
+            <div
+              x-show="open"
+              style="display: none"
+              x-on:keydown.escape.prevent.stop="open = false"
+              role="dialog"
+              aria-modal="true"
+              x-id="['modal-title']"
+              :aria-labelledby="$id('modal-title')"
+              class="fixed inset-0 z-50 w-screen overflow-y-auto"
+            >
+              <!-- Overlay -->
+              <div
+                x-show="open"
+                x-transition.opacity
+                class="fixed inset-0 bg-vulcan-950 bg-opacity-50"
+              >
+              </div>
+              <!-- Panel -->
+              <div
+                x-show="open"
+                x-transition
+                x-on:click="open = false"
+                class="relative flex min-h-screen items-center justify-center p-4"
+              >
+                <div
+                  x-on:click.stop
+                  x-trap.noscroll.inert="open"
+                  class="relative w-full max-w-sm overflow-y-auto bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-3xl p-[0.060rem]"
+                >
+                  <div class="bg-vulcan-900 rounded-3xl p-10">
+                    <div class="flex flex-col text-center">
+                      <div>
+                        <p class="text-3xl font-normal text-white">Signup.</p>
+                        <p class="mt-2 text-sm text-vulcan-300">
+                          Create an account wiht us.
+                        </p>
+                        <div class="py-3">
+                          <div class="space-y-2">
+                            <span class="relative z-0 inline-flex w-full mt-3">
+                              <button
+                                class="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700"
+                                type="button"
+                                ><span>Signup with X</span>
+                                <span class="order-first mr-3">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-brand-x"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  >
+                                    <path
+                                      stroke="none"
+                                      d="M0 0h24v24H0z"
+                                      fill="none"></path>
+                                    <path d="M4 4l11.733 16h4.267l-11.733 -16z"
+                                    ></path>
+                                    <path
+                                      d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"
+                                    ></path>
+                                  </svg>
+                                </span>
+                              </button>
+                            </span>
+                            <span class="relative z-0 inline-flex w-full mt-3">
+                              <button
+                                class="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700"
+                                type="button"
+                                ><span>Signup with Google</span>
+                                <span class="order-first mr-3"
+                                  ><svg
+                                    fill="none"
+                                    height="24"
+                                    viewBox="0 0 32 32"
+                                    width="24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    ><path
+                                      d="M30.0014 16.3109C30.0014 15.1598 29.9061 14.3198 29.6998 13.4487H16.2871V18.6442H24.1601C24.0014 19.9354 23.1442 21.8798 21.2394 23.1864L21.2127 23.3604L25.4536 26.58L25.7474 26.6087C28.4458 24.1665 30.0014 20.5731 30.0014 16.3109Z"
+                                      fill="#4285F4"></path><path
+                                      d="M16.2862 30C20.1433 30 23.3814 28.7555 25.7465 26.6089L21.2386 23.1865C20.0322 24.011 18.4132 24.5866 16.2862 24.5866C12.5085 24.5866 9.30219 22.1444 8.15923 18.7688L7.9917 18.7827L3.58202 22.1272L3.52435 22.2843C5.87353 26.8577 10.6989 30 16.2862 30Z"
+                                      fill="#34A853"></path><path
+                                      d="M8.16007 18.7688C7.85848 17.8977 7.68395 16.9643 7.68395 15.9999C7.68395 15.0354 7.85849 14.1021 8.1442 13.231L8.13621 13.0455L3.67126 9.64734L3.52518 9.71544C2.55696 11.6132 2.0014 13.7444 2.0014 15.9999C2.0014 18.2555 2.55696 20.3865 3.52518 22.2843L8.16007 18.7688Z"
+                                      fill="#FBBC05"></path><path
+                                      d="M16.2863 7.4133C18.9688 7.4133 20.7783 8.54885 21.8101 9.4978L25.8418 5.64C23.3657 3.38445 20.1434 2 16.2863 2C10.699 2 5.87354 5.1422 3.52435 9.71549L8.14339 13.2311C9.30223 9.85555 12.5086 7.4133 16.2863 7.4133Z"
+                                      fill="#EB4335"></path>
+                                  </svg>
+                                </span>
+                              </button>
+                            </span>
+                          </div>
+                          <div class="relative py-3">
+                            <div
+                              class="absolute inset-0 flex items-center"
+                              aria-hidden="true"
+                            >
+                              <div class="w-full border-t border-white/5"></div>
+                            </div><div class="relative flex justify-center">
+                              <span
+                                class="px-2 text-sm text-white bg-vulcan-900"
+                                >Or continue with</span
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <form action="#">
+                      <input
+                        name="hidden"
+                        autocomplete="false"
+                        style="display:none"
+                      />
+                      <input name="_redirect" type="hidden" value="#" /><div
+                        class="space-y-3"
+                      >
+                        <div class="flex flex-row w-full gap-3">
+                          <div class="w-full">
+                            <label
+                              class="block mb-3 text-sm font-medium text-white sr-only"
+                              for="first_name">First name</label
+                            >
+                            <input
+                              class="block w-full h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+                              id="first_name"
+                              name="first_name"
+                              autocomplete="given-name"
+                              required=""
+                              placeholder="Your name..."
+                            />
+                          </div>
+                          <div class="w-full">
+                            <label
+                              class="block mb-3 text-sm font-medium text-white sr-only"
+                              for="last_name">Last name</label
+                            ><input
+                              class="block w-full h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+                              id="last_name"
+                              name="last_name"
+                              autocomplete="family-name"
+                              required=""
+                              placeholder="Last name..."
+                            />
+                          </div>
+                        </div>
+                        <div class="col-span-full">
+                          <label
+                            name="email"
+                            class="block mb-3 text-sm font-medium text-white sr-only"
+                          >
+                            Email
+                          </label>
+                          <input
+                            type="email"
+                            autocomplete="off"
+                            placeholder="email@example.com"
+                            class="block w-full h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+                          />
+                        </div>
+                        <div class="col-span-full">
+                          <label
+                            class="block mb-3 text-sm font-medium text-white sr-only"
+                            name="company">Password</label
+                          >
+                          <input
+                            class="block w-full h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+                            placeholder="Type password here..."
+                            type="password"
+                          />
+                        </div>
+                        <div class="flex items-start">
+                          <input
+                            class="w-4 h-4 bg-black border-indigo-300 rounded focus:ring-white focus:border-white"
+                            id="remember-me"
+                            name="remember-me"
+                            type="checkbox"
+                          />
+                          <label
+                            class="block ml-2 text-xs leading-tight text-vulcan-300"
+                            for="remember-me"
+                            >Creating an account means you’re okay with our <a
+                              class="text-white hover:text-indigo-300"
+                              href="/terms"
+                              >Terms of Service,
+                            </a><a
+                              class="text-white hover:text-indigo-300"
+                              href="/privacy"
+                              >Privacy Policy
+                            </a>, and our default <a
+                              class="text-white hover:text-indigo-300"
+                              href="/notifications">Notification Settings.</a
+                            >
+                          </label>
+                        </div>
+                        <div class="col-span-full">
+                          <a
+                            class="flex items-center justify-center h-10 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+                            href="#"
+                            >Sign in
+                          </a>
+                        </div>
+                        <div>
+                          <p
+                            class="mx-auto text-sm font-medium leading-tight text-center text-white"
+                          >
+                            Already member? <a
+                              class="ml-3 text-indigo-300 hover:text-white"
+                              href="/signin">Log in now</a
+                            >
+                          </p>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div x-data="{ open: false }" class="flex justify-center">
+            <!-- Trigger -->
+            <span x-on:click="open = true">
+              <button
+                type="button"
+                class="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700"
+              >
+                Subscribe
+              </button>
+            </span>
+            <!-- Modal -->
+            <div
+              x-show="open"
+              style="display: none"
+              x-on:keydown.escape.prevent.stop="open = false"
+              role="dialog"
+              aria-modal="true"
+              x-id="['modal-title']"
+              :aria-labelledby="$id('modal-title')"
+              class="fixed inset-0 z-50 w-screen overflow-y-auto"
+            >
+              <!-- Overlay -->
+              <div
+                x-show="open"
+                x-transition.opacity
+                class="fixed inset-0 bg-vulcan-950 bg-opacity-50"
+              >
+              </div>
+              <!-- Panel -->
+              <div
+                x-show="open"
+                x-transition
+                x-on:click="open = false"
+                class="relative flex min-h-screen items-center justify-center p-4"
+              >
+                <div
+                  x-on:click.stop
+                  x-trap.noscroll.inert="open"
+                  class="relative w-full max-w-xl overflow-y-auto bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-3xl p-[0.060rem]"
+                >
+                  <div class="bg-vulcan-900 rounded-3xl p-10 text-center">
+                    <div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="icon icon-tabler w-6 h-6 lg:h-12 lg:w-12 icon-tabler-mail text-white mx-auto"
+                        viewBox="0 0 24 24"
+                        stroke-width="1"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"
+                        ></path>
+                        <path
+                          d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"
+                        ></path>
+                        <path d="M3 7l9 6l9 -6"></path>
+                      </svg>
+                      <!-- Title -->
+                      <h2
+                        class="text-lg mt-4 font-medium text-white lg:text-xl"
+                        :id="$id('modal-title')"
+                      >
+                        Subscribe to our newsletter
+                      </h2>
+                      <!-- Content -->
+                      <p class="mt-2 text-vulcan-300 text-sm max-w-sm mx-auto">
+                        Explore our comprehensive investment management
+                        solutions, carefully crafted to help you grow your
+                        wealth.
+                      </p>
+                    </div>
+                    <!-- Buttons -->
+                    <form action="#" class="mt-8 flex flex-col gap-2">
+                      <label for="email-address" class="sr-only"
+                        >Email address</label
+                      >
+                      <input
+                        type="email"
+                        name="email-address"
+                        id="email-address"
+                        autocomplete="email"
+                        required
+                        class="block w-full text-center h-10 px-4 py-2 text-sm text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+                        placeholder="Enter your email"
+                      />
+                      <div class="mt-4 sm:mt-0 sm:flex-shrink-0">
+                        <button
+                          type="submit"
+                          class="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+                          >Subscribe</button
+                        >
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div x-data="{ open: false }" class="flex justify-center">
+            <!-- Trigger -->
+            <span x-on:click="open = true">
+              <button
+                type="button"
+                class="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700"
+              >
+                Cookies
+              </button>
+            </span>
+            <!-- Modal -->
+            <div
+              x-show="open"
+              style="display: none"
+              x-on:keydown.escape.prevent.stop="open = false"
+              role="dialog"
+              aria-modal="true"
+              x-id="['modal-title']"
+              :aria-labelledby="$id('modal-title')"
+              class="fixed inset-0 z-50 w-screen overflow-y-auto"
+            >
+              <!-- Overlay -->
+              <div
+                x-show="open"
+                x-transition.opacity
+                class="fixed inset-0 bg-vulcan-950 bg-opacity-50"
+              >
+              </div>
+              <!-- Panel -->
+              <div
+                x-show="open"
+                x-transition
+                x-on:click="open = false"
+                class="relative flex min-h-screen items-center justify-center p-4"
+              >
+                <div
+                  x-on:click.stop
+                  x-trap.noscroll.inert="open"
+                  class="relative w-full max-w-lg overflow-y-auto bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-3xl p-[0.060rem]"
+                >
+                  <div class="bg-vulcan-900 rounded-3xl p-10">
+                    <div>
+                      <h2
+                        class="text-lg font-medium text-white lg:text-xl"
+                        :id="$id('modal-title')"
+                        id="modal-title-1"
+                      >
+                        Customize Consent Preferences
+                      </h2>
+                      <!-- Content -->
+                      <p class="mt-6 text-vulcan-300 text-sm">
+                        We use first-party and third-party cookies to provide a
+                        better experience, tailor and measure ads, analyze
+                        traffic, and personalize content. See Section 4 of our
+                        <a
+                          href="#_"
+                          class="text-indigo-400 hover:text-white duration-200"
+                        >
+                          Privacy Policy</a
+                        > to learn more.
+                      </p><div
+                        class="mt-4 divide-y border-b border-y divide-vulcan-800 border-vulcan-800"
+                      >
+                        <div class="flex items-center justify-between py-3">
+                          <span class="flex flex-grow flex-col"
+                            ><span
+                              class="text-sm font-medium leading-6 text-white"
+                              id="availability-label">Necesary</span
+                            ><span class="text-xs text-vulcan-300" id="#">
+                              Necessary cookies are required for this website to
+                              function and cannot be disabled.
+                            </span></span
+                          ><!-- Toggle -->
+                          <div
+                            x-data="{ value: false }"
+                            class="flex items-center justify-center"
+                            x-id="['toggle-label']"
+                          >
+                            <input
+                              type="hidden"
+                              name="sendNotifications"
+                              :value="value"
+                              value="false"
+                            /><!-- Label -->
+                            <label
+                              @click="$refs.toggle.click(); $refs.toggle.focus()"
+                              :id="$id('toggle-label')"
+                              class="sr-only"
+                              id="toggle-label-1"
+                            >
+                              Toggle
+                            </label><!-- Button -->
+                            <button
+                              x-ref="toggle"
+                              @click="value = ! value"
+                              type="button"
+                              role="switch"
+                              :aria-checked="value"
+                              :aria-labelledby="$id('toggle-label')"
+                              :class="value ? 'bg-indigo-400' : 'bg-vulcan-800'"
+                              class="relative ml-4 inline-flex w-12 rounded-full py-1 transition bg-indigo-500"
+                              aria-checked="false"
+                              aria-labelledby="toggle-label-1"
+                              ><span
+                                :class="value ? 'translate-x-7' : 'translate-x-1'"
+                                class="bg-white h-4 w-4 rounded-full transition shadow-md translate-x-1"
+                                aria-hidden="true"></span></button
+                            >
+                          </div>
+                        </div><div
+                          class="flex items-center justify-between py-3"
+                        >
+                          <span class="flex flex-grow flex-col"
+                            ><span
+                              class="text-sm font-medium leading-6 text-white"
+                              id="availability-label">Functional</span
+                            ><span class="text-xs text-vulcan-300" id="#">
+                              Functional cookies enable this website to provide
+                              enhanced functionality and personalization.
+                            </span></span
+                          ><!-- Toggle -->
+                          <div
+                            x-data="{ value: false }"
+                            class="flex items-center justify-center"
+                            x-id="['toggle-label']"
+                          >
+                            <input
+                              type="hidden"
+                              name="sendNotifications"
+                              :value="value"
+                              value="false"
+                            /><!-- Label -->
+                            <label
+                              @click="$refs.toggle.click(); $refs.toggle.focus()"
+                              :id="$id('toggle-label')"
+                              class="sr-only"
+                              id="toggle-label-2"
+                            >
+                              Toggle
+                            </label><!-- Button -->
+                            <button
+                              x-ref="toggle"
+                              @click="value = ! value"
+                              type="button"
+                              role="switch"
+                              :aria-checked="value"
+                              :aria-labelledby="$id('toggle-label')"
+                              :class="value ? 'bg-indigo-400' : 'bg-vulcan-800'"
+                              class="relative ml-4 inline-flex w-12 rounded-full py-1 transition bg-indigo-500"
+                              aria-checked="false"
+                              aria-labelledby="toggle-label-2"
+                              ><span
+                                :class="value ? 'translate-x-7' : 'translate-x-1'"
+                                class="bg-white h-4 w-4 rounded-full transition shadow-md translate-x-1"
+                                aria-hidden="true"></span></button
+                            >
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="inline-flex flex-wrap items-center w-full gap-2 mt-10"
+                      >
+                        <button
+                          class="flex items-center justify-center w-auto h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700"
+                        >
+                          Save my preferences</button
+                        >
+                        <button
+                          class="flex items-center justify-center w-auto ml-auto h-10 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg bg-danger-700 hover:bg-danger-600"
+                        >
+                          Reject all</button
+                        >
+                        <button
+                          class="flex items-center justify-center w-auto h-10 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+                        >
+                          Acept all</button
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,24 @@
+---
+import CtaFive from "@/components/ctas/CtaFive.astro";
+
+import { getCollection } from 'astro:content';
+import ChangeLogLayout from '@/layouts/ChangeLogLayout.astro';
+export async function getStaticPaths() {
+  const changelog = await getCollection('changelog');
+  const paths = changelog.map(page => {
+    return {
+      params: { slug: page.slug },
+      props: { page },
+
+      trailingSlash: false,
+    };
+  });
+  return paths;
+}
+const { page } = Astro.props;
+const { Content } = await page.render();
+---
+<ChangeLogLayout frontmatter={page.data}>
+  <Content>
+     <CtaFive />
+</ChangeLogLayout>

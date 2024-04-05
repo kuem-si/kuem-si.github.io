@@ -1,0 +1,59 @@
+---
+import { getCollection } from "astro:content";
+const allPosts = await getCollection("helpcenter");
+import HelpcenterEntries from "../../components/helpcenter/HelpcenterEntries.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Blurgradientleft from "../../components/assets/Blurgradientleft.astro";
+---
+
+<BaseLayout>
+  <section class="relative">
+    <Blurgradientleft />
+    <div
+      class="relative px-8 py-32 mx-auto max-w-7xl md:px-12 lg:px-32 lg:py-56"
+    >
+      <div class="max-w-2xl">
+        <span
+          class="text-xs font-medium tracking-widest text-transparent uppercase bg-clip-text bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-500"
+          >Help Center</span
+        >
+        <p
+          class="mt-8 text-4xl font-normal tracking-tighter text-white sm:text-5xl"
+        >
+          Hi, how can we help you?
+        </p>
+        <div class="relative flex items-center max-w-sm mt-12">
+          <input
+            type="text"
+            name="search"
+            id="search"
+            placeholder="search for anything..."
+            class="block w-full h-10 px-4 py-3 text-indigo-300 border rounded-lg appearance-none bg-vulcan-900 border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm pr-14"
+          />
+          <div class="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
+            <kbd
+              class="inline-flex items-center px-1 font-sans text-xs text-gray-400 rounded"
+              >⌘K</kbd
+            >
+          </div>
+        </div>
+      </div>
+      <ul
+        class="grid grid-cols-1 gap-6 mt-12 list-none md:grid-cols-2 lg:grid-cols-3 lg:mt-24"
+        role="list"
+      >
+        {
+          allPosts
+            .slice()
+            .map((post) => (
+              <HelpcenterEntries
+                url={"/helpcenter/" + post.slug}
+                category={post.data.category}
+                 icon={post.data.icon.url}
+              />
+            ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

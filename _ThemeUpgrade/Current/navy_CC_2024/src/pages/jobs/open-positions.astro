@@ -1,0 +1,78 @@
+---
+import { getCollection } from "astro:content";
+const allPosts = await getCollection("jobs");
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import JobEntries from "@/components/jobs/JobEntries.astro";
+import Blurgradienttop from "@/components/assets/Blurgradienttop.astro";
+---
+
+<BaseLayout>
+  <section class="relative">
+    <Blurgradienttop />
+    <section>
+      <div
+        class="relative items-center w-full px-5 py-12 mx-auto md:px-12 lg:px-16 max-w-7xl lg:pb-32 lg:pt-56"
+      >
+        <div
+          class="lg:items-end gap-6 lg:gap-12 mx-auto text-left md:text-center max-w-5xl"
+        >
+          <div>
+            <span
+              class="text-white font-medium tracking-widest text-xs uppercase"
+              >Jobs</span
+            ><p class="text-3xl mt-8 font-normal tracking-tight text-white">
+              Join us, and help us
+              <span class="md:block"> bring software magic back</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="max-w-3xl mx-auto mt-24 relative">
+          <div class="space-y-24">
+            <div>
+              <div class="border-b border-vulcan-800 pb-5">
+                <h3 class="text-base leading-6 text-white">Engineering</h3>
+              </div>
+
+              <div class="divide-y divide-white/10">
+                {
+                  allPosts
+                    .slice(0,2)
+                    .map((post) => (
+                      <JobEntries
+                        url={"/jobs/" + post.slug}
+                        alt={post.data.position}
+                        position={post.data.position}
+                        d
+                      />
+                    ))
+                }
+              </div>
+            </div>
+            <div>
+              <div class="border-b border-vulcan-800 pb-5">
+                <h3 class="text-base leading-6 text-white">Design</h3>
+              </div>
+
+              <div class="divide-y divide-white/10">
+                {
+                  allPosts
+                    .slice(2,4)
+                    .map((post) => (
+                      <JobEntries
+                        url={"/jobs/" + post.slug}
+                        alt={post.data.position}
+                        position={post.data.position}
+                        
+                      />
+                    ))
+                }
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+</BaseLayout>

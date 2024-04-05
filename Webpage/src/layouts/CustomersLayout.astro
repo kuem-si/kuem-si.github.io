@@ -1,0 +1,64 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+const { frontmatter } = Astro.props;
+import Blurgradienttop from "../components/assets/Blurgradienttop.astro";
+---
+
+<BaseLayout>
+  <section class="relative">
+    <Blurgradienttop />
+    <div
+      class="max-w-7xl px-8 md:px-12 relative lg:px-32 mx-auto py-12 lg:py-56"
+    >
+      <div class="grid grid-cols-1 gap-10 xl:gap-24 lg:grid-cols-3">
+        <div>
+          <div class="flex flex-row gap-3">
+            <img src={frontmatter.logo.url} alt={frontmatter.logo.alt} />
+          </div>
+          <div class="mt-2">
+            <p class="text-base text-vulcan-300">
+              {frontmatter.customer}
+            </p>
+            <p class="text-indigo-400 hover:text-white mt-2">
+              <a href={frontmatter.link}> {frontmatter.page}</a>
+            </p>
+            <p class="text-indigo-400 hover:text-white mt-2">
+              Visit
+              <a
+                title= {frontmatter.customer}
+                aria-label={frontmatter.customer}
+                href={frontmatter.website}
+                >{frontmatter.customer}
+              </a>
+            </p>
+          </div>
+          <div class="border-t mt-6 pt-6 border-vulcan-800">
+            <p class="mt-2 text-base text-white">Founded</p>
+            <p class="mt-2 text-base text-vulcan-300">
+              {frontmatter.country}, {
+                frontmatter.fundDate.toString().slice(0, 10)
+              }
+            </p>
+          </div>
+        </div>
+        <div class="lg:col-span-2 lg:order-first">
+          <div>
+            <p
+              class="bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-500 text-transparent bg-clip-text lg:pl-4 lg:border-l border-white mt-3 lg:mt-0"
+            >
+              Customer story
+            </p>
+            <h3 class="mt-12 text-white text-4xl">{frontmatter.customer}</h3>
+            <div class="prose-styles">
+              <slot />
+            </div>
+            <div class="space-y-3">
+              <p class="text-white">{frontmatter.person}</p>
+              <p class="text-vulcan-300">{frontmatter.position}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,152 @@
+---
+const typographyDetails = [
+  {
+    title: "Title h1",
+    color: "text-white",
+    fontFamily: "Inter",
+    fontWeight: "font-normal",
+    fontSize: "text-4xl, sm:text-5xl",
+    letterSpacing: "tracking-tighter",
+    exampleText: "Lexington ",
+  },
+  {
+    title: "Title h2",
+    color: "text-white",
+    fontFamily: "Inter",
+    fontWeight: "font-normal",
+    fontSize: "text-3xl",
+    letterSpacing: "tracking-tighter",
+    exampleText: "Lexington Themes",
+  },
+  {
+    title: "Title h3",
+    color: "text-white",
+    fontFamily: "Inter",
+    fontWeight: "font-medium",
+    fontSize: "text-lg, lg:text-xl",
+    letterSpacing: "tracking-normal",
+    exampleText: "Lexington Themes",
+  },
+  {
+    title: "Subtitle",
+    color: "text-white",
+    fontFamily: "Inter",
+    fontWeight: "font-semibold",
+    fontSize: "text-base",
+    letterSpacing: "tracking-normal",
+    exampleText: "Lexington Themes",
+  },
+  {
+    title: "Paragraph",
+    color: "text-vulcan-300",
+    fontFamily: "Inter",
+    fontWeight: "font-normal",
+    fontSize: "text-base",
+    letterSpacing: "tracking-normal",
+    exampleText: "Lexington Themes",
+  },
+  {
+    title: "Body",
+    color: "text-vulcan-300",
+    fontFamily: "Inter",
+    fontWeight: "font-normal",
+    fontSize: "text-base",
+    letterSpacing: "tracking-normal",
+    exampleText: "Lexington Themes",
+  },
+  {
+    title: "Tag",
+    color:
+      "text-transparent  bg-gradient-to-r from-indigo-300 to-indigo-400 bg-clip-text",
+    fontFamily: "Inter",
+    fontWeight: "font-normal",
+    fontSize: "text-sm, uppercase",
+    letterSpacing: "tracking-normal",
+    exampleText: "Lexington ",
+  },
+  {
+    title: "Small/Caption",
+    color: "text-vulcan-300",
+    fontFamily: "Inter",
+    fontWeight: "font-normal",
+    fontSize: "text-xs",
+    letterSpacing: "tracking-normal",
+    exampleText: "Lexington Themes",
+  },
+  {
+    title: "List",
+    color: "text-vulcan-300",
+    fontFamily: "Inter",
+    fontWeight: "font-normal",
+    fontSize: "text-sm",
+    letterSpacing: "tracking-normal",
+    exampleText: "Lexington Themes",
+  },
+  {
+    title: "Blockquote",
+    color: "text-vulcan-300",
+    fontFamily: "Inter",
+    fontWeight: "font-normal",
+    fontSize: "text-sm",
+    letterSpacing: "tracking-normal",
+    exampleText:
+      "This is an example blockquote - a space for your quoted content. Here's to creativity and inspiration.",
+  },
+];
+---
+
+<section>
+  <div class="px-8 py-24 mx-auto max-w-7xl md:px-12 lg:px-32 lg:pt-56">
+    <div class="justify-center max-w-3xl">
+      <p class="text-3xl font-normal tracking-tight text-white">Typography</p>
+    </div>
+    <div class="pb-5 mt-12 border-b border-white/5 lg:mt-24">
+      <h3 class="text-base font-semibold leading-6 text-white">
+        Titles and headlines
+      </h3>
+    </div>
+    <dl class="divide-y divide-white/10">
+      {
+        typographyDetails.map((detail) => (
+          <div
+            key={detail.title}
+            class="py-6 sm:grid lg:grid-cols-4 sm:gap-4 "
+          >
+            <dt class="text-xl font-medium text-white ">
+              {detail.title}
+            </dt>
+            <dd class="flex flex-col mt-1 text-sm text-vulcan-300 text-balance sm:mt-0 lg:col-span-2">
+              <div class="flex items-start gap-2">
+                <span class="font-semibold text-white">Font Family:</span>
+                <span> {detail.fontFamily}</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="font-semibold text-white">Font Weight:</span>
+                <span> {detail.fontWeight}</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="font-semibold text-white">Font Size:</span>
+                <span> {detail.fontSize}</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="font-semibold text-white">Letter spacing:</span>
+                <span> {detail.letterSpacing}</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="font-semibold text-white">Color:</span>
+                <span> {detail.color}</span>
+              </div>
+            </dd>
+            <dd class="mt-4 sm:mt-0 ">
+              <div
+                class={`${detail.fontSize} ${detail.fontWeight} ${detail.letterSpacing} ${detail.color} `}
+              >
+                {detail.exampleText}
+              </div>
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>

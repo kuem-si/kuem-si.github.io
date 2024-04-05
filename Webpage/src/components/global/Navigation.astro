@@ -1,0 +1,317 @@
+---
+import { getLangFromUrl, useTranslations, useTranslatedPath, getRouteFromUrl } from '../../i18n/utils';
+import { languages } from '../../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
+const route = getRouteFromUrl(Astro.url);
+---
+<section
+  class="fixed z-50 w-full border-b relatve bg-vulcan-900/20 border-white/5 backdrop-blur-2xl lg:bg-vulcan-900/0"
+>
+  <div class="relative w-full mx-auto max-w-7xl">
+    <div
+      x-data="{ open: false }"
+      class="relative flex flex-col w-full px-8 py-5 mx-auto md:items-center md:justify-between md:flex-row md:px-12 lg:px-32"
+    >
+      <div
+        class="flex flex-row items-center justify-between text-white lg:justify-start"
+      >
+        <a
+          href={translatePath('/', lang)}
+          title="link to  page"
+          aria-label="your label"
+          class="lg:pr-8"
+        >
+          <div class="inline-flex items-center gap-3">
+            <!-- <svg
+              class="h-4"
+              viewBox="0 0 78 30"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18.5147 0C15.4686 0 12.5473 1.21005 10.3934 3.36396L3.36396 10.3934C1.21005 12.5473 0 15.4686 0 18.5147C0 24.8579 5.14214 30 11.4853 30C14.5314 30 17.4527 28.7899 19.6066 26.636L24.4689 21.7737C24.469 21.7738 24.4689 21.7736 24.4689 21.7737L38.636 7.6066C39.6647 6.57791 41.0599 6 42.5147 6C44.9503 6 47.0152 7.58741 47.7311 9.78407L52.2022 5.31296C50.1625 2.11834 46.586 0 42.5147 0C39.4686 0 36.5473 1.21005 34.3934 3.36396L15.364 22.3934C14.3353 23.4221 12.9401 24 11.4853 24C8.45584 24 6 21.5442 6 18.5147C6 17.0599 6.57791 15.6647 7.6066 14.636L14.636 7.6066C15.6647 6.57791 17.0599 6 18.5147 6C20.9504 6 23.0152 7.58748 23.7311 9.78421L28.2023 5.31307C26.1626 2.1184 22.5861 0 18.5147 0Z"
+                fill="#ffffff"></path>
+              <path
+                d="M39.364 22.3934C38.3353 23.4221 36.9401 24 35.4853 24C33.05 24 30.9853 22.413 30.2692 20.2167L25.7982 24.6877C27.838 27.8819 31.4143 30 35.4853 30C38.5314 30 41.4527 28.7899 43.6066 26.636L62.636 7.6066C63.6647 6.57791 65.0599 6 66.5147 6C69.5442 6 72 8.45584 72 11.4853C72 12.9401 71.4221 14.3353 70.3934 15.364L63.364 22.3934C62.3353 23.4221 60.9401 24 59.4853 24C57.0498 24 54.985 22.4127 54.269 20.2162L49.798 24.6873C51.8377 27.8818 55.4141 30 59.4853 30C62.5314 30 65.4527 28.7899 67.6066 26.636L74.636 19.6066C76.7899 17.4527 78 14.5314 78 11.4853C78 5.14214 72.8579 0 66.5147 0C63.4686 0 60.5473 1.21005 58.3934 3.36396L39.364 22.3934Z"
+                fill="#ffffff"></path>
+            </svg> -->
+            <svg class="h-11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+              viewBox="0 0 425.2 212.6" style="enable-background:new 0 0 425.2 212.6;" xml:space="http://www.w3.org/2000/svg">
+            <style type="text/css">
+              .st0{fill:#3D3D3D;}
+              .st1{fill:#85331F;}
+              .st2{fill:#4A8B75;}
+              .st3{fill:#4886A8;}
+              .st4{fill:#A2443F;}
+              .st5{fill:#40869A;}
+              .st6{fill:#204456;}
+              .st7{fill:#FFFFFF;}
+            </style>
+            <g id="PODLAGA">
+            </g>
+            <g id="VSEBINA">
+              <path class="st7" d="M69.07,141.15V71.45h19.14v26.51l21.21-26.51h21.6l-25.33,31.22l27.1,38.49h-21.99l-17.28-25.62l-5.3,5.5
+                v20.13H69.07z"/>
+              <path class="st7" d="M172.54,141.15c-5.56,0-10.29-0.93-14.19-2.8c-3.9-1.87-7.04-4.43-9.43-7.71c-2.39-3.27-4.14-6.99-5.25-11.14
+                c-1.11-4.16-1.67-8.49-1.67-13.01V71.45h13.55v35.05c0,2.88,0.28,5.68,0.83,8.39c0.55,2.72,1.49,5.15,2.8,7.31
+                c1.31,2.16,3.04,3.86,5.2,5.11c2.16,1.24,4.84,1.87,8.05,1.87c3.27,0,6-0.64,8.2-1.91c2.19-1.28,3.93-2.99,5.2-5.15
+                c1.28-2.16,2.21-4.6,2.8-7.31c0.59-2.71,0.88-5.48,0.88-8.3V71.45h13.45v35.05c0,4.78-0.57,9.26-1.72,13.45
+                c-1.15,4.19-2.95,7.87-5.4,11.04c-2.45,3.18-5.61,5.66-9.47,7.46C182.52,140.25,177.91,141.15,172.54,141.15z"/>
+              <path class="st7" d="M269.83,135.06v6.09H223V71.45h45.95v6.09h-39.07v25.13h34.07v5.79h-34.07v26.61H269.83z"/>
+              <path class="st7" d="M352.69,141.15V78.32l-29.26,49.38h-2.36l-29.26-49.38v62.83h-3.44V71.45h3.14l30.73,51.84l30.73-51.84h3.14
+                v69.71H352.69z"/>
+            </g>
+            </svg>
+            <p class="text-xl font-bold uppercase"></p>
+          </div>
+        </a>
+
+        <div
+          @click.away="open = false"
+          class="relative"
+          x-data="{ open: false }"
+        >
+          <button
+            @click="open = !open"
+            class="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700"
+          >
+            <span>{languages[lang]}</span>
+            <svg
+              :class="{'rotate-180': open, 'rotate-0': !open}"
+              xmlns="http://www.w3.org/2000/svg"
+              class="inline h-4 transition-transform duration-200 transform rotate-0 icon icon-tabler icon-tabler-chevron-down"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M6 9l6 6l6 -6"></path>
+            </svg>
+          </button>
+          <div
+            x-show="open"
+            style="display: none;"
+            x-transition:enter="transition ease-out duration-100"
+            x-transition:enter-start="transform opacity-0 scale-95"
+            x-transition:enter-end="transform opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-75"
+            x-transition:leave-start="transform opacity-100 scale-100"
+            x-transition:leave-end="transform opacity-0 scale-95"
+            class="absolute right-0 z-10 w-full mt-2 origin-top-right rounded-xl bg-gradient-to-b from-indigo-500 via-indigo-500/ ring-1 ring-inset ring-white/5 focus:outline-none p-[0.060rem]"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="menu-button"
+            tabindex="-1"
+          >
+            <div class="py-1 bg-vulcan-900 rounded-xl" role="none">
+              {Object.entries(languages).map(([lang, label]) => (
+                <button
+                  type="button"
+                  class="block text-left px-4 py-2 text-sm text-white hover:text-indigo-400"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-0"
+                  ><a href={translatePath(`/${route ? route : ''}`, lang)}>{label}</a>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <button
+          @click="open = !open"
+          class="inline-flex items-center justify-center p-2 text-white hover:text-indigo-400 focus:outline-none focus:text-white md:hidden"
+        >
+          <svg
+            class="w-6 h-6"
+            stroke="currentColor"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              :class="{'hidden': open, 'inline-flex': !open }"
+              class="inline-flex"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"></path>
+            <path
+              :class="{'hidden': !open, 'inline-flex': open }"
+              class="hidden"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <nav
+        :class="{'flex': open, 'hidden': !open}"
+        class="flex-col items-center flex-grow hidden text-sm font-normal text-white md:pb-0 md:flex md:justify-end md:flex-row"
+      >
+      <a
+          href={translatePath('/', lang)}
+          title="link to  page"
+          aria-label="your label"
+          class="px-2 py-2 lg:px-6 md:px-3 hover:text-white/50 "
+          >{t('nav.home')}</a
+        >
+      <div
+          @click.away="open = false"
+          class="relative"
+          x-data="{ open: false }"
+        >
+          <button
+            @click="open = !open"
+            class="inline-flex items-center gap-2 justify-between px-2 py-2 text-sm font-normal text-white lg:px-6 md:px-3 hover:text-white/50"
+          >
+            <span>{t('nav.solutions')}</span>
+            <svg
+              :class="{'rotate-180': open, 'rotate-0': !open}"
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-chevron-down inline h-4 transition-transform duration-200 transform rotate-0"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M6 9l6 6l6 -6"></path>
+            </svg>
+          </button>
+          <div
+            x-show="open"
+            style="display: none;"
+            x-transition:enter="transition ease-out duration-100"
+            x-transition:enter-start="transform opacity-0 scale-95"
+            x-transition:enter-end="transform opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-75"
+            x-transition:leave-start="transform opacity-100 scale-100"
+            x-transition:leave-end="transform opacity-0 scale-95"
+            class="absolute right-0 z-50 mt-2 w-full origin-top-right rounded-xl bg-gradient-to-b from-indigo-500 via-indigo-500/ ring-1 ring-inset ring-white/5 focus:outline-none p-[0.060rem]"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="menu-button"
+            tabindex="-1"
+          >
+            <div class="py-1 bg-vulcan-900 rounded-xl" role="none">
+              <a
+                href={translatePath('/resitve/nexavia', lang)}
+                title="link to  page"
+                aria-label="your label"
+                role="menuitem"
+                tabindex="-1"
+                class="text-white block px-4 py-2 text-sm hover:text-indigo-400"
+              >
+                {t('nexavia')}
+              </a>
+              <a
+                href={translatePath('/resitve/thynkr', lang)}
+                title="link to  page"
+                aria-label="your label"
+                role="menuitem"
+                tabindex="-1"
+                class="text-white block px-4 py-2 text-sm hover:text-indigo-400"
+                >{t('thynkr')}</a
+              >
+            </div>
+          </div>
+        </div>
+        <div
+          @click.away="open = false"
+          class="relative"
+          x-data="{ open: false }"
+        >
+          <button
+            @click="open = !open"
+            class="inline-flex items-center gap-2 justify-between px-2 py-2 text-sm font-normal text-white lg:px-6 md:px-3 hover:text-white/50"
+          >
+            <span>{t('nav.services')}</span>
+            <svg
+              :class="{'rotate-180': open, 'rotate-0': !open}"
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-chevron-down inline h-4 transition-transform duration-200 transform rotate-0"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M6 9l6 6l6 -6"></path>
+            </svg>
+          </button>
+          <div
+            x-show="open"
+            style="display: none;"
+            x-transition:enter="transition ease-out duration-100"
+            x-transition:enter-start="transform opacity-0 scale-95"
+            x-transition:enter-end="transform opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-75"
+            x-transition:leave-start="transform opacity-100 scale-100"
+            x-transition:leave-end="transform opacity-0 scale-95"
+            class="absolute right-0 z-50 mt-2 w-full origin-top-right rounded-xl bg-gradient-to-b from-indigo-500 via-indigo-500/ ring-1 ring-inset ring-white/5 focus:outline-none p-[0.060rem]"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="menu-button"
+            tabindex="-1"
+          >
+            <div class="py-1 bg-vulcan-900 rounded-xl" role="none">
+              <a
+                href={translatePath('/storitve/razvoj-programske-opreme', lang)}
+                title="link to  page"
+                aria-label="your label"
+                role="menuitem"
+                tabindex="-1"
+                class="text-white block px-4 py-2 text-sm hover:text-indigo-400"
+              >
+                {t('nav.softwaredevelopment')}
+              </a>
+              <a
+                href={translatePath('/storitve/arhitektura-programske-opreme-in-svetovanje', lang)}
+                title="link to  page"
+                aria-label="your label"
+                role="menuitem"
+                tabindex="-1"
+                class="text-white block px-4 py-2 text-sm hover:text-indigo-400"
+                >{t('nav.softwarearhitectureandconsulting')}</a
+              >
+              <a
+                href={translatePath('/storitve/devops-in-platform-engineering', lang)}
+                title="link to  page"
+                aria-label="your label"
+                role="menuitem"
+                tabindex="-1"
+                class="text-white block px-4 py-2 text-sm hover:text-indigo-400"
+                >{t('nav.devopsandplatformengineering')}</a
+              >
+            </div>
+          </div>
+        </div>
+        <a
+          href={translatePath('/o-nas', lang)}
+          title="link to  page"
+          aria-label="your label"
+          class="px-2 py-2 lg:px-6 md:px-3 hover:text-white/50 "
+          >{t('nav.about')}</a
+        >
+        <a
+          href={translatePath('/kontakt', lang)}
+          title="link to  page"
+          aria-label="your label"
+          class="px-2 py-2 lg:px-6 md:px-3 hover:text-white/50">{t('nav.contact')}</a
+        >
+      </nav>
+    </div>
+  </div>
+</section>

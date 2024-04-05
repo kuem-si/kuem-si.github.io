@@ -1,0 +1,58 @@
+---
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import LogoCloudFour from "@/components/testimonials/LogoCloudFour.astro";
+import ContentAboutUs from "@/components_webpage/_aboutpage/ContentAboutUs.astro";
+import Team from "@/components/about/Team.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const teams = [
+  {
+    image:
+      "https://assets.vercel.com/image/upload/front/about/individual-investors/jessiefrazelle.png",
+    name: "Jane Doe",
+    job: "IT Manager.",
+  },
+  {
+    image:
+      "https://assets.vercel.com/image/upload/front/about/individual-investors/soleiocuervo.png",
+    name: " John Smith",
+    job: "Software Engineer",
+  },
+  {
+    image: "https://assets.vercel.com/image/upload/front/about/individual-investors/michaelstoppelman.png",
+    name: "Michael Johnson",
+    job: "Chief Technical Officer",
+  },
+  {
+    image: "https://assets.vercel.com/image/upload/front/about/individual-investors/karrisaarinen.png",
+    name: "Jessica Williams",
+    job: "Data Analyst",
+  },
+  {
+    image:
+      "https://assets.vercel.com/image/upload/front/about/individual-investors/rasmusanderson.png",
+    name: "Juanita Dou",
+    job: "IT Manager.",
+  },
+  {
+    image:
+      "https://assets.vercel.com/image/upload/front/about/individual-investors/brendaneich.png",
+    name: "Pablo Smizo",
+    job: "Software Engineer",
+  },
+  {
+    image: "https://assets.vercel.com/image/upload/front/about/individual-investors/natfriedman.png",
+    name: "Xavier spike",
+    job: "Chief Technical Officer",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1548142813-c348350df52b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=989&q=80",
+    name: "Jessica Williams",
+    job: "Data Analyst",
+  },
+];
+---
+<ContentAboutUs />
+<Team />

@@ -1,0 +1,88 @@
+---
+import Verticalgrid from "../assets/Verticalgrid.astro";
+const teams = [
+  {
+    image:
+      "https://assets.vercel.com/image/upload/front/about/individual-investors/jessiefrazelle.png",
+    name: "Jane Doe",
+    job: "IT Manager.",
+  },
+  {
+    image:
+      "https://assets.vercel.com/image/upload/front/about/individual-investors/soleiocuervo.png",
+    name: " John Smith",
+    job: "Software Engineer",
+  },
+  {
+    image: "https://assets.vercel.com/image/upload/front/about/individual-investors/michaelstoppelman.png",
+    name: "Michael Johnson",
+    job: "Chief Technical Officer",
+  },
+  {
+    image: "https://assets.vercel.com/image/upload/front/about/individual-investors/karrisaarinen.png",
+    name: "Jessica Williams",
+    job: "Data Analyst",
+  },
+  {
+    image:
+      "https://assets.vercel.com/image/upload/front/about/individual-investors/rasmusanderson.png",
+    name: "Juanita Dou",
+    job: "IT Manager.",
+  },
+  {
+    image:
+      "https://assets.vercel.com/image/upload/front/about/individual-investors/brendaneich.png",
+    name: "Pablo Smizo",
+    job: "Software Engineer",
+  },
+  {
+    image: "https://assets.vercel.com/image/upload/front/about/individual-investors/natfriedman.png",
+    name: "Xavier spike",
+    job: "Chief Technical Officer",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1548142813-c348350df52b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=989&q=80",
+    name: "Jessica Williams",
+    job: "Data Analyst",
+  },
+];
+---
+
+<section class="relative">
+  <Verticalgrid />
+  <div class="max-w-7xl px-8 md:px-12 lg:px-32 mx-auto py-12 lg:py-24 relative">
+    <div class="max-w-2xl mx-auto lg:text-center">
+      <div>
+        <span
+          class="text-transparent bg-clip-text font-medium tracking-widest bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-500 text-xs uppercase"
+          >Teams</span
+        ><p class="text-3xl mt-8 font-normal text-white">Our Team</p>
+      </div>
+    </div>
+    <ul
+      class="grid grid-cols-2 lg:text-center gap-6 mt-12 list-none lg:grid-cols-4 lg:gap-12 lg:mt-24"
+      role="list"
+    >
+      {
+        teams.map((team) => (
+          <>
+            <li>
+              <img
+                class="object-cover w-16 h-16 rounded-full lg:h-20 lg:w-20 mx-auto"
+                src={team.image}
+                alt={team.name}
+              />
+              <div>
+                <p class="text-lg mt-8 font-medium text-white lg:text-xl">
+                  {" "}
+                  {team.name}
+                </p>
+              </div>
+              <div class="mt-2 text-base text-vulcan-300"> {team.job}</div>
+            </li>
+          </>
+        ))
+      }
+    </ul>
+  </div>
+</section>

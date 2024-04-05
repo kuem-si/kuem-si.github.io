@@ -1,0 +1,178 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+const { frontmatter } = Astro.props;
+import Blurgradientleft from "@/components/assets/Blurgradientleft.astro";
+---
+
+<BaseLayout>
+  <section class="relative">
+    <Blurgradientleft />
+    <div
+      class="relative items-center w-full px-5 py-12 mx-auto md:px-12 lg:px-16 max-w-7xl lg:pb-32 lg:pt-56"
+    >
+      <div class="max-w-xl mx-auto">
+        <div class="prose-styles">
+          <div class="text-left not-prose">
+            <span
+              class="text-transparent bg-clip-text font-medium tracking-widest bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-500 text-xs uppercase"
+              >{frontmatter.company}, {frontmatter.type}, {
+                frontmatter.location
+              }</span
+            ><p class="text-3xl mt-8 font-normal text-white">
+              {frontmatter.position}
+            </p>
+            <div class="flex flex-wrap items-center gap-2 mt-10">
+              <a
+                href={frontmatter.applyURL}
+                title={frontmatter.position}
+                aria-label="Apply"
+                class="flex items-center justify-center h-10 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+                >Apply</a
+              >
+              <a
+                href={frontmatter.referrURL}
+                title={frontmatter.referrUrl}
+                aria-label="Reffer someone"
+                class="flex items-center justify-center h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700"
+                >Reffer someone</a
+              >
+            </div>
+          </div>
+          <slot />
+        </div>
+      </div>
+      <div
+        class="w-full max-w-xl scroll-mt-32 md:px-0 mx-auto sm:px-4 mt-24"
+        id="apply"
+      >
+        <form action="#">
+          <div class="space-y-6">
+            <div class="col-span-full">
+              <label
+                for="name"
+                class="block mb-3 text-sm font-medium text-white">Name</label
+              >
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Your name"
+                aria-placeholder="your name"
+                class="block w-full h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+              />
+            </div>
+            <div class="col-span-full">
+              <label
+                for="email"
+                class="block mb-3 text-sm font-medium text-white"
+              >
+                Email
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="email@example.com"
+                aria-placeholder="email@example.com"
+                autocomplete="given-name"
+                class="block w-full h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+              />
+            </div>
+            <div>
+              <label
+                for="letter"
+                class="block mb-3 text-sm font-medium text-white"
+                >Cover letter ⏤ Tell us why you want to join our team!
+              </label>
+              <div class="mt-1">
+                <textarea
+                  id="letter"
+                  placeholder="Tell us why you want to join our team!"
+                  aria-placeholder="Tell us why you want to join our team!"
+                  rows="4"
+                  class="block w-full px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+                ></textarea>
+              </div>
+            </div>
+            <div class="col-span-full">
+              <label
+                class="block mb-3 text-sm font-medium text-white"
+                for="country"
+                >What country are you based in?
+              </label>
+              <input
+                id="country"
+                name="country"
+                type="text"
+                placeholder="Your country"
+                aria-placeholder="your countryu"
+                class="block w-full h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+              />
+            </div>
+            <div class="col-span-full">
+              <label
+                class="block mb-3 text-sm font-medium text-white"
+                for="linkedin"
+                >Linkedin profile ⏤ Please provide your LinkedIn handle
+              </label>
+              <input
+                id="linkedin"
+                name="linkedin"
+                type="text"
+                placeholder="your linkeding handle"
+                aria-placeholder="your linkeding handle"
+                class="block w-full h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+              />
+            </div>
+            <div class="col-span-full">
+              <label class="block mb-3 text-sm font-medium text-white" for="X"
+                >X profile ⏤ Please provide your Twitter handle
+              </label>
+              <input
+                id="x"
+                name="x"
+                type="text"
+                placeholder="Your x handle"
+                aria-placeholder="your x handle"
+                class="block w-full h-10 px-4 py-3 text-indigo-300 bg-transparent border rounded-lg appearance-none border-vulcan-800 placeholder-vulcan-400 focus:border-indigo-300 focus:bg-transparent focus:outline-none focus:ring-indigo-300 sm:text-sm"
+              />
+            </div>
+            <div
+              class="inline-flex flex-wrap items-center w-full gap-2 mt-10 col-span-full justify-between border-t border-vulcan-800 pt-4"
+            >
+              <input type="file" id="fileInput" style="display: none;" />
+              <button
+                type="submit"
+                aria-label="Upload a file"
+                onclick="document.getElementById('fileInput').click()"
+                class="inline-flex gap-2 items-center justify-center h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon icon-tabler icon-tabler-upload w-4 h-4 text-current"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
+                  <path d="M7 9l5 -5l5 5"></path>
+                  <path d="M12 4l0 12"></path>
+                </svg>
+                Upload a file
+              </button>
+              <button
+                type="button"
+                class="flex items-center justify-center h-10 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+                >Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

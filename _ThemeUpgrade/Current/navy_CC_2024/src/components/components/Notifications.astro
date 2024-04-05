@@ -1,0 +1,262 @@
+<section class="relative">
+  <div class="px-8 py-24 mx-auto max-w-7xl md:px-12 lg:px-32 lg:pt-56">
+    <div class="justify-center max-w-3xl">
+      <p class="text-3xl font-normal tracking-tight text-white">
+        Notifications
+      </p>
+    </div>
+    <div class="mt-12 space-y-24">
+      <div>
+        <div class="pb-5 border-b border-vulcan-800">
+          <h3 class="text-base font-semibold leading-6 text-white">Simple</h3>
+        </div>
+        <div class="flex flex-col w-full gap-2 mt-10">
+          <div
+            x-show="showAlert"
+            x-data="{ showAlert: true }"
+            role="alert"
+            class="pointer-events-auto w-full max-w-lg overflow-hidden ring-1 ring-inset ring-white/5 text-white bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem]"
+          >
+            <div class="flex items-start bg-vulcan-900 rounded-xl p-4">
+              <div class="flex-1">
+                <h3 class="text-sm font-medium">Time for a Giggle Break!</h3>
+                <p class="mt-1 text-sm text-vulcan-500">
+                  Anyone with a link can now view this file.
+                </p>
+              </div>
+              <div class="ml-4 flex flex-shrink-0">
+                <button
+                  @click="showAlert = false"
+                  class="underline bg-white/10 ring-1 ring-white/50 text-white focus:bg-white focus:text-blue-700 hover:bg-white hover:text-blue-950 rounded-full p-0.5"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4 icon icon-tabler icon-tabler-x"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    ><path stroke="none" d="M0 0h24v24H0z" fill="none"
+                    ></path><path d="M18 6l-12 12"></path><path d="M6 6l12 12"
+                    ></path></svg
+                  ></button
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="pb-5 border-b border-vulcan-800">
+          <h3 class="text-base font-semibold leading-6 text-white">
+            Condensed
+          </h3>
+        </div>
+        <div class="flex flex-col w-full gap-2 mt-10">
+          <div
+            x-show="showAlert"
+            x-data="{ showAlert: true }"
+            role="alert"
+            class="pointer-events-auto w-full max-w-lg overflow-hidden ring-1 ring-inset ring-white/5 text-white bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem]"
+          >
+            <div class="bg-vulcan-900 rounded-xl p-4">
+              <div class="flex items-center">
+                <div class="flex w-0 flex-1 justify-between">
+                  <p class="w-0 flex-1 text-sm font-medium text-white">
+                    Newsletter archived
+                  </p>
+                  <button
+                    type="button"
+                    class="ml-3 flex-shrink-0 rounded-full px-2 text-sm font-medium text-indigo-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >Undo</button
+                  >
+                </div>
+                <div class="ml-4 flex flex-shrink-0">
+                  <button
+                    @click="showAlert = false"
+                    class="underline bg-white/10 ring-1 ring-white/50 text-white focus:bg-white focus:text-blue-700 hover:bg-white hover:text-blue-950 rounded-full p-0.5"
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-4 h-4 icon icon-tabler icon-tabler-x"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      ><path stroke="none" d="M0 0h24v24H0z" fill="none"
+                      ></path><path d="M18 6l-12 12"></path><path d="M6 6l12 12"
+                      ></path></svg
+                    ></button
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="pb-5 border-b border-vulcan-800">
+          <h3 class="text-base font-semibold leading-6 text-white">
+            With actions
+          </h3>
+        </div>
+        <div class="flex flex-col w-full gap-2 mt-10">
+          <div
+            x-show="showAlert"
+            x-data="{ showAlert: true }"
+            role="alert"
+            class="pointer-events-auto w-full max-w-lg overflow-hidden ring-1 ring-inset ring-white/5 text-white bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem]"
+          >
+            <div class="p-4 bg-vulcan-900 rounded-xl">
+              <div class="flex items-start">
+                <div class="w-0 flex-1 pt-0.5">
+                  <div class="inline-flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="icon icon-tabler icon-tabler-brand-hipchat w-4 h-4"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path
+                        d="M17.802 17.292s.077 -.055 .2 -.149c1.843 -1.425 3 -3.49 3 -5.789c0 -4.286 -4.03 -7.764 -9 -7.764c-4.97 0 -9 3.478 -9 7.764c0 4.288 4.03 7.646 9 7.646c.424 0 1.12 -.028 2.088 -.084c1.262 .82 3.104 1.493 4.716 1.493c.499 0 .734 -.41 .414 -.828c-.486 -.596 -1.156 -1.551 -1.416 -2.29z"
+                      ></path>
+                      <path d="M7.5 13.5c2.5 2.5 6.5 2.5 9 0"></path>
+                    </svg>
+                    <p class="text-sm text-white">Discussion moved</p>
+                  </div>
+                  <p class="mt-1 text-sm text-vulcan-300">
+                    You will find the discussion on the deleted items folder.
+                  </p>
+                  <div
+                    class="mt-4 flex space-x-7 border-t pt-4 border-vulcan-800 justify-end"
+                  >
+                    <button
+                      type="button"
+                      class="flex items-center justify-center text-sm text-white transition-all hover:text-indigo-400"
+                      >Dismiss</button
+                    >
+                    <button
+                      type="button"
+                      class="flex items-center justify-center text-sm text-indigo-400 transition-all hover:text-white"
+                      >Undo</button
+                    >
+                  </div>
+                </div>
+                <div class="ml-4 flex flex-shrink-0">
+                  <button
+                    @click="showAlert = false"
+                    class="underline bg-white/10 ring-1 ring-white/50 text-white focus:bg-white focus:text-blue-700 hover:bg-white hover:text-blue-950 rounded-full p-0.5"
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-4 h-4 icon icon-tabler icon-tabler-x"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      ><path stroke="none" d="M0 0h24v24H0z" fill="none"
+                      ></path><path d="M18 6l-12 12"></path><path d="M6 6l12 12"
+                      ></path></svg
+                    ></button
+                  >
+                </div>
+              </div>
+              <div class="bg-vulcan-900 rounded-xl p-4 sr-only">
+                <div class="flex items-center">
+                  <div class="flex w-0 flex-1 justify-between">
+                    <p class="w-0 flex-1 text-sm font-medium text-white">
+                      Newsletter archived
+                    </p>
+                    <button
+                      type="button"
+                      class="ml-3 flex-shrink-0 rounded-full px-2 text-sm font-medium text-indigo-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      >Undo</button
+                    >
+                  </div>
+                  <div class="ml-4 flex flex-shrink-0">
+                    <button
+                      @click="showAlert = false"
+                      class="underline bg-white/10 ring-1 ring-white/50 text-white focus:bg-white focus:text-blue-700 hover:bg-white hover:text-blue-950 rounded-full p-0.5"
+                      ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 icon icon-tabler icon-tabler-x"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path stroke="none" d="M0 0h24v24H0z" fill="none"
+                        ></path><path d="M18 6l-12 12"></path><path
+                          d="M6 6l12 12"></path></svg
+                      ></button
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="pb-5 border-b border-vulcan-800">
+          <h3 class="text-base font-semibold leading-6 text-white">
+            With image
+          </h3>
+        </div>
+        <div class="flex flex-col w-full gap-2 mt-10">
+          <div
+            x-show="showAlert"
+            x-data="{ showAlert: true }"
+            role="alert"
+            class="pointer-events-auto w-full max-w-lg overflow-hidden ring-1 ring-inset ring-white/5 text-white bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem]"
+          >
+            <div class="flex items-start bg-vulcan-900 rounded-xl p-4">
+              <div class="flex-shrink-0 pt-0.5">
+                <img
+                  class="h-10 w-10 rounded-full"
+                  src="https://pbs.twimg.com/profile_images/1039477099768295424/DkFxqf2V_400x400.jpg"
+                  alt=""
+                />
+              </div>
+              <div class="ml-3 w-0 flex-1">
+                <p class="text-sm font-medium text-white">Volkan Kaja</p>
+                <p class="mt-1 text-sm text-vulcan-300">
+                  Sure! 8:30pm works great!
+                </p>
+              </div>
+              <div class="ml-4 flex flex-shrink-0">
+                <button
+                  @click="showAlert = false"
+                  class="underline bg-white/10 ring-1 ring-white/50 text-white focus:bg-white focus:text-blue-700 hover:bg-white hover:text-blue-950 rounded-full p-0.5"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4 icon icon-tabler icon-tabler-x"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    ><path stroke="none" d="M0 0h24v24H0z" fill="none"
+                    ></path><path d="M18 6l-12 12"></path><path d="M6 6l12 12"
+                    ></path></svg
+                  ></button
+                >
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

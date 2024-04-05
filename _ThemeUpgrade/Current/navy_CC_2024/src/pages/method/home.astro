@@ -1,0 +1,92 @@
+---
+import { getCollection } from "astro:content";
+const allPosts = await getCollection("method");
+import MethodEntries from "@/components/method/MethodEntries.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout>
+  <section class="relative border-y border-white/5">
+    <div
+      class="max-w-7xl px-8 md:px-12 lg:px-32 mx-auto py-32 lg:py-36 relative"
+    >
+      <div class="max-w-xl">
+        <div class="w-full">
+          <span
+            class="text-transparent bg-clip-text font-medium tracking-widest bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-500 text-xs uppercase"
+            >Method</span
+          >
+          <h2 class="text-3xl mt-8 font-normal text-white">The Navy Method</h2>
+          <p class="text-lg mt-3 text-vulcan-300 text-balance">
+            At Navy, we hold the belief that software has the ability to evoke a
+            sense of enchantment. We recognize that the quality of software is
+            influenced not only by the skillset of its creators but also by the
+            level of enjoyment they experience while developing it.
+          </p>
+        </div>
+      </div>
+      <div class="max-w-3xl mt-24">
+        <div class="space-y-24">
+          <div>
+            <div class="border-b border-vulcan-800 pb-5">
+              <h3 class="text-base leading-6 text-vulcan-300">
+                <span class="text-white">01 ⏤</span> Introduction
+              </h3>
+            </div>
+            <div class="divide-y divide-white/10">
+              {
+                allPosts
+                  .slice(0, 1)
+                  .map((post) => (
+                    <MethodEntries
+                      url={"/method/" + post.slug}
+                      page={post.data.page}
+                    />
+                  ))
+              }
+            </div>
+          </div>
+          <div>
+            <div class="border-b border-vulcan-800 pb-5">
+              <h3 class="text-base leading-6 text-vulcan-300">
+                <span class="text-white">02 ⏤</span> Direction
+              </h3>
+            </div>
+            <div class="divide-y divide-white/10">
+              {
+                allPosts
+                  .slice(1, 4)
+                  .map((post) => (
+                    <MethodEntries
+                      url={"/method/" + post.slug}
+                      page={post.data.page}
+                    />
+                  ))
+              }
+            </div>
+          </div>
+          <div>
+            <div class="border-b border-vulcan-800 pb-5">
+              <h3 class="text-base leading-6 text-vulcan-300">
+                <span class="text-white">03 ⏤</span> Building
+              </h3>
+            </div>
+            <div class="divide-y divide-white/10">
+              {
+                allPosts
+                  .slice(4, 7)
+                  .map((post) => (
+                    <MethodEntries
+                      url={"/method/" + post.slug}
+                      page={post.data.page}
+                    />
+                  ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>

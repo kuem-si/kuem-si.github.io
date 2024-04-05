@@ -1,0 +1,79 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+const { frontmatter } = Astro.props;
+---
+
+<BaseLayout>
+  <section class="relative overflow-x-hidden">
+    <svg
+      class="absolute top-0 right-0 blur-3xl opacity-80"
+      width="50%"
+      height="100%"
+      viewBox="0 0 400 400"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clip-path="url(#clip0_17_60)">
+        <g filter="url(#filter0_f_17_60)">
+          <path d="M128.6 0H0V322.2L332.5 211.5L128.6 0Z" fill="#4D07E3"></path>
+          <path d="M0 322.2V400H240H320L332.5 211.5L0 322.2Z" fill="#4C00FF"
+          ></path>
+          <path d="M320 400H400V78.75L332.5 211.5L320 400Z" fill="#B5BFF1"
+          ></path>
+          <path d="M400 0H128.6L332.5 211.5L400 78.75V0Z" fill="#7fcef3"></path>
+        </g>
+      </g>
+      <defs>
+        <filter
+          id="filter0_f_17_60"
+          x="-159.933"
+          y="-159.933"
+          width="719.867"
+          height="719.867"
+          filterUnits="userSpaceOnUse"
+          color-interpolation-filters="sRGB"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="BackgroundImageFix"
+            result="shape"></feBlend>
+          <feGaussianBlur
+            stdDeviation="79.9667"
+            result="effect1_foregroundBlur_17_60"></feGaussianBlur>
+        </filter>
+      </defs>
+    </svg>
+    <div
+      class="relative px-8 py-32 mx-auto max-w-7xl md:px-12 lg:px-32 lg:pt-56"
+    >
+      <div class="max-w-3xl">
+        <p class="text-xs font-medium tracking-widest text-transparent uppercase bg-clip-text bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-500">
+          <time datetime={frontmatter.pubDate.toString().slice(0, 10)}
+            >{frontmatter.pubDate.toString().slice(0, 10)}</time
+          >
+        </p>
+        <h1 class="text-3xl mt-8 font-normal tracking-tight text-white">
+          {frontmatter.page}
+        </h1>
+        <p class="mt-2 text-base text-vulcan-300">
+          {frontmatter.description}
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="relative">
+    <div class="relative px-8 py-12 mx-auto max-w-7xl md:px-12 lg:px-32">
+      <div class="grid grid-cols-1 gap-10 xl:gap-24">
+        <div>
+          <div
+            class="prose prose-blockquote:border-l-white prose-a:text-indigo-500 hover:prose-a:text-white prose-headings:font-normal prose-headings:text-white prose-li:marker:text-indigo-500 text-vulcan-300 prose-code:text-white prose-blockquote:text-white/70"
+          >
+            <slot />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

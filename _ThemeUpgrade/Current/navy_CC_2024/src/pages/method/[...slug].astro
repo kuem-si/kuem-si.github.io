@@ -1,0 +1,22 @@
+---
+import { getCollection } from "astro:content";
+import MethodLayout from "@/layouts/MethodLayout.astro";
+export async function getStaticPaths() {
+  const method = await getCollection("method");
+  const paths = method.map((page) => {
+    return {
+      params: { slug: page.slug },
+      props: { page },
+
+      trailingSlash: false,
+    };
+  });
+  return paths;
+}
+const { page } = Astro.props;
+const { Content } = await page.render();
+---
+
+<MethodLayout frontmatter={page.data}>
+  <Content />
+</MethodLayout>

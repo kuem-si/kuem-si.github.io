@@ -1,0 +1,45 @@
+---
+import { getCollection } from "astro:content";
+const allPosts = await getCollection("changelog");
+import HomeEntries from "../../components/changelog/HomeEntries.astro";
+import CtaFive from "@/components/ctas/CtaFive.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout>
+  <section class="relative border-y border-white/5">
+    <div
+      class="max-w-7xl px-8 md:px-12 lg:px-32 mx-auto py-32 lg:py-36 relative"
+    >
+      <div class="w-full">
+        <span
+          class="text-transparent bg-clip-text font-medium tracking-widest bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-500 text-xs uppercase"
+          >Changelog</span
+        >
+        <h2 class="text-3xl mt-8 font-normal text-white">Stay updated</h2>
+        <div class="max-w-lg mt-3">
+          <p class="text-lg text-vulcan-300">
+            Follow our changelog to keep yourself updatd
+          </p>
+        </div>
+      </div>
+      <div class="mt-12 flex flex-col divide-2 divide-white/5">
+        <div class="grid grid-cols-1 gap-y-24 pt-4 lg:grid-cols-3 lg:pt-12">
+          {
+            allPosts
+              .slice()
+              .map((post) => (
+                <HomeEntries
+                  url={"/changelog/" + post.slug}
+                  page={post.data.page}
+                  pubDate={post.data.pubDate.toString().slice(0, 10)}
+                  description={post.data.description}
+                />
+              ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+  <CtaFive />
+</BaseLayout>

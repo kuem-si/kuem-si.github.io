@@ -1,0 +1,68 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+const { frontmatter } = Astro.props;
+import Blurgradienttop from "../components/assets/Blurgradienttop.astro";
+import CtaSix from "@/components/ctas/CtaSix.astro";
+---
+<BaseLayout>
+  <section class="relative">
+    <Blurgradienttop />
+    <div
+      class="relative px-8 py-32 mx-auto max-w-7xl md:px-12 lg:px-32 lg:py-56"
+    >
+      <div class="grid grid-cols-1 gap-10 xl:gap-24 lg:grid-cols-3">
+        <div>
+          <div class="flex flex-row gap-3">
+            <img src={frontmatter.logo.url} alt={frontmatter.logo.alt} />
+            <p class="text-2xl font-normal tracking-tight text-white">
+              {frontmatter.integration}
+            </p>
+          </div>
+          <p class="mt-4 text-base text-vulcan-300">
+            {frontmatter.tagline}
+          </p>
+          <div
+            class="flex flex-col mt-6 space-y-6 border-t divide-y border-vulcan-800 divide-white/10"
+          >
+            <div class="flex flex-row justify-between pt-6">
+              <span class="text-white">Built by</span>
+              <span class="text-vulcan-300"> {frontmatter.builtby}</span>
+            </div>
+            <div class="flex flex-row justify-between pt-6">
+              <span class="text-white">Website</span>
+              <span class="text-indigo-300 hover:text-white"
+                ><a href={frontmatter.website}>{frontmatter.integration}</a
+                ></span
+              >
+            </div>
+            <div class="flex flex-row justify-between pt-6">
+              <span class="text-white">Category</span>
+              <span class="text-vulcan-300">{frontmatter.category}</span>
+            </div>
+            <div class="flex flex-row justify-between pt-6">
+              <span class="text-white">Contact</span>
+              <span class="text-indigo-300 hover:text-white"
+                ><a href={frontmatter.email}>{frontmatter.contact}</a></span
+              >
+            </div>
+          </div>
+          <div class="mt-12">
+            <a
+              class="flex items-center justify-center h-10 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+              href={frontmatter.appURL}
+              title={frontmatter.title}
+              aria-label={frontmatter.appURL}
+              >Add to Navy
+            </a>
+          </div>
+        </div>
+        <div class="lg:col-span-2">
+          <div class="prose-styles">
+            <slot />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <CtaSix />
+</BaseLayout>

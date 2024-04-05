@@ -1,0 +1,16 @@
+---
+const { customer, url, logo } = Astro.props;
+---
+
+<a
+  href={url}
+  title={customer}
+  aria-label={url}
+  class="hover:shadow-xl duration-200 items-center bg-gradient-to-b from-indigo-500 via-indigo-500/5 rounded-3xl inline-flex p-[0.060rem] shadow-2xl text-center bg-vulcan-900 aspect-square"
+>
+  <div
+    class="bg-vulcan-900 px-6 sm:px-8 lg:py-8 h-full w-full rounded-3xl inline-flex items-center"
+  >
+    <img src={logo} alt={customer} class="mx-auto" />
+  </div>
+</a>

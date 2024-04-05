@@ -1,0 +1,24 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+const { frontmatter } = Astro.props;
+import Blurgradienttop from "../components/assets/Blurgradienttop.astro";
+---
+<BaseLayout>
+  <section class="relative overflow-x-hidden">
+   <Blurgradienttop/>
+    <div
+      class="relative px-8 py-32 mx-auto max-w-7xl md:px-12 lg:px-32 lg:pt-56"
+    >
+      <div class="max-w-3xl">
+        <p
+          class="mt-8 text-4xl font-normal tracking-tighter text-white sm:text-5xl"
+        >
+          {frontmatter.category}
+        </p>
+        <div class="prose-styles mt-12">
+          <slot/>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

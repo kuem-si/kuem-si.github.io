@@ -1,0 +1,56 @@
+---
+import Verticalgrid from "../assets/Verticalgrid.astro";
+const featuresBlockTwo = [
+  {
+    number: "01.",
+    title: "Multiple Locations Support",
+    description:
+    "Our platform allows for orders to be placed and fulfilled by multiple locations, making it easy for your users to order from the location closest to them. This feature also allows for regional or seasonal offerings",
+  },
+  {
+    number: "02.",
+    title: "Support for Custom Recipes and Products",
+    description:
+      "Our baking platform allows for custom recipes and products to be added, giving your users the ability to order unique items that are not listed on the menu. This feature is perfect for special events or for accommodating the needs of particular customers",
+  },
+];
+---
+
+<section class="relative">
+  <Verticalgrid />
+  <div class="max-w-7xl px-8 md:px-12 lg:px-32 mx-auto py-32 relative">
+    <div class="max-w-xl">
+      <p class="text-3xl font-normal text-white tracking-tight">
+        Smart conversations, quick answers
+      </p>
+      <p class="mt-4 text-base text-vulcan-300">
+        Engage in intelligent and efficient conversations with our AI-powered
+        chatbots, capable of providing instant and accurate responses to your
+        banking queries, offering you immediate assistance whenever you need it.
+      </p>
+    </div>
+
+    <div>
+      <ul
+        class="grid grid-cols-1  gap-4 mt-6 list-none lg:gap-24 md:grid-cols-2 lg:mt-24"
+        role="list">
+         {
+            featuresBlockTwo.map((feature) => (
+              <>
+                <li>
+                  <div class="text-base text-vulcan-300">
+                    <strong class="text-white">
+                      {feature.number} {feature.title}
+                    </strong>
+                    ― {feature.description}
+                  </div>
+                </li>
+
+              </>
+            ))
+          }
+
+      </ul>
+    </div>
+  </div>
+</section>

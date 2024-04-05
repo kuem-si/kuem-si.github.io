@@ -1,0 +1,59 @@
+---
+import Verticalgrid from "../assets/Verticalgrid.astro";
+const features = [
+  {
+    title: "User-friendly",
+    description: "Our platform is designed with the user in mind.",
+  },
+  {
+    title: "Customizable",
+    description: "Our platform allows for customizable branding.",
+  },
+  {
+    title: "Scheduled Orders",
+    description: "Our platform allows for scheduled orders.",
+  },
+  {
+    title: "Customizable",
+    description: "Our platform includes an allergen filtering feature.",
+  },
+];
+---
+
+<section class="relative">
+  <Verticalgrid />
+  <div class="relative px-8 py-12 mx-auto max-w-7xl md:px-12 lg:px-32 lg:py-24">
+    <div class="grid grid-cols-1 gap-12 xl:grid-cols-2 lg:gap-24">
+      <div>
+        <p
+          class="text-sm text-transparent uppercase bg-gradient-to-r from-indigo-300 to-indigo-400 bg-clip-text"
+        >
+          Intelligent chatbots
+        </p>
+        <p class="mt-8 text-3xl font-normal tracking-tight text-white">
+          Stay in the know with our real time notifications that provide instant
+          updates.
+        </p>
+      </div>
+      <ul
+        class="grid grid-cols-2 gap-6 list-none l xl:grid-cols-2 lg:gap-12"
+        role="list"
+      >
+        {
+          features.map((feature) => (
+            <li>
+              <div>
+                <p class="text-lg mt-6 font-medium text-white lg:text-xl">
+                  {feature.title}
+                </p>
+              </div>
+              <div class="mt-2 text-base text-vulcan-300">
+                {feature.description}
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,707 @@
+---
+import { getCollection } from "astro:content";
+const allPosts = await getCollection("posts");
+import EntriesOne from "@/components/entries/EntriesOne.astro";
+---
+
+<section class="overflow-hidden">
+  <div class="px-8 py-24 mx-auto max-w-7xl md:px-12 lg:px-32 lg:pt-56">
+    <div class="justify-center max-w-3xl">
+      <p class="text-3xl font-normal tracking-tight text-white">Sliders</p>
+    </div>
+    <div class="mt-12 space-y-24">
+      <div>
+        <div class="pb-5 border-b border-vulcan-800">
+          <h3 class="text-base font-semibold leading-6 text-white">Simple</h3>
+        </div>
+        <div class="inline-flex flex-wrap items-center w-full gap-2 mt-10">
+          <div
+            x-data="{
+        skip: 3,
+        atBeginning: false,
+        atEnd: false,
+        next() {
+            this.to((current, offset) => current + (offset * this.skip))
+        },
+        prev() {
+            this.to((current, offset) => current - (offset * this.skip))
+        },
+        to(strategy) {
+            let slider = this.$refs.slider
+            let current = slider.scrollLeft
+            let offset = slider.firstElementChild.getBoundingClientRect().width
+            slider.scrollTo({ left: strategy(current, offset), behavior: 'smooth' })
+        },
+        focusableWhenVisible: {
+            'x-intersect:enter'() {
+                this.$el.removeAttribute('tabindex')
+            },
+            'x-intersect:leave'() {
+                this.$el.setAttribute('tabindex', '-1')
+            },
+        },
+        disableNextAndPreviousButtons: {
+            'x-intersect:enter.threshold.05'() {
+                let slideEls = this.$el.parentElement.children
+                // If this is the first slide.
+                if (slideEls[0] === this.$el) {
+                    this.atBeginning = true
+                // If this is the last slide.
+                } else if (slideEls[slideEls.length-1] === this.$el) {
+                    this.atEnd = true
+                }
+            },
+            'x-intersect:leave.threshold.05'() {
+                let slideEls = this.$el.parentElement.children
+                // If this is the first slide.
+                if (slideEls[0] === this.$el) {
+                    this.atBeginning = false
+                // If this is the last slide.
+                } else if (slideEls[slideEls.length-1] === this.$el) {
+                    this.atEnd = false
+                }
+            },
+        },
+    }"
+            class="flex w-full flex-col"
+          >
+            <div
+              x-on:keydown.right="next"
+              x-on:keydown.left="prev"
+              tabindex="0"
+              role="region"
+              aria-labelledby="carousel-label"
+              class="flex flex-col"
+            >
+              <h2 id="carousel-label" class="sr-only" hidden>Carousel</h2>
+              <div class="items-center inline-flex mt-4 space-x-2">
+                <button
+                  class="inline-flex items-center justify-center h-10 p-3 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700 cursor-pointer"
+                  :class="{ 'opacity-50 cursor-not-allowed': atBeginning }"
+                  :aria-disabled="atBeginning"
+                  :tabindex="atEnd ? -1 : 0"
+                  x-on:click="prev"
+                  tabindex="0"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon icon-tabler icon-tabler-chevron-left"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    ><path stroke="none" d="M0 0h24v24H0z" fill="none"
+                    ></path><path d="M15 6l-6 6l6 6"></path></svg
+                  ><span class="sr-only">Skip to previous slide page</span
+                  ></button
+                ><button
+                  class="inline-flex items-center justify-center h-10 p-3 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700 cursor-pointer"
+                  :class="{ 'opacity-50 cursor-not-allowed': atEnd }"
+                  :aria-disabled="atEnd"
+                  :tabindex="atEnd ? -1 : 0"
+                  x-on:click="next"
+                  tabindex="0"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon icon-tabler icon-tabler-chevron-right"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    ><path stroke="none" d="M0 0h24v24H0z" fill="none"
+                    ></path><path d="M9 6l6 6l-6 6"></path></svg
+                  ><span class="sr-only">Skip to next slide page</span></button
+                >
+              </div>
+
+              <div class="relative w-full snap-x mt-12 ">
+                <div class="w-full justify-between grid">
+                  <div class="w-full justify-between grid">
+                    <div
+                      class="absolute inset-0 from-vulcan-900  left-0 via-transparent w-44 z-10 bg-gradient-to-r"
+                    >
+                    </div><div
+                      class="absolute inset-0 from-vulcan-900  left-0 via-transparent w-44 z-10 bg-gradient-to-l ml-auto"
+                    >
+                    </div>
+                  </div>
+                </div>
+                <ul
+                  class="gap-3 overflow-x-scroll pb-12 grid grid-flow-col auto-cols-max scrollbar-hide snap-mandatory relative"
+                  role="listbox"
+                  aria-labelledby="carousel-content-label"
+                  tabindex="0"
+                  x-ref="slider"
+                >
+                  <li
+                    role="option"
+                    x-bind="disableNextAndPreviousButtons"
+                    class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800"
+                  >
+                    <figure class="bg-vulcan-900 rounded-xl p-4">
+                      <div>
+                        <div class="inline-flex items-center gap-4">
+                          <img
+                            class="w-12 h-12 rounded-full object-cover"
+                            src="https://alfred.lexingtonthemes.com/avatar1.png"
+                            alt="Testimonial Image"
+                          /><p
+                            class="uppercase tracking-tighter text-sm font-medium text-white"
+                          >
+                            John Doe
+                          </p>
+                        </div><p
+                          class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                        >
+                          "This platform has been a game-changer for me. It's
+                          made managing my finances so much easier."
+                        </p>
+                      </div>
+                    </figure>
+                  </li><li
+                    role="option"
+                    x-bind="disableNextAndPreviousButtons"
+                    class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800"
+                  >
+                    <figure class="bg-vulcan-900 rounded-xl p-4">
+                      <div>
+                        <div class="inline-flex items-center gap-4">
+                          <img
+                            class="w-12 h-12 rounded-full object-cover"
+                            src="https://alfred.lexingtonthemes.com/avatar2.png"
+                            alt="Testimonial Image"
+                          /><p
+                            class="uppercase tracking-tighter text-sm font-medium text-white"
+                          >
+                            Jane Smith
+                          </p>
+                        </div><p
+                          class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                        >
+                          "I've seen substantial growth in my investments thanks
+                          to this platform. Highly recommended!"
+                        </p>
+                      </div>
+                    </figure>
+                  </li><li
+                    role="option"
+                    x-bind="disableNextAndPreviousButtons"
+                    class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800"
+                  >
+                    <figure class="bg-vulcan-900 rounded-xl p-4">
+                      <div>
+                        <div class="inline-flex items-center gap-4">
+                          <img
+                            class="w-12 h-12 rounded-full object-cover"
+                            src="https://alfred.lexingtonthemes.com/avatar3.png"
+                            alt="Testimonial Image"
+                          /><p
+                            class="uppercase tracking-tighter text-sm font-medium text-white"
+                          >
+                            Emma Johnson
+                          </p>
+                        </div><p
+                          class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                        >
+                          "The transparency and efficiency of this platform have
+                          made my financial life stress-free."
+                        </p>
+                      </div>
+                    </figure>
+                  </li><li
+                    role="option"
+                    x-bind="disableNextAndPreviousButtons"
+                    class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800"
+                  >
+                    <figure class="bg-vulcan-900 rounded-xl p-4">
+                      <div>
+                        <div class="inline-flex items-center gap-4">
+                          <img
+                            class="w-12 h-12 rounded-full object-cover"
+                            src="https://alfred.lexingtonthemes.com/avatar4.png"
+                            alt="Testimonial Image"
+                          /><p
+                            class="uppercase tracking-tighter text-sm font-medium text-white"
+                          >
+                            Mark Davis
+                          </p>
+                        </div><p
+                          class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                        >
+                          "The platform's stability and redundancy give me peace
+                          of mind knowing my data is secure."
+                        </p>
+                      </div>
+                    </figure>
+                  </li><li
+                    role="option"
+                    x-bind="disableNextAndPreviousButtons"
+                    class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800"
+                  >
+                    <figure class="bg-vulcan-900 rounded-xl p-4">
+                      <div>
+                        <div class="inline-flex items-center gap-4">
+                          <img
+                            class="w-12 h-12 rounded-full object-cover"
+                            src="https://alfred.lexingtonthemes.com/avatar5.png"
+                            alt="Testimonial Image"
+                          /><p
+                            class="uppercase tracking-tighter text-sm font-medium text-white"
+                          >
+                            Lisa Brown
+                          </p>
+                        </div><p
+                          class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                        >
+                          "The fast services have saved me time and made my
+                          financial planning a breeze."
+                        </p>
+                      </div>
+                    </figure>
+                  </li><li
+                    role="option"
+                    x-bind="disableNextAndPreviousButtons"
+                    class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800"
+                  >
+                    <figure class="bg-vulcan-900 rounded-xl p-4">
+                      <div>
+                        <div class="inline-flex items-center gap-4">
+                          <img
+                            class="w-12 h-12 rounded-full object-cover"
+                            src="https://alfred.lexingtonthemes.com/avatar6.png"
+                            alt="Testimonial Image"
+                          /><p
+                            class="uppercase tracking-tighter text-sm font-medium text-white"
+                          >
+                            Sarah Wilson
+                          </p>
+                        </div><p
+                          class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                        >
+                          "I'm amazed by the support and guidance provided. It's
+                          been a fantastic journey with this platform."
+                        </p>
+                      </div>
+                    </figure>
+                  </li><li
+                    role="option"
+                    x-bind="disableNextAndPreviousButtons"
+                    class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800"
+                  >
+                    <figure class="bg-vulcan-900 rounded-xl p-4">
+                      <div>
+                        <div class="inline-flex items-center gap-4">
+                          <img
+                            class="w-12 h-12 rounded-full object-cover"
+                            src="https://alfred.lexingtonthemes.com/avatar7.png"
+                            alt="Testimonial Image"
+                          /><p
+                            class="uppercase tracking-tighter text-sm font-medium text-white"
+                          >
+                            Michael Turner
+                          </p>
+                        </div><p
+                          class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                        >
+                          "I've never encountered a more user-friendly platform
+                          for managing my finances. It's a true gem."
+                        </p>
+                      </div>
+                    </figure>
+                  </li><li
+                    role="option"
+                    x-bind="disableNextAndPreviousButtons"
+                    class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800 mr-[42rem]"
+                  >
+                    <figure class="bg-vulcan-900 rounded-xl p-4">
+                      <div>
+                        <div class="inline-flex items-center gap-4">
+                          <img
+                            class="w-12 h-12 rounded-full object-cover"
+                            src="https://alfred.lexingtonthemes.com/avatar8.png"
+                            alt="Testimonial Image"
+                          /><p
+                            class="uppercase tracking-tighter text-sm font-medium text-white"
+                          >
+                            Amanda Carter
+                          </p>
+                        </div><p
+                          class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                        >
+                          "This platform's features have made a significant
+                          impact on my financial goals. I couldn't be happier."
+                        </p>
+                      </div>
+                    </figure>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="pb-5 border-b border-vulcan-800">
+          <h3 class="text-base font-semibold leading-6 text-white">
+            Of canvas
+          </h3>
+        </div>
+        <div class="inline-flex flex-wrap items-center w-full gap-2 mt-10">
+          <div
+            class="flex flex-col w-full"
+            x-data="{
+            skip: 1,
+            atBeginning: false,
+            atEnd: false,
+            next() {
+                this.to((current, offset) => current + (offset * this.skip))
+            },
+            prev() {
+                this.to((current, offset) => current - (offset * this.skip))
+            },
+            to(strategy) {
+                let slider = this.$refs.slider
+                let current = slider.scrollLeft
+                let offset = slider.firstElementChild.getBoundingClientRect().width
+                slider.scrollTo({ left: strategy(current, offset), behavior: 'smooth' })
+            },
+            focusableWhenVisible: {
+                'x-intersect:enter'() {
+                    this.$el.removeAttribute('tabindex')
+                },
+                'x-intersect:leave'() {
+                    this.$el.setAttribute('tabindex', '-1')
+                },
+            },
+            disableNextAndPreviousButtons: {
+                'x-intersect:enter.threshold.05'() {
+                    let slideEls = this.$el.parentElement.children
+                    // If this is the first slide.
+                    if (slideEls[0] === this.$el) {
+                        this.atBeginning = true
+                    // If this is the last slide.
+                    } else if (slideEls[slideEls.length-1] === this.$el) {
+                        this.atEnd = true
+                    }
+                },
+                'x-intersect:leave.threshold.05'() {
+                    let slideEls = this.$el.parentElement.children
+                    // If this is the first slide.
+                    if (slideEls[0] === this.$el) {
+                        this.atBeginning = false
+                    // If this is the last slide.
+                    } else if (slideEls[slideEls.length-1] === this.$el) {
+                        this.atEnd = false
+                    }
+                },
+            },
+        }"
+          >
+            <div
+              class="flex flex-col w-full"
+              aria-labelledby="carousel-label"
+              role="region"
+              tabindex="0"
+              x-on:keydown.left="prev"
+              x-on:keydown.right="next"
+            >
+              <div class="flex flex-col lg:flex-row">
+                <div>
+                  <div>
+                    <p class="text-3xl font-normal tracking-tight text-white">
+                      Some heading <span class="md:block">just right here</span>
+                    </p><p
+                      class="text-base lg:text-base w-full mt-4 text-vulcan-300 max-w-xs"
+                    >
+                      And some subtitle here too if you want to have some
+                      support text
+                    </p>
+                  </div>
+                  <div
+                    class="items-center inline-flex mt-4 order-last space-x-2"
+                  >
+                    <button
+                      class="inline-flex items-center justify-center h-10 p-3 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700 cursor-pointer"
+                      :class="{ 'opacity-50 cursor-not-allowed': atBeginning }"
+                      :aria-disabled="atBeginning"
+                      :tabindex="atEnd ? -1 : 0"
+                      x-on:click="prev"
+                      tabindex="0"
+                      ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="icon icon-tabler icon-tabler-chevron-left"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path stroke="none" d="M0 0h24v24H0z" fill="none"
+                        ></path><path d="M15 6l-6 6l6 6"></path></svg
+                      ><span class="sr-only">Skip to previous slide page</span
+                      ></button
+                    ><button
+                      class="inline-flex items-center justify-center h-10 p-3 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700 cursor-pointer"
+                      :class="{ 'opacity-50 cursor-not-allowed': atEnd }"
+                      :aria-disabled="atEnd"
+                      :tabindex="atEnd ? -1 : 0"
+                      x-on:click="next"
+                      tabindex="0"
+                      ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="icon icon-tabler icon-tabler-chevron-right"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path stroke="none" d="M0 0h24v24H0z" fill="none"
+                        ></path><path d="M9 6l6 6l-6 6"></path></svg
+                      ><span class="sr-only">Skip to next slide page</span
+                      ></button
+                    >
+                  </div>
+                </div>
+                <div
+                  class="relative w-full snap-x lg:-mr-[90rem] lg:ml-32 mt-12 lg:mt-0"
+                >
+                  <div class="w-full justify-between grid">
+                    <div
+                      class="absolute inset-0 from-vulcan-900 left-0 via-transparent w-32 z-10 bg-gradient-to-r"
+                    >
+                    </div><div
+                      class="hidden lg:absolute inset-0 from-vulcan-900 left-0 via-transparent w-32 z-10 bg-gradient-to-l ml-auto"
+                    >
+                    </div>
+                  </div>
+                  <ul
+                    class="gap-3 overflow-x-scroll pb-12 w-screen grid grid-flow-col auto-cols-max scrollbar-hide snap-mandatory relative"
+                    role="listbox"
+                    aria-labelledby="carousel-content-label"
+                    tabindex="0"
+                    x-ref="slider"
+                  >
+                    <li
+                      role="option"
+                      x-bind="disableNextAndPreviousButtons"
+                      class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800"
+                    >
+                      <figure class="bg-vulcan-900 rounded-xl p-4">
+                        <div>
+                          <div class="inline-flex items-center gap-4">
+                            <img
+                              class="w-12 h-12 rounded-full object-cover"
+                              src="https://alfred.lexingtonthemes.com/avatar1.png"
+                              alt="Testimonial Image"
+                            /><p
+                              class="uppercase tracking-tighter text-sm font-medium text-white"
+                            >
+                              John Doe
+                            </p>
+                          </div><p
+                            class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                          >
+                            "This platform has been a game-changer for me. It's
+                            made managing my finances so much easier."
+                          </p>
+                        </div>
+                      </figure>
+                    </li><li
+                      role="option"
+                      x-bind="disableNextAndPreviousButtons"
+                      class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800"
+                    >
+                      <figure class="bg-vulcan-900 rounded-xl p-4">
+                        <div>
+                          <div class="inline-flex items-center gap-4">
+                            <img
+                              class="w-12 h-12 rounded-full object-cover"
+                              src="https://alfred.lexingtonthemes.com/avatar2.png"
+                              alt="Testimonial Image"
+                            /><p
+                              class="uppercase tracking-tighter text-sm font-medium text-white"
+                            >
+                              Jane Smith
+                            </p>
+                          </div><p
+                            class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                          >
+                            "I've seen substantial growth in my investments
+                            thanks to this platform. Highly recommended!"
+                          </p>
+                        </div>
+                      </figure>
+                    </li><li
+                      role="option"
+                      x-bind="disableNextAndPreviousButtons"
+                      class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800"
+                    >
+                      <figure class="bg-vulcan-900 rounded-xl p-4">
+                        <div>
+                          <div class="inline-flex items-center gap-4">
+                            <img
+                              class="w-12 h-12 rounded-full object-cover"
+                              src="https://alfred.lexingtonthemes.com/avatar3.png"
+                              alt="Testimonial Image"
+                            /><p
+                              class="uppercase tracking-tighter text-sm font-medium text-white"
+                            >
+                              Emma Johnson
+                            </p>
+                          </div><p
+                            class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                          >
+                            "The transparency and efficiency of this platform
+                            have made my financial life stress-free."
+                          </p>
+                        </div>
+                      </figure>
+                    </li><li
+                      role="option"
+                      x-bind="disableNextAndPreviousButtons"
+                      class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800"
+                    >
+                      <figure class="bg-vulcan-900 rounded-xl p-4">
+                        <div>
+                          <div class="inline-flex items-center gap-4">
+                            <img
+                              class="w-12 h-12 rounded-full object-cover"
+                              src="https://alfred.lexingtonthemes.com/avatar4.png"
+                              alt="Testimonial Image"
+                            /><p
+                              class="uppercase tracking-tighter text-sm font-medium text-white"
+                            >
+                              Mark Davis
+                            </p>
+                          </div><p
+                            class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                          >
+                            "The platform's stability and redundancy give me
+                            peace of mind knowing my data is secure."
+                          </p>
+                        </div>
+                      </figure>
+                    </li><li
+                      role="option"
+                      x-bind="disableNextAndPreviousButtons"
+                      class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800"
+                    >
+                      <figure class="bg-vulcan-900 rounded-xl p-4">
+                        <div>
+                          <div class="inline-flex items-center gap-4">
+                            <img
+                              class="w-12 h-12 rounded-full object-cover"
+                              src="https://alfred.lexingtonthemes.com/avatar5.png"
+                              alt="Testimonial Image"
+                            /><p
+                              class="uppercase tracking-tighter text-sm font-medium text-white"
+                            >
+                              Lisa Brown
+                            </p>
+                          </div><p
+                            class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                          >
+                            "The fast services have saved me time and made my
+                            financial planning a breeze."
+                          </p>
+                        </div>
+                      </figure>
+                    </li><li
+                      role="option"
+                      x-bind="disableNextAndPreviousButtons"
+                      class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800"
+                    >
+                      <figure class="bg-vulcan-900 rounded-xl p-4">
+                        <div>
+                          <div class="inline-flex items-center gap-4">
+                            <img
+                              class="w-12 h-12 rounded-full object-cover"
+                              src="https://alfred.lexingtonthemes.com/avatar6.png"
+                              alt="Testimonial Image"
+                            /><p
+                              class="uppercase tracking-tighter text-sm font-medium text-white"
+                            >
+                              Sarah Wilson
+                            </p>
+                          </div><p
+                            class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                          >
+                            "I'm amazed by the support and guidance provided.
+                            It's been a fantastic journey with this platform."
+                          </p>
+                        </div>
+                      </figure>
+                    </li><li
+                      role="option"
+                      x-bind="disableNextAndPreviousButtons"
+                      class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800"
+                    >
+                      <figure class="bg-vulcan-900 rounded-xl p-4">
+                        <div>
+                          <div class="inline-flex items-center gap-4">
+                            <img
+                              class="w-12 h-12 rounded-full object-cover"
+                              src="https://alfred.lexingtonthemes.com/avatar7.png"
+                              alt="Testimonial Image"
+                            /><p
+                              class="uppercase tracking-tighter text-sm font-medium text-white"
+                            >
+                              Michael Turner
+                            </p>
+                          </div><p
+                            class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                          >
+                            "I've never encountered a more user-friendly
+                            platform for managing my finances. It's a true gem."
+                          </p>
+                        </div>
+                      </figure>
+                    </li><li
+                      role="option"
+                      x-bind="disableNextAndPreviousButtons"
+                      class="bg-gradient-to-b from-indigo-500 via-indigo-500/5 shadow-2xl rounded-xl p-[0.060rem] snap-start w-64 h-full ring-1 ring-vulcan-800 mr-[42rem]"
+                    >
+                      <figure class="bg-vulcan-900 rounded-xl p-4">
+                        <div>
+                          <div class="inline-flex items-center gap-4">
+                            <img
+                              class="w-12 h-12 rounded-full object-cover"
+                              src="https://alfred.lexingtonthemes.com/avatar8.png"
+                              alt="Testimonial Image"
+                            /><p
+                              class="uppercase tracking-tighter text-sm font-medium text-white"
+                            >
+                              Amanda Carter
+                            </p>
+                          </div><p
+                            class="text-sm text-vulcan-300 group-hover:text-white mt-4"
+                          >
+                            "This platform's features have made a significant
+                            impact on my financial goals. I couldn't be
+                            happier."
+                          </p>
+                        </div>
+                      </figure>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,22 @@
+---
+const { integration, tagline, logo, url } = Astro.props;
+---
+
+<li class="h-full flex flex-col ">
+  <div>
+    <img src={logo} alt={integration} />
+    <p class="mt-4 text-lg font-medium text-white lg:text-xl">{integration}</p>
+  </div>
+  <div class="mt-2 text-sm text-vulcan-300 h-full gap-y-12 justify-between flex flex-col">
+    <p class="mt-4">
+      {tagline}
+    </p>
+    <p >
+      <a
+        href={url} title={integration}  aria-label={url}
+        class="text-sm leading-6 text-indigo-300 hover:text-white block"
+        >Read more <span aria-hidden="true">&rarr;</span></a
+      >
+    </p>
+  </div>
+</li>

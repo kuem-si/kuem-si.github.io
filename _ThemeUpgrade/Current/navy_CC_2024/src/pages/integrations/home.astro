@@ -1,0 +1,55 @@
+---
+import { getCollection } from "astro:content";
+const allPosts = await getCollection("integrations");
+import IntegrationsEntries from "../../components/integrations/IntegrationsEntries.astro";
+import CtaSix from "@/components/ctas/CtaSix.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Verticalgrid from "@/components/assets/Verticalgrid.astro";
+---
+
+<BaseLayout>
+  <section class="relative">
+    <Verticalgrid />
+    <div
+      class="relative px-8 py-32 mx-auto space-y-24 max-w-7xl md:px-12 lg:px-32 lg:py-56"
+    >
+      <div class="max-w-2xl">
+        <div>
+          <span
+            class="text-xs font-medium tracking-widest text-transparent uppercase bg-clip-text bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-500"
+            >integrations</span
+          >
+          <p
+            class="mt-8 text-4xl font-normal tracking-tighter text-white sm:text-5xl"
+          >
+            Dozens of apps.
+            <span class="block"> Endless possibilities.</span>
+          </p>
+          <p class="max-w-xl mt-4 text-base text-vulcan-300">
+            Enhance your Navy experience with a wide variety of add-ons and
+            integrations. From everyday essentials to powerful pro workflows.
+          </p>
+        </div>
+      </div>
+      <ul
+        class="grid grid-cols-2 gap-6 mt-12 list-none lg:grid-cols-4  lg:gap-x-12 lg:gap-y-32 gap-y-24 lg:mt-24"
+        role="list"
+      >
+        {
+          allPosts
+            .slice()
+            .map((post) => (
+              <IntegrationsEntries
+                url={"/integrations/" + post.slug}
+                logo={post.data.logo.url}
+                tagline={post.data.tagline}
+                integration={post.data.integration}
+              />
+            ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaSix />
+</BaseLayout>

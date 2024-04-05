@@ -1,0 +1,92 @@
+---
+import Verticalgrid from "../assets/Verticalgrid.astro";
+import StarIcon from "../assets/StarIcon.astro";
+const testimonials = [
+  {
+    name: "Amrit Nagi",
+    role: "CEO",
+    company: "Tailwind Toolbox",
+    testimonial: "It's amazing just how quickly the quality and variety of his work has developed and evolved!",
+    imageUrl: "https://d33wubrfki0l68.cloudfront.net/1a2e935392c14749028729b21b20ddbd4c54b70e/1a932/images/testimonials/amrit.jpeg",
+    stars: 5
+  },
+  {
+    name: "Gabriel Perales",
+    role: "Engineer",
+    company: "Cabify",
+    testimonial: "Mike has helped me with many designs, and I couldn't follow his working speed when we worked together.",
+    imageUrl: "https://d33wubrfki0l68.cloudfront.net/cabc8d70a84f6d78e56c5cd2db3f54ab6462325d/95045/images/testimonials/gabi.jpeg",
+    stars: 5
+  },{
+    name: "Petter VOx",
+    role: "CEO",
+    company: "SVG Everuything",
+    testimonial: "Ever since I made the switch to Attentive, my productivity levels have skyrocketed. ",
+    imageUrl: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80",
+    stars: 5
+  },
+  {
+    name: "Johnny MC",
+    role: "Engineer",
+    company: "Jhonnyfy",
+    testimonial: "Mike has helped me with many designs, and I couldn't follow his working speed when we worked together.",
+    imageUrl: "https://images.unsplash.com/photo-1639149888905-fb39731f2e6c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80",
+    stars: 5
+  },
+  // Additional testimonials...
+];
+
+---
+<section class="relative overflow-x-hidden">
+  <Verticalgrid />
+  <div class="relative px-8 py-12 mx-auto max-w-7xl md:px-12 lg:px-32 lg:pt-24">
+    <div class="">
+      <p class="text-3xl font-normal text-white">
+        Companies like yours use Navy to grow.
+      </p>
+      <p class="max-w-xl mt-4 text-base text-vulcan-300">
+        This are the customers we have paid to say something nice anytime we ask
+        them, they will do anything we ask because we have the do.
+      </p>
+    </div>
+  </div>
+  <div class="pb-24 2xl:max-7xl">
+    <div class="mx-auto">
+      <div class="relative overflow-x-hidden">
+        <div class="gap-6 py-24 flex animate-scroll whitespace-nowrap ">
+         {
+            testimonials.map((testimonial) => (
+              <div class="p-[0.060rem] rounded-3xl shadow-2xl shadow-vulcan-950 bg-gradient-to-b from-indigo-500 via-indigo-500/5">
+                <div class="p-4 text-left border shadow-2xl lg:p-10 border-white/5 rounded-3xl bg-vulcan-900 w-96 shrink-0">
+                  <div class="gap-4 lg:inline-flex lg:items-center">
+                    <img
+                      class="inline-block w-10 h-10 rounded-full ring-2 ring-white/5 ring-offset-4 ring-offset-vulcan-900"
+                      src={testimonial.imageUrl}
+                      alt={`Testimonial by ${testimonial.name}`}
+                    />
+                    <div>
+                      <p class="mt-8 text-xs text-vulcan-300 lg:mt-0">
+                        <strong class="text-white block">{testimonial.name}</strong>{" "}
+                        {testimonial.role} at {testimonial.company}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="mt-4 text-base text-vulcan-300 text-wrap">
+                    {testimonial.testimonial}
+                  </div>
+                  <div class="flex justify-start gap-1 mx-auto mt-6">
+                    <StarIcon />
+                    <StarIcon />
+                    <StarIcon />
+                    <StarIcon />
+                    <StarIcon />
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
