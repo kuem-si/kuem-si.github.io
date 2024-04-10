@@ -69,6 +69,7 @@ export const languages = {
       'kuemdoo': 'Kuem d.o.o.',
       'linkedin': 'LinkedIn',
       'github': 'GitHub',
+      'youtube': 'YouTube',
 
       'global:moreinfo': 'Več informacij',
       'global:support': 'Podpora',
