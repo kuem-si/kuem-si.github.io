@@ -1,0 +1,162 @@
+---
+import Blurgradientleft from "../../assets/Blurgradientleft.astro";
+import Verticalgrid from "../../assets/Verticalgrid.astro";
+const featuresNexaviaEnterprise = [
+  {
+    tagline: "About",
+    title: "Advanced General-Purpose, Multitenant IoT Platform for Businesses (B2B)",
+    description:
+      "Nexavia Enterprise enables the capture of data from IoT devices across various networks such as LoRa, NB-IoT, and more.",
+    image: "/assets/card2.svg",
+  },
+  {
+    tagline: "Support for multiple network protocols and concentrators",
+    title: "LoRa, NB-IoT, REST, MQTT",
+    description:
+      "IoT devices can send data to Nexavia Enterprise via multiple supported protocols and network servers such as TTS, ChripStack,....",
+    image: "/assets/card2.svg",
+  },
+  {
+    tagline: "Over 50 IoT devices are currently supported",
+    title: "Measure temperature, humidity, parking place occupation and much more",
+    description:
+      "Nexavia Enterprise has integrated many decoders for various IoT device types for many use cases (various industries, smart cities,...).",
+    image: "/assets/card2.svg",
+  },
+  {
+    tagline: "Monitoring & Alerting",
+    title: "View and be notified on events",
+    description:
+      "With its real-time monitoring and control, it allows tracking and management across various verticals including environmental and spatial areas (temperature, humidity, CO2), HACCP (food monitoring), electricity (home and rental space consumption monitoring), and home monitoring (water leak detection, temperature, etc.).",
+    image: "/assets/card1.svg",
+  },
+  {
+    tagline: "Have complete control",
+    title: "Dedicated database per tenant, SaaS or on-premise installation",
+    description:
+      "Each tenant has it's own database for data which can be transfared from SaaS and on-premise (and vice versa).",
+    image: "/assets/card4.svg",
+  },
+];
+---
+
+<section class="relative">
+    <Verticalgrid />
+    <div
+      class="relative items-center w-full px-5 py-24 mx-auto md:px-12 lg:px-16 max-w-7xl lg:pb-32 lg:pt-56"
+    >
+      <div class="max-w-5xl mx-auto">
+        <p
+          class="text-sm text-transparent uppercase bg-gradient-to-r from-indigo-300 to-indigo-400 bg-clip-text"
+        >
+          Nexavia family line of IoT software solutions
+        </p>
+        <p
+          class="mt-8 text-4xl text-balance font-normal text-white sm:text-5xl"
+        >
+          Comprehensive software solutions for complete overview of IoT devices ecosystem
+        </p>
+        <p class="max-w-2xl mt-4 text-vulcan-300">
+          Nexavia line of products covers IoT software solutions for businesses (B2B) as well as end-users (B2C).
+          <br />
+          All Nexavia line od software solutions are based on web and mobile technologies.
+        </p>
+        <!-- <div class="flex flex-wrap items-center gap-2 mt-10">
+          <a
+            href="https://lexingtonthemes.lemonsqueezy.com/checkout/buy/cad98266-24b3-47fd-99a6-e65ad9af37f6"
+            title="link to  page"
+            aria-label="your label"
+            class="flex items-center justify-center h-10 px-4 py-2 text-sm font-semibold text-white transition-all rounded-lg hover:to-indigo-600 bg-gradient-to-b from-indigo-300 via-indigo-400 to-indigo-500"
+            >Buy Navy</a
+          >
+          <a
+            href="/system/overview"
+            title="link to  page"
+            aria-label="your label"
+            class="flex items-center justify-center h-10 px-4 py-2 text-sm font-semibold text-white transition-all border rounded-lg bg-vulcan-900 hover:text-indigo-400 border-vulcan-700"
+            >See all pages</a
+          >
+        </div> -->
+      </div>
+    </div>
+
+    <!-- <div class="">
+        <div
+        class="max-w-7xl px-8 md:px-12 lg:px-32 mx-auto py-12 lg:py-24 relative space-y-24"
+        >
+        {
+            features.map((feature, index) => (
+            <div
+                key={index}
+                class="grid grid-cols-1 gap-8 mt-6 sm:grid-cols-2 lg:gap-24 items-center"
+            >
+                <div>
+                <p class="text-sm text-transparent uppercase bg-gradient-to-r from-indigo-300 to-indigo-400 bg-clip-text">
+                    {feature.tagline}
+                </p>
+                <p class="text-3xl mt-8 font-normal text-white tracking-tight">
+                    {feature.title}
+                </p>
+                <p class="mt-4 text-base text-vulcan-300">
+                    {feature.description}
+                </p>
+                </div>
+                <div class={`h-full ${index % 2 === 0 ? "lg:order-first" : ""}`}>
+                <img
+                    alt={feature.tagline}
+                    class="rounded-2xl shadow-2xl shadow-vulcan-950/50 w-full"
+                    src={feature.image}
+                />
+                </div>
+            </div>
+            ))
+        }
+        </div>
+    </div> -->
+</section>
+
+<section class="relative border-t border-white/5">
+    <div class="">
+        <div
+        class="max-w-7xl px-8 md:px-12 lg:px-32 mx-auto py-12 lg:py-24 relative space-y-24"
+        >
+        <p
+          class="mt-8 text-4xl text-balance font-normal text-white sm:text-5xl"
+        >
+          Nexavia Enterprise
+        </p>
+        <p
+          class="mt-8 text-2xl text-balance font-normal text-white sm:text-2xl"
+        >
+          Web Platform
+        </p>
+        {
+            featuresNexaviaEnterprise.map((feature, index) => (
+            <div
+                key={index}
+                class="grid grid-cols-1 gap-8 mt-6 sm:grid-cols-2 lg:gap-24 items-center"
+            >
+                <div>
+                <p class="text-sm text-transparent uppercase bg-gradient-to-r from-indigo-300 to-indigo-400 bg-clip-text">
+                    {feature.tagline}
+                </p>
+                <p class="text-3xl mt-8 font-normal text-white tracking-tight">
+                    {feature.title}
+                </p>
+                <p class="mt-4 text-base text-vulcan-300">
+                    {feature.description}
+                </p>
+                </div>
+                <div class={`h-full ${index % 2 === 0 ? "lg:order-first" : ""}`}>
+                <img
+                    alt={feature.tagline}
+                    class="rounded-2xl shadow-2xl shadow-vulcan-950/50 w-full"
+                    src={feature.image}
+                />
+                </div>
+            </div>
+            ))
+        }
+        </div>
+    </div>
+</section>
