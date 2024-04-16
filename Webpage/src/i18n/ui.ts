@@ -10,6 +10,7 @@ export const languages = {
   export const routes = {
     en: {
       'resitvenexavia': 'solutions/nexavia',
+      'resitvenexavianexavia-enterprise': 'solutions/nexavia/nexavia-enterprise',
       'resitvethynkr': 'solutions/thynkr',
       'storitverazvoj-programske-opreme': 'services/software-development',
       'storitvearhitektura-programske-opreme-in-svetovanje': 'services/software-arhitecture-and-consulting',
