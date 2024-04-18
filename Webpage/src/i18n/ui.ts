@@ -62,6 +62,15 @@ export const languages = {
       'aboutpage:teams': 'Teams',
       'aboutpage:ourteam': 'Our Team',
 
+      'softwaredevelopmentpage:maintitle': 'Software Development and Design',
+      'softwaredevelopmentpage:maindescription': 'Excessively generalized software brings along its own drawbacks, such as increased complexity in usage, suboptimal adaptation to all processes within the ecosystem, (over)complex configuration, and other issues. The solution lies in customized software, which brings:',
+      'softwaredevelopmentpage:optimaladaptationtodigitizationandoptimizationbusinessprocesses': 'Optimal adaptation to digitization and optimization of business processes',
+      'softwaredevelopmentpage:optimaladaptationtodigitizationandoptimizationbusinessprocessesdescription': 'Enhanced user efficiency contributes to greater competitiveness in the global market.',
+      'softwaredevelopmentpage:rapidadaptationchanges': 'Rapid adaptation to changes',
+      'softwaredevelopmentpage:rapidadaptationchangesdescription': 'In many market segments across various industries, the market changes rapidly. With purpose-built software, changes can be implemented more easily and quickly, maintaining optimal competitiveness.',
+      'softwaredevelopmentpage:enhancedconnectivitywithexternalsystems': 'Enhanced connectivity with external systems',
+      'softwaredevelopmentpage:enhancedconnectivitywithexternalsystemsdescription': 'One of the key aspects of bespoke software is its ability to communicate with other systems performing various tasks. Automated data exchange is crucial for improving overall operations and reducing human errors.',
+
       'footer:allrightsreserved': 'All rights reserved',
       'footer:socialnetworks': 'Social Networks',
     },
@@ -111,6 +120,15 @@ export const languages = {
       'aboutpage:paragraphthree': 'Z našim obsežnim znanjem, pridobljenim skozi leta, pomagamo našim strankam doseči kvalitetne in sodobne programske rešitve, ki jim omogočajo konkurenčnost na globalnem trgu.',
       'aboutpage:teams': 'Ekipe',
       'aboutpage:ourteam': 'V ekipi smo',
+
+      'softwaredevelopmentpage:maintitle': 'Razvoj in oblikovanje programske opreme',
+      'softwaredevelopmentpage:maindescription': 'Pretirano posplošena programska oprema prinaša s seboj tudi slabosti, kot so večja kompleksnost pri uporabi, neoptimalno prilagajanje vsem procesom, ki se izvajajo v ekosistemu, (pre)kompleksna konfiguracija in druge težave. Rešitev je programska oprema po meri, ki prinaša:',
+      'softwaredevelopmentpage:optimaladaptationtodigitizationandoptimizationbusinessprocesses': 'Optimalno prilagajanje digitalizaciji in optimizaciji poslovnih procesov',
+      'softwaredevelopmentpage:optimaladaptationtodigitizationandoptimizationbusinessprocessesdescription': 'Povečanje učinkovitosti uporabnikov prispeva k večji konkurenčnosti na globalnem trgu.',
+      'softwaredevelopmentpage:rapidadaptationchanges': 'Hitro prilagajanje spremembam',
+      'softwaredevelopmentpage:rapidadaptationchangesdescription': 'V mnogih tržnih segmentih različnih panog se trg hitro spreminja. Z namensko programsko opremo se spremembe lahko lažje in hitreje implementira, kar ohranja optimalno konkurenčnost.',
+      'softwaredevelopmentpage:enhancedconnectivitywithexternalsystems': 'Izboljšana povezljivost z zunanjimi sistemi',
+      'softwaredevelopmentpage:enhancedconnectivitywithexternalsystemsdescription': 'Eden od ključnih vidikov namenske programske opreme je njena sposobnost komuniciranja z drugimi sistemi, ki opravljajo različne naloge. Avtomatizirana izmenjava podatkov je ključna za izboljšanje celovitega poslovanja in zmanjšanje človeških napak.',
 
       'footer:allrightsreserved': 'Vse pravice pridržane',
       'footer:socialnetworks': 'Socialna omrežja',
