@@ -1,0 +1,63 @@
+---
+import Verticalgrid from "../../assets/Verticalgrid.astro";
+import { getLangFromUrl, useTranslations, useTranslatedPath, getRouteFromUrl } from '../../../i18n/utils';
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const features = [
+  {
+    number: t('global:step1'),
+    title: t('softwaredevelopmentstepspage:step1'),
+    description: t('softwaredevelopmentstepspage:step1description'),
+  },
+  {
+    number: t('global:step2'),
+    title: t('softwaredevelopmentstepspage:step2'),
+    description: t('softwaredevelopmentstepspage:step2description'),
+  },
+  {
+    number: t('global:step3'),
+    title: t('softwaredevelopmentstepspage:step3'),
+    description: t('softwaredevelopmentstepspage:step3description'),
+  },
+  {
+    number: t('global:step4'),
+    title: t('softwaredevelopmentstepspage:step4'),
+    description: t('softwaredevelopmentstepspage:step4description'),
+  },
+];
+
+---
+
+<section class="relative">
+  <Verticalgrid />
+  <div class="relative px-8 py-12 mx-auto max-w-7xl md:px-12 lg:px-32 lg:py-24">
+    <div class="max-w-xl mx-auto text-center">
+      <p class="text-sm text-transparent uppercase bg-gradient-to-r from-indigo-300 to-indigo-400 bg-clip-text">
+        {t('softwaredevelopmentstepspage:cliptext')}
+      </p>
+      <p class="mt-8 text-3xl font-normal tracking-tight text-white">
+        {t('softwaredevelopmentstepspage:title')}
+      </p>
+    </div>
+    <div class="relative items-center w-full mx-auto mt-12 lg:p-10 lg:rounded-5xl lg:border bg-vulcan-900 border-vulcan-800">
+      <img
+        class="object-top w-full border shadow-2xl lg:object-cover border-white/5 rounded-3xl h-96 shadow-vulcan-950"
+        src="/assets/dashboard1.png"
+        alt="" />
+    </div>
+    <ul class="grid grid-cols-1 gap-12 mt-12 list-none md:grid-cols-2" role="list">
+     {
+        features.map((features) => (
+          <li>
+        <div class="text-base text-vulcan-300">
+          <strong class="text-white">{features.number}:&nbsp; &nbsp;{features.title}</strong>
+          ― {features.description}
+        </div>
+      </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
