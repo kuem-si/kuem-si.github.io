@@ -8,9 +8,10 @@
     "\\Webpage\\src\\components_webpage",
     "\\Webpage\\src\\components_webpage\\_servicespage",
     "\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture",
+    "\\Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment",
     "\\Webpage\\src\\components_webpage\\_solutionspage",
     "\\Webpage\\src\\pages"
   ],
-  "SelectedNode": "\\Webpage\\public\\assets",
+  "SelectedNode": "\\Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\SoftwareDevelopmentSteps.astro",
   "PreviewInSolutionExplorer": false
 }
