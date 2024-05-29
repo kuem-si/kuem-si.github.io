@@ -13,23 +13,21 @@ const route = getRouteFromUrl(Astro.url);
 
 <section class="relative">
     <Verticalgrid />
-    <div
-      class="relative items-center w-full px-5 py-24 mx-auto md:px-12 lg:px-16 max-w-7xl lg:pb-32 lg:pt-56"
-    >
+    <div class="relative items-center w-full px-5 py-24 mx-auto md:px-12 lg:px-16 max-w-7xl lg:pb-32 lg:pt-56">
       <div class="max-w-5xl mx-auto">
-        <p
-          class="text-sm text-transparent uppercase bg-gradient-to-r from-indigo-300 to-indigo-400 bg-clip-text"
-        >
+        <p class="text-sm text-transparent uppercase bg-gradient-to-r from-indigo-300 to-indigo-400 bg-clip-text">
           {t('solutionsnexaviapage:maintitle')}
         </p>
-        <p
-          class="mt-8 text-4xl text-balance font-normal text-white sm:text-5xl"
-        >
+        <p class="mt-8 text-4xl text-balance font-normal text-white sm:text-5xl">
           {t('solutionsnexaviapage:maintitle2')}
         </p>
         <p class="max-w-2xl mt-4 text-vulcan-300">
           {t('solutionsnexaviapage:content1text1')}<br />
           {t('solutionsnexaviapage:content1text2')}
+        </p>
+        <p>
+          <br />
+          <img alt="Lexington thumbnail" class="rounded-2xl shadow-2xl shadow-vulcan-950/50 w-full" src="/assets/nexavia-1.png" style="max-width:800px" />
         </p>
       </div>
     </div>
@@ -37,17 +35,13 @@ const route = getRouteFromUrl(Astro.url);
 
 <section class="relative border-t border-white/5">
     <div class="">
-        <div
-        class="max-w-7xl px-8 md:px-12 lg:px-32 mx-auto py-1 lg:py-1 relative space-y-4"
-        >
+        <div class="max-w-7xl px-8 md:px-12 lg:px-32 mx-auto py-1 lg:py-1 relative space-y-4">
         <!-- <p
           class="mt-8 text-4xl text-balance font-normal text-white sm:text-5xl"
         >
           Nexavia Enterprise
         </p> -->
-        <p
-          class="mt-8 text-2xl text-balance font-normal text-white sm:text-2xl"
-        >
+        <p class="mt-8 text-2xl text-balance font-normal text-white sm:text-2xl">
           {t('global:nexaviaenterprise')}
         </p>
         <p class="max-w-2xl mt-4 text-vulcan-300">
@@ -55,10 +49,8 @@ const route = getRouteFromUrl(Astro.url);
           {t('solutionsnexaviapage:content2text2')}
           <br />
           <div class="flex flex-wrap items-center w-full gap-2 mt-10">
-            <a href={translatePath('/resitve/nexavia/nexavia-enterprise', lang)} target="_blank">
-              <button
-              class="rounded-lg px-4 border py-2 text-sm font-semibold transition-all flex items-center justify-center bg-vulcan-900 text-white hover:text-indigo-400 h-10 border-vulcan-700"
-              >
+            <a href={translatePath('/resitve/nexavia/nexavia-enterprise', lang)} >
+              <button class="rounded-lg px-4 border py-2 text-sm font-semibold transition-all flex items-center justify-center bg-vulcan-900 text-white hover:text-indigo-400 h-10 border-vulcan-700">
               <!-- <svg
                 class="icon icon-tabler icon-tabler-brand-google-play"
                 fill="none"

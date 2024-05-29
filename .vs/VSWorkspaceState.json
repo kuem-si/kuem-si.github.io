@@ -3,14 +3,14 @@
     "",
     "\\Webpage",
     "\\Webpage\\public",
+    "\\Webpage\\public\\assets",
     "\\Webpage\\src",
     "\\Webpage\\src\\components_webpage",
     "\\Webpage\\src\\components_webpage\\_servicespage",
     "\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture",
     "\\Webpage\\src\\components_webpage\\_solutionspage",
-    "\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia",
     "\\Webpage\\src\\pages"
   ],
-  "SelectedNode": "\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro",
+  "SelectedNode": "\\Webpage\\public\\assets",
   "PreviewInSolutionExplorer": false
 }

@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Sandbox\\kuem-si.github.io\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Content.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Content.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\i18n\\ui.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\i18n\\ui.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     },
@@ -13,10 +17,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Content.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Content.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\SoftwareDevelopmentSteps.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
@@ -62,24 +62,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 181,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Content_NexaviaEnterprise.astro",
-              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro",
-              "RelativeDocumentMoniker": "Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro",
-              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro",
-              "RelativeToolTip": "Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAADwAAAApAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-05-29T11:50:05.691Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Content.astro",
               "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content.astro",
               "RelativeDocumentMoniker": "Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content.astro",
@@ -87,8 +74,7 @@
               "RelativeToolTip": "Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content.astro",
               "ViewState": "AQIAAAYAAAAAAAAAAAAAAC0AAAAcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-05-29T09:23:16.527Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T09:23:16.527Z"
             },
             {
               "$type": "Document",
@@ -128,13 +114,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Content.astro",
               "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Content.astro",
               "RelativeDocumentMoniker": "Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Content.astro",
               "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Content.astro",
               "RelativeToolTip": "Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Content.astro",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAuAAAA",
+              "ViewState": "AQIAAAIAAAAAAAAAAAAiwCEAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2024-04-18T12:51:31.834Z",
               "EditorCaption": ""
@@ -149,8 +135,7 @@
               "RelativeToolTip": "Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\SoftwareDevelopmentSteps.astro",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAQAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-04-18T12:07:38.418Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-18T12:07:38.418Z"
             },
             {
               "$type": "Document",
@@ -190,7 +175,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "ui.ts",
               "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\i18n\\ui.ts",
               "RelativeDocumentMoniker": "Webpage\\src\\i18n\\ui.ts",
@@ -200,6 +185,18 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
               "WhenOpened": "2024-04-18T11:16:26.507Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Content_NexaviaEnterprise.astro",
+              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro",
+              "RelativeDocumentMoniker": "Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro",
+              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro",
+              "RelativeToolTip": "Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAADwAAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-05-29T11:50:05.691Z"
             },
             {
               "$type": "Document",
