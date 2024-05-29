@@ -38,6 +38,7 @@ export const ui = {
         'global:arhitecture': 'Arhitecture',
         'global:consulting': 'Consulting',
         'global:yearsofexperience': 'Years of experience',
+        'global:nexaviaenterprise': 'NEXAVIA Enterprise',
 
         'nav.contact': 'Contact',
         'nav.solutions': 'Solutions',
@@ -70,6 +71,30 @@ export const ui = {
         'aboutpage:paragraphthree': 'With our extensive knowledge accumulated over the years, we assist our clients in achieving high-quality and modern software solutions, enabling them to remain competitive in the global market.',
         'aboutpage:teams': 'Teams',
         'aboutpage:ourteam': 'Our Team',
+
+        'solutionsnexaviapage:maintitle': 'NEXAVIA family line of iot software solutions',
+        'solutionsnexaviapage:maintitle2': 'Comprehensive software solutions for complete overview of IoT devices ecosystem',
+        'solutionsnexaviapage:content1text1': 'Nexavia line of products covers IoT software solutions for businesses (B2B) as well as end-users (B2C).',
+        'solutionsnexaviapage:content1text2': 'All Nexavia line od software solutions are based on web and mobile technologies.',
+        'solutionsnexaviapage:content2text1': 'Nexavia Enterprise is complete software suite for businesses (B2B).',
+        'solutionsnexaviapage:content2text2': 'It consists of web portal and a optional mobile application for gathering data via Wireless M- Bus(wM - Bus) protocol.',
+        'solutionsnexaviapage:buttontext': 'More about NEXAVIA Enterprise',
+
+        'solutionsnexaviaaboutpage:tagline1': 'About',
+        'solutionsnexaviaaboutpage:title1': 'Advanced General-Purpose, Multitenant IoT Platform for Businesses (B2B)',
+        'solutionsnexaviaaboutpage:description1': 'Nexavia Enterprise enables the capture of data from IoT devices across various networks such as LoRa, NB-IoT, and more.',
+        'solutionsnexaviaaboutpage:tagline2': 'Support for multiple network protocols and concentrators',
+        'solutionsnexaviaaboutpage:title2': 'LP-WAN (LoRa, NB-IoT,...), REST, MQTT',
+        'solutionsnexaviaaboutpage:description2': 'IoT devices can send data to Nexavia Enterprise via multiple supported protocols and network servers such as TTS, ChripStack, ...',
+        'solutionsnexaviaaboutpage:tagline3': 'Over 50 IoT devices are currently supported',
+        'solutionsnexaviaaboutpage:title3': 'Measure temperature, humidity, parking place occupation and much more',
+        'solutionsnexaviaaboutpage:description3': 'Nexavia Enterprise has integrated many decoders for various IoT device types for many use cases (various industries, smart cities,...).',
+        'solutionsnexaviaaboutpage:tagline4': 'Monitoring & Alerting',
+        'solutionsnexaviaaboutpage:title4': 'View and be notified on events',
+        'solutionsnexaviaaboutpage:description4': 'With its real-time monitoring and control, it allows tracking and management across various verticals including environmental and spatial areas (temperature, humidity, CO2), HACCP (food monitoring), electricity (home and rental space consumption monitoring), and home monitoring (water leak detection, temperature, etc.).',
+        'solutionsnexaviaaboutpage:tagline5': 'Have complete control',
+        'solutionsnexaviaaboutpage:title5': 'Dedicated database per tenant, SaaS or on-premise installation',
+        'solutionsnexaviaaboutpage:description5': 'Each tenant has it\'s own database for data which can be transfared from SaaS and on- premise(and vice versa).',
 
         'softwaredevelopmentpage:maintitle': 'Software Development and Design',
         'softwaredevelopmentpage:maindescription': 'Excessively generalized software brings along its own drawbacks, such as increased complexity in usage, suboptimal adaptation to all processes within the ecosystem, (over)complex configuration, and other issues. The solution lies in customized software, which brings:',
@@ -129,6 +154,7 @@ export const ui = {
         'global:arhitecture': 'Arhitektura',
         'global:consulting': 'Svetovanje',
         'global:yearsofexperience': 'Dolgoletne izkušnje',
+        'global:nexaviaenterprise': 'NEXAVIA Enterprise',
 
         'nav.contact': 'Kontakt',
         'nav.solutions': 'Rešitve',
@@ -161,6 +187,34 @@ export const ui = {
         'aboutpage:paragraphthree': 'Z našim obsežnim znanjem, pridobljenim skozi leta, pomagamo našim strankam doseči kvalitetne in sodobne programske rešitve, ki jim omogočajo konkurenčnost na globalnem trgu.',
         'aboutpage:teams': 'Ekipe',
         'aboutpage:ourteam': 'V ekipi smo',
+
+        'solutionsnexaviapage:maintitle': 'NEXAVIA družina IoT programske opreme',
+        'solutionsnexaviapage:maintitle2': 'Celovite programske rešitve za popoln pregled ekosistema IoT naprav',
+        'solutionsnexaviapage:content1text1': 'Nexavia zajema IoT programske rešitve za podjetja (B2B) ter končne uporabnike (B2C).',
+        'solutionsnexaviapage:content1text2': 'Vse linije programskih rešitev Nexavia temeljijo na spletnih in mobilnih tehnologijah.',
+        'solutionsnexaviapage:content2text1': 'NEXAVIA Enterprise je celovita programska zbirka za podjetja (B2B).',
+        'solutionsnexaviapage:content2text2': 'Sestavljena je iz spletnega portala in opcijske mobilne aplikacije za zbiranje podatkov preko protokola Wireless M-Bus (wM-Bus).',
+        'solutionsnexaviapage:buttontext': 'Več o NEXAVIA Enterprise',
+
+        'solutionsnexaviaaboutpage:tagline1': 'Kaj je NEXAVIA',
+        'solutionsnexaviaaboutpage:title1': 'Napredna večnamenska IoT platforma namenjena podjetjem (B2B)',
+        'solutionsnexaviaaboutpage:description1': 'Nexavia Enterprise omogoča zajem podatkov iz IoT naprav preko različnih omrežij, kot so LoRa, NB-IoT ipd.',
+
+        'solutionsnexaviaaboutpage:tagline2': 'Podpora za številne mrežne protokole in koncentratorje.',
+        'solutionsnexaviaaboutpage:title2': 'LP-WAN (LoRa, NB-IoT,...), REST, MQTT',
+        'solutionsnexaviaaboutpage:description2': 'IoT naprave lahko pošiljajo podatke v Nexavia Enterprise preko več podprtih protokolov in strežnikov omrežij, kot na primer TTS, ChirpStack, ipd.',
+
+        'solutionsnexaviaaboutpage:tagline3': 'Trenutno je podprtih več kot 50 različnih IoT naprav',
+        'solutionsnexaviaaboutpage:title3': 'Merjenje temperature, vlage, zasedenosti parkirnih mest in še veliko več',
+        'solutionsnexaviaaboutpage:description3': 'Nexavia Enterprise ima integrirane številne dekoderje za različne vrste IoT naprav z različnimi namembnostmi (različne industrije, pametna mesta, itd.)',
+
+        'solutionsnexaviaaboutpage:tagline4': 'Spremljanje in opozarjanje',
+        'solutionsnexaviaaboutpage:title4': 'Nadzor in obveščanje',
+        'solutionsnexaviaaboutpage:description4': 'Z nadzorom in spremljanjem v realnem času, Nexavia omogoča upravljanje na različnih vertikalah, vključno z okoljskimi in prostorskimi področji (temperatura, vlaga, CO2), HACCP (spremljanje hrane), elektriko (spremljanje porabe) in osebno uporabo (zaznavanje puščanja vode, temperatura, itd.).',
+
+        'solutionsnexaviaaboutpage:tagline5': 'Popoln nadzor',
+        'solutionsnexaviaaboutpage:title5': 'Namenska baza podatkov za vsakega uporabnika, namestitev SaaS ali v oblaku',
+        'solutionsnexaviaaboutpage:description5': 'Vsak uporabnik ima svojo lastno bazo podatkov, v katero se lahko prenašajo podatki iz storitve SaaS ali on-premise namestitve (in obratno).',
 
         'softwaredevelopmentpage:maintitle': 'Razvoj in oblikovanje programske opreme',
         'softwaredevelopmentpage:maindescription': 'Pretirano posplošena programska oprema prinaša s seboj tudi slabosti, kot so večja kompleksnost pri uporabi, neoptimalno prilagajanje vsem procesom, ki se izvajajo v ekosistemu, (pre)kompleksna konfiguracija in druge težave. Rešitev je programska oprema po meri, ki prinaša:',

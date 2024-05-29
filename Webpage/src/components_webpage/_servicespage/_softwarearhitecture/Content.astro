@@ -1,7 +1,7 @@
 ---
 import Verticalgrid from "../../assets/Verticalgrid.astro";
 import { getLangFromUrl, useTranslations, useTranslatedPath, getRouteFromUrl } from '../../../i18n/utils';
-import { languages } from '../../i18n/ui';
+import { languages } from '../../../i18n/ui';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);

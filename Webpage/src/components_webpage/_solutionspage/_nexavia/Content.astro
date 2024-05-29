@@ -20,17 +20,16 @@ const route = getRouteFromUrl(Astro.url);
         <p
           class="text-sm text-transparent uppercase bg-gradient-to-r from-indigo-300 to-indigo-400 bg-clip-text"
         >
-          Nexavia family line of IoT software solutions
+          {t('solutionsnexaviapage:maintitle')}
         </p>
         <p
           class="mt-8 text-4xl text-balance font-normal text-white sm:text-5xl"
         >
-          Comprehensive software solutions for complete overview of IoT devices ecosystem
+          {t('solutionsnexaviapage:maintitle2')}
         </p>
         <p class="max-w-2xl mt-4 text-vulcan-300">
-          Nexavia line of products covers IoT software solutions for businesses (B2B) as well as end-users (B2C).
-          <br />
-          All Nexavia line od software solutions are based on web and mobile technologies.
+          {t('solutionsnexaviapage:content1text1')}<br />
+          {t('solutionsnexaviapage:content1text2')}
         </p>
       </div>
     </div>
@@ -49,12 +48,11 @@ const route = getRouteFromUrl(Astro.url);
         <p
           class="mt-8 text-2xl text-balance font-normal text-white sm:text-2xl"
         >
-          Nexavia Enterprise
+          {t('global:nexaviaenterprise')}
         </p>
         <p class="max-w-2xl mt-4 text-vulcan-300">
-          Nexavia Enterprise is complete software suite for businesses (B2B).
-          <br />
-          It consists of web portal and a optional mobile application for gathering data via Wireless M-Bus (wM-Bus) protocol.
+          {t('solutionsnexaviapage:content2text1')}<br />
+          {t('solutionsnexaviapage:content2text2')}
           <br />
           <div class="flex flex-wrap items-center w-full gap-2 mt-10">
             <a href={translatePath('/resitve/nexavia/nexavia-enterprise', lang)} target="_blank">
@@ -77,7 +75,7 @@ const route = getRouteFromUrl(Astro.url);
                 ></path><path d="M15 9l-10.5 11.5"></path><path
                   d="M4.5 3.5l10.5 11.5"></path>
                 </svg> -->
-                <span class="flex flex-col items-start leading-none ml-4">More about Nexavia Enterprise</span>
+                <span class="flex flex-col items-start leading-none ml-4">{t('solutionsnexaviapage:buttontext')}</span>
               </button>
             </a>
         </p>

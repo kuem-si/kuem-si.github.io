@@ -4,13 +4,13 @@
     "\\Webpage",
     "\\Webpage\\public",
     "\\Webpage\\src",
-    "\\Webpage\\src\\components",
-    "\\Webpage\\src\\components\\features",
     "\\Webpage\\src\\components_webpage",
-    "\\Webpage\\src\\components_webpage\\features",
     "\\Webpage\\src\\components_webpage\\_servicespage",
-    "\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture"
+    "\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture",
+    "\\Webpage\\src\\components_webpage\\_solutionspage",
+    "\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia",
+    "\\Webpage\\src\\pages"
   ],
-  "SelectedNode": "\\Webpage\\src\\pages\\storitve\\arhitektura-programske-opreme-in-svetovanje.astro",
+  "SelectedNode": "\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro",
   "PreviewInSolutionExplorer": false
 }
