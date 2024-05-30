@@ -4,7 +4,6 @@
     "\\Webpage",
     "\\Webpage\\src",
     "\\Webpage\\src\\components_webpage",
-    "\\Webpage\\src\\components_webpage\\assets",
     "\\Webpage\\src\\components_webpage\\_servicespage",
     "\\Webpage\\src\\components_webpage\\_servicespage\\_devops",
     "\\Webpage\\src\\pages",
@@ -12,6 +11,5 @@
     "\\Webpage\\src\\pages\\en\\services",
     "\\Webpage\\src\\pages\\storitve"
   ],
-  "SelectedNode": "\\Webpage\\public\\assets",
   "PreviewInSolutionExplorer": false
 }
