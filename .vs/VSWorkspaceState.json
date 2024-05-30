@@ -2,16 +2,16 @@
   "ExpandedNodes": [
     "",
     "\\Webpage",
-    "\\Webpage\\public",
-    "\\Webpage\\public\\assets",
     "\\Webpage\\src",
     "\\Webpage\\src\\components_webpage",
+    "\\Webpage\\src\\components_webpage\\assets",
     "\\Webpage\\src\\components_webpage\\_servicespage",
-    "\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture",
-    "\\Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment",
-    "\\Webpage\\src\\components_webpage\\_solutionspage",
-    "\\Webpage\\src\\pages"
+    "\\Webpage\\src\\components_webpage\\_servicespage\\_devops",
+    "\\Webpage\\src\\pages",
+    "\\Webpage\\src\\pages\\en",
+    "\\Webpage\\src\\pages\\en\\services",
+    "\\Webpage\\src\\pages\\storitve"
   ],
-  "SelectedNode": "\\Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\SoftwareDevelopmentSteps.astro",
+  "SelectedNode": "\\Webpage\\public\\assets",
   "PreviewInSolutionExplorer": false
 }

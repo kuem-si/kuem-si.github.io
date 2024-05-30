@@ -3,56 +3,20 @@
   "WorkspaceRootPath": "C:\\Sandbox\\kuem-si.github.io\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\SoftwareDevelopmentSteps.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\SoftwareDevelopmentSteps.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\pages\\storitve\\devops-in-platform-engineering.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\pages\\storitve\\devops-in-platform-engineering.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\i18n\\ui.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\i18n\\ui.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Content.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Content.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\pages\\en\\services\\devops-and-platform-engineering.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\pages\\en\\services\\devops-and-platform-engineering.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\pages\\en\\services\\software-development.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\pages\\en\\services\\software-development.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\Content.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\Content.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Feature.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Feature.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\pages\\en\\services\\software-arhitecture-and-consulting.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\pages\\en\\services\\software-arhitecture-and-consulting.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\pages\\storitve\\arhitektura-programske-opreme-in-svetovanje.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\pages\\storitve\\arhitektura-programske-opreme-in-svetovanje.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_landingpage\\FeatureFive.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\components_webpage\\_landingpage\\FeatureFive.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\pages\\storitve\\devops-in-platform-engineering.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\pages\\storitve\\devops-in-platform-engineering.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\heros\\HeroTwo.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\components_webpage\\heros\\HeroTwo.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_devops\\Content.astro||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Webpage\\src\\components_webpage\\_servicespage\\_devops\\Content.astro||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -62,158 +26,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 181,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Content.astro",
-              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content.astro",
-              "RelativeDocumentMoniker": "Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content.astro",
-              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content.astro",
-              "RelativeToolTip": "Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content.astro",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAAC0AAAAcAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-05-29T09:23:16.527Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "software-development.astro",
-              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\pages\\en\\services\\software-development.astro",
-              "RelativeDocumentMoniker": "Webpage\\src\\pages\\en\\services\\software-development.astro",
-              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\pages\\en\\services\\software-development.astro",
-              "RelativeToolTip": "Webpage\\src\\pages\\en\\services\\software-development.astro",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAMAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-04-21T15:04:11.86Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "software-arhitecture-and-consulting.astro",
-              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\pages\\en\\services\\software-arhitecture-and-consulting.astro",
-              "RelativeDocumentMoniker": "Webpage\\src\\pages\\en\\services\\software-arhitecture-and-consulting.astro",
-              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\pages\\en\\services\\software-arhitecture-and-consulting.astro",
-              "RelativeToolTip": "Webpage\\src\\pages\\en\\services\\software-arhitecture-and-consulting.astro",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-04-18T21:50:46.807Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Feature.astro",
-              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Feature.astro",
-              "RelativeDocumentMoniker": "Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Feature.astro",
-              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Feature.astro",
-              "RelativeToolTip": "Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Feature.astro",
-              "ViewState": "AQIAACUAAAAAAAAAAAAAAC0AAAAEAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-04-18T21:37:19.192Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Content.astro",
-              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Content.astro",
-              "RelativeDocumentMoniker": "Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Content.astro",
-              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Content.astro",
-              "RelativeToolTip": "Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture\\Content.astro",
-              "ViewState": "AQIAAAIAAAAAAAAAAAAiwCEAAAAIAAAA",
+              "Title": "devops-and-platform-engineering.astro",
+              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\pages\\en\\services\\devops-and-platform-engineering.astro",
+              "RelativeDocumentMoniker": "Webpage\\src\\pages\\en\\services\\devops-and-platform-engineering.astro",
+              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\pages\\en\\services\\devops-and-platform-engineering.astro",
+              "RelativeToolTip": "Webpage\\src\\pages\\en\\services\\devops-and-platform-engineering.astro",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-04-18T12:51:31.834Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "SoftwareDevelopmentSteps.astro",
-              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\SoftwareDevelopmentSteps.astro",
-              "RelativeDocumentMoniker": "Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\SoftwareDevelopmentSteps.astro",
-              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\SoftwareDevelopmentSteps.astro",
-              "RelativeToolTip": "Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\SoftwareDevelopmentSteps.astro",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAiwCcAAAAMAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-04-18T12:07:38.418Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "FeatureFive.astro",
-              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_landingpage\\FeatureFive.astro",
-              "RelativeDocumentMoniker": "Webpage\\src\\components_webpage\\_landingpage\\FeatureFive.astro",
-              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_landingpage\\FeatureFive.astro",
-              "RelativeToolTip": "Webpage\\src\\components_webpage\\_landingpage\\FeatureFive.astro",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-04-18T11:53:02.092Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "arhitektura-programske-opreme-in-svetovanje.astro",
-              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\pages\\storitve\\arhitektura-programske-opreme-in-svetovanje.astro",
-              "RelativeDocumentMoniker": "Webpage\\src\\pages\\storitve\\arhitektura-programske-opreme-in-svetovanje.astro",
-              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\pages\\storitve\\arhitektura-programske-opreme-in-svetovanje.astro",
-              "RelativeToolTip": "Webpage\\src\\pages\\storitve\\arhitektura-programske-opreme-in-svetovanje.astro",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-04-18T11:45:13.607Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "HeroTwo.astro",
-              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\heros\\HeroTwo.astro",
-              "RelativeDocumentMoniker": "Webpage\\src\\components_webpage\\heros\\HeroTwo.astro",
-              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\heros\\HeroTwo.astro",
-              "RelativeToolTip": "Webpage\\src\\components_webpage\\heros\\HeroTwo.astro",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-04-18T11:19:04.024Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ui.ts",
-              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\i18n\\ui.ts",
-              "RelativeDocumentMoniker": "Webpage\\src\\i18n\\ui.ts",
-              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\i18n\\ui.ts*",
-              "RelativeToolTip": "Webpage\\src\\i18n\\ui.ts*",
-              "ViewState": "AQIAAE4AAAAAAAAAAAAAwGsAAAArAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-04-18T11:16:26.507Z",
+              "WhenOpened": "2024-05-30T09:53:33.141Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "Content_NexaviaEnterprise.astro",
-              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro",
-              "RelativeDocumentMoniker": "Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro",
-              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro",
-              "RelativeToolTip": "Webpage\\src\\components_webpage\\_solutionspage\\_nexavia\\Content_NexaviaEnterprise.astro",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAADwAAAApAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-05-29T11:50:05.691Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
               "Title": "Content.astro",
-              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\Content.astro",
-              "RelativeDocumentMoniker": "Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\Content.astro",
-              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\Content.astro",
-              "RelativeToolTip": "Webpage\\src\\components_webpage\\_servicespage\\_softwaredevelopment\\Content.astro",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAAACYAAAAMAAAA",
+              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_devops\\Content.astro",
+              "RelativeDocumentMoniker": "Webpage\\src\\components_webpage\\_servicespage\\_devops\\Content.astro",
+              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\components_webpage\\_servicespage\\_devops\\Content.astro",
+              "RelativeToolTip": "Webpage\\src\\components_webpage\\_servicespage\\_devops\\Content.astro",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAAABYAAAA2AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-04-18T10:40:54.655Z"
+              "WhenOpened": "2024-05-30T09:46:26.514Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 0,
               "Title": "devops-in-platform-engineering.astro",
               "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\pages\\storitve\\devops-in-platform-engineering.astro",
               "RelativeDocumentMoniker": "Webpage\\src\\pages\\storitve\\devops-in-platform-engineering.astro",
@@ -221,7 +64,21 @@
               "RelativeToolTip": "Webpage\\src\\pages\\storitve\\devops-in-platform-engineering.astro",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-04-18T10:16:05.616Z"
+              "WhenOpened": "2024-05-30T09:41:10.197Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ui.ts",
+              "DocumentMoniker": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\i18n\\ui.ts",
+              "RelativeDocumentMoniker": "Webpage\\src\\i18n\\ui.ts",
+              "ToolTip": "C:\\Sandbox\\kuem-si.github.io\\Webpage\\src\\i18n\\ui.ts",
+              "RelativeToolTip": "Webpage\\src\\i18n\\ui.ts",
+              "ViewState": "AQIAAHsAAAAAAAAAAAAiwIIAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2024-04-18T11:16:26.507Z",
+              "EditorCaption": ""
             }
           ]
         }

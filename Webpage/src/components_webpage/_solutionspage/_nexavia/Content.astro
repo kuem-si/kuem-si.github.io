@@ -49,27 +49,13 @@ const route = getRouteFromUrl(Astro.url);
           {t('solutionsnexaviapage:content2text2')}
           <br />
           <div class="flex flex-wrap items-center w-full gap-2 mt-10">
-            <a href={translatePath('/resitve/nexavia/nexavia-enterprise', lang)} >
-              <button class="rounded-lg px-4 border py-2 text-sm font-semibold transition-all flex items-center justify-center bg-vulcan-900 text-white hover:text-indigo-400 h-10 border-vulcan-700">
-              <!-- <svg
-                class="icon icon-tabler icon-tabler-brand-google-play"
-                fill="none"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                height="20"
-                width="20"
-                ><path d="M0 0h24v24H0z" fill="none" stroke="none"></path><path
-                  d="M4 3.71v16.58a.7 .7 0 0 0 1.05 .606l14.622 -8.42a.55 .55 0 0 0 0 -.953l-14.622 -8.419a.7 .7 0 0 0 -1.05 .607z"
-                ></path><path d="M15 9l-10.5 11.5"></path><path
-                  d="M4.5 3.5l10.5 11.5"></path>
-                </svg> -->
-                <span class="flex flex-col items-start leading-none ml-4">{t('solutionsnexaviapage:buttontext')}</span>
-              </button>
+
+            <a href={translatePath('/resitve/nexavia/nexavia-enterprise', lang)} class="rounded-lg px-4 border py-2 text-sm font-semibold transition-all flex items-center justify-center bg-vulcan-900 text-white hover:text-indigo-400 h-10 border-vulcan-700">
+              {t('solutionsnexaviapage:buttontext')}
             </a>
+
+          </div>
+          <br/>
         </p>
         </div>
     </div>

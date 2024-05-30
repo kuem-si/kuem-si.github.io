@@ -128,6 +128,12 @@ export const ui = {
         'softwarearhitecturefeaturepage:feature4': 'Conceptual design for horizontal scaling (scale-out)',
         'softwarearhitecturefeaturepage:feature4description': 'An important aspect at the outset of software design is analyzing potential bottlenecks that could seriously jeopardize future use as data volume and/or user numbers increase. The most effective hardware scaling approach, from both economic and technical perspectives, is adding additional hardware capacity.',
 
+        'devopspage.title': 'DevOps & Platform Engineering',
+        'devopspage.description1': 'At our company, we leverage modern, battlefield-tested software technology stacks to optimize development lifecycle and running in production. Establishing and maintaining such environment requires DevOps and Platform Engineering skills.',
+        'devopspage.description2': 'DevOps integrates development and operations teams to enhance collaboration and efficiency, promoting a seamless flow from software conception to operation. This approach emphasizes automation, continuous integration (CI), and continuous delivery (CD), facilitating rapid and reliable software deployment.',
+        'devopspage.description3': 'Platform Engineering complements DevOps by creating robust and scalable infrastructure platforms that support automated software delivery processes. Our platform engineering efforts focus on providing and maintaining cluster container environments for running our applications and complementary systems (such as Postgres, Redis,...). We utilize state-of-the-art tools and technologies to ensure that the infrastructure not only meets current demands but is also future-proofed against evolving business needs.',
+        'devopspage.description4': 'We only serve our DevOps & Platform Engineering services in case of on-premise installations of our software products. Larger project scopes (for instance migration of the whole server infrastructure to containerised environment) are out of our domain.',
+
         'footer:allrightsreserved': 'All rights reserved',
         'footer:socialnetworks': 'Social Networks',
     },
@@ -199,19 +205,15 @@ export const ui = {
         'solutionsnexaviaaboutpage:tagline1': 'Kaj je NEXAVIA',
         'solutionsnexaviaaboutpage:title1': 'Napredna večnamenska IoT platforma namenjena podjetjem (B2B)',
         'solutionsnexaviaaboutpage:description1': 'Nexavia Enterprise omogoča zajem podatkov iz IoT naprav preko različnih omrežij, kot so LoRa, NB-IoT ipd.',
-
         'solutionsnexaviaaboutpage:tagline2': 'Podpora za številne mrežne protokole in koncentratorje.',
         'solutionsnexaviaaboutpage:title2': 'LP-WAN (LoRa, NB-IoT,...), REST, MQTT',
         'solutionsnexaviaaboutpage:description2': 'IoT naprave lahko pošiljajo podatke v Nexavia Enterprise preko več podprtih protokolov in strežnikov omrežij, kot na primer TTS, ChirpStack, ipd.',
-
         'solutionsnexaviaaboutpage:tagline3': 'Trenutno je podprtih več kot 50 različnih IoT naprav',
         'solutionsnexaviaaboutpage:title3': 'Merjenje temperature, vlage, zasedenosti parkirnih mest in še veliko več',
         'solutionsnexaviaaboutpage:description3': 'Nexavia Enterprise ima integrirane številne dekoderje za različne vrste IoT naprav z različnimi namembnostmi (različne industrije, pametna mesta, itd.)',
-
         'solutionsnexaviaaboutpage:tagline4': 'Spremljanje in opozarjanje',
         'solutionsnexaviaaboutpage:title4': 'Nadzor in obveščanje',
         'solutionsnexaviaaboutpage:description4': 'Z nadzorom in spremljanjem v realnem času, Nexavia omogoča upravljanje na različnih vertikalah, vključno z okoljskimi in prostorskimi področji (temperatura, vlaga, CO2), HACCP (spremljanje hrane), elektriko (spremljanje porabe) in osebno uporabo (zaznavanje puščanja vode, temperatura, itd.).',
-
         'solutionsnexaviaaboutpage:tagline5': 'Popoln nadzor',
         'solutionsnexaviaaboutpage:title5': 'Namenska baza podatkov za vsakega uporabnika, namestitev SaaS ali v oblaku',
         'solutionsnexaviaaboutpage:description5': 'Vsak uporabnik ima svojo lastno bazo podatkov, v katero se lahko prenašajo podatki iz storitve SaaS ali on-premise namestitve (in obratno).',
@@ -247,6 +249,12 @@ export const ui = {
         'softwarearhitecturefeaturepage:feature3description': 'Ena pomembnejših prednosti, ki jih prinaša namenska programska oprema je možnost komuniciranja z drugimi sistemi, ki opravljajo druge namenske naloge. Avtomatizirana izmenjava je ključ do boljšega celostnega poslovanja in zmanjševanja človeških napak.',
         'softwarearhitecturefeaturepage:feature4': 'Koncept zasnove za t.i. horizontalno skaliranje (ang.: scale-out)',
         'softwarearhitecturefeaturepage:feature4description': 'Pomemben vidik že na samem začetku pri snovanju programske opreme je analiza optencialnih ozkih grl, ki lahko resneje ogrozijo uporabo v prihodnosti, ko količina podatkov in/ali število uporabnikov naraste. Najboljši način skaliranja strojne opreme tako z ekonomskega kot tehničnega vidika je z dodajanjem dodatnih strojnih kapacitet.',
+
+        'devopspage.title': 'DevOps & Platform Engineering',
+        'devopspage.description1': 'V našem podjetju izkoriščamo sodobne, v bojih preizkušene tehnološke skladnje programske opreme za optimizacijo razvojnega življenjskega cikla in delovanja v produkciji. Vzpostavitev in vzdrževanje takšnega okolja zahteva veščine DevOps in platformnega inženiringa.',
+        'devopspage.description2': 'DevOps združuje razvojne in operativne ekipe za izboljšanje sodelovanja in učinkovitosti ter spodbuja nemoten pretok od zasnove programske opreme do delovanja. Ta pristop poudarja avtomatizacijo, neprekinjeno integracijo (CI) in neprekinjeno dostavo (CD), kar omogoča hitro in zanesljivo uvajanje programske opreme.',
+        'devopspage.description3': 'Platformni inženiring dopolnjuje DevOps z ustvarjanjem robustnih in skalabilnih infrastrukturnih platform, ki podpirajo avtomatizirane procese dostave programske opreme. Naši napori na področju platformnega inženiringa se osredotočajo na zagotavljanje in vzdrževanje okolij za grozdne kontejnerje za izvajanje naših aplikacij in dopolnilnih sistemov (kot so Postgres, Redis,...). Uporabljamo najsodobnejša orodja in tehnologije, da zagotovimo, da infrastruktura ne samo izpolnjuje trenutne zahteve, ampak je tudi pripravljena na prihodnje poslovne potrebe.',
+        'devopspage.description4': 'Naše storitve DevOps in platformnega inženiringa nudimo le v primeru namestitev naših programskih izdelkov na lokaciji. Večji obseg projektov (na primer migracija celotne strežniške infrastrukture v okolje s kontejnerji) ni v našem področju delovanja.',
 
         'footer:allrightsreserved': 'Vse pravice pridržane',
         'footer:socialnetworks': 'Socialna omrežja',
