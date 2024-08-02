@@ -2,15 +2,14 @@
   "ExpandedNodes": [
     "",
     "\\Webpage",
-    "\\Webpage\\public",
     "\\Webpage\\src",
-    "\\Webpage\\src\\components",
-    "\\Webpage\\src\\components\\features",
     "\\Webpage\\src\\components_webpage",
-    "\\Webpage\\src\\components_webpage\\features",
     "\\Webpage\\src\\components_webpage\\_servicespage",
-    "\\Webpage\\src\\components_webpage\\_servicespage\\_softwarearhitecture"
+    "\\Webpage\\src\\components_webpage\\_servicespage\\_devops",
+    "\\Webpage\\src\\pages",
+    "\\Webpage\\src\\pages\\en",
+    "\\Webpage\\src\\pages\\en\\services",
+    "\\Webpage\\src\\pages\\storitve"
   ],
-  "SelectedNode": "\\Webpage\\src\\pages\\storitve\\arhitektura-programske-opreme-in-svetovanje.astro",
   "PreviewInSolutionExplorer": false
 }

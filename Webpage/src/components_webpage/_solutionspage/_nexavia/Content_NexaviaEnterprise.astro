@@ -12,39 +12,34 @@ const route = getRouteFromUrl(Astro.url);
 
 const featuresNexaviaEnterprise = [
   {
-    tagline: "About",
-    title: "Advanced General-Purpose, Multitenant IoT Platform for Businesses (B2B)",
-    description:
-      "Nexavia Enterprise enables the capture of data from IoT devices across various networks such as LoRa, NB-IoT, and more.",
-    image: "https://placeholder.pics/svg/400x270",
+    tagline: t('solutionsnexaviaaboutpage:tagline1'),
+    title: t('solutionsnexaviaaboutpage:title1'),
+    description: t('solutionsnexaviaaboutpage:description1'),
+    image: "/assets/nexavia-login-1.jpg",
   },
   {
-    tagline: "Support for multiple network protocols and concentrators",
-    title: "LP-WAN (LoRa, NB-IoT,...), REST, MQTT",
-    description:
-      "IoT devices can send data to Nexavia Enterprise via multiple supported protocols and network servers such as TTS, ChripStack,....",
-    image: "https://placeholder.pics/svg/400x270",
+    tagline: t('solutionsnexaviaaboutpage:tagline2'),
+    title: t('solutionsnexaviaaboutpage:title2'),
+    description: t('solutionsnexaviaaboutpage:description2'),
+    image: "/assets/nexavia-2.png",
   },
   {
-    tagline: "Over 50 IoT devices are currently supported",
-    title: "Measure temperature, humidity, parking place occupation and much more",
-    description:
-      "Nexavia Enterprise has integrated many decoders for various IoT device types for many use cases (various industries, smart cities,...).",
-    image: "https://placeholder.pics/svg/400x270",
+    tagline: t('solutionsnexaviaaboutpage:tagline3'),
+    title: t('solutionsnexaviaaboutpage:title3'),
+    description: t('solutionsnexaviaaboutpage:description3'),
+    image: "/assets/nexavia-groups-2.jpg",
   },
   {
-    tagline: "Monitoring & Alerting",
-    title: "View and be notified on events",
-    description:
-      "With its real-time monitoring and control, it allows tracking and management across various verticals including environmental and spatial areas (temperature, humidity, CO2), HACCP (food monitoring), electricity (home and rental space consumption monitoring), and home monitoring (water leak detection, temperature, etc.).",
-    image: "https://placeholder.pics/svg/400x270",
+    tagline: t('solutionsnexaviaaboutpage:tagline4'),
+    title: t('solutionsnexaviaaboutpage:title4'),
+    description: t('solutionsnexaviaaboutpage:description4'),
+    image: "/assets/nexavia-devices.jpg",
   },
   {
-    tagline: "Have complete control",
-    title: "Dedicated database per tenant, SaaS or on-premise installation",
-    description:
-      "Each tenant has it's own database for data which can be transfared from SaaS and on-premise (and vice versa).",
-    image: "https://placeholder.pics/svg/400x270",
+    tagline: t('solutionsnexaviaaboutpage:tagline5'),
+    title: t('solutionsnexaviaaboutpage:title5'),
+    description: t('solutionsnexaviaaboutpage:description5'),
+    image: "/assets/nexavia-3.png",
   },
 ];
 ---
@@ -63,7 +58,7 @@ const featuresNexaviaEnterprise = [
         <p
           class="mt-8 text-4xl text-balance font-normal text-white sm:text-3xl text-center"
         >
-          Thynkr Enterprise
+          {t('global:nexaviaenterprise')}
         </p>
       </div>
       <div
@@ -71,8 +66,7 @@ const featuresNexaviaEnterprise = [
         >
         {
             featuresNexaviaEnterprise.map((feature, index) => (
-            <div
-                key={index}
+            <div key={index}
                 class="grid grid-cols-1 gap-8 mt-6 sm:grid-cols-2 lg:gap-24 items-center"
             >
                 <div>
