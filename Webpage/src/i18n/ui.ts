@@ -48,6 +48,7 @@ export const ui = {
         'nav.softwarearhitectureandconsulting': 'Software Arhitecture and Consulting',
         'nav.devopsandplatformengineering': 'DevOps and Platform Engineering',
         'nav.home': 'Home',
+        'nav.utilitymetering': 'Utility Metering',
 
         'landingpage:maincompanytitle': 'Solutions and services',
         'landingpage:maincompanytitledescription': 'Tailored software solutions and consulting services designed to meet the most demanding challenges.',
@@ -171,6 +172,7 @@ export const ui = {
         'nav.softwarearhitectureandconsulting': 'Arhitektura programske opreme in svetovanje',
         'nav.devopsandplatformengineering': 'DevOps in Platform Engineering',
         'nav.home': 'Domov',
+        'nav.utilitymetering': 'Odčitavanje energentov',
 
         'landingpage:maincompanytitle': 'Rešitve in storitve',
         'landingpage:maincompanytitledescription': 'Dovršene programske rešitve in svetovanja primerna za najzahtevnejše izzive.',
