@@ -1,0 +1,84 @@
+---
+
+---
+
+<main>
+  <h1>Contact</h1>
+
+  <form id="contact-form">
+    <label>
+      Name
+      <input type="text" name="name" required />
+    </label>
+    <label>
+      Email
+      <input type="email" name="email" required />
+    </label>
+    <label>
+      Message
+      <textarea name="message" rows="6" required></textarea>
+    </label>
+
+    <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITEKEY"></div>
+
+    <button type="submit">Send message</button>
+  </form>
+
+  <div id="status" aria-live="polite"></div>
+
+  <script
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+    async
+    defer></script>
+  <script>
+    (function () {
+      const WORKER_URL = "https://YOUR_WORKER_URL_HERE/submit";
+
+      async function handleSubmit(e) {
+        e.preventDefault();
+        const form = e.currentTarget;
+        const name = form.elements["name"].value.trim();
+        const email = form.elements["email"].value.trim();
+        const message = form.elements["message"].value.trim();
+        const tokenInput = document.querySelector(
+          'input[name="cf-turnstile-response"]',
+        );
+        const token = tokenInput ? tokenInput.value : "";
+        const status = document.getElementById("status");
+
+        if (!token) {
+          status.textContent = "Please complete the captcha.";
+          return;
+        }
+
+        status.textContent = "Sending...";
+
+        try {
+          const res = await fetch(WORKER_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name,
+              email,
+              message,
+              cf_turnstile_response: token,
+            }),
+          });
+          const data = await res.json();
+          if (res.ok) {
+            status.textContent = "Message sent — thank you.";
+            form.reset();
+          } else {
+            status.textContent = data?.error || "Failed to send message.";
+          }
+        } catch (err) {
+          status.textContent = "Network error.";
+        }
+      }
+
+      document
+        .getElementById("contact-form")
+        .addEventListener("submit", handleSubmit);
+    })();
+  </script>
+</main>

@@ -88,3 +88,54 @@ To add a new language:
 3. Add localized `paths`, `labels`, and content fields for each route in `src/config/routes.ts`.
 
 The catch-all page (`src/pages/[...slug].astro`) auto-generates static pages for all locales from this config.
+
+## Contact form setup (Cloudflare Turnstile + Worker)
+
+This project includes a ready-made contact page and a Cloudflare Worker example to verify Cloudflare Turnstile tokens and forward messages to an Exchange Online mailbox via Microsoft Graph.
+
+Files added:
+
+- `src/pages/contact.astro` — client contact form (placeholders for `TURNSTILE_SITEKEY` and `WORKER_URL`).
+- `worker/turnstile-graph-worker.js` — Cloudflare Worker that verifies Turnstile and calls Microsoft Graph `sendMail` using app-only credentials.
+
+Quick TODOs you must complete before the contact form will work:
+
+1. Create a Cloudflare Turnstile site and secret: https://developers.cloudflare.com/turnstile/get-started
+   - Copy the **Site Key** and paste it in `src/pages/contact.astro` replacing `YOUR_TURNSTILE_SITEKEY`.
+   - Keep the **Secret Key** for the Worker.
+
+2. Register an Azure AD application for app-only Graph access:
+   - In Azure Portal → App registrations → New registration.
+   - Grant **Application** permission `Mail.Send` and click **Grant admin consent** for your tenant.
+   - Create a client secret and note the `CLIENT_ID`, `TENANT_ID` and `CLIENT_SECRET`.
+
+3. Deploy the Worker (recommended using `wrangler`):
+   - Install Wrangler: `npm install -g wrangler`.
+   - Create or update `wrangler.toml` for your worker (project name, account id, etc.).
+   - Add the following secrets to the Worker (example):
+
+```bash
+wrangler secret put TURNSTILE_SECRET
+wrangler secret put AZ_CLIENT_SECRET
+wrangler secret put FROM_EMAIL
+wrangler secret put TO_EMAIL
+```
+
+4. Bind the remaining env vars in `wrangler.toml` (or as plain env vars):
+
+- `AZ_TENANT_ID` — your Azure AD tenant id
+- `AZ_CLIENT_ID` — app (client) id
+- `FROM_EMAIL` — the mailbox/user the app will send as (must be allowed with Mail.Send app permission)
+- `TO_EMAIL` — destination address that receives contact messages
+
+5. Deploy and get the Worker URL. Set `WORKER_URL` in `src/pages/contact.astro` (replace `https://YOUR_WORKER_URL_HERE/submit`).
+
+6. Test the form in the browser. The Worker will verify Turnstile and forward the message to `TO_EMAIL` using Microsoft Graph.
+
+Security notes:
+
+- Keep `AZ_CLIENT_SECRET` and `TURNSTILE_SECRET` as secrets (do not commit them).
+- Ensure your Azure AD app has **Application** permission `Mail.Send` and admin consent — app-only send requires that permission.
+- You can restrict which `FROM_EMAIL` addresses the app may use by scoping in Exchange or by using a dedicated sending account.
+
+Optional: If you prefer I can deploy the Worker and wire the values for you — I will need the secrets and permission to deploy, or I can provide step-by-step commands for you to run locally.
