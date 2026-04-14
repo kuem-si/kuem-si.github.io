@@ -1,0 +1,19 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout
+  locale="sl"
+  routeId="home"
+  title="404 | KUEM"
+  description="Stran ne obstaja."
+  canonicalPath="/404"
+  alternatePaths={{ sl: '/404', en: '/en/404' }}
+>
+  <section class="hero">
+    <p class="eyebrow">404</p>
+    <h1>Stran ne obstaja</h1>
+    <p class="lead">Preverite URL ali pa nadaljujte na zacetno stran.</p>
+    <p><a href="/">Nazaj na domov</a></p>
+  </section>
+</MainLayout>

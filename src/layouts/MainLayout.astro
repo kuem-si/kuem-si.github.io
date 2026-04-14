@@ -1,0 +1,88 @@
+---
+import LanguageSwitcher from '../components/LanguageSwitcher.astro';
+import { SITE, type Locale } from '../config/site';
+import { getNavItems, type RouteId } from '../config/routes';
+import { toAbsoluteUrl } from '../lib/seo';
+import '../styles/global.css';
+
+interface Props {
+  locale: Locale;
+  routeId: RouteId;
+  title: string;
+  description: string;
+  canonicalPath: string;
+  alternatePaths: Record<Locale, string>;
+}
+
+const { locale, routeId, title, description, canonicalPath, alternatePaths } = Astro.props;
+const navItems = getNavItems(locale);
+const canonicalUrl = toAbsoluteUrl(canonicalPath);
+const ogLocale = locale === 'sl' ? 'sl_SI' : 'en_US';
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#f4f8ff" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    {Object.entries(alternatePaths).map(([localeCode, path]) => (
+      <link rel="alternate" hreflang={localeCode} href={toAbsoluteUrl(path)} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={toAbsoluteUrl(alternatePaths.sl)} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <title>{title}</title>
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: SITE.legalName,
+      url: SITE.url,
+      sameAs: [SITE.social.linkedin, SITE.social.github],
+      contactPoint: [{
+        '@type': 'ContactPoint',
+        contactType: 'sales',
+        email: SITE.email,
+        availableLanguage: ['sl', 'en']
+      }]
+    })} />
+  </head>
+  <body>
+    <div class="background-glow" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href={locale === 'sl' ? '/' : '/en'} data-astro-prefetch="viewport">KUEM</a>
+      <nav aria-label="Main navigation">
+        <ul>
+          {navItems.map((item) => (
+            <li>
+              <a href={item.href} data-active={item.id === routeId} data-astro-prefetch="viewport">{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <LanguageSwitcher locale={locale} routeId={routeId} />
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <p>{SITE.legalName}</p>
+      <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+    </footer>
+  </body>
+</html>

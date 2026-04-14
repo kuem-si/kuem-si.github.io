@@ -1,0 +1,17 @@
+---
+import { localeLabels, type Locale } from '../config/site';
+import { buildLocalizedPath, type RouteId } from '../config/routes';
+
+interface Props {
+  locale: Locale;
+  routeId: RouteId;
+}
+
+const { locale, routeId } = Astro.props;
+const nextLocale = locale === 'sl' ? 'en' : 'sl';
+const switchUrl = buildLocalizedPath(nextLocale, routeId);
+---
+
+<a class="lang-switch" href={switchUrl} data-astro-prefetch="viewport" aria-label={`Switch language to ${localeLabels[nextLocale]}`}>
+  {nextLocale === 'sl' ? 'SL' : 'EN'}
+</a>

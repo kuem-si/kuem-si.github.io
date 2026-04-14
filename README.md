@@ -1,0 +1,40 @@
+# KUEM Website (Astro 6.1)
+
+Multilingual Astro site scaffold with route-localized slugs:
+- Slovenian default locale on root paths (`/`, `/o-nas`, `/storitve/...`)
+- English under `/en` (`/en`, `/en/about`, `/en/services/...`)
+
+## Requirements
+
+- Node.js 22.12+
+- npm 10+
+
+## Run
+
+```bash
+npm install
+npm run dev
+```
+
+## Build
+
+```bash
+npm run build
+npm run preview
+```
+
+## Development Container
+
+Open this repository in VS Code and select **Reopen in Container**.
+The `.devcontainer/devcontainer.json` config provisions Node 22 and installs dependencies.
+
+## i18n Routing and Future Languages
+
+Routes and localized slugs are centralized in `src/config/routes.ts`.
+To add a new language:
+
+1. Add locale code in `src/config/site.ts` (`SUPPORTED_LOCALES`).
+2. Add locale in `astro.config.mjs` under `i18n.locales`.
+3. Add localized `paths`, `labels`, and content fields for each route in `src/config/routes.ts`.
+
+The catch-all page (`src/pages/[...slug].astro`) auto-generates static pages for all locales from this config.
