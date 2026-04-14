@@ -29,6 +29,31 @@ npm run preview
 Open this repository in VS Code and select **Reopen in Container**.
 The `.devcontainer/devcontainer.json` config provisions Node 22 and installs dependencies.
 
+### Host prerequisites
+
+On your host machine (outside the container) ensure the following are installed and configured:
+
+- Docker Desktop or Docker Engine (latest stable) and Docker CLI; Docker must be running. On Linux, add your user to the `docker` group or use `sudo` for Docker commands.
+- Visual Studio Code (stable release).
+- The VS Code "Dev Containers" / "Remote - Containers" support is provided by the `Dev Containers` extension (recommended workflow uses this to reopen the repository in the container).
+- Optionally: Docker Compose if you use multi-container setups, and Git for repository workflows.
+
+System resources: allocate at least 2 CPU cores, 4GB RAM to the dev container for a smooth experience.
+
+### Recommended VS Code extensions
+
+Install these extensions in VS Code for the best developer experience working on this Astro site:
+
+- Dev Containers: `ms-vscode-remote.remote-containers` (reopen in container support)
+- Docker: `ms-azuretools.vscode-docker` (Dockerfile and container helpers)
+- Astro: `astro-build.astro-vscode` (Astro language support)
+- ESLint: `dbaeumer.vscode-eslint` (linting)
+- Prettier: `esbenp.prettier-vscode` (code formatting)
+- GitLens: `eamodio.gitlens` (Git insights)
+- Optional: GitHub Copilot or Copilot Chat if you use AI-assisted coding
+
+Installing these extensions before (or after) reopening in the dev container helps keep editor features and formatting consistent between host and container environments.
+
 ### Accessing the dev server from your host
 
 - The dev container is configured to forward port `5173` (see `.devcontainer/devcontainer.json`). Rebuild or reopen the container to apply this change.
