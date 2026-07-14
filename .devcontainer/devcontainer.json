@@ -1,25 +1,59 @@
 {
   "name": "KUEM Astro Dev",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-bookworm",
-  "features": {
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "24"
-    }
-  },
+
+  // Node.js 24 on Debian 13 Trixie
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:24-trixie",
+
+  // Properly handle child processes started by Node.js development tools
+  "init": true,
+
+  // Compatible with:
+  // "Dev Containers: Clone Repository in Named Container Volume"
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+  "remoteUser": "node",
+
   "customizations": {
     "vscode": {
       "extensions": [
         "astro-build.astro-vscode",
+        "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode"
       ],
       "settings": {
         "editor.formatOnSave": true,
-        "files.eol": "\n"
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+
+        "[astro]": {
+          "editor.defaultFormatter": "astro-build.astro-vscode"
+        },
+
+        "files.eol": "\n",
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true,
+        "files.trimTrailingWhitespace": true,
+
+        "terminal.integrated.defaultProfile.linux": "zsh"
       }
     }
   },
-  "postCreateCommand": "npm install",
-  "remoteUser": "node",
-  "forwardPorts": [5173]
+
+  // Use the lock file for deterministic dependency installation
+  "postCreateCommand": "npm ci",
+
+  // Astro's default development-server port
+  "forwardPorts": [
+    4321
+  ],
+
+  "portsAttributes": {
+    "4321": {
+      "label": "Astro Development Server",
+      "onAutoForward": "openPreview"
+    }
+  }
 }
