@@ -1,4 +1,4 @@
-# KUEM Website (Astro 6.1)
+# KUEM Website (Astro 7)
 
 Multilingual Astro site scaffold with route-localized slugs:
 

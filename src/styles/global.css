@@ -16,10 +16,11 @@
 
 body {
   margin: 0;
-  font-family: 'Space Grotesk', 'Avenir Next', 'Segoe UI', sans-serif;
+  font-family: var(--font-space-grotesk), "Avenir Next", "Segoe UI", sans-serif;
   line-height: 1.55;
   color: var(--text);
-  background: radial-gradient(circle at 85% -10%, #c7ddff, transparent 42%), var(--bg);
+  background:
+    radial-gradient(circle at 85% -10%, #c7ddff, transparent 42%), var(--bg);
   min-height: 100vh;
 }
 
@@ -52,7 +53,7 @@ main {
 .brand {
   text-decoration: none;
   color: var(--text);
-  font-weight: 800;
+  font-weight: 700;
   font-size: 1.2rem;
   letter-spacing: 0.04em;
 }
@@ -78,7 +79,7 @@ nav a,
   font-weight: 500;
 }
 
-nav a[data-active='true'],
+nav a[data-active="true"],
 nav a:hover,
 .lang-switch:hover {
   border-color: var(--border);
