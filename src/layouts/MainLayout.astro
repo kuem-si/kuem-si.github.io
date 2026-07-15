@@ -7,6 +7,9 @@ import {
   toAbsoluteUrl,
   generateBreadcrumbLd,
   generateWebsiteLd,
+  generateOrganizationLd,
+  generateWebPageLd,
+  generateServiceLd,
 } from "../lib/seo";
 import "../styles/global.css";
 
@@ -25,6 +28,15 @@ const navItems = getNavItems(locale);
 const canonicalUrl = toAbsoluteUrl(canonicalPath);
 const ogLocale = locale === "sl" ? "sl_SI" : "en_US";
 const ogImageUrl = toAbsoluteUrl("/og-image.png");
+
+const webPageLd = generateWebPageLd(
+  routeId,
+  locale,
+  title,
+  description,
+  canonicalUrl,
+);
+const serviceLd = generateServiceLd(routeId, locale, canonicalUrl);
 ---
 
 <!doctype html>
@@ -42,6 +54,18 @@ const ogImageUrl = toAbsoluteUrl("/og-image.png");
     <link rel="icon" href="/favicon.ico" />
     <link rel="preconnect" href="https://challenges.cloudflare.com" />
     <link rel="dns-prefetch" href="https://challenges.cloudflare.com" />
+    <link
+      rel="llms"
+      type="text/plain"
+      title="LLMs content guide"
+      href={toAbsoluteUrl("/llms.txt")}
+    />
+    <link
+      rel="llms-full"
+      type="text/plain"
+      title="LLMs full content"
+      href={toAbsoluteUrl("/llms-full.txt")}
+    />
     {
       (Object.entries(alternatePaths) as [Locale, string][]).map(
         ([localeCode, path]) => (
@@ -75,31 +99,25 @@ const ogImageUrl = toAbsoluteUrl("/og-image.png");
     <Font cssVariable="--font-space-grotesk" preload />
     <script
       type="application/ld+json"
+      set:html={JSON.stringify(generateOrganizationLd())}
+    />
+    <script
+      type="application/ld+json"
       set:html={JSON.stringify(generateWebsiteLd(locale))}
     />
+    <script type="application/ld+json" set:html={JSON.stringify(webPageLd)} />
     <script
       type="application/ld+json"
       set:html={JSON.stringify(generateBreadcrumbLd(routeId, locale))}
     />
-    <script
-      type="application/ld+json"
-      set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        name: SITE.legalName,
-        url: SITE.url,
-        logo: toAbsoluteUrl("/favicon.svg"),
-        sameAs: [SITE.social.linkedin, SITE.social.github].filter(Boolean),
-        contactPoint: [
-          {
-            "@type": "ContactPoint",
-            contactType: "sales",
-            email: SITE.email,
-            availableLanguage: ["sl", "en"],
-          },
-        ],
-      })}
-    />
+    {
+      serviceLd && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(serviceLd)}
+        />
+      )
+    }
   </head>
   <body>
     <div class="background-glow" aria-hidden="true"></div>

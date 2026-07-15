@@ -49,53 +49,62 @@ const linkedRouteIds: RouteId[] =
   canonicalPath={buildLocalizedPath(locale, routeId)}
   alternatePaths={getAlternatePaths(routeId)}
 >
-  <section class="hero">
-    <p class="eyebrow">
-      {locale === "sl" ? "Digitalni inzeniring" : "Digital engineering"}
-    </p>
-    <h1>{route.intro[locale]}</h1>
-    <p class="lead">{route.description[locale]}</p>
-  </section>
-
-  <section
-    class="content-grid"
-    aria-label={locale === "sl" ? "Poudarki strani" : "Page highlights"}
+  <main
+    itemscope
+    itemtype="https://schema.org/WebPage"
+    itemid={new URL(
+      buildLocalizedPath(locale, routeId),
+      "https://www.kuem.si",
+    ).toString()}
   >
-    {
-      route.highlights[locale].map((item) => (
-        <article class="card">
-          <h2>{item}</h2>
-          <p>
-            {locale === "sl"
-              ? "Pristop je prilagojen vasemu kontekstu, ciljem in tehnicnim omejitvam."
-              : "Delivery is adapted to your context, goals, and technical constraints."}
-          </p>
-        </article>
-      ))
-    }
-  </section>
+    <section class="hero">
+      <p class="eyebrow">
+        {locale === "sl" ? "Digitalni inzeniring" : "Digital engineering"}
+      </p>
+      <h1 itemprop="name">{route.intro[locale]}</h1>
+      <p class="lead" itemprop="description">{route.description[locale]}</p>
+    </section>
 
-  <section
-    class="related"
-    aria-label={locale === "sl" ? "Sorodne strani" : "Related pages"}
-  >
-    <h2>{locale === "sl" ? "Raziscite naprej" : "Explore further"}</h2>
-    <div class="related-links">
+    <section
+      class="content-grid"
+      aria-label={locale === "sl" ? "Poudarki strani" : "Page highlights"}
+    >
       {
-        linkedRouteIds.map((id) => {
-          const related = getRoute(id);
-          return (
-            <a
-              href={buildLocalizedPath(locale, id)}
-              data-astro-prefetch="hover"
-            >
-              <strong>{related.labels[locale]}</strong>
-              <span>{related.description[locale]}</span>
-            </a>
-          );
-        })
+        route.highlights[locale].map((item) => (
+          <article class="card">
+            <h2>{item}</h2>
+            <p>
+              {locale === "sl"
+                ? "Pristop je prilagojen vasemu kontekstu, ciljem in tehnicnim omejitvam."
+                : "Delivery is adapted to your context, goals, and technical constraints."}
+            </p>
+          </article>
+        ))
       }
-    </div>
-  </section>
-  {routeId === "contact" && <ContactForm />}
+    </section>
+
+    <section
+      class="related"
+      aria-label={locale === "sl" ? "Sorodne strani" : "Related pages"}
+    >
+      <h2>{locale === "sl" ? "Raziscite naprej" : "Explore further"}</h2>
+      <div class="related-links">
+        {
+          linkedRouteIds.map((id) => {
+            const related = getRoute(id);
+            return (
+              <a
+                href={buildLocalizedPath(locale, id)}
+                data-astro-prefetch="hover"
+              >
+                <strong>{related.labels[locale]}</strong>
+                <span>{related.description[locale]}</span>
+              </a>
+            );
+          })
+        }
+      </div>
+    </section>
+    {routeId === "contact" && <ContactForm />}
+  </main>
 </MainLayout>; ---

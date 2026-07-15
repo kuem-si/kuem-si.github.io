@@ -75,9 +75,13 @@ export function generateWebsiteLd(locale: Locale): object {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${SITE.url}/#website`,
     name: SITE.name,
     url: SITE.url,
     inLanguage: locale,
+    publisher: {
+      "@id": `${SITE.url}/#organization`,
+    },
     potentialAction: {
       "@type": "SearchAction",
       target: {
@@ -87,4 +91,110 @@ export function generateWebsiteLd(locale: Locale): object {
       "query-input": "required name=search_term_string",
     },
   };
+}
+
+export function generateOrganizationLd(): object {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${SITE.url}/#organization`,
+    name: SITE.legalName,
+    alternateName: SITE.name,
+    url: SITE.url,
+    logo: toAbsoluteUrl("/favicon.svg"),
+    email: SITE.email,
+    sameAs: [SITE.social.linkedin, SITE.social.github].filter(Boolean),
+    description:
+      "Digital product engineering, software architecture, and DevOps platforms. Building reliable software from concept to production.",
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        email: SITE.email,
+        availableLanguage: ["sl", "en"],
+      },
+    ],
+  };
+}
+
+export function generateWebPageLd(
+  routeId: RouteId,
+  locale: Locale,
+  title: string,
+  description: string,
+  canonicalUrl: string,
+): object {
+  const route = ROUTES.find((r) => r.id === routeId)!;
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${canonicalUrl}#webpage`,
+    url: canonicalUrl,
+    name: title,
+    description: description,
+    inLanguage: locale,
+    isPartOf: {
+      "@id": `${SITE.url}/#website`,
+    },
+    about: {
+      "@id": `${SITE.url}/#organization`,
+    },
+    breadcrumb: {
+      "@id": `${canonicalUrl}#breadcrumb`,
+    },
+  };
+}
+
+export function generateServiceLd(
+  routeId: RouteId,
+  locale: Locale,
+  canonicalUrl: string,
+): object | null {
+  const route = ROUTES.find((r) => r.id === routeId)!;
+
+  if (
+    routeId === "service-development" ||
+    routeId === "service-architecture" ||
+    routeId === "service-devops"
+  ) {
+    return {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "@id": `${canonicalUrl}#service`,
+      name: route.labels[locale],
+      description: route.description[locale],
+      provider: {
+        "@id": `${SITE.url}/#organization`,
+      },
+      areaServed: "Worldwide",
+      category: "Software Engineering",
+      serviceType: route.labels[locale],
+      termsOfService: canonicalUrl,
+    };
+  }
+
+  if (
+    routeId === "solution-nexavia" ||
+    routeId === "solution-nexavia-enterprise" ||
+    routeId === "solution-thynkr"
+  ) {
+    return {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "@id": `${canonicalUrl}#application`,
+      name: route.labels[locale],
+      description: route.description[locale],
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      offers: {
+        "@type": "Offer",
+        availability: "https://schema.org/InStock",
+      },
+      provider: {
+        "@id": `${SITE.url}/#organization`,
+      },
+    };
+  }
+
+  return null;
 }
