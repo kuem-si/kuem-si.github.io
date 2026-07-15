@@ -3,7 +3,11 @@ import { Font } from "astro:assets";
 import LanguageSwitcher from "../components/LanguageSwitcher.astro";
 import { SITE, type Locale } from "../config/site";
 import { getNavItems, type RouteId } from "../config/routes";
-import { toAbsoluteUrl } from "../lib/seo";
+import {
+  toAbsoluteUrl,
+  generateBreadcrumbLd,
+  generateWebsiteLd,
+} from "../lib/seo";
 import "../styles/global.css";
 
 interface Props {
@@ -32,9 +36,12 @@ const ogImageUrl = toAbsoluteUrl("/og-image.png");
     <meta name="description" content={description} />
     <meta name="robots" content="index,follow" />
     <meta name="theme-color" content="#1f64e0" />
+    <meta name="view-transition" content="same-origin" />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://challenges.cloudflare.com" />
+    <link rel="dns-prefetch" href="https://challenges.cloudflare.com" />
     {
       (Object.entries(alternatePaths) as [Locale, string][]).map(
         ([localeCode, path]) => (
@@ -66,6 +73,14 @@ const ogImageUrl = toAbsoluteUrl("/og-image.png");
     <meta name="twitter:image" content={ogImageUrl} />
     <title>{title}</title>
     <Font cssVariable="--font-space-grotesk" preload />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(generateWebsiteLd(locale))}
+    />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(generateBreadcrumbLd(routeId, locale))}
+    />
     <script
       type="application/ld+json"
       set:html={JSON.stringify({

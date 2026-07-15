@@ -1,5 +1,6 @@
-import { defineConfig, fontProviders } from "astro/config";
+import { defineConfig, fontProviders, svgoOptimizer } from "astro/config";
 import sitemap from "@astrojs/sitemap";
+import partytown from "@astrojs/partytown";
 
 export default defineConfig({
   site: "https://www.kuem.si",
@@ -15,11 +16,35 @@ export default defineConfig({
     syntaxHighlight: false,
   },
   build: {
-    inlineStylesheets: "auto",
+    inlineStylesheets: "always",
+    assets: "_",
   },
   image: {
+    service: {
+      entrypoint: "astro/assets/services/sharp",
+      config: {
+        webp: { effort: 6, alphaQuality: 80 },
+        avif: { effort: 6 },
+        jpeg: { mozjpeg: true, progressive: true },
+        png: { compressionLevel: 9, effort: 10 },
+      },
+    },
     layout: "constrained",
     responsiveStyles: true,
+  },
+  experimental: {
+    svgOptimizer: svgoOptimizer({
+      multipass: true,
+      floatPrecision: 2,
+      plugins: [
+        "preset-default",
+        "removeXMLNS",
+        {
+          name: "removeXlink",
+          params: { includeLegacy: true },
+        },
+      ],
+    }),
   },
   security: {
     csp: {
@@ -33,6 +58,23 @@ export default defineConfig({
         "connect-src 'self' https://challenges.cloudflare.com",
         "frame-src https://challenges.cloudflare.com",
       ],
+    },
+  },
+  vite: {
+    build: {
+      target: "esnext",
+      minify: "terser",
+      cssMinify: "lightningcss",
+      assetsInlineLimit: 4096,
+      modulePreload: {
+        polyfill: false,
+      },
+      cssCodeSplit: false,
+      rollupOptions: {
+        output: {
+          hoistTransitiveImports: false,
+        },
+      },
     },
   },
   i18n: {
@@ -50,6 +92,7 @@ export default defineConfig({
       weights: [400, 500, 600, 700],
       styles: ["normal"],
       subsets: ["latin", "latin-ext"],
+      display: "swap",
     },
   ],
   integrations: [
@@ -62,6 +105,11 @@ export default defineConfig({
         },
       },
       filter: (page) => new URL(page).pathname !== "/contact/",
+    }),
+    partytown({
+      config: {
+        forward: [],
+      },
     }),
   ],
 });
