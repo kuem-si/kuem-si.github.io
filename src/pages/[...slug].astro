@@ -1,14 +1,15 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro';
+import MainLayout from "../layouts/MainLayout.astro";
 import {
   ROUTES,
   buildLocalizedPath,
   buildStaticSlugParam,
   getAlternatePaths,
   getRoute,
-  type RouteId
-} from '../config/routes';
-import { SUPPORTED_LOCALES, type Locale } from '../config/site';
+  type RouteId,
+} from "../config/routes";
+import { SUPPORTED_LOCALES, type Locale } from "../config/site";
+import ContactForm from "../components/ContactForm.astro";
 
 interface Props {
   locale: Locale;
@@ -21,9 +22,9 @@ export function getStaticPaths() {
       params: { slug: buildStaticSlugParam(locale, route.id) },
       props: {
         locale,
-        routeId: route.id
-      }
-    }))
+        routeId: route.id,
+      },
+    })),
   );
 }
 
@@ -31,13 +32,13 @@ const { locale, routeId } = Astro.props as Props;
 const route = getRoute(routeId);
 
 const linkedRouteIds: RouteId[] =
-  routeId === 'services'
-    ? ['service-development', 'service-architecture', 'service-devops']
-    : routeId === 'solutions'
-      ? ['solution-nexavia', 'solution-nexavia-enterprise', 'solution-thynkr']
-      : routeId === 'home'
-        ? ['services', 'solutions', 'about', 'contact']
-        : ['contact'];
+  routeId === "services"
+    ? ["service-development", "service-architecture", "service-devops"]
+    : routeId === "solutions"
+      ? ["solution-nexavia", "solution-nexavia-enterprise", "solution-thynkr"]
+      : routeId === "home"
+        ? ["services", "solutions", "about", "contact"]
+        : ["contact"];
 ---
 
 <MainLayout
@@ -49,36 +50,52 @@ const linkedRouteIds: RouteId[] =
   alternatePaths={getAlternatePaths(routeId)}
 >
   <section class="hero">
-    <p class="eyebrow">{locale === 'sl' ? 'Digitalni inzeniring' : 'Digital engineering'}</p>
+    <p class="eyebrow">
+      {locale === "sl" ? "Digitalni inzeniring" : "Digital engineering"}
+    </p>
     <h1>{route.intro[locale]}</h1>
     <p class="lead">{route.description[locale]}</p>
   </section>
 
-  <section class="content-grid" aria-label={locale === 'sl' ? 'Poudarki strani' : 'Page highlights'}>
-    {route.highlights[locale].map((item) => (
-      <article class="card">
-        <h2>{item}</h2>
-        <p>
-          {locale === 'sl'
-            ? 'Pristop je prilagojen vasemu kontekstu, ciljem in tehnicnim omejitvam.'
-            : 'Delivery is adapted to your context, goals, and technical constraints.'}
-        </p>
-      </article>
-    ))}
+  <section
+    class="content-grid"
+    aria-label={locale === "sl" ? "Poudarki strani" : "Page highlights"}
+  >
+    {
+      route.highlights[locale].map((item) => (
+        <article class="card">
+          <h2>{item}</h2>
+          <p>
+            {locale === "sl"
+              ? "Pristop je prilagojen vasemu kontekstu, ciljem in tehnicnim omejitvam."
+              : "Delivery is adapted to your context, goals, and technical constraints."}
+          </p>
+        </article>
+      ))
+    }
   </section>
 
-  <section class="related" aria-label={locale === 'sl' ? 'Sorodne strani' : 'Related pages'}>
-    <h2>{locale === 'sl' ? 'Raziscite naprej' : 'Explore further'}</h2>
+  <section
+    class="related"
+    aria-label={locale === "sl" ? "Sorodne strani" : "Related pages"}
+  >
+    <h2>{locale === "sl" ? "Raziscite naprej" : "Explore further"}</h2>
     <div class="related-links">
-      {linkedRouteIds.map((id) => {
-        const related = getRoute(id);
-        return (
-          <a href={buildLocalizedPath(locale, id)} data-astro-prefetch="viewport">
-            <strong>{related.labels[locale]}</strong>
-            <span>{related.description[locale]}</span>
-          </a>
-        );
-      })}
+      {
+        linkedRouteIds.map((id) => {
+          const related = getRoute(id);
+          return (
+            <a
+              href={buildLocalizedPath(locale, id)}
+              data-astro-prefetch="hover"
+            >
+              <strong>{related.labels[locale]}</strong>
+              <span>{related.description[locale]}</span>
+            </a>
+          );
+        })
+      }
     </div>
   </section>
-</MainLayout>
+  {routeId === "contact" && <ContactForm />}
+</MainLayout>; ---

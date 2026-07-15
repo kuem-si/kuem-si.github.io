@@ -5,9 +5,35 @@ export default defineConfig({
   site: "https://www.kuem.si",
   output: "static",
   compressHTML: true,
+  trailingSlash: "always",
+  scopedStyleStrategy: "where",
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: "viewport",
+    defaultStrategy: "hover",
+  },
+  markdown: {
+    syntaxHighlight: false,
+  },
+  build: {
+    inlineStylesheets: "auto",
+  },
+  image: {
+    layout: "constrained",
+    responsiveStyles: true,
+  },
+  security: {
+    csp: {
+      scriptDirective: {
+        resources: ["'self'", "https://challenges.cloudflare.com"],
+      },
+      styleDirective: {
+        resources: ["'self'"],
+      },
+      directives: [
+        "connect-src 'self' https://challenges.cloudflare.com",
+        "frame-src https://challenges.cloudflare.com",
+      ],
+    },
   },
   i18n: {
     locales: ["sl", "en"],
@@ -26,5 +52,16 @@ export default defineConfig({
       subsets: ["latin", "latin-ext"],
     },
   ],
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      i18n: {
+        defaultLocale: "sl",
+        locales: {
+          sl: "sl-SI",
+          en: "en-US",
+        },
+      },
+      filter: (page) => new URL(page).pathname !== "/contact/",
+    }),
+  ],
 });
