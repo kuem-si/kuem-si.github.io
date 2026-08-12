@@ -56,7 +56,7 @@ export default defineConfig({
       },
       directives: [
         "connect-src 'self' https://challenges.cloudflare.com",
-        "frame-src https://challenges.cloudflare.com",
+        "frame-src https://challenges.cloudflare.com https://kuem-doo.odoo.com https://contactform.kuem.si",
       ],
     },
   },

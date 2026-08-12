@@ -49,14 +49,7 @@ const linkedRouteIds: RouteId[] =
   canonicalPath={buildLocalizedPath(locale, routeId)}
   alternatePaths={getAlternatePaths(routeId)}
 >
-  <main
-    itemscope
-    itemtype="https://schema.org/WebPage"
-    itemid={new URL(
-      buildLocalizedPath(locale, routeId),
-      "https://www.kuem.si",
-    ).toString()}
-  >
+  <div>
     <section class="hero">
       <p class="eyebrow">
         {locale === "sl" ? "Digitalni inzeniring" : "Digital engineering"}
@@ -66,7 +59,6 @@ const linkedRouteIds: RouteId[] =
     </section>
 
     <section
-      class="content-grid"
       aria-label={locale === "sl" ? "Poudarki strani" : "Page highlights"}
     >
       {
@@ -105,6 +97,6 @@ const linkedRouteIds: RouteId[] =
         }
       </div>
     </section>
-    {routeId === "contact" && <ContactForm />}
-  </main>
+    {routeId === "contact" && <ContactForm locale={locale} />}
+  </div>
 </MainLayout>; ---

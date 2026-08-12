@@ -1,70 +1,60 @@
-<form id="contact-form">
-  <label>
-    Name
-    <input type="text" name="name" required />
-  </label>
-  <label>
-    Email
-    <input type="email" name="email" required />
-  </label>
-  <label>
-    Message
-    <textarea name="message" rows="6" required></textarea>
-  </label>
+---
+interface Props {
+  locale: "sl" | "en";
+}
 
-  <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITEKEY"></div>
+const { locale } = Astro.props as Props;
+const contactFormBaseUrl =
+  import.meta.env.PUBLIC_CONTACT_FORM_URL || "https://contactform.kuem.si/";
+const contactFormEnglishUrl =
+  import.meta.env.PUBLIC_CONTACT_FORM_URL_EN ||
+  new URL("/en", contactFormBaseUrl).toString();
+const contactFormUrl =
+  locale === "en" ? contactFormEnglishUrl : contactFormBaseUrl;
+---
 
-  <button type="submit">Send message</button>
-</form>
+{
+  contactFormUrl ? (
+    <section class="contact-form" aria-label="Contact form">
+      <iframe
+        src={contactFormUrl}
+        title="KUEM contact form"
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+      />
+    </section>
+  ) : (
+    <p class="contact-form-error" role="alert">
+      The contact form is temporarily unavailable.
+    </p>
+  )
+}
 
-<div id="status" aria-live="polite"></div>
+<style>
+  .contact-form {
+    width: min(100% - 2rem, 1180px);
+    margin: 2rem auto;
+    overflow: hidden;
+    border: 1px solid rgba(91, 141, 239, 0.25);
+    border-radius: 1rem;
+    background: #fff;
+  }
 
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer
-></script>
-<script>
-  (() => {
-    const workerUrl = "https://YOUR_WORKER_URL_HERE/submit";
-    const form = document.querySelector<HTMLFormElement>("#contact-form");
-    const status = document.querySelector<HTMLElement>("#status");
+  .contact-form iframe {
+    display: block;
+    width: 100%;
+    height: 850px;
+    border: 0;
+  }
 
-    if (!form || !status) return;
+  .contact-form-error {
+    width: min(100% - 2rem, 1180px);
+    margin: 2rem auto;
+  }
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const formData = new FormData(form);
-      const token = document.querySelector<HTMLInputElement>(
-        'input[name="cf-turnstile-response"]',
-      )?.value;
-
-      if (!token) {
-        status.textContent = "Please complete the captcha.";
-        return;
-      }
-
-      status.textContent = "Sending...";
-
-      try {
-        const response = await fetch(workerUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: formData.get("name")?.toString().trim(),
-            email: formData.get("email")?.toString().trim(),
-            message: formData.get("message")?.toString().trim(),
-            cf_turnstile_response: token,
-          }),
-        });
-        const data = await response.json();
-
-        if (response.ok) {
-          status.textContent = "Message sent - thank you.";
-          form.reset();
-        } else {
-          status.textContent = data?.error || "Failed to send message.";
-        }
-      } catch {
-        status.textContent = "Network error.";
-      }
-    });
-  })();
-</script>
+  @media (max-width: 640px) {
+    .contact-form iframe {
+      height: 1000px;
+    }
+  }
+</style>
