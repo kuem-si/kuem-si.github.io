@@ -884,10 +884,12 @@ const processSteps = isSlovenian
   }
 
   @media (max-width: 640px) {
-    .company-home { gap: 4rem; padding-top: 0.6rem; }
+    .company-home { gap: 3.5rem; padding-top: 0.6rem; padding-bottom: 2rem; }
     .hero-panel { min-height: 0; padding: 1.35rem; border-radius: 1.35rem; }
-    .hero-copy h1 { font-size: clamp(2.7rem, 14vw, 4rem); }
+    .hero-copy h1 { font-size: clamp(2.55rem, 13vw, 3.75rem); letter-spacing: -0.04em; }
+    .hero-lead { line-height: 1.6; }
     .hero-actions { align-items: stretch; flex-direction: column; }
+    .button { width: 100%; min-height: 3.25rem; }
     .hero-logo { min-height: 13rem; }
     .partner-strip { grid-template-columns: 1fr; }
     .partner-strip ul { justify-content: flex-start; gap: 0.8rem 1.25rem; }
@@ -895,7 +897,7 @@ const processSteps = isSlovenian
     .service-grid { grid-template-columns: 1fr; }
     .strengths div { min-height: 0; }
     .service-card,
-    .service-card:last-child { min-height: 19rem; grid-column: auto; }
+    .service-card:last-child { min-height: 16rem; grid-column: auto; }
     .solution-stack { display: grid; gap: 1rem; min-height: 0; }
     .solution-card { width: 100%; min-height: 17rem; transform: none; }
     .process-list { grid-template-columns: 1fr; }
@@ -907,6 +909,49 @@ const processSteps = isSlovenian
     .process-list strong { margin-top: 0.8rem; }
     .contact-section { grid-template-columns: 1fr; padding: 1.5rem; border-radius: 1.35rem; }
     .contact-details { padding: 1.5rem 0 0; border-top: 1px solid rgba(255, 255, 255, 0.16); border-left: 0; }
+    .chat-widget { right: max(0.75rem, env(safe-area-inset-right)); bottom: max(0.75rem, env(safe-area-inset-bottom)); }
+  }
+
+  :global(html[data-theme="dark"]) .company-home {
+    --ink: #eef5ff;
+    --muted: #b5c6df;
+    --blue: #72b7ff;
+    --cyan: #49b9ff;
+    --line: rgba(91, 132, 181, 0.5);
+  }
+
+  :global(html[data-theme="dark"]) .hero-panel {
+    background:
+      radial-gradient(circle at 95% 0%, rgba(52, 130, 230, 0.28), transparent 36%),
+      linear-gradient(145deg, rgba(16, 33, 61, 0.98), rgba(8, 24, 47, 0.96));
+    box-shadow: 0 35px 90px rgba(0, 0, 0, 0.32);
+  }
+
+  :global(html[data-theme="dark"]) .hero-panel::before {
+    background-image:
+      linear-gradient(rgba(114, 183, 255, 0.09) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(114, 183, 255, 0.09) 1px, transparent 1px);
+  }
+
+  :global(html[data-theme="dark"]) .button-secondary,
+  :global(html[data-theme="dark"]) .strengths div,
+  :global(html[data-theme="dark"]) .service-card {
+    background: rgba(16, 33, 61, 0.8);
+  }
+
+  :global(html[data-theme="dark"]) .about-body > p:first-child,
+  :global(html[data-theme="dark"]) .partner-strip li {
+    color: #cfddf0;
+  }
+
+  :global(html[data-theme="dark"]) .service-card:hover {
+    border-color: #72b7ff;
+    box-shadow: 0 22px 50px rgba(0, 0, 0, 0.28);
+  }
+
+  :global(html[data-theme="dark"]) .chat-widget div {
+    border-color: var(--line);
+    background: #10213d;
   }
 
   @media (prefers-reduced-motion: reduce) {

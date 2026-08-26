@@ -43,11 +43,21 @@ const serviceLd = generateServiceLd(routeId, locale, canonicalUrl);
 <html lang={locale}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <meta name="robots" content="index,follow" />
-    <meta name="theme-color" content="#1f64e0" />
+    <meta name="theme-color" content="#f3f7ff" />
+    <script is:inline>
+      (() => {
+        const saved = localStorage.getItem("kuem-theme");
+        const theme = saved === "light" || saved === "dark"
+          ? saved
+          : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
     <meta name="view-transition" content="same-origin" />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -172,11 +182,58 @@ const serviceLd = generateServiceLd(routeId, locale, canonicalUrl);
           </ul>
         </nav>
       </details>
+      <button
+        class="theme-toggle"
+        type="button"
+        aria-label={locale === "sl" ? "Vklopi temni način" : "Switch to dark mode"}
+        aria-pressed="false"
+      >
+        <span class="theme-toggle-track" aria-hidden="true">
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3.5"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
+          </svg>
+          <span class="theme-toggle-thumb"></span>
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24">
+            <path d="M20.2 15.3A8.5 8.5 0 0 1 8.7 3.8 8.5 8.5 0 1 0 20.2 15.3Z"></path>
+          </svg>
+        </span>
+        <span class="sr-only">{locale === "sl" ? "Tema" : "Theme"}</span>
+      </button>
       <LanguageSwitcher locale={locale} routeId={routeId} />
     </header>
 
     <script>
       const mobileMenu = document.querySelector(".mobile-nav");
+      const themeToggle = document.querySelector(".theme-toggle");
+      const themeColor = document.querySelector('meta[name="theme-color"]');
+
+      const applyTheme = (theme) => {
+        const isDark = theme === "dark";
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        themeColor?.setAttribute("content", isDark ? "#071225" : "#f3f7ff");
+        if (themeToggle instanceof HTMLButtonElement) {
+          themeToggle.setAttribute("aria-pressed", String(isDark));
+          themeToggle.setAttribute(
+            "aria-label",
+            isDark
+              ? themeToggle.dataset.lightLabel || "Switch to light mode"
+              : themeToggle.dataset.darkLabel || "Switch to dark mode",
+          );
+        }
+      };
+
+      if (themeToggle instanceof HTMLButtonElement) {
+        themeToggle.dataset.darkLabel = document.documentElement.lang === "sl" ? "Vklopi temni način" : "Switch to dark mode";
+        themeToggle.dataset.lightLabel = document.documentElement.lang === "sl" ? "Vklopi svetli način" : "Switch to light mode";
+        applyTheme(document.documentElement.dataset.theme || "light");
+        themeToggle.addEventListener("click", () => {
+          const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+          localStorage.setItem("kuem-theme", next);
+          applyTheme(next);
+        });
+      }
 
       document.addEventListener("click", (event) => {
         if (
