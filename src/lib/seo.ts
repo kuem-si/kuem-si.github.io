@@ -17,7 +17,6 @@ const PARENT_MAP: Partial<Record<RouteId, RouteId>> = {
   "service-devops": "services",
   "solution-nexavia": "solutions",
   "solution-nexavia-enterprise": "solutions",
-  "solution-thynkr": "solutions",
 };
 
 export interface BreadcrumbItem {
@@ -175,8 +174,7 @@ export function generateServiceLd(
 
   if (
     routeId === "solution-nexavia" ||
-    routeId === "solution-nexavia-enterprise" ||
-    routeId === "solution-thynkr"
+    routeId === "solution-nexavia-enterprise"
   ) {
     return {
       "@context": "https://schema.org",

@@ -10,7 +10,6 @@ export type RouteId =
   | "solutions"
   | "solution-nexavia"
   | "solution-nexavia-enterprise"
-  | "solution-thynkr"
   | "contact";
 
 export interface RouteEntry {
@@ -197,8 +196,8 @@ export const ROUTES: RouteEntry[] = [
       en: "Besides services, we build focused products for specific domains.",
     },
     highlights: {
-      sl: ["Nexavia", "Nexavia Enterprise", "Thynkr"],
-      en: ["Nexavia", "Nexavia Enterprise", "Thynkr"],
+      sl: ["Nexavia", "Nexavia Enterprise"],
+      en: ["Nexavia", "Nexavia Enterprise"],
     },
   },
   {
@@ -240,29 +239,6 @@ export const ROUTES: RouteEntry[] = [
     highlights: {
       sl: ["Multi-tenant", "Napredna varnost", "Skalabilna arhitektura"],
       en: ["Multi-tenant", "Advanced security", "Scalable architecture"],
-    },
-  },
-  {
-    id: "solution-thynkr",
-    paths: { sl: ["resitve", "thynkr"], en: ["solutions", "thynkr"] },
-    nav: false,
-    labels: { sl: "Thynkr", en: "Thynkr" },
-    title: { sl: "Thynkr | KUEM", en: "Thynkr | KUEM" },
-    description: {
-      sl: "Resitev za strukturirano sodelovanje in odlocanje.",
-      en: "A solution for structured collaboration and decision making.",
-    },
-    intro: {
-      sl: "Thynkr izboljsa transparentnost in hitrost ekipnih odlocitev.",
-      en: "Thynkr improves transparency and speed in team decisions.",
-    },
-    highlights: {
-      sl: [
-        "Skupinsko sodelovanje",
-        "Vpogledi v podatke",
-        "Sledenje odlocitvam",
-      ],
-      en: ["Collaborative workflows", "Data insights", "Decision traceability"],
     },
   },
   {

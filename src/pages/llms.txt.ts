@@ -13,7 +13,6 @@ function getChildRoutes(parentId: RouteId): RouteId[] {
     solutions: [
       "solution-nexavia",
       "solution-nexavia-enterprise",
-      "solution-thynkr",
     ],
   };
   return children[parentId] ?? [];

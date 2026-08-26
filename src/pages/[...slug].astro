@@ -9,6 +9,7 @@ import {
   type RouteId,
 } from "../config/routes";
 import { SUPPORTED_LOCALES, type Locale } from "../config/site";
+import CompanyPrototype from "../components/CompanyPrototype.astro";
 import ContactForm from "../components/ContactForm.astro";
 
 interface Props {
@@ -35,7 +36,7 @@ const linkedRouteIds: RouteId[] =
   routeId === "services"
     ? ["service-development", "service-architecture", "service-devops"]
     : routeId === "solutions"
-      ? ["solution-nexavia", "solution-nexavia-enterprise", "solution-thynkr"]
+      ? ["solution-nexavia", "solution-nexavia-enterprise"]
       : routeId === "home"
         ? ["services", "solutions", "about", "contact"]
         : ["contact"];
@@ -49,6 +50,10 @@ const linkedRouteIds: RouteId[] =
   canonicalPath={buildLocalizedPath(locale, routeId)}
   alternatePaths={getAlternatePaths(routeId)}
 >
+  {
+    routeId === "home" ? (
+      <CompanyPrototype locale={locale} />
+    ) : (
   <div>
     <section class="hero">
       <p class="eyebrow">
@@ -99,4 +104,6 @@ const linkedRouteIds: RouteId[] =
     </section>
     {routeId === "contact" && <ContactForm locale={locale} />}
   </div>
-</MainLayout>; ---
+    )
+  }
+</MainLayout>

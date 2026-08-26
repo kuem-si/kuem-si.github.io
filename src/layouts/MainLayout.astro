@@ -127,7 +127,7 @@ const serviceLd = generateServiceLd(routeId, locale, canonicalUrl);
         href={locale === "sl" ? "/" : "/en/"}
         data-astro-prefetch="hover">KUEM</a
       >
-      <nav aria-label="Main navigation">
+      <nav class="desktop-nav" aria-label="Main navigation">
         <ul>
           {
             navItems.map((item) => (
@@ -144,8 +144,57 @@ const serviceLd = generateServiceLd(routeId, locale, canonicalUrl);
           }
         </ul>
       </nav>
+      <details class="mobile-nav">
+        <summary
+          aria-label={locale === "sl" ? "Odpri glavni meni" : "Open main menu"}
+        >
+          <span class="hamburger-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </summary>
+        <nav aria-label={locale === "sl" ? "Mobilna navigacija" : "Mobile navigation"}>
+          <ul>
+            {
+              navItems.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    data-active={item.id === routeId}
+                    data-astro-prefetch="hover"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </details>
       <LanguageSwitcher locale={locale} routeId={routeId} />
     </header>
+
+    <script>
+      const mobileMenu = document.querySelector(".mobile-nav");
+
+      document.addEventListener("click", (event) => {
+        if (
+          mobileMenu instanceof HTMLDetailsElement &&
+          mobileMenu.open &&
+          event.target instanceof Node &&
+          !mobileMenu.contains(event.target)
+        ) {
+          mobileMenu.open = false;
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && mobileMenu instanceof HTMLDetailsElement) {
+          mobileMenu.open = false;
+        }
+      });
+    </script>
 
     <main>
       <slot />
