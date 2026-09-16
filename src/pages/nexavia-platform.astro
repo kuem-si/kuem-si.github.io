@@ -1,11 +1,49 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import FeatureList from "../components/FeatureList.astro";
+import ArchitectureFlow from "../components/ArchitectureFlow.astro";
 import CTASection from "../components/CTASection.astro";
+
+const capabilities = [
+  "Zajem podatkov iz števcev, senzorjev in naprav",
+  "Daljinsko odčitavanje, nadzor in alarmiranje",
+  "LoRaWAN, NB-IoT, LTE, M-Bus, wM-Bus, MQTT, Modbus, API",
+  "Nadzorne plošče, grafi, tabele in zemljevidi",
+  "Alarmiranje ob napakah, prekoračitvah ali izpadih",
+  "Zgodovina meritev in poročila",
+  "Integracije z obračunskimi sistemi, SCADA, ERP, Power BI in drugimi sistemi",
+  "Več uporabnikov, več organizacij in različne pravice dostopa",
+  "Možnost lokalne, oblačne ali hibridne postavitve",
+];
+
+const architecture = [
+  {
+    title: "Števci, senzorji in naprave",
+    description:
+      "Terenski viri, ki ustvarjajo odčitke, dogodke in podatke o stanju.",
+  },
+  {
+    title: "LoRaWAN / NB-IoT / LTE / M-Bus / wM-Bus",
+    description:
+      "Povezljivost in protokoli za zajem podatkov iz razpršene infrastrukture.",
+  },
+  {
+    title: "Nexavia",
+    description:
+      "Platforma za obdelavo, nadzor, alarmiranje in upravljanje podatkov.",
+  },
+  {
+    title: "Nadzorne plošče, alarmi, poročila in integracije",
+    description:
+      "Operativni prikazi, obvestila, izvozi in povezave z zunanjimi sistemi.",
+  },
+];
 ---
 
 <MainLayout
   title="Platforma Nexavia | KUEM"
-  description="Nexavia je KUEM platforma za upravljanje naprav, analitiko, integracije in varne možnosti uvedbe."
+  description="Nexavia je KUEM platforma za digitalni nadzor, daljinsko odčitavanje, alarmiranje in integracijo podatkov iz števcev, senzorjev in naprav preko LoRaWAN, NB-IoT, LTE, M-Bus, wM-Bus in drugih tehnologij."
 >
   <section class="hero">
     <div class="container split">
@@ -27,6 +65,57 @@ import CTASection from "../components/CTASection.astro";
           <li>Hibridna arhitektura z razmejenimi obremenitvami</li>
         </ul>
       </aside>
+    </div>
+  </section>
+
+  <section>
+    <div class="container split">
+      <article>
+        <SectionHeader title="Kaj je Nexavia" />
+        <p>
+          Nexavia povezuje terensko infrastrukturo z digitalnimi procesi
+          nadzora: daljinskim odčitavanjem, spremljanjem, alarmiranjem, poročili
+          in integracijami z obstoječimi poslovnimi sistemi. Tehnologije IoT se
+          uporabijo tam, kjer ustrezajo komunikacijskim in izvedbenim zahtevam.
+        </p>
+      </article>
+      <article class="card">
+        <h2>Kaj omogoča</h2>
+        <FeatureList items={capabilities} />
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <SectionHeader
+        title="Podprte tehnologije"
+        description="LoRaWAN, NB-IoT, LTE, M-Bus, wM-Bus, MQTT, Modbus, API in druge tehnologije se povežejo glede na zahteve projekta."
+      />
+      <div class="reference-name-grid">
+        {
+          [
+            "LoRaWAN",
+            "NB-IoT",
+            "LTE",
+            "M-Bus",
+            "wM-Bus",
+            "MQTT",
+            "Modbus",
+            "API",
+          ].map((item) => <span class="reference-name-card">{item}</span>)
+        }
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <SectionHeader
+        title="Arhitektura sistema"
+        description="Števci, senzorji in naprave → LoRaWAN / NB-IoT / LTE / M-Bus / wM-Bus → Nexavia → Nadzorne plošče, alarmi, poročila in integracije"
+      />
+      <ArchitectureFlow steps={architecture} />
     </div>
   </section>
 
@@ -58,6 +147,35 @@ import CTASection from "../components/CTASection.astro";
         <p>
           REST API-ji in izvozni poteki za SCADA, obračun, ERP, vzdrževanje in
           BI sisteme.
+        </p>
+      </article>
+      <article class="card">
+        <h2>Nadzorne plošče, alarmi in poročila</h2>
+        <p>
+          Nexavia omogoča nadzorne plošče, grafe, tabele, zemljevide, alarmna
+          pravila, zgodovino meritev in poročila.
+        </p>
+      </article>
+      <article class="card">
+        <h2>Integracije z zunanjimi sistemi</h2>
+        <p>
+          Nexavia se povezuje z obračunskimi sistemi, SCADA, ERP, Power BI in
+          drugimi operativnimi ali poslovnimi sistemi.
+        </p>
+      </article>
+      <article class="card">
+        <h2>Oblačna, lokalna ali hibridna postavitev</h2>
+        <p>
+          Platforma je lahko nameščena v oblaku, lokalno ali hibridno glede na
+          varnostne, lastniške in operativne zahteve.
+        </p>
+      </article>
+      <article class="card">
+        <h2>Za koga je namenjena</h2>
+        <p>
+          Nexavia je namenjena komunalam, občinam, upravljavcem infrastrukture,
+          industriji, javnim službam in partnerjem, ki potrebujejo zanesljivo
+          upravljanje terenskih podatkov.
         </p>
       </article>
     </div>

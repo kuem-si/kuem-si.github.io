@@ -27,7 +27,6 @@ import {
 } from "../../data/homepage";
 import { footerContent } from "../../data/site";
 import { references } from "../../data/references";
-import "../../styles/global.css";
 import "../../styles/homepage.css";
 
 interface Props {
@@ -266,6 +265,8 @@ const stories = [
             width="158"
             height="48"
             alt="KUEM"
+            fetchpriority="high"
+            decoding="sync"
           /></a
         >
         <button

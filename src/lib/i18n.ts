@@ -36,7 +36,6 @@ export const routePairs: Record<string, string> = {
   "/partner-program": "/en/partner-program",
   "/utilities": "/en/utilities",
   "/nexavia-platform": "/en/nexavia-platform",
-  "/platforma/nexavia": "/en/platform/nexavia",
 };
 const reversePairs = Object.fromEntries(
   Object.entries(routePairs).map(([sl, en]) => [

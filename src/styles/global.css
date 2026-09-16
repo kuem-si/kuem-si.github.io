@@ -415,6 +415,11 @@ nav {
   gap: 1rem;
   max-width: 760px;
 }
+.lead-form {
+  display: grid;
+  gap: 1rem;
+  max-width: 760px;
+}
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
