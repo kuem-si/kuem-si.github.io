@@ -4190,6 +4190,7 @@ html body:has(main) .site-header.site-header .nav-list > li > a[aria-current] {
 }
 .site-header .menu-toggle {
   border-color: #b8cbd4;
+  background: #fff !important;
 }
 .site-header .menu-toggle > span:not(.sr-only) {
   background: #172437 !important;
