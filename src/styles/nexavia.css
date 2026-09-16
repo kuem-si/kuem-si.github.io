@@ -358,6 +358,8 @@ html:not(.js) .nx-role-panel[hidden] {
   padding: 1.4rem 0.8rem;
   background: white;
   box-shadow: 0 4px 15px rgba(27, 62, 85, 0.03);
+  /* Hover repaint (box-shadow/border) stays confined to this card. */
+  contain: content;
   transition:
     box-shadow 0.25s,
     border-color 0.25s;
