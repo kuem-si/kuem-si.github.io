@@ -4,6 +4,12 @@
 .nx-closing {
   font-size: 16px;
 }
+figure {
+  margin: 0;
+}
+abbr[title] {
+  text-decoration: none;
+}
 .nx-hero h1,
 .nx-section h2,
 .nx-closing h2 {
@@ -228,6 +234,10 @@
 }
 .nx-role-panel[hidden] {
   display: none;
+}
+/* Without JS, show all role panels stacked instead of hiding them. */
+html:not(.js) .nx-role-panel[hidden] {
+  display: grid;
 }
 .nx-role-screen {
   min-width: 0;
@@ -663,6 +673,41 @@
   .nx-role-screen {
     min-height: 0;
   }
+}
+/* Below-the-fold sections skip rendering until scrolled near, cutting initial
+   layout/paint cost. contain-intrinsic-size reserves scroll space so the
+   scrollbar stays stable. */
+.nx-roles,
+.nx-modules,
+.nx-kai,
+.nx-integrations,
+.nx-stories,
+.nx-closing {
+  content-visibility: auto;
+}
+.nx-roles {
+  contain-intrinsic-size: 900px;
+  contain-intrinsic-size: auto 900px;
+}
+.nx-modules {
+  contain-intrinsic-size: 700px;
+  contain-intrinsic-size: auto 700px;
+}
+.nx-kai {
+  contain-intrinsic-size: 700px;
+  contain-intrinsic-size: auto 700px;
+}
+.nx-integrations {
+  contain-intrinsic-size: 900px;
+  contain-intrinsic-size: auto 900px;
+}
+.nx-stories {
+  contain-intrinsic-size: 450px;
+  contain-intrinsic-size: auto 450px;
+}
+.nx-closing {
+  contain-intrinsic-size: 250px;
+  contain-intrinsic-size: auto 250px;
 }
 @media (prefers-reduced-motion: reduce) {
   html {

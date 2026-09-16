@@ -1,6 +1,5 @@
 ---
 import type { Locale } from "../lib/i18n";
-import { withLocale } from "../lib/i18n";
 import { withBase } from "../lib/paths";
 
 const { locale = "en" } = Astro.props as { locale?: Locale };
@@ -13,7 +12,7 @@ const { locale = "en" } = Astro.props as { locale?: Locale };
         ? "Uporabljamo nujne piškotke in anonimizirano analitiko za izboljšanje spletnega mesta. Z nadaljevanjem soglasate s to uporabo. Preberite "
         : "We use essential cookies and anonymized analytics to improve this website. By continuing, you consent to this use. See our "
     }
-    <a href={withBase(withLocale("/privacy", locale))}
+    <a href={withBase(locale === "sl" ? "/zasebnost" : "/en/privacy")}
       >{locale === "sl" ? "politiko zasebnosti" : "privacy policy"}</a
     >.
   </p>

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.kuem.si/sitemap-index.xml

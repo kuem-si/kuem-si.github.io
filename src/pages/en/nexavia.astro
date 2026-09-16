@@ -2,9 +2,42 @@
 import TrustedCompanies from "../../components/TrustedCompanies.astro";
 import MainLayout from "../../layouts/MainLayout.astro";
 import NexaviaIntegration from "../../components/NexaviaIntegrationEn.astro";
+import { getImage, Image } from "astro:assets";
 import logo from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
 import dashboard from "../../assets/brand/nexavia/nexavia-noc-dashboard.png";
+import { nexaviaSoftware } from "../../data/organization";
 import "../../styles/nexavia.css";
+
+// LCP hero: generate the full responsive candidate set at build time so the
+// <link rel="preload"> in <head> matches the rendered <img> exactly.
+const heroWidths = [960, 1440, 1920, 2197] as const;
+const heroSizes = "(min-width: 1100px) 800px, 100vw";
+const heroImages = await Promise.all(
+  heroWidths.map((width) =>
+    getImage({ src: dashboard, width, format: "avif", quality: 90 }),
+  ),
+);
+const heroSrcset = heroImages
+  .map((image, index) => `${image.src} ${heroWidths[index]}w`)
+  .join(", ");
+const heroSrc = heroImages[heroImages.length - 1].src;
+const breadcrumb = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "KUEM",
+      item: new URL("/", Astro.site).href,
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Nexavia",
+      item: new URL(Astro.url.pathname, Astro.site).href,
+    },
+  ],
+};
 const roles = [
   {
     id: "vodstvo",
@@ -57,7 +90,21 @@ const stories = [
 <MainLayout
   title="Nexavia | KUEM"
   description="Nexavia turns infrastructure data into a useful overview, alerts and a basis for action."
+  jsonLd={[nexaviaSoftware, breadcrumb]}
 >
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    href={heroSrc}
+    imagesrcset={heroSrcset}
+    imagesizes={heroSizes}
+    fetchpriority="high"
+    type="image/avif"
+  />
+  <script is:inline slot="head">
+    document.documentElement.classList.add("js");
+  </script>
   <section class="nx-hero" aria-labelledby="nx-title">
     <div class="container nx-hero-grid">
       <div class="nx-hero-copy">
@@ -75,23 +122,26 @@ const stories = [
           <li>Modular</li><li>Adaptable</li><li>Connected</li>
         </ul>
       </div>
-      <div class="nx-hero-visual">
+      <figure class="nx-hero-visual">
         <div class="nx-window">
           <div class="nx-window-bar">
             <span class="nx-dots" aria-hidden="true"><i></i><i></i><i></i></span
             ><img src={logo.src} alt="Nexavia" width="125" height="40" />
           </div><img
             class="nx-dashboard"
-            src={dashboard.src}
-            alt="Real Nexavia screen: overview of devices, alarms and infrastructure map"
+            src={heroSrc}
+            srcset={heroSrcset}
+            sizes={heroSizes}
             width="2197"
             height="1224"
+            alt="Real Nexavia screen: overview of devices, alarms and infrastructure map"
             fetchpriority="high"
+            loading="eager"
           />
-        </div><span class="nx-status"
-          ><i aria-hidden="true"></i>Data is up to date</span
+        </div><figcaption class="nx-status"
+          ><i aria-hidden="true"></i>Data is up to date</figcaption
         >
-      </div>
+      </figure>
     </div>
   </section>
   <section class="nx-trust" aria-label="Trusted by">
@@ -148,7 +198,7 @@ const stories = [
             hidden={i !== 0}
           >
             <>
-              <div class="nx-role-screen nx-window">
+              <figure class="nx-role-screen nx-window">
                 <div class="nx-window-bar">
                   <>
                     <span class="nx-dots" aria-hidden="true">
@@ -162,12 +212,14 @@ const stories = [
                   </>
                 </div>
                 {i === 1 ? (
-                  <img
-                    src={dashboard.src}
+                  <Image
+                    src={dashboard}
                     alt="Real operational overview of devices and their map in Nexavia"
                     width="2197"
                     height="1224"
                     loading="lazy"
+                    format="avif"
+                    quality="90"
                   />
                 ) : (
                   <div class="nx-demo">
@@ -207,7 +259,7 @@ const stories = [
                     </div>
                   </div>
                 )}
-              </div>
+              </figure>
               <div class="nx-role-copy">
                 <>
                   <h3>{role.title}</h3>

@@ -3,6 +3,7 @@ import MainLayout from "../layouts/MainLayout.astro";
 import type { Locale } from "../lib/i18n";
 const { locale } = Astro.props as { locale: Locale };
 const sl = locale === "sl";
+const contactEndpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? null;
 ---
 
 <MainLayout
@@ -85,7 +86,7 @@ const sl = locale === "sl";
         >
       </aside>
     </div>
-  </section><script is:inline define:vars={{ sl }}>
+  </section><script is:inline define:vars={{ sl, endpoint: contactEndpoint }}>
     const form = document.querySelector("[data-contact]");
     form?.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -100,7 +101,6 @@ const sl = locale === "sl";
       }
       const data = new FormData(f);
       if (data.get("website")) return;
-      const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT;
       if (!endpoint) {
         status.textContent = sl
           ? "Pošiljanje še ni konfigurirano. Pišite na info@kuem.si."

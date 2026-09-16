@@ -17,7 +17,8 @@ const {
 };
 const statusId = `${formId || "lead"}-status`;
 const countryListId = `${formId || "lead"}-countries`;
-const apiPath = `${import.meta.env.BASE_URL}api/lead`;
+const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? null;
+const apiPath = endpoint ?? `${import.meta.env.BASE_URL}api/lead`;
 const copy =
   locale === "sl"
     ? {
@@ -132,7 +133,7 @@ const copy =
   <p id={statusId} class="form-status" role="status" aria-live="polite"></p>
 </form>
 
-<script define:vars={{ copy }}>
+<script is:inline define:vars={{ copy, endpoint }}>
   const forms = document.querySelectorAll("[data-lead-form]");
 
   forms.forEach((form) => {
@@ -170,6 +171,11 @@ const copy =
       };
 
       if (status) status.textContent = copy.submitting;
+
+      if (!endpoint) {
+        if (status) status.textContent = copy.failed;
+        return;
+      }
 
       try {
         const response = await fetch(apiPath, {

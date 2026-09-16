@@ -55,6 +55,9 @@ img {
   max-width: 100%;
   height: auto;
 }
+address {
+  font-style: normal;
+}
 h1,
 h2,
 h3 {

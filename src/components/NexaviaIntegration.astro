@@ -1,6 +1,12 @@
 ---
 import logo from "../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
-const sources = ["Naprave", "ERP", "SCADA", "GIS", "Vreme in javni podatki"];
+const sources = [
+  ["Naprave", ""],
+  ["ERP", "Enterprise Resource Planning"],
+  ["SCADA", "Supervisory Control and Data Acquisition"],
+  ["GIS", "Geographic Information System"],
+  ["Vreme in javni podatki", ""],
+] as const;
 const outcomes = ["Pregled stanja", "Opozorila", "Poročila", "KAI analiza"];
 ---
 
@@ -55,52 +61,12 @@ const outcomes = ["Pregled stanja", "Opozorila", "Poročila", "KAI analiza"];
             <rect x="690" y="317" width="9" height="9"></rect>
           </g>
           <g class="nx-moving-squares" fill="#f06432">
-            <rect width="9" height="9"
-              ><animateMotion
-                begin="indefinite"
-                dur="8s"
-                repeatCount="indefinite"
-                path="M205 41H245C280 41 270 198 342 198H365"
-              ></animateMotion></rect
-            >
-            <rect width="9" height="9"
-              ><animateMotion
-                begin="indefinite"
-                dur="9s"
-                repeatCount="indefinite"
-                path="M205 213H365"></animateMotion></rect
-            >
-            <rect width="9" height="9"
-              ><animateMotion
-                begin="indefinite"
-                dur="8.5s"
-                repeatCount="indefinite"
-                path="M205 385H245C280 385 270 227 342 227H365"
-              ></animateMotion></rect
-            >
-            <rect width="9" height="9"
-              ><animateMotion
-                begin="indefinite"
-                dur="8s"
-                repeatCount="indefinite"
-                path="M640 205H660C715 205 690 106 745 106H780"
-              ></animateMotion></rect
-            >
-            <rect width="9" height="9"
-              ><animateMotion
-                begin="indefinite"
-                dur="9s"
-                repeatCount="indefinite"
-                path="M640 216H780"></animateMotion></rect
-            >
-            <rect width="9" height="9"
-              ><animateMotion
-                begin="indefinite"
-                dur="8.5s"
-                repeatCount="indefinite"
-                path="M640 227H660C715 227 690 322 745 322H780"
-              ></animateMotion></rect
-            >
+            <rect width="9" height="9"></rect>
+            <rect width="9" height="9"></rect>
+            <rect width="9" height="9"></rect>
+            <rect width="9" height="9"></rect>
+            <rect width="9" height="9"></rect>
+            <rect width="9" height="9"></rect>
           </g>
         </svg>
         <div class="nx-diagram-column nx-diagram-sources">
@@ -147,7 +113,13 @@ const outcomes = ["Pregled stanja", "Opozorila", "Poročila", "KAI analiza"];
                         )}
                       </svg>
                     </span>
-                    <span>{source}</span>
+                    <span
+                      >{source[1] ? (
+                        <abbr title={source[1]}>{source[0]}</abbr>
+                      ) : (
+                        source[0]
+                      )}</span
+                    >
                   </>
                 </li>
               ))
@@ -320,11 +292,55 @@ const outcomes = ["Pregled stanja", "Opozorila", "Poročila", "KAI analiza"];
   .nx-moving-squares {
     opacity: 0;
   }
-  .nx-integrations.is-animated .nx-moving-squares {
-    opacity: 1;
-  }
-  .nx-integrations.is-animated .nx-static-squares {
-    opacity: 0;
+  /* GPU-composited motion along the connector paths (CSS offset-path
+     replaces SMIL <animateMotion>; transform-only, composited). */
+  @supports (offset-path: path("m0 0h10")) {
+    .nx-integrations.is-animated .nx-moving-squares {
+      opacity: 1;
+    }
+    .nx-integrations.is-animated .nx-static-squares {
+      opacity: 0;
+    }
+    .nx-moving-squares rect {
+      offset-rotate: 0deg;
+      animation: nx-flow 8s linear infinite paused;
+    }
+    .nx-moving-squares rect:nth-child(1) {
+      offset-path: path("m205 41h40c35 0 25 157 97 157h23");
+    }
+    .nx-moving-squares rect:nth-child(2) {
+      offset-path: path("m205 213h160");
+      animation-duration: 9s;
+    }
+    .nx-moving-squares rect:nth-child(3) {
+      offset-path: path("m205 385h40c35 0 25-158 97-158h23");
+      animation-duration: 8.5s;
+    }
+    .nx-moving-squares rect:nth-child(4) {
+      offset-path: path("m640 205h20c55 0 30-99 85-99h35");
+    }
+    .nx-moving-squares rect:nth-child(5) {
+      offset-path: path("m640 216h140");
+      animation-duration: 9s;
+    }
+    .nx-moving-squares rect:nth-child(6) {
+      offset-path: path("m640 227h20c55 0 30 95 85 95h35");
+      animation-duration: 8.5s;
+    }
+    .nx-integrations.is-animated .nx-moving-squares rect {
+      animation-play-state: running;
+    }
+    .nx-integrations.nx-flow-paused .nx-moving-squares rect {
+      animation-play-state: paused;
+    }
+    @keyframes nx-flow {
+      from {
+        offset-distance: 0%;
+      }
+      to {
+        offset-distance: 100%;
+      }
+    }
   }
   .nx-diagram-column {
     position: relative;
@@ -550,45 +566,30 @@ const outcomes = ["Pregled stanja", "Opozorila", "Poročila", "KAI analiza"];
 </style>
 <script>
   const section = document.querySelector<HTMLElement>(".nx-integrations");
-  const lines = section?.querySelector<SVGSVGElement>(".nx-connector-lines");
-  const motions =
-    lines?.querySelectorAll<SVGAnimateMotionElement>("animateMotion");
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-  let started = false;
-  const update = (visible: boolean) => {
-    if (!section || !lines || reduced.matches) {
-      section?.classList.remove("is-animated");
-      lines?.pauseAnimations();
-      return;
-    }
-    if (!visible || document.hidden) {
-      lines.pauseAnimations();
-      return;
-    }
-    if (!started) {
-      started = true;
-      motions?.forEach((motion) => motion.beginElement());
-      section.classList.add("is-animated");
-    }
-    lines.unpauseAnimations();
-  };
   if (section) {
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    let started = false;
+    const isInView = () =>
+      section.getBoundingClientRect().top < innerHeight &&
+      section.getBoundingClientRect().bottom > 0;
+    const update = (visible: boolean) => {
+      if (!visible || document.hidden || reduced.matches) {
+        section.classList.add("nx-flow-paused");
+        if (reduced.matches) section.classList.remove("is-animated");
+        return;
+      }
+      if (!started) {
+        started = true;
+        section.classList.add("is-animated");
+      }
+      section.classList.remove("nx-flow-paused");
+    };
     const observer = new IntersectionObserver(
       ([entry]) => update(Boolean(entry?.isIntersecting)),
       { threshold: 0.15 },
     );
     observer.observe(section);
-    document.addEventListener("visibilitychange", () =>
-      update(
-        section.getBoundingClientRect().top < innerHeight &&
-          section.getBoundingClientRect().bottom > 0,
-      ),
-    );
-    reduced.addEventListener("change", () =>
-      update(
-        section.getBoundingClientRect().top < innerHeight &&
-          section.getBoundingClientRect().bottom > 0,
-      ),
-    );
+    document.addEventListener("visibilitychange", () => update(isInView()));
+    reduced.addEventListener("change", () => update(isInView()));
   }
 </script>

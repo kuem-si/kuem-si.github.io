@@ -1,5 +1,80 @@
 ---
-import Page from "../partner-program.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import LeadForm from "../../components/LeadForm.astro";
 ---
 
-<Page />
+<MainLayout
+  title="Partner Program | KUEM"
+  description="Join KUEM’s partner network for utility and industrial IoT projects across the EU market."
+>
+  <section class="hero">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">Scaling via partners</p>
+        <h1>Partner with KUEM to deliver reliable IoT projects.</h1>
+        <p>
+          KUEM collaborates with system integrators and technology providers to
+          deploy utility and infrastructure solutions with consistent quality
+          and integration standards.
+        </p>
+      </div>
+      <div class="panel">
+        <h2>Ideal partner profiles</h2>
+        <ul>
+          <li>System integrators working with utilities</li>
+          <li>SCADA and billing implementation partners</li>
+          <li>Connectivity and hardware ecosystem providers</li>
+          <li>Regional operators with deployment capacity</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container grid-3">
+      <article class="card">
+        <h2>Partner models</h2>
+        <ul>
+          <li>Referral and co-selling partnerships</li>
+          <li>Implementation and rollout partnerships</li>
+          <li>Technology integration partnerships</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h2>Onboarding process</h2>
+        <ul>
+          <li>Capability and market fit review</li>
+          <li>Technical enablement and solution training</li>
+          <li>Joint opportunity planning</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h2>Partner benefits</h2>
+        <ul>
+          <li>Access to Nexavia platform and support</li>
+          <li>Joint go-to-market assets</li>
+          <li>Structured technical escalation paths</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="partner-form">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">Partner inquiry</p>
+        <h2>Apply to join the KUEM partner program</h2>
+        <p>
+          Tell us your target segment, regional coverage, and technical
+          capabilities.
+        </p>
+      </div>
+      <LeadForm
+        formType="partner"
+        heading="Partner inquiry"
+        submitLabel="Submit partner inquiry"
+        sourcePage="partner-program"
+      />
+    </div>
+  </section>
+</MainLayout>

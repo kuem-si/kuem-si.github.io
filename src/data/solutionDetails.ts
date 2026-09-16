@@ -27,7 +27,7 @@ export type SolutionDetail = {
 };
 
 const cta = {
-  sl: { ctaText: "Dogovorite predstavitev", ctaHref: "/sl/kontakt" },
+  sl: { ctaText: "Dogovorite predstavitev", ctaHref: "/kontakt" },
   en: { ctaText: "Book a presentation", ctaHref: "/en/contact" }
 };
 

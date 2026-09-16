@@ -19,9 +19,7 @@ export function getLocaleFromPath(pathname: string): Locale {
     : "sl";
 }
 export const routePairs: Record<string, string> = {
-  "/sl": "/en/",
   "/": "/en/",
-  "/sl/resitve": "/en/solutions",
   "/resitve": "/en/solutions",
   "/resitve/zajem-podatkov": "/en/solutions/data-acquisition",
   "/resitve/povezljivost": "/en/solutions/connectivity",
@@ -44,23 +42,15 @@ export const routePairs: Record<string, string> = {
   "/nexavia": "/en/nexavia",
   "/kai": "/en/kai",
   "/panoge": "/en/industries",
-  "/sl/reference": "/en/references",
   "/reference": "/en/references",
   "/vpogledi": "/en/insights",
-  "/sl/o-nas": "/en/company",
-  "/o-podjetju": "/en/company",
   "/o-nas": "/en/company",
-  "/sl/kontakt": "/en/contact",
   "/kontakt": "/en/contact",
-  "/sl/privacy": "/en/privacy",
   "/zasebnost": "/en/privacy",
   "/sl/platforma/nexavia": "/en/platform/nexavia",
   "/sl/industrial-iot": "/en/industrial-iot",
   "/sl/partner-program": "/en/partner-program",
   "/sl/utilities": "/en/utilities",
-  "/sl/about": "/en/about",
-  "/sl/case-studies": "/en/case-studies",
-  "/sl/contact": "/contact",
   "/sl/nexavia-platform": "/en/nexavia-platform",
 };
 const reversePairs = Object.fromEntries(

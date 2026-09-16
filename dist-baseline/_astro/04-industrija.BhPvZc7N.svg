@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 144" role="img" aria-labelledby="title desc">
+  <title id="title">Industrija</title>
+  <desc id="desc">Proizvodni objekt z operativnim prikazom v vizualnem slogu KUEM.</desc>
+  <g stroke="#253238" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M15 112V56l34 20V56l34 20V45h35v67H15Z" fill="#E8E6E1"/>
+    <path d="M15 56 49 76V56l34 20V65H15v-9Z" fill="#7DB7AB"/>
+    <path d="M92 45V12h19v33" fill="#FFFFFF"/>
+    <path d="M96 23h11M96 31h11"/>
+    <rect x="26" y="88" width="13" height="14" rx="1" fill="#FFFFFF"/>
+    <rect x="47" y="88" width="13" height="14" rx="1" fill="#FFFFFF"/>
+    <path d="M15 112h112" stroke-width="5"/>
+    <rect x="105" y="59" width="57" height="49" rx="5" fill="#FFFFFF"/>
+    <path d="M105 72h57"/>
+    <rect x="113" y="80" width="41" height="20" rx="2" fill="#E8E6E1"/>
+    <path d="m118 95 8-7 7 4 8-10 8 5" fill="none" stroke="#156B75"/>
+  </g>
+  <circle cx="116" cy="66" r="3" fill="#7DB7AB"/>
+  <rect x="126" y="63" width="6" height="6" fill="#E95D2A"/>
+  <path d="M120 13c8-8 17-7 22-1M127 5c7-6 14-4 18 0" fill="none" stroke="#7DB7AB" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M10 125h42l9-9h51l9 9h45" fill="none" stroke="#156B75" stroke-width="2.5"/>
+  <path d="M10 132h42l9-9h51l9 9h45" fill="none" stroke="#E95D2A" stroke-width="2"/>
+  <rect x="49" y="122" width="6" height="6" fill="#156B75"/>
+  <rect x="109" y="120" width="6" height="6" fill="#E95D2A"/>
+</svg>

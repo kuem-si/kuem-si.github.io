@@ -4,9 +4,11 @@ import SeoHead from "../SeoHead.astro";
 import Header from "../Header.astro";
 import Icon from "./LineIcon.astro";
 import DataFlow from "./DataFlow.astro";
+import { Image } from "astro:assets";
 import wordmark from "../../assets/brand/kuem/KUEM_Official_Wordmark.svg";
 import nexavia from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
 import dashboard from "../../assets/brand/nexavia/nexavia-noc-dashboard.png";
+import { nexaviaSoftware, kaiSoftware } from "../../data/organization";
 import {
   homeNavigation,
   benefits,
@@ -36,12 +38,13 @@ const stories = [
     ><SeoHead
       title="KUEM | Od naprave do odločitve"
       description="KUEM povezuje naprave, obstoječe sisteme in podatke v platformo Nexavia za učinkovitejše upravljanje infrastrukture."
+      jsonLd={[nexaviaSoftware, kaiSoftware]}
     /></head
   >
   <body class="kuem-home">
     <a class="skip-link" href="#main">Preskoči na vsebino</a>
     <Header locale="sl" pathname="/" />
-    <header class="hp-header legacy-site-header" aria-hidden="true">
+    <header class="hp-header legacy-site-header">
       <div class="hp-wrap hp-header-inner">
         <a href="#main" aria-label="KUEM – domača stran"
           ><img
@@ -505,12 +508,14 @@ const stories = [
         type="button"
         data-dashboard-close
         aria-label="Zapri povečani prikaz">Zapri ×</button
-      ><img
-        src={dashboard.src}
+      ><Image
+        src={dashboard}
         width={dashboard.width}
         height={dashboard.height}
         alt="Povečan originalni Nexavia dashboard"
         loading="lazy"
+        decoding="async"
+        format="avif"
       />
     </dialog>
     <script>

@@ -4,9 +4,11 @@ import SeoHead from "../SeoHead.astro";
 import Header from "../Header.astro";
 import Icon from "./LineIcon.astro";
 import DataFlow from "./DataFlowEn.astro";
+import { Image } from "astro:assets";
 import wordmark from "../../assets/brand/kuem/KUEM_Official_Wordmark.svg";
 import nexavia from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
 import dashboard from "../../assets/brand/nexavia/nexavia-noc-dashboard.png";
+import { nexaviaSoftware, kaiSoftware } from "../../data/organization";
 import {
   homeNavigationEn as homeNavigation,
   benefitsEn as benefits,
@@ -36,12 +38,13 @@ const stories = [
     ><SeoHead
       title="KUEM | From device to decision"
       description="KUEM connects devices, existing systems and data in the Nexavia platform for more effective infrastructure management."
+      jsonLd={[nexaviaSoftware, kaiSoftware]}
     /></head
   >
   <body class="kuem-home">
     <a class="skip-link" href="#main">Skip to content</a>
     <Header locale="en" pathname="/en/" />
-    <header class="hp-header legacy-site-header" aria-hidden="true">
+    <header class="hp-header legacy-site-header">
       <div class="hp-wrap hp-header-inner">
         <a href="#main" aria-label="KUEM – home page"
           ><img
@@ -160,13 +163,14 @@ const stories = [
               aria-controls="dashboard-preview"
               aria-label="Enlarge the original Nexavia dashboard"
             >
-              <img
-                src={dashboard.src}
+              <Image
+                src={dashboard}
                 width={dashboard.width}
                 height={dashboard.height}
                 alt="Original Nexavia Network Operations Center: device map, network status, alarms and data quality"
                 decoding="async"
                 loading="lazy"
+                format="avif"
               />
               <span class="hp-enlarge"
                 >Enlarge view <span aria-hidden="true">↗</span></span
@@ -496,12 +500,14 @@ const stories = [
         type="button"
         data-dashboard-close
         aria-label="Close enlarged view">Close ×</button
-      ><img
-        src={dashboard.src}
+      ><Image
+        src={dashboard}
         width={dashboard.width}
         height={dashboard.height}
         alt="Enlarged original Nexavia dashboard"
         loading="lazy"
+        decoding="async"
+        format="avif"
       />
     </dialog>
     <script>

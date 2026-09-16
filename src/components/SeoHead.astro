@@ -1,43 +1,109 @@
 ---
+import JsonLd from "./JsonLd.astro";
 import { alternatePath, getLocaleFromPath } from "../lib/i18n";
+import { organization, website } from "../data/organization";
+import sourceSansRegular from "../assets/brand/fonts/SourceSans3-Regular.woff2";
+import spaceGroteskBold from "../assets/brand/fonts/SpaceGrotesk-Bold.woff2";
 const {
   title,
   description,
   pathname = Astro.url.pathname,
   image = "/og-image.png",
   noindex = false,
+  jsonLd = [] as unknown[],
 } = Astro.props;
 const locale = getLocaleFromPath(pathname);
 const canonical = new URL(pathname, Astro.site);
 const alternate = new URL(alternatePath(pathname), Astro.site);
 const fullTitle = title.includes("KUEM") ? title : `${title} | KUEM`;
+const otherLocale = locale === "sl" ? "en" : "sl";
+const langTag = locale === "sl" ? "sl-SI" : "en-GB";
+const otherLangTag = otherLocale === "sl" ? "sl-SI" : "en-GB";
+const pageNode: Record<string, unknown> = {
+  "@type": "WebPage",
+  "@id": `${canonical.href}#webpage`,
+  url: canonical.href,
+  name: fullTitle,
+  description,
+  inLanguage: langTag,
+  isPartOf: { "@id": website["@id"] },
+  primaryImageOfPage: new URL(image, Astro.site).href,
+};
+const firstEntity = jsonLd[0] as { "@id"?: string } | undefined;
+if (firstEntity?.["@id"]) {
+  pageNode.mainEntity = { "@id": firstEntity["@id"] };
+}
+const structuredData = [
+  organization,
+  {
+    ...website,
+    url: canonical.href,
+    inLanguage: langTag,
+  },
+  pageNode,
+  ...jsonLd,
+];
 ---
 
 <meta charset="UTF-8" /><meta
   name="viewport"
-  content="width=device-width"
-/><title>{fullTitle}</title><meta name="description" content={description} />
-{noindex && <meta name="robots" content="noindex,follow" />}<link
+  content="width=device-width, initial-scale=1"
+/><meta name="color-scheme" content="light" /><meta
+  name="theme-color"
+  content="#161a1d"
+/><title>{fullTitle}</title><meta name="description" content={description} /><meta
+  name="robots"
+  content={noindex
+    ? "noindex,follow"
+    : "index,follow,max-image-preview:large,max-snippet:-1"}
+/><link
   rel="canonical"
   href={canonical}
-/><link rel="alternate" hreflang={locale} href={canonical} /><link
+/><link rel="alternate" hreflang={langTag} href={canonical} /><link
   rel="alternate"
-  hreflang={locale === "sl" ? "en" : "sl"}
+  hreflang={otherLangTag}
   href={alternate}
 /><link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site)} />
 <meta property="og:type" content="website" /><meta
-  property="og:title"
-  content={fullTitle}
-/><meta property="og:description" content={description} /><meta
-  property="og:url"
-  content={canonical}
-/><meta property="og:image" content={new URL(image, Astro.site)} /><meta
-  property="og:image:alt"
-  content={fullTitle}
+  property="og:site_name"
+  content="KUEM"
+/><meta property="og:title" content={fullTitle} /><meta
+  property="og:description"
+  content={description}
+/><meta property="og:url" content={canonical} /><meta
+  property="og:image"
+  content={new URL(image, Astro.site)}
+/><meta property="og:image:alt" content={fullTitle} /><meta
+  property="og:image:width"
+  content="1200"
+/><meta property="og:image:height" content="630" /><meta
+  property="og:image:type"
+  content="image/png"
 /><meta
   property="og:locale"
   content={locale === "sl" ? "sl_SI" : "en_GB"}
-/><meta name="twitter:card" content="summary_large_image" /><link
+/><meta
+  property="og:locale:alternate"
+  content={otherLocale === "sl" ? "sl_SI" : "en_GB"}
+/><meta name="twitter:card" content="summary_large_image" /><meta
+  name="twitter:title"
+  content={fullTitle}
+/><meta name="twitter:description" content={description} /><meta
+  name="twitter:image"
+  content={new URL(image, Astro.site)}
+/><meta name="twitter:image:alt" content={fullTitle} /><link
   rel="icon"
   href="/favicon.svg"
-/>
+/><link
+  rel="preload"
+  href={sourceSansRegular}
+  as="font"
+  type="font/woff2"
+  crossorigin
+/><link
+  rel="preload"
+  href={spaceGroteskBold}
+  as="font"
+  type="font/woff2"
+  crossorigin
+/><JsonLd data={structuredData} />
