@@ -1,0 +1,44 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import SolutionCard from "../../components/SolutionCard.astro";
+import CTASection from "../../components/CTASection.astro";
+import { homepageSolutions } from "../../data/solutions";
+---
+
+<MainLayout
+  title="Digitalne rešitve za nadzor infrastrukture | KUEM"
+  description="KUEM razvija digitalne rešitve za infrastrukturo, daljinsko odčitavanje, nadzor, alarmiranje, nadzorne plošče, poročila in integracije."
+>
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">Rešitve</p>
+      <h1>Digitalne rešitve za infrastrukturo, odčitavanje in nadzor</h1>
+      <p>
+        KUEM povezuje terenske podatke iz števcev, senzorjev, naprav in zunanjih
+        sistemov v procese nadzora, alarmiranja, poročanja in integracij s
+        platformo Nexavia.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <SectionHeader title="Digitalne rešitve za pametno infrastrukturo" />
+      <div class="grid-3">
+        {
+          homepageSolutions.sl.map((solution) => (
+            <SolutionCard solution={solution} />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    title="Imate projekt za daljinsko odčitavanje ali nadzor infrastrukture?"
+    description="Povejte nam svoje infrastrukturne, podatkovne in integracijske zahteve."
+    ctaHref="/sl/kontakt"
+    ctaText="Dogovorite predstavitev"
+  />
+</MainLayout>

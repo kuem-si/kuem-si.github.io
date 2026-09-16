@@ -1,0 +1,402 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import NexaviaIntegration from "../components/NexaviaIntegration.astro";
+import logo from "../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
+import dashboard from "../assets/brand/nexavia/nexavia-noc-dashboard.png";
+import "../styles/nexavia.css";
+const roles = [
+  {
+    id: "vodstvo",
+    tab: "Vodstvo",
+    title: "Od kazalnika do odločitve.",
+    items: [
+      "Ključni kazalniki na enem mestu",
+      "Primerjava obdobij in lokacij",
+      "Poročila za hitrejše odločanje",
+    ],
+    icons: ["▥", "⌁", "▤"],
+  },
+  {
+    id: "operativa",
+    tab: "Operativa",
+    title: "Od opozorila do izvedenega ukrepa.",
+    items: [
+      "Pregled aktivnih dogodkov in alarmov",
+      "Hiter dostop do lokacije in naprave",
+      "Sledenje obravnavi in izvedenim ukrepom",
+    ],
+    icons: ["△", "⌖", "✓"],
+  },
+  {
+    id: "it",
+    tab: "IT in skrbniki",
+    title: "Nadzor nad uporabniki, podatki in povezavami.",
+    items: [
+      "Upravljanje naprav in virov podatkov",
+      "Uporabniške vloge in pravice dostopa",
+      "Pregled integracij in stanja sistema",
+    ],
+    icons: ["⌘", "♙", "⌁"],
+  },
+];
+const modules = [
+  ["♧", "Voda in komunala", "Poraba, tlaki, izgube in kakovost."],
+  ["ϟ", "Energija", "Poraba, moč in odstopanja."],
+  ["◇", "Okolje", "Zrak, hrup in okoljski kazalniki."],
+  ["♧", "Mobilnost", "Prometni tokovi in trajnostna mobilnost."],
+  ["▥", "Javna infrastruktura", "Stanje objektov, naprav in vzdrževanja."],
+];
+const stories = [
+  ["Domplan", "Daljinsko spremljanje plinomerov."],
+  ["Brezovica", "Pregled vodomerov in komunalne infrastrukture."],
+  ["Adria Mobil", "Energetski podatki proizvodnega okolja."],
+];
+---
+
+<MainLayout
+  title="Nexavia | KUEM"
+  description="Nexavia združi podatke infrastrukture v uporaben pregled, opozorila in podlago za ukrep."
+>
+  <section class="nx-hero" aria-labelledby="nx-title">
+    <div class="container nx-hero-grid">
+      <div class="nx-hero-copy">
+        <p class="nx-eyebrow">PLATFORMA NEXAVIA</p><h1 id="nx-title">
+          Vsi podatki infrastrukture. En uporaben pogled.
+        </h1><p class="nx-lead">
+          Nexavia združi podatke naprav, obstoječih sistemov in zunanjih virov
+          ter jih spremeni v pregled, opozorilo in podlago za ukrep.
+        </p><div class="nx-actions">
+          <a class="btn btn-primary" href="/kontakt"
+            >Dogovorite se za predstavitev <span aria-hidden="true">→</span></a
+          ><a class="btn btn-secondary" href="#vloge"
+            >Oglejte si platformo <span aria-hidden="true">↘</span></a
+          >
+        </div><ul class="nx-traits">
+          <li>Modularna</li><li>Prilagodljiva</li><li>Povezljiva</li>
+        </ul>
+      </div>
+      <div class="nx-hero-visual">
+        <div class="nx-window">
+          <div class="nx-window-bar">
+            <span class="nx-dots" aria-hidden="true"><i></i><i></i><i></i></span
+            ><img src={logo.src} alt="Nexavia" width="125" height="40" />
+          </div><img
+            class="nx-dashboard"
+            src={dashboard.src}
+            alt="Dejanski zaslon Nexavie: pregled naprav, alarmov in zemljevid infrastrukture"
+            width="2197"
+            height="1224"
+            fetchpriority="high"
+          />
+        </div><span class="nx-status"
+          ><i aria-hidden="true"></i>Podatki so posodobljeni</span
+        >
+      </div>
+    </div>
+  </section>
+  <section class="nx-trust" aria-label="Zaupajo nam">
+    <div class="container">
+      <p class="nx-eyebrow">ZAUPAJO NAM</p><div class="nx-trust-list">
+        <span>CMC Group</span><span>KOLEKTOR</span><span>Telegroup</span><span
+          >T-2</span
+        ><span>Vodotehnika</span>
+      </div>
+    </div>
+  </section>
+  <section
+    class="nx-section nx-roles"
+    id="vloge"
+    aria-labelledby="nx-roles-title"
+  >
+    <div class="container">
+      <div class="nx-role-heading">
+        <div>
+          <p class="nx-eyebrow">NEXAVIA V VSAKODNEVNEM DELU</p><h2
+            id="nx-roles-title"
+          >
+            Pravi pogled za vsako vlogo.
+          </h2><p>
+            Vsak uporabnik vidi podatke in orodja, ki jih potrebuje za svoje
+            delo.
+          </p>
+        </div><div
+          class="nx-tabs"
+          role="tablist"
+          aria-label="Uporabniške vloge"
+        >
+          {
+            roles.map((role, i) => (
+              <button
+                id={`tab-${role.id}`}
+                type="button"
+                role="tab"
+                aria-selected={i === 0 ? "true" : "false"}
+                aria-controls={`panel-${role.id}`}
+                tabindex={i === 0 ? 0 : -1}
+                data-role={role.id}
+              >
+                {role.tab}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+      {
+        roles.map((role, i) => (
+          <div
+            class="nx-role-panel"
+            id={`panel-${role.id}`}
+            role="tabpanel"
+            aria-labelledby={`tab-${role.id}`}
+            tabindex="0"
+            data-panel={role.id}
+            hidden={i !== 0}
+          >
+            <>
+              <div class="nx-role-screen nx-window">
+                <div class="nx-window-bar">
+                  <>
+                    <span class="nx-dots" aria-hidden="true">
+                      <>
+                        <i />
+                        <i />
+                        <i />
+                      </>
+                    </span>
+                    <img src={logo.src} alt="Nexavia" width="120" height="36" />
+                  </>
+                </div>
+                {i === 1 ? (
+                  <img
+                    src={dashboard.src}
+                    alt="Dejanski operativni pregled naprav in zemljevida v Nexavii"
+                    width="2197"
+                    height="1224"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div class="nx-demo">
+                    <p class="nx-demo-note">Demo podatki</p>
+                    <h3>{i === 0 ? "Pregled" : "Upravljanje okolja"}</h3>
+                    <div class="nx-demo-cards">
+                      {(i === 0
+                        ? ["Skupno število naprav", "Aktivni alarmi", "Območja"]
+                        : ["Viri podatkov", "Uporabniki", "Integracije"]
+                      ).map((x, j) => (
+                        <div>
+                          <small>{x}</small>
+                          <strong>
+                            {i === 0 ? ["1.248", "12", "5"][j] : "Aktivno"}
+                          </strong>
+                        </div>
+                      ))}
+                    </div>
+                    <div class="nx-demo-chart">
+                      <b>{i === 0 ? "Poraba skozi čas" : "Stanje sistema"}</b>
+                      <svg
+                        viewBox="0 0 360 120"
+                        role="img"
+                        aria-label="Primer trendnega grafa"
+                      >
+                        <path
+                          d="M0 105H360M0 70H360M0 35H360"
+                          stroke="#dce8f0"
+                        />
+                        <path
+                          d="M0 95 L35 80 L65 88 L95 57 L125 77 L155 55 L185 63 L215 42 L245 65 L275 59 L305 31 L335 46 L360 18"
+                          fill="none"
+                          stroke="#3795df"
+                          stroke-width="3"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div class="nx-role-copy">
+                <>
+                  <h3>{role.title}</h3>
+                  <ul>
+                    {role.items.map((item, j) => (
+                      <li>
+                        <span aria-hidden="true">{role.icons[j]}</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <a href="/kontakt" class="nx-text-link">
+                    Poglejte primer uporabe →
+                  </a>
+                </>
+              </div>
+            </>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+  <section class="nx-section nx-modules" aria-labelledby="nx-modules-title">
+    <div class="container">
+      <p class="nx-eyebrow">MODULARNA PLATFORMA</p><h2 id="nx-modules-title">
+        Začnite z enim področjem. Razširite, ko potrebujete.
+      </h2><div class="nx-module-grid">
+        {
+          modules.map(([, title, copy], index) => (
+            <article class="nx-module-card">
+              <>
+                <span class="nx-module-icon" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 48 48"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    {index === 0 && (
+                      <path d="M24 4C19 13 11 22 11 30a13 13 0 0 0 26 0C37 22 29 13 24 4Z M16 30c0 5 3 8 8 8" />
+                    )}
+                    {index === 1 && (
+                      <path d="M27 3 13 27h11l-3 18 15-26H25l2-16Z" />
+                    )}
+                    {index === 2 && (
+                      <path d="M39 7C21 8 9 18 9 31c0 7 5 11 12 11 15 0 21-19 18-35Z M13 38c5-10 12-16 21-23" />
+                    )}
+                    {index === 3 && (
+                      <>
+                        <circle cx="10" cy="34" r="8" />
+                        <circle cx="38" cy="34" r="8" />
+                        <path d="m10 34 11-18 8 18H10m19 0 9-18h-8m-9 0-3-6h-5" />
+                      </>
+                    )}
+                    {index === 4 && (
+                      <path d="M6 44V17h14v27m0-32V4h13v40m0-23h9v23M12 23h2m-2 7h2m12-18h2m-2 8h2m-2 8h2M3 44h42" />
+                    )}
+                  </svg>
+                </span>
+                <h3>{title}</h3>
+                <p>{copy}</p>
+                <span aria-hidden="true">→</span>
+              </>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <section class="nx-section nx-kai" aria-labelledby="nx-kai-title">
+    <div class="container nx-kai-grid">
+      <div>
+        <p class="nx-eyebrow">KAI V NEXAVII</p><h2 id="nx-kai-title">
+          Ko pregled ni dovolj, KAI izpostavi, kaj zahteva pozornost.
+        </h2><p>
+          KAI analizira podatke znotraj Nexavie, zazna odstopanja in odgovorni
+          osebi poda razumljivo opozorilo ter kontekst za naslednji korak.
+        </p><ul class="nx-kai-benefits">
+          <li>Zaznavanje odstopanj</li><li>Razumljiva opozorila</li><li>
+            Podpora odločitvam
+          </li>
+        </ul><p class="nx-human">Človek ohrani nadzor nad odločitvijo.</p>
+      </div><div class="nx-kai-panel">
+        <div class="nx-kai-panel-head">
+          <strong>KAI — zaznano odstopanje</strong><span>Visoka prioriteta</span
+          >
+        </div><div class="nx-alert">
+          <span aria-hidden="true">△</span><div>
+            <strong>Nepričakovana sprememba porabe</strong><small
+              >Primer opozorila · Demo podatki</small
+            >
+          </div>
+        </div><p>Poraba skozi čas</p><svg
+          viewBox="0 0 460 150"
+          role="img"
+          aria-label="Demo trend porabe z oranžno označeno anomalijo"
+          ><path d="M0 125H460M0 90H460M0 55H460M0 20H460" stroke="#e4edf3"
+          ></path><polyline
+            points="0,104 25,95 50,105 75,98 100,106 125,91 150,97 175,88 200,96 225,89 250,98 275,94 300,102 325,92 350,100 375,94 400,37 415,90 440,94 460,89"
+            fill="none"
+            stroke="#438ddd"
+            stroke-width="3"></polyline><circle
+            cx="400"
+            cy="37"
+            r="7"
+            fill="#f06432"></circle></svg
+        ><div class="nx-recommendation">
+          <strong>Priporočen naslednji korak</strong><p>
+            Preverite lokacijo in primerjajte zadnjih 7 dni.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <NexaviaIntegration />
+  <section class="nx-section nx-stories" aria-labelledby="nx-stories-title">
+    <div class="container">
+      <p class="nx-eyebrow">USPEŠNE ZGODBE</p><h2 id="nx-stories-title">
+        Nexavia v realnem okolju.
+      </h2><div class="nx-story-grid">
+        {
+          stories.map(([name, copy]) => (
+            <article>
+              <>
+                <span aria-hidden="true">▥</span>
+                <div>
+                  <>
+                    <h3>{name}</h3>
+                    <p>{copy}</p>
+                    <a href="/reference" class="nx-text-link">
+                      Preberite zgodbo →
+                    </a>
+                  </>
+                </div>
+              </>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <section class="nx-closing" aria-labelledby="nx-closing-title">
+    <div class="container nx-closing-inner">
+      <div>
+        <h2 id="nx-closing-title">Poglejte Nexavio na svojih podatkih.</h2><p>
+          Na kratkem prikazu vam pokažemo, kako bi platforma podprla vaš
+          konkretni primer uporabe.
+        </p>
+      </div><a class="btn btn-primary" href="/kontakt"
+        >Dogovorite se za predstavitev →</a
+      >
+    </div>
+  </section>
+</MainLayout>
+<script>
+  const tabs = [
+    ...document.querySelectorAll<HTMLButtonElement>(".nx-tabs [role='tab']"),
+  ];
+  const panels = [...document.querySelectorAll<HTMLElement>(".nx-role-panel")];
+  function activate(tab: HTMLButtonElement, focus = false) {
+    tabs.forEach((item) => {
+      const selected = item === tab;
+      item.setAttribute("aria-selected", String(selected));
+      item.tabIndex = selected ? 0 : -1;
+    });
+    panels.forEach((panel) => {
+      panel.hidden = panel.dataset.panel !== tab.dataset.role;
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => activate(tab));
+    tab.addEventListener("keydown", (event) => {
+      let next = index;
+      if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+      else if (event.key === "ArrowLeft")
+        next = (index - 1 + tabs.length) % tabs.length;
+      else if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = tabs.length - 1;
+      else return;
+      event.preventDefault();
+      activate(tabs[next], true);
+    });
+  });
+</script>

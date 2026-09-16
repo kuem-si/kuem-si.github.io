@@ -1,0 +1,672 @@
+---
+import { Image } from "astro:assets";
+import type { Locale } from "../lib/i18n";
+import { homeNexavia } from "../data/site";
+import nexaviaLogo from "../assets/brand/nexavia/official/NEXAVIA-web-White.svg";
+import nexaviaDashboard from "../assets/brand/nexavia/nexavia-noc-dashboard.png";
+
+const { locale } = Astro.props as { locale: Locale };
+const content = homeNexavia[locale];
+const lightboxId = `nexavia-dashboard-lightbox-${locale}`;
+---
+
+<section
+  class="section nexavia-section"
+  aria-labelledby={`home-nexavia-title-${locale}`}
+  data-home-nexavia
+>
+  <svg
+    class="nexavia-ambient-routes"
+    viewBox="0 0 1600 900"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+  >
+    <path
+      class="ambient-route ambient-route-blue"
+      d="M0 174h258l86 86h278l104-104h338l122 122h414"
+    ></path>
+    <path
+      class="ambient-route ambient-route-cyan"
+      d="M1600 674h-236l-76-76h-260l-92 92H648l-116-116H190L0 764"
+    ></path>
+    <rect x="338" y="254" width="9" height="9"></rect>
+    <rect x="1180" y="272" width="9" height="9"></rect>
+    <rect x="928" y="684" width="9" height="9"></rect>
+  </svg>
+
+  <div class="container nexavia-inner">
+    <div class="nexavia-copy">
+      <div class="nexavia-logo-frame">
+        <img
+          class="nexavia-wordmark" src={nexaviaLogo.src}
+          alt="Nexavia"
+          width="1200"
+          height="360"
+          loading="lazy"
+        />
+      </div>
+      <h2 id={`home-nexavia-title-${locale}`}>{content.title}</h2>
+      <p class="nexavia-description">{content.description}</p>
+      <p class="nexavia-emphasis">
+        <span aria-hidden="true"></span>{content.emphasis}
+      </p>
+      <div class="nexavia-actions">
+        <a class="nexavia-primary" href={content.primaryHref}>
+          {content.primaryLabel}<span aria-hidden="true">→</span>
+        </a>
+        <a class="nexavia-secondary" href={content.secondaryHref}>
+          {content.secondaryLabel}<span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="nexavia-product">
+      <figure class="nexavia-workspace">
+        <a
+          class="nexavia-dashboard-link"
+          href={nexaviaDashboard.src}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={content.previewOpenLabel}
+          aria-controls={lightboxId}
+          aria-haspopup="dialog"
+          data-nexavia-open
+        >
+          <Image
+            class="nexavia-dashboard-image"
+            src={nexaviaDashboard}
+            alt={content.previewAlt}
+            loading="lazy"
+            decoding="async"
+            format="webp"
+          />
+          <span class="nexavia-dashboard-open">
+            {content.previewOpenLabel}<i aria-hidden="true">↗</i>
+          </span>
+        </a>
+      </figure>
+
+      <ul
+        class="nexavia-capabilities"
+        aria-label={locale === "sl"
+          ? "Ključne zmogljivosti Nexavie"
+          : "Core Nexavia capabilities"}
+      >
+        {
+          content.capabilities.map((capability) => (
+            <li><span aria-hidden="true"></span>{capability}</li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<dialog
+  class="nexavia-lightbox"
+  id={lightboxId}
+  aria-label={content.previewAlt}
+  aria-modal="true"
+  data-nexavia-lightbox
+>
+  <div class="nexavia-lightbox-content">
+    <button
+      class="nexavia-lightbox-close"
+      type="button"
+      aria-label={content.previewCloseLabel}
+      data-nexavia-close>×</button
+    >
+    <Image
+      class="nexavia-lightbox-image"
+      src={nexaviaDashboard}
+      alt={content.previewAlt}
+      loading="lazy"
+      decoding="async"
+      format="webp"
+    />
+  </div>
+</dialog>
+
+<script>
+  const nexaviaSections = document.querySelectorAll("[data-home-nexavia]");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  nexaviaSections.forEach((section) => {
+    if (reduceMotion || !(section instanceof HTMLElement)) {
+      section.classList.add("is-visible");
+      return;
+    }
+
+    section.classList.add("nexavia-motion-ready");
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        section.classList.add("is-visible");
+        observer.disconnect();
+      },
+      { threshold: 0.18 },
+    );
+    observer.observe(section);
+  });
+
+  document.querySelectorAll("[data-nexavia-lightbox]").forEach((modal) => {
+    if (!(modal instanceof HTMLDialogElement) || !modal.id) return;
+
+    const trigger = document.querySelector(`[aria-controls="${modal.id}"]`);
+    const closeButton = modal.querySelector("[data-nexavia-close]");
+    let returnFocus: Element | null = null;
+
+    const closeModal = () => {
+      if (modal.open) modal.close();
+    };
+
+    trigger?.addEventListener("click", (event) => {
+      event.preventDefault();
+      returnFocus = trigger;
+      modal.showModal();
+      if (closeButton instanceof HTMLElement) closeButton.focus();
+    });
+
+    closeButton?.addEventListener("click", closeModal);
+    modal.addEventListener("cancel", (event) => {
+      event.preventDefault();
+      closeModal();
+    });
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) closeModal();
+    });
+    modal.addEventListener("keydown", (event) => {
+      if (event.key !== "Tab") return;
+      const focusable = Array.from(
+        modal.querySelectorAll(
+          'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter(
+        (element) =>
+          element instanceof HTMLElement && element.offsetParent !== null,
+      );
+      const first = focusable.at(0);
+      const last = focusable.at(-1);
+
+      if (!(first instanceof HTMLElement) || !(last instanceof HTMLElement)) {
+        event.preventDefault();
+        return;
+      }
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+    modal.addEventListener("close", () => {
+      if (returnFocus instanceof HTMLElement) returnFocus.focus();
+      returnFocus = null;
+    });
+  });
+</script>
+
+<style>
+  .nexavia-section {
+    --nx-blue: #2f6fed;
+    --nx-cyan: #22b8cf;
+    --nx-copper: #f06432;
+    --nx-bg: #08111f;
+    --nx-nav: #050b13;
+    --nx-surface: #111c2b;
+    --nx-surface-2: #172438;
+    --nx-border: #26364d;
+    --nx-text: #f4f7fa;
+    --nx-muted: #98a8bc;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: clamp(6rem, 8vw, 8rem);
+    color: var(--nx-text);
+    background:
+      radial-gradient(circle at 76% 45%, rgba(47, 111, 237, 0.16), transparent 34%),
+      radial-gradient(circle at 68% 80%, rgba(34, 184, 207, 0.06), transparent 30%),
+      var(--nx-bg);
+  }
+  .nexavia-section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(5, 11, 19, 0.3), transparent 48%);
+  }
+  .nexavia-ambient-routes {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .ambient-route {
+    fill: none;
+    stroke-width: 1.5;
+    opacity: 0.16;
+    vector-effect: non-scaling-stroke;
+  }
+  .ambient-route-blue {
+    stroke: var(--nx-blue);
+  }
+  .ambient-route-cyan {
+    stroke: var(--nx-cyan);
+  }
+  .nexavia-ambient-routes rect {
+    fill: var(--nx-cyan);
+    opacity: 0.35;
+  }
+  .nexavia-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.05fr);
+    gap: clamp(2.75rem, 5vw, 5rem);
+    align-items: center;
+    width: min(1280px, calc(100% - 2rem));
+  }
+  .nexavia-copy,
+  .nexavia-product {
+    min-width: 0;
+  }
+  .nexavia-copy {
+    position: relative;
+    z-index: 1;
+    background: var(--nx-bg);
+    box-shadow: 0 0 42px 28px var(--nx-bg);
+  }
+  .nexavia-logo-frame {
+    width: 305px;
+    height: 118px;
+    margin-bottom: 1.35rem;
+    overflow: hidden;
+  }
+  .nexavia-logo-frame img {
+    display: block;
+    width: 540px;
+    max-width: none;
+    height: 162px;
+    transform: translateY(-3px);
+  }
+  .nexavia-copy h2 {
+    max-width: 8.3em;
+    margin: 0;
+    color: var(--nx-text);
+    font-size: clamp(2.75rem, 4vw, 3.75rem);
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+  }
+  .nexavia-section .nexavia-description {
+    max-width: 590px;
+    margin: 1.55rem 0 0;
+    color: #cbd6e3;
+    font-size: clamp(1.125rem, 1.5vw, 1.25rem);
+    line-height: 1.62;
+  }
+  .nexavia-section .nexavia-emphasis {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin: 1.25rem 0 0;
+    color: var(--nx-text);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.55;
+  }
+  .nexavia-emphasis > span {
+    flex: 0 0 auto;
+    width: 7px;
+    height: 7px;
+    margin-top: 0.48rem;
+    background: var(--nx-copper);
+  }
+  .nexavia-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.9rem 1.35rem;
+    margin-top: 2.1rem;
+  }
+  .nexavia-primary,
+  .nexavia-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 48px;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-decoration: none;
+    transition:
+      transform 180ms ease,
+      background-color 180ms ease,
+      border-color 180ms ease;
+  }
+  .nexavia-primary {
+    padding: 0.78rem 1.15rem;
+    border: 1px solid var(--nx-blue);
+    color: #fff;
+    background: var(--nx-blue);
+  }
+  .nexavia-secondary {
+    min-height: 44px;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid rgba(34, 184, 207, 0.55);
+    color: #dfe9f4;
+  }
+  .nexavia-primary span,
+  .nexavia-secondary span {
+    color: var(--nx-cyan);
+    transition: transform 180ms ease;
+  }
+  .nexavia-primary span {
+    color: #fff;
+  }
+  .nexavia-primary:hover,
+  .nexavia-secondary:hover {
+    transform: translateY(-2px);
+  }
+  .nexavia-primary:hover {
+    background: #3e7af0;
+  }
+  .nexavia-primary:hover span,
+  .nexavia-secondary:hover span {
+    transform: translateX(3px);
+  }
+  .nexavia-primary:focus-visible,
+  .nexavia-secondary:focus-visible {
+    outline: 2px solid var(--nx-cyan);
+    outline-offset: 4px;
+  }
+  .nexavia-product {
+    position: relative;
+    z-index: 1;
+  }
+  .nexavia-product::before {
+    content: "";
+    position: absolute;
+    inset: 6% 4% 24%;
+    z-index: -1;
+    border-radius: 50%;
+    background: rgba(47, 111, 237, 0.18);
+    filter: blur(55px);
+  }
+  .nexavia-workspace {
+    position: relative;
+    min-height: 0;
+    margin: 0;
+    padding: 0.5rem;
+    overflow: hidden;
+    border: 1px solid rgba(76, 103, 139, 0.72);
+    border-radius: 14px;
+    background: #0c1725;
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.34);
+  }
+  .nexavia-workspace::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.06);
+  }
+  .nexavia-dashboard-link {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 9px;
+    background: #f3f6f8;
+    text-decoration: none;
+  }
+  .nexavia-dashboard-link:focus-visible {
+    outline: 2px solid var(--nx-cyan);
+    outline-offset: -2px;
+  }
+  .nexavia-dashboard-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+    background: #f3f6f8;
+  }
+  .nexavia-dashboard-open {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 34px;
+    padding: 0.45rem 0.7rem;
+    color: #dce5ef;
+    background: var(--nx-surface);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+  .nexavia-dashboard-open i {
+    color: var(--nx-cyan);
+    font-style: normal;
+    transition: transform 180ms ease;
+  }
+  .nexavia-dashboard-link:hover .nexavia-dashboard-open i {
+    transform: translate(2px, -2px);
+  }
+  .nexavia-capabilities {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin: 1.35rem 0 0;
+    padding: 0;
+    background: var(--nx-bg);
+    box-shadow: 0 0 30px 18px var(--nx-bg);
+    list-style: none;
+  }
+  .nexavia-capabilities li {
+    display: grid;
+    grid-template-columns: 8px minmax(0, 1fr);
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 46px;
+    padding: 0.65rem 0.8rem 0.65rem 0;
+    border-bottom: 1px solid rgba(76, 103, 139, 0.52);
+    color: #dce5ef;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .nexavia-capabilities li:nth-child(odd) {
+    margin-right: 1rem;
+  }
+  .nexavia-capabilities li > span {
+    width: 7px;
+    height: 7px;
+    background: var(--nx-cyan);
+  }
+  .nexavia-capabilities li:nth-child(3n + 1) > span {
+    background: var(--nx-blue);
+  }
+  .nexavia-lightbox {
+    --nx-cyan: #22b8cf;
+    --nx-bg: #08111f;
+    --nx-surface: #111c2b;
+    --nx-text: #f4f7fa;
+    width: min(1480px, calc(100% - 2rem));
+    max-width: none;
+    max-height: calc(100svh - 2rem);
+    margin: auto;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgba(76, 103, 139, 0.9);
+    border-radius: 14px;
+    color: var(--nx-text);
+    background: var(--nx-bg);
+    box-shadow: 0 32px 90px rgba(0, 0, 0, 0.58);
+  }
+  .nexavia-lightbox::backdrop {
+    background: rgba(2, 7, 13, 0.84);
+    backdrop-filter: blur(6px);
+  }
+  .nexavia-lightbox[open] {
+    display: grid;
+    place-items: center;
+  }
+  .nexavia-lightbox-content {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    padding: 3.75rem 1rem 1rem;
+  }
+  .nexavia-lightbox-image {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: calc(100svh - 6.75rem);
+    border-radius: 8px;
+    object-fit: contain;
+  }
+  .nexavia-lightbox-close {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.7rem;
+    z-index: 1;
+    display: grid;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    place-items: center;
+    border: 1px solid rgba(34, 184, 207, 0.65);
+    border-radius: 5px;
+    color: var(--nx-text);
+    background: var(--nx-surface);
+    font-size: 1.65rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .nexavia-lightbox-close:focus,
+  .nexavia-lightbox-close:focus-visible {
+    outline: 2px solid var(--nx-cyan);
+    outline-offset: 3px;
+  }
+  .nexavia-motion-ready .nexavia-workspace {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .nexavia-motion-ready .ambient-route {
+    stroke-dasharray: 2400;
+    stroke-dashoffset: 2400;
+  }
+  .nexavia-motion-ready.is-visible .nexavia-workspace {
+    animation: nexavia-preview-in 650ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  }
+  .nexavia-motion-ready.is-visible .ambient-route {
+    animation: nexavia-route-in 1.25s ease-out forwards;
+  }
+  @keyframes nexavia-preview-in {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes nexavia-route-in {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @media (max-width: 1100px) and (min-width: 1051px) {
+    .nexavia-inner {
+      grid-template-columns: minmax(330px, 0.72fr) minmax(0, 1fr);
+      gap: 2.25rem;
+    }
+  }
+  @media (max-width: 1050px) {
+    .nexavia-inner {
+      grid-template-columns: 1fr;
+      gap: 3.5rem;
+      max-width: 760px;
+    }
+    .nexavia-copy {
+      max-width: 650px;
+    }
+  }
+  @media (max-width: 600px) {
+    .nexavia-section {
+      padding-block: 4.75rem;
+    }
+    .nexavia-inner {
+      width: min(100% - 2rem, 480px);
+      gap: 2.8rem;
+    }
+    .nexavia-logo-frame {
+      width: 292px;
+      height: 112px;
+      margin-bottom: 1.35rem;
+    }
+    .nexavia-logo-frame img {
+      width: 515px;
+      height: 154.5px;
+    }
+    .nexavia-copy h2 {
+      font-size: clamp(2.65rem, 12vw, 3.2rem);
+      line-height: 1.04;
+    }
+    .nexavia-section .nexavia-description {
+      margin-top: 1.3rem;
+      font-size: 1.125rem;
+      line-height: 1.58;
+    }
+    .nexavia-actions {
+      display: grid;
+      justify-items: start;
+      margin-top: 1.75rem;
+    }
+    .nexavia-workspace {
+      min-height: 0;
+      padding: 0.35rem;
+      border-radius: 11px;
+    }
+    .nexavia-dashboard-image {
+      width: 100%;
+    }
+    .nexavia-lightbox {
+      width: calc(100% - 1rem);
+      max-height: calc(100svh - 1rem);
+    }
+    .nexavia-lightbox-content {
+      padding: 3.5rem 0.5rem 0.5rem;
+    }
+    .nexavia-lightbox-image {
+      max-height: calc(100svh - 5rem);
+    }
+    .nexavia-capabilities {
+      grid-template-columns: 1fr;
+      margin-top: 1.1rem;
+    }
+    .nexavia-capabilities li,
+    .nexavia-capabilities li:nth-child(odd) {
+      margin-right: 0;
+      padding-right: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nexavia-workspace,
+    .ambient-route {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
+      stroke-dashoffset: 0 !important;
+    }
+    .nexavia-primary,
+    .nexavia-secondary,
+    .nexavia-primary span,
+    .nexavia-secondary span,
+    .nexavia-dashboard-open i {
+      transition: none;
+    }
+  }
+</style>

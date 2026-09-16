@@ -1,0 +1,338 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import AboutIcon from "../components/AboutIcon.astro";
+import regionalMap from "../assets/maps/kuem-regional-map.svg";
+import "../styles/about.css";
+const facts = [
+  ["location", "SEDEŽ", "Kranj, Slovenija"],
+  ["presence", "PRISOTNOST", "Slovenija in širša regija"],
+  ["knowledge", "ZNANJA", "Razvoj · povezljivost · integracije · izvedba"],
+  ["people", "PRISTOP", "Od prvega ogleda do dolgoročne podpore"],
+];
+const expertise = [
+  [
+    "software",
+    "Programska oprema",
+    "Razvoj platform, uporabniških vmesnikov in podatkovnih rešitev.",
+  ],
+  [
+    "connectivity",
+    "Komunikacijske tehnologije",
+    "Načrtovanje zanesljive poti od terenske naprave do sistema.",
+  ],
+  [
+    "integration",
+    "Integracije in avtomatizacija",
+    "Povezovanje obstoječih sistemov, podatkov in procesov.",
+  ],
+  [
+    "field",
+    "Terenska izvedba in podpora",
+    "Uvedba, nadzor delovanja in pomoč po začetku uporabe.",
+  ],
+];
+const growth = [
+  [
+    "01",
+    "Terenske rešitve",
+    "Začetki na terenu in razumevanje dejanskih infrastrukturnih izzivov.",
+  ],
+  [
+    "02",
+    "Povezovanje sistemov",
+    "Naprave, komunikacije in obstoječi sistemi so postali povezana celota.",
+  ],
+  [
+    "03",
+    "Lastna platforma Nexavia",
+    "Razvili smo enotno okolje za pregled in upravljanje podatkov.",
+  ],
+  [
+    "04",
+    "Napredna analitika KAI",
+    "Podatke nadgrajujemo s kontekstom in podporo pri odločanju.",
+  ],
+];
+const principles = [
+  [
+    "document",
+    "Razumemo okolje",
+    "Predlagamo šele, ko poznamo teren, obstoječe sisteme in cilj.",
+  ],
+  [
+    "dialog",
+    "Govorimo jasno",
+    "Brez nepotrebnega žargona, skritih omejitev in praznih obljub.",
+  ],
+  [
+    "shield",
+    "Prevzamemo odgovornost",
+    "Rešitev obravnavamo kot celoto, ne kot skupek nepovezanih delov.",
+  ],
+  [
+    "infinity",
+    "Ostajamo dosegljivi",
+    "Sodelovanje se ne konča z uvedbo rešitve.",
+  ],
+];
+---
+
+<MainLayout
+  title="O nas | KUEM"
+  description="KUEM je slovensko tehnološko podjetje, ki povezuje razvoj programske opreme, komunikacijske tehnologije, integracije, teren in podporo."
+>
+  <div class="ab-page">
+    <section class="ab-hero" aria-labelledby="ab-title">
+      <div class="container ab-hero-grid">
+        <div class="ab-hero-copy">
+          <p class="ab-eyebrow">O NAS</p><h1 id="ab-title">
+            Ljudje, ki tehnologijo spravimo v delovanje.
+          </h1><p>
+            KUEM je slovensko tehnološko podjetje. Naša ekipa združuje razvoj
+            programske opreme, komunikacijske tehnologije, integracije, terensko
+            izvedbo in podporo.
+          </p><div class="ab-actions">
+            <a class="btn btn-primary" href="#kuem-v-potezah"
+              >Spoznajte nas <span aria-hidden="true">↓</span></a
+            ><a class="btn btn-secondary" href="#kontakt"
+              >Kontakt <span aria-hidden="true">→</span></a
+            >
+          </div>
+        </div>
+        <div
+          class="ab-hero-graphic"
+          aria-label="Pot od terena prek sistemov do upravljanja"
+        >
+          <p>OD IDEJE DO DELOVANJA.</p><svg
+            viewBox="0 0 760 420"
+            role="img"
+            aria-labelledby="ab-flow-title"
+            ><title id="ab-flow-title">Teren, sistemi in upravljanje</title><g
+              class="ab-grid"
+              aria-hidden="true"
+              ><path
+                d="M0 370 120 290 220 338 360 238 490 310 630 214 760 274M0 403 170 315 290 370 410 285 560 348 720 265"
+              ></path></g
+            ><path class="ab-route" d="M70 300H225L330 190H485L580 76H704"
+            ></path><g class="ab-node"
+              ><rect x="66" y="296" width="9" height="9"></rect><rect
+                x="326"
+                y="186"
+                width="9"
+                height="9"></rect><rect x="576" y="72" width="9" height="9"
+              ></rect></g
+            ><g class="ab-flow-copy"
+              ><text x="68" y="260">TEREN</text><text x="68" y="326"
+                >PODATKI IZ REALNEGA</text
+              ><text x="68" y="344">OKOLJA</text><text x="328" y="150"
+                >SISTEMI</text
+              ><text x="328" y="216">POVEZOVANJE ZNANJ</text><text
+                x="328"
+                y="234">IN TEHNOLOGIJ</text
+              ><text x="578" y="38">UPRAVLJANJE</text><text x="578" y="101"
+                >UPORABNI PODATKI</text
+              ><text x="578" y="119">ZA BOLJŠE ODLOČITVE</text></g
+            ><g class="ab-moving"
+              ><rect width="8" height="8"
+                ><animateMotion
+                  begin="indefinite"
+                  dur="14s"
+                  repeatCount="indefinite"
+                  path="M70 300H225L330 190H485L580 76H704"
+                ></animateMotion></rect
+              ></g
+            ></svg
+          >
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="ab-facts"
+      id="kuem-v-potezah"
+      aria-labelledby="ab-facts-title"
+    >
+      <div class="container">
+        <p class="ab-eyebrow">KUEM V NEKAJ POTEZAH</p><h2 id="ab-facts-title">
+          Podjetje, zgrajeno na znanju in odgovornosti.
+        </h2><div class="ab-fact-grid">
+          {
+            facts.map(([icon, title, copy]) => (
+              <article>
+                <>
+                  <AboutIcon name={icon} />
+                  <div>
+                    <>
+                      <h3>{title}</h3>
+                      <p>{copy}</p>
+                    </>
+                  </div>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="ab-team" aria-labelledby="ab-team-title">
+      <div class="container ab-team-grid">
+        <div>
+          <p class="ab-eyebrow">NAŠA EKIPA</p><h2 id="ab-team-title">
+            Različna znanja. Ena ekipa.
+          </h2><p>
+            Projekt pri nas ne potuje med nepovezanimi izvajalci. Strokovnjaki
+            za teren, povezljivost, programsko opremo, integracije in podporo
+            sodelujejo kot ena ekipa.
+          </p>
+        </div><div class="ab-expertise">
+          {
+            expertise.map(([icon, title, copy]) => (
+              <article>
+                <>
+                  <span>
+                    <AboutIcon name={icon} />
+                  </span>
+                  <div>
+                    <>
+                      <h3>{title}</h3>
+                      <p>{copy}</p>
+                    </>
+                  </div>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="ab-growth" aria-labelledby="ab-growth-title">
+      <div class="container">
+        <p class="ab-eyebrow">NAŠ RAZVOJ</p><h2 id="ab-growth-title">
+          Rastli smo iz realnih projektov.
+        </h2><p>
+          Vsak naslednji korak je nastal iz konkretne potrebe naročnikov.
+        </p><ol class="ab-timeline">
+          {
+            growth.map(([number, title, copy], index) => (
+              <li>
+                <>
+                  <div class="ab-step-icon" aria-hidden="true">
+                    {index === 0
+                      ? "⌁"
+                      : index === 1
+                        ? "↗"
+                        : index === 2
+                          ? "▣"
+                          : "▥"}
+                  </div>
+                  <span class="ab-step-node" />
+                  <strong>{number}</strong>
+                  <h3>{title}</h3>
+                  <p>{copy}</p>
+                </>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section class="ab-principles" aria-labelledby="ab-principles-title">
+      <div class="container">
+        <p class="ab-eyebrow">KAKO DELAMO</p><h2 id="ab-principles-title">
+          Neposredno, odgovorno in dolgoročno.
+        </h2><div class="ab-principle-grid">
+          {
+            principles.map(([icon, title, copy]) => (
+              <article>
+                <>
+                  <AboutIcon name={icon} />
+                  <h3>{title}</h3>
+                  <p>{copy}</p>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="ab-region" aria-labelledby="ab-region-title">
+      <div class="container ab-region-grid">
+        <div>
+          <p class="ab-eyebrow">REGIONALNA PRISOTNOST</p><h2
+            id="ab-region-title"
+          >
+            Znanje razvijamo v Sloveniji. Rešitve uvajamo po regiji.
+          </h2><p>
+            Z naročniki in partnerji sodelujemo neposredno – od prvega ogleda do
+            dolgoročne podpore.
+          </p><a href="/reference"
+            >Oglejte si uspešne zgodbe <span aria-hidden="true">→</span></a
+          >
+        </div><div class="ab-map">
+          <img
+            class="regional-map"
+            src={regionalMap.src}
+            width="1100"
+            height="700"
+            alt="Regionalna prisotnost podjetja KUEM v Sloveniji in državah jugovzhodne Evrope"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="ab-contact" id="kontakt" aria-labelledby="ab-contact-title">
+      <div class="container">
+        <h2 id="ab-contact-title">
+          Pogovorimo se o vašem naslednjem projektu.
+        </h2><p>Najboljši pogovori se začnejo pri konkretnem izzivu.</p><a
+          class="btn btn-primary"
+          href="/kontakt"
+          >Dogovorite se za uvodni sestanek <span aria-hidden="true">→</span></a
+        ><small>KUEM d.o.o. · Kranj · Slovenija</small>
+      </div>
+    </section>
+  </div>
+</MainLayout>
+<script>
+  const graphic = document.querySelector<HTMLElement>(".ab-hero-graphic");
+  const svg = graphic?.querySelector<SVGSVGElement>("svg");
+  const motion = svg?.querySelector<SVGAnimateMotionElement>("animateMotion");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  let started = false;
+  const update = (visible: boolean) => {
+    if (!graphic || !svg || reduced.matches) {
+      graphic?.classList.remove("is-animated");
+      svg?.pauseAnimations();
+      return;
+    }
+    if (!visible || document.hidden) {
+      svg.pauseAnimations();
+      return;
+    }
+    if (!started) {
+      started = true;
+      motion?.beginElement();
+      graphic.classList.add("is-animated");
+    }
+    svg.unpauseAnimations();
+  };
+  if (graphic) {
+    const observer = new IntersectionObserver(
+      ([entry]) => update(Boolean(entry?.isIntersecting)),
+      { threshold: 0.15 },
+    );
+    observer.observe(graphic);
+    document.addEventListener("visibilitychange", () =>
+      update(
+        graphic.getBoundingClientRect().top < innerHeight &&
+          graphic.getBoundingClientRect().bottom > 0,
+      ),
+    );
+  }
+</script>

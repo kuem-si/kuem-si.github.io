@@ -1,0 +1,127 @@
+---
+const { name } = Astro.props as { name: string };
+---
+
+<svg
+  viewBox="0 0 56 56"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.8"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  {
+    name === "software" && (
+      <>
+        <>
+          <path d="m20 17-10 11 10 11m16-22 10 11-10 11M32 12 24 44" />
+          <path d="M6 5h44v46H6z" opacity=".25" />
+        </>
+      </>
+    )
+  }
+  {
+    name === "connectivity" && (
+      <>
+        <>
+          <circle cx="28" cy="30" r="4" />
+          <path d="M20 22a11 11 0 0 0 0 16m16-16a11 11 0 0 1 0 16M14 16a20 20 0 0 0 0 28m28-28a20 20 0 0 1 0 28M28 34v16" />
+        </>
+      </>
+    )
+  }
+  {
+    name === "integration" && (
+      <>
+        <>
+          <circle cx="11" cy="28" r="5" />
+          <circle cx="28" cy="10" r="5" />
+          <circle cx="45" cy="28" r="5" />
+          <circle cx="28" cy="46" r="5" />
+          <path d="m15 24 9-10m8 0 9 10m0 8-9 10m-8 0-9-10" />
+        </>
+      </>
+    )
+  }
+  {
+    name === "field" && (
+      <>
+        <>
+          <path d="M12 39h32v8H12zM17 39v-7a11 11 0 0 1 22 0v7M28 15v-5m-8 8-4-4m20 4 4-4M8 47h40" />
+          <path d="M22 32h12" />
+        </>
+      </>
+    )
+  }
+  {
+    name === "location" && (
+      <>
+        <>
+          <path d="M28 50S12 35 12 22a16 16 0 0 1 32 0c0 13-16 28-16 28Z" />
+          <circle cx="28" cy="22" r="6" />
+        </>
+      </>
+    )
+  }
+  {
+    name === "presence" && (
+      <>
+        <>
+          <circle cx="28" cy="28" r="21" />
+          <path d="M7 28h42M28 7c7 7 10 14 10 21s-3 14-10 21c-7-7-10-14-10-21S21 14 28 7Z" />
+        </>
+      </>
+    )
+  }
+  {
+    name === "knowledge" && (
+      <>
+        <>
+          <circle cx="28" cy="28" r="8" />
+          <path d="m28 6 3 8 8-3 4 7 7 4-4 7 4 7-7 4-4 7-8-3-3 8-3-8-8 3-4-7-7-4 4-7-4-7 7-4 4-7 8 3 3-8Z" />
+        </>
+      </>
+    )
+  }
+  {
+    name === "people" && (
+      <>
+        <>
+          <circle cx="20" cy="18" r="7" />
+          <circle cx="39" cy="21" r="5" />
+          <path d="M7 49v-9a13 13 0 0 1 26 0v9m1-18a11 11 0 0 1 15 10v8" />
+        </>
+      </>
+    )
+  }
+  {
+    name === "document" && (
+      <>
+        <path d="M12 6h24l8 8v36H12zM36 6v9h8M19 25h18M19 33h18M19 41h12" />
+      </>
+    )
+  }
+  {
+    name === "dialog" && (
+      <>
+        <path d="M8 28c0-11 9-19 20-19s20 8 20 19-9 19-20 19c-4 0-8-1-11-3L7 49l4-10c-2-3-3-7-3-11Z" />
+      </>
+    )
+  }
+  {
+    name === "shield" && (
+      <>
+        <>
+          <path d="M28 5c8 6 14 7 20 8v14c0 13-8 20-20 25C16 47 8 40 8 27V13c6-1 12-2 20-8Z" />
+          <path d="m18 28 7 7 13-15" />
+        </>
+      </>
+    )
+  }
+  {
+    name === "infinity" && (
+      <path d="M28 28c-7-12-18-14-22-6-5 10 8 22 22 6 14-16 27-4 22 6-4 8-15 6-22-6Z" />
+    )
+  }
+</svg>

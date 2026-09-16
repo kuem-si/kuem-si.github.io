@@ -1,0 +1,45 @@
+---
+import { withBase } from "../lib/paths";
+
+const { title, subtitle, references, ctaText, ctaHref } = Astro.props as {
+  title: string;
+  subtitle: string;
+  references: string[];
+  ctaText: string;
+  ctaHref: string;
+};
+
+const marqueeItems = [...references, ...references];
+---
+
+<section
+  class="reference-marquee-section"
+  aria-labelledby="reference-marquee-title"
+>
+  <div class="container">
+    <div class="reference-marquee-header">
+      <p class="eyebrow">Reference</p>
+      <h2 id="reference-marquee-title">{title}</h2>
+      <p>{subtitle}</p>
+    </div>
+
+    <div class="reference-marquee-shell" aria-label={title}>
+      <div class="reference-marquee-track">
+        {
+          marqueeItems.map((name, index) => (
+            <article
+              class="reference-marquee-card"
+              aria-hidden={index >= references.length ? "true" : undefined}
+            >
+              <span>{name}</span>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="reference-marquee-cta">
+      <a class="btn btn-secondary" href={withBase(ctaHref)}>{ctaText}</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,508 @@
+---
+import { Image } from "astro:assets";
+import connectedFactory from "../assets/brand/projects/kuem-connected-factory.webp.png";
+import environmentalCity from "../assets/brand/projects/kuem-environmental-city.webp.png";
+import lorawanWaterCity from "../assets/brand/projects/kuem-lorawan-water-city.webp.png";
+import { customerStories } from "../data/stories";
+import type { Locale } from "../lib/i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const sl = locale === "sl";
+const stories = customerStories[locale].slice(0, 3);
+const storyVisuals = [
+  {
+    src: lorawanWaterCity,
+    alt: sl
+      ? "Mestno območje z LoRaWAN omrežjem za daljinsko odčitavanje vodomerov"
+      : "Urban area with a LoRaWAN network for remote water-meter reading",
+    position: "center",
+  },
+  {
+    src: connectedFactory,
+    alt: sl
+      ? "Proizvodna hala s povezanimi merilniki energije, plina, vode ter temperature in vlage"
+      : "Manufacturing facility with connected electricity, gas, water, temperature and humidity meters",
+    position: "38% center",
+  },
+  {
+    src: environmentalCity,
+    alt: sl
+      ? "Mestno okolje s spremljanjem hrupa, kakovosti zraka, prometa in vodostaja"
+      : "Urban environment with noise, air-quality, traffic and water-level monitoring",
+    position: "52% center",
+  },
+] as const;
+---
+
+<section
+  id="projects-in-practice"
+  class="home-stories"
+  aria-labelledby="home-stories-title"
+>
+  <div class="container">
+    <header class="home-stories__header">
+      <p class="eyebrow">
+        {sl ? "PROJEKTI V PRAKSI" : "PROJECTS IN PRACTICE"}
+      </p>
+      <h2 id="home-stories-title">
+        {sl ? "Kako KUEM deluje v praksi." : "How KUEM works in practice."}
+      </h2>
+      <p>
+        {
+          sl
+            ? "Trije projekti. Različna okolja. Enak cilj: zanesljivi podatki za boljše operativne odločitve."
+            : "Three projects. Different environments. One goal: reliable data for better operational decisions."
+        }
+      </p>
+    </header>
+
+    <div class="home-stories__grid">
+      {
+        stories.map((story, index) => {
+          const visual = storyVisuals[index];
+
+          return (
+            <article
+              class:list={[
+                "home-story",
+                { "home-story--featured": index === 0 },
+              ]}
+            >
+              <figure class="home-story__visual">
+                <button
+                  class="home-story__media"
+                  type="button"
+                  data-project-open
+                  aria-label={
+                    sl
+                      ? `Povečaj vizualizacijo: ${story.client}`
+                      : `Enlarge visualization: ${story.client}`
+                  }
+                >
+                  <Image
+                    class="home-story__image"
+                    src={visual.src}
+                    alt={visual.alt}
+                    widths={
+                      index === 0 ? [480, 768, 960, 1280] : [320, 480, 640, 800]
+                    }
+                    sizes={
+                      index === 0
+                        ? "(max-width: 767px) calc(100vw - 2rem), (max-width: 1000px) 55vw, 54vw"
+                        : "(max-width: 767px) calc(100vw - 2rem), (max-width: 1000px) 45vw, 18vw"
+                    }
+                    loading="lazy"
+                    decoding="async"
+                    style={`object-position: ${visual.position}`}
+                  />
+                </button>
+              </figure>
+              <div class="home-story__copy">
+                <div class="home-story__meta">
+                  <strong>{story.label}</strong>
+                  <span aria-hidden="true" />
+                  <small>{story.client}</small>
+                </div>
+                <h3>{story.title}</h3>
+                <p>{story.summary}</p>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+
+    <p class="home-stories__note">
+      {
+        sl
+          ? "Prikazane slike so vizualizacije rešitev."
+          : "The images shown are solution visualizations."
+      }
+    </p>
+
+    <div class="home-stories__cta">
+      <p>
+        {
+          sl
+            ? "Imate podoben operativni izziv?"
+            : "Facing a similar operational challenge?"
+        }
+      </p>
+      <a href={sl ? "/kontakt" : "/en/contact"}>
+        {sl ? "Pogovorimo se" : "Talk to us"}<span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<dialog
+  class="project-lightbox"
+  data-project-dialog
+  aria-label={sl
+    ? "Povečana projektna vizualizacija"
+    : "Enlarged project visualization"}
+>
+  <button type="button" data-project-close aria-label={sl ? "Zapri" : "Close"}
+    >×</button
+  ><img alt="" />
+</dialog>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".home-stories").forEach((section) => {
+    const dialog = section.nextElementSibling;
+    if (!(dialog instanceof HTMLDialogElement)) return;
+    const target = dialog.querySelector("img");
+    const close = dialog.querySelector<HTMLElement>("[data-project-close]");
+    let trigger: HTMLElement | null = null;
+    section
+      .querySelectorAll<HTMLElement>("[data-project-open]")
+      .forEach((button) =>
+        button.addEventListener("click", () => {
+          const source = button.querySelector<HTMLImageElement>("img");
+          if (!source || !target) return;
+          trigger = button;
+          target.src = source.currentSrc || source.src;
+          target.alt = source.alt;
+          dialog.showModal();
+          close?.focus();
+        }),
+      );
+    close?.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    dialog.addEventListener("close", () => trigger?.focus());
+  });
+</script>
+
+<style>
+  .home-stories {
+    padding-block: clamp(6rem, 8.5vw, 8.5rem);
+    background: #deddd8;
+    color: var(--ink);
+  }
+
+  .home-stories__header {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    gap: 0.65rem clamp(3rem, 8vw, 7.5rem);
+    align-items: end;
+    margin-bottom: clamp(3.5rem, 6vw, 5rem);
+  }
+
+  .home-stories__header .eyebrow {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+
+  .home-stories__header h2 {
+    max-width: 16ch;
+    margin: 0;
+    font-size: clamp(2.5rem, 4.25vw, 4.2rem);
+    line-height: 1;
+  }
+
+  .home-stories__header > p:last-child {
+    max-width: 560px;
+    margin: 0 0 0.3rem;
+    color: #4e575b;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+  }
+
+  .home-stories__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(370px, 0.9fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: clamp(2.75rem, 5vw, 4.5rem) clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .home-story {
+    display: grid;
+    grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
+    gap: 1.5rem;
+    align-items: start;
+    min-width: 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid #aaa9a4;
+  }
+  .home-story__media {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    cursor: zoom-in;
+    background: transparent;
+    text-align: inherit;
+  }
+  .home-stories__note {
+    margin: 1.6rem 0 0;
+    color: #62696b;
+    font-size: 0.88rem;
+  }
+  .project-lightbox {
+    width: min(1320px, calc(100% - 2rem));
+    max-width: none;
+    max-height: calc(100svh - 2rem);
+    padding: 3.5rem 1rem 1rem;
+    border: 1px solid #4c666b;
+    background: #0c1215;
+  }
+  .project-lightbox::backdrop {
+    background: rgba(5, 8, 10, 0.88);
+    backdrop-filter: blur(5px);
+  }
+  .project-lightbox[open] {
+    place-items: center;
+  }
+  .project-lightbox img {
+    display: block;
+    max-height: calc(100svh - 6rem);
+    margin: auto;
+    object-fit: contain;
+  }
+  .project-lightbox button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 44px;
+    height: 44px;
+    border: 1px solid #687b7f;
+    background: #161a1d;
+    color: #fff;
+    font-size: 1.6rem;
+    cursor: pointer;
+  }
+
+  .home-story--featured {
+    grid-row: 1 / 3;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .home-story__visual {
+    min-width: 0;
+    margin: 0;
+  }
+
+  .home-story__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: #c8cac6;
+  }
+
+  .home-story--featured .home-story__media {
+    aspect-ratio: 16 / 9;
+  }
+
+  .home-story__media::after {
+    position: absolute;
+    inset: auto 0 0;
+    height: 18%;
+    background: linear-gradient(to bottom, transparent, rgba(25, 32, 35, 0.12));
+    content: "";
+    pointer-events: none;
+  }
+
+  .home-story__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.96) contrast(1.02);
+    transition: transform 280ms ease;
+  }
+
+  .home-story:hover .home-story__image {
+    transform: scale(1.01);
+  }
+
+  .home-story__visual figcaption {
+    margin-top: 0.55rem;
+    color: #697174;
+    font-size: 0.72rem;
+    line-height: 1.35;
+  }
+
+  .home-story__copy {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .home-story__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.6rem;
+    align-items: center;
+    color: #586367;
+    font-size: 0.79rem;
+    line-height: 1.35;
+  }
+
+  .home-story__meta strong {
+    color: var(--kuem-petrol);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .home-story__meta > span {
+    width: 5px;
+    height: 5px;
+    background: var(--kuem-copper);
+  }
+
+  .home-story__meta small {
+    color: #333b3e;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .home-story h3 {
+    max-width: 22ch;
+    margin: 0.85rem 0 0;
+    font-size: clamp(1.45rem, 2.1vw, 2.25rem);
+    line-height: 1.08;
+  }
+
+  .home-story:not(.home-story--featured) h3 {
+    font-size: clamp(1.3rem, 1.65vw, 1.65rem);
+  }
+
+  .home-story p {
+    margin: 1rem 0 0;
+    color: #555e62;
+    font-size: 0.95rem;
+    line-height: 1.52;
+  }
+
+  .home-stories__cta {
+    display: flex;
+    gap: 1.25rem 2rem;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: clamp(3.5rem, 6vw, 5rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid #aaa9a4;
+  }
+
+  .home-stories__cta p {
+    margin: 0;
+    color: #596165;
+    font-size: 0.95rem;
+  }
+
+  .home-stories__cta a {
+    display: inline-flex;
+    gap: 0.55rem;
+    align-items: center;
+    color: #155f68;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 5px;
+  }
+
+  .home-stories__cta a:hover,
+  .home-stories__cta a:focus-visible {
+    color: #0e4f57;
+    text-decoration-color: var(--kuem-copper);
+  }
+
+  .home-stories__cta a span {
+    color: var(--kuem-copper);
+    transition: transform 180ms ease;
+  }
+
+  .home-stories__cta a:hover span,
+  .home-stories__cta a:focus-visible span {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 1000px) {
+    .home-stories__grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
+
+    .home-story--featured {
+      grid-column: 1 / -1;
+      grid-row: auto;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+      grid-template-rows: auto;
+    }
+
+    .home-story:not(.home-story--featured) {
+      grid-template-columns: 1fr;
+    }
+
+    .home-story:not(.home-story--featured) .home-story__media {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .home-stories {
+      padding-block: 5.5rem;
+    }
+
+    .home-stories__header {
+      grid-template-columns: 1fr;
+      gap: 1.4rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .home-stories__header .eyebrow {
+      grid-column: auto;
+      margin-bottom: -0.5rem;
+    }
+
+    .home-stories__header h2 {
+      font-size: clamp(2.45rem, 11vw, 3.4rem);
+    }
+
+    .home-stories__grid {
+      grid-template-columns: 1fr;
+      gap: 3.5rem;
+    }
+
+    .home-story,
+    .home-story--featured {
+      grid-column: auto;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+
+    .home-story__media,
+    .home-story--featured .home-story__media,
+    .home-story:not(.home-story--featured) .home-story__media {
+      aspect-ratio: 16 / 9;
+    }
+
+    .home-story h3,
+    .home-story:not(.home-story--featured) h3 {
+      font-size: clamp(1.65rem, 7vw, 2.15rem);
+    }
+
+    .home-stories__cta {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-story__image,
+    .home-stories__cta a span {
+      transition: none;
+    }
+
+    .home-story:hover .home-story__image {
+      transform: none;
+    }
+  }
+</style>

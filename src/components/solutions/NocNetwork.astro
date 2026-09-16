@@ -1,0 +1,115 @@
+---
+const nodes = [
+  { x: 58, y: 159, kind: "device", status: "unknown" },
+  { x: 97, y: 90, kind: "gateway", status: "ok" },
+  { x: 100, y: 251, kind: "gateway", status: "ok" },
+  { x: 170, y: 159, kind: "device", status: "ok" },
+  { x: 198, y: 309, kind: "gateway", status: "ok" },
+  { x: 207, y: 249, kind: "gateway", status: "ok" },
+  { x: 306, y: 122, kind: "gateway", status: "ok" },
+  { x: 320, y: 277, kind: "gateway", status: "ok" },
+  { x: 348, y: 193, kind: "device", status: "unknown" },
+  { x: 413, y: 83, kind: "gateway", status: "maintenance" },
+  { x: 449, y: 236, kind: "device", status: "ok" },
+  { x: 494, y: 168, kind: "gateway", status: "warning" },
+  { x: 551, y: 124, kind: "gateway", status: "ok" },
+  { x: 552, y: 245, kind: "gateway", status: "ok" },
+  { x: 594, y: 190, kind: "device", status: "ok" },
+  { x: 498, y: 75, kind: "device", status: "unknown" },
+  { x: 382, y: 320, kind: "device", status: "unreachable" },
+];
+const edges = [
+  [0, 1],
+  [0, 2],
+  [1, 2],
+  [1, 3],
+  [1, 6],
+  [2, 3],
+  [2, 4],
+  [2, 5],
+  [3, 5],
+  [3, 6],
+  [4, 5],
+  [4, 7],
+  [5, 6],
+  [5, 7],
+  [6, 8],
+  [6, 9],
+  [7, 8],
+  [7, 10],
+  [7, 16],
+  [8, 9],
+  [8, 10],
+  [9, 11],
+  [9, 15],
+  [10, 11],
+  [10, 13],
+  [11, 12],
+  [11, 13],
+  [11, 14],
+  [12, 14],
+  [12, 15],
+  [13, 14],
+  [10, 16],
+];
+const statusLabels: Record<string, string> = {
+  ok: "V redu",
+  warning: "Opozorilo",
+  unreachable: "Nedosegljivo",
+  unknown: "Neznano",
+  maintenance: "Vzdrževanje",
+};
+---
+
+<figure class="sol-noc-figure">
+  <ul class="sol-noc-legend" aria-label="Legenda omrežja">
+    <li><i class="sol-legend-device"></i>Naprava</li><li>
+      <i class="sol-legend-gateway"></i>Prehod
+    </li><li><i class="sol-legend-ok"></i>V redu</li><li>
+      <i class="sol-legend-warning"></i>Opozorilo
+    </li>
+  </ul>
+  <svg viewBox="0 0 650 365" role="img" aria-labelledby="noc-title noc-desc"
+    ><title id="noc-title">Ponazoritev nadzora omrežja</title><desc
+      id="noc-desc"
+      >Krogi predstavljajo naprave, rombi prehode. Turkizna označuje normalno
+      delovanje, oranžna opozorilo, rdeča nedosegljivost, siva neznano stanje in
+      modra vzdrževanje.</desc
+    ><g class="sol-noc-edges"
+      >{
+        edges.map(([a, b]) => (
+          <path
+            d={`M${nodes[a].x} ${nodes[a].y}L${nodes[b].x} ${nodes[b].y}`}
+          />
+        ))
+      }</g
+    >{
+      nodes.map((node) => (
+        <g
+          class={`sol-noc-node sol-status-${node.status}`}
+          aria-label={`${node.kind === "gateway" ? "Prehod" : "Naprava"}: ${statusLabels[node.status]}`}
+        >
+          <circle class="sol-node-halo" cx={node.x} cy={node.y} r="18" />
+          {node.kind === "gateway" ? (
+            <rect
+              x={node.x - 9}
+              y={node.y - 9}
+              width="18"
+              height="18"
+              rx="3"
+              transform={`rotate(45 ${node.x} ${node.y})`}
+            />
+          ) : (
+            <circle cx={node.x} cy={node.y} r="10" />
+          )}
+          <circle class="sol-node-core" cx={node.x} cy={node.y} r="2" />
+        </g>
+      ))
+    }</svg
+  >
+  <figcaption>
+    <span>Ponazoritev omrežja</span><span
+      >Stalna razpoložljivost<br />in zanesljivo delovanje</span
+    >
+  </figcaption>
+</figure>

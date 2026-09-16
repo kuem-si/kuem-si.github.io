@@ -1,0 +1,178 @@
+---
+import SeoHead from "../SeoHead.astro";
+import Chrome from "./SiteChrome.astro";
+import Architecture from "./SolutionsArchitecture.astro";
+import Panel from "./SolutionExplorerPanel.astro";
+import Icon from "./ServiceIcon.astro";
+import {
+  explorerBenefits,
+  explorerExamples,
+} from "../../data/solutionExplorer";
+import "../../styles/global.css";
+import "../../styles/homepage.css";
+import "../../styles/solution-explorer.css";
+const partners = ["CMC Group", "Kolektor", "Telegroup", "T-2", "Vodotehnika"];
+const stories = [
+  "Domplan",
+  "Brezovica",
+  "Adria Mobil",
+  "Gradiška",
+  "Novo mesto",
+];
+---
+
+<!doctype html>
+<html lang="sl">
+  <head
+    ><SeoHead
+      title="Rešitve | KUEM – Od zajema podatka do upravljane storitve"
+      description="Raziščite celotno KUEM rešitev: od naprav in obstoječih sistemov prek Nexavie do odločitev in upravljanih storitev."
+      pathname="/resitve"
+    /></head
+  >
+  <body class="kuem-home solutions-page">
+    <div class="solutions-shell">
+      <a class="skip-link" href="#main">Preskoči na vsebino</a>
+      <Chrome />
+      <main id="main">
+        <section class="explorer-hero">
+          <div class="hp-wrap explorer-hero-grid">
+            <div class="explorer-copy">
+              <p class="hp-eyebrow">REŠITVE KUEM</p><h1>
+                Od zajema podatka do upravljane storitve.
+              </h1><p>
+                Povežemo naprave, komunikacijska omrežja, obstoječe sisteme in
+                podatke v rešitev, ki deluje kot celota.
+              </p><div class="hp-actions">
+                <a class="hp-button" href="/#kontakt"
+                  >Pogovorimo se <span aria-hidden="true">→</span></a
+                ><button
+                  type="button"
+                  class="hp-button hp-outline"
+                  data-solution-step="0"
+                  aria-controls="solution-panel"
+                  aria-haspopup="dialog"
+                  aria-expanded="false"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true"
+                    ><path
+                      d="m8 5 11 7-11 7Z"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"></path></svg
+                  >Oglejte si tok podatka</button
+                >
+              </div>
+            </div>
+            <Architecture />
+          </div>
+        </section>
+        <section class="explorer-trust" aria-label="Zaupajo nam">
+          <div class="hp-wrap">
+            <h2 class="hp-eyebrow">ZAUPAJO NAM</h2><ul>
+              {partners.map((name) => <li>{name}</li>)}
+            </ul>
+          </div>
+        </section>
+        <section class="explorer-benefits">
+          <div class="hp-wrap">
+            <p class="hp-eyebrow">KAJ UPORABNIK PRIDOBI</p><h2>
+              Manj iskanja podatkov. Več časa za ukrepanje.
+            </h2><div class="explorer-cards">
+              {
+                explorerBenefits.map((item) => (
+                  <button
+                    type="button"
+                    class="hp-card"
+                    data-solution-step={item.step}
+                    aria-controls="solution-panel"
+                    aria-haspopup="dialog"
+                    aria-expanded="false"
+                  >
+                    <>
+                      <Icon name={item.icon} />
+                      <h3>{item.title}</h3>
+                      <p>{item.text}</p>
+                      <span class="card-chevron" aria-hidden="true">
+                        ›
+                      </span>
+                    </>
+                  </button>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+        <section class="explorer-examples">
+          <div class="hp-wrap">
+            <p class="hp-eyebrow">PRIMERI IZ PRAKSE</p><h2>
+              Od podatka do konkretnega rezultata.
+            </h2><div class="explorer-cards">
+              {
+                explorerExamples.map((item) => (
+                  <button
+                    type="button"
+                    class="hp-card example-card"
+                    data-solution-step={item.step}
+                    aria-controls="solution-panel"
+                    aria-haspopup="dialog"
+                    aria-expanded="false"
+                  >
+                    <>
+                      <div class="example-drawing">
+                        <>
+                          <Icon name={item.icon} />
+                          <svg
+                            viewBox="0 0 180 64"
+                            aria-hidden="true"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.2"
+                          >
+                            <path d="M2 60h176M14 60V34h22v26M44 60V15h24v45M80 60V28h23v32M116 60V5l28-4v59M153 60V39h18v21M20 40h8v7h-8zM50 22h9v8h-9zM50 37h9v8h-9zM86 36h9v7h-9zM122 12h8v8h-8zM132 30h7v7h-7zM159 45h6v6h-6z" />
+                          </svg>
+                        </>
+                      </div>
+                      <h3>{item.title}</h3>
+                      <p>{item.text}</p>
+                      <span class="card-chevron" aria-hidden="true">
+                        ›
+                      </span>
+                    </>
+                  </button>
+                ))
+              }
+            </div><div class="explorer-stories">
+              <h2 class="hp-eyebrow">USPEŠNE ZGODBE</h2><ul>
+                {
+                  stories.map((name) => (
+                    <li>
+                      <a href="/reference">
+                        {name}
+                        <span aria-hidden="true">↗</span>
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+          </div>
+        </section>
+        <section class="hp-closing">
+          <div class="hp-wrap">
+            <div>
+              <h2>Začnimo z enim konkretnim izzivom.</h2><p>
+                Izberemo primer uporabe, preverimo razpoložljive podatke in
+                predlagamo izvedljiv prvi korak.
+              </p>
+            </div><a class="hp-button" href="/#kontakt"
+              >Dogovorite se za uvodni sestanek <span aria-hidden="true">→</span
+              ></a
+            >
+          </div>
+        </section>
+      </main>
+      <Chrome footer />
+    </div>
+    <Panel />
+  </body>
+</html>

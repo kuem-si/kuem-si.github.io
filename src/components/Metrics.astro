@@ -1,0 +1,18 @@
+---
+import type { Locale } from "../lib/i18n";
+import { getMetrics } from "../lib/content";
+
+const { locale = "en" } = Astro.props as { locale?: Locale };
+const metrics = getMetrics(locale);
+---
+
+<div class="metrics-grid">
+  {
+    metrics.map((metric) => (
+      <article class="metric-card">
+        <p class="metric-value">{metric.value}</p>
+        <p class="metric-label">{metric.label}</p>
+      </article>
+    ))
+  }
+</div>

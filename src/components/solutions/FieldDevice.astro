@@ -1,0 +1,90 @@
+---
+const { type } = Astro.props as { type: string };
+---
+
+<svg
+  class="field-device"
+  viewBox="0 0 180 180"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.8"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  {
+    type === "water" && (
+      <>
+        <path d="M5 115h29v24H5zM146 115h29v24h-29M39 108h8v38h-8zM133 108h8v38h-8zM34 112h5v30h-5zM141 112h5v30h-5zM47 119h11m64 0h11M47 135h11m64 0h11" />
+        <>
+          <rect x="58" y="88" width="64" height="73" rx="13" />
+          <path d="M63 90v-6q0-9 10-9h34q10 0 10 9v6M66 102h48v26H66zM71 109h7v11h-7zm13 0h7v11h-7zm13 0h7v11h-7zM72 139h35m-35 6h12m10 0h13M80 161v7h20v-7M86 168v7h8v-7M148 115V72h5v43" />
+        </>
+        <>
+          <circle cx="150" cy="55" r="18" />
+          <circle cx="150" cy="55" r="14" />
+          <path d="m150 55-7-7m7 7 8 5M150 43v3m-11 9h3m16 0h3M147 73h7" />
+        </>
+      </>
+    )
+  }
+  {
+    type === "energy" && (
+      <>
+        <>
+          <rect x="24" y="20" width="132" height="154" rx="3" />
+          <path d="M32 29h116v136H32zM37 29v136m106-136v136M148 46h-5m5 96h-5M39 87h25v23H39zM116 87h24v23h-24M45 92h12m-12 12h12m65-12h12m-12 12h12" />
+        </>
+        <>
+          <rect x="64" y="62" width="52" height="82" rx="3" />
+          <path d="M64 77h52M64 129h52M73 87h34v24H73zM77 101h24M75 119h7m13 0h9M68 56h44v6M70 144v6h40v-6" />
+        </>
+        {[73, 84, 95, 106].map((x) => (
+          <>
+            <circle cx={x} cy="69" r="2.5" />
+            <circle cx={x} cy="136" r="2.5" />
+          </>
+        ))}
+      </>
+    )
+  }
+  {
+    type === "environment" && (
+      <>
+        <path d="M57 174V75h7v99M37 27q4-10 14-10h19q10 0 15 10zM37 34l-5 8h57l-5-8zM37 49l-5 8h57l-5-8zM37 64l-5 8h57l-5-8zM43 73l7 10h21l7-10M53 83v7h15v-7" />
+        <>
+          <rect x="43" y="108" width="35" height="42" rx="3" />
+          <path d="M78 132h31q7 0 7-7V98M78 126h30V98M99 91h28v7H99zM102 91v-5a11 11 0 0 1 22 0v5M105 98v5h16v-5M50 138h21m-21-6h21m-21-6h21" />
+          <circle cx="51" cy="115" r="1" />
+          <circle cx="71" cy="115" r="1" />
+        </>
+        <path d="M127 38q9 9 0 18m6-24q15 15 0 30m6-36q21 21 0 42" />
+      </>
+    )
+  }
+  {
+    type === "infrastructure" && (
+      <>
+        <>
+          <path d="M9 24h96v150H9zM16 31h82v136H16zM22 99v15m73-18v10M36 49h38v33H36zM42 55h26v13H42zM47 58v7m6-7v7m6-7v7M43 75h5m7 0h5m6 0h2M55 111l13 23H42zM55 119v7" />
+          <circle cx="55" cy="130" r=".8" />
+        </>
+        <path d="M105 146h11v19h-11M116 140h5v31h-5zM158 140h5v31h-5zM163 146h12v19h-12M121 145q18-10 37 0v20q-19 10-37 0zM136 140v-17h8v17M129 118h22v5h-22z" />
+        <>
+          <rect x="127" y="96" width="26" height="20" rx="3" />
+          <path d="M132 101h16v10h-16zM140 96v-5" />
+          <circle cx="84" cy="42" r="3" fill="#7DB7AB" stroke="none" />
+        </>
+      </>
+    )
+  }
+</svg>
+<style>
+  .field-device {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    color: var(--hp-petrol, #156b75);
+  }
+</style>

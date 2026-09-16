@@ -1,0 +1,129 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import type { Locale } from "../lib/i18n";
+const { locale } = Astro.props as { locale: Locale };
+const sl = locale === "sl";
+---
+
+<MainLayout
+  title={sl ? "Kontakt" : "Contact"}
+  description={sl
+    ? "Pogovorite se s KUEM o podatkovni poti, integraciji ali operativnem izzivu."
+    : "Talk to KUEM about a data path, integration or operational challenge."}
+  ><section class="hero contact-hero">
+    <div class="container">
+      <p class="eyebrow">{sl ? "Kontakt" : "Contact"}</p><h1>
+        {
+          sl
+            ? "Začnimo pri vašem operativnem problemu."
+            : "Start with your operational problem."
+        }
+      </h1><p class="lead">
+        {
+          sl
+            ? "Opišite, kaj želite spremljati, povezati ali izboljšati."
+            : "Tell us what you need to monitor, connect or improve."
+        }
+      </p>
+    </div>
+  </section><section class="section">
+    <div class="container split">
+      <form class="form" data-contact novalidate>
+        <div class="form-grid">
+          <label
+            >{sl ? "Ime" : "Name"}<input
+              name="name"
+              autocomplete="name"
+              required
+            /></label
+          ><label
+            >{sl ? "E-pošta" : "Email"}<input
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+            /></label
+          >
+        </div><label
+          >{sl ? "Tema" : "Topic"}<select name="topic" required
+            ><option value="">{sl ? "Izberite temo" : "Choose a topic"}</option
+            ><option
+              >{
+                sl ? "Rešitev ali integracija" : "Solution or integration"
+              }</option
+            ><option>Nexavia</option><option>KAI</option><option
+              >{sl ? "Drugo" : "Other"}</option
+            ></select
+          ></label
+        ><label
+          >{sl ? "Sporočilo" : "Message"}<textarea
+            name="message"
+            rows="7"
+            required
+            minlength="20"></textarea></label
+        ><label class="hp"
+          >Website<input
+            name="website"
+            tabindex="-1"
+            autocomplete="off"
+          /></label
+        ><label
+          ><span
+            ><input name="consent" type="checkbox" required />
+            {
+              sl
+                ? "Strinjam se, da KUEM uporabi posredovane podatke za odgovor na povpraševanje."
+                : "I consent to KUEM using the submitted data to respond to this inquiry."
+            }</span
+          ></label
+        ><button class="btn btn-primary" type="submit"
+          >{sl ? "Pošlji povpraševanje" : "Send inquiry"}</button
+        ><p class="status" role="status" aria-live="polite"></p>
+      </form><aside>
+        <h2>{sl ? "Neposreden stik" : "Direct contact"}</h2><a
+          href="mailto:info@kuem.si">info@kuem.si</a
+        >
+      </aside>
+    </div>
+  </section><script is:inline define:vars={{ sl }}>
+    const form = document.querySelector("[data-contact]");
+    form?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const f = e.currentTarget;
+      const status = f.querySelector(".status");
+      if (!f.checkValidity()) {
+        f.reportValidity();
+        status.textContent = sl
+          ? "Preverite označena polja."
+          : "Please check the required fields.";
+        return;
+      }
+      const data = new FormData(f);
+      if (data.get("website")) return;
+      const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT;
+      if (!endpoint) {
+        status.textContent = sl
+          ? "Pošiljanje še ni konfigurirano. Pišite na info@kuem.si."
+          : "Submission is not configured yet. Email info@kuem.si.";
+        return;
+      }
+      status.textContent = sl ? "Pošiljanje …" : "Sending…";
+      try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(Object.fromEntries(data)),
+        });
+        if (!response.ok) throw new Error();
+        status.textContent = sl
+          ? "Sporočilo je bilo poslano."
+          : "Your message was sent.";
+        f.reset();
+      } catch {
+        status.textContent = sl
+          ? "Pošiljanje ni uspelo. Pišite na info@kuem.si."
+          : "Submission failed. Email info@kuem.si.";
+      }
+    });
+  </script></MainLayout
+>

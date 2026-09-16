@@ -1,0 +1,98 @@
+---
+import type { Locale } from "../lib/i18n";
+import type { SolutionDetailKey } from "../data/solutionDetails";
+import { solutionDetails } from "../data/solutionDetails";
+import MainLayout from "../layouts/MainLayout.astro";
+import SectionHeader from "./SectionHeader.astro";
+import FeatureList from "./FeatureList.astro";
+import ReferenceNameCard from "./ReferenceNameCard.astro";
+import CTASection from "./CTASection.astro";
+
+const { locale = "en", solutionKey } = Astro.props as {
+  locale?: Locale;
+  solutionKey: SolutionDetailKey;
+};
+const page = solutionDetails[solutionKey][locale];
+const labels =
+  locale === "sl"
+    ? {
+        eyebrow: "Rešitev",
+        focus: "Kaj pokriva rešitev",
+        references: "Povezane reference",
+        keyMessage: "Ključno sporočilo",
+        platform: "Nadzor, alarmi in integracije",
+        platformText:
+          "Podatki se zbirajo v platformi Nexavia, kjer so na voljo nadzorne plošče, zgodovina meritev, alarmiranje, poročila in povezave z obstoječimi sistemi.",
+      }
+    : {
+        eyebrow: "Solution",
+        focus: "What the solution covers",
+        references: "Related references",
+        keyMessage: "Key message",
+        platform: "Dashboards, alarms and integrations",
+        platformText:
+          "Data is collected in the Nexavia platform, where dashboards, measurement history, alarms, reports and links to existing systems are available.",
+      };
+---
+
+<MainLayout title={page.seoTitle} description={page.metaDescription}>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow">{labels.eyebrow}</p>
+        <h1>{page.heroHeadline ?? page.title}</h1>
+        <p>{page.subtitle}</p>
+      </div>
+      <aside class="panel">
+        <h2>{labels.focus}</h2>
+        <FeatureList items={page.focus.slice(0, 6)} />
+      </aside>
+    </div>
+  </section>
+
+  <section>
+    <div class="container split">
+      <article class="card">
+        <h2>{labels.focus}</h2>
+        <FeatureList items={page.focus} />
+      </article>
+      <article class="card">
+        <h2>{labels.platform}</h2>
+        <p>{labels.platformText}</p>
+        {
+          page.keyMessage && (
+            <>
+              <h3>{labels.keyMessage}</h3>
+              <p>{page.keyMessage}</p>
+            </>
+          )
+        }
+      </article>
+    </div>
+  </section>
+
+  {
+    page.references.length > 0 && (
+      <section>
+        <div class="container">
+          <SectionHeader title={labels.references} />
+          <div class="reference-name-grid">
+            {page.references.map((name) => (
+              <ReferenceNameCard reference={{ name }} locale={locale} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CTASection
+    locale={locale}
+    title={page.ctaTitle}
+    description={locale === "sl"
+      ? "KUEM lahko pomaga pripraviti pilot, arhitekturo in integracijski načrt."
+      : "KUEM can help define the pilot, architecture and integration plan."}
+    ctaHref={page.ctaHref}
+    ctaText={page.ctaText}
+  />
+</MainLayout>

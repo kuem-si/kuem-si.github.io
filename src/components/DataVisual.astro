@@ -1,0 +1,25 @@
+---
+const { labels = ["Naprava", "Podatkovna pot", "Odločitev"] } = Astro.props;
+---
+
+<div class="data-visual" aria-label={labels.join(" – ")} role="img">
+  <svg viewBox="0 0 600 420" aria-hidden="true"
+    ><path
+      d="M40 90H180V210H340V330H560"
+      fill="none"
+      stroke="#156B75"
+      stroke-width="4"></path><path
+      d="M40 330H130V260H250V90H560"
+      fill="none"
+      stroke="#156B75"
+      stroke-width="2"
+      opacity=".6"></path><g fill="#F06432"
+      ><rect x="34" y="84" width="12" height="12"></rect><rect
+        x="174"
+        y="204"
+        width="12"
+        height="12"></rect><rect x="334" y="324" width="12" height="12"
+      ></rect><rect x="554" y="324" width="12" height="12"></rect></g
+    ></svg
+  >{labels.map((label: string) => <span class="node-label">{label}</span>)}
+</div>

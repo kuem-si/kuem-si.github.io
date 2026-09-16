@@ -1,19 +1,23 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro';
+import MainLayout from "../layouts/MainLayout.astro";
 ---
 
 <MainLayout
-  locale="sl"
-  routeId="home"
-  title="404 | KUEM"
-  description="Stran ne obstaja."
-  canonicalPath="/404"
-  alternatePaths={{ sl: '/404', en: '/en/404' }}
+  title="404 – Stran ni najdena / Page not found"
+  description="Zahtevana stran ne obstaja. The requested page does not exist."
+  noindex={true}
+  ><section class="hero">
+    <div class="container">
+      <p class="eyebrow">404</p><h1>
+        Pot se tu prekine.<br />The path ends here.
+      </h1><p class="lead">
+        Stran ne obstaja ali je bila premaknjena. The page does not exist or has
+        moved.
+      </p><div class="actions">
+        <a class="btn btn-primary" href="/">Slovensko</a><a
+          class="btn btn-secondary"
+          href="/en/">English</a>
+      </div>
+    </div>
+  </section></MainLayout
 >
-  <section class="hero">
-    <p class="eyebrow">404</p>
-    <h1>Stran ne obstaja</h1>
-    <p class="lead">Preverite URL ali pa nadaljujte na zacetno stran.</p>
-    <p><a href="/">Nazaj na domov</a></p>
-  </section>
-</MainLayout>

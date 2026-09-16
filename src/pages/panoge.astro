@@ -1,0 +1,482 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import { industryExplorer } from "../data/industry-explorer";
+import nexaviaLogo from "../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
+import "../styles/panoge.css";
+const initial = industryExplorer[0];
+const names = [
+  "Domplan",
+  "Brezovica",
+  "Adria Mobil",
+  "Gradiška",
+  "Novo mesto",
+  "Krk",
+];
+const outcomes = [
+  [
+    "◎",
+    "Enoten pregled",
+    "Pomembni podatki iz različnih virov so dostopni na enem mestu.",
+  ],
+  [
+    "♧",
+    "Pravočasno obveščanje",
+    "Odstopanja in dogodki dosežejo odgovorno osebo brez nepotrebnega iskanja.",
+  ],
+  [
+    "▥",
+    "Podlaga za ukrep",
+    "Zgodovina, kontekst in primerjave pomagajo sprejeti boljšo odločitev.",
+  ],
+];
+const stories = [
+  [
+    "Brezovica",
+    "Pregled vodomerov in komunalne infrastrukture.",
+    "komunala-in-energija",
+  ],
+  ["Gradiška", "Kakovost zraka, hrup, promet in stanje okolja.", "okolje"],
+  ["Adria Mobil", "Energetski podatki proizvodnega okolja.", "industrija"],
+  ["Novo mesto", "Podatki za načrtovanje trajnostne mobilnosti.", "mobilnost"],
+];
+---
+
+<MainLayout
+  title="Panoge | KUEM"
+  description="Podatki za okolja, ki morajo delovati. Izberite panogo in preverite, katere podatke spremljamo ter kaj z njimi pridobite."
+>
+  <div class="pi-page">
+    <section class="pi-hero" aria-labelledby="pi-title">
+      <div class="container pi-hero-grid">
+        <div class="pi-hero-copy">
+          <p class="pi-eyebrow">PANOGE IN VERTIKALE</p><h1 id="pi-title">
+            Podatki za okolja, ki morajo delovati.
+          </h1><p>
+            Od komunalnih sistemov in javne infrastrukture do industrije,
+            mobilnosti in turizma – rešitve prilagodimo dejanskemu okolju in
+            načinu dela.
+          </p><div class="pi-actions">
+            <a class="btn btn-primary" href="#izberite-podrocje"
+              >Izberite svojo panogo <span aria-hidden="true">→</span></a
+            ><a class="btn btn-secondary" href="/kontakt"
+              >Pogovorimo se <span aria-hidden="true">→</span></a
+            >
+          </div>
+        </div>
+        <div class="pi-hero-board">
+          <div class="pi-board-heading">
+            <span>PODROČJA UPORABE</span><span>ŠEST PANOG, ENA PLATFORMA</span>
+          </div><div class="pi-hero-cards">
+            {
+              industryExplorer.map((industry, index) => (
+                <button
+                  type="button"
+                  class="pi-hero-card"
+                  data-hero-industry={industry.id}
+                  aria-pressed={index === 0 ? "true" : "false"}
+                >
+                  <>
+                    <img
+                      src={industry.icon}
+                      width="176"
+                      height="144"
+                      alt=""
+                      aria-hidden="true"
+                    />
+                    <span>{industry.name}</span>
+                    <b aria-hidden="true">›</b>
+                  </>
+                </button>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="pi-references" aria-label="Izkušnje iz realnega okolja">
+      <div class="container">
+        <p class="pi-eyebrow">IZKUŠNJE IZ REALNEGA OKOLJA</p><div
+          class="pi-reference-list"
+        >
+          {names.map((name) => <span>{name}</span>)}
+        </div>
+      </div>
+    </section>
+    <section
+      class="pi-explorer"
+      id="izberite-podrocje"
+      aria-labelledby="pi-explorer-title"
+    >
+      <div class="container">
+        <p class="pi-eyebrow">IZBERITE PODROČJE</p><h2 id="pi-explorer-title">
+          Ista platforma. Različni operativni izzivi.
+        </h2><p class="pi-section-lead">
+          Izberite panogo in preverite, katere podatke spremljamo ter kaj
+          uporabnik z njimi pridobi.
+        </p><div class="pi-explorer-layout">
+          <div class="pi-tabs" role="tablist" aria-label="Izberite panogo">
+            {
+              industryExplorer.map((industry, index) => (
+                <button
+                  type="button"
+                  role="tab"
+                  id={`pi-tab-${industry.id}`}
+                  aria-controls="pi-industry-panel"
+                  aria-selected={index === 0 ? "true" : "false"}
+                  tabindex={index === 0 ? 0 : -1}
+                  data-industry={industry.id}
+                >
+                  <>
+                    <img
+                      src={industry.icon}
+                      width="176"
+                      height="144"
+                      alt=""
+                      aria-hidden="true"
+                    />
+                    <span>{industry.name}</span>
+                    <b aria-hidden="true">›</b>
+                  </>
+                </button>
+              ))
+            }
+          </div>
+          <div
+            class="pi-panel"
+            id="pi-industry-panel"
+            role="tabpanel"
+            aria-labelledby={`pi-tab-${initial.id}`}
+            tabindex="0"
+          >
+            <div class="pi-panel-heading">
+              <span class="pi-panel-symbol"
+                ><img
+                  src={initial.icon}
+                  width="176"
+                  height="144"
+                  alt=""
+                  aria-hidden="true"
+                /></span
+              ><div>
+                <p class="pi-eyebrow" id="pi-industry-eyebrow">
+                  {initial.eyebrow}
+                </p><h3 id="pi-industry-title">{initial.name}</h3><p
+                  id="pi-industry-description"
+                >
+                  {initial.description}
+                </p>
+              </div>
+            </div>
+            <div
+              class="pi-dashboard"
+              aria-label="Demo prikaz Nexavia za izbrano panogo"
+            >
+              <div class="pi-app-sidebar">
+                <img
+                  src={nexaviaLogo.src}
+                  width="115"
+                  height="36"
+                  alt="Nexavia"
+                /><span>Pregled</span><span>Operacije</span><span
+                  class="pi-app-active">Poraba</span
+                ><span>Mobilnost</span><span>Konfiguracija</span>
+              </div><div class="pi-app-main">
+                <div class="pi-app-header">
+                  <span>Pregled področja</span><span>Občina Kranj · Demo</span>
+                </div><div class="pi-app-kpis">
+                  {
+                    initial.metrics.map((metric, index) => (
+                      <div>
+                        <>
+                          <span class="pi-kpi-icon" aria-hidden="true">
+                            {["◇", "ϟ", "▥"][index]}
+                          </span>
+                          <small data-metric-label={index}>{metric}</small>
+                          <strong data-metric-value={index}>
+                            {initial.metricValues[index]}
+                          </strong>
+                        </>
+                      </div>
+                    ))
+                  }
+                </div><div class="pi-app-visuals">
+                  <div class="pi-app-chart">
+                    <strong id="pi-chart-title">Poraba v času</strong><svg
+                      viewBox="0 0 440 190"
+                      role="img"
+                      aria-label="Primer časovnega grafa z demo podatki"
+                      ><path
+                        d="M0 160H440M0 120H440M0 80H440M0 40H440"
+                        stroke="#e4edf3"></path><polyline
+                        points="0,142 20,135 40,142 60,124 80,130 100,120 120,125 140,108 160,116 180,100 200,110 220,93 240,103 260,84 280,94 300,74 320,90 340,72 360,85 380,57 400,65 420,42 440,52"
+                        fill="none"
+                        stroke="#3992df"
+                        stroke-width="3"></polyline><polyline
+                        points="0,154 20,149 40,151 60,145 80,143 100,142 120,137 140,135 160,139 180,131 200,129 220,130 240,125 260,121 280,125 300,115 320,111 340,116 360,107 380,98 400,102 420,90 440,94"
+                        fill="none"
+                        stroke="#55bec8"
+                        stroke-width="2"></polyline></svg
+                    >
+                  </div><div class="pi-app-map">
+                    <strong id="pi-map-title">{initial.map}</strong><svg
+                      viewBox="0 0 360 190"
+                      role="img"
+                      aria-label="Shematski demo zemljevid območja"
+                      ><rect width="360" height="190" fill="#f0f6f3"
+                      ></rect><path
+                        d="M0 165Q80 90 170 140T360 60M10 30Q130 120 220 30T360 150"
+                        fill="none"
+                        stroke="#9ed2e0"
+                        stroke-width="15"></path><path
+                        d="M0 165Q80 90 170 140T360 60M10 30Q130 120 220 30T360 150"
+                        fill="none"
+                        stroke="#fff"
+                        stroke-width="7"></path><path
+                        d="M40 0 90 190M190 0 245 190M315 0 270 190"
+                        stroke="#c9d5bf"
+                        stroke-width="3"></path><circle
+                        cx="76"
+                        cy="97"
+                        r="6"
+                        fill="#26ab66"></circle><circle
+                        cx="166"
+                        cy="124"
+                        r="6"
+                        fill="#f06432"></circle><circle
+                        cx="230"
+                        cy="76"
+                        r="6"
+                        fill="#26ab66"></circle><circle
+                        cx="308"
+                        cy="103"
+                        r="6"
+                        fill="#e6af39"></circle></svg
+                    ><small>Normalno · Opozorilo · Alarm</small>
+                  </div>
+                </div><div class="pi-app-alert">
+                  <span aria-hidden="true">△</span><span
+                    ><strong id="pi-event-title">{initial.events}</strong><small
+                      >Demo opozorilo za izbrano področje</small
+                    ></span
+                  ><b aria-hidden="true">›</b>
+                </div><span class="pi-demo-label">DEMO PODATKI</span>
+              </div>
+            </div>
+            <div class="pi-panel-details">
+              <div>
+                <p class="pi-eyebrow">SPREMLJAMO</p><ul id="pi-watch-list">
+                  {initial.watch.map((item) => <li>{item}</li>)}
+                </ul>
+              </div><div>
+                <p class="pi-eyebrow">UPORABNIK PRIDOBI</p><ul
+                  id="pi-gain-list"
+                >
+                  {initial.gain.map((item) => <li>{item}</li>)}
+                </ul>
+              </div>
+            </div><div class="pi-panel-references">
+              <div>
+                <p class="pi-eyebrow">PRIMERI IZ PRAKSE</p><strong
+                  id="pi-industry-references">{initial.references}</strong
+                >
+              </div><a href="/reference"
+                >Poglejte uspešne zgodbe <span aria-hidden="true">→</span></a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="pi-results" aria-labelledby="pi-results-title">
+      <div class="container">
+        <p class="pi-eyebrow">SKUPNI REZULTATI</p><h2 id="pi-results-title">
+          Različna okolja. Ista potreba po zanesljivih informacijah.
+        </h2><div class="pi-result-grid">
+          {
+            outcomes.map(([icon, title, copy]) => (
+              <article>
+                <>
+                  <span aria-hidden="true">{icon}</span>
+                  <div>
+                    <>
+                      <h3>{title}</h3>
+                      <p>{copy}</p>
+                    </>
+                  </div>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+    <section class="pi-stories" aria-labelledby="pi-stories-title">
+      <div class="container">
+        <p class="pi-eyebrow">USPEŠNE ZGODBE</p><h2 id="pi-stories-title">
+          Rešitve v realnem okolju.
+        </h2><div class="pi-story-grid">
+          {
+            stories.map(([name, copy, icon]) => (
+              <article>
+                <>
+                  <img
+                    src={
+                      industryExplorer.find((industry) => industry.id === icon)
+                        ?.icon
+                    }
+                    width="176"
+                    height="144"
+                    alt=""
+                    aria-hidden="true"
+                  />
+                  <h3>{name}</h3>
+                  <p>{copy}</p>
+                  <a href="/reference">
+                    Preberite zgodbo <span aria-hidden="true">→</span>
+                  </a>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+    <section class="pi-closing" aria-labelledby="pi-closing-title">
+      <div class="container">
+        <div>
+          <h2 id="pi-closing-title">
+            Poiščimo pravi prvi korak za vaše okolje.
+          </h2><p>
+            Predstavite nam izziv. Skupaj preverimo podatke, obstoječo
+            infrastrukturo in izvedljivo pot uvedbe.
+          </p>
+        </div><a class="btn btn-primary" href="/kontakt"
+          >Dogovorite se za uvodni sestanek <span aria-hidden="true">→</span></a
+        >
+      </div>
+    </section>
+  </div>
+</MainLayout>
+<script>
+  import { industryExplorer } from "../data/industry-explorer";
+  const tabs = [
+    ...document.querySelectorAll<HTMLButtonElement>(".pi-tabs [role='tab']"),
+  ];
+  const heroButtons = [
+    ...document.querySelectorAll<HTMLButtonElement>(".pi-hero-card"),
+  ];
+  const panel = document.querySelector<HTMLElement>(".pi-panel");
+  const byId = new Map(industryExplorer.map((item) => [item.id, item]));
+  const setText = (selector: string, value: string) => {
+    const node = document.querySelector<HTMLElement>(selector);
+    if (node) node.textContent = value;
+  };
+  const setList = (selector: string, items: string[]) => {
+    const list = document.querySelector<HTMLElement>(selector);
+    if (!list) return;
+    list.replaceChildren(
+      ...items.map((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        return li;
+      }),
+    );
+  };
+  function select(
+    id: string,
+    { history = true, scroll = false, focus = false } = {},
+  ) {
+    const item = byId.get(id);
+    if (!item || !panel) return;
+    tabs.forEach((tab) => {
+      const active = tab.dataset.industry === id;
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+      if (active && focus) tab.focus();
+    });
+    heroButtons.forEach((button) =>
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset.heroIndustry === id),
+      ),
+    );
+    panel.setAttribute("aria-labelledby", `pi-tab-${id}`);
+    panel.classList.add("pi-changing");
+    setText("#pi-industry-eyebrow", item.eyebrow);
+    setText("#pi-industry-title", item.name);
+    setText("#pi-industry-description", item.description);
+    setText("#pi-industry-references", item.references);
+    setText(
+      "#pi-chart-title",
+      id === "mobilnost"
+        ? "Intenzivnost skozi čas"
+        : id === "okolje"
+          ? "Meritve skozi čas"
+          : "Poraba v času",
+    );
+    setText("#pi-map-title", item.map);
+    setText("#pi-event-title", item.events);
+    const activeView =
+      id === "mobilnost"
+        ? "Mobilnost"
+        : ["javna-infrastruktura", "okolje"].includes(id)
+          ? "Pregled"
+          : "Poraba";
+    document
+      .querySelectorAll<HTMLElement>(".pi-app-sidebar > span")
+      .forEach((view) =>
+        view.classList.toggle(
+          "pi-app-active",
+          view.textContent?.trim() === activeView,
+        ),
+      );
+    item.metrics.forEach((label, index) => {
+      setText(`[data-metric-label="${index}"]`, label);
+      setText(`[data-metric-value="${index}"]`, item.metricValues[index]);
+    });
+    const symbol = document.querySelector<HTMLElement>(".pi-panel-symbol");
+    const chosen = tabs
+      .find((tab) => tab.dataset.industry === id)
+      ?.querySelector("img");
+    if (symbol && chosen) symbol.replaceChildren(chosen.cloneNode(true));
+    setList("#pi-watch-list", item.watch);
+    setList("#pi-gain-list", item.gain);
+    if (history && location.hash !== `#${id}`)
+      window.history.pushState({ industry: id }, "", `#${id}`);
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => panel.classList.remove("pi-changing")),
+    );
+    if (scroll)
+      panel.scrollIntoView({
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
+        block: "start",
+      });
+  }
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => select(tab.dataset.industry ?? ""));
+    tab.addEventListener("keydown", (event) => {
+      let next = index;
+      if (event.key === "ArrowRight" || event.key === "ArrowDown")
+        next = (index + 1) % tabs.length;
+      else if (event.key === "ArrowLeft" || event.key === "ArrowUp")
+        next = (index - 1 + tabs.length) % tabs.length;
+      else if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = tabs.length - 1;
+      else return;
+      event.preventDefault();
+      select(tabs[next].dataset.industry ?? "", { focus: true });
+    });
+  });
+  heroButtons.forEach((button) =>
+    button.addEventListener("click", () =>
+      select(button.dataset.heroIndustry ?? "", { scroll: true }),
+    ),
+  );
+  const fromHash = () =>
+    select(decodeURIComponent(location.hash.slice(1)), { history: false });
+  addEventListener("popstate", fromHash);
+  addEventListener("hashchange", fromHash);
+  fromHash();
+</script>

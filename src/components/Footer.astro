@@ -1,0 +1,393 @@
+---
+import wordmark from "../assets/brand/kuem/KUEM_Official_Wordmark.svg";
+import { footerContent } from "../data/site";
+import { alternatePath, type Locale } from "../lib/i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const sl = locale === "sl";
+const content = footerContent[locale];
+const currentYear = new Date().getFullYear();
+const alternateHref = alternatePath(Astro.url.pathname);
+---
+
+<footer class="site-footer">
+  <div class="container footer-shell">
+    <span class="footer-data-node" aria-hidden="true"></span>
+
+    <div class="footer-main" aria-label={content.navigationLabel}>
+      <div class="footer-identity">
+        <a
+          class="footer-logo"
+          href={sl ? "/" : "/en/"}
+          aria-label={content.homeLabel}
+        >
+          <img src={wordmark.src} width="142" height="43" alt="KUEM" />
+        </a>
+        <p class="footer-slogan">{content.slogan}</p>
+        <p class="footer-description">{content.description}</p>
+      </div>
+
+      <nav
+        class="footer-column footer-products"
+        aria-labelledby="footer-products-title"
+      >
+        <h2 id="footer-products-title">{content.productsTitle}</h2>
+        <ul>
+          {
+            content.products.map((item) => (
+              <li>
+                <a class="footer-product" href={item.href}>
+                  <span>{item.label}</span>
+                  <small>{item.description}</small>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <nav
+        class="footer-column footer-company"
+        aria-labelledby="footer-company-title"
+      >
+        <h2 id="footer-company-title">{content.companyTitle}</h2>
+        <ul>
+          {
+            content.company.map((item) => (
+              <li>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="footer-column footer-contact">
+        <h2>{content.contactTitle}</h2>
+        <a class="footer-email" href={`mailto:${content.email}`}
+          >{content.email}</a
+        >
+        <a class="footer-contact-link" href={content.contactHref}>
+          {content.contactLabel}<span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <p>© {currentYear} KUEM d.o.o. {content.copyright}</p>
+      <div class="footer-legal-links">
+        <a href={content.privacyHref}>{content.privacyLabel}</a>
+        <nav class="footer-languages" aria-label={content.languageLabel}>
+          {
+            sl ? (
+              <>
+                <>
+                  <span aria-current="true">SL</span>
+                  <i aria-hidden="true">/</i>
+                </>
+                <a href={alternateHref} lang="en" hreflang="en">
+                  EN
+                </a>
+              </>
+            ) : (
+              <>
+                <a href={alternateHref} lang="sl" hreflang="sl">
+                  SL
+                </a>
+                <>
+                  <i aria-hidden="true">/</i>
+                  <span aria-current="true">EN</span>
+                </>
+              </>
+            )
+          }
+        </nav>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    padding: 4.75rem 0 2.25rem;
+    border-top: 2px solid #156b75;
+    background: #161a1d;
+    color: #fff;
+  }
+
+  .footer-shell {
+    position: relative;
+  }
+
+  .footer-data-node {
+    position: absolute;
+    top: calc(-4.75rem - 6px);
+    left: 0;
+    width: 12px;
+    height: 12px;
+    background: #f06432;
+  }
+
+  .footer-main {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.3fr;
+    gap: clamp(1.75rem, 3.2vw, 3rem);
+    padding-bottom: clamp(3rem, 5vw, 4.5rem);
+  }
+
+  .footer-identity,
+  .footer-column {
+    min-width: 0;
+  }
+
+  .footer-column {
+    position: static;
+    display: block;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  .footer-logo {
+    display: inline-flex !important;
+    margin: 0 !important;
+  }
+
+  .footer-logo img {
+    display: block;
+    width: 142px;
+    max-width: 100%;
+    filter: brightness(0) invert(1);
+  }
+
+  .footer-slogan {
+    margin: 1.45rem 0 0;
+    color: #f3f5f5;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  .footer-description {
+    max-width: 31ch;
+    margin: 0.7rem 0 0;
+    color: #aeb7ba;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .footer-column h2 {
+    margin: 0 0 1.25rem;
+    color: #f06432;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    line-height: 1.35;
+  }
+
+  .footer-column ul {
+    display: grid;
+    gap: 0.68rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-footer a {
+    margin: 0;
+  }
+
+  .footer-column a,
+  .footer-legal a {
+    width: fit-content;
+    color: #f4f6f6;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 5px;
+    transition:
+      color 180ms ease,
+      text-decoration-color 180ms ease;
+  }
+
+  .footer-column a:hover,
+  .footer-legal a:hover {
+    color: #fff;
+    text-decoration-color: #2b8d97;
+  }
+
+  .footer-column a:focus-visible,
+  .footer-legal a:focus-visible,
+  .footer-logo:focus-visible {
+    outline: 2px solid #f06432;
+    outline-offset: 5px;
+    text-decoration-color: #2b8d97;
+  }
+
+  .footer-products ul {
+    gap: 1.05rem;
+  }
+
+  .footer-product {
+    display: grid !important;
+    gap: 0.25rem;
+  }
+
+  .footer-product > span {
+    font-weight: 600;
+  }
+
+  .footer-product small {
+    max-width: 19ch;
+    color: #9da8ab;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.35;
+  }
+
+  .footer-email {
+    display: inline-flex !important;
+    color: #fff !important;
+    font-size: 1rem !important;
+    font-weight: 600;
+  }
+
+  .footer-contact {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .footer-contact-link {
+    display: inline-flex !important;
+    gap: 0.45rem;
+    align-items: center;
+    margin-top: 1rem !important;
+  }
+
+  .footer-contact-link span {
+    color: #f06432;
+    transition: transform 180ms ease;
+  }
+
+  .footer-contact-link:hover span,
+  .footer-contact-link:focus-visible span {
+    transform: translateX(3px);
+  }
+
+  .footer-legal {
+    display: flex;
+    gap: 1.5rem 3rem;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .footer-legal p {
+    margin: 0;
+    color: #9da8ab;
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+
+  .footer-legal-links,
+  .footer-languages {
+    display: flex;
+    align-items: center;
+  }
+
+  .footer-legal-links {
+    gap: 1.5rem;
+  }
+
+  .footer-languages {
+    gap: 0.4rem;
+    position: static;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  .footer-languages i {
+    color: #697478;
+    font-style: normal;
+  }
+
+  .footer-languages span[aria-current] {
+    color: #fff;
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 1100px) {
+    .footer-main {
+      grid-template-columns: 1.55fr 1fr 1fr;
+      gap: 3rem 2.5rem;
+    }
+
+    .footer-identity {
+      grid-row: span 2;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .site-footer {
+      padding: 4.5rem 0 2rem;
+    }
+
+    .footer-data-node {
+      top: calc(-4.5rem - 6px);
+    }
+
+    .footer-main {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2.75rem 1.5rem;
+      padding-bottom: 3.25rem;
+    }
+
+    .footer-identity {
+      grid-column: 1 / -1;
+      grid-row: auto;
+    }
+
+    .footer-description {
+      max-width: 40ch;
+    }
+
+    .footer-legal {
+      align-items: flex-start;
+      flex-direction: column;
+      padding-top: 1.5rem;
+    }
+
+    .footer-legal-links {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  @media (max-width: 390px) {
+    .footer-main {
+      column-gap: 1.1rem;
+    }
+
+    .footer-column a,
+    .footer-legal a {
+      overflow-wrap: anywhere;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-footer *,
+    .site-footer *::before,
+    .site-footer *::after {
+      transition: none !important;
+    }
+  }
+</style>

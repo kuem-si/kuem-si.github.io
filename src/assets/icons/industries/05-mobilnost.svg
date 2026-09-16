@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 144" role="img" aria-labelledby="title desc">
+  <title id="title">Mobilnost</title>
+  <desc id="desc">Kolesarska in peš pot z lokacijskim podatkom v vizualnem slogu KUEM.</desc>
+  <path d="M13 112c28-18 40-38 53-64 12-23 29-34 60-43" fill="none" stroke="#E8E6E1" stroke-width="18" stroke-linecap="round"/>
+  <path d="M13 112c28-18 40-38 53-64 12-23 29-34 60-43" fill="none" stroke="#7DB7AB" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 7"/>
+  <path d="M136 6c-9 0-16 7-16 16 0 12 16 27 16 27s16-15 16-27c0-9-7-16-16-16Z" fill="#E95D2A" stroke="#253238" stroke-width="2.5"/>
+  <circle cx="136" cy="22" r="5" fill="#FFFFFF"/>
+  <g stroke="#253238" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="38" cy="91" r="18" fill="#FFFFFF"/>
+    <circle cx="96" cy="91" r="18" fill="#FFFFFF"/>
+    <path d="m38 91 21-32 16 32H38l15-20h29l14 20" fill="none"/>
+    <path d="M55 59h13M61 51h13"/>
+    <circle cx="69" cy="37" r="8" fill="#7DB7AB"/>
+    <path d="m66 46-12 14 16 11 12-18 13 7" fill="none" stroke-width="5"/>
+    <circle cx="140" cy="72" r="6" fill="#156B75"/>
+    <path d="M140 80v19M140 85l-10 10M140 86l10 9M140 99l-9 13M140 99l10 13" fill="none" stroke-width="4"/>
+  </g>
+  <rect x="20" y="104" width="6" height="6" fill="#E95D2A"/>
+  <path d="M10 125h42l9-9h51l9 9h45" fill="none" stroke="#156B75" stroke-width="2.5"/>
+  <path d="M10 132h42l9-9h51l9 9h45" fill="none" stroke="#E95D2A" stroke-width="2"/>
+  <rect x="49" y="122" width="6" height="6" fill="#156B75"/>
+  <rect x="109" y="120" width="6" height="6" fill="#E95D2A"/>
+</svg>

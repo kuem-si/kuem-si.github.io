@@ -1,0 +1,125 @@
+---
+import type { Locale } from "../lib/i18n";
+import { withBase } from "../lib/paths";
+
+const { locale = "en" } = Astro.props as { locale?: Locale };
+
+const images = {
+  sl: {
+    src: "/images/nexavia-flow-sl.png",
+    alt: "Shema platforme Nexavia: števci, senzorji in naprave se povežejo prek komunikacijskih tehnologij v platformo Nexavia, kjer nastanejo nadzorne plošče, alarmi, poročila in integracije.",
+    openLabel: "Povečaj shemo platforme Nexavia",
+    closeLabel: "Zapri povečano shemo platforme Nexavia",
+    modalLabel: "Povečana shema platforme Nexavia",
+  },
+  en: {
+    src: "/images/nexavia-flow-en.png",
+    alt: "Nexavia platform diagram: meters, sensors and devices connect through communication technologies into the Nexavia platform, producing dashboards, alarms, reports and integrations.",
+    openLabel: "Enlarge the Nexavia platform diagram",
+    closeLabel: "Close enlarged Nexavia platform diagram",
+    modalLabel: "Enlarged Nexavia platform diagram",
+  },
+};
+
+const image = images[locale];
+const modalId = `nexavia-flow-lightbox-${locale}`;
+---
+
+<figure class="nexavia-architecture-visual" data-nexavia-lightbox>
+  <button
+    class="nexavia-architecture-trigger"
+    type="button"
+    aria-label={image.openLabel}
+    aria-haspopup="dialog"
+    aria-controls={modalId}
+    data-nexavia-open
+  >
+    <img
+      src={withBase(image.src)}
+      alt={image.alt}
+      width="1448"
+      height="1086"
+      loading="eager"
+      decoding="async"
+    />
+  </button>
+
+  <div
+    class="nexavia-lightbox"
+    id={modalId}
+    role="dialog"
+    aria-modal="true"
+    aria-label={image.modalLabel}
+    hidden
+    data-nexavia-modal
+  >
+    <button
+      class="nexavia-lightbox-backdrop"
+      type="button"
+      aria-label={image.closeLabel}
+      data-nexavia-close></button>
+    <div class="nexavia-lightbox-content">
+      <button
+        class="nexavia-lightbox-close"
+        type="button"
+        aria-label={image.closeLabel}
+        data-nexavia-close>×</button
+      >
+      <img
+        src={withBase(image.src)}
+        alt={image.alt}
+        width="1448"
+        height="1086"
+        decoding="async"
+      />
+    </div>
+  </div>
+</figure>
+
+<script is:inline>
+  (() => {
+    if (window.__nexaviaLightboxInitialized) return;
+    window.__nexaviaLightboxInitialized = true;
+
+    let activeModal = null;
+    let activeTrigger = null;
+
+    const closeModal = () => {
+      if (!activeModal) return;
+
+      activeModal.hidden = true;
+      document.body.classList.remove("is-lightbox-open");
+      activeTrigger?.focus();
+      activeModal = null;
+      activeTrigger = null;
+    };
+
+    document.addEventListener("click", (event) => {
+      const openButton = event.target.closest("[data-nexavia-open]");
+      const closeButton = event.target.closest("[data-nexavia-close]");
+
+      if (openButton) {
+        const wrapper = openButton.closest("[data-nexavia-lightbox]");
+        const modal = wrapper?.querySelector("[data-nexavia-modal]");
+
+        if (modal) {
+          activeModal = modal;
+          activeTrigger = openButton;
+          modal.hidden = false;
+          document.body.classList.add("is-lightbox-open");
+          modal.querySelector("[data-nexavia-close]")?.focus();
+        }
+      }
+
+      if (closeButton) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeModal();
+      }
+    });
+  })();
+</script>

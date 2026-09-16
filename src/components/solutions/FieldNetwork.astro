@@ -1,0 +1,188 @@
+---
+import Icon from "./ServiceIcon.astro";
+const { connectivity = false } = Astro.props as { connectivity?: boolean };
+---
+
+{
+  connectivity ? (
+    <figure
+      class="sol-radio-figure"
+      aria-label="LoRaWAN, NB-IoT, wM-Bus in LAN povezujejo naprave s skupnim komunikacijskim prehodom."
+    >
+      <svg
+        class="sol-radio-lines"
+        viewBox="0 0 600 390"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path d="M140 80 300 210 450 80M110 300 300 210 480 300" />
+      </svg>
+      <div class="sol-radio-node sol-radio-one">
+        <>
+          <Icon name="network" />
+          <strong>LoRaWAN</strong>
+        </>
+      </div>
+      <div class="sol-radio-node sol-radio-two">
+        <>
+          <Icon name="network" />
+          <strong>NB-IoT</strong>
+        </>
+      </div>
+      <div class="sol-radio-node sol-radio-three">
+        <>
+          <Icon name="network" />
+          <strong>wM-Bus</strong>
+        </>
+      </div>
+      <div class="sol-radio-node sol-radio-four">
+        <>
+          <Icon name="api" />
+          <strong>LAN</strong>
+        </>
+      </div>
+      <div class="sol-gateway">
+        <>
+          <svg viewBox="0 0 100 125" fill="none" aria-hidden="true">
+            <>
+              <path d="M43 58V12a3 3 0 0 1 6 0v46M58 58V27a2 2 0 0 1 4 0v31" />
+              <rect x="12" y="58" width="76" height="55" rx="6" />
+              <path d="M22 113v5h9v-5m39 0v5h9v-5M23 70h4m6 0h4" />
+            </>
+          </svg>
+          <span>Prehod</span>
+        </>
+      </div>
+      <figcaption>
+        Več možnosti povezave
+        <br />
+        za vsako lokacijo
+      </figcaption>
+    </figure>
+  ) : (
+    <figure class="sol-field-figure">
+      <>
+        <svg
+          viewBox="0 0 660 370"
+          role="img"
+          aria-labelledby="field-title field-desc"
+        >
+          <>
+            <title id="field-title">
+              Zanesljiv zajem podatkov iz terenskih naprav
+            </title>
+            <desc id="field-desc">
+              Števec, ventil, okoljski senzor in nadzorna kamera pošiljajo
+              podatke v skupni prehod.
+            </desc>
+          </>
+          <defs>
+            <marker
+              id="field-arrow"
+              viewBox="0 0 8 8"
+              refX="7"
+              refY="4"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto"
+            >
+              <path d="M1 1 7 4 1 7" fill="none" stroke="#156b75" />
+            </marker>
+          </defs>
+          <g class="sol-device-lines" fill="none">
+            <>
+              <path
+                d="M90 155V195Q90 207 104 214L303 279"
+                marker-end="url(#field-arrow)"
+              />
+              <path
+                d="M230 143V201Q230 215 243 226L319 278"
+                marker-end="url(#field-arrow)"
+              />
+              <path
+                d="M410 148V205Q410 218 396 230L354 278"
+                marker-end="url(#field-arrow)"
+              />
+              <path
+                d="M565 143V194Q565 209 550 215L373 278"
+                marker-end="url(#field-arrow)"
+              />
+            </>
+          </g>
+          <g
+            class="sol-device-drawing"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <g transform="translate(61 50)">
+              <>
+                <path d="M15 28V15a15 15 0 0 1 30 0v13" />
+                <rect x="2" y="28" width="55" height="74" rx="10" />
+                <rect x="10" y="39" width="39" height="22" rx="3" />
+                <path d="M15 46h7v9h-7zm13 0h5v9h-5m11-9v9M13 73h33m-33 7h14m5 0h14M12 95h5m6 0h5" />
+              </>
+            </g>
+            <g transform="translate(200 68)">
+              <>
+                <path d="M5 33h51v38H5zm-5 8h5m51 0h5M0 65h5m51 0h5M25 33V14h10v19M12 14h37V8H12zM15 71v9m32-9v9M20 39v25m20-25v25" />
+                <path d="M-2 35v34m65-34v34" />
+              </>
+            </g>
+            <g transform="translate(386 54)">
+              <>
+                <rect x="0" y="26" width="48" height="67" rx="5" />
+                <path d="M24 26V2m-6 0h12M9 34h3m24 0h3M9 84h3m24 0h3M12 93v7m24-7v7" />
+                <circle cx="24" cy="51" r="4" />
+                <path d="M20 65h8m-8 5h8" />
+              </>
+            </g>
+            <g transform="translate(532 91)">
+              <>
+                <path d="m0 12 46-12 10 27-46 12zM10 16l31-8 5 13-31 8zM38 33v20h18V40m-2-2h10v24H54z" />
+                <ellipse
+                  cx="11"
+                  cy="27"
+                  rx="7"
+                  ry="10"
+                  transform="rotate(-20 11 27)"
+                />
+              </>
+            </g>
+          </g>
+          <g class="sol-hub" transform="translate(299 254)">
+            <>
+              <path d="M28 25V-27a3 3 0 0 1 6 0v52m13 0V-12a2 2 0 0 1 4 0v37" />
+              <rect x="0" y="25" width="77" height="47" rx="6" />
+              <path d="M10 72v5h8v-5m42 0v5h8v-5" />
+              <text x="38" y="53" text-anchor="middle">
+                Prehod
+              </text>
+            </>
+          </g>
+          <g class="sol-device-labels">
+            <>
+              <text x="90" y="30" text-anchor="middle">
+                Števec
+              </text>
+              <text x="230" y="30" text-anchor="middle">
+                Ventil
+              </text>
+              <text x="410" y="30" text-anchor="middle">
+                Senzor
+              </text>
+              <text x="565" y="30" text-anchor="middle">
+                Nadzor
+              </text>
+            </>
+          </g>
+        </svg>
+        <figcaption>
+          Zanesljivi podatki
+          <br />
+          iz realnega okolja
+        </figcaption>
+      </>
+    </figure>
+  )
+}

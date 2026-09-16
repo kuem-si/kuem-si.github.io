@@ -1,0 +1,45 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import LeadForm from "../../components/LeadForm.astro";
+---
+
+<MainLayout
+  title="Kontaktirajte nas | KUEM"
+  description="Kontaktirajte KUEM za predstavitev ali povpraševanje o daljinskem odčitavanju, nadzoru infrastrukture, alarmih, nadzornih ploščah, poročilih in integracijah."
+>
+  <section class="hero">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">Kontakt</p>
+        <h1>Kontaktirajte nas</h1>
+        <p>Imate projekt za daljinsko odčitavanje ali nadzor infrastrukture?</p>
+        <div style="display:flex; gap:.75rem; margin-top:1rem; flex-wrap:wrap;">
+          <a class="btn btn-primary" href="#kontaktni-obrazec"
+            >Dogovorite predstavitev</a
+          >
+          <a class="btn btn-secondary" href="#kontaktni-obrazec"
+            >Pošljite povpraševanje</a
+          >
+        </div>
+      </div>
+      <article class="panel">
+        <h2>Neposreden kontakt</h2>
+        <p>E-pošta: <a href="mailto:info@kuem.eu">info@kuem.eu</a></p>
+        <p>Telefon: <a href="tel:+38659013416">0038659013416</a></p>
+        <p>Naslov: Ljubljanska cesta 24g, 4000 Kranj, Slovenia</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="kontaktni-obrazec">
+    <div class="container">
+      <LeadForm
+        locale="sl"
+        formId="kontaktni-obrazec"
+        heading="Pošljite povpraševanje"
+        submitLabel="Pošlji povpraševanje"
+        sourcePage="kontakt"
+      />
+    </div>
+  </section>
+</MainLayout>

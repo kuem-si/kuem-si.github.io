@@ -1,0 +1,94 @@
+---
+import wordmark from "../assets/brand/kuem/KUEM_Official_Wordmark.svg";
+import { alternatePath, type Locale } from "../lib/i18n";
+import { contactNavigation, primaryNavigation } from "../data/navigation";
+const { locale, pathname } = Astro.props as {
+  locale: Locale;
+  pathname: string;
+};
+const sl = locale === "sl";
+const currentPath = pathname.replace(/\/+$/, "") || "/";
+const nav = primaryNavigation[locale];
+const contact = contactNavigation[locale];
+const isActive = (href: string) => {
+  if (currentPath === href) return true;
+  if (href === "/resitve")
+    return (
+      currentPath.startsWith("/resitve/") ||
+      currentPath.startsWith("/sl/resitve/")
+    );
+  if (href === "/en/solutions") return currentPath.startsWith("/en/solutions/");
+  return false;
+};
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a
+      class="brand"
+      href={sl ? "/" : "/en/"}
+      aria-label={sl ? "KUEM – domača stran" : "KUEM – home page"}
+      ><img src={wordmark.src} width="142" height="41" alt="KUEM" /></a
+    ><button
+      class="menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-nav"
+      ><span></span><span></span><span></span><span class="sr-only"
+        >{sl ? "Meni" : "Menu"}</span
+      ></button
+    ><nav
+      id="site-nav"
+      aria-label={sl ? "Glavna navigacija" : "Main navigation"}
+    >
+      <ul class="nav-list">
+        {
+          nav.map(({ label, href }) => (
+            <li>
+              <a href={href} aria-current={isActive(href) ? "page" : undefined}>
+                {label}
+              </a>
+            </li>
+          ))
+        }
+        <li class="mobile-only">
+          <a href={alternatePath(pathname)} lang={sl ? "en" : "sl"}
+            >{sl ? "EN" : "SLO"}</a
+          >
+        </li>
+        <li class="mobile-only mobile-contact-item">
+          <a class="header-contact" href={contact.href}
+            ><span>{contact.shortLabel}</span><i aria-hidden="true">→</i></a
+          >
+        </li>
+      </ul>
+    </nav><div class="header-actions">
+      <a class="lang" href={alternatePath(pathname)} lang={sl ? "en" : "sl"}
+        >{sl ? "EN" : "SLO"}</a
+      ><a class="header-contact" href={contact.href}
+        ><span>{contact.label}</span><i aria-hidden="true">→</i></a
+      >
+    </div>
+  </div>
+</header>
+<script>
+  const header = document.querySelector<HTMLElement>(".site-header");
+  const button = document.querySelector<HTMLButtonElement>(".menu-toggle");
+  const nav = document.querySelector<HTMLElement>("#site-nav");
+  button?.addEventListener("click", () => {
+    const open = button.getAttribute("aria-expanded") === "true";
+    button.setAttribute("aria-expanded", String(!open));
+    nav?.classList.toggle("open", !open);
+  });
+  const updateHeader = () =>
+    header?.classList.toggle("is-scrolled", scrollY > 12);
+  updateHeader();
+  addEventListener("scroll", updateHeader, { passive: true });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      button?.setAttribute("aria-expanded", "false");
+      nav?.classList.remove("open");
+      button?.focus();
+    }
+  });
+</script>

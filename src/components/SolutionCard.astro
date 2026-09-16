@@ -1,0 +1,22 @@
+---
+import FeatureList from "./FeatureList.astro";
+import type { Solution } from "../data/solutions";
+import { withBase } from "../lib/paths";
+
+const { solution } = Astro.props as { solution: Solution };
+---
+
+<article class="card solution-card">
+  <h3>{solution.title}</h3>
+  {solution.description && <p>{solution.description}</p>}
+  {solution.features?.length ? <FeatureList items={solution.features} /> : null}
+  {
+    solution.href && (
+      <a
+        class="card-link"
+        href={withBase(solution.href)}
+        aria-label={solution.title}
+      />
+    )
+  }
+</article>

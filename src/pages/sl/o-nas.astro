@@ -1,0 +1,35 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import FeatureList from "../../components/FeatureList.astro";
+---
+
+<MainLayout
+  title="O podjetju KUEM"
+  description="KUEM digitalizira infrastrukturo, terenske podatke, daljinsko odčitavanje, nadzor in integracije z lastno platformo Nexavia."
+>
+  <section class="hero">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">Podjetje</p>
+        <h1>O podjetju KUEM</h1>
+        <p>
+          KUEM je podjetje za digitalizacijo infrastrukture, terenskih podatkov,
+          daljinskega odčitavanja, nadzora in integracij. Podjetje razvija
+          rešitve za občine, javna podjetja, industrijo, energetiko in javne
+          objekte.
+        </p>
+      </div>
+      <article class="panel">
+        <h2>Kako deluje KUEM</h2>
+        <FeatureList
+          items={[
+            "Lastna platforma Nexavia",
+            "Terenska izvedba in komunikacijska infrastruktura",
+            "Integracije z obstoječimi sistemi",
+            "Delo od koncepta do produkcije",
+          ]}
+        />
+      </article>
+    </div>
+  </section>
+</MainLayout>

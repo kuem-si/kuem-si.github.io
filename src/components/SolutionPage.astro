@@ -1,0 +1,117 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import DataVisual from "./DataVisual.astro";
+import CTA from "./CTA.astro";
+import type { Locale } from "../lib/i18n";
+const { locale, solution } = Astro.props as {
+  locale: Locale;
+  solution: { title: string; summary: string; tech: string[] };
+};
+const sl = locale === "sl";
+const uses = sl
+  ? [
+      "Energetika: povezava razpršenih merilnih mest in pregled odstopanj.",
+      "Proizvodnja: združevanje signalov strojev z informacijami iz poslovnih sistemov.",
+      "Objekti in logistika: spremljanje porabe, pogojev in dogodkov na več lokacijah.",
+    ]
+  : [
+      "Utilities: connect distributed metering points and review deviations.",
+      "Manufacturing: combine machine signals with information from business systems.",
+      "Buildings and logistics: monitor consumption, conditions and events across locations.",
+    ];
+---
+
+<MainLayout title={solution.title} description={solution.summary}
+  ><section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow">{sl ? "Rešitev KUEM" : "KUEM solution"}</p><h1>
+          {solution.title}
+        </h1><p class="lead">{solution.summary}</p><div class="actions">
+          <a class="btn btn-primary" href={sl ? "/kontakt" : "/en/contact"}
+            >{sl ? "Pogovor o projektu" : "Discuss a project"}</a>
+        </div>
+      </div><DataVisual
+        labels={sl
+          ? ["Teren", "Integracija", "Rezultat"]
+          : ["Field", "Integration", "Outcome"]}
+      />
+    </div>
+  </section><section class="section">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">
+          {sl ? "Operativni problem" : "Operational problem"}
+        </p><h2>
+          {
+            sl
+              ? "Podatki obstajajo. Pot do uporabne odločitve pogosto ne."
+              : "Data exists. A reliable path to a useful decision often does not."
+          }
+        </h2>
+      </div><p>
+        {
+          sl
+            ? "Različne naprave, protokoli in sistemi ustvarjajo nepovezane podatkovne tokove. KUEM začne pri dejanskem procesu, določi arhitekturo in poveže zajem, prenos, obdelavo ter uporabo podatkov."
+            : "Different devices, protocols and systems create fragmented data flows. KUEM starts with the operating process, defines the architecture and connects acquisition, transfer, processing and use."
+        }
+      </p>
+    </div>
+  </section><section class="section dark">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">{sl ? "Pristop" : "Approach"}</p><h2>
+          {
+            sl
+              ? "Razumljiva arhitektura od vira do uporabnika"
+              : "A clear architecture from source to user"
+          }
+        </h2>
+      </div><ol class="pipeline">
+        {
+          (sl
+            ? [
+                "Razumevanje",
+                "Arhitektura",
+                "Zajem",
+                "Prenos",
+                "Integracija",
+                "Preverjanje",
+              ]
+            : [
+                "Understand",
+                "Architecture",
+                "Acquire",
+                "Transfer",
+                "Integrate",
+                "Verify",
+              ]
+          ).map((x) => <li>{x}</li>)
+        }
+      </ol><ul class="tag-list">{solution.tech.map((x) => <li>{x}</li>)}</ul>
+    </div>
+  </section><section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">{sl ? "Primeri uporabe" : "Use cases"}</p><h2>
+          {
+            sl
+              ? "Ena sposobnost, več okolij"
+              : "One capability, multiple environments"
+          }
+        </h2>
+      </div><div class="grid-3">
+        {
+          uses.map((x, i) => (
+            <article class="card">
+              <>
+                <span class="index">0{i + 1}</span>
+                <p>{x}</p>
+              </>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section><CTA {locale} /></MainLayout
+>

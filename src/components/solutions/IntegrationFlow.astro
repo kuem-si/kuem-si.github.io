@@ -1,0 +1,63 @@
+---
+import Icon from "./ServiceIcon.astro";
+import nexavia from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
+import {
+  integrationSources,
+  integrationBenefits,
+} from "../../data/solutionsOverview";
+---
+
+<div
+  class="sol-integration"
+  role="group"
+  aria-label="Obstoječi sistemi prek API v platformo Nexavia"
+>
+  <ul class="sol-integration-sources">
+    {
+      integrationSources.map((item) => (
+        <li class="hp-card">
+          <>
+            <Icon name={item.icon} />
+            <span>{item.title}</span>
+          </>
+        </li>
+      ))
+    }
+  </ul>
+  <div class="sol-integration-merge" aria-hidden="true">
+    <svg viewBox="0 0 100 300" preserveAspectRatio="none"
+      ><path d="M0 27H45V125H99M0 89H45M0 150H99M0 211H45V175H99M0 273H45V211"
+      ></path><path d="m93 119 6 6-6 6m0 13 6 6-6 6m0 13 6 6-6 6"></path></svg
+    >
+  </div>
+  <div class="hp-card sol-api"><Icon name="api" /><strong>API</strong></div>
+  <div class="sol-integration-arrow" aria-hidden="true">
+    <span class="sol-arrow"></span>
+  </div>
+  <div class="hp-card sol-platform">
+    <div class="hp-nexavia-mark hp-product-logo">
+      <img
+        class="nexavia-wordmark" src={nexavia.src}
+        width="1200"
+        height="360"
+        alt="Nexavia"
+        loading="lazy"
+      />
+    </div><p>Enotna platforma za upravljanje podatkov</p>
+  </div>
+  <div class="sol-integration-arrow" aria-hidden="true">
+    <span class="sol-arrow"></span>
+  </div>
+  <ul class="sol-integration-benefits">
+    {
+      integrationBenefits.map((item) => (
+        <li class="hp-card">
+          <>
+            <Icon name={item.icon} />
+            <span>{item.title}</span>
+          </>
+        </li>
+      ))
+    }
+  </ul>
+</div>

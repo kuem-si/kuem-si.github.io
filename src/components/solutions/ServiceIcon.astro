@@ -1,0 +1,33 @@
+---
+import Icon from "../homepage/LineIcon.astro";
+const { name } = Astro.props as { name: string };
+const paths: Record<string, string> = {
+  location:
+    "M16 29S5 18 5 12a11 11 0 0 1 22 0c0 6-11 17-11 17ZM16 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z",
+  wrench:
+    "M20 3a8 8 0 0 0-9 10L3 23a4 4 0 0 0 6 6l9-10a8 8 0 0 0 11-9l-6 6-6-6 6-6-3-1Z",
+  settings:
+    "M12.17 6.76L13.92 6.22L13.97 3.16L18.03 3.16L18.08 6.22L19.83 6.76L21.45 7.61L23.64 5.48L26.52 8.36L24.39 10.55L25.24 12.17L25.78 13.92L28.84 13.97L28.84 18.03L25.78 18.08L25.24 19.83L24.39 21.45L26.52 23.64L23.64 26.52L21.45 24.39L19.83 25.24L18.08 25.78L18.03 28.84L13.97 28.84L13.92 25.78L12.17 25.24L10.55 24.39L8.36 26.52L5.48 23.64L7.61 21.45L6.76 19.83L6.22 18.08L3.16 18.03L3.16 13.97L6.22 13.92L6.76 12.17L7.61 10.55L5.48 8.36L8.36 5.48L10.55 7.61ZM16 11a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z",
+  document: "M7 2h12l7 7v21H7V2Zm12 0v8h7M11 15h11m-11 5h11m-11 5h8",
+  cloud: "M9 25a7 7 0 0 1-2-14 10 10 0 0 1 19 2 6 6 0 0 1-1 12H9Z",
+};
+---
+
+{
+  paths[name] ? (
+    <svg
+      class="hp-icon"
+      viewBox="0 0 32 32"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d={paths[name]} />
+    </svg>
+  ) : (
+    <Icon {name} />
+  )
+}

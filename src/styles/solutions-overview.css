@@ -1,0 +1,1453 @@
+/* Reuses the homepage's brand, content width, header, footer and controls. */
+.sol-page {
+  --sol-gap: clamp(28px, 4vw, 70px);
+}
+.sol-page .hp-header a[aria-current="page"] {
+  position: relative;
+  color: var(--hp-petrol);
+}
+.sol-page .hp-header a[aria-current="page"]:after {
+  content: "";
+  position: absolute;
+  bottom: -22px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--hp-petrol);
+}
+.sol-page .sol-section {
+  padding-block: clamp(44px, 4.5vw, 76px);
+  scroll-margin-top: 110px;
+}
+.sol-tint,
+.sol-hero {
+  background: #f1f6f7;
+}
+.sol-page h2 {
+  font-size: clamp(30px, 2.8vw, 46px);
+  line-height: 1.16;
+  letter-spacing: -0.045em;
+}
+.sol-page p {
+  font-size: 18px;
+  line-height: 1.5;
+}
+.sol-page .hp-eyebrow {
+  font-size: 12px;
+  color: var(--hp-petrol);
+  margin-bottom: 16px;
+}
+.sol-two-col {
+  display: grid;
+  grid-template-columns: 1.08fr 1fr;
+  align-items: center;
+  gap: var(--sol-gap);
+}
+.sol-two-col > * {
+  min-width: 0;
+}
+.sol-two-col > div > p:not(.hp-eyebrow) {
+  max-width: 650px;
+}
+.sol-hero {
+  padding-block: clamp(58px, 5vw, 94px);
+  overflow: hidden;
+}
+.sol-hero-grid {
+  display: grid;
+  grid-template-columns: 0.88fr 1.12fr;
+  align-items: center;
+  gap: 50px;
+}
+.sol-page h1 {
+  font-size: clamp(42px, 3.7vw, 68px);
+  max-width: 680px;
+  line-height: 1.06;
+  letter-spacing: -0.05em;
+}
+.sol-hero-copy > p:not(.hp-eyebrow) {
+  max-width: 610px;
+  margin-bottom: 28px;
+  font-size: 20px;
+}
+.sol-hero-visual {
+  position: relative;
+  min-width: 0;
+  padding-top: 64px;
+}
+.sol-page .sol-caption {
+  position: absolute;
+  right: 0;
+  top: -20px;
+  font-size: 12px;
+  color: #486f7c;
+  line-height: 1.5;
+  text-align: right;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.sol-ambient {
+  position: absolute;
+  inset: -30px -30px -20px;
+  width: calc(100% + 60px);
+  height: calc(100% + 50px);
+  fill: none;
+  stroke: #c9dce1;
+  stroke-width: 1;
+  opacity: 0.7;
+  pointer-events: none;
+}
+.sol-ambient rect {
+  fill: #aac2c9;
+  stroke: none;
+}
+.sol-flow {
+  position: relative;
+}
+.sol-flow ol {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  list-style: none;
+  gap: 34px;
+  padding: 0;
+  margin: 0;
+}
+.sol-flow li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 23px 16px;
+  min-width: 0;
+  min-height: 92px;
+}
+.sol-flow strong {
+  font-size: 16px;
+  line-height: 1.35;
+}
+.sol-flow .hp-icon {
+  width: 36px;
+  height: 36px;
+}
+.sol-flow-hero li {
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px 10px;
+  min-height: 126px;
+  text-align: center;
+}
+.sol-flow-hero strong {
+  font-size: 14px;
+}
+.sol-arrow {
+  position: absolute;
+  display: block;
+  height: 1px;
+  background: var(--hp-petrol);
+  width: 28px;
+  left: calc(100% + 3px);
+  top: 50%;
+}
+.sol-arrow:after {
+  content: "";
+  position: absolute;
+  right: 2px;
+  top: 0.5px;
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid var(--hp-petrol);
+  border-right: 1px solid var(--hp-petrol);
+  transform: translateY(-50%) rotate(45deg);
+}
+.sol-arrow:before {
+  content: "";
+  position: absolute;
+  top: -1.5px;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  background: var(--hp-orange);
+  animation: sol-data 6s linear infinite;
+}
+.sol-flow li:nth-child(2) .sol-arrow:before {
+  animation-delay: -1.5s;
+}
+.sol-flow li:nth-child(3) .sol-arrow:before {
+  animation-delay: -3s;
+}
+.sol-flow li:nth-child(4) .sol-arrow:before {
+  animation-delay: -4.5s;
+}
+.sol-external {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding-top: 58px;
+}
+.sol-external > .hp-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 22px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.sol-external .hp-icon {
+  width: 28px;
+  height: 28px;
+}
+.sol-external-line {
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  height: 56px;
+  width: 1px;
+  background: var(--hp-petrol);
+}
+.sol-external-line:before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 0.5px;
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid var(--hp-petrol);
+  border-right: 1px solid var(--hp-petrol);
+  transform: translateX(-50%) rotate(-45deg);
+}
+.sol-external-line:after {
+  content: "";
+  position: absolute;
+  left: -1.5px;
+  bottom: 0;
+  width: 4px;
+  height: 4px;
+  background: var(--hp-orange);
+  animation: sol-external-data 7s linear infinite;
+}
+.sol-page .sol-section-nav {
+  position: static;
+  background: #fff;
+  display: block;
+  padding: 8px 0;
+  border-block: 1px solid #e6edef;
+  margin: 0;
+}
+.sol-section-nav > .hp-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(22px, 4vw, 70px);
+}
+.sol-section-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  color: var(--hp-petrol);
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 8px 3px;
+}
+.sol-section-nav a:hover {
+  text-decoration: underline;
+  text-underline-offset: 7px;
+}
+.sol-cards {
+  display: grid;
+  grid-template-columns: repeat(var(--card-count), minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 28px;
+}
+.sol-cards .hp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px 20px;
+}
+.sol-cards .hp-icon {
+  width: 39px;
+  height: 39px;
+}
+.sol-cards h3 {
+  font-size: 17px;
+  line-height: 1.35;
+  margin: 0;
+}
+.sol-cards p {
+  font-size: 15px;
+  margin: 10px 0 0;
+  line-height: 1.45;
+}
+.sol-cards-compact .hp-card {
+  min-height: 134px;
+}
+.sol-cards-horizontal .hp-card {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 22px 18px;
+}
+.sol-cards-horizontal h3 {
+  font-size: 16px;
+}
+.sol-field-figure {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-width: 0;
+}
+.sol-field-figure > svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.sol-field-figure figcaption {
+  order: -1;
+  text-align: right;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  color: #486f7c;
+}
+.sol-device-lines {
+  stroke: #156b75;
+  stroke-width: 1.3;
+  stroke-dasharray: 3 5;
+  animation: sol-line-flow 24s linear infinite;
+}
+.sol-device-drawing {
+  stroke: #365663;
+  stroke-width: 2;
+}
+.sol-device-drawing rect {
+  fill: #edf3f3;
+}
+.sol-device-labels {
+  font:
+    14px "Source Sans 3",
+    sans-serif;
+  fill: #496772;
+}
+.sol-hub {
+  stroke: #365663;
+  stroke-width: 2;
+  fill: none;
+}
+.sol-hub rect {
+  fill: #365f69;
+}
+.sol-hub text {
+  fill: #fff;
+  stroke: none;
+  font:
+    13px "Source Sans 3",
+    sans-serif;
+}
+.sol-connectivity {
+  grid-template-columns: 1fr 1.18fr;
+}
+.sol-connectivity-copy {
+  grid-column: 2;
+  grid-row: 1;
+}
+.sol-radio-figure {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  margin: 0;
+  aspect-ratio: 600/410;
+  min-width: 0;
+}
+.sol-radio-lines {
+  position: absolute;
+  width: 100%;
+  height: 95%;
+  inset: 0;
+  stroke: #6d9ca8;
+  stroke-width: 1.2;
+  stroke-dasharray: 5 5;
+}
+.sol-radio-node {
+  position: absolute;
+  width: 24%;
+  aspect-ratio: 1;
+  border: 1px solid #d5e2e7;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #fff;
+}
+.sol-radio-node strong {
+  font-size: 16px;
+  font-weight: 600;
+}
+.sol-radio-node .hp-icon {
+  width: 36px;
+  height: 36px;
+}
+.sol-radio-one {
+  left: 11%;
+  top: 1%;
+}
+.sol-radio-two {
+  right: 10%;
+  top: 1%;
+}
+.sol-radio-three {
+  left: 5%;
+  top: 55%;
+}
+.sol-radio-four {
+  right: 4%;
+  top: 55%;
+}
+.sol-gateway {
+  position: absolute;
+  left: 39%;
+  top: 30%;
+  width: 22%;
+  aspect-ratio: 100/125;
+}
+.sol-gateway svg {
+  width: 100%;
+  height: 100%;
+  stroke: #45606a;
+  stroke-width: 1.5;
+}
+.sol-gateway rect {
+  fill: #546d75;
+}
+.sol-gateway span {
+  position: absolute;
+  top: 64%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 13px;
+  color: #fff;
+}
+.sol-radio-figure figcaption {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.05em;
+  color: #486f7c;
+  text-transform: uppercase;
+}
+.sol-integration {
+  display: grid;
+  grid-template-columns: 1fr 0.48fr 0.45fr 0.45fr 1.1fr 0.28fr 0.9fr;
+  align-items: center;
+  margin-top: 28px;
+  gap: 0;
+}
+.sol-integration ul {
+  list-style: none;
+  display: grid;
+  padding: 0;
+  margin: 0;
+  gap: 10px;
+  min-width: 0;
+}
+.sol-integration-sources li,
+.sol-integration-benefits li {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 15px 20px;
+  font-size: 16px;
+  min-height: 62px;
+}
+.sol-integration li .hp-icon {
+  width: 31px;
+  height: 31px;
+}
+.sol-integration-merge {
+  height: 350px;
+}
+.sol-integration-merge svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill: none;
+  stroke: var(--hp-petrol);
+  stroke-width: 1;
+}
+.sol-api {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 140px;
+  padding: 18px;
+  font-size: 20px;
+  color: var(--hp-petrol);
+}
+.sol-api .hp-icon {
+  width: 40px;
+  height: 40px;
+}
+.sol-integration-arrow {
+  position: relative;
+  height: 1px;
+  width: 100%;
+}
+.sol-integration-arrow .sol-arrow {
+  left: 8px;
+  right: 8px;
+  width: auto;
+  top: 0;
+}
+.sol-platform {
+  padding: 35px 20px;
+  text-align: center;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 5px 16px #36566305;
+}
+.sol-platform .hp-product-logo {
+  width: min(260px, 100%);
+  height: auto;
+  aspect-ratio: 3.4;
+  margin-bottom: 15px;
+}
+.sol-platform p {
+  font-size: 17px;
+  margin: 0;
+  max-width: 220px;
+}
+.sol-integration-benefits {
+  padding-left: 20px !important;
+  border-left: 1px solid #c7dce2;
+}
+.sol-integration-benefits li {
+  border-color: transparent;
+  padding: 20px 16px;
+  min-height: 90px;
+}
+.sol-platform-grid {
+  display: grid;
+  grid-template-columns: 0.65fr 1.55fr;
+  gap: 40px;
+  align-items: start;
+}
+.sol-platform-copy {
+  padding-top: 22px;
+}
+.sol-platform-copy .hp-product-logo {
+  margin-block: 32px 18px;
+}
+.sol-platform-copy h2 {
+  font-size: clamp(28px, 2.1vw, 36px);
+}
+.sol-platform-copy > p {
+  font-size: 17px;
+}
+.sol-platform-grid .sol-cards {
+  margin-top: 16px;
+}
+.sol-platform-grid .sol-cards .hp-icon {
+  width: 34px;
+  height: 34px;
+}
+.sol-kai-panel {
+  display: grid;
+  grid-template-columns: auto 1fr 1.25fr;
+  align-items: center;
+  gap: 40px;
+  margin-top: 26px;
+  padding: 22px 26px;
+  background: #253238;
+  border-radius: 6px;
+  color: white;
+}
+.sol-kai-label {
+  font:
+    700 48px/1 "Space Grotesk",
+    sans-serif;
+  letter-spacing: 0.06em;
+  border-right: 1px solid #779198;
+  padding-right: 40px;
+}
+.sol-kai-panel > p {
+  font-size: 17px;
+  color: #e0e8ea;
+  margin: 0;
+}
+.sol-alert {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  border: 1px solid #d2e3e7;
+  border-radius: 6px;
+  padding: 15px 20px;
+  background: #fff;
+  color: var(--hp-ink);
+}
+.sol-alert svg {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  stroke: #cf4614;
+  stroke-width: 1.5;
+}
+.sol-alert h3 {
+  font:
+    600 16px/1.3 "Source Sans 3",
+    sans-serif;
+  color: #a53b12;
+  margin: 3px 0 4px;
+}
+.sol-alert p {
+  font-size: 14px;
+  margin: 0;
+}
+.sol-example {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64717b;
+}
+.sol-noc {
+  background: #253238;
+  color: white;
+}
+.sol-noc h2 {
+  color: white;
+}
+.sol-noc p {
+  color: #dde6e8;
+}
+.sol-noc .hp-eyebrow {
+  color: #d6e4e6;
+}
+.sol-noc .hp-card {
+  border-color: #647c83;
+  background: transparent;
+}
+.sol-noc .hp-card:hover {
+  border-color: #a4ccca;
+}
+.sol-noc .hp-card h3 {
+  color: #fff;
+}
+.sol-noc .hp-icon {
+  color: #a7d5d1;
+}
+.sol-noc-figure {
+  margin: 0;
+  min-width: 0;
+}
+.sol-noc-legend {
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  flex-wrap: wrap;
+}
+.sol-noc-legend li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #d4e1e3;
+}
+.sol-noc-legend i {
+  display: block;
+  width: 9px;
+  height: 9px;
+  background: #89b5b7;
+  border-radius: 50%;
+}
+.sol-noc-legend .sol-legend-gateway {
+  border-radius: 0;
+  background: none;
+  border: 1px solid #b6d4d7;
+  transform: rotate(45deg);
+}
+.sol-noc-legend .sol-legend-ok {
+  background: #7db7ab;
+}
+.sol-noc-legend .sol-legend-warning {
+  background: #e95d2a;
+}
+.sol-noc-figure > svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.sol-noc-edges {
+  stroke: #6e8a93;
+  stroke-width: 1;
+  fill: none;
+  opacity: 0.42;
+}
+.sol-noc-edges path:nth-child(3n) {
+  stroke-dasharray: 3 6;
+}
+.sol-noc-node {
+  fill: var(--node-color);
+  stroke: #c8e8e066;
+  stroke-width: 1;
+}
+.sol-status-ok {
+  --node-color: #7db7ab;
+}
+.sol-status-warning {
+  --node-color: #e95d2a;
+}
+.sol-status-unreachable {
+  --node-color: #d85d61;
+}
+.sol-status-unknown {
+  --node-color: #71868e;
+}
+.sol-status-maintenance {
+  --node-color: #5597c5;
+}
+.sol-noc-node .sol-node-halo {
+  fill: var(--node-color);
+  opacity: 0.12;
+  stroke: none;
+}
+.sol-noc-node .sol-node-core {
+  fill: #fff;
+  stroke: none;
+}
+.sol-noc-figure figcaption {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  color: #cbdce0;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  line-height: 1.5;
+}
+.sol-noc-figure figcaption span:last-child {
+  text-align: right;
+}
+.sol-end-to-end .sol-flow {
+  margin-top: 26px;
+}
+.sol-end-to-end p {
+  text-align: center;
+  font-size: 16px;
+  margin: 26px auto 0;
+  max-width: 1300px;
+}
+.sol-industries .hp-section-heading {
+  margin-bottom: 0;
+}
+.sol-industries .hp-text-link {
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin: 0;
+}
+.sol-industries .sol-cards {
+  margin-top: 20px;
+}
+.sol-industries .sol-cards .hp-card {
+  align-items: center;
+  min-height: 85px;
+}
+.sol-page .hp-closing p {
+  max-width: 800px;
+}
+@keyframes sol-data {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    left: calc(100% - 4px);
+    opacity: 0;
+  }
+}
+@keyframes sol-external-data {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+}
+@keyframes sol-line-flow {
+  to {
+    stroke-dashoffset: -80;
+  }
+}
+@media (max-width: 1400px) {
+  .sol-hero-grid {
+    gap: 30px;
+    grid-template-columns: 0.85fr 1.15fr;
+  }
+  .sol-flow ol {
+    gap: 25px;
+  }
+  .sol-arrow {
+    width: 19px;
+  }
+  .sol-flow-hero li {
+    padding-inline: 6px;
+  }
+  .sol-flow-hero strong {
+    font-size: 13px;
+  }
+  .sol-flow .hp-icon {
+    width: 32px;
+    height: 32px;
+  }
+  .sol-cards {
+    gap: 10px;
+  }
+  .sol-cards .hp-card {
+    padding: 20px 15px;
+  }
+  .sol-cards h3 {
+    font-size: 16px;
+  }
+  .sol-cards-horizontal .hp-card {
+    flex-direction: column;
+  }
+  .sol-two-col {
+    gap: 35px;
+  }
+  .sol-kai-panel {
+    gap: 25px;
+  }
+  .sol-kai-label {
+    padding-right: 25px;
+  }
+  .sol-integration-sources li,
+  .sol-integration-benefits li {
+    font-size: 15px;
+    padding: 15px 12px;
+    gap: 12px;
+  }
+  .sol-platform {
+    min-height: 220px;
+    padding-inline: 18px;
+  }
+  .sol-flow li {
+    gap: 12px;
+  }
+  .sol-end-to-end .sol-flow strong {
+    font-size: 15px;
+  }
+}
+@media (max-width: 1200px) {
+  .sol-page .hp-header a[aria-current="page"]:after {
+    bottom: 6px;
+    left: 12px;
+    right: auto;
+    width: 45px;
+  }
+  .sol-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+  .sol-hero-copy {
+    max-width: 740px;
+  }
+  .sol-page h1 {
+    max-width: 760px;
+    font-size: clamp(44px, 5.3vw, 62px);
+  }
+  .sol-hero-copy > p:not(.hp-eyebrow) {
+    max-width: 700px;
+  }
+  .sol-hero-visual {
+    padding-top: 35px;
+  }
+  .sol-page .sol-caption {
+    top: -30px;
+  }
+  .sol-flow-hero li {
+    min-height: 120px;
+  }
+  .sol-flow-hero strong {
+    font-size: 16px;
+  }
+  .sol-two-col {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  .sol-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .sol-connectivity .sol-cards {
+    grid-template-columns: 1fr;
+  }
+  .sol-connectivity .sol-cards .hp-card {
+    flex-direction: row;
+    gap: 16px;
+  }
+  .sol-connectivity .sol-cards .hp-icon {
+    width: 32px;
+    height: 32px;
+  }
+  .sol-radio-figure {
+    aspect-ratio: 600/430;
+  }
+  .sol-integration {
+    grid-template-columns: 1fr 0.3fr 0.5fr 0.25fr 1fr;
+  }
+  .sol-integration-benefits {
+    grid-column: 1/-1;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: 0 !important;
+    margin-top: 26px !important;
+    border-left: 0;
+  }
+  .sol-integration > .sol-integration-arrow:nth-last-child(2) {
+    display: none;
+  }
+  .sol-platform-grid {
+    grid-template-columns: 0.65fr 1fr;
+    gap: 28px;
+  }
+  .sol-platform-grid .sol-cards {
+    grid-template-columns: 1fr;
+  }
+  .sol-platform-grid .sol-cards .hp-card {
+    flex-direction: row;
+    gap: 18px;
+    padding: 18px;
+  }
+  .sol-kai-panel {
+    grid-template-columns: auto 1fr;
+  }
+  .sol-alert {
+    grid-column: 1/-1;
+  }
+  .sol-noc .sol-two-col {
+    grid-template-columns: 1fr 1fr;
+  }
+  .sol-end-to-end .sol-flow li {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 12px;
+  }
+  .sol-industries .sol-cards {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .sol-industries .sol-cards .hp-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .sol-industries .sol-cards h3 {
+    font-size: 15px;
+  }
+}
+@media (max-width: 850px) {
+  .sol-two-col {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .sol-two-col > div > p:not(.hp-eyebrow) {
+    max-width: 700px;
+  }
+  .sol-connectivity-copy,
+  .sol-radio-figure {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .sol-connectivity .sol-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .sol-connectivity .sol-cards .hp-card {
+    flex-direction: column;
+  }
+  .sol-cards {
+    grid-template-columns: repeat(var(--card-count), minmax(0, 1fr));
+  }
+  .sol-field-figure,
+  .sol-radio-figure {
+    width: min(620px, 100%);
+    margin-inline: auto;
+  }
+  .sol-radio-figure {
+    aspect-ratio: 600/410;
+  }
+  .sol-platform-grid {
+    grid-template-columns: 1fr;
+  }
+  .sol-platform-copy {
+    padding: 0;
+    max-width: 650px;
+  }
+  .sol-platform-copy .hp-product-logo {
+    margin-block: 18px;
+  }
+  .sol-platform-copy h2 {
+    font-size: 34px;
+  }
+  .sol-platform-grid .sol-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .sol-platform-grid .sol-cards .hp-card {
+    flex-direction: column;
+    padding: 18px;
+  }
+  .sol-noc .sol-two-col {
+    grid-template-columns: 1fr;
+  }
+  .sol-noc-figure {
+    width: min(680px, 100%);
+    margin-inline: auto;
+  }
+  .sol-noc .sol-cards {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .sol-integration-sources li {
+    font-size: 14px;
+    gap: 10px;
+    padding-inline: 10px;
+  }
+  .sol-api {
+    padding-inline: 10px;
+  }
+  .sol-platform {
+    padding: 20px 14px;
+  }
+  .sol-platform p {
+    font-size: 16px;
+  }
+  .sol-page .sol-section-nav {
+    overflow: auto;
+  }
+  .sol-section-nav > .hp-wrap {
+    gap: 30px;
+    justify-content: flex-start;
+    width: max-content;
+    min-width: calc(100% - 48px);
+  }
+  .sol-section-nav a {
+    font-size: 14px;
+  }
+  .sol-section-nav > .hp-wrap {
+    padding-inline: 24px;
+  }
+  .sol-end-to-end .sol-flow ol {
+    gap: 22px;
+  }
+  .sol-end-to-end .sol-flow .sol-arrow {
+    width: 16px;
+  }
+  .sol-industries .sol-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .sol-industries .sol-cards .hp-card {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+@media (max-width: 580px) {
+  .sol-page .sol-section {
+    padding-block: 38px;
+    scroll-margin-top: 90px;
+  }
+  .sol-hero {
+    padding-block: 40px;
+  }
+  .sol-page h1 {
+    font-size: 44px;
+    letter-spacing: -0.05em;
+  }
+  .sol-page h2 {
+    font-size: 32px;
+  }
+  .sol-hero-copy > p:not(.hp-eyebrow) {
+    font-size: 18px;
+  }
+  .sol-hero-grid {
+    gap: 34px;
+  }
+  .sol-hero-visual {
+    padding-top: 0;
+  }
+  .sol-page .sol-caption {
+    position: static;
+    font-size: 11px;
+    margin-bottom: 25px;
+  }
+  .sol-flow ol {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .sol-flow li {
+    flex-direction: row;
+    min-height: 85px;
+    padding: 20px;
+    justify-content: flex-start;
+    gap: 18px;
+  }
+  .sol-flow strong,
+  .sol-flow-hero strong {
+    font-size: 16px;
+  }
+  .sol-flow li .sol-arrow {
+    left: 50%;
+    top: calc(100% + 3px);
+    height: 26px;
+    width: 1px;
+  }
+  .sol-arrow:after {
+    right: auto;
+    left: 0.5px;
+    top: auto;
+    bottom: 2px;
+    transform: translateX(-50%) rotate(135deg);
+  }
+  .sol-arrow:before {
+    top: 0;
+    left: -1.5px;
+    animation-name: sol-data-down;
+  }
+  .sol-flow-hero {
+    padding-right: 125px;
+  }
+  .sol-flow-hero ol {
+    gap: 32px;
+  }
+  .sol-flow-hero li {
+    padding: 18px 14px;
+    flex-direction: column;
+    min-height: 108px;
+    gap: 10px;
+    align-items: center;
+  }
+  .sol-external {
+    position: absolute;
+    left: calc(100% - 105px);
+    right: 0;
+    top: 280px;
+    height: 108px;
+    padding: 0;
+    align-items: center;
+  }
+  .sol-external > .hp-card {
+    flex-direction: column;
+    font-size: 13px;
+    gap: 9px;
+    padding: 15px 10px;
+    text-align: center;
+    line-height: 1.5;
+    width: 100%;
+    min-height: 104px;
+  }
+  .sol-external-line {
+    left: -20px;
+    top: 50%;
+    width: 20px;
+    height: 1px;
+  }
+  .sol-external-line:before {
+    left: 2px;
+    top: 0.5px;
+    transform: translateY(-50%) rotate(-135deg);
+  }
+  .sol-external-line:after {
+    left: 0;
+    top: -1.5px;
+    bottom: auto;
+    animation-name: sol-external-left;
+  }
+  .sol-ambient {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+  }
+  .sol-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .sol-cards .hp-card {
+    padding: 20px 16px;
+    gap: 16px;
+  }
+  .sol-cards h3 {
+    font-size: 17px;
+  }
+  .sol-cards p {
+    font-size: 15px;
+  }
+  .sol-cards .hp-icon {
+    width: 35px;
+    height: 35px;
+  }
+  .sol-connectivity .sol-cards {
+    grid-template-columns: 1fr;
+  }
+  .sol-connectivity .sol-cards .hp-card {
+    flex-direction: row;
+  }
+  .sol-field-figure figcaption {
+    font-size: 11px;
+  }
+  .sol-field-figure svg {
+    margin-top: 12px;
+  }
+  .sol-radio-figure {
+    margin-block: 8px 0;
+  }
+  .sol-radio-node {
+    width: 26%;
+    gap: 6px;
+  }
+  .sol-radio-node strong {
+    font-size: 13px;
+  }
+  .sol-radio-node .hp-icon {
+    width: 27px;
+    height: 27px;
+  }
+  .sol-radio-one {
+    left: 9%;
+  }
+  .sol-radio-two {
+    right: 8%;
+  }
+  .sol-radio-figure figcaption {
+    font-size: 10px;
+    bottom: -10px;
+  }
+  .sol-gateway span {
+    font-size: 10px;
+  }
+  .sol-integration {
+    display: flex;
+    flex-direction: column;
+    margin-top: 24px;
+  }
+  .sol-integration-sources {
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+  }
+  .sol-integration-sources li {
+    font-size: 15px;
+    padding: 14px;
+    gap: 12px;
+  }
+  .sol-integration-sources li:last-child {
+    grid-column: 1/-1;
+    justify-content: center;
+  }
+  .sol-integration-merge {
+    height: 34px;
+    width: 1px;
+    background: var(--hp-petrol);
+    position: relative;
+  }
+  .sol-integration-merge:after {
+    content: "";
+    position: absolute;
+    left: 0.5px;
+    bottom: 2px;
+    width: 7px;
+    height: 7px;
+    border-top: 1px solid var(--hp-petrol);
+    border-right: 1px solid var(--hp-petrol);
+    transform: translateX(-50%) rotate(135deg);
+  }
+  .sol-integration-merge svg {
+    display: none;
+  }
+  .sol-api {
+    min-height: 110px;
+    min-width: 145px;
+  }
+  .sol-integration-arrow {
+    height: 34px;
+    width: 1px;
+  }
+  .sol-integration-arrow .sol-arrow {
+    width: 1px;
+    height: 28px;
+    top: 3px;
+    left: 0;
+    right: auto;
+  }
+  .sol-platform {
+    min-height: 190px;
+    width: 100%;
+    padding: 26px;
+  }
+  .sol-platform .hp-product-logo {
+    width: 230px;
+  }
+  .sol-platform p {
+    max-width: 260px;
+    font-size: 17px;
+  }
+  .sol-integration-benefits {
+    width: 100%;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 0 !important;
+  }
+  .sol-integration-benefits li {
+    min-height: 75px;
+    padding: 20px;
+    font-size: 16px;
+  }
+  .sol-integration > .sol-integration-arrow:nth-last-child(2) {
+    display: block;
+  }
+  .sol-platform-grid .sol-cards {
+    grid-template-columns: 1fr;
+  }
+  .sol-platform-grid .sol-cards .hp-card {
+    flex-direction: row;
+    padding: 20px;
+  }
+  .sol-platform-copy h2 {
+    font-size: 30px;
+  }
+  .sol-kai-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 24px 18px;
+  }
+  .sol-kai-label {
+    font-size: 40px;
+    border-right: 0;
+    padding-right: 0;
+  }
+  .sol-kai-panel > p {
+    font-size: 17px;
+  }
+  .sol-alert {
+    padding: 18px 14px;
+    gap: 12px;
+    width: 100%;
+  }
+  .sol-alert svg {
+    width: 30px;
+    height: 30px;
+  }
+  .sol-alert p {
+    font-size: 14px;
+  }
+  .sol-alert h3 {
+    font-size: 17px;
+  }
+  .sol-noc .sol-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+  .sol-noc-legend {
+    gap: 14px;
+    font-size: 12px;
+    justify-content: flex-start;
+  }
+  .sol-noc-legend li {
+    font-size: 12px;
+    gap: 7px;
+  }
+  .sol-noc-figure figcaption {
+    font-size: 10px;
+  }
+  .sol-end-to-end .sol-flow li {
+    flex-direction: row;
+    text-align: left;
+    padding: 22px;
+    gap: 20px;
+    min-height: 85px;
+  }
+  .sol-end-to-end .sol-flow .sol-arrow {
+    width: 1px;
+    height: 26px;
+  }
+  .sol-end-to-end p {
+    font-size: 16px;
+    text-align: left;
+    line-height: 1.5;
+  }
+  .sol-industries .sol-cards {
+    grid-template-columns: 1fr;
+  }
+  .sol-industries .sol-cards .hp-card {
+    min-height: 75px;
+    gap: 20px;
+  }
+  .sol-industries .sol-cards h3 {
+    font-size: 17px;
+  }
+  .sol-page .hp-closing .hp-wrap {
+    gap: 24px;
+  }
+  .sol-page .hp-closing h2 {
+    font-size: 30px;
+  }
+  .sol-page .hp-closing p {
+    font-size: 17px;
+  }
+  @keyframes sol-data-down {
+    0% {
+      top: 0;
+      opacity: 0;
+    }
+    15%,
+    85% {
+      opacity: 1;
+    }
+    100% {
+      top: calc(100% - 4px);
+      opacity: 0;
+    }
+  }
+  @keyframes sol-external-left {
+    0% {
+      transform: translateX(16px);
+      opacity: 0;
+    }
+    15%,
+    85% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sol-page *,
+  .sol-page *:before,
+  .sol-page *:after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

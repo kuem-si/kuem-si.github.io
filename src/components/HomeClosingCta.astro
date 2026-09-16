@@ -1,0 +1,163 @@
+---
+import { homeClosingCta } from "../data/site";
+import type { Locale } from "../lib/i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const content = homeClosingCta[locale];
+---
+
+<section
+  id="home-closing-cta"
+  class="home-closing-cta"
+  aria-labelledby="home-closing-title"
+>
+  <div class="container closing-layout">
+    <div class="closing-heading">
+      <h2 id="home-closing-title">{content.title}</h2>
+      <span class="closing-path" aria-hidden="true"><span></span></span>
+    </div>
+    <div class="closing-action">
+      <p>{content.description}</p>
+      <a href={content.href}>{content.label}<span aria-hidden="true">→</span></a
+      >
+    </div>
+  </div>
+</section>
+
+<style>
+  .home-closing-cta {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(5.625rem, 7.5vw, 7.5rem);
+    background: linear-gradient(135deg, #156b75 0%, #145f68 58%, #10535b 100%);
+    color: #fff;
+  }
+
+  .home-closing-cta::after {
+    content: "";
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    right: -180px;
+    bottom: -360px;
+    border-radius: 50%;
+    background: rgba(10, 48, 53, 0.18);
+    pointer-events: none;
+  }
+
+  .closing-layout {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.12fr) minmax(360px, 0.88fr);
+    gap: clamp(3rem, 8vw, 7rem);
+    align-items: center;
+  }
+
+  .closing-heading h2 {
+    max-width: 13ch;
+    margin: 0;
+    font-size: clamp(2.6rem, 4.6vw, 4.25rem);
+    line-height: 1.03;
+  }
+
+  .closing-path {
+    position: relative;
+    display: block;
+    width: min(280px, 72%);
+    height: 2px;
+    margin-top: 2rem;
+    background: rgba(255, 255, 255, 0.55);
+  }
+
+  .closing-path > span {
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    top: 50%;
+    left: 0;
+    background: #f06432;
+    transform: translateY(-50%);
+  }
+
+  .closing-action {
+    max-width: 520px;
+  }
+
+  .closing-action p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: clamp(1rem, 1.25vw, 1.125rem);
+    line-height: 1.65;
+  }
+
+  .closing-action a {
+    display: inline-flex;
+    min-height: 50px;
+    gap: 0.55rem;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.8rem;
+    padding: 0.8rem 1.25rem;
+    border: 1px solid #f06432;
+    background: #f06432;
+    color: #161a1d;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    transition:
+      transform 180ms ease,
+      background-color 180ms ease;
+  }
+
+  .closing-action a:hover,
+  .closing-action a:focus-visible {
+    background: #f47a4d;
+    transform: translateY(-2px);
+  }
+
+  .closing-action a:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 4px;
+  }
+
+  .closing-action a span {
+    transition: transform 180ms ease;
+  }
+
+  .closing-action a:hover span,
+  .closing-action a:focus-visible span {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 760px) {
+    .home-closing-cta {
+      padding: 6rem 0 4.5rem;
+    }
+
+    .closing-layout {
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
+    }
+
+    .closing-heading h2 {
+      max-width: 15ch;
+      font-size: clamp(2.35rem, 11vw, 3.25rem);
+    }
+
+    .closing-path {
+      margin-top: 1.5rem;
+    }
+
+    .closing-action {
+      max-width: 600px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-closing-cta *,
+    .home-closing-cta *::before,
+    .home-closing-cta *::after {
+      transition: none !important;
+    }
+  }
+</style>

@@ -1,0 +1,59 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import CTASection from "../../components/CTASection.astro";
+import ReferenceCard from "../../components/ReferenceCard.astro";
+import ReferenceNameCard from "../../components/ReferenceNameCard.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import { getDetailedReferences, references } from "../../data/references";
+
+const detailedReferences = getDetailedReferences();
+---
+
+<MainLayout
+  title="Reference in sodelovanja | KUEM"
+  description="Reference in sodelovanja KUEM za daljinsko odčitavanje, nadzor infrastrukture, alarmiranje, poročila in integracije."
+>
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">Reference</p>
+      <h1>Reference in sodelovanja</h1>
+      <p>
+        Reference so prikazane kot besedilni prikaz. Podrobnosti uporabljamo
+        samo pri potrjenih projektnih informacijah.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <SectionHeader title="Izbrane reference in sodelovanja" />
+      <div class="reference-name-grid">
+        {
+          references.map((reference) => (
+            <ReferenceNameCard reference={reference} locale="sl" />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <SectionHeader title="Primeri izvedb po področjih" />
+      <div class="grid-3">
+        {
+          detailedReferences.map((reference) => (
+            <ReferenceCard reference={reference} locale="sl" />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    title="Pogovor o primerljivi uvedbi"
+    description="Delite svoj izziv daljinskega odčitavanja ali nadzora infrastrukture s KUEM."
+    ctaHref="/sl/kontakt"
+    ctaText="Pošljite povpraševanje"
+  />
+</MainLayout>

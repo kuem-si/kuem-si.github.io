@@ -1,0 +1,327 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import AboutIcon from "../../components/AboutIcon.astro";
+import regionalMap from "../../assets/maps/kuem-regional-map.svg";
+import "../../styles/about.css";
+const facts = [
+  ["location", "HEADQUARTERS", "Kranj, Slovenia"],
+  ["presence", "PRESENCE", "Slovenia and the wider region"],
+  [
+    "knowledge",
+    "EXPERTISE",
+    "Software · connectivity · integrations · delivery",
+  ],
+  ["people", "APPROACH", "From the first site visit to long-term support"],
+];
+const expertise = [
+  [
+    "software",
+    "Software development",
+    "Platforms, user interfaces and data solutions.",
+  ],
+  [
+    "connectivity",
+    "Communication technologies",
+    "Planning a reliable path from field devices to the system.",
+  ],
+  [
+    "integration",
+    "Integrations and automation",
+    "Connecting existing systems, data and processes.",
+  ],
+  [
+    "field",
+    "Field delivery and support",
+    "Deployment, operational monitoring and support after launch.",
+  ],
+];
+const growth = [
+  [
+    "01",
+    "Field solutions",
+    "We began in the field by understanding real infrastructure challenges.",
+  ],
+  [
+    "02",
+    "Connected systems",
+    "Devices, communications and existing systems became a connected whole.",
+  ],
+  [
+    "03",
+    "Our Nexavia platform",
+    "We developed a unified environment for data overview and management.",
+  ],
+  [
+    "04",
+    "Advanced KAI analytics",
+    "We enrich data with context and decision support.",
+  ],
+];
+const principles = [
+  [
+    "document",
+    "We understand the environment",
+    "We make recommendations only after understanding the field, existing systems and the goal.",
+  ],
+  [
+    "dialog",
+    "We speak clearly",
+    "Without unnecessary jargon, hidden constraints or empty promises.",
+  ],
+  [
+    "shield",
+    "We take responsibility",
+    "We treat the solution as a whole, rather than a collection of disconnected parts.",
+  ],
+  [
+    "infinity",
+    "We remain available",
+    "Our cooperation does not end when the solution is deployed.",
+  ],
+];
+---
+
+<MainLayout
+  title="About | KUEM"
+  description="KUEM is a Slovenian technology company combining software development, communication technologies, integrations, field delivery and support."
+>
+  <div class="ab-page">
+    <section class="ab-hero" aria-labelledby="ab-title">
+      <div class="container ab-hero-grid">
+        <div class="ab-hero-copy">
+          <p class="ab-eyebrow">ABOUT US</p><h1 id="ab-title">
+            People who make technology work.
+          </h1><p>
+            KUEM is a Slovenian technology company. Our team combines software
+            development, communication technologies, integrations, field
+            delivery and support.
+          </p><div class="ab-actions">
+            <a class="btn btn-primary" href="#kuem-at-a-glance"
+              >Meet us <span aria-hidden="true">↓</span></a
+            ><a class="btn btn-secondary" href="#contact"
+              >Contact <span aria-hidden="true">→</span></a
+            >
+          </div>
+        </div>
+        <div
+          class="ab-hero-graphic"
+          aria-label="The path from field data through systems to management"
+        >
+          <p>FROM IDEA TO OPERATION.</p><svg
+            viewBox="0 0 760 420"
+            role="img"
+            aria-labelledby="ab-flow-title"
+            ><title id="ab-flow-title">Field, systems and management</title><g
+              class="ab-grid"
+              aria-hidden="true"
+              ><path
+                d="M0 370 120 290 220 338 360 238 490 310 630 214 760 274M0 403 170 315 290 370 410 285 560 348 720 265"
+              ></path></g
+            ><path class="ab-route" d="M70 300H225L330 190H485L580 76H704"
+            ></path><g class="ab-node"
+              ><rect x="66" y="296" width="9" height="9"></rect><rect
+                x="326"
+                y="186"
+                width="9"
+                height="9"></rect><rect x="576" y="72" width="9" height="9"
+              ></rect></g
+            ><g class="ab-flow-copy"
+              ><text x="68" y="260">FIELD</text><text x="68" y="326"
+                >DATA FROM THE REAL</text
+              ><text x="68" y="344">ENVIRONMENT</text><text x="328" y="150"
+                >SYSTEMS</text
+              ><text x="328" y="216">CONNECTING EXPERTISE</text><text
+                x="328"
+                y="234">AND TECHNOLOGY</text
+              ><text x="578" y="38">MANAGEMENT</text><text x="578" y="101"
+                >USEFUL DATA FOR</text
+              ><text x="578" y="119">BETTER DECISIONS</text></g
+            ><g class="ab-moving"
+              ><rect width="8" height="8"
+                ><animateMotion
+                  begin="indefinite"
+                  dur="14s"
+                  repeatCount="indefinite"
+                  path="M70 300H225L330 190H485L580 76H704"
+                ></animateMotion></rect
+              ></g
+            ></svg
+          >
+        </div>
+      </div>
+    </section>
+    <section
+      class="ab-facts"
+      id="kuem-at-a-glance"
+      aria-labelledby="ab-facts-title"
+    >
+      <div class="container">
+        <p class="ab-eyebrow">KUEM AT A GLANCE</p><h2 id="ab-facts-title">
+          A company built on expertise and responsibility.
+        </h2><div class="ab-fact-grid">
+          {
+            facts.map(([icon, title, copy]) => (
+              <article>
+                <>
+                  <AboutIcon name={icon} />
+                  <div>
+                    <>
+                      <h3>{title}</h3>
+                      <p>{copy}</p>
+                    </>
+                  </div>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+    <section class="ab-team" aria-labelledby="ab-team-title">
+      <div class="container ab-team-grid">
+        <div>
+          <p class="ab-eyebrow">OUR TEAM</p><h2 id="ab-team-title">
+            Different expertise. One team.
+          </h2><p>
+            A project does not travel between disconnected contractors. Field,
+            connectivity, software, integration and support specialists work
+            together as one team.
+          </p>
+        </div><div class="ab-expertise">
+          {
+            expertise.map(([icon, title, copy]) => (
+              <article>
+                <>
+                  <span>
+                    <AboutIcon name={icon} />
+                  </span>
+                  <div>
+                    <>
+                      <h3>{title}</h3>
+                      <p>{copy}</p>
+                    </>
+                  </div>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+    <section class="ab-growth" aria-labelledby="ab-growth-title">
+      <div class="container">
+        <p class="ab-eyebrow">OUR DEVELOPMENT</p><h2 id="ab-growth-title">
+          We grew from real projects.
+        </h2><p>Every next step emerged from a concrete customer need.</p><ol
+          class="ab-timeline"
+        >
+          {
+            growth.map(([number, title, copy], index) => (
+              <li>
+                <>
+                  <div class="ab-step-icon" aria-hidden="true">
+                    {index === 0
+                      ? "⌁"
+                      : index === 1
+                        ? "↗"
+                        : index === 2
+                          ? "▣"
+                          : "▥"}
+                  </div>
+                  <span class="ab-step-node" />
+                  <strong>{number}</strong>
+                  <h3>{title}</h3>
+                  <p>{copy}</p>
+                </>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+    <section class="ab-principles" aria-labelledby="ab-principles-title">
+      <div class="container">
+        <p class="ab-eyebrow">HOW WE WORK</p><h2 id="ab-principles-title">
+          Directly, responsibly and for the long term.
+        </h2><div class="ab-principle-grid">
+          {
+            principles.map(([icon, title, copy]) => (
+              <article>
+                <>
+                  <AboutIcon name={icon} />
+                  <h3>{title}</h3>
+                  <p>{copy}</p>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+    <section class="ab-region" aria-labelledby="ab-region-title">
+      <div class="container ab-region-grid">
+        <div>
+          <p class="ab-eyebrow">REGIONAL PRESENCE</p><h2 id="ab-region-title">
+            We develop expertise in Slovenia. We deploy solutions across the
+            region.
+          </h2><p>
+            We work directly with customers and partners, from the first site
+            visit to long-term support.
+          </p><a href="/en/references"
+            >View success stories <span aria-hidden="true">→</span></a
+          >
+        </div><div class="ab-map">
+          <img
+            class="regional-map"
+            src={regionalMap.src}
+            width="1100"
+            height="700"
+            alt="KUEM regional presence in Slovenia and Southeast European countries"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </section>
+    <section class="ab-contact" id="contact" aria-labelledby="ab-contact-title">
+      <div class="container">
+        <h2 id="ab-contact-title">Let’s discuss your next project.</h2><p>
+          The best conversations begin with a concrete challenge.
+        </p><a class="btn btn-primary" href="/en/contact"
+          >Book an introductory meeting <span aria-hidden="true">→</span></a
+        ><small>KUEM d.o.o. · Kranj · Slovenia</small>
+      </div>
+    </section>
+  </div>
+</MainLayout>
+<script>
+  const graphic = document.querySelector<HTMLElement>(".ab-hero-graphic");
+  const svg = graphic?.querySelector<SVGSVGElement>("svg");
+  const motion = svg?.querySelector<SVGAnimateMotionElement>("animateMotion");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  let started = false;
+  const update = (visible: boolean) => {
+    if (!graphic || !svg || reduced.matches) {
+      graphic?.classList.remove("is-animated");
+      svg?.pauseAnimations();
+      return;
+    }
+    if (!visible || document.hidden) {
+      svg.pauseAnimations();
+      return;
+    }
+    if (!started) {
+      started = true;
+      motion?.beginElement();
+      graphic.classList.add("is-animated");
+    }
+    svg.unpauseAnimations();
+  };
+  if (graphic) {
+    const observer = new IntersectionObserver(
+      ([entry]) => update(Boolean(entry?.isIntersecting)),
+      { threshold: 0.15 },
+    );
+    observer.observe(graphic);
+  }
+</script>

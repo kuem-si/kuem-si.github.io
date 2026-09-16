@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 144" role="img" aria-labelledby="title desc">
+  <title id="title">Okolje</title>
+  <desc id="desc">Okoljska merilna postaja, vegetacija in merilni signal v slogu KUEM.</desc>
+  <g stroke="#253238" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M88 17h42l8 18H81l7-18Z" fill="#156B75"/>
+    <path d="m91 22 34 9M105 18l-5 16M123 18l-4 16" stroke="#FFFFFF" stroke-width="1.7"/>
+    <path d="M109 35v78" fill="none" stroke-width="4"/>
+    <path d="M91 45h36l-7 7H98l-7-7ZM95 57h28l-6 7h-16l-6-7ZM99 69h20l-4 7h-12l-4-7Z" fill="#FFFFFF"/>
+    <rect x="94" y="82" width="31" height="25" rx="4" fill="#E8E6E1"/>
+    <rect x="100" y="88" width="13" height="7" rx="1" fill="#FFFFFF"/>
+    <rect x="117" y="89" width="5" height="5" fill="#E95D2A" stroke="none"/>
+    <path d="M87 113h46" stroke-width="5"/>
+    <path d="M18 101c1-30 21-48 50-49-1 29-19 48-50 49Z" fill="#7DB7AB" stroke="#156B75"/>
+    <path d="M21 105c13-19 26-32 44-48M29 88c7 0 13 2 19 7M41 72c6 0 11 2 16 6" fill="none" stroke="#156B75"/>
+    <path d="M139 48c7 5 10 11 10 18s-3 13-10 18M148 39c10 7 15 16 15 27s-5 20-15 28" fill="none" stroke="#156B75"/>
+  </g>
+  <circle cx="38" cy="32" r="5" fill="#7DB7AB"/>
+  <rect x="51" y="25" width="6" height="6" fill="#E95D2A"/>
+  <path d="M10 125h42l9-9h51l9 9h45" fill="none" stroke="#156B75" stroke-width="2.5"/>
+  <path d="M10 132h42l9-9h51l9 9h45" fill="none" stroke="#E95D2A" stroke-width="2"/>
+  <rect x="49" y="122" width="6" height="6" fill="#156B75"/>
+  <rect x="109" y="120" width="6" height="6" fill="#E95D2A"/>
+</svg>

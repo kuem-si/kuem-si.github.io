@@ -1,0 +1,509 @@
+---
+import { homeDelivery } from "../data/site";
+import type { Locale } from "../lib/i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const content = homeDelivery[locale];
+---
+
+<section
+  id="home-delivery"
+  class="home-delivery"
+  data-home-delivery
+  aria-labelledby="home-delivery-title"
+>
+  <div class="delivery-raster" aria-hidden="true"></div>
+  <div class="container">
+    <header class="delivery-header">
+      <div>
+        <p class="delivery-eyebrow">{content.eyebrow}</p>
+        <h2 id="home-delivery-title">{content.title}</h2>
+      </div>
+      <p class="delivery-introduction">{content.introduction}</p>
+    </header>
+
+    <div class="delivery-flow">
+      <span class="delivery-path" aria-hidden="true"></span>
+      <div class="delivery-phases">
+        {
+          content.phases.map((phase) => (
+            <article class="delivery-phase" data-delivery-phase>
+              <span class="delivery-node" aria-hidden="true">
+                <span />
+              </span>
+              <p class="delivery-phase-label">{phase.label}</p>
+              <h3>{phase.title}</h3>
+              <div class="delivery-step">
+                <h4>{phase.steps[0].title}</h4>
+                <p>{phase.steps[0].description}</p>
+              </div>
+              <span class="delivery-divider" aria-hidden="true" />
+              <div class="delivery-step">
+                <h4>{phase.steps[1].title}</h4>
+                <p>{phase.steps[1].description}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document
+    .querySelectorAll<HTMLElement>("[data-home-delivery]")
+    .forEach((section) => {
+      if (section.dataset.deliveryInitialized === "true") return;
+      section.dataset.deliveryInitialized = "true";
+
+      if (
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+        !("IntersectionObserver" in window)
+      ) {
+        section.classList.add("is-visible");
+        return;
+      }
+
+      section.classList.add("delivery-motion-ready");
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry?.isIntersecting) return;
+          section.classList.add("is-visible");
+          observer.disconnect();
+        },
+        { threshold: 0.18 },
+      );
+      observer.observe(section);
+    });
+</script>
+
+<style>
+  .home-delivery {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: clamp(6rem, 8vw, 7.5rem);
+    background:
+      radial-gradient(
+        circle at 18% 12%,
+        rgba(21, 107, 117, 0.17),
+        transparent 36%
+      ),
+      linear-gradient(145deg, #161a1d 18%, #121719 100%);
+    color: #fff;
+  }
+
+  .delivery-raster {
+    position: absolute;
+    z-index: -1;
+    width: min(720px, 58vw);
+    height: 440px;
+    top: 0;
+    right: 0;
+    opacity: 0.24;
+    background-image:
+      linear-gradient(rgba(21, 107, 117, 0.13) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(21, 107, 117, 0.13) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(circle at 70% 20%, #000, transparent 72%);
+    pointer-events: none;
+  }
+
+  .delivery-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    gap: clamp(3rem, 8vw, 7rem);
+    align-items: end;
+  }
+
+  .delivery-header > div {
+    max-width: 700px;
+  }
+
+  .delivery-eyebrow {
+    margin: 0 0 1rem;
+    color: #f06432;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    line-height: 1.35;
+  }
+
+  .delivery-header h2 {
+    margin: 0;
+    max-width: 16ch;
+    font-size: clamp(2.5rem, 4.2vw, 4rem);
+    line-height: 1.04;
+  }
+
+  .delivery-introduction {
+    max-width: 520px;
+    margin: 0 0 0.25rem;
+    color: #cbd2d4;
+    font-size: clamp(1rem, 1.25vw, 1.125rem);
+    line-height: 1.65;
+  }
+
+  .delivery-flow {
+    position: relative;
+    margin-top: clamp(4.75rem, 7vw, 6.25rem);
+  }
+
+  .delivery-path {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: calc(100% / 6);
+    left: calc(100% / 6);
+    height: 2px;
+    background: #156b75;
+    transform-origin: left;
+  }
+
+  .delivery-phases {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding-top: 42px;
+  }
+
+  .delivery-phase {
+    position: relative;
+    display: grid;
+    grid-template-rows: 24px 68px 138px 1px minmax(150px, 1fr);
+    min-width: 0;
+    padding-inline: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .delivery-phase:nth-child(1) {
+    --node-delay: 300ms;
+    --content-delay: 430ms;
+  }
+
+  .delivery-phase:nth-child(2) {
+    --node-delay: 520ms;
+    --content-delay: 650ms;
+  }
+
+  .delivery-phase:nth-child(3) {
+    --node-delay: 740ms;
+    --content-delay: 870ms;
+  }
+
+  .delivery-phase + .delivery-phase {
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .delivery-phase::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    top: -42px;
+    right: 0;
+    left: 0;
+    height: 2px;
+    background: #55a2aa;
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+
+  .delivery-phase:first-child::after {
+    left: 50%;
+  }
+
+  .delivery-phase:last-child::after {
+    right: 50%;
+  }
+
+  .delivery-phase:hover::after,
+  .delivery-phase:focus-within::after {
+    opacity: 1;
+  }
+
+  .delivery-node {
+    position: absolute;
+    z-index: 3;
+    top: -48px;
+    left: 50%;
+    display: grid;
+    width: 12px;
+    height: 12px;
+    place-items: center;
+    transform: translateX(-50%);
+  }
+
+  .delivery-node > span {
+    width: 12px;
+    height: 12px;
+    background: #f06432;
+    transition:
+      transform 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  .delivery-phase:hover .delivery-node > span,
+  .delivery-phase:focus-within .delivery-node > span {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 7px rgba(240, 100, 50, 0.14);
+  }
+
+  .delivery-phase-label {
+    margin: 0;
+    color: #6fb3bb;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    line-height: 1.35;
+  }
+
+  .delivery-phase h3 {
+    align-self: start;
+    margin: 0;
+    max-width: 20ch;
+    color: #fff;
+    font-size: clamp(1.5rem, 2vw, 1.75rem);
+    line-height: 1.15;
+  }
+
+  .delivery-step {
+    align-self: start;
+    padding-top: 0.25rem;
+  }
+
+  .delivery-step h4 {
+    margin: 0 0 0.65rem;
+    color: #f3f5f5;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(1.125rem, 1.45vw, 1.25rem);
+    line-height: 1.25;
+  }
+
+  .delivery-step p {
+    max-width: 34ch;
+    margin: 0;
+    color: #b9c2c4;
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .delivery-divider {
+    display: block;
+    width: 100%;
+    height: 1px;
+    align-self: start;
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .delivery-divider + .delivery-step {
+    padding-top: 1.4375rem;
+  }
+
+  .delivery-motion-ready .delivery-path {
+    transform: scaleX(0);
+  }
+
+  .delivery-motion-ready .delivery-node > span,
+  .delivery-motion-ready .delivery-phase > :not(.delivery-node) {
+    opacity: 0;
+  }
+
+  .delivery-motion-ready.is-visible .delivery-path {
+    animation: delivery-path-in 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .delivery-motion-ready.is-visible .delivery-node > span {
+    opacity: 1;
+    animation: delivery-node-in 380ms cubic-bezier(0.2, 0.9, 0.25, 1.25)
+      backwards;
+    animation-delay: var(--node-delay);
+  }
+
+  .delivery-motion-ready.is-visible .delivery-phase > :not(.delivery-node) {
+    animation: delivery-content-in 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--content-delay);
+  }
+
+  @keyframes delivery-path-in {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes delivery-node-in {
+    from {
+      opacity: 0;
+      transform: scale(0.25);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes delivery-content-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .delivery-phase {
+      grid-template-rows: 24px 68px 134px 1px minmax(150px, 1fr);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .home-delivery {
+      padding-block: 5.25rem;
+    }
+
+    .delivery-header {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+
+    .delivery-header h2 {
+      max-width: 18ch;
+    }
+
+    .delivery-introduction {
+      max-width: 660px;
+    }
+
+    .delivery-flow {
+      margin-top: 4rem;
+    }
+
+    .delivery-phase {
+      grid-template-rows: 24px 76px 134px 1px minmax(165px, 1fr);
+      padding-inline: 1.15rem;
+    }
+  }
+
+  @media (max-width: 650px) {
+    .home-delivery {
+      padding: 6rem 0 4.5rem;
+    }
+
+    .delivery-header h2 {
+      font-size: clamp(2.25rem, 11vw, 3rem);
+    }
+
+    .delivery-flow {
+      margin-top: 3.25rem;
+    }
+
+    .delivery-path {
+      top: 6px;
+      right: auto;
+      bottom: 6px;
+      left: 6px;
+      width: 2px;
+      height: auto;
+      transform-origin: top;
+    }
+
+    .delivery-phases {
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding: 0 0 0 38px;
+    }
+
+    .delivery-phase {
+      display: block;
+      padding: 0 0 2.8rem;
+    }
+
+    .delivery-phase + .delivery-phase {
+      padding-top: 2.6rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+      border-left: 0;
+    }
+
+    .delivery-phase::after {
+      top: 0;
+      right: auto;
+      bottom: 0;
+      left: -32px;
+      width: 2px;
+      height: auto;
+    }
+
+    .delivery-phase:first-child::after,
+    .delivery-phase:last-child::after {
+      right: auto;
+      left: -32px;
+    }
+
+    .delivery-node {
+      top: 0;
+      left: -38px;
+      transform: none;
+    }
+
+    .delivery-phase + .delivery-phase .delivery-node {
+      top: 2.6rem;
+    }
+
+    .delivery-phase-label {
+      margin-bottom: 0.6rem;
+    }
+
+    .delivery-phase h3 {
+      margin-bottom: 1.75rem;
+    }
+
+    .delivery-step {
+      padding: 0;
+    }
+
+    .delivery-divider {
+      margin-block: 1.125rem 1.25rem;
+    }
+
+    .delivery-divider + .delivery-step {
+      padding-top: 0;
+    }
+
+    .delivery-step p {
+      max-width: 42ch;
+    }
+
+    .delivery-motion-ready .delivery-path {
+      transform: scaleY(0);
+    }
+
+    .delivery-motion-ready.is-visible .delivery-path {
+      animation-name: delivery-path-vertical-in;
+    }
+  }
+
+  @keyframes delivery-path-vertical-in {
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-delivery *,
+    .home-delivery *::before,
+    .home-delivery *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    .delivery-motion-ready .delivery-path,
+    .delivery-motion-ready .delivery-node > span,
+    .delivery-motion-ready .delivery-phase > :not(.delivery-node) {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

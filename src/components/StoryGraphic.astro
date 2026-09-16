@@ -1,0 +1,135 @@
+---
+const { variant } = Astro.props as {
+  variant: "utility" | "industry" | "environment";
+};
+---
+
+<div
+  class:list={["story-graphic", `story-graphic--${variant}`]}
+  aria-hidden="true"
+>
+  <svg viewBox="0 0 640 380" preserveAspectRatio="none">
+    {
+      variant === "utility" && (
+        <>
+          <path class="story-route" d="M54 88 H218 V190 H374 V116 H582" />
+          <path
+            class="story-route story-route--soft"
+            d="M54 304 H166 V238 H332 V304 H582"
+          />
+          <path class="story-route story-route--soft" d="M218 190 V304" />
+          <rect class="story-node" x="48" y="82" width="12" height="12" />
+          <rect class="story-node" x="212" y="184" width="12" height="12" />
+          <rect class="story-node" x="368" y="110" width="12" height="12" />
+          <rect class="story-node" x="576" y="110" width="12" height="12" />
+        </>
+      )
+    }
+    {
+      variant === "industry" && (
+        <>
+          <path class="story-route" d="M58 104 H180 V274 H330 V164 H580" />
+          <path
+            class="story-route story-route--soft"
+            d="M180 162 H278 V80 H468 V164"
+          />
+          <path
+            class="story-signal"
+            d="M58 274 C130 220 190 322 260 270 S386 210 468 274 S552 252 580 230"
+          />
+          <rect class="story-node" x="52" y="98" width="12" height="12" />
+          <rect class="story-node" x="174" y="268" width="12" height="12" />
+          <rect class="story-node" x="324" y="158" width="12" height="12" />
+          <rect class="story-node" x="462" y="158" width="12" height="12" />
+        </>
+      )
+    }
+    {
+      variant === "environment" && (
+        <>
+          <path
+            class="story-contour"
+            d="M28 278 C132 198 170 330 274 246 S452 174 612 236"
+          />
+          <path
+            class="story-contour story-route--soft"
+            d="M28 318 C146 238 196 358 300 282 S488 218 612 272"
+          />
+          <path class="story-route" d="M66 90 H206 V170 H360 V96 H566 V214" />
+          <rect class="story-node" x="60" y="84" width="12" height="12" />
+          <rect class="story-node" x="200" y="164" width="12" height="12" />
+          <rect class="story-node" x="354" y="90" width="12" height="12" />
+          <rect class="story-node" x="560" y="208" width="12" height="12" />
+        </>
+      )
+    }
+  </svg>
+</div>
+
+<style>
+  .story-graphic {
+    position: relative;
+    min-height: 100%;
+    overflow: hidden;
+    background:
+      linear-gradient(rgba(74, 139, 146, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74, 139, 146, 0.07) 1px, transparent 1px),
+      radial-gradient(
+        circle at 70% 34%,
+        rgba(21, 107, 117, 0.2),
+        transparent 46%
+      ),
+      #192023;
+    background-size:
+      42px 42px,
+      42px 42px,
+      auto,
+      auto;
+  }
+
+  .story-graphic::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      transparent 45%,
+      rgba(255, 255, 255, 0.025)
+    );
+  }
+
+  svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  path {
+    fill: none;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .story-route {
+    stroke: #3d8d95;
+    stroke-width: 1.5;
+  }
+
+  .story-route--soft {
+    opacity: 0.5;
+  }
+
+  .story-signal {
+    stroke: #65a6ac;
+    stroke-width: 1.25;
+  }
+
+  .story-contour {
+    stroke: #39767c;
+    stroke-width: 1.2;
+  }
+
+  .story-node {
+    fill: var(--kuem-copper);
+  }
+</style>

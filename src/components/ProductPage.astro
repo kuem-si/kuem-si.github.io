@@ -1,0 +1,177 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import CTA from "./CTA.astro";
+import DataVisual from "./DataVisual.astro";
+import type { Locale } from "../lib/i18n";
+import nexavia from "../assets/brand/nexavia/official/NEXAVIA-web-White.svg";
+import kai from "../assets/brand/kai/KAI_by_KUEM_Dark.svg";
+const { locale, product } = Astro.props as {
+  locale: Locale;
+  product: "nexavia" | "kai";
+};
+const sl = locale === "sl";
+const isKai = product === "kai";
+const title = isKai ? "Ask. Understand. Act." : "Nexavia";
+const lead = isKai
+  ? sl
+    ? "KAI je operativni pomočnik, ki razume kontekst infrastrukture, pojasni dogodke, primerja podatke in pripravi naslednji korak."
+    : "KAI is an operational assistant that understands infrastructure context, explains events, compares data and prepares the next step."
+  : sl
+    ? "Nexavia je operativna podatkovna platforma, ki poveže teren, sisteme in uporabnike v enoten pregled."
+    : "Nexavia is an operational data platform connecting the field, systems and users into one unified view.";
+const features = isKai
+  ? sl
+    ? [
+        "Analizira razpoložljivi kontekst",
+        "Loči opažanje od sklepa",
+        "Pokaže podporne vire",
+        "Priporoči naslednji korak",
+        "Pred ukrepom zahteva potrditev",
+        "Deluje z Nexavio",
+      ]
+    : [
+        "Analyses available context",
+        "Separates observation from inference",
+        "Shows supporting sources",
+        "Recommends a next step",
+        "Requires confirmation before action",
+        "Works with Nexavia",
+      ]
+  : sl
+    ? [
+        "Pregledi in KPI",
+        "Alarmi in dogodki",
+        "Zemljevidi naprav in prehodov",
+        "Analitika porabe in infrastrukture",
+        "Poročila in izvozi",
+        "Mobilni in terenski postopki",
+        "API in zunanje integracije",
+        "Lokalna ali oblačna postavitev",
+      ]
+    : [
+        "Dashboards and KPIs",
+        "Alarms and events",
+        "Device and gateway maps",
+        "Consumption and infrastructure analytics",
+        "Reports and exports",
+        "Mobile and field workflows",
+        "APIs and external integrations",
+        "On-premises or cloud deployment",
+      ];
+---
+
+<MainLayout title={title} description={lead}
+  ><section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <img
+          src={(isKai ? kai : nexavia).src}
+          width="300"
+          alt={isKai ? "KAI by KUEM" : "Nexavia"}
+        /><h1>{title}</h1><p class="lead">{lead}</p>{
+          isKai && <p>Works with Nexavia</p>
+        }
+      </div><DataVisual
+        labels={isKai
+          ? sl
+            ? ["Vprašanje", "Dokazi", "Potrditev"]
+            : ["Question", "Evidence", "Confirmation"]
+          : sl
+            ? ["Teren", "Platforma", "Uporabnik"]
+            : ["Field", "Platform", "User"]}
+      />
+    </div>
+  </section><section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">{sl ? "Zmogljivosti" : "Capabilities"}</p><h2>
+          {
+            isKai
+              ? sl
+                ? "Analizira. Pojasni. Priporoči."
+                : "Analyze. Explain. Recommend."
+              : sl
+                ? "Eno okolje za operativni pregled"
+                : "One environment for operational overview"
+          }
+        </h2>
+      </div><div class="grid-3">
+        {
+          features.map((x, i) => (
+            <article class="card">
+              <>
+                <span class="index">0{i + 1}</span>
+                <h3>{x}</h3>
+                <p>
+                  {sl
+                    ? "Funkcija je vezana na razpoložljive podatke, uporabniške pravice in preverjen operativni kontekst."
+                    : "The capability depends on available data, user permissions and verified operational context."}
+                </p>
+              </>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section><section class="section dark">
+    <div class="container split">
+      <div>
+        <h2>
+          {sl ? "Razumljiva arhitektura" : "Understandable architecture"}
+        </h2><p>
+          {
+            sl
+              ? "Viri in naprave se prek komunikacijske plasti povežejo z operativnim okoljem, integracijami in uporabniki. Postavitev se prilagodi obstoječi infrastrukturi."
+              : "Sources and devices connect through a communication layer to the operational environment, integrations and users. Deployment adapts to existing infrastructure."
+          }
+        </p>
+      </div><ol class="pipeline">
+        {
+          (isKai
+            ? sl
+              ? [
+                  "Vprašanje",
+                  "Kontekst",
+                  "Primerjava",
+                  "Dokazi",
+                  "Predlog",
+                  "Potrditev",
+                ]
+              : [
+                  "Question",
+                  "Context",
+                  "Comparison",
+                  "Evidence",
+                  "Recommendation",
+                  "Confirmation",
+                ]
+            : sl
+              ? [
+                  "Naprave",
+                  "Omrežje",
+                  "Obdelava",
+                  "Nexavia",
+                  "Integracije",
+                  "Uporabniki",
+                ]
+              : [
+                  "Devices",
+                  "Network",
+                  "Processing",
+                  "Nexavia",
+                  "Integrations",
+                  "Users",
+                ]
+          ).map((x) => <li>{x}</li>)
+        }
+      </ol>
+    </div>
+  </section><CTA
+    {locale}
+    title={isKai
+      ? sl
+        ? "Preverite KAI na svojem primeru."
+        : "Explore KAI with your use case."
+      : undefined}
+  /></MainLayout
+>

@@ -1,0 +1,1197 @@
+---
+import nexaviaLogo from "../assets/brand/nexavia/official/NEXAVIA-web-White.svg";
+import kaiLogo from "../assets/brand/kai/KAI_by_KUEM_Dark.svg";
+const { locale = "sl" } = Astro.props;
+const sl = locale === "sl";
+const c = sl
+  ? {
+      field: "TEREN",
+      fieldMain: "Merilniki in senzorji",
+      measure: "Meritev zajeta",
+      connect: "POVEZLJIVOST",
+      connectMain: "LoRaWAN · NB-IoT · MQTT",
+      packet: "Paket prenesen",
+      business: "POSLOVNI SISTEMI",
+      businessMain: "SCADA · ERP · API",
+      platform: "OPERATIVNA PODATKOVNA PLATFORMA",
+      intake: "SPREJEM",
+      intakeText: "Preverjen podatek",
+      context: "KONTEKST",
+      contextText: "Povezani sistemi",
+      analysis: "ANALIZA",
+      analysisText: "Odstopanje zaznano",
+      status: "Povečano odstopanje · potrebna preveritev",
+      kai: "KAI · PODPORA ODLOČANJU",
+      explained: "Dogodek pojasnjen",
+      proposal: "Predlog pripravljen",
+      confirmation: "POTRDITEV UPORABNIKA",
+      result: "OPERATIVNI REZULTAT",
+      resultMain: "Delovni nalog ustvarjen",
+      sent: "Poslano operativni ekipi",
+    }
+  : {
+      field: "FIELD",
+      fieldMain: "Meters and sensors",
+      measure: "Measurement captured",
+      connect: "CONNECTIVITY",
+      connectMain: "LoRaWAN · NB-IoT · MQTT",
+      packet: "Packet transferred",
+      business: "BUSINESS SYSTEMS",
+      businessMain: "SCADA · ERP · API",
+      platform: "OPERATIONAL DATA PLATFORM",
+      intake: "INTAKE",
+      intakeText: "Verified data",
+      context: "CONTEXT",
+      contextText: "Connected systems",
+      analysis: "ANALYSIS",
+      analysisText: "Deviation detected",
+      status: "Increased deviation · verification required",
+      kai: "KAI · DECISION SUPPORT",
+      explained: "Event explained",
+      proposal: "Proposal ready",
+      confirmation: "USER CONFIRMATION",
+      result: "OPERATIONAL RESULT",
+      resultMain: "Work order created",
+      sent: "Sent to operations team",
+    };
+---
+
+<figure
+  class="hero-system"
+  data-hero-system
+  aria-label={sl
+    ? "Podatkovni tok od terena do operativnega rezultata"
+    : "Data flow from field to operational result"}
+>
+  <svg
+    class="wiring"
+    viewBox="0 0 1600 1000"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+  >
+    <path
+      class="wire wire-1"
+      pathLength="1"
+      d="M260 178H465Q490 178 490 205V300"></path><path
+      class="wire wire-2"
+      pathLength="1"
+      d="M335 760H440Q465 760 465 730V560H505"></path><path
+      class="wire wire-3"
+      pathLength="1"
+      d="M1120 360H1200V190H1260"></path><path
+      class="wire orange-wire"
+      pathLength="1"
+      d="M1120 550H1300"></path><path
+      class="wire orange-wire"
+      pathLength="1"
+      d="M1390 630V760H1260"></path><path
+      class="wire return-wire"
+      pathLength="1"
+      d="M1260 860H210V250"></path>
+    <rect class="packet packet-main" width="10" height="10"
+      ><animateMotion
+        dur="15s"
+        begin="indefinite"
+        repeatCount="indefinite"
+        keyPoints="0;.25;.25;1;1"
+        keyTimes="0;.1;.18;.3;1"
+        calcMode="linear"
+        path="M260 178H465Q490 178 490 205V300"></animateMotion></rect
+    >
+    <rect class="packet packet-context" width="8" height="8"
+      ><animateMotion
+        dur="15s"
+        begin="indefinite"
+        repeatCount="indefinite"
+        keyPoints="0;0;1;1"
+        keyTimes="0;.27;.39;1"
+        calcMode="linear"
+        path="M335 760H440Q465 760 465 730V560H505"></animateMotion></rect
+    >
+    <rect class="packet packet-kai" width="9" height="9"
+      ><animateMotion
+        dur="15s"
+        begin="indefinite"
+        repeatCount="indefinite"
+        keyPoints="0;0;1;1"
+        keyTimes="0;.48;.62;1"
+        calcMode="linear"
+        path="M1120 360H1200V190H1260"></animateMotion></rect
+    >
+    <rect class="packet packet-confirm" width="9" height="9"
+      ><animateMotion
+        dur="15s"
+        begin="indefinite"
+        repeatCount="indefinite"
+        keyPoints="0;0;1;1"
+        keyTimes="0;.61;.73;1"
+        calcMode="linear"
+        path="M1120 550H1300"></animateMotion></rect
+    >
+    <rect class="packet packet-result" width="9" height="9"
+      ><animateMotion
+        dur="15s"
+        begin="indefinite"
+        repeatCount="indefinite"
+        keyPoints="0;0;1;1"
+        keyTimes="0;.72;.83;1"
+        calcMode="linear"
+        path="M1390 630V760H1260"></animateMotion></rect
+    >
+  </svg>
+  <section class="module field">
+    <small>{c.field}</small><div class="module-body">
+      <div class="field-icons"><i></i><i></i><i></i><i></i></div><strong
+        >{c.fieldMain}</strong
+      ><span>{c.measure}</span>
+    </div>
+  </section>
+  <section class="module connectivity">
+    <small>{c.connect}</small><div class="module-body">
+      <div class="radio"><i></i><i></i><b></b></div><strong
+        >{c.connectMain}</strong
+      ><span>{c.packet}</span>
+    </div>
+  </section>
+  <section class="module business">
+    <div class="systems-icon"><i></i><i></i><i></i></div><div>
+      <small>{c.business}</small><strong>{c.businessMain}</strong>
+    </div>
+  </section>
+  <section class="nexavia-shell">
+    <span class="shell-notch left"></span><span class="shell-notch right"
+    ></span><header>
+      <img
+        class="nexavia-wordmark"
+        src={nexaviaLogo.src}
+        width="112"
+        height="31"
+        alt="Nexavia"
+      /><small>{c.platform}</small>
+    </header><div class="stations">
+      <article class="station intake">
+        <div class="station-icon">↓</div><small>{c.intake}</small><strong
+          >{c.intakeText}</strong
+        >
+      </article><article class="station context">
+        <div class="station-icon network"><i></i><i></i><i></i></div><small
+          >{c.context}</small
+        ><strong>{c.contextText}</strong>
+      </article><article class="station analysis">
+        <div class="station-icon warning">!</div><small>{c.analysis}</small
+        ><strong>{c.analysisText}</strong><i class="ring"></i>
+      </article><span class="inner-packet"></span>
+    </div><p class="nex-status">{c.status}</p>
+  </section>
+  <section class="kai-module">
+    <small>{c.kai}</small><div class="kai-body">
+      <div class="kai-orb">
+        <i></i><i></i><i></i><img
+          src={kaiLogo.src}
+          width="160"
+          height="48"
+          alt="KAI by KUEM"
+        />
+      </div><div><strong>{c.explained}</strong><span>{c.proposal}</span></div>
+    </div>
+  </section>
+  <section class="confirmation">
+    <small>{c.confirmation}</small><div class="confirm-box">
+      <i></i><b>✓</b>
+    </div>
+  </section>
+  <section class="result">
+    <small>{c.result}</small><div class="result-body">
+      <div class="work-icon">✓</div><div>
+        <strong>{c.resultMain}</strong><span>{c.sent}</span>
+      </div>
+    </div>
+  </section>
+</figure>
+<script>
+  document
+    .querySelectorAll<HTMLElement>("[data-hero-system]")
+    .forEach((stage) => {
+      const reduced = matchMedia("(prefers-reduced-motion: reduce)"),
+        svg = stage.querySelector<SVGSVGElement>(".wiring"),
+        motions =
+          stage.querySelectorAll<SVGAnimateMotionElement>("animateMotion");
+      let visible = false,
+        started = false;
+      const pause = () => {
+          stage.classList.add("paused");
+          svg?.pauseAnimations();
+        },
+        play = () => {
+          if (!visible || document.hidden) return;
+          if (reduced.matches) {
+            stage.classList.add("complete");
+            return;
+          }
+          if (!started) {
+            started = true;
+            stage.classList.add("animated");
+            motions.forEach((m) => m.beginElement());
+          }
+          stage.classList.remove("paused");
+          svg?.unpauseAnimations();
+        };
+      const observer = new IntersectionObserver(
+        ([e]) => {
+          visible = Boolean(e?.isIntersecting);
+          visible && !document.hidden ? play() : pause();
+        },
+        { threshold: 0.15 },
+      );
+      observer.observe(stage);
+      const v = () => (document.hidden ? pause() : play());
+      document.addEventListener("visibilitychange", v);
+      addEventListener(
+        "pagehide",
+        () => {
+          observer.disconnect();
+          document.removeEventListener("visibilitychange", v);
+          pause();
+        },
+        { once: true },
+      );
+    });
+</script>
+<style>
+  .hero-system {
+    --cycle: 15s;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(16, minmax(0, 1fr));
+    grid-template-rows: repeat(10, minmax(0, 1fr));
+    gap: 14px;
+    width: min(100%, 880px);
+    aspect-ratio: 16/10;
+    margin: 0;
+    isolation: isolate;
+  }
+  .hero-system::before {
+    content: "";
+    position: absolute;
+    inset: -4%;
+    z-index: -2;
+    background:
+      radial-gradient(
+        circle at 50% 50%,
+        rgba(12, 72, 99, 0.27),
+        transparent 62%
+      ),
+      linear-gradient(rgba(52, 104, 130, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(52, 104, 130, 0.045) 1px, transparent 1px);
+    background-size:
+      auto,
+      28px 28px,
+      28px 28px;
+    mask-image: radial-gradient(ellipse, #000 32%, transparent 78%);
+  }
+  .wiring {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .wire {
+    fill: none;
+    stroke: rgba(72, 181, 198, 0.62);
+    stroke-width: 1.35;
+    vector-effect: non-scaling-stroke;
+  }
+  .orange-wire {
+    stroke: #f06432;
+  }
+  .return-wire {
+    stroke-dasharray: 5 8;
+    opacity: 0.38;
+  }
+  .packet {
+    fill: #baf8fc;
+    opacity: 0;
+    filter: drop-shadow(0 0 4px rgba(95, 208, 218, 0.55));
+  }
+  .packet-kai {
+    fill: #9988e2;
+  }
+  .packet-confirm,
+  .packet-result {
+    fill: #f06432;
+  }
+  .module {
+    position: relative;
+    z-index: 1;
+  }
+  .module > small,
+  .business small,
+  .nexavia-shell small,
+  .kai-module small,
+  .confirmation small,
+  .result small {
+    display: block;
+    margin: 0 0 9px;
+    color: #9badb4;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+  }
+  .module-body {
+    display: flex;
+    min-width: 0;
+    min-height: 105px;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border: 1px solid rgba(134, 164, 171, 0.55);
+    border-radius: 7px;
+    background: linear-gradient(
+      145deg,
+      rgba(26, 37, 42, 0.86),
+      rgba(15, 25, 30, 0.84)
+    );
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+  }
+  .module strong,
+  .business strong,
+  .kai-module strong,
+  .result strong {
+    display: block;
+    color: #f2f6f7;
+    font-size: 16px;
+    line-height: 1.28;
+  }
+  .module span,
+  .kai-module span,
+  .result span {
+    display: block;
+    margin-top: 8px;
+    color: #9ba9ad;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+  .field {
+    grid-area: 2/1/5/4;
+  }
+  .connectivity {
+    grid-area: 2/4/5/7;
+  }
+  .field-icons {
+    display: grid;
+    grid-template-columns: repeat(2, 20px);
+    gap: 7px;
+    flex: 0 0 47px;
+  }
+  .field-icons i {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #67b7c2;
+    border-radius: 50%;
+  }
+  .field-icons i:nth-child(2) {
+    border-radius: 50% 50% 55% 45%;
+    transform: rotate(45deg);
+  }
+  .field-icons i:nth-child(3) {
+    border-radius: 2px;
+  }
+  .field-icons i:nth-child(4) {
+    box-shadow: inset 0 0 0 5px rgba(103, 183, 194, 0.15);
+  }
+  .radio {
+    position: relative;
+    flex: 0 0 48px;
+    height: 58px;
+  }
+  .radio b {
+    position: absolute;
+    left: 23px;
+    top: 20px;
+    width: 2px;
+    height: 32px;
+    background: #70c8d2;
+  }
+  .radio i {
+    position: absolute;
+    left: 10px;
+    top: 7px;
+    width: 28px;
+    height: 28px;
+    border: 1px solid transparent;
+    border-top-color: #70c8d2;
+    border-radius: 50%;
+  }
+  .radio i:nth-child(2) {
+    left: 1px;
+    top: -2px;
+    width: 46px;
+    height: 46px;
+  }
+  .business {
+    grid-area: 8/1/10/5;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 17px;
+    border: 1px solid rgba(134, 164, 171, 0.55);
+    border-radius: 7px;
+    background: rgba(19, 30, 34, 0.85);
+  }
+  .business small {
+    margin-bottom: 7px;
+  }
+  .systems-icon {
+    flex: 0 0 45px;
+  }
+  .systems-icon i {
+    display: block;
+    width: 42px;
+    height: 10px;
+    margin: 5px 0;
+    border: 1px solid #68b9c3;
+  }
+  .nexavia-shell {
+    grid-area: 4/5/10/12;
+    position: relative;
+    z-index: 2;
+    min-width: 0;
+    padding: 27px 30px;
+    border: 1px solid #3a7194;
+    border-right-color: #4fa9df;
+    border-radius: 18px 6px 18px 6px;
+    clip-path: polygon(
+      7% 0,
+      93% 0,
+      100% 10%,
+      100% 90%,
+      93% 100%,
+      7% 100%,
+      0 90%,
+      0 10%
+    );
+    background:
+      radial-gradient(
+        circle at 70% 28%,
+        rgba(43, 111, 166, 0.17),
+        transparent 37%
+      ),
+      linear-gradient(145deg, #0a2334, #071722);
+    box-shadow:
+      0 28px 60px rgba(0, 0, 0, 0.32),
+      inset 0 0 0 8px rgba(42, 92, 128, 0.08),
+      inset 0 0 40px rgba(39, 103, 150, 0.08);
+  }
+  .nexavia-shell::before {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border: 1px solid rgba(68, 118, 153, 0.28);
+    clip-path: inherit;
+    pointer-events: none;
+  }
+  .nexavia-shell header {
+    position: relative;
+    text-align: center;
+  }
+  .nexavia-shell header img {
+    width: 156px;
+  }
+  .nexavia-shell header small {
+    margin: 9px 0 0;
+    color: #82a9c9;
+  }
+  .stations {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    margin-top: 30px;
+  }
+  .stations::before {
+    content: "";
+    position: absolute;
+    left: 14%;
+    right: 14%;
+    top: 41px;
+    border-top: 1px solid rgba(79, 169, 204, 0.45);
+  }
+  .station {
+    position: relative;
+    min-width: 0;
+    min-height: 150px;
+    padding: 14px 10px;
+    text-align: center;
+    border: 1px solid rgba(63, 128, 168, 0.55);
+    border-radius: 10px;
+    background: rgba(10, 30, 44, 0.72);
+  }
+  .station-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    margin: 0 auto 13px;
+    border: 1px solid #62b9d2;
+    color: #76d0e5;
+    font-size: 27px;
+  }
+  .station small {
+    margin-bottom: 8px;
+    color: #70bad5;
+  }
+  .station strong {
+    display: block;
+    color: #eef5f7;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+  .network i {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border: 1px solid #69c0d8;
+  }
+  .network i:first-child {
+    top: 7px;
+  }
+  .network i:nth-child(2) {
+    left: 7px;
+    bottom: 7px;
+  }
+  .network i:nth-child(3) {
+    right: 7px;
+    bottom: 7px;
+  }
+  .analysis {
+    border-color: rgba(240, 100, 50, 0.65);
+    background: rgba(54, 28, 23, 0.45);
+  }
+  .analysis .station-icon {
+    border-color: #f06432;
+    color: #f08357;
+  }
+  .analysis small {
+    color: #f08357;
+  }
+  .analysis .ring {
+    position: absolute;
+    left: 50%;
+    top: 37px;
+    width: 48px;
+    height: 48px;
+    border: 1px solid #f06432;
+    border-radius: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+  }
+  .inner-packet {
+    position: absolute;
+    left: 14%;
+    top: 38px;
+    width: 8px;
+    height: 8px;
+    background: #8bdff0;
+    opacity: 0;
+  }
+  .nex-status {
+    position: relative;
+    margin: 20px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid rgba(63, 122, 158, 0.32);
+    color: #e5edf0;
+    font-size: 14px;
+    text-align: center;
+    opacity: 0.42;
+  }
+  .nex-status::first-letter {
+    color: #f06432;
+  }
+  .kai-module {
+    grid-area: 2/12/5/17;
+    z-index: 2;
+  }
+  .kai-module > small {
+    color: #b0a5e9;
+    text-align: center;
+  }
+  .kai-body {
+    display: flex;
+    min-height: 118px;
+    align-items: center;
+    gap: 17px;
+    padding: 16px;
+    border: 1px solid rgba(140, 123, 221, 0.72);
+    border-radius: 10px;
+    background: linear-gradient(
+      145deg,
+      rgba(29, 27, 48, 0.9),
+      rgba(17, 22, 32, 0.9)
+    );
+  }
+  .kai-orb {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: 0 0 84px;
+    width: 84px;
+    height: 84px;
+    border: 1px solid #9482e3;
+    border-radius: 50%;
+  }
+  .kai-orb > i {
+    position: absolute;
+    right: 72px;
+    width: 38px;
+    border-top: 1px solid #9482e3;
+  }
+  .kai-orb > i:first-child {
+    transform: translateY(-18px) rotate(22deg);
+  }
+  .kai-orb > i:nth-child(3) {
+    transform: translateY(18px) rotate(-22deg);
+  }
+  .kai-orb img {
+    width: 58px;
+  }
+  .kai-module span {
+    color: #b9b5c9;
+    font-size: 14px;
+  }
+  .confirmation {
+    grid-area: 6/13/8/16;
+    z-index: 2;
+    text-align: center;
+  }
+  .confirmation small {
+    color: #c79b8c;
+  }
+  .confirm-box {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    margin: 12px auto 0;
+    border: 1px solid #f06432;
+    border-radius: 9px;
+    background: rgba(43, 27, 23, 0.5);
+  }
+  .confirm-box i {
+    position: absolute;
+    inset: 14px;
+    border: 1px solid #f06432;
+    border-radius: 50%;
+  }
+  .confirm-box b {
+    color: #f08459;
+    font-size: 25px;
+    opacity: 0;
+  }
+  .result {
+    grid-area: 8/12/11/17;
+    z-index: 2;
+  }
+  .result > small {
+    text-align: center;
+  }
+  .result-body {
+    display: flex;
+    min-height: 105px;
+    align-items: center;
+    gap: 17px;
+    padding: 16px;
+    border: 1px solid rgba(134, 164, 171, 0.55);
+    border-radius: 8px;
+    background: rgba(20, 29, 33, 0.88);
+  }
+  .work-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 52px;
+    width: 52px;
+    height: 60px;
+    border: 1px solid #f06432;
+    color: #f06432;
+    font-size: 21px;
+  }
+  .result strong {
+    font-size: 18px;
+  }
+  .result span {
+    font-size: 14px;
+  }
+  .animated .packet {
+    animation: packet 15s linear infinite;
+  }
+  .animated .field {
+    animation: a1 var(--cycle) ease infinite;
+  }
+  .animated .connectivity {
+    animation: a2 var(--cycle) ease infinite;
+  }
+  .animated .business {
+    animation: a4 var(--cycle) ease infinite;
+  }
+  .animated .nexavia-shell {
+    animation: a3 var(--cycle) cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+  }
+  .animated .intake {
+    animation: s1 var(--cycle) ease infinite;
+  }
+  .animated .context {
+    animation: s2 var(--cycle) ease infinite;
+  }
+  .animated .analysis {
+    animation: s3 var(--cycle) ease infinite;
+  }
+  .animated .inner-packet {
+    animation: inner var(--cycle) linear infinite;
+  }
+  .animated .analysis .ring {
+    animation: ring var(--cycle) ease infinite;
+  }
+  .animated .nex-status {
+    animation: status var(--cycle) ease infinite;
+  }
+  .animated .kai-module {
+    animation: a6 var(--cycle) ease infinite;
+  }
+  .animated .confirmation {
+    animation: a7 var(--cycle) ease infinite;
+  }
+  .animated .confirm-box b {
+    animation: check var(--cycle) ease infinite;
+  }
+  .animated .result {
+    animation: a8 var(--cycle) ease infinite;
+  }
+  .paused * {
+    animation-play-state: paused !important;
+  }
+  @keyframes packet {
+    0%,
+    96% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes a1 {
+    0%,
+    10% {
+      filter: brightness(1.3);
+    }
+    13%,
+    100% {
+      filter: none;
+    }
+  }
+  @keyframes a2 {
+    0%,
+    10% {
+      filter: none;
+    }
+    13%,
+    21% {
+      filter: brightness(1.3);
+    }
+    24%,
+    100% {
+      filter: none;
+    }
+  }
+  @keyframes a3 {
+    0%,
+    20% {
+      transform: none;
+    }
+    23%,
+    32% {
+      transform: scale(1.015);
+      filter: brightness(1.15);
+    }
+    35%,
+    100% {
+      transform: none;
+      filter: none;
+    }
+  }
+  @keyframes a4 {
+    0%,
+    27% {
+      filter: none;
+    }
+    30%,
+    39% {
+      filter: brightness(1.25);
+    }
+    42%,
+    100% {
+      filter: none;
+    }
+  }
+  @keyframes s1 {
+    0%,
+    20% {
+      filter: none;
+    }
+    23%,
+    31% {
+      filter: brightness(1.4);
+    }
+    34%,
+    100% {
+      filter: none;
+    }
+  }
+  @keyframes s2 {
+    0%,
+    31% {
+      filter: none;
+    }
+    34%,
+    43% {
+      filter: brightness(1.4);
+    }
+    46%,
+    100% {
+      filter: none;
+    }
+  }
+  @keyframes s3 {
+    0%,
+    42% {
+      filter: none;
+    }
+    45%,
+    58% {
+      filter: brightness(1.4);
+    }
+    61%,
+    100% {
+      filter: none;
+    }
+  }
+  @keyframes inner {
+    0%,
+    22% {
+      opacity: 0;
+      left: 14%;
+    }
+    24% {
+      opacity: 1;
+    }
+    34% {
+      left: 48%;
+    }
+    44% {
+      left: 82%;
+    }
+    48%,
+    100% {
+      opacity: 0;
+      left: 82%;
+    }
+  }
+  @keyframes ring {
+    0%,
+    44% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.6);
+    }
+    48% {
+      opacity: 0.7;
+    }
+    54%,
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(1.5);
+    }
+  }
+  @keyframes status {
+    0%,
+    45% {
+      opacity: 0.42;
+    }
+    49%,
+    58% {
+      opacity: 1;
+    }
+    61%,
+    100% {
+      opacity: 0.42;
+    }
+  }
+  @keyframes a6 {
+    0%,
+    58% {
+      filter: none;
+    }
+    61%,
+    71% {
+      filter: brightness(1.3);
+    }
+    74%,
+    100% {
+      filter: none;
+    }
+  }
+  @keyframes a7 {
+    0%,
+    70% {
+      filter: none;
+    }
+    73%,
+    79% {
+      filter: brightness(1.35);
+    }
+    82%,
+    100% {
+      filter: none;
+    }
+  }
+  @keyframes check {
+    0%,
+    72% {
+      opacity: 0;
+    }
+    76%,
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes a8 {
+    0%,
+    79% {
+      filter: none;
+    }
+    82%,
+    100% {
+      filter: brightness(1.25);
+    }
+  }
+  .complete .packet {
+    display: none;
+  }
+  .complete .nex-status {
+    opacity: 1;
+  }
+  .complete .confirm-box b {
+    opacity: 1;
+  }
+  @media (min-width: 1180px) {
+    :global(.home-hero-grid) {
+      grid-template-columns: minmax(480px, 0.76fr) minmax(0, 1.24fr);
+      column-gap: clamp(42px, 3vw, 64px);
+    }
+  }
+  @media (max-width: 1100px) and (min-width: 768px) {
+    :global(.home-hero-grid) {
+      grid-template-columns: 1fr !important;
+    }
+    .hero-system {
+      width: min(100%, 880px);
+      margin: 1.5rem auto 0;
+    }
+  }
+  @media (max-width: 767px) {
+    .hero-system {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      width: 100%;
+      aspect-ratio: auto;
+      margin-top: 2rem;
+      padding-left: 24px;
+    }
+    .hero-system::before {
+      inset: -2rem -1rem;
+    }
+    .wiring {
+      left: 0;
+      width: 24px;
+      height: 100%;
+    }
+    .wiring path,
+    .wiring .packet {
+      display: none;
+    }
+    .wiring::before {
+      content: "";
+      position: absolute;
+      left: 12px;
+      top: 70px;
+      bottom: 70px;
+      border-left: 1px solid rgba(72, 181, 198, 0.55);
+    }
+    .module,
+    .business,
+    .nexavia-shell,
+    .kai-module,
+    .confirmation,
+    .result {
+      grid-area: auto;
+    }
+    .field {
+      order: 1;
+    }
+    .connectivity {
+      order: 2;
+    }
+    .business {
+      order: 3;
+      margin-left: 24px;
+    }
+    .nexavia-shell {
+      order: 4;
+      min-height: 430px;
+      padding: 24px 18px;
+    }
+    .kai-module {
+      order: 5;
+    }
+    .confirmation {
+      order: 6;
+    }
+    .result {
+      order: 7;
+    }
+    .module > small,
+    .business small,
+    .nexavia-shell small,
+    .kai-module small,
+    .confirmation small,
+    .result small {
+      font-size: 14px;
+    }
+    .module strong,
+    .business strong,
+    .kai-module strong {
+      font-size: 16px;
+    }
+    .module span,
+    .kai-module span,
+    .result span,
+    .station strong,
+    .nex-status {
+      font-size: 14px;
+    }
+    .stations {
+      gap: 8px;
+    }
+    .station {
+      padding: 12px 5px;
+    }
+    .station-icon {
+      width: 38px;
+      height: 38px;
+    }
+    .kai-body {
+      min-height: 145px;
+    }
+    .result-body {
+      min-height: 130px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-system * {
+      animation: none !important;
+    }
+    .packet {
+      display: none;
+    }
+    .nex-status {
+      opacity: 1;
+    }
+    .confirm-box b {
+      opacity: 1;
+    }
+  }
+  .animated .packet-main {
+    animation: packet-main 15s linear infinite;
+  }
+  .animated .packet-context {
+    animation: packet-context 15s linear infinite;
+  }
+  .animated .packet-kai {
+    animation: packet-kai 15s linear infinite;
+  }
+  .animated .packet-confirm {
+    animation: packet-confirm 15s linear infinite;
+  }
+  .animated .packet-result {
+    animation: packet-result 15s linear infinite;
+  }
+  @keyframes packet-main {
+    0%,
+    30% {
+      opacity: 1;
+    }
+    33%,
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes packet-context {
+    0%,
+    27% {
+      opacity: 0;
+    }
+    29%,
+    39% {
+      opacity: 1;
+    }
+    42%,
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes packet-kai {
+    0%,
+    48% {
+      opacity: 0;
+    }
+    50%,
+    62% {
+      opacity: 1;
+    }
+    65%,
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes packet-confirm {
+    0%,
+    61% {
+      opacity: 0;
+    }
+    63%,
+    73% {
+      opacity: 1;
+    }
+    76%,
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes packet-result {
+    0%,
+    72% {
+      opacity: 0;
+    }
+    74%,
+    83% {
+      opacity: 1;
+    }
+    86%,
+    100% {
+      opacity: 0;
+    }
+  }
+</style>

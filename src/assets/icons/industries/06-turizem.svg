@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 144" role="img" aria-labelledby="title desc">
+  <title id="title">Turizem</title>
+  <desc id="desc">Marina in kamp s priključkom v vizualnem slogu KUEM.</desc>
+  <g stroke="#253238" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M46 8v71" fill="none" stroke-width="4"/>
+    <path d="M42 12 17 64h25V12Z" fill="#FFFFFF"/>
+    <path d="m51 21 28 43H51V21Z" fill="#7DB7AB"/>
+    <path d="M13 72h73L75 91H28L13 72Z" fill="#E8E6E1"/>
+    <path d="M99 70 119 35l21 35H99Z" fill="#7DB7AB"/>
+    <path d="m119 35 1 35M120 70l10-16 10 16" fill="none"/>
+    <path d="M94 102h70v10H94z" fill="#E8E6E1"/>
+    <path d="M105 112v11M153 112v11" stroke-width="5"/>
+    <rect x="112" y="74" width="21" height="29" rx="3" fill="#FFFFFF"/>
+    <path d="M118 82h9M122 87v8"/>
+  </g>
+  <rect x="119" y="95" width="6" height="6" fill="#E95D2A"/>
+  <path d="M8 97c11-5 22-5 33 0s22 5 33 0 22-5 33 0 22 5 33 0 19-4 28 0" fill="none" stroke="#156B75" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M8 105c11-5 22-5 33 0s22 5 33 0 22-5 33 0 22 5 33 0 19-4 28 0" fill="none" stroke="#7DB7AB" stroke-width="3" stroke-linecap="round"/>
+  <path d="M10 125h42l9-9h51l9 9h45" fill="none" stroke="#156B75" stroke-width="2.5"/>
+  <path d="M10 132h42l9-9h51l9 9h45" fill="none" stroke="#E95D2A" stroke-width="2"/>
+  <rect x="49" y="122" width="6" height="6" fill="#156B75"/>
+  <rect x="109" y="120" width="6" height="6" fill="#E95D2A"/>
+</svg>

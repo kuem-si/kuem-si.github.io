@@ -1,0 +1,68 @@
+---
+import Icon from "./LineIcon.astro";
+import nexavia from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
+---
+
+<div
+  class="hp-flow"
+  role="img"
+  aria-label="Naprave prek povezljivosti in obstoječi sistemi prek ločenih API-integracij pošiljajo podatke neposredno v Nexavio. Nexavia poveže podatke s KAI, ki podpira ukrepanje."
+>
+  <div class="hp-flow-inputs">
+    <div class="hp-flow-lane">
+      <div class="hp-node">
+        <Icon name="device" /><strong>Naprave</strong><small
+          >Senzorji, števci, telemetrija</small
+        >
+      </div>
+      <span class="hp-connector" aria-hidden="true"></span>
+      <div class="hp-node">
+        <Icon name="network" /><strong>Povezljivost</strong><small
+          >LoRaWAN, NB-IoT, mobilna in lokalna omrežja</small
+        >
+      </div>
+    </div>
+    <div class="hp-flow-lane">
+      <div class="hp-node">
+        <Icon name="database" /><strong>Obstoječi sistemi</strong><small
+          >ERP, SCADA, GIS in drugi viri</small
+        >
+      </div>
+      <span class="hp-connector" aria-hidden="true"></span>
+      <div class="hp-node">
+        <Icon name="api" /><strong>API</strong><small
+          >Integracije in standardni vmesniki</small
+        >
+      </div>
+    </div>
+  </div>
+  <div class="hp-merge" aria-hidden="true">
+    <svg viewBox="0 0 40 200" preserveAspectRatio="none"
+      ><path
+        d="M0 45H10Q18 45 18 55V85Q18 95 27 95H39M0 155H10Q18 155 18 145V115Q18 105 27 105H39"
+      ></path><path
+        class="hp-flow-pulse"
+        d="M0 45H10Q18 45 18 55V85Q18 95 27 95H39M0 155H10Q18 155 18 145V115Q18 105 27 105H39"
+      ></path><path d="m34 92 5 3-5 3m0 4 5 3-5 3"></path></svg
+    ><span>↓</span>
+  </div>
+  <div class="hp-flow-output">
+    <div class="hp-node hp-platform">
+      <div class="hp-nexavia-mark">
+        <img class="nexavia-wordmark" src={nexavia.src} width="1200" height="360" alt="Nexavia" />
+      </div><small>Platforma za podatke, prikaz in upravljanje</small>
+    </div>
+    <span class="hp-connector" aria-hidden="true"></span>
+    <div class="hp-node hp-result">
+      <Icon name="chart" /><strong>KAI</strong><small
+        >Analiza, opozorila in priporočila</small
+      >
+    </div>
+    <span class="hp-connector" aria-hidden="true"></span>
+    <div class="hp-node hp-result">
+      <Icon name="check" /><strong>Ukrep</strong><small
+        >Boljše odločitve v praksi</small
+      >
+    </div>
+  </div>
+</div>

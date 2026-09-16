@@ -1,0 +1,43 @@
+---
+const { locale = "sl" } = Astro.props;
+const sl = locale === "sl";
+---
+
+<article class="scenario-card" tabindex="0">
+  <span class="scenario-anchor" aria-hidden="true"></span><div
+    class="scenario-brand"
+  >
+    <strong>KAI</strong><span>{sl ? "Kontekst" : "Context"}</span>
+  </div><div class="scenario-status">
+    <i></i>{sl ? "Odstopanje zaznano" : "Deviation detected"}
+  </div><p>
+    {
+      sl
+        ? "Možen vzrok: prekinjena komunikacijska pot"
+        : "Possible cause: interrupted communication path"
+    }
+  </p>
+  <a href={sl ? "/kontakt" : "/en/contact"}
+    >{sl ? "Preveri dogodek" : "Review event"}<span aria-hidden="true">↗</span
+    ></a
+  ><span class="flow-detail"
+    >{
+      sl
+        ? "Primerjaj območje, meritve in povezane dogodke."
+        : "Compare the area, readings and related events."
+    }</span
+  >
+</article>
+<article class="action-card" tabindex="0">
+  <span class="action-check" aria-hidden="true">✓</span><span
+    ><small>{sl ? "Operativni rezultat" : "Operational outcome"}</small><strong
+      >{sl ? "Delovni nalog ustvarjen" : "Work order created"}</strong
+    ></span
+  ><span class="flow-detail"
+    >{
+      sl
+        ? "Ekipa je obveščena · prioriteta določena"
+        : "Team notified · priority assigned"
+    }</span
+  >
+</article>

@@ -1,0 +1,517 @@
+---
+import Cards from "./ServiceCards.astro";
+import Device from "./ConnectivityDevice.astro";
+import { connectivity } from "../../data/solutionsOverview";
+import logo from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
+const routes = [
+  {
+    name: "LoRaWAN",
+    source: "sensor",
+    network: "gateway",
+    caption: "Naprava → prehod",
+    label: "LoRaWAN prehod",
+  },
+  {
+    name: "NB-IoT",
+    source: "sensor",
+    network: "mobile",
+    caption: "Naprava → mobilno omrežje",
+    label: "Mobilno omrežje",
+  },
+  {
+    name: "wM-Bus",
+    source: "meter",
+    network: "reader",
+    caption: "Števec → čitalnik",
+    label: "Čitalnik wM-Bus",
+  },
+  {
+    name: "LAN",
+    source: "plc",
+    network: "switch",
+    caption: "Naprava ali PLC → lokalno omrežje",
+    label: "Stikalo / robna naprava",
+  },
+];
+---
+
+<section
+  id="povezljivost"
+  class="sol-section connectivity-section"
+  aria-labelledby="connectivity-title"
+>
+  <div class="hp-wrap connectivity-layout">
+    <figure
+      class="connection"
+      aria-label="Štiri ločene komunikacijske poti v Nexavio"
+    >
+      <figcaption>VEČ POTI · EN VAREN CILJ</figcaption>
+      <div class="connection-layout">
+        <svg class="connection-wires" aria-hidden="true"
+          ><defs
+            ><marker
+              id="connectivity-arrow"
+              viewBox="0 0 10 10"
+              refX="9"
+              refY="5"
+              markerWidth="5"
+              markerHeight="5"
+              orient="auto"
+              ><path
+                d="m2 1 6 4-6 4"
+                fill="none"
+                stroke="#156B75"
+                stroke-width="1.5"></path></marker
+            ></defs
+          ><g class="connection-paths"></g><g class="connection-packets"
+          ></g></svg
+        >
+        <div class="connection-routes">
+          {
+            routes.map((route, i) => (
+              <article class="connection-row" data-route={route.name}>
+                <strong class="technology">{route.name}</strong>
+                <div class="source-device">
+                  <>
+                    <div class="source-drawing">
+                      <Device type={route.source} wireless={i !== 3} />
+                    </div>
+                    <span>{route.caption}</span>
+                  </>
+                </div>
+                <div class="network-device">
+                  <>
+                    <div class="network-drawing">
+                      <Device type={route.network} />
+                    </div>
+                    <span>{route.label}</span>
+                  </>
+                </div>
+                {i === 1 && (
+                  <span class="sr-only">
+                    Omrežje mobilnega operaterja, brez lokalnega prehoda.
+                  </span>
+                )}
+              </article>
+            ))
+          }
+        </div>
+        <div class="connection-target">
+          <div class="connection-logo">
+            <img
+              class="nexavia-wordmark" src={logo.src}
+              width="1200"
+              height="360"
+              alt="Nexavia"
+              loading="lazy"
+            />
+          </div><strong>NEXAVIA</strong><span>Varno posredovani podatki</span>
+        </div>
+      </div>
+      <p class="connection-note">
+        Vedno izberemo ustrezno pot – ne ene tehnologije za vse.
+      </p>
+    </figure>
+    <div class="connectivity-copy">
+      <p class="hp-eyebrow">02 · POVEZLJIVOST</p><h2 id="connectivity-title">
+        Izberemo povezavo, ki ustreza lokaciji in namenu.
+      </h2>
+      <p>
+        LoRaWAN, NB-IoT, wM-Bus, mobilna in lokalna omrežja povezujemo v
+        robustno pot od naprave do platforme.
+      </p>
+      <Cards items={connectivity} />
+    </div>
+  </div>
+</section>
+<style>
+  .connectivity-layout {
+    display: grid;
+    grid-template-columns: 0.96fr 1.04fr;
+    gap: clamp(28px, 3vw, 56px);
+    align-items: center;
+  }
+  .connectivity-layout > * {
+    min-width: 0;
+  }
+  .connectivity-copy :global(.sol-cards) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .connectivity-copy :global(.sol-cards .hp-card) {
+    padding: 24px 18px;
+    box-shadow: 0 3px 12px #25323803;
+  }
+  .connectivity-copy :global(.sol-cards h3) {
+    font-size: 17px;
+  }
+  .connection {
+    margin: 0;
+    container-type: inline-size;
+    color: var(--hp-petrol);
+  }
+  .connection figcaption {
+    font-size: 11px;
+    letter-spacing: 0.09em;
+    color: var(--hp-muted);
+    margin-bottom: 22px;
+  }
+  .connection-layout {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(120px, 0.34fr);
+    gap: 54px;
+    align-items: center;
+  }
+  .connection-routes {
+    display: grid;
+    gap: 14px;
+  }
+  .connection-row {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+    min-height: 108px;
+    padding: 12px 24px 12px 10px;
+    background: white;
+    border: 1px solid var(--hp-line);
+    border-radius: 6px;
+  }
+  .technology {
+    align-self: center;
+    justify-self: start;
+    background: #eaf4f4;
+    border-radius: 16px;
+    padding: 7px 9px;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+  .source-device,
+  .network-device {
+    min-width: 0;
+    text-align: center;
+  }
+  .source-drawing,
+  .network-drawing {
+    width: 76px;
+    max-width: 100%;
+    margin: auto;
+  }
+  .connection-row span:not(.sr-only) {
+    display: block;
+    color: var(--hp-muted);
+    font-size: 11px;
+    line-height: 1.4;
+    margin-top: 6px;
+  }
+  .connection-target {
+    position: relative;
+    min-width: 0;
+    padding: 18px 10px;
+    text-align: center;
+    border: 1px solid var(--hp-line);
+    border-radius: 6px;
+    background: white;
+  }
+  .connection-logo {
+    position: relative;
+    width: 100%;
+    height: 56px;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+  .connection-logo img {
+    position: absolute;
+    max-width: none;
+    width: 190%;
+    height: auto;
+    left: -8%;
+    top: -5%;
+  }
+  .connection-target strong {
+    display: block;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+  .connection-target > span {
+    display: block;
+    margin-top: 7px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--hp-muted);
+  }
+  .connection .connection-note {
+    font-size: 14px;
+    margin: 20px 0 0;
+    line-height: 1.5;
+  }
+  .connection-wires {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 2;
+  }
+  @media (min-width: 1700px) {
+    .connection-row {
+      gap: 32px;
+      min-height: 116px;
+    }
+    .connection-row span:not(.sr-only) {
+      font-size: 12px;
+    }
+    .technology {
+      font-size: 13px;
+    }
+    .connection-target > span {
+      font-size: 13px;
+    }
+    .connectivity-copy :global(.sol-cards h3) {
+      font-size: 19px;
+    }
+  }
+  @media (max-width: 1100px) {
+    .connectivity-layout {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .connectivity-copy {
+      grid-row: 1;
+    }
+    .connection {
+      width: 100%;
+      max-width: 860px;
+      justify-self: center;
+    }
+  }
+  @media (max-width: 600px) {
+    .connectivity-copy :global(.sol-cards) {
+      grid-template-columns: 1fr;
+    }
+    .connectivity-copy :global(.sol-cards .hp-card) {
+      flex-direction: row;
+      padding: 22px;
+      gap: 18px;
+    }
+    .connectivity-copy :global(.sol-cards h3) {
+      font-size: 18px;
+    }
+  }
+  @container (max-width:480px) {
+    .connection-layout {
+      grid-template-columns: 1fr;
+      padding-right: 24px;
+      gap: 44px;
+    }
+    .connection-row {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 12px 40px;
+      padding: 16px 24px 16px 12px;
+    }
+    .technology {
+      grid-column: 1/-1;
+      font-size: 13px;
+    }
+    .connection-row span:not(.sr-only) {
+      font-size: 13px;
+    }
+    .connection-target {
+      justify-self: center;
+      width: 220px;
+      max-width: 100%;
+      padding: 18px 20px;
+    }
+    .connection-logo {
+      height: 66px;
+    }
+    .connection-target > span {
+      font-size: 14px;
+    }
+    .connection-target strong {
+      font-size: 15px;
+    }
+    .connection .connection-note {
+      font-size: 14px;
+    }
+  }
+</style>
+<script>
+  document.querySelectorAll<HTMLElement>(".connection").forEach((root) => {
+    const layout = root.querySelector<HTMLElement>(".connection-layout")!;
+    const svg = root.querySelector<SVGSVGElement>(".connection-wires")!;
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    let visible = false;
+    const ns = "http://www.w3.org/2000/svg";
+    const make = (
+      tag: string,
+      attrs: Record<string, string>,
+      parent: Element,
+    ) => {
+      const el = document.createElementNS(ns, tag);
+      Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
+      parent.append(el);
+      return el;
+    };
+    const draw = () => {
+      const bounds = layout.getBoundingClientRect();
+      const mobile = root.clientWidth <= 480;
+      const box = (el: Element) => {
+        const r = el.getBoundingClientRect();
+        return {
+          x: r.x - bounds.x,
+          y: r.y - bounds.y,
+          w: r.width,
+          h: r.height,
+        };
+      };
+      const target = box(root.querySelector(".connection-target")!);
+      const rows = [...root.querySelectorAll(".connection-row")];
+      const last = box(rows[3]);
+      const spine = mobile ? bounds.width - 10 : last.x + last.w + 24;
+      const destX = mobile ? target.x + target.w / 2 : target.x;
+      const destY = mobile ? target.y : target.y + target.h / 2;
+      const paths = svg.querySelector(".connection-paths")!;
+      const packets = svg.querySelector(".connection-packets")!;
+      paths.replaceChildren();
+      packets.replaceChildren();
+      const heights = rows.map((row) => {
+        const b = box(row.querySelector(".network-drawing")!);
+        return b.y + b.h / 2;
+      });
+      make(
+        "path",
+        {
+          d: `M${spine} ${heights[0]}V${mobile ? destY - 22 : heights[3]}`,
+          fill: "none",
+          stroke: "#156B75",
+          "stroke-width": "1.8",
+        },
+        paths,
+      );
+      const exit = mobile
+        ? `M${spine} ${destY - 22}H${destX}V${destY}`
+        : `M${spine} ${destY}H${destX}`;
+      make(
+        "path",
+        {
+          d: exit,
+          fill: "none",
+          stroke: "#156B75",
+          "stroke-width": "1.8",
+          "marker-end": "url(#connectivity-arrow)",
+        },
+        paths,
+      );
+      rows.forEach((row, i) => {
+        const a = box(row.querySelector(".source-drawing")!),
+          b = box(row.querySelector(".network-drawing")!);
+        const y = b.y + b.h / 2;
+        const start = a.x + a.w,
+          endFirst = b.x,
+          second = b.x + b.w;
+        const first = `M${start} ${y}H${endFirst}`;
+        make(
+          "path",
+          {
+            d: first,
+            fill: "none",
+            stroke: "#156B75",
+            "stroke-width": "1.5",
+            ...(i < 3 ? { "stroke-dasharray": "2 5" } : {}),
+            "marker-end": "url(#connectivity-arrow)",
+          },
+          paths,
+        );
+        make(
+          "path",
+          {
+            d: `M${second} ${y}H${spine}`,
+            fill: "none",
+            stroke: "#156B75",
+            "stroke-width": "1.5",
+          },
+          paths,
+        );
+        make(
+          "circle",
+          { cx: String(spine), cy: String(y), r: "3.5", fill: "#156B75" },
+          paths,
+        );
+        const tail = mobile
+          ? `V${destY - 22}H${destX}V${destY}`
+          : `V${destY}H${destX}`;
+        const full = `${first}H${second}H${spine}${tail}`;
+        const measure = make(
+          "path",
+          { d: full },
+          document.createElementNS(ns, "g"),
+        ) as SVGPathElement;
+        const length = measure.getTotalLength();
+        const l1 = endFirst - start,
+          l2 = second - start,
+          l3 = spine - start;
+        const size = mobile ? 6 : root.clientWidth < 750 ? 7 : 8;
+        const packet = make(
+          "rect",
+          {
+            x: String(-size / 2),
+            y: String(-size / 2),
+            width: String(size),
+            height: String(size),
+            rx: "1",
+            fill: "#E95D2A",
+          },
+          packets,
+        );
+        if (reduced.matches) {
+          packet.setAttribute(
+            "transform",
+            `translate(${(start + endFirst) / 2} ${y})`,
+          );
+        } else {
+          packet.setAttribute("opacity", "0");
+          // Hide the packet while it crosses the network illustration, then resume at its output.
+          make(
+            "animateMotion",
+            {
+              path: full,
+              dur: "7.2s",
+              begin: `${i * 0.8}s`,
+              repeatCount: "indefinite",
+              keyPoints: `0;${l1 / length};${l2 / length};${l3 / length};1;1`,
+              keyTimes: "0;0.083333;0.104167;0.166667;0.263889;1",
+              calcMode: "linear",
+            },
+            packet,
+          );
+          make(
+            "animate",
+            {
+              attributeName: "opacity",
+              values: "0;1;1;0;0;1;1;0;0",
+              keyTimes: "0;0.01;0.073;0.083333;0.104167;0.114;0.247;0.263889;1",
+              dur: "7.2s",
+              begin: `${i * 0.8}s`,
+              repeatCount: "indefinite",
+            },
+            packet,
+          );
+        }
+      });
+      svg.setCurrentTime(0);
+      if (visible && !reduced.matches) svg.unpauseAnimations();
+      else svg.pauseAnimations();
+    };
+    new ResizeObserver(draw).observe(layout);
+    document.fonts.ready.then(draw);
+    reduced.addEventListener("change", draw);
+    new IntersectionObserver((entries) => {
+      visible = entries[0].isIntersecting;
+      if (visible && !reduced.matches) svg.unpauseAnimations();
+      else svg.pauseAnimations();
+    }).observe(root);
+  });
+</script>

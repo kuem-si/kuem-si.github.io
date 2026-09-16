@@ -1,0 +1,424 @@
+---
+import Cards from "./ServiceCards.astro";
+import Device from "./FieldDevice.astro";
+import { acquisition } from "../../data/solutionsOverview";
+const devices = [
+  { type: "water", title: "VODA IN PLIN", label: "Pretok · tlak · poraba" },
+  { type: "energy", title: "ENERGIJA", label: "kWh · moč · napetost" },
+  { type: "environment", title: "OKOLJE", label: "AQI · hrup · temperatura" },
+  {
+    type: "infrastructure",
+    title: "INFRASTRUKTURA",
+    label: "Stanje · alarm · dogodek",
+  },
+];
+---
+
+<section
+  id="zajem"
+  class="sol-section sol-tint acquisition"
+  aria-labelledby="acquisition-title"
+>
+  <div class="hp-wrap acquisition-layout">
+    <div class="acquisition-copy">
+      <p class="hp-eyebrow">01 · ZAJEM PODATKOV</p>
+      <h2 id="acquisition-title">Podatek se začne na terenu.</h2>
+      <p>
+        Povežemo senzorje, števce in obstoječo terensko opremo ter poskrbimo za
+        zanesljiv zajem podatkov.
+      </p>
+      <Cards items={acquisition} compact />
+    </div>
+    <figure
+      class="capture"
+      aria-label="Terenske naprave oddajajo meritve in dogodke v skupno podatkovno pot. Naslednji korak je povezljivost."
+    >
+      <figcaption>PODATKI IZ REALNEGA OKOLJA</figcaption>
+      <div class="capture-layout">
+        <svg class="capture-wires" aria-hidden="true"
+          ><g class="capture-paths"></g><g class="capture-packets"></g></svg
+        >
+        {
+          devices.map((device, i) => (
+            <article class={`capture-device capture-device-${i}`}>
+              <>
+                <strong>{device.title}</strong>
+                <Device type={device.type} />
+                <span class="capture-label" data-source={i}>
+                  {device.label}
+                </span>
+              </>
+            </article>
+          ))
+        }
+        <div class="capture-bus"><strong>ZAJETI PODATKI</strong></div>
+        <a class="capture-next" href="#povezljivost"
+          ><svg viewBox="0 0 48 20" aria-hidden="true"
+            ><path
+              d="M0 10h44m-9-8 9 8-9 8"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"></path></svg
+          ><span>NASLEDNJI KORAK · POVEZLJIVOST</span></a
+        >
+      </div>
+    </figure>
+  </div>
+</section>
+<style>
+  .acquisition-layout {
+    display: grid;
+    grid-template-columns: 0.98fr 1.02fr;
+    align-items: center;
+    gap: clamp(28px, 3vw, 56px);
+  }
+  .acquisition-layout > * {
+    min-width: 0;
+  }
+  .acquisition-copy :global(.sol-cards) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .acquisition-copy :global(.sol-cards .hp-card) {
+    padding: 24px 16px;
+    min-height: 160px;
+    box-shadow: 0 3px 12px #25323803;
+  }
+  .acquisition-copy :global(.sol-cards h3) {
+    font-size: clamp(15px, 1.1vw, 19px);
+    overflow-wrap: normal;
+  }
+  .capture {
+    margin: 0;
+    min-width: 0;
+    container-type: inline-size;
+    color: var(--hp-petrol);
+  }
+  .capture figcaption {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--hp-muted);
+    text-align: right;
+    margin-bottom: 32px;
+  }
+  .capture-layout {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 14px;
+    row-gap: 0;
+  }
+  .capture-device {
+    position: relative;
+    min-width: 0;
+    text-align: center;
+  }
+  .capture-device > strong {
+    display: block;
+    font-size: 13px;
+    line-height: 1.4;
+    min-height: 22px;
+    letter-spacing: 0.015em;
+  }
+  .capture-device :global(.field-device) {
+    margin: 10px 0 12px;
+  }
+  .capture-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    background: white;
+    border: 1px solid #a8c9ce;
+    border-radius: 5px;
+    padding: 7px 4px;
+    font-size: 12px;
+    line-height: 1.35;
+    font-weight: 600;
+  }
+  .capture-bus {
+    position: relative;
+    grid-column: 1/-1;
+    border: 1.5px solid var(--hp-petrol);
+    border-radius: 14px;
+    height: 48px;
+    margin: 112px 25% 0 4%;
+    background: #f1f6f7;
+    text-align: center;
+    padding-top: 4px;
+  }
+  .capture-bus strong {
+    font-size: 13px;
+    letter-spacing: 0.06em;
+  }
+  .capture-next {
+    grid-column: 1/-1;
+    display: flex;
+    align-items: center;
+    justify-self: end;
+    gap: 12px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 25%;
+    height: 48px;
+    padding-left: 8px;
+    color: var(--hp-petrol);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    min-height: 44px;
+  }
+  .capture-next svg {
+    width: 36px;
+    flex-shrink: 0;
+  }
+  .capture-next:hover span {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .capture-next:focus-visible {
+    outline: 3px solid var(--hp-petrol);
+    outline-offset: 5px;
+    border-radius: 3px;
+  }
+  .capture-wires {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 2;
+  }
+  @media (min-width: 1600px) {
+    .capture-device > strong {
+      font-size: 15px;
+    }
+    .capture-label {
+      font-size: 14px;
+    }
+    .capture-bus strong {
+      font-size: 15px;
+    }
+  }
+  @media (max-width: 1100px) {
+    .acquisition-layout {
+      grid-template-columns: 1fr;
+      gap: 42px;
+    }
+    .acquisition-copy :global(.sol-cards .hp-card) {
+      min-height: 140px;
+    }
+    .capture {
+      max-width: 860px;
+      width: 100%;
+      justify-self: center;
+    }
+  }
+  @media (max-width: 600px) {
+    .acquisition-copy :global(.sol-cards) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .acquisition-copy :global(.sol-cards .hp-card) {
+      padding: 20px;
+      min-height: 140px;
+    }
+    .acquisition-copy :global(.sol-cards h3) {
+      font-size: 17px;
+    }
+  }
+  @container (max-width:520px) {
+    .capture-layout {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 48px 24px;
+      padding-inline: 14px;
+    }
+    .capture-device > strong {
+      font-size: 12px;
+    }
+    .capture-label {
+      font-size: 12px;
+      min-height: 48px;
+    }
+    .capture-device :global(.field-device) {
+      max-width: 180px;
+      margin-inline: auto;
+    }
+    .capture-bus {
+      margin: 16px 0 0;
+    }
+    .capture-next {
+      position: static;
+      width: auto;
+      margin-top: -34px;
+      gap: 10px;
+      font-size: 10px;
+    }
+    .capture-next svg {
+      width: 34px;
+    }
+    .capture figcaption {
+      font-size: 10px;
+    }
+  }
+</style>
+<script>
+  document.querySelectorAll<HTMLElement>(".capture").forEach((root) => {
+    const layout = root.querySelector<HTMLElement>(".capture-layout")!;
+    const svg = root.querySelector<SVGSVGElement>(".capture-wires")!;
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    let visible = false;
+    const ns = "http://www.w3.org/2000/svg";
+    const make = (
+      tag: string,
+      attrs: Record<string, string>,
+      parent: Element,
+    ) => {
+      const el = document.createElementNS(ns, tag);
+      Object.entries(attrs).forEach(([key, value]) =>
+        el.setAttribute(key, value),
+      );
+      parent.append(el);
+      return el;
+    };
+    const draw = () => {
+      const bounds = layout.getBoundingClientRect();
+      const mobile = root.clientWidth <= 520;
+      const rect = (el: Element) => {
+        const r = el.getBoundingClientRect();
+        return {
+          x: r.x - bounds.x,
+          y: r.y - bounds.y,
+          w: r.width,
+          h: r.height,
+        };
+      };
+      const bus = rect(root.querySelector(".capture-bus")!);
+      const lane = bus.y + bus.h - 10;
+      const end = bus.x + bus.w - 12;
+      const paths = svg.querySelector(".capture-paths")!;
+      const packets = svg.querySelector(".capture-packets")!;
+      paths.replaceChildren();
+      packets.replaceChildren();
+      make(
+        "path",
+        {
+          d: `M${bus.x + 10} ${lane}H${end}`,
+          fill: "none",
+          stroke: "#7DB7AB",
+          "stroke-width": "1",
+          opacity: ".5",
+        },
+        paths,
+      );
+      root.querySelectorAll("[data-source]").forEach((source, i) => {
+        const a = rect(source);
+        const x = a.x + a.w / 2,
+          y = a.y + a.h;
+        let entry = mobile
+          ? bus.x + bus.w * (i % 2 === 0 ? 0.12 : 0.88)
+          : Math.max(bus.x + 12, Math.min(end - 8, x));
+        // Keep the vertical entries clear of the central bus label.
+        if (
+          !mobile &&
+          entry > bus.x + bus.w * 0.3 &&
+          entry < bus.x + bus.w * 0.7
+        ) {
+          entry = bus.x + bus.w * (entry < bus.x + bus.w * 0.5 ? 0.27 : 0.73);
+        }
+        let d = `M${x} ${y}`;
+        if (mobile && i < 2) {
+          const gutter = i === 0 ? 4 : bounds.width - 4;
+          d += `V${y + 20}H${gutter}V${bus.y - 12}H${entry}V${lane}`;
+        } else
+          d += `V${bus.y - 16}Q${x} ${bus.y - 8} ${entry} ${bus.y}V${lane}`;
+        const branch = make(
+          "path",
+          {
+            d,
+            fill: "none",
+            stroke: "#156B75",
+            "stroke-width": "1.5",
+            "stroke-dasharray": "3 5",
+          },
+          paths,
+        ) as SVGPathElement;
+        const totalD = d + `H${end}`;
+        const size = mobile ? 6 : root.clientWidth < 700 ? 7 : 8;
+        const packet = make(
+          "rect",
+          {
+            x: String(-size / 2),
+            y: String(-size / 2),
+            width: String(size),
+            height: String(size),
+            rx: "1",
+            fill: "#E95D2A",
+          },
+          packets,
+        );
+        if (reduced.matches) {
+          const p = branch.getPointAtLength(branch.getTotalLength() * 0.5);
+          packet.setAttribute("transform", `translate(${p.x} ${p.y})`);
+        } else {
+          const vertical = branch.getTotalLength(),
+            horizontal = end - entry;
+          const duration = 1.2 + horizontal / (bus.w / 1.8);
+          const split = vertical / (vertical + horizontal);
+          packet.setAttribute("opacity", "0");
+          make(
+            "animateMotion",
+            {
+              path: totalD,
+              dur: "6.5s",
+              begin: `${i * 0.7}s`,
+              repeatCount: "indefinite",
+              keyPoints: `0;${split};1;1`,
+              keyTimes: `0;${1.2 / 6.5};${duration / 6.5};1`,
+              calcMode: "linear",
+            },
+            packet,
+          );
+          make(
+            "animate",
+            {
+              attributeName: "opacity",
+              values: "0;1;1;0;0",
+              keyTimes: `0;0.02;${(duration - 0.12) / 6.5};${duration / 6.5};1`,
+              dur: "6.5s",
+              begin: `${i * 0.7}s`,
+              repeatCount: "indefinite",
+            },
+            packet,
+          );
+        }
+      });
+      if (reduced.matches)
+        make(
+          "rect",
+          {
+            x: String(bus.x + bus.w * 0.45),
+            y: String(lane - 3),
+            width: "6",
+            height: "6",
+            rx: "1",
+            fill: "#E95D2A",
+          },
+          packets,
+        );
+      svg.setCurrentTime(0);
+      if (visible && !reduced.matches) svg.unpauseAnimations();
+      else svg.pauseAnimations();
+    };
+    new ResizeObserver(draw).observe(layout);
+    new IntersectionObserver((entries) => {
+      visible = entries[0].isIntersecting;
+      if (visible && !reduced.matches) svg.unpauseAnimations();
+      else svg.pauseAnimations();
+    }).observe(root);
+    reduced.addEventListener("change", draw);
+    document.fonts.ready.then(draw);
+  });
+</script>

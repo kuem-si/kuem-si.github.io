@@ -1,0 +1,401 @@
+﻿---
+import MainLayout from "../../layouts/MainLayout.astro";
+import NexaviaIntegration from "../../components/NexaviaIntegrationEn.astro";
+import logo from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
+import dashboard from "../../assets/brand/nexavia/nexavia-noc-dashboard.png";
+import "../../styles/nexavia.css";
+const roles = [
+  {
+    id: "vodstvo",
+    tab: "Management",
+    title: "From indicator to decision.",
+    items: [
+      "Key indicators in one place",
+      "Comparison of periods and locations",
+      "Reports for faster decisions",
+    ],
+    icons: ["▥", "⌁", "▤"],
+  },
+  {
+    id: "operativa",
+    tab: "Operations",
+    title: "From alert to completed action.",
+    items: [
+      "Overview of active events and alarms",
+      "Fast access to locations and devices",
+      "Tracking responses and completed actions",
+    ],
+    icons: ["△", "⌖", "✓"],
+  },
+  {
+    id: "it",
+    tab: "IT and administrators",
+    title: "Control over users, data and connections.",
+    items: [
+      "Device and data-source management",
+      "User roles and access rights",
+      "Overview of integrations and system status",
+    ],
+    icons: ["⌘", "♙", "⌁"],
+  },
+];
+const modules = [
+  ["♧", "Water and utilities", "Consumption, pressure, losses and quality."],
+  ["ϟ", "Energy", "Consumption, power and deviations."],
+  ["◇", "Environment", "Air, noise and environmental indicators."],
+  ["♧", "Mobility", "Traffic flows and sustainable mobility."],
+  ["▥", "Public infrastructure", "Status of facilities, devices and maintenance."],
+];
+const stories = [
+  ["Domplan", "Remote gas-meter monitoring."],
+  ["Brezovica", "Overview of water meters and utility infrastructure."],
+  ["Adria Mobil", "Energy data from the production environment."],
+];
+---
+
+<MainLayout
+  title="Nexavia | KUEM"
+  description="Nexavia turns infrastructure data into a useful overview, alerts and a basis for action."
+>
+  <section class="nx-hero" aria-labelledby="nx-title">
+    <div class="container nx-hero-grid">
+      <div class="nx-hero-copy">
+        <p class="nx-eyebrow">NEXAVIA PLATFORM</p><h1 id="nx-title">
+          All infrastructure data. One useful view.
+        </h1><p class="nx-lead">
+          Nexavia combines data from devices, existing systems and external sources and turns it into an overview, an alert and a basis for action.
+        </p><div class="nx-actions">
+          <a class="btn btn-primary" href="/en/contact"
+            >Book a presentation <span aria-hidden="true">→</span></a
+          ><a class="btn btn-secondary" href="#vloge"
+            >Explore the platform <span aria-hidden="true">↘</span></a
+          >
+        </div><ul class="nx-traits">
+          <li>Modular</li><li>Adaptable</li><li>Connected</li>
+        </ul>
+      </div>
+      <div class="nx-hero-visual">
+        <div class="nx-window">
+          <div class="nx-window-bar">
+            <span class="nx-dots" aria-hidden="true"><i></i><i></i><i></i></span
+            ><img src={logo.src} alt="Nexavia" width="125" height="40" />
+          </div><img
+            class="nx-dashboard"
+            src={dashboard.src}
+            alt="Real Nexavia screen: overview of devices, alarms and infrastructure map"
+            width="2197"
+            height="1224"
+            fetchpriority="high"
+          />
+        </div><span class="nx-status"
+          ><i aria-hidden="true"></i>Data is up to date</span
+        >
+      </div>
+    </div>
+  </section>
+  <section class="nx-trust" aria-label="Trusted by">
+    <div class="container">
+      <p class="nx-eyebrow">TRUSTED BY</p><div class="nx-trust-list">
+        <span>CMC Group</span><span>KOLEKTOR</span><span>Telegroup</span><span
+          >T-2</span
+        ><span>Vodotehnika</span>
+      </div>
+    </div>
+  </section>
+  <section
+    class="nx-section nx-roles"
+    id="vloge"
+    aria-labelledby="nx-roles-title"
+  >
+    <div class="container">
+      <div class="nx-role-heading">
+        <div>
+          <p class="nx-eyebrow">NEXAVIA IN EVERYDAY WORK</p><h2
+            id="nx-roles-title"
+          >
+            The right view for every role.
+          </h2><p>
+            Every user sees the data and tools they need for their work.
+          </p>
+        </div><div
+          class="nx-tabs"
+          role="tablist"
+          aria-label="User roles"
+        >
+          {
+            roles.map((role, i) => (
+              <button
+                id={`tab-${role.id}`}
+                type="button"
+                role="tab"
+                aria-selected={i === 0 ? "true" : "false"}
+                aria-controls={`panel-${role.id}`}
+                tabindex={i === 0 ? 0 : -1}
+                data-role={role.id}
+              >
+                {role.tab}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+      {
+        roles.map((role, i) => (
+          <div
+            class="nx-role-panel"
+            id={`panel-${role.id}`}
+            role="tabpanel"
+            aria-labelledby={`tab-${role.id}`}
+            tabindex="0"
+            data-panel={role.id}
+            hidden={i !== 0}
+          >
+            <>
+              <div class="nx-role-screen nx-window">
+                <div class="nx-window-bar">
+                  <>
+                    <span class="nx-dots" aria-hidden="true">
+                      <>
+                        <i />
+                        <i />
+                        <i />
+                      </>
+                    </span>
+                    <img src={logo.src} alt="Nexavia" width="120" height="36" />
+                  </>
+                </div>
+                {i === 1 ? (
+                  <img
+                    src={dashboard.src}
+                    alt="Real operational overview of devices and their map in Nexavia"
+                    width="2197"
+                    height="1224"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div class="nx-demo">
+                    <p class="nx-demo-note">Demo data</p>
+                    <h3>{i === 0 ? "Overview" : "Environment management"}</h3>
+                    <div class="nx-demo-cards">
+                      {(i === 0
+                        ? ["Total devices", "Active alarms", "Areas"]
+                        : ["Data sources", "Users", "Integrations"]
+                      ).map((x, j) => (
+                        <div>
+                          <small>{x}</small>
+                          <strong>
+                            {i === 0 ? ["1.248", "12", "5"][j] : "Active"}
+                          </strong>
+                        </div>
+                      ))}
+                    </div>
+                    <div class="nx-demo-chart">
+                      <b>{i === 0 ? "Consumption over time" : "System status"}</b>
+                      <svg
+                        viewBox="0 0 360 120"
+                        role="img"
+                        aria-label="Example trend chart"
+                      >
+                        <path
+                          d="M0 105H360M0 70H360M0 35H360"
+                          stroke="#dce8f0"
+                        />
+                        <path
+                          d="M0 95 L35 80 L65 88 L95 57 L125 77 L155 55 L185 63 L215 42 L245 65 L275 59 L305 31 L335 46 L360 18"
+                          fill="none"
+                          stroke="#3795df"
+                          stroke-width="3"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div class="nx-role-copy">
+                <>
+                  <h3>{role.title}</h3>
+                  <ul>
+                    {role.items.map((item, j) => (
+                      <li>
+                        <span aria-hidden="true">{role.icons[j]}</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <a href="/en/contact" class="nx-text-link">
+                    View a use case →
+                  </a>
+                </>
+              </div>
+            </>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+  <section class="nx-section nx-modules" aria-labelledby="nx-modules-title">
+    <div class="container">
+      <p class="nx-eyebrow">MODULAR PLATFORM</p><h2 id="nx-modules-title">
+        Start with one area. Expand when needed.
+      </h2><div class="nx-module-grid">
+        {
+          modules.map(([, title, copy], index) => (
+            <article class="nx-module-card">
+              <>
+                <span class="nx-module-icon" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 48 48"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    {index === 0 && (
+                      <path d="M24 4C19 13 11 22 11 30a13 13 0 0 0 26 0C37 22 29 13 24 4Z M16 30c0 5 3 8 8 8" />
+                    )}
+                    {index === 1 && (
+                      <path d="M27 3 13 27h11l-3 18 15-26H25l2-16Z" />
+                    )}
+                    {index === 2 && (
+                      <path d="M39 7C21 8 9 18 9 31c0 7 5 11 12 11 15 0 21-19 18-35Z M13 38c5-10 12-16 21-23" />
+                    )}
+                    {index === 3 && (
+                      <>
+                        <circle cx="10" cy="34" r="8" />
+                        <circle cx="38" cy="34" r="8" />
+                        <path d="m10 34 11-18 8 18H10m19 0 9-18h-8m-9 0-3-6h-5" />
+                      </>
+                    )}
+                    {index === 4 && (
+                      <path d="M6 44V17h14v27m0-32V4h13v40m0-23h9v23M12 23h2m-2 7h2m12-18h2m-2 8h2m-2 8h2M3 44h42" />
+                    )}
+                  </svg>
+                </span>
+                <h3>{title}</h3>
+                <p>{copy}</p>
+                <span aria-hidden="true">→</span>
+              </>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <section class="nx-section nx-kai" aria-labelledby="nx-kai-title">
+    <div class="container nx-kai-grid">
+      <div>
+        <p class="nx-eyebrow">KAI IN NEXAVIA</p><h2 id="nx-kai-title">
+          When an overview is not enough, KAI highlights what requires attention.
+        </h2><p>
+          KAI analyzes data within Nexavia, detects deviations and gives the
+          responsible person a clear alert and context for the next step.
+        </p><ul class="nx-kai-benefits">
+          <li>Deviation detection</li><li>Clear alerts</li><li>
+            Decision support
+          </li>
+        </ul><p class="nx-human">People remain in control of decisions.</p>
+      </div><div class="nx-kai-panel">
+        <div class="nx-kai-panel-head">
+          <strong>KAI — deviation detected</strong><span>High priority</span
+          >
+        </div><div class="nx-alert">
+          <span aria-hidden="true">△</span><div>
+            <strong>Unexpected consumption change</strong><small
+              >Alert example · Demo data</small
+            >
+          </div>
+        </div><p>Consumption over time</p><svg
+          viewBox="0 0 460 150"
+          role="img"
+          aria-label="Demo consumption trend with an orange anomaly"
+          ><path d="M0 125H460M0 90H460M0 55H460M0 20H460" stroke="#e4edf3"
+          ></path><polyline
+            points="0,104 25,95 50,105 75,98 100,106 125,91 150,97 175,88 200,96 225,89 250,98 275,94 300,102 325,92 350,100 375,94 400,37 415,90 440,94 460,89"
+            fill="none"
+            stroke="#438ddd"
+            stroke-width="3"></polyline><circle
+            cx="400"
+            cy="37"
+            r="7"
+            fill="#f06432"></circle></svg
+        ><div class="nx-recommendation">
+          <strong>Recommended next step</strong><p>
+            Check the location and compare the last 7 days.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <NexaviaIntegration />
+  <section class="nx-section nx-stories" aria-labelledby="nx-stories-title">
+    <div class="container">
+      <p class="nx-eyebrow">SUCCESS STORIES</p><h2 id="nx-stories-title">
+        Nexavia in real environments.
+      </h2><div class="nx-story-grid">
+        {
+          stories.map(([name, copy]) => (
+            <article>
+              <>
+                <span aria-hidden="true">▥</span>
+                <div>
+                  <>
+                    <h3>{name}</h3>
+                    <p>{copy}</p>
+                    <a href="/en/references" class="nx-text-link">
+                      Read the story →
+                    </a>
+                  </>
+                </div>
+              </>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <section class="nx-closing" aria-labelledby="nx-closing-title">
+    <div class="container nx-closing-inner">
+      <div>
+        <h2 id="nx-closing-title">See Nexavia with your data.</h2><p>
+          In a short presentation, we show how the platform could support your
+          specific use case.
+        </p>
+      </div><a class="btn btn-primary" href="/en/contact"
+        >Book a presentation →</a
+      >
+    </div>
+  </section>
+</MainLayout>
+<script>
+  const tabs = [
+    ...document.querySelectorAll<HTMLButtonElement>(".nx-tabs [role='tab']"),
+  ];
+  const panels = [...document.querySelectorAll<HTMLElement>(".nx-role-panel")];
+  function activate(tab: HTMLButtonElement, focus = false) {
+    tabs.forEach((item) => {
+      const selected = item === tab;
+      item.setAttribute("aria-selected", String(selected));
+      item.tabIndex = selected ? 0 : -1;
+    });
+    panels.forEach((panel) => {
+      panel.hidden = panel.dataset.panel !== tab.dataset.role;
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => activate(tab));
+    tab.addEventListener("keydown", (event) => {
+      let next = index;
+      if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+      else if (event.key === "ArrowLeft")
+        next = (index - 1 + tabs.length) % tabs.length;
+      else if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = tabs.length - 1;
+      else return;
+      event.preventDefault();
+      activate(tabs[next], true);
+    });
+  });
+</script>
+

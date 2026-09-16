@@ -1,0 +1,19 @@
+---
+const { steps = [] } = Astro.props as {
+  steps?: Array<{ title: string; description: string }>;
+};
+---
+
+<div class="architecture-flow">
+  {
+    steps.map((step, index) => (
+      <article class="architecture-step">
+        <span class="architecture-step-number">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <h3>{step.title}</h3>
+        <p>{step.description}</p>
+      </article>
+    ))
+  }
+</div>

@@ -1,0 +1,568 @@
+---
+import { homeDataPath } from "../data/site";
+import type { Locale } from "../lib/i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const sl = locale === "sl";
+const steps = homeDataPath[locale];
+---
+
+<section
+  class="section dark complete-data-path"
+  data-complete-data-path
+  aria-labelledby={`complete-data-path-title-${locale}`}
+>
+  <div class="container complete-data-path-inner">
+    <header class="complete-data-path-head">
+      <div>
+        <p class="eyebrow">
+          {sl ? "Celotna podatkovna pot" : "The complete data path"}
+        </p><h2 id={`complete-data-path-title-${locale}`}>
+          {
+            sl
+              ? "Od signala do odločitve in ukrepa."
+              : "From signal to decision and action."
+          }
+        </h2>
+      </div><p class="complete-data-path-intro">
+        {
+          sl
+            ? "Zajem, prenos, obdelavo in analitiko povezujemo v eno zanesljivo podatkovno pot. Rezultat je jasen operativni pregled, hitrejše razumevanje dogodkov in pravočasen ukrep."
+            : "We connect acquisition, transfer, processing and analytics into one reliable data path. The result is a clear operational view, faster understanding of events and timely action."
+        }
+      </p>
+    </header>
+
+    <ol class="complete-data-path-steps">
+      {
+        steps.map((step, index) => (
+          <li
+            class:list={{
+              "complete-data-path-step": true,
+              "is-final": index === steps.length - 1,
+            }}
+            style={`--step-delay: ${index * 140}ms`}
+          >
+            <span class="complete-data-path-route" aria-hidden="true" />
+            <span class="complete-data-path-turn" aria-hidden="true" />
+            <span class="complete-data-path-node" aria-hidden="true" />
+            <div class="complete-data-path-copy">
+              <span class="complete-data-path-label">{step.label ?? ""}</span>
+              <h3>{step.title}</h3>
+              <p>{step.summary}</p>
+              <a href={step.href}>
+                {sl ? "Podrobnosti" : "Learn more"}<span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <a
+      class="complete-data-path-all"
+      href={sl ? "/resitve" : "/en/solutions"}
+    >
+      {sl ? "Raziščite vse rešitve" : "Explore all solutions"}<span
+        aria-hidden="true">→</span
+      >
+    </a>
+  </div>
+</section>
+
+<script>
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  );
+
+  document
+    .querySelectorAll<HTMLElement>("[data-complete-data-path]")
+    .forEach((section) => {
+      if (reducedMotion.matches || !("IntersectionObserver" in window)) {
+        section.classList.add("is-visible");
+        return;
+      }
+
+      section.classList.add("is-animated");
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) return;
+          section.classList.add("is-visible");
+          observer.unobserve(section);
+        },
+        { threshold: 0.22 },
+      );
+      observer.observe(section);
+    });
+</script>
+
+<style>
+  .complete-data-path.dark {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background-color: #161a1d;
+    background-image: radial-gradient(
+      circle at 72% 58%,
+      rgba(21, 107, 117, 0.14),
+      transparent 38%
+    );
+  }
+  .complete-data-path::before {
+    position: absolute;
+    z-index: -1;
+    inset: 34% 4% 8%;
+    content: "";
+    opacity: 0.06;
+    background-image:
+      linear-gradient(rgba(70, 125, 131, 0.16) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(70, 125, 131, 0.16) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse at center, #000 18%, transparent 78%);
+  }
+  .complete-data-path-inner {
+    position: relative;
+    z-index: 1;
+  }
+  .complete-data-path-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
+    gap: clamp(3rem, 7vw, 7.5rem);
+    align-items: end;
+  }
+  .complete-data-path-head > div {
+    max-width: 760px;
+  }
+  .complete-data-path-head .eyebrow {
+    color: #f06432;
+  }
+  .complete-data-path-head h2 {
+    max-width: 760px;
+    margin: 0;
+    font-size: clamp(2.75rem, 4vw, 4rem);
+    line-height: 1.05;
+  }
+  .complete-data-path-intro {
+    max-width: 500px;
+    margin: 0 0 0.2rem;
+    color: #d2d9da;
+    font-size: clamp(1.125rem, 1.35vw, 1.25rem);
+    line-height: 1.62;
+  }
+  .complete-data-path-steps {
+    display: grid;
+    position: relative;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    margin: clamp(4.5rem, 7vw, 6.5rem) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .complete-data-path-step {
+    display: flex;
+    position: relative;
+    box-sizing: border-box;
+    min-width: 0;
+    min-height: 360px;
+    padding: 4.3rem clamp(0.75rem, 1.2vw, 1.1rem) 1.75rem;
+    flex-direction: column;
+  }
+  .complete-data-path-step::before {
+    position: absolute;
+    top: 31px;
+    left: 50%;
+    width: 1px;
+    height: 25px;
+    content: "";
+    background: linear-gradient(rgba(80, 151, 158, 0.42), transparent);
+  }
+  .complete-data-path-route {
+    position: absolute;
+    top: 25px;
+    right: 0;
+    left: 0;
+    height: 2px;
+    background: rgba(45, 129, 138, 0.3);
+  }
+  .complete-data-path-route::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+    background: #26808a;
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  .complete-data-path-step:first-child .complete-data-path-route {
+    left: 50%;
+  }
+  .complete-data-path-step:last-child .complete-data-path-route {
+    right: 50%;
+  }
+  .complete-data-path-turn {
+    display: none;
+  }
+  .complete-data-path-node {
+    position: absolute;
+    z-index: 2;
+    top: 20px;
+    left: calc(50% - 6px);
+    width: 12px;
+    height: 12px;
+    background: #f06432;
+    transition:
+      transform 180ms ease,
+      box-shadow 180ms ease;
+  }
+  .complete-data-path-copy {
+    display: grid;
+    grid-template-rows: 28px 58px minmax(0, 1fr) auto;
+    height: 100%;
+    flex: 1;
+    transition: color 180ms ease;
+  }
+  .complete-data-path-label {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    color: #9eb8ba;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(0.75rem, 0.82vw, 0.8125rem);
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+  .complete-data-path-step h3 {
+    margin: 0;
+    color: #f3f5f5;
+    font-size: clamp(1.125rem, 1.35vw, 1.25rem);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .complete-data-path-step p {
+    margin: 0;
+    padding-bottom: 1.25rem;
+    color: #c4cdcf;
+    font-size: clamp(0.9375rem, 1vw, 1rem);
+    line-height: 1.55;
+    transition: color 180ms ease;
+  }
+  .complete-data-path-step a,
+  .complete-data-path-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #e1e7e8;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .complete-data-path-step a span,
+  .complete-data-path-all span {
+    color: #4b9aa2;
+    transition: transform 180ms ease;
+  }
+  .complete-data-path-step:hover .complete-data-path-node,
+  .complete-data-path-step:focus-within .complete-data-path-node {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 5px rgba(240, 100, 50, 0.1);
+  }
+  .complete-data-path-step:hover .complete-data-path-route::after,
+  .complete-data-path-step:focus-within .complete-data-path-route::after {
+    background: #3a939c;
+  }
+  .complete-data-path-step:hover p,
+  .complete-data-path-step:focus-within p {
+    color: #e0e5e6;
+  }
+  .complete-data-path-step a:hover span,
+  .complete-data-path-step a:focus-visible span,
+  .complete-data-path-all:hover span,
+  .complete-data-path-all:focus-visible span {
+    transform: translateX(3px);
+  }
+  .complete-data-path-step.is-final {
+    box-sizing: border-box;
+    outline: 1px solid rgba(240, 100, 50, 0.22);
+    outline-offset: -1px;
+    background: linear-gradient(135deg, rgba(240, 100, 50, 0.035), transparent 70%);
+  }
+  .complete-data-path-step.is-final .complete-data-path-node {
+    top: 18px;
+    left: calc(50% - 8px);
+    width: 16px;
+    height: 16px;
+  }
+  .complete-data-path-step.is-final .complete-data-path-route::after {
+    background: linear-gradient(90deg, #26808a, #f06432);
+  }
+  .complete-data-path-step.is-final h3 {
+    color: #fff;
+    font-weight: 700;
+  }
+  .complete-data-path-all {
+    display: flex;
+    width: max-content;
+    margin: 1.5rem 0 0 auto;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid rgba(75, 154, 162, 0.5);
+  }
+  .complete-data-path.is-animated:not(.is-visible)
+    .complete-data-path-route::after {
+    transform: scaleX(0);
+  }
+  .complete-data-path.is-animated:not(.is-visible)
+    .complete-data-path-node,
+  .complete-data-path.is-animated:not(.is-visible)
+    .complete-data-path-copy {
+    opacity: 0;
+  }
+  .complete-data-path.is-visible .complete-data-path-route::after {
+    animation: complete-data-path-route-in 520ms ease-out both;
+    animation-delay: var(--step-delay);
+  }
+  .complete-data-path.is-visible .complete-data-path-node {
+    animation: complete-data-path-node-in 420ms ease-out both;
+    animation-delay: calc(var(--step-delay) + 110ms);
+  }
+  .complete-data-path.is-visible .complete-data-path-copy {
+    animation: complete-data-path-copy-in 480ms ease-out both;
+    animation-delay: calc(var(--step-delay) + 190ms);
+  }
+  .complete-data-path.is-visible
+    .complete-data-path-step.is-final
+    .complete-data-path-node {
+    animation:
+      complete-data-path-node-in 420ms ease-out both,
+      complete-data-path-final-node 560ms ease-out both;
+    animation-delay:
+      calc(var(--step-delay) + 110ms),
+      calc(var(--step-delay) + 480ms);
+  }
+  @keyframes complete-data-path-route-in {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+  @keyframes complete-data-path-node-in {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes complete-data-path-copy-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes complete-data-path-final-node {
+    50% {
+      box-shadow: 0 0 0 7px rgba(240, 100, 50, 0.12);
+    }
+  }
+  @media (max-width: 1199px) and (min-width: 701px) {
+    .complete-data-path-head {
+      gap: 3rem;
+    }
+    .complete-data-path-steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2.5rem 0;
+    }
+    .complete-data-path-step {
+      min-height: 320px;
+      padding-inline: 1.35rem;
+    }
+    .complete-data-path-step:nth-child(3) {
+      grid-column: 2;
+      grid-row: 2;
+    }
+    .complete-data-path-step:nth-child(4) {
+      grid-column: 1;
+      grid-row: 2;
+    }
+    .complete-data-path-step:nth-child(5) {
+      grid-column: 1;
+      grid-row: 3;
+    }
+    .complete-data-path-step:nth-child(6) {
+      grid-column: 2;
+      grid-row: 3;
+    }
+    .complete-data-path-step:nth-child(2) .complete-data-path-turn,
+    .complete-data-path-step:nth-child(4) .complete-data-path-turn {
+      display: block;
+      position: absolute;
+      top: 25px;
+      width: 2px;
+      height: calc(100% + 2.5rem);
+      background: rgba(45, 129, 138, 0.55);
+    }
+    .complete-data-path-step:nth-child(2) .complete-data-path-turn {
+      right: 0;
+    }
+    .complete-data-path-step:nth-child(4) .complete-data-path-turn {
+      left: 0;
+    }
+    .complete-data-path-step:nth-child(3) .complete-data-path-route::after,
+    .complete-data-path-step:nth-child(4) .complete-data-path-route::after {
+      transform-origin: right;
+    }
+    .complete-data-path-step:first-child .complete-data-path-route {
+      left: 50%;
+    }
+    .complete-data-path-step:nth-child(2) .complete-data-path-route,
+    .complete-data-path-step:nth-child(3) .complete-data-path-route,
+    .complete-data-path-step:nth-child(4) .complete-data-path-route,
+    .complete-data-path-step:nth-child(5) .complete-data-path-route {
+      right: 0;
+      left: 0;
+    }
+    .complete-data-path-step:last-child .complete-data-path-route {
+      right: 50%;
+      left: 0;
+    }
+  }
+  @media (max-width: 800px) and (min-width: 701px) {
+    .complete-data-path-head {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+      align-items: start;
+    }
+  }
+  @media (max-width: 700px) {
+    .complete-data-path::before {
+      inset: 28% 0 4%;
+      background-size: 52px 52px;
+    }
+    .complete-data-path-head {
+      grid-template-columns: 1fr;
+      gap: 1.6rem;
+      align-items: start;
+    }
+    .complete-data-path-head h2 {
+      font-size: clamp(2.5rem, 11vw, 3.15rem);
+    }
+    .complete-data-path-intro {
+      font-size: 1.0625rem;
+    }
+    .complete-data-path-steps {
+      grid-template-columns: 1fr;
+      grid-auto-rows: auto;
+      gap: 2.4rem;
+      margin-top: 3.5rem;
+    }
+    .complete-data-path-step,
+    .complete-data-path-step:nth-child(3),
+    .complete-data-path-step:nth-child(4),
+    .complete-data-path-step:nth-child(5),
+    .complete-data-path-step:nth-child(6) {
+      grid-column: auto;
+      grid-row: auto;
+      min-height: 0;
+      padding: 0 0 1.2rem 3rem;
+    }
+    .complete-data-path-step::before {
+      display: none;
+    }
+    .complete-data-path-route,
+    .complete-data-path-step:first-child .complete-data-path-route,
+    .complete-data-path-step:last-child .complete-data-path-route {
+      top: 6px;
+      right: auto;
+      bottom: -2.4rem;
+      left: 5px;
+      width: 2px;
+      height: calc(100% + 2.4rem);
+    }
+    .complete-data-path-route::after,
+    .complete-data-path-step:nth-child(n + 4) .complete-data-path-route::after {
+      transform-origin: top;
+    }
+    .complete-data-path.is-animated:not(.is-visible)
+      .complete-data-path-route::after {
+      transform: scaleY(0);
+    }
+    .complete-data-path.is-visible .complete-data-path-route::after {
+      animation-name: complete-data-path-route-in-vertical;
+    }
+    .complete-data-path-step:last-child .complete-data-path-route {
+      display: none;
+    }
+    .complete-data-path-turn,
+    .complete-data-path-step:nth-child(2) .complete-data-path-turn,
+    .complete-data-path-step:nth-child(4) .complete-data-path-turn {
+      display: none;
+    }
+    .complete-data-path-node,
+    .complete-data-path-step.is-final .complete-data-path-node {
+      top: 0;
+      left: 0;
+    }
+    .complete-data-path-step.is-final {
+      margin-left: -0.75rem;
+      padding: 1.25rem 1rem 1.25rem 3.75rem;
+    }
+    .complete-data-path-step.is-final .complete-data-path-node {
+      top: 1.25rem;
+      left: 0.75rem;
+    }
+    .complete-data-path-copy {
+      display: block;
+      height: auto;
+      flex: none;
+      padding-top: 0;
+    }
+    .complete-data-path-label {
+      max-width: 100%;
+      margin-bottom: 0.55rem;
+    }
+    .complete-data-path-label:empty {
+      display: none;
+    }
+    .complete-data-path-step h3 {
+      margin-bottom: 0.85rem;
+    }
+    .complete-data-path-step p {
+      margin-bottom: 1.25rem;
+      padding-bottom: 0;
+    }
+    .complete-data-path-step h3 {
+      font-size: 1.2rem;
+    }
+    .complete-data-path-step p {
+      font-size: 1rem;
+    }
+    .complete-data-path-all {
+      margin-top: 0.5rem;
+    }
+  }
+  @keyframes complete-data-path-route-in-vertical {
+    from {
+      transform: scaleY(0);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .complete-data-path-route::after,
+    .complete-data-path-node,
+    .complete-data-path-copy {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>

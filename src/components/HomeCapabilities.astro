@@ -1,0 +1,325 @@
+---
+import { homeCapabilityLayers } from "../data/site";
+import type { Locale } from "../lib/i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const sl = locale === "sl";
+const layers = homeCapabilityLayers[locale];
+---
+
+<section
+  class="section home-capabilities"
+  aria-labelledby={`home-capabilities-title-${locale}`}
+>
+  <div class="container">
+    <header class="home-capabilities-head">
+      <div>
+        <p class="eyebrow">
+          {sl ? "KUEM zmogljivosti" : "KUEM capabilities"}
+        </p><h2 id={`home-capabilities-title-${locale}`}>
+          {
+            sl
+              ? "Tri plasti. Ena operativna celota."
+              : "Three layers. One operational system."
+          }
+        </h2>
+      </div><p class="home-capabilities-intro">
+        {
+          sl
+            ? "KUEM poveže teren, podatkovno platformo in operativne procese v celovit sistem. Posamezne zmogljivosti lahko uvedemo samostojno ali jih povežemo v enotno podatkovno pot."
+            : "KUEM connects the field, the data platform and operational processes into one complete system. Individual capabilities can be deployed independently or connected into a unified data path."
+        }
+      </p>
+    </header>
+
+    <div class="home-capability-layers">
+      {
+        layers.map((layer) => (
+          <article class="home-capability-layer">
+            <span class="home-capability-route" aria-hidden="true" />
+            <span class="home-capability-node" aria-hidden="true" />
+            <span class="home-capability-label">{layer.label}</span>
+            <h3>{layer.title}</h3>
+            {layer.capabilities.map((capability, index) => (
+              <div class="home-capability-item">
+                <h4>{capability.title}</h4>
+                <p>{capability.summary}</p>
+                <a href={capability.href}>
+                  {capability.linkLabel}<span aria-hidden="true">→</span>
+                </a>
+                {index === 0 && <span class="home-capability-divider" aria-hidden="true" />}
+              </div>
+            ))}
+          </article>
+        ))
+      }
+    </div>
+
+    <a
+      class="home-capabilities-all"
+      href={sl ? "/resitve" : "/en/solutions"}
+    >
+      {sl ? "Raziščite vse rešitve" : "Explore all solutions"}<span
+        aria-hidden="true">→</span
+      >
+    </a>
+  </div>
+</section>
+
+<style>
+  .home-capabilities {
+    background: var(--kuem-concrete);
+    color: var(--kuem-carbon);
+  }
+  .home-capabilities-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
+    gap: clamp(3rem, 7vw, 7.5rem);
+    align-items: end;
+    margin-bottom: clamp(2.25rem, 4vw, 3.5rem);
+  }
+  .home-capabilities-head > div {
+    max-width: 760px;
+  }
+  .home-capabilities-head h2 {
+    max-width: 720px;
+    margin: 0;
+  }
+  .home-capabilities-intro {
+    max-width: 530px;
+    margin: 0 0 0.2rem;
+    color: #454d50;
+    font-size: clamp(1rem, 1.2vw, 1.125rem);
+    line-height: 1.65;
+  }
+  .home-capability-layers {
+    display: grid;
+    position: relative;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .home-capability-layers::before {
+    position: absolute;
+    top: 25px;
+    right: calc(100% / 6);
+    left: calc(100% / 6);
+    height: 2px;
+    content: "";
+    background: rgba(21, 107, 117, 0.48);
+  }
+  .home-capability-layer {
+    display: grid;
+    position: relative;
+    box-sizing: border-box;
+    min-width: 0;
+    grid-template-rows: 28px 52px minmax(235px, 1fr) minmax(235px, 1fr);
+    padding: 4.35rem clamp(1.5rem, 2.4vw, 2.5rem) 0;
+  }
+  .home-capability-layer + .home-capability-layer {
+    border-left: 1px solid #b7b8b4;
+  }
+  .home-capability-route {
+    position: absolute;
+    top: 25px;
+    right: 0;
+    left: 0;
+    height: 2px;
+    background: var(--kuem-petrol);
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+  .home-capability-layer:first-child .home-capability-route {
+    left: 50%;
+  }
+  .home-capability-layer:last-child .home-capability-route {
+    right: 50%;
+  }
+  .home-capability-node {
+    position: absolute;
+    z-index: 2;
+    top: 19px;
+    left: calc(50% - 6px);
+    width: 12px;
+    height: 12px;
+    background: #f06432;
+    transition:
+      transform 200ms ease,
+      box-shadow 200ms ease;
+  }
+  .home-capability-label {
+    color: var(--kuem-petrol);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+  .home-capability-layer > h3 {
+    margin: 0;
+    color: var(--kuem-carbon);
+    font-size: clamp(1.5rem, 1.9vw, 1.75rem);
+    line-height: 1.2;
+  }
+  .home-capability-item {
+    display: grid;
+    position: relative;
+    min-width: 0;
+    grid-template-rows: 58px minmax(0, 1fr) auto;
+    padding: 1.65rem 0 1.8rem;
+    transition: background-color 200ms ease;
+  }
+  .home-capability-item h4 {
+    margin: 0;
+    color: var(--kuem-carbon);
+    font-size: clamp(1.1875rem, 1.4vw, 1.3125rem);
+    line-height: 1.3;
+  }
+  .home-capability-item p {
+    margin: 0;
+    padding: 0 0 1.4rem;
+    color: #454d50;
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+  .home-capability-item a,
+  .home-capabilities-all {
+    display: inline-flex;
+    width: max-content;
+    max-width: 100%;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--kuem-petrol);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .home-capability-item a span,
+  .home-capabilities-all span {
+    transition: transform 200ms ease;
+  }
+  .home-capability-divider {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    background: #b7b8b4;
+  }
+  .home-capability-layer:hover .home-capability-route,
+  .home-capability-layer:focus-within .home-capability-route {
+    opacity: 1;
+  }
+  .home-capability-layer:hover .home-capability-node,
+  .home-capability-layer:focus-within .home-capability-node {
+    transform: scale(1.18);
+    box-shadow: 0 0 0 5px rgba(240, 100, 50, 0.1);
+  }
+  .home-capability-item:hover,
+  .home-capability-item:focus-within {
+    background: rgba(21, 107, 117, 0.035);
+  }
+  .home-capability-item a:hover span,
+  .home-capability-item a:focus-visible span,
+  .home-capabilities-all:hover span,
+  .home-capabilities-all:focus-visible span {
+    transform: translateX(3px);
+  }
+  .home-capabilities-all {
+    display: flex;
+    margin: 0.5rem 0 0 auto;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid rgba(21, 107, 117, 0.5);
+  }
+  @media (max-width: 1050px) and (min-width: 761px) {
+    .home-capabilities-head {
+      gap: 3rem;
+    }
+    .home-capability-layer {
+      grid-template-rows: 28px 74px minmax(270px, 1fr) minmax(270px, 1fr);
+      padding-inline: 1.35rem;
+    }
+    .home-capability-item {
+      grid-template-rows: 66px minmax(0, 1fr) auto;
+    }
+  }
+  @media (max-width: 800px) and (min-width: 761px) {
+    .home-capabilities-head {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+      align-items: start;
+    }
+  }
+  @media (max-width: 760px) {
+    .home-capabilities-head {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      align-items: start;
+      margin-bottom: 2rem;
+    }
+    .home-capability-layers {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      padding-left: 0.4rem;
+    }
+    .home-capability-layers::before {
+      top: 6px;
+      right: auto;
+      bottom: 0;
+      left: 5px;
+      width: 2px;
+      height: auto;
+    }
+    .home-capability-layer {
+      display: block;
+      padding: 0 0 0 3rem;
+    }
+    .home-capability-layer + .home-capability-layer {
+      border-left: 0;
+    }
+    .home-capability-route,
+    .home-capability-layer:first-child .home-capability-route,
+    .home-capability-layer:last-child .home-capability-route {
+      top: 6px;
+      right: auto;
+      bottom: -3rem;
+      left: 5px;
+      width: 2px;
+      height: auto;
+    }
+    .home-capability-layer:last-child .home-capability-route {
+      bottom: auto;
+      height: 0;
+    }
+    .home-capability-node {
+      top: 0;
+      left: 0;
+    }
+    .home-capability-label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .home-capability-layer > h3 {
+      margin-bottom: 1.4rem;
+    }
+    .home-capability-item {
+      display: block;
+      min-height: 0;
+      padding: 1.45rem 0 1.6rem;
+    }
+    .home-capability-item h4 {
+      margin-bottom: 0.75rem;
+    }
+    .home-capability-item p {
+      padding-bottom: 1.15rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .home-capability-route,
+    .home-capability-node,
+    .home-capability-item,
+    .home-capability-item a span,
+    .home-capabilities-all span {
+      transition: none;
+    }
+  }
+</style>

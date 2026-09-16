@@ -1,0 +1,46 @@
+---
+import Icon from "./ServiceIcon.astro";
+import { solutionSections, endToEnd } from "../../data/solutionsOverview";
+const { hero = false } = Astro.props as { hero?: boolean };
+const nodes = hero
+  ? solutionSections.map((s) => ({ title: s.short, icon: s.icon }))
+  : endToEnd;
+---
+
+<div class:list={["sol-flow", { "sol-flow-hero": hero }]}>
+  <ol
+    aria-label={hero
+      ? "Sklopi rešitev od zajema do NOC"
+      : "Celotna pot podatka"}
+  >
+    {
+      nodes.map((node, i) => (
+        <li class="hp-card">
+          <>
+            <Icon name={node.icon} />
+            <strong>{node.title}</strong>
+            {i < nodes.length - 1 && (
+              <span class="sol-arrow" aria-hidden="true" />
+            )}
+          </>
+        </li>
+      ))
+    }
+  </ol>
+  {
+    hero && (
+      <div class="sol-external">
+        <>
+          <span class="sol-external-line" aria-hidden="true" />
+          <div class="hp-card">
+            <>
+              <Icon name="database" />
+              <span>ERP · SCADA · GIS</span>
+            </>
+          </div>
+          <span class="sr-only">Ločen vhod neposredno v Integracije.</span>
+        </>
+      </div>
+    )
+  }
+</div>

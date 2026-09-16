@@ -1,0 +1,62 @@
+---
+interface Props {
+  class?: string;
+  kicker: string;
+  title: string;
+  detail: string;
+  icon?: "device" | "systems" | "network";
+}
+const {
+  class: className = "",
+  kicker,
+  title,
+  detail,
+  icon = "device",
+} = Astro.props;
+---
+
+<article class:list={["flow-node", className]} tabindex="0">
+  <span
+    class:list={["flow-node-icon", `flow-node-icon--${icon}`]}
+    aria-hidden="true"
+  >
+    {
+      icon === "device" && (
+        <>
+          <>
+            <i />
+            <i />
+            <i />
+          </>
+        </>
+      )
+    }
+    {
+      icon === "systems" && (
+        <>
+          <>
+            <i />
+            <i />
+          </>
+        </>
+      )
+    }
+    {
+      icon === "network" && (
+        <>
+          <>
+            <i />
+            <i />
+            <i />
+          </>
+        </>
+      )
+    }
+  </span>
+  <span class="flow-node-copy"
+    ><span class="flow-kicker">{kicker}</span><strong>{title}</strong><span
+      class="flow-detail">{detail}</span
+    ></span
+  >
+  <span class="flow-port" aria-hidden="true"></span>
+</article>

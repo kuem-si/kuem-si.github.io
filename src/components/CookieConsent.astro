@@ -1,0 +1,37 @@
+---
+import type { Locale } from "../lib/i18n";
+import { withLocale } from "../lib/i18n";
+import { withBase } from "../lib/paths";
+
+const { locale = "en" } = Astro.props as { locale?: Locale };
+---
+
+<div class="cookie-banner" id="cookie-banner" hidden>
+  <p>
+    {
+      locale === "sl"
+        ? "Uporabljamo nujne piškotke in anonimizirano analitiko za izboljšanje spletnega mesta. Z nadaljevanjem soglasate s to uporabo. Preberite "
+        : "We use essential cookies and anonymized analytics to improve this website. By continuing, you consent to this use. See our "
+    }
+    <a href={withBase(withLocale("/privacy", locale))}
+      >{locale === "sl" ? "politiko zasebnosti" : "privacy policy"}</a
+    >.
+  </p>
+  <button class="btn btn-secondary" id="cookie-accept" type="button"
+    >{locale === "sl" ? "Sprejmi" : "Accept"}</button
+  >
+</div>
+
+<script>
+  const key = "kuem-cookie-consent";
+  const banner = document.getElementById("cookie-banner");
+  const button = document.getElementById("cookie-accept");
+
+  if (banner && button && !localStorage.getItem(key)) {
+    banner.hidden = false;
+    button.addEventListener("click", () => {
+      localStorage.setItem(key, "accepted");
+      banner.hidden = true;
+    });
+  }
+</script>

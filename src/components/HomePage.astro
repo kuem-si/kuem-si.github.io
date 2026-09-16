@@ -1,0 +1,181 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import HeroSystemFlow from "./HeroSystemFlow.astro";
+import HomeNexavia from "./HomeNexavia.astro";
+import HomeKai from "./HomeKai.astro";
+import HomeStories from "./HomeStories.astro";
+import HomeClosingCta from "./HomeClosingCta.astro";
+import type { Locale } from "../lib/i18n";
+const { locale } = Astro.props as { locale: Locale };
+const sl = locale === "sl";
+const industries = sl
+  ? [
+      "Energetika in komunala",
+      "Industrija in proizvodnja",
+      "Stavbe, trgovina in logistika",
+      "Mesta in okolje",
+      "Turizem, kampi in marine",
+      "Razpršena infrastruktura",
+    ]
+  : [
+      "Energy and utilities",
+      "Industry and manufacturing",
+      "Buildings, retail and logistics",
+      "Cities and environment",
+      "Tourism, campsites and marinas",
+      "Distributed infrastructure",
+    ];
+---
+
+<MainLayout
+  title={sl ? "Od naprave do odločitve" : "From device to decision"}
+  description={sl
+    ? "KUEM povezuje fizično infrastrukturo, podatke in operativne odločitve."
+    : "KUEM connects physical infrastructure, data and operational decisions."}
+>
+  <section class="hero home-hero">
+    <div class="container home-hero-grid">
+      <div class="home-hero-copy">
+        <p class="eyebrow">
+          KUEM · {
+            sl
+              ? "DIGITALIZACIJA IN OPERATIVNA TEHNOLOGIJA"
+              : "DIGITALIZATION AND OPERATIONAL TECHNOLOGY"
+          }
+        </p><h1>
+          {sl ? "Od naprave do odločitve." : "From device to decision."}
+        </h1><p class="lead">
+          {
+            sl
+              ? "Povezujemo fizično infrastrukturo, komunikacijska omrežja, podatkovne platforme in napredno analitiko v enoten operativni sistem."
+              : "We connect physical infrastructure, communication networks, data platforms and advanced analytics into one operational system."
+          }
+        </p><p class="hero-support">
+          {
+            sl
+              ? "Zanesljiv prenos podatkov in visoka stopnja avtomatizacije omogočata operativni vpogled ter ukrepanje z majhnim časovnim zamikom."
+              : "Reliable data transfer and a high degree of automation enable operational insight and action with minimal delay."
+          }
+        </p><div class="actions">
+          <a class="btn btn-primary" href="#nexavia"
+            >{sl ? "Poglejte, kako deluje" : "See how it works"}</a
+          ><a class="btn btn-link" href={sl ? "/kontakt" : "/en/contact"}
+            >{sl ? "Pogovorimo se" : "Let's talk"}</a
+          >
+        </div>
+      </div><HeroSystemFlow {locale} />
+    </div>
+  </section>
+  <!-- Trusted-by logos remain unpublished until approved assets and permissions are available. -->
+  <div id="nexavia"><HomeNexavia {locale} /></div><HomeKai
+    {locale}
+  /><HomeStories {locale} />
+  <section class="section industries-strip" aria-labelledby="industries-title">
+    <div class="container">
+      <p class="eyebrow">{sl ? "PANOGE" : "INDUSTRIES"}</p><h2
+        id="industries-title"
+      >
+        {
+          sl
+            ? "Različna okolja. Ena zanesljiva podatkovna pot."
+            : "Different environments. One reliable data path."
+        }
+      </h2><ol>
+        {
+          industries.map((industry, i) => (
+            <li>
+              <>
+                <span aria-hidden="true" />
+                <small>0{i + 1}</small>
+                <strong>{industry}</strong>
+              </>
+            </li>
+          ))
+        }
+      </ol><a class="industries-link" href={sl ? "/panoge" : "/en/industries"}
+        >{sl ? "Oglejte si področja delovanja" : "Explore our industries"}<span
+          aria-hidden="true">→</span
+        ></a
+      >
+    </div>
+  </section>
+  <HomeClosingCta {locale} />
+</MainLayout>
+<style>
+  .industries-strip {
+    position: relative;
+    overflow: hidden;
+    background: #10181b;
+    color: #fff;
+  }
+  .industries-strip h2 {
+    max-width: 900px;
+    font-size: clamp(2.5rem, 4.5vw, 5rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+  }
+  .industries-strip ol {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 3.5rem 0 2.5rem;
+    padding: 0;
+    list-style: none;
+  }
+  .industries-strip ol::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    height: 1px;
+    background: #286e75;
+  }
+  .industries-strip li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 0.7rem 1rem;
+    padding: 0 1.5rem 2.2rem 0;
+  }
+  .industries-strip li > span {
+    z-index: 1;
+    width: 11px;
+    height: 11px;
+    background: #f06432;
+  }
+  .industries-strip small {
+    color: #6f898d;
+    font-size: 0.75rem;
+  }
+  .industries-strip strong {
+    grid-column: 2;
+    color: #eaf0f0;
+    font-size: 1.05rem;
+    line-height: 1.35;
+  }
+  .industries-link {
+    display: inline-flex;
+    gap: 0.7rem;
+    align-items: center;
+    color: #fff;
+    font-weight: 650;
+    text-decoration: none;
+    border-bottom: 1px solid #2b7f88;
+    padding-bottom: 0.35rem;
+  }
+  .industries-link span {
+    color: #f06432;
+  }
+  @media (max-width: 760px) {
+    .industries-strip ol {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .industries-strip li {
+      padding-right: 0.8rem;
+    }
+    .industries-strip ol::before {
+      display: none;
+    }
+  }
+</style>

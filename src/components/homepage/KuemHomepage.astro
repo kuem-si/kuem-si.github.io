@@ -1,0 +1,652 @@
+---
+import SeoHead from "../SeoHead.astro";
+import Header from "../Header.astro";
+import Icon from "./LineIcon.astro";
+import DataFlow from "./DataFlow.astro";
+import wordmark from "../../assets/brand/kuem/KUEM_Official_Wordmark.svg";
+import nexavia from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
+import dashboard from "../../assets/brand/nexavia/nexavia-noc-dashboard.png";
+import {
+  homeNavigation,
+  benefits,
+  steps,
+  industries,
+  useCases,
+  partnership,
+} from "../../data/homepage";
+import { footerContent } from "../../data/site";
+import { references } from "../../data/references";
+import "../../styles/global.css";
+import "../../styles/homepage.css";
+const stories = [
+  { name: "Domplan", source: "DOMPLAN, d.d." },
+  { name: "Sombor", source: "Sombor-gas d.o.o." },
+  { name: "Koprivnica", source: "" },
+  { name: "Tropic", source: "Tropic Maloprodaja d.o.o." },
+].map((item) => ({
+  ...item,
+  detail: references.find((r) => r.name === item.source)?.detail?.sl,
+}));
+---
+
+<!doctype html>
+<html lang="sl">
+  <head
+    ><SeoHead
+      title="KUEM | Od naprave do odločitve"
+      description="KUEM povezuje naprave, obstoječe sisteme in podatke v platformo Nexavia za učinkovitejše upravljanje infrastrukture."
+    /></head
+  >
+  <body class="kuem-home">
+    <a class="skip-link" href="#main">Preskoči na vsebino</a>
+    <Header locale="sl" pathname="/" />
+    <header class="hp-header legacy-site-header" aria-hidden="true">
+      <div class="hp-wrap hp-header-inner">
+        <a href="#main" aria-label="KUEM – domača stran"
+          ><img
+            class="hp-wordmark"
+            src={wordmark.src}
+            width="158"
+            height="48"
+            alt="KUEM"
+          /></a
+        >
+        <button
+          class="hp-menu"
+          type="button"
+          aria-expanded="false"
+          aria-controls="homepage-nav"
+          aria-label="Odpri meni"
+          ><span></span><span></span><span></span></button
+        >
+        <nav id="homepage-nav" aria-label="Glavna navigacija">
+          {homeNavigation.map(([label, href]) => <a href={href}>{label}</a>)}
+          <a
+            class="hp-language"
+            href="/en/"
+            lang="en"
+            aria-label="View site in English">EN</a
+          >
+          <a class="hp-button" href="#kontakt"
+            >Dogovorite se za predstavitev <span aria-hidden="true">→</span></a
+          >
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <section class="hp-hero">
+        <svg
+          class="hp-ambient"
+          viewBox="0 0 900 380"
+          fill="none"
+          aria-hidden="true"
+          ><path
+            d="M280 0 440 135Q470 162 520 148T670 155 900 60M470 0 370 80Q350 100 390 128T570 110 760 180 900 160"
+          ></path><rect x="373" y="87" width="8" height="8"></rect><rect
+            x="663"
+            y="150"
+            width="6"
+            height="6"></rect></svg
+        >
+        <div class="hp-wrap hp-hero-grid">
+          <div>
+            <p class="hp-eyebrow">Digitalizacija infrastrukture in procesov</p>
+            <h1>Od naprave do odločitve.</h1>
+            <p class="hp-intro">
+              Povežemo terenske naprave, obstoječe sisteme in podatke v
+              platformo Nexavia – za pregleden nadzor, pravočasna opozorila in
+              boljše odločitve.
+            </p>
+            <div class="hp-actions">
+              <a class="hp-button" href="#nexavia"
+                >Poglejte Nexavio <span aria-hidden="true">→</span></a
+              ><a class="hp-button hp-outline" href="#kontakt">Pogovorimo se</a>
+            </div>
+          </div>
+          <div class="hp-hero-visual">
+            <p class="hp-flow-caption">
+              Podatki povezujejo<br />boljše skupnosti
+            </p><DataFlow />
+          </div>
+        </div>
+      </section>
+      <section class="hp-trust" aria-label="Zaupajo nam">
+        <div class="hp-wrap">
+          <h2 class="hp-eyebrow">Zaupajo nam</h2><ul>
+            {
+              ["CMC Group", "Kolektor", "Telegroup", "T-2", "Vodotehnika"].map(
+                (name) => <li>{name}</li>,
+              )
+            }
+          </ul>
+        </div>
+      </section>
+
+      <section id="nexavia" class="hp-product hp-section">
+        <div class="hp-wrap hp-product-grid">
+          <div class="hp-product-copy">
+            <div class="hp-nexavia-mark hp-product-logo">
+              <img
+                class="nexavia-wordmark"
+                src={nexavia.src}
+                width="1200"
+                height="360"
+                alt="Nexavia"
+                loading="lazy"
+              />
+            </div>
+            <h2>Vsi ključni podatki na enem mestu.</h2>
+            <p>
+              Nexavia združuje podatke iz terenskih naprav, meritev in
+              obstoječih informacijskih sistemov. Omogoča enoten pregled nad
+              stanjem infrastrukture, hitrejše zaznavanje odstopanj in
+              učinkovitejše ukrepanje.
+            </p>
+            <a class="hp-button" href="#kontakt" data-nexavia-contact
+              >Spoznajte Nexavio <span aria-hidden="true">→</span></a
+            >
+            <div class="hp-benefits">
+              {
+                benefits.map((item) => (
+                  <article class="hp-card">
+                    <>
+                      <Icon name={item.icon} />
+                      <h3>{item.title}</h3>
+                      <p>{item.text}</p>
+                    </>
+                  </article>
+                ))
+              }
+            </div>
+          </div>
+          <figure class="hp-browser">
+            <div class="hp-browser-bar" aria-hidden="true">
+              <i></i><i></i><i></i><span></span>
+            </div>
+            <a
+              href={dashboard.src}
+              data-dashboard-open
+              aria-haspopup="dialog"
+              aria-controls="dashboard-preview"
+              aria-label="Povečaj originalni Nexavia dashboard"
+            >
+              <img
+                src={dashboard.src}
+                width={dashboard.width}
+                height={dashboard.height}
+                alt="Originalni Nexavia Network Operations Center: zemljevid naprav, stanje omrežja, alarmi in kakovost podatkov"
+                decoding="async"
+                loading="lazy"
+              />
+              <span class="hp-enlarge"
+                >Povečaj prikaz <span aria-hidden="true">↗</span></span
+              >
+            </a>
+          </figure>
+        </div>
+      </section>
+
+      <section id="resitve" class="hp-section hp-how">
+        <div class="hp-wrap">
+          <p class="hp-eyebrow">Kako deluje</p><h2>
+            Obstoječe infrastrukture ne zamenjamo. Povežemo jo.
+          </h2>
+          <div class="hp-process">
+            <ol class="hp-steps">
+              {
+                steps.map((item, i) => (
+                  <li
+                    class="hp-card"
+                    id={i === 2 ? "platforma-korak" : undefined}
+                  >
+                    <>
+                      <div class="hp-step-icon">
+                        <>
+                          <span>0{i + 1}</span>
+                          <Icon name={item.icon} />
+                        </>
+                      </div>
+                      <div>
+                        <>
+                          <h3>{item.title}</h3>
+                          <p>{item.text}</p>
+                        </>
+                      </div>
+                    </>
+                  </li>
+                ))
+              }
+            </ol>
+            <svg
+              class="hp-api-route"
+              aria-label="Obstoječi sistemi in zunanji viri prek API neposredno v Nexavio"
+              role="img"
+              ><defs
+                ><marker
+                  id="api-arrow"
+                  viewBox="0 0 8 8"
+                  refX="7"
+                  refY="4"
+                  markerWidth="8"
+                  markerHeight="8"
+                  orient="auto"><path d="M1 1 7 4 1 7"></path></marker
+                ></defs
+              ><path data-api-path marker-end="url(#api-arrow)"></path><g
+                data-api-label
+                ><rect x="-22" y="-13" width="44" height="26" rx="4"
+                ></rect><text text-anchor="middle" dominant-baseline="central"
+                  >API</text
+                ></g
+              ></svg
+            >
+            <div class="hp-sources">
+              <h3>Obstoječi sistemi in zunanji viri</h3><ul>
+                {
+                  [
+                    "ERP",
+                    "SCADA",
+                    "GIS",
+                    "Vreme in javni podatki",
+                    "Druge namenske platforme",
+                  ].map((name, i) => (
+                    <li>
+                      <>
+                        <Icon
+                          name={
+                            ["database", "screen", "network", "leaf", "api"][i]
+                          }
+                        />
+                        <span>{name}</span>
+                      </>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="panoge" class="hp-section hp-industries">
+        <div class="hp-wrap">
+          <div class="hp-section-heading">
+            <h2>Ena platforma. Različni izzivi infrastrukture.</h2><p
+              class="hp-eyebrow"
+            >
+              Rešitve za občine, komunalna podjetja in industrijo
+            </p>
+          </div>
+          <div class="hp-industry-grid">
+            {
+              industries.map((item) => (
+                <article class="hp-card hp-industry">
+                  <>
+                    <Icon name={item.icon} />
+                    <div>
+                      <>
+                        <h3>{item.title}</h3>
+                        <p>{item.text}</p>
+                        <span class="hp-reference">
+                          <small>Referenca</small>
+                          {item.reference}
+                        </span>
+                      </>
+                    </div>
+                  </>
+                </article>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      <section id="kai" class="hp-section hp-kai">
+        <div class="hp-wrap hp-kai-grid">
+          <div>
+            <p class="hp-eyebrow">KAI · Analitični sloj Nexavie</p><h2>
+              Podatki, ki opozorijo, preden problem postane večji.
+            </h2><p>
+              KAI spremlja podatke, prepoznava odstopanja in izpostavi dogodke,
+              ki zahtevajo pozornost. Odgovorni osebi pomaga razumeti stanje in
+              izbrati naslednji korak.
+            </p><p class="hp-kai-emphasis">
+              KAI ne odloča namesto človeka. Iz velike količine podatkov
+              izpostavi tisto, kar zahteva njegovo pozornost.
+            </p><a class="hp-button hp-outline" href="/kai"
+              >Več o KAI <span aria-hidden="true">→</span></a
+            >
+          </div>
+          <div class="hp-kai-example">
+            <p class="hp-example-label">Ponazoritev zaznave odstopanja</p><div
+              class="hp-kai-panels"
+            >
+              <article class="hp-alert">
+                <p class="hp-alert-title">
+                  <span aria-hidden="true">△</span> Opozorilo
+                </p><h3>Nenavadno povečana poraba vode</h3><p>
+                  Poraba odstopa od običajnega vzorca. Preverite merilno mesto
+                  in stanje omrežja.
+                </p><a class="hp-button" href="/kai"
+                  >Kako deluje zaznava <span aria-hidden="true">→</span></a
+                >
+              </article>
+              <figure class="hp-chart">
+                <figcaption>Vzorec porabe vode</figcaption><div
+                  class="hp-chart-legend"
+                >
+                  <span>Običajni vzorec</span><span>Odstopanje</span>
+                </div><svg
+                  viewBox="0 0 320 180"
+                  role="img"
+                  aria-label="Shematski graf: poraba vode preseže običajni vzorec in se nato vrne v običajno območje."
+                  ><path
+                    class="hp-gridlines"
+                    d="M15 30H310M15 70H310M15 110H310M15 150H310M50 20V150M120 20V150M190 20V150M260 20V150"
+                  ></path><path
+                    class="hp-chart-range"
+                    d="M15 105 45 120 70 115 100 108 125 112 150 100 180 105 215 119 245 109 275 112 310 100V128L275 137 245 133 215 140 180 130 150 124 125 135 100 131 70 140 45 142 15 130Z"
+                  ></path><path
+                    class="hp-chart-normal"
+                    d="m15 119 30 12 25-5 30-7 25 5 25-12 30 5 35 12 30-10 30 6 35-11"
+                  ></path><path
+                    class="hp-chart-actual"
+                    d="m15 120 30 12 25-9 30-45 25-46 25 55 30 29 35 13 30-10 30 6 35-11"
+                  ></path><circle cx="125" cy="32" r="5"></circle><text
+                    x="15"
+                    y="174">00:00</text
+                  ><text x="102" y="174">06:00</text><text x="193" y="174"
+                    >12:00</text
+                  ><text x="277" y="174">18:00</text></svg
+                >
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="hp-section hp-usecases">
+        <div class="hp-wrap">
+          <div class="hp-section-heading">
+            <h2>Od podatka do konkretnega ukrepa.</h2><p class="hp-eyebrow">
+              Resnični izzivi. Konkretne rešitve.
+            </p>
+          </div><div class="hp-case-grid">
+            {
+              useCases.map((item) => (
+                <article class="hp-card">
+                  <>
+                    <Icon name={item.icon} />
+                    <div>
+                      <>
+                        <h3>{item.title}</h3>
+                        <p>{item.text}</p>
+                        <a class="hp-text-link" href={item.href}>
+                          Raziščite rešitev <span aria-hidden="true">→</span>
+                        </a>
+                      </>
+                    </div>
+                  </>
+                </article>
+              ))
+            }
+          </div>
+          <div id="zgodbe" class="hp-stories">
+            <h2 class="hp-eyebrow">Uspešne zgodbe</h2><div>
+              {
+                stories.map((item) =>
+                  item.detail ? (
+                    <details>
+                      <>
+                        <summary>
+                          {item.name}
+                          <span class="hp-story-toggle" aria-hidden="true" />
+                          <span class="sr-only"> – podrobnosti reference</span>
+                        </summary>
+                        <p>{item.detail}</p>
+                        <a class="hp-text-link" href="/reference">
+                          Vse reference →
+                        </a>
+                      </>
+                    </details>
+                  ) : (
+                    <span class="hp-story-name">{item.name}</span>
+                  ),
+                )
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="o-nas" class="hp-section hp-about">
+        <div class="hp-wrap">
+          <div class="hp-section-heading">
+            <h2>Tehnologija je uporabna šele, ko deluje kot celota.</h2><p
+              class="hp-eyebrow"
+            >
+              Zato izberete KUEM
+            </p>
+          </div><p class="hp-about-intro">
+            KUEM je tehnološki partner za digitalizacijo infrastrukture v
+            občinah, komunalnih podjetjih in industriji. Povezujemo naprave,
+            komunikacijska omrežja, obstoječe sisteme in podatke v rešitve, ki
+            delujejo kot celota.
+          </p><ol class="hp-partnership">
+            {
+              partnership.map((item) => (
+                <li>
+                  <>
+                    <Icon name={item.icon} />
+                    <div>
+                      <>
+                        <h3>{item.title}</h3>
+                        <p>{item.text}</p>
+                      </>
+                    </div>
+                  </>
+                </li>
+              ))
+            }
+          </ol><p class="hp-partner-line">
+            En partner od zajema podatka do ukrepa.
+          </p>
+        </div>
+      </section>
+      <section id="kontakt" class="hp-closing">
+        <div class="hp-wrap">
+          <div>
+            <h2>Začnimo z enim konkretnim izzivom.</h2><p>
+              Ni treba digitalizirati vsega naenkrat. Izberemo primer uporabe,
+              povežemo razpoložljive podatke in rešitev najprej preverimo v
+              omejenem obsegu.
+            </p>
+          </div><div class="hp-contact-options">
+            <a
+              class="hp-button"
+              href="mailto:info@kuem.si?subject=Dogovor%20za%20uvodni%20sestanek"
+              >Dogovorite se za uvodni sestanek <span aria-hidden="true">→</span
+              ></a
+            ><a
+              id="nexavia-povprasevanje"
+              class="hp-demo-link"
+              href="mailto:info@kuem.si?subject=Predstavitev%20platforme%20Nexavia"
+              >Želim predstavitev Nexavie <span aria-hidden="true">→</span></a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="hp-footer">
+      <div class="hp-wrap">
+        <div class="hp-footer-main">
+          <a href="#main" aria-label="KUEM – na vrh"
+            ><img
+              class="hp-wordmark"
+              src={wordmark.src}
+              alt="KUEM"
+              width="140"
+              height="42"
+              loading="lazy"
+            /></a
+          ><address>
+            <span>Kranj, Slovenija</span><span aria-hidden="true">|</span>
+            <a href={`mailto:${footerContent.sl.email}`}
+              >{footerContent.sl.email}</a
+            >
+          </address><nav aria-label="Navigacija v nogi">
+            {homeNavigation.map(([label, href]) => <a href={href}>{label}</a>)}
+            <a href="/en/" lang="en">EN</a>
+          </nav>
+        </div><div class="hp-footer-legal">
+          <a href={footerContent.sl.privacyHref}>Zasebnost</a><p>
+            © {new Date().getFullYear()} KUEM. Vse pravice pridržane.
+          </p>
+        </div>
+      </div>
+    </footer>
+    <!-- TODO: V projektu ni potrjene telefonske številke ali uličnega naslova; dodajte ju po prejemu pravilnih podatkov. -->
+    <dialog id="dashboard-preview" class="hp-dialog">
+      <button
+        type="button"
+        data-dashboard-close
+        aria-label="Zapri povečani prikaz">Zapri ×</button
+      ><img
+        src={dashboard.src}
+        width={dashboard.width}
+        height={dashboard.height}
+        alt="Povečan originalni Nexavia dashboard"
+        loading="lazy"
+      />
+    </dialog>
+    <script>
+      const menu = document.querySelector<HTMLButtonElement>(".hp-menu");
+      const nav = document.querySelector<HTMLElement>("#homepage-nav");
+      const closeMenu = () => {
+        menu?.setAttribute("aria-expanded", "false");
+        menu?.setAttribute("aria-label", "Odpri meni");
+        nav?.classList.remove("is-open");
+      };
+      menu?.addEventListener("click", () => {
+        const open = menu.getAttribute("aria-expanded") !== "true";
+        menu.setAttribute("aria-expanded", String(open));
+        menu.setAttribute("aria-label", open ? "Zapri meni" : "Odpri meni");
+        nav?.classList.toggle("is-open", open);
+      });
+      nav
+        ?.querySelectorAll("a")
+        .forEach((link) => link.addEventListener("click", closeMenu));
+      document.addEventListener("keydown", (event) => {
+        if (
+          event.key === "Escape" &&
+          menu?.getAttribute("aria-expanded") === "true"
+        ) {
+          closeMenu();
+          menu.focus();
+        }
+      });
+      document.addEventListener("click", (event) => {
+        if (
+          event.target instanceof Node &&
+          !nav?.contains(event.target) &&
+          !menu?.contains(event.target)
+        )
+          closeMenu();
+      });
+      document.addEventListener("focusin", (event) => {
+        if (
+          event.target instanceof Node &&
+          !nav?.contains(event.target) &&
+          !menu?.contains(event.target)
+        )
+          closeMenu();
+      });
+      matchMedia("(min-width: 1201px)").addEventListener("change", closeMenu);
+      document
+        .querySelector("[data-nexavia-contact]")
+        ?.addEventListener("click", (event) => {
+          event.preventDefault();
+          document.querySelector("#kontakt")?.scrollIntoView();
+          history.pushState(null, "", "#kontakt");
+          document
+            .querySelector<HTMLAnchorElement>("#nexavia-povprasevanje")
+            ?.focus({ preventScroll: true });
+        });
+      const process = document.querySelector<HTMLElement>(".hp-process");
+      const apiRoute = document.querySelector<SVGSVGElement>(".hp-api-route");
+      const updateApiRoute = () => {
+        const target = document
+          .querySelector("#platforma-korak")
+          ?.getBoundingClientRect();
+        const source = document
+          .querySelector(".hp-sources")
+          ?.getBoundingClientRect();
+        if (!process || !apiRoute || !target || !source) return;
+        const bounds = process.getBoundingClientRect();
+        const mobile = matchMedia("(max-width: 580px)").matches;
+        apiRoute.setAttribute(
+          "viewBox",
+          `0 0 ${bounds.width} ${bounds.height}`,
+        );
+        let path: string, labelX: number, labelY: number;
+        if (mobile) {
+          const x = bounds.width - 14;
+          const startY = source.top - bounds.top + 28;
+          const endY = target.top - bounds.top + target.height / 2;
+          path = `M${source.right - bounds.left} ${startY} H${x} V${endY} H${target.right - bounds.left + 2}`;
+          labelX = x;
+          labelY = (startY + endY) / 2;
+        } else {
+          const startX = bounds.width / 2;
+          const startY = source.top - bounds.top;
+          const endX = target.left - bounds.left + target.width / 2;
+          const endY = target.bottom - bounds.top + 2;
+          path = `M${startX} ${startY} V${startY - 24} H${endX} V${endY}`;
+          labelX = startX;
+          labelY = startY - 24;
+        }
+        apiRoute.querySelector("[data-api-path]")?.setAttribute("d", path);
+        apiRoute
+          .querySelector("[data-api-label]")
+          ?.setAttribute("transform", `translate(${labelX} ${labelY})`);
+      };
+      if (process) new ResizeObserver(updateApiRoute).observe(process);
+      document.fonts.ready.then(updateApiRoute);
+      const dialog =
+        document.querySelector<HTMLDialogElement>("#dashboard-preview");
+      document
+        .querySelector("[data-dashboard-open]")
+        ?.addEventListener("click", (event) => {
+          if (dialog) {
+            event.preventDefault();
+            dialog.showModal();
+          }
+        });
+      document
+        .querySelector("[data-dashboard-close]")
+        ?.addEventListener("click", () => dialog?.close());
+      dialog?.addEventListener("click", (event) => {
+        if (event.target === dialog) dialog.close();
+      });
+      if (
+        !matchMedia("(prefers-reduced-motion: reduce)").matches &&
+        "IntersectionObserver" in window
+      ) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("hp-visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.06 },
+        );
+        document.querySelectorAll(".hp-section").forEach((section) => {
+          section.classList.add("hp-reveal");
+          observer.observe(section);
+        });
+      }
+    </script>
+  </body>
+</html>

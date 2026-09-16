@@ -1,0 +1,148 @@
+---
+import wordmark from "../../assets/brand/kuem/KUEM_Official_Wordmark.svg";
+import Header from "../Header.astro";
+import { homeNavigationEn } from "../../data/homepage";
+import { footerContent } from "../../data/site";
+const { footer = false } = Astro.props as { footer?: boolean };
+const navigation = homeNavigationEn.map(([label, href]) => [
+  label,
+  href.startsWith("#") ? `/en/${href}` : href,
+]);
+---
+
+{
+  footer ? (
+    <footer class="hp-footer">
+      <div class="hp-wrap">
+        <>
+          <div class="hp-footer-main">
+            <>
+              <a href="/en/" aria-label="KUEM – home page">
+                <img
+                  class="hp-wordmark"
+                  src={wordmark.src}
+                  width="140"
+                  height="42"
+                  alt="KUEM"
+                  loading="lazy"
+                />
+              </a>
+              <address>
+                <>
+                  <span>Kranj, Slovenia</span>
+                  <span aria-hidden="true">|</span>
+                  <a href={`mailto:${footerContent.en.email}`}>
+                    {footerContent.en.email}
+                  </a>
+                </>
+              </address>
+              <nav aria-label="Footer navigation">
+                {navigation.map(([label, href]) => (
+                  <a href={href}>{label}</a>
+                ))}
+                <a href="/resitve" lang="sl">
+                  SL
+                </a>
+              </nav>
+            </>
+          </div>
+          <div class="hp-footer-legal">
+            <>
+              <a href={footerContent.en.privacyHref}>Privacy</a>
+              <p>© {new Date().getFullYear()} KUEM. All rights reserved.</p>
+            </>
+          </div>
+        </>
+      </div>
+    </footer>
+  ) : (
+    <>
+      <Header locale="en" pathname="/en/solutions" />
+      <header class="hp-header legacy-site-header" aria-hidden="true">
+        <div class="hp-wrap hp-header-inner">
+          <>
+            <a href="/en/" aria-label="KUEM – home page">
+              <img
+                class="hp-wordmark"
+                src={wordmark.src}
+                width="158"
+                height="48"
+                alt="KUEM"
+              />
+            </a>
+            <button
+              class="hp-menu"
+              type="button"
+              aria-expanded="false"
+              aria-controls="solutions-main-nav"
+              aria-label="Open menu"
+            >
+              <>
+                <span />
+                <span />
+                <span />
+              </>
+            </button>
+            <nav id="solutions-main-nav" aria-label="Main navigation">
+              {navigation.map(([label, href]) => (
+                <a
+                  href={href}
+                  aria-current={href === "/en/solutions" ? "page" : undefined}
+                >
+                  {label}
+                </a>
+              ))}
+              <a
+                href="/resitve"
+                lang="sl"
+                aria-label="View solutions in Slovenian"
+              >
+                SL
+              </a>
+              <a class="hp-button" href="/en/contact">
+                Book a presentation <span aria-hidden="true">→</span>
+              </a>
+            </nav>
+          </>
+        </div>
+      </header>
+    </>
+  )
+}
+<script>
+  const menu = document.querySelector<HTMLButtonElement>(".hp-menu");
+  const nav = document.querySelector("#solutions-main-nav");
+  const close = () => {
+    menu?.setAttribute("aria-expanded", "false");
+    menu?.setAttribute("aria-label", "Open menu");
+    nav?.classList.remove("is-open");
+  };
+  menu?.addEventListener("click", () => {
+    const open = menu.getAttribute("aria-expanded") !== "true";
+    menu.setAttribute("aria-expanded", String(open));
+    menu.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    nav?.classList.toggle("is-open", open);
+  });
+  nav
+    ?.querySelectorAll("a")
+    .forEach((link) => link.addEventListener("click", close));
+  document.addEventListener("keydown", (event) => {
+    if (
+      event.key === "Escape" &&
+      menu?.getAttribute("aria-expanded") === "true"
+    ) {
+      close();
+      menu.focus();
+    }
+  });
+  for (const eventName of ["click", "focusin"])
+    document.addEventListener(eventName, (event) => {
+      if (
+        event.target instanceof Node &&
+        !nav?.contains(event.target) &&
+        !menu?.contains(event.target)
+      )
+        close();
+    });
+  matchMedia("(min-width: 1201px)").addEventListener("change", close);
+</script>

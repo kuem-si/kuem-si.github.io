@@ -1,0 +1,107 @@
+---
+const { type, wireless = false } = Astro.props as {
+  type: string;
+  wireless?: boolean;
+};
+---
+
+<svg
+  class="connection-device"
+  viewBox="0 0 90 64"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.8"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  {
+    type === "sensor" && (
+      <>
+        <>
+          <rect x="12" y="12" width="32" height="46" rx="4" />
+          <path d="M19 20h18v13H19zM22 42h3m7 0h2M41 12V6" />
+          <circle cx="25" cy="49" r="1" />
+          <circle cx="32" cy="49" r="1" />
+          <path d="M37 7a5 5 0 0 1 10 0m-13 0a8 8 0 0 1 16 0" />
+        </>
+      </>
+    )
+  }
+  {
+    type === "meter" && (
+      <>
+        <>
+          <circle cx="29" cy="33" r="23" />
+          <circle cx="29" cy="33" r="18" />
+          <path d="M18 26h22v10H18zM24 42h2m7 0h2M6 24H2v18h4m46-18h5v18h-5" />
+        </>
+      </>
+    )
+  }
+  {
+    type === "plc" && (
+      <>
+        <>
+          <rect x="7" y="12" width="64" height="43" rx="2" />
+          <path d="M13 18h7v31h-7zM27 18h7v31h-7zM41 18h7v31h-7zM55 18h7v31h-7zM15 22h3m11 0h3m11 0h3m11 0h3" />
+        </>
+      </>
+    )
+  }
+  {
+    type === "gateway" && (
+      <>
+        <>
+          <rect x="12" y="34" width="65" height="23" rx="3" />
+          <path d="M31 34V4m23 30V4M20 46h3m6 0h3M20 57v3m49-3v3" />
+        </>
+      </>
+    )
+  }
+  {
+    type === "mobile" && (
+      <>
+        <>
+          <circle cx="44" cy="15" r="4" />
+          <path d="m43 19-15 40 16-9 16 9-15-40M34 43h20M37 33h14M34 43l22 11M54 43 32 54M31 6q-9 10 0 20m-7-26q-15 16 0 32M57 6q9 10 0 20m7-26q15 16 0 32" />
+        </>
+      </>
+    )
+  }
+  {
+    type === "reader" && (
+      <>
+        <>
+          <rect x="28" y="5" width="34" height="55" rx="4" />
+          <path d="M34 13h22v15H34zM37 42l8-5 8 5m-8-5v13" />
+          <circle cx="37" cy="44" r="2" />
+          <circle cx="53" cy="44" r="2" />
+          <circle cx="45" cy="52" r="2" />
+        </>
+      </>
+    )
+  }
+  {
+    type === "switch" && (
+      <>
+        <rect x="3" y="23" width="84" height="29" rx="4" />
+        {[11, 27, 43, 59].map((x) => (
+          <path d={`M${x} 31h11v7h-3v3h-5v-3h-3z`} />
+        ))}
+        <circle cx="78" cy="36" r="3" />
+        <path d="M12 52v3m65-3v3" />
+      </>
+    )
+  }
+  {wireless && <path d="M66 23q7 9 0 18m6-24q12 15 0 30m6-36q17 21 0 42" />}
+</svg>
+<style>
+  .connection-device {
+    display: block;
+    width: 76px;
+    height: 58px;
+    max-width: 100%;
+    color: var(--hp-petrol, #156b75);
+  }
+</style>

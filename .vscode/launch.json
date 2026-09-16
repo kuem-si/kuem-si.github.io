@@ -2,10 +2,24 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "./node_modules/.bin/astro dev",
-      "name": "Development server",
+      "name": "Astro: Dev Server (server-side debug)",
+      "type": "node-terminal",
       "request": "launch",
-      "type": "node-terminal"
+      "command": "npm run dev"
+    },
+    {
+      "name": "Astro: Browser client-side debug (start server first)",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:4321",
+      "webRoot": "${workspaceFolder}",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Astro: Build (debug)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run build"
     }
   ]
 }

@@ -1,0 +1,158 @@
+---
+import MainLayout from "../../../layouts/MainLayout.astro";
+import SectionHeader from "../../../components/SectionHeader.astro";
+import FeatureList from "../../../components/FeatureList.astro";
+import ArchitectureFlow from "../../../components/ArchitectureFlow.astro";
+import CTASection from "../../../components/CTASection.astro";
+
+const capabilities = [
+  "Data collection from meters, sensors and devices",
+  "Remote reading, supervision and alarms",
+  "LoRaWAN, NB-IoT, LTE, M-Bus, wM-Bus, MQTT, Modbus, API",
+  "Dashboards, charts, tables and maps",
+  "Alarms for errors, thresholds or outages",
+  "Measurement history and reports",
+  "Integrations with billing systems, SCADA, ERP, Power BI and other systems",
+  "Multiple users, organizations and access rights",
+  "Local, cloud or hybrid deployment",
+];
+
+const architecture = [
+  {
+    title: "Meters, sensors and devices",
+    description:
+      "Field sources that generate readings, events and status data.",
+  },
+  {
+    title: "LoRaWAN / NB-IoT / LTE / M-Bus / wM-Bus",
+    description:
+      "Connectivity and protocol layer for collecting data from distributed infrastructure.",
+  },
+  {
+    title: "Nexavia",
+    description: "Processing, supervision, alarm and data-management platform.",
+  },
+  {
+    title: "Dashboards, alarms, reports and integrations",
+    description:
+      "Operational views, notifications, exports and links to external systems.",
+  },
+];
+---
+
+<MainLayout
+  title="Nexavia platform for digital supervision | KUEM"
+  description="Nexavia is a platform for digital supervision, remote reading, alarms and integration of data from meters, sensors and devices via LoRaWAN, NB-IoT, LTE, M-Bus, wM-Bus and other technologies."
+>
+  <section class="hero">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">Nexavia</p>
+        <h1>
+          Nexavia platform for digital supervision and field-data management
+        </h1>
+        <p>
+          Nexavia is a modular platform for collecting, processing, visualizing,
+          alarming and integrating data from meters, sensors, devices and
+          external systems.
+        </p>
+      </div>
+      <aside class="panel">
+        <h2>Key capabilities</h2>
+        <FeatureList items={capabilities.slice(0, 5)} />
+      </aside>
+    </div>
+  </section>
+
+  <section>
+    <div class="container split">
+      <article>
+        <SectionHeader title="What is Nexavia" />
+        <p>
+          Nexavia connects field infrastructure with digital supervision
+          workflows: remote reading, monitoring, alarms, reports and
+          integrations with existing business systems. IoT technologies are used
+          where they fit the communication and deployment requirements.
+        </p>
+      </article>
+      <article class="card">
+        <h2>Key capabilities</h2>
+        <FeatureList items={capabilities} />
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <SectionHeader
+        title="Supported technologies"
+        description="LoRaWAN, NB-IoT, LTE, M-Bus, wM-Bus, MQTT, Modbus, API and other technologies can be connected according to project requirements."
+      />
+      <div class="reference-name-grid">
+        {
+          [
+            "LoRaWAN",
+            "NB-IoT",
+            "LTE",
+            "M-Bus",
+            "wM-Bus",
+            "MQTT",
+            "Modbus",
+            "API",
+          ].map((item) => <span class="reference-name-card">{item}</span>)
+        }
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <SectionHeader
+        title="System architecture"
+        description="Meters, sensors and devices → LoRaWAN / NB-IoT / LTE / M-Bus / wM-Bus → Nexavia → Dashboards, alarms, reports and integrations"
+      />
+      <ArchitectureFlow steps={architecture} />
+    </div>
+  </section>
+
+  <section>
+    <div class="container grid-2">
+      <article class="card">
+        <h2>Dashboards, alarms and reports</h2>
+        <p>
+          Nexavia provides dashboards, charts, tables, maps, alarm rules,
+          measurement history and reporting workflows.
+        </p>
+      </article>
+      <article class="card">
+        <h2>External system integrations</h2>
+        <p>
+          Nexavia integrates with billing systems, SCADA, ERP, Power BI and
+          other operational or business systems.
+        </p>
+      </article>
+      <article class="card">
+        <h2>Cloud, local or hybrid deployment</h2>
+        <p>
+          The platform can be deployed in cloud, local or hybrid architectures
+          depending on security, ownership and operational requirements.
+        </p>
+      </article>
+      <article class="card">
+        <h2>Who it is for</h2>
+        <p>
+          Nexavia is intended for utilities, municipalities, infrastructure
+          operators, industry, public services and partners that need reliable
+          field-data management.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <CTASection
+    title="Review Nexavia in your architecture"
+    description="KUEM can map Nexavia to your data, supervision, alarm and integration requirements."
+    ctaHref="/en/contact"
+    ctaText="Book a presentation"
+  />
+</MainLayout>

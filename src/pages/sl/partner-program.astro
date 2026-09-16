@@ -1,0 +1,81 @@
+﻿---
+import MainLayout from "../../layouts/MainLayout.astro";
+import LeadForm from "../../components/LeadForm.astro";
+---
+
+<MainLayout
+  title="Partnerski program | KUEM"
+  description="Pridruzite se KUEM partnerski mrezi za komunalne in industrijske IoT projekte na trgu EU."
+>
+  <section class="hero">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">Rast s partnerji</p>
+        <h1>Partnerstvo s KUEM za zanesljive IoT projekte.</h1>
+        <p>
+          KUEM sodeluje s sistemskimi integratorji in tehnološkimi ponudniki pri
+          uvajanju komunalnih in infrastrukturnih rešitev z enotnimi standardi
+          kakovosti in integracije.
+        </p>
+      </div>
+      <div class="panel">
+        <h2>Idealni profili partnerjev</h2>
+        <ul>
+          <li>Sistemski integratorji v komunalnem sektorju</li>
+          <li>Partnerji za implementacijo SCADA in obracunskih sistemov</li>
+          <li>Ponudniki povezljivosti in strojne opreme</li>
+          <li>Regionalni operaterji z izvedbeno kapaciteto</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container grid-3">
+      <article class="card">
+        <h2>Modeli sodelovanja</h2>
+        <ul>
+          <li>Partnerski model priporočil in skupne prodaje</li>
+          <li>Partnerski model implementacije in uvedbe</li>
+          <li>Partnerski model tehnoloških integracij</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h2>Postopek vključitve</h2>
+        <ul>
+          <li>Pregled sposobnosti in skladnosti s trgom</li>
+          <li>Tehnično usposabljanje in enablement</li>
+          <li>Skupno planiranje priložnosti</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h2>Prednosti partnerstva</h2>
+        <ul>
+          <li>Dostop do platforme Nexavia in podpore</li>
+          <li>Skupni go-to-market materiali</li>
+          <li>Strukturirane poti tehnične eskalacije</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="partner-form">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">Partnersko povpraševanje</p>
+        <h2>Prijavite se v KUEM partnerski program</h2>
+        <p>
+          Povejte nam o ciljnem segmentu, regijski pokritosti in tehničnih
+          zmožnostih.
+        </p>
+      </div>
+      <LeadForm
+        locale="sl"
+        formType="partner"
+        heading="Partnersko povpraševanje"
+        submitLabel="Pošlji povpraševanje"
+        sourcePage="partner-program-sl"
+      />
+    </div>
+  </section>
+</MainLayout>

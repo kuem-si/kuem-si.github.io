@@ -1,0 +1,40 @@
+---
+import { alternatePath, getLocaleFromPath } from "../lib/i18n";
+const {
+  title,
+  description,
+  pathname = Astro.url.pathname,
+  image = "/social-card.svg",
+  noindex = false,
+} = Astro.props;
+const locale = getLocaleFromPath(pathname);
+const canonical = new URL(pathname, Astro.site);
+const alternate = new URL(alternatePath(pathname), Astro.site);
+const fullTitle = title.includes("KUEM") ? title : `${title} | KUEM`;
+---
+
+<meta charset="UTF-8" /><meta
+  name="viewport"
+  content="width=device-width"
+/><title>{fullTitle}</title><meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex,follow" />}<link
+  rel="canonical"
+  href={canonical}
+/><link rel="alternate" hreflang={locale} href={canonical} /><link
+  rel="alternate"
+  hreflang={locale === "sl" ? "en" : "sl"}
+  href={alternate}
+/><link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site)} />
+<meta property="og:type" content="website" /><meta
+  property="og:title"
+  content={fullTitle}
+/><meta property="og:description" content={description} /><meta
+  property="og:url"
+  content={canonical}
+/><meta property="og:image" content={new URL(image, Astro.site)} /><meta
+  property="og:locale"
+  content={locale === "sl" ? "sl_SI" : "en_GB"}
+/><meta name="twitter:card" content="summary_large_image" /><link
+  rel="icon"
+  href="/favicon.svg"
+/>

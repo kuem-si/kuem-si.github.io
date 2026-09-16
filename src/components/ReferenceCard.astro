@@ -1,0 +1,17 @@
+---
+import type { Locale } from "../lib/i18n";
+import type { Reference } from "../data/references";
+import { t } from "../data/translations";
+
+const { reference, locale = "en" } = Astro.props as {
+  reference: Reference;
+  locale?: Locale;
+};
+const detail = reference.detail?.[locale];
+---
+
+<article class="card reference-card">
+  <p class="eyebrow">{t(locale, "detailedReference")}</p>
+  <h3>{reference.name}</h3>
+  {detail && <p>{detail}</p>}
+</article>

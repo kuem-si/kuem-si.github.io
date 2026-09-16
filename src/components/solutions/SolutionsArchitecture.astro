@@ -1,0 +1,856 @@
+---
+import Icon from "./ArchitectureIcon.astro";
+import logo from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
+const cards = [
+  {
+    id: "devices",
+    icon: "devices",
+    title: "NAPRAVE IN SENZORJI",
+    sub: "Števci · senzorji · telemetrija",
+  },
+  {
+    id: "radio",
+    icon: "radio",
+    title: "POVEZLJIVOST",
+    sub: "LoRaWAN · NB-IoT · wM-Bus · LAN",
+  },
+  {
+    id: "systems",
+    icon: "systems",
+    title: "OBSTOJEČI SISTEMI",
+    sub: "ERP · SCADA · GIS · zunanji viri",
+  },
+  {
+    id: "api",
+    icon: "api",
+    title: "API-INTEGRACIJE",
+    sub: "Standardni vmesniki",
+  },
+];
+---
+
+<section
+  class="architecture"
+  aria-label="Arhitektura rešitve: od podatka do odločitve"
+>
+  <div class="architecture-intro">
+    <div>
+      <strong>IZBERITE DEL REŠITVE</strong><p>
+        Kliknite posamezen korak za podrobnosti.
+      </p>
+    </div><div class="micro">OD PODATKA DO ODLOČITVE</div>
+  </div>
+  <p class="sr-only">
+    Naprave in senzorji prek povezljivosti v Nexavio. Ločena pot: obstoječi
+    sistemi prek API-integracij v Nexavio. KAI je analitični sloj Nexavie. Iz
+    Nexavie do odločitve in ukrepa. NOC spremlja vse sloje in ni postaja
+    podatkovnega toka.
+  </p>
+  <div class="architecture-grid">
+    <svg class="wires" aria-hidden="true"
+      ><defs
+        ><marker
+          id="architecture-arrow"
+          viewBox="0 0 10 10"
+          refX="9"
+          refY="5"
+          markerWidth="6"
+          markerHeight="6"
+          orient="auto"
+          ><path
+            d="m2 1 4 4-4 4"
+            fill="none"
+            stroke="#156B75"
+            stroke-width="1.5"></path></marker
+        ></defs
+      ><g class="monitor-links"></g><g class="data-links"></g><g class="packets"
+      ></g></svg
+    >
+    {
+      cards.map((card) => (
+        <button
+          type="button"
+          class={`node ${card.id}`}
+          data-node={card.id}
+          data-solution-step={
+            card.id === "devices" ? 0 : card.id === "radio" ? 1 : 2
+          }
+          aria-controls="solution-panel"
+          aria-expanded="false"
+          aria-haspopup="dialog"
+        >
+          <>
+            <Icon name={card.icon} />
+            <strong>{card.title}</strong>
+            <span>{card.sub}</span>
+          </>
+          <small class="node-open" aria-hidden="true">
+            ›
+          </small>
+        </button>
+      ))
+    }
+    <div class="node platform" data-node="platform">
+      <button
+        type="button"
+        class="platform-open"
+        data-solution-step="3"
+        aria-controls="solution-panel"
+        aria-expanded="false"
+        aria-haspopup="dialog"
+      >
+        <span class="logo"
+          ><img class="nexavia-wordmark" src={logo.src} alt="Nexavia" width="1200" height="360" /></span
+        >
+        <strong>NEXAVIA</strong><span>Zajem · obdelava · prikaz</span><small
+          class="node-open"
+          aria-hidden="true">›</small
+        >
+      </button>
+      <button
+        type="button"
+        class="kai"
+        data-solution-step="3"
+        aria-controls="solution-panel"
+        aria-expanded="false"
+        aria-haspopup="dialog"
+      >
+        <Icon name="kai" /><span
+          ><strong>KAI</strong><span>Analitika · opozorila · priporočila</span
+          ></span
+        ><small class="node-open" aria-hidden="true">›</small>
+      </button>
+    </div>
+    <button
+      type="button"
+      class="node action"
+      data-node="action"
+      data-solution-step="4"
+      aria-controls="solution-panel"
+      aria-expanded="false"
+      aria-haspopup="dialog"
+    >
+      <Icon name="action" /><strong>ODLOČITEV IN UKREP</strong><span
+        >Človek ali avtomatizacija</span
+      ><small class="node-open" aria-hidden="true">›</small>
+    </button>
+    <button
+      type="button"
+      class="noc"
+      data-node="noc"
+      data-solution-step="5"
+      aria-controls="solution-panel"
+      aria-expanded="false"
+      aria-haspopup="dialog"
+    >
+      <Icon name="noc" /><div>
+        <strong>NOC IN UPRAVLJANE STORITVE</strong><span
+          >Nadzor naprav · povezljivosti · alarmov · podpora</span
+        >
+      </div><svg class="network" viewBox="0 0 260 40" aria-hidden="true"
+        ><path d="M12 20h236" stroke="#7DB7AB"></path><g fill="#7DB7AB"
+          ><circle cx="12" cy="20" r="7"></circle><circle cx="90" cy="20" r="7"
+          ></circle><circle cx="248" cy="20" r="7"></circle></g
+        ><g fill="#253238" stroke="#7DB7AB" stroke-width="2"
+          ><path d="m50 12 8 8-8 8-8-8zM130 12l8 8-8 8-8-8zM210 12l8 8-8 8-8-8z"
+          ></path></g
+        ><circle cx="170" cy="20" r="9" fill="#E95D2A"></circle><text
+          x="170"
+          y="25"
+          text-anchor="middle"
+          fill="white"
+          font-size="14">!</text
+        ></svg
+      ><small>STALEN NADZOR<br />CELOTNE REŠITVE</small>
+    </button>
+  </div>
+</section>
+<style>
+  .architecture {
+    container-type: inline-size;
+    color: #253238;
+    position: relative;
+    width: 100%;
+  }
+  .micro {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: #156b75;
+    margin-bottom: 24px;
+  }
+  .micro:before {
+    content: "";
+    width: 28px;
+    height: 1px;
+    background: #7db7ab;
+  }
+  .architecture-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.38fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 36px 28px;
+  }
+  .node {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    background: white;
+    border: 1px solid #a8c9ce;
+    border-radius: 8px;
+    padding: 18px 8px;
+    box-shadow: 0 4px 16px #25323804;
+  }
+  .node > :global(svg) {
+    width: 66px;
+    height: 56px;
+    color: #156b75;
+    margin-bottom: 12px;
+  }
+  .architecture strong {
+    display: block;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+  .architecture span {
+    display: block;
+    font-size: 11px;
+    line-height: 1.5;
+    margin-top: 5px;
+    color: #486f7c;
+  }
+  .devices {
+    grid-area: 1/1;
+  }
+  .radio {
+    grid-area: 1/2;
+  }
+  .systems {
+    grid-area: 2/1;
+  }
+  .api {
+    grid-area: 2/2;
+  }
+  .platform {
+    grid-area: 1/3/3/4;
+    align-self: start;
+    padding: 20px 12px;
+  }
+  .action {
+    grid-area: 1/4;
+  }
+  .logo {
+    width: 100%;
+    height: 74px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 10px;
+  }
+  .logo img {
+    position: absolute;
+    max-width: none;
+    width: 190%;
+    height: auto;
+    left: -8%;
+    top: -8%;
+  }
+  .platform > strong {
+    font-size: 18px;
+  }
+  .kai {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #156b75;
+    width: 100%;
+    border-radius: 6px;
+    padding: 18px 10px;
+    margin-top: 20px;
+    text-align: left;
+    color: white;
+  }
+  .kai :global(svg) {
+    width: 40px;
+    flex-shrink: 0;
+  }
+  .kai strong {
+    font-size: 20px;
+  }
+  .kai span {
+    color: white;
+  }
+  .noc {
+    grid-area: 3/1/4/5;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #253238;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    min-width: 0;
+  }
+  .noc > :global(svg:first-child) {
+    width: 44px;
+    flex-shrink: 0;
+  }
+  .noc span {
+    color: #bdd4d9;
+  }
+  .network {
+    flex: 1;
+    min-width: 60px;
+    max-width: 300px;
+  }
+  .noc small {
+    font-size: 10px;
+    line-height: 1.6;
+    border-left: 1px solid #7db7ab;
+    padding-left: 16px;
+    margin-left: auto;
+  }
+  .wires {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+  @container (min-width:1000px) {
+    .architecture-grid {
+      gap: 42px 54px;
+    }
+    .node {
+      padding: 25px 12px;
+    }
+    .architecture strong {
+      font-size: 16px;
+    }
+    .architecture span {
+      font-size: 14px;
+    }
+    .node > :global(svg) {
+      width: 90px;
+      height: 70px;
+    }
+    .logo {
+      height: 100px;
+    }
+    .platform > strong {
+      font-size: 22px;
+    }
+    .kai {
+      padding: 22px 16px;
+    }
+    .noc small {
+      font-size: 12px;
+    }
+  }
+  @container (max-width:480px) {
+    .architecture-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 38px 24px;
+      padding: 0 16px;
+    }
+    .devices {
+      grid-area: 1/1;
+    }
+    .radio {
+      grid-area: 2/1;
+    }
+    .systems {
+      grid-area: 1/2;
+    }
+    .api {
+      grid-area: 2/2;
+    }
+    .platform {
+      grid-area: 3/1/4/3;
+      justify-self: center;
+      width: 100%;
+      max-width: 360px;
+    }
+    .action {
+      grid-area: 4/1/5/3;
+      justify-self: center;
+      width: 100%;
+      max-width: 360px;
+    }
+    .noc {
+      grid-area: 5/1/6/3;
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      padding: 18px 12px;
+      gap: 12px;
+    }
+    .noc > div {
+      flex: 1;
+    }
+    .network {
+      grid-column: 1 / -1;
+      width: 100%;
+      max-width: none;
+      height: 36px;
+    }
+    .noc small {
+      grid-column: 1 / -1;
+      font-size: 9px;
+    }
+    .node {
+      padding: 16px 7px;
+    }
+    .architecture strong {
+      font-size: 12px;
+    }
+    .architecture span {
+      font-size: 12px;
+    }
+    .logo {
+      width: 230px;
+      height: 82px;
+    }
+    .kai {
+      justify-content: center;
+    }
+    .micro {
+      font-size: 10px;
+    }
+    .platform > strong {
+      font-size: 20px;
+    }
+  }
+
+  .architecture-intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .architecture-intro > div > strong {
+    font-size: 12px;
+    color: #156b75;
+    letter-spacing: 0.04em;
+  }
+  .architecture-intro p {
+    font-size: 13px !important;
+    margin: 6px 0 0 !important;
+  }
+  .architecture-intro .micro {
+    font-size: 10px;
+    margin: 0;
+    white-space: nowrap;
+  }
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    line-height: inherit;
+    color: inherit;
+  }
+  .node,
+  .noc,
+  .platform-open,
+  .kai {
+    transition:
+      background-color 0.2s,
+      border-color 0.2s,
+      box-shadow 0.2s,
+      opacity 0.2s;
+  }
+  .node:hover,
+  .platform-open:hover {
+    border-color: #156b75;
+    box-shadow: 0 4px 16px #2532380c;
+  }
+  .architecture button:focus-visible {
+    outline: 3px solid #156b75;
+    outline-offset: 4px;
+  }
+  .node-open {
+    position: absolute;
+    right: 12px;
+    bottom: 6px;
+    font-size: 22px;
+    line-height: 1;
+    color: #156b75;
+  }
+  .node {
+    padding-bottom: 26px;
+  }
+  .platform {
+    padding: 10px;
+    gap: 10px;
+  }
+  .platform-open {
+    position: relative;
+    width: 100%;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: white;
+    padding: 8px 4px 22px;
+  }
+  .platform-open .logo {
+    display: block;
+    margin: 0 auto 8px;
+    height: 70px;
+  }
+  .platform-open > strong {
+    font-size: 17px;
+  }
+  .kai {
+    position: relative;
+    border: 1px solid #156b75;
+    margin: 0;
+    padding-bottom: 22px;
+  }
+  .kai .node-open {
+    color: white;
+  }
+  .kai > span {
+    margin: 0;
+    color: white;
+  }
+  .noc {
+    position: relative;
+    border: 1px solid #253238;
+    text-align: left;
+  }
+  .is-muted {
+    opacity: 0.85;
+  }
+  .architecture .is-selected {
+    border-color: #e95d2a;
+    box-shadow: 0 0 0 1px #e95d2a;
+    background: #fff8f4;
+  }
+  .architecture .kai.is-selected {
+    color: white;
+    background: #156b75;
+  }
+  .architecture .noc.is-selected {
+    background: #253238;
+    color: white;
+  }
+  .is-selected:before {
+    content: "Izbrani korak";
+    position: absolute;
+    right: 8px;
+    top: -29px;
+    background: #e95d2a;
+    color: #17212e;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 20px;
+    z-index: 5;
+  }
+  .platform:has(.is-selected) {
+    border-color: #e95d2a;
+  }
+  .platform .kai.is-selected:before {
+    display: none;
+  }
+  .node.is-selected,
+  .noc.is-selected {
+    z-index: 3;
+  }
+  @container (max-width:650px) {
+    .architecture-grid {
+      gap: 32px 18px;
+    }
+    .architecture strong {
+      font-size: 11px;
+    }
+    .architecture span {
+      font-size: 11px;
+    }
+    .node > :global(svg) {
+      width: 56px;
+      height: 48px;
+    }
+    .platform-open > strong {
+      font-size: 16px;
+    }
+    .platform-open .logo {
+      height: 48px;
+    }
+    .kai {
+      gap: 5px;
+      padding: 12px 6px 24px;
+    }
+    .kai :global(svg) {
+      width: 28px;
+    }
+    .kai strong {
+      font-size: 16px;
+    }
+    .noc {
+      gap: 10px;
+      padding: 16px 12px;
+    }
+    .noc small {
+      font-size: 9px;
+    }
+    .architecture-intro {
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .architecture-intro .micro {
+      margin-left: auto;
+    }
+  }
+  @container (max-width:480px) {
+    .architecture-grid {
+      gap: 36px 24px;
+    }
+    .architecture strong {
+      font-size: 12px;
+    }
+    .architecture span {
+      font-size: 12px;
+    }
+    .platform-open .logo {
+      height: 78px;
+      width: 230px;
+      max-width: 100%;
+    }
+    .platform-open > strong {
+      font-size: 20px;
+    }
+    .kai {
+      padding: 18px 14px 24px;
+      gap: 12px;
+    }
+    .kai strong {
+      font-size: 20px;
+    }
+    .kai :global(svg) {
+      width: 40px;
+    }
+    .noc {
+      padding: 18px 12px;
+    }
+    .noc small {
+      font-size: 10px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .architecture * {
+      transition: none !important;
+    }
+  }
+</style>
+<script>
+  document.querySelectorAll<HTMLElement>(".architecture").forEach((root) => {
+    const grid = root.querySelector<HTMLElement>(".architecture-grid")!;
+    const svg = root.querySelector<SVGSVGElement>(".wires")!;
+    const motion = matchMedia("(prefers-reduced-motion: reduce)");
+    let visible = false;
+    let selected = -1;
+    const highlight = () => {
+      root.classList.toggle("has-selection", selected >= 0);
+      root.querySelectorAll<HTMLElement>("[data-node]").forEach((el) => {
+        const step =
+          el.dataset.node === "platform" ? 3 : Number(el.dataset.solutionStep);
+        el.classList.toggle("is-muted", selected >= 0 && step !== selected);
+      });
+      svg.querySelectorAll<SVGElement>("[data-route-steps]").forEach((el) => {
+        const active =
+          selected < 0 ||
+          el.dataset.routeSteps?.split(" ").includes(String(selected));
+        if (el.tagName !== "rect") el.style.opacity = active ? "1" : "0.18";
+        if (el.tagName === "rect")
+          el.style.visibility = active ? "visible" : "hidden";
+      });
+      svg.querySelector<SVGGElement>(".monitor-links")!.style.opacity =
+        selected === 5 ? "1" : "0.55";
+    };
+    document.addEventListener("solution-step-change", (event) => {
+      selected = (event as CustomEvent<number>).detail;
+      highlight();
+    });
+    const ns = "http://www.w3.org/2000/svg";
+    const make = (
+      tag: string,
+      attrs: Record<string, string>,
+      parent: Element,
+    ) => {
+      const el = document.createElementNS(ns, tag);
+      Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
+      parent.append(el);
+      return el;
+    };
+    const draw = () => {
+      const bounds = grid.getBoundingClientRect();
+      const mobile = root.clientWidth <= 480;
+      const box = (id: string) => {
+        const r = root
+          .querySelector<HTMLElement>(`[data-node="${id}"]`)!
+          .getBoundingClientRect();
+        return {
+          x: r.x - bounds.x,
+          y: r.y - bounds.y,
+          w: r.width,
+          h: r.height,
+        };
+      };
+      const links = svg.querySelector(".data-links")!;
+      const packets = svg.querySelector(".packets")!;
+      const monitors = svg.querySelector(".monitor-links")!;
+      links.replaceChildren();
+      packets.replaceChildren();
+      monitors.replaceChildren();
+      const routes = [
+        ["devices", "radio", 0],
+        ["radio", "platform", 2.6],
+        ["systems", "api", 1.2],
+        ["api", "platform", 3.8],
+        ["platform", "action", 5.2],
+        ["platform", "action", 6.4],
+      ] as const;
+      routes.forEach(([from, to, delay], i) => {
+        const a = box(from),
+          b = box(to);
+        let d: string;
+        if (mobile) {
+          const x = a.x + a.w / 2,
+            y = a.y + a.h;
+          const endX =
+            to === "platform"
+              ? b.x + b.w * (from === "radio" ? 0.28 : 0.72)
+              : b.x + b.w / 2;
+          const endY = b.y;
+          const mid = (y + endY) / 2;
+          d = `M${x} ${y}V${mid}H${endX}V${endY}`;
+        } else {
+          const x = a.x + a.w,
+            y = from === "platform" ? b.y + b.h / 2 : a.y + a.h / 2;
+          const endY = from === "api" ? b.y + b.h - 35 : y;
+          d = `M${x} ${y}H${(x + b.x) / 2}V${endY}H${b.x}`;
+        }
+        const relevant =
+          from === "systems" || from === "api"
+            ? "2 3"
+            : from === "platform"
+              ? "3 4"
+              : "0 1 3";
+        if (i !== 5)
+          make(
+            "path",
+            {
+              d,
+              fill: "none",
+              stroke: "#156B75",
+              "stroke-width": "1.7",
+              "marker-end": "url(#architecture-arrow)",
+              "data-route-steps": relevant,
+            },
+            links,
+          );
+        const size = mobile ? 6 : 8;
+        const rect = make(
+          "rect",
+          {
+            x: String(-size / 2),
+            y: String(-size / 2),
+            width: String(size),
+            height: String(size),
+            rx: "1",
+            "data-route-steps": relevant,
+            fill: "#E95D2A",
+          },
+          packets,
+        );
+        if (motion.matches) {
+          if (i === 5) {
+            rect.remove();
+            return;
+          }
+          const p = make(
+            "path",
+            { d },
+            document.createElementNS(ns, "g"),
+          ) as SVGPathElement;
+          const point = p.getPointAtLength(p.getTotalLength() * 0.5);
+          rect.setAttribute("transform", `translate(${point.x} ${point.y})`);
+        } else {
+          rect.setAttribute("opacity", "0");
+          make(
+            "animateMotion",
+            {
+              path: d,
+              dur: "10s",
+              begin: `${delay}s`,
+              repeatCount: "indefinite",
+              keyPoints: "0;1;1",
+              keyTimes: "0;0.25;1",
+              calcMode: "linear",
+            },
+            rect,
+          );
+          make(
+            "animate",
+            {
+              attributeName: "opacity",
+              values: "0;1;1;0;0",
+              keyTimes: "0;0.02;0.23;0.25;1",
+              dur: "10s",
+              begin: `${delay}s`,
+              repeatCount: "indefinite",
+            },
+            rect,
+          );
+        }
+      });
+      const noc = box("noc");
+      ["devices", "radio", "api", "platform"].forEach((id) => {
+        const a = box(id);
+        let d: string;
+        if (mobile) {
+          const left = id === "devices" || id === "radio";
+          const side = left ? 5 : bounds.width - 5;
+          d = `M${a.x + (left ? 0 : a.w)} ${a.y + a.h * 0.7}H${side}V${noc.y}`;
+        } else {
+          const x = a.x + a.w * 0.88;
+          d = `M${x} ${a.y + a.h}V${noc.y}`;
+        }
+        make(
+          "path",
+          {
+            d,
+            fill: "none",
+            stroke: "#156B75",
+            "stroke-width": "1",
+            "stroke-dasharray": "2 4",
+            opacity: "0.45",
+          },
+          monitors,
+        );
+      });
+      highlight();
+      svg.setCurrentTime(0);
+      if (visible && !motion.matches) svg.unpauseAnimations();
+      else svg.pauseAnimations();
+    };
+    new ResizeObserver(draw).observe(grid);
+    new IntersectionObserver((entries) => {
+      visible = entries[0].isIntersecting;
+      if (visible && !motion.matches) svg.unpauseAnimations();
+      else svg.pauseAnimations();
+    }).observe(root);
+    motion.addEventListener("change", draw);
+    document.fonts.ready.then(draw);
+  });
+</script>

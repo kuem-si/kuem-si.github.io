@@ -1,0 +1,236 @@
+---
+import { solutionSteps } from "../../data/solutionExplorer";
+import Content from "./SolutionStepContent.astro";
+---
+
+<aside
+  id="solution-panel"
+  class="solution-panel"
+  role="dialog"
+  aria-modal="false"
+  aria-labelledby="solution-panel-title"
+  hidden
+>
+  <header class="panel-header">
+    <p class="hp-eyebrow" data-step-count>KORAK 01 / 06</p><h2
+      id="solution-panel-title"
+      tabindex="-1"
+    >
+      Naprave in senzorji
+    </h2><button
+      type="button"
+      class="panel-close"
+      data-panel-close
+      aria-label="Zapri podrobnosti"
+      ><svg viewBox="0 0 24 24" aria-hidden="true"
+        ><path
+          d="m5 5 14 14M19 5 5 19"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"></path></svg
+      ></button
+    >
+  </header>
+  <div class="panel-content" data-panel-content></div>
+  <footer class="panel-footer">
+    <nav class="panel-progress" aria-label="Izberite korak">
+      {
+        solutionSteps.map((step, i) => (
+          <button
+            type="button"
+            data-panel-step={i}
+            aria-label={`Korak ${i + 1}: ${step.name}`}
+          >
+            <span>{i + 1}</span>
+          </button>
+        ))
+      }
+    </nav><div class="panel-actions">
+      <button type="button" class="hp-button hp-outline" data-panel-back
+        >Zapri</button
+      ><button type="button" class="hp-button" data-panel-next
+        >Naslednji: Povezljivost <span aria-hidden="true">→</span></button
+      ><a class="hp-button" href="/#kontakt" data-panel-cta hidden
+        >Dogovorite se za predstavitev <span aria-hidden="true">→</span></a
+      >
+    </div>
+  </footer>
+</aside>
+{
+  solutionSteps.map((step, i) => (
+    <template data-step-template={i}>
+      <Content step={step} />
+    </template>
+  ))
+}
+<script>
+  import { solutionSteps } from "../../data/solutionExplorer";
+  const panel = document.querySelector<HTMLElement>("#solution-panel")!;
+  const content = panel.querySelector<HTMLElement>("[data-panel-content]")!;
+  const title = panel.querySelector<HTMLElement>("#solution-panel-title")!;
+  const back = panel.querySelector<HTMLButtonElement>("[data-panel-back]")!;
+  const next = panel.querySelector<HTMLButtonElement>("[data-panel-next]")!;
+  const cta = panel.querySelector<HTMLElement>("[data-panel-cta]")!;
+  const shell = document.querySelector<HTMLElement>(".solutions-shell")!;
+  const mobile = matchMedia("(max-width: 767px)");
+  let current = -1,
+    opener: HTMLElement | null = null,
+    savedScroll = 0,
+    closeTimer: ReturnType<typeof setTimeout> | undefined;
+  const syncMode = () => {
+    const modal = current >= 0 && mobile.matches;
+    panel.setAttribute("aria-modal", String(modal));
+    shell.inert = modal;
+    document.body.classList.toggle("solution-modal", modal);
+  };
+  const render = (index: number, focus = true) => {
+    clearTimeout(closeTimer);
+    if (index < 0) {
+      const wasOpen = current >= 0;
+      current = -1;
+      panel.classList.remove("is-open");
+      document.body.classList.remove("explorer-open");
+      syncMode();
+      document
+        .querySelectorAll<HTMLElement>("[data-solution-step]")
+        .forEach((el) => {
+          el.classList.remove("is-selected");
+          el.setAttribute("aria-expanded", "false");
+        });
+      document.dispatchEvent(
+        new CustomEvent("solution-step-change", { detail: -1 }),
+      );
+      if (wasOpen) {
+        panel.inert = true;
+        closeTimer = setTimeout(
+          () => {
+            panel.hidden = true;
+          },
+          matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 300,
+        );
+        opener?.focus({ preventScroll: true });
+        if (mobile.matches)
+          window.scrollTo({ top: savedScroll, behavior: "instant" });
+      }
+      return;
+    }
+    if (current < 0) {
+      savedScroll = window.scrollY;
+      if (!opener)
+        opener = document.querySelector<HTMLElement>(
+          `[data-solution-step="${index}"]`,
+        );
+    }
+    current = index;
+    const step = solutionSteps[index];
+    title.textContent = step.name;
+    panel.querySelector("[data-step-count]")!.textContent =
+      `KORAK ${String(index + 1).padStart(2, "0")} / 06`;
+    const template = document.querySelector<HTMLTemplateElement>(
+      `[data-step-template="${index}"]`,
+    )!;
+    content.replaceChildren(template.content.cloneNode(true));
+    content.scrollTop = 0;
+    back.textContent = index === 0 ? "Zapri" : "Nazaj";
+    next.hidden = index === 5;
+    cta.hidden = index !== 5;
+    if (index < 5)
+      next.replaceChildren(
+        document.createTextNode(`Naslednji: ${step.next} `),
+        Object.assign(document.createElement("span"), { textContent: "→" }),
+      );
+    panel
+      .querySelectorAll<HTMLElement>("[data-panel-step]")
+      .forEach((el, i) => {
+        if (i === index) el.setAttribute("aria-current", "step");
+        else el.removeAttribute("aria-current");
+      });
+    document
+      .querySelectorAll<HTMLElement>("[data-solution-step]")
+      .forEach((el) => {
+        const selected = Number(el.dataset.solutionStep) === index;
+        el.classList.toggle("is-selected", selected);
+        el.setAttribute("aria-expanded", String(selected));
+      });
+    panel.hidden = false;
+    panel.inert = false;
+    document.body.classList.add("explorer-open");
+    syncMode();
+    requestAnimationFrame(() => {
+      panel.classList.add("is-open");
+      if (focus) title.focus({ preventScroll: true });
+    });
+    document.dispatchEvent(
+      new CustomEvent("solution-step-change", { detail: index }),
+    );
+  };
+  const navigate = (index: number) => {
+    const hash = index >= 0 ? `#${solutionSteps[index].id}` : "";
+    if (location.hash !== hash)
+      history.pushState(
+        { solutionStep: index },
+        "",
+        `${location.pathname}${location.search}${hash}`,
+      );
+    render(index);
+  };
+  document.addEventListener("click", (event) => {
+    const trigger = (event.target as Element).closest<HTMLElement>(
+      "[data-solution-step]",
+    );
+    if (!trigger) return;
+    opener = trigger;
+    navigate(Number(trigger.dataset.solutionStep));
+  });
+  panel
+    .querySelector("[data-panel-close]")!
+    .addEventListener("click", () => navigate(-1));
+  back.addEventListener("click", () => navigate(current - 1));
+  next.addEventListener("click", () => navigate(Math.min(5, current + 1)));
+  panel
+    .querySelectorAll<HTMLElement>("[data-panel-step]")
+    .forEach((button) =>
+      button.addEventListener("click", () =>
+        navigate(Number(button.dataset.panelStep)),
+      ),
+    );
+  document.addEventListener("keydown", (event) => {
+    if (current < 0) return;
+    if (event.key === "Escape") {
+      event.preventDefault();
+      navigate(-1);
+    }
+    if (event.key === "Tab") {
+      const controls = [
+        ...panel.querySelectorAll<HTMLElement>("button,a[href]"),
+      ].filter((el) => !el.hidden && el.getClientRects().length > 0);
+      const first = controls[0],
+        last = controls[controls.length - 1];
+      if (
+        event.shiftKey &&
+        (document.activeElement === first ||
+          document.activeElement === title ||
+          !panel.contains(document.activeElement))
+      ) {
+        event.preventDefault();
+        last.focus();
+      } else if (
+        !event.shiftKey &&
+        (document.activeElement === last ||
+          !panel.contains(document.activeElement))
+      ) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  });
+  const fromUrl = () => {
+    const id = location.hash.slice(1);
+    const index = solutionSteps.findIndex((step) => step.id === id);
+    render(index);
+  };
+  window.addEventListener("popstate", fromUrl);
+  window.addEventListener("hashchange", fromUrl);
+  mobile.addEventListener("change", syncMode);
+  fromUrl();
+</script>

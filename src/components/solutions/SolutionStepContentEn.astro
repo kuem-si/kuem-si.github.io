@@ -1,0 +1,115 @@
+---
+import Icon from "./ServiceIcon.astro";
+import type { SolutionStep } from "../../data/solutionExplorer";
+import dashboard from "../../assets/brand/nexavia/nexavia-noc-dashboard.png";
+const { step } = Astro.props as { step: SolutionStep };
+---
+
+<h3 class="step-headline">{step.title}</h3>
+<p class="step-description">{step.description}</p>
+{
+  step.visual === "dashboard" && (
+    <figure class="step-dashboard">
+      <>
+        <img
+          src={dashboard.src}
+          width={dashboard.width}
+          height={dashboard.height}
+          alt="Real Nexavia view with a device map, indicators and alerts"
+        />
+        <figcaption>Nexavia dashboard preview</figcaption>
+      </>
+    </figure>
+  )
+}
+{
+  step.visual === "action" && (
+    <ol class="step-action-flow" aria-label="From alert to action">
+      {["Deviation detected", "Responsible person notified", "Action confirmed"].map(
+        (label, i) => (
+          <li>
+            <b aria-hidden="true">{i + 1}</b>
+            <Icon name={["bell", "people", "check"][i]} />
+            <span>{label}</span>
+          </li>
+        ),
+      )}
+    </ol>
+  )
+}
+{
+  step.visual === "noc" && (
+    <div class="step-status">
+      <>
+        <div>
+          <>
+            <strong>System status</strong>
+            <span>24/7 monitoring</span>
+          </>
+        </div>
+        <svg viewBox="0 0 360 62" aria-hidden="true">
+          <>
+            <path d="M16 30h328" stroke="#156B75" stroke-width="1.5" />
+            <g fill="#7DB7AB">
+              <>
+                <circle cx="16" cy="30" r="8" />
+                <circle cx="120" cy="30" r="8" />
+                <circle cx="344" cy="30" r="8" />
+              </>
+            </g>
+            <g fill="white" stroke="#156B75" stroke-width="1.5">
+              <path d="m67 21 9 9-9 9-9-9zM177 21l9 9-9 9-9-9zM289 21l9 9-9 9-9-9z" />
+            </g>
+            <circle cx="233" cy="30" r="12" fill="#E95D2A" />
+            <text
+              x="233"
+              y="35"
+              text-anchor="middle"
+              fill="white"
+              font-size="17"
+            >
+              !
+            </text>
+          </>
+        </svg>
+        <p>Devices · connectivity · alerts</p>
+      </>
+    </div>
+  )
+}
+<section class="step-details">
+  <h3>{step.heading}</h3><ul>
+    {
+      step.items.map((item) => (
+        <li>
+          <>
+            <span class="step-icon">
+              <Icon name={item.icon} />
+            </span>
+            <div>
+              <>
+                <h4>{item.title}</h4>
+                <p>{item.text}</p>
+              </>
+            </div>
+          </>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+{
+  step.tags && (
+    <section class="step-tags">
+      <>
+        <h3>{step.tagLabel}</h3>
+        <ul>
+          {step.tags.map((tag) => (
+            <li>{tag}</li>
+          ))}
+        </ul>
+      </>
+    </section>
+  )
+}
+{step.note && <p class="step-note">{step.note}</p>}

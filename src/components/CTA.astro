@@ -1,0 +1,25 @@
+---
+const { locale = "sl", title, text } = Astro.props;
+const sl = locale === "sl";
+---
+
+<section class="cta">
+  <div class="container">
+    <h2>
+      {
+        title ??
+          (sl
+            ? "Povežimo podatke z odločitvami."
+            : "Connect data with decisions.")
+      }
+    </h2><p>
+      {
+        text ??
+          (sl
+            ? "Povejte nam, kaj želite spremljati, povezati ali izboljšati. Skupaj bomo določili smiselno podatkovno pot in izvedbeni model."
+            : "Tell us what you need to monitor, connect or improve. Together, we will define a sensible data path and delivery model.")
+      }
+    </p><a class="btn btn-primary" href={sl ? "/kontakt" : "/en/contact"}
+      >{sl ? "Začnimo pogovor" : "Start a conversation"}</a>
+  </div>
+</section>

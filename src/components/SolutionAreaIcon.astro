@@ -1,0 +1,161 @@
+---
+const { name } = Astro.props as { name: string };
+---
+
+<svg class="solution-area-svg" viewBox="0 0 64 64" aria-hidden="true">
+  {
+    name === "meter" && (
+      <>
+        <path d="M16 18c-4 5-7 9-7 14a7 7 0 0 0 14 0c0-5-3-9-7-14Z" />
+        <path d="M33 13l-7 15h8l-4 14 11-19h-8l4-10Z" />
+        <path d="M49 17c-5 5-8 10-8 15a8 8 0 0 0 16 0c0-5-3-10-8-15Z" />
+        <path d="M10 49c5-3 9-3 14 0s9 3 14 0 9-3 16 0" />
+        <path d="M10 56c5-3 9-3 14 0s9 3 14 0 9-3 16 0" />
+      </>
+    )
+  }
+  {
+    name === "municipal" && (
+      <>
+        <path d="M18 52V24l14-8 14 8v28" />
+        <path d="M11 52h42" />
+        <path d="M27 52V41h10v11" />
+        <path d="M25 29h4M35 29h4M25 36h4M35 36h4" />
+        <path d="M32 16V9" />
+        <path d="M32 9h9" />
+        <path d="M10 52V40l8-5" />
+        <path d="M54 52V40l-8-5" />
+        <path d="M13 43h5M46 43h5" />
+      </>
+    )
+  }
+  {
+    name === "energy" && (
+      <>
+        <path d="M12 52h42" />
+        <path d="M18 52V40" />
+        <path d="M28 52V32" />
+        <path d="M38 52V37" />
+        <path d="M48 52V25" />
+        <path d="M14 30l10-9 10 8 14-16" />
+        <circle cx="14" cy="30" r="2.3" />
+        <circle cx="24" cy="21" r="2.3" />
+        <circle cx="34" cy="29" r="2.3" />
+        <circle cx="48" cy="13" r="2.3" />
+      </>
+    )
+  }
+  {
+    name === "temperature" && (
+      <>
+        <path d="M27 14a7 7 0 0 1 14 0v23a14 14 0 1 1-14 0V14Z" />
+        <path d="M34 19v24" />
+        <path d="M30 46a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z" />
+        <path d="M41 18h5M41 26h4" />
+      </>
+    )
+  }
+  {
+    name === "people" && (
+      <>
+        <circle cx="32" cy="20" r="5" />
+        <circle cx="18" cy="25" r="4" />
+        <circle cx="46" cy="25" r="4" />
+        <path d="M23 50v-8a9 9 0 0 1 18 0v8" />
+        <path d="M9 50v-6a8 8 0 0 1 11-7" />
+        <path d="M55 50v-6a8 8 0 0 0-11-7" />
+        <path d="M15 50v-8" />
+        <path d="M49 50v-8" />
+      </>
+    )
+  }
+  {
+    name === "lighting" && (
+      <>
+        <path d="M21 53V24a10 10 0 0 1 10-10h16" />
+        <path d="M15 53h12" />
+        <path d="M17 45h8" />
+        <path d="M47 14h7a4 4 0 0 1 0 8H42" />
+        <path d="M42 14v8" />
+        <path d="M34 22h8" />
+        <path d="M47 22l-3 5" />
+      </>
+    )
+  }
+  {
+    name === "environment" && (
+      <>
+        <path d="M46 12C27 16 15 30 17 49c18-2 30-14 33-33l-4-4Z" />
+        <path d="M21 45c7-10 14-17 25-25" />
+        <path d="M31 34l-1-9" />
+        <path d="M37 28l8 1" />
+      </>
+    )
+  }
+  {
+    name === "traffic" && (
+      <>
+        <path d="M14 40h36l-4-13a6 6 0 0 0-6-4H24a6 6 0 0 0-6 4l-4 13Z" />
+        <path d="M11 40v9h8" />
+        <path d="M53 40v9h-8" />
+        <circle cx="23" cy="49" r="4" />
+        <circle cx="41" cy="49" r="4" />
+        <path d="M22 32h20" />
+        <path d="M20 40h24" />
+      </>
+    )
+  }
+  {
+    name === "waste" && (
+      <>
+        <path d="M19 22h26" />
+        <path d="M25 22v-6h14v6" />
+        <path d="M23 22l3 32h12l3-32" />
+        <path d="M16 28h32" />
+        <path d="M30 33v15" />
+        <path d="M36 33v15" />
+      </>
+    )
+  }
+  {
+    name === "tourism" && (
+      <>
+        <path d="M10 53l15-35 15 35" />
+        <path d="M18 53V37" />
+        <path d="M25 18v35" />
+        <path d="M34 40h15a7 7 0 0 1 7 7v6H37" />
+        <path d="M40 40v-9h10l6 9" />
+        <circle cx="42" cy="53" r="3" />
+        <circle cx="53" cy="53" r="3" />
+      </>
+    )
+  }
+  {
+    name === "datacenter" && (
+      <>
+        <rect x="15" y="12" width="34" height="11" rx="3" />
+        <rect x="15" y="27" width="34" height="11" rx="3" />
+        <rect x="15" y="42" width="34" height="11" rx="3" />
+        <path d="M22 18h2" />
+        <path d="M29 18h13" />
+        <path d="M22 33h2" />
+        <path d="M29 33h13" />
+        <path d="M22 48h2" />
+        <path d="M29 48h13" />
+        <path d="M32 23v4" />
+        <path d="M32 38v4" />
+      </>
+    )
+  }
+  {
+    name === "code" && (
+      <>
+        <path d="M25 18L12 32l13 14" />
+        <path d="M39 18l13 14-13 14" />
+        <path d="M35 15l-6 34" />
+        <path d="M22 32h-3" />
+        <path d="M45 32h-3" />
+      </>
+    )
+  }
+</svg>

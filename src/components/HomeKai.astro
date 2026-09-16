@@ -1,0 +1,751 @@
+---
+import kaiLogo from "../assets/brand/kai/KAI_by_KUEM_Light.svg";
+import { homeKai } from "../data/site";
+import type { Locale } from "../lib/i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const content = homeKai[locale];
+---
+
+<section
+  id="home-kai"
+  class="home-kai"
+  data-home-kai
+  aria-labelledby="home-kai-title"
+>
+  <div class="kai-ambient" aria-hidden="true"></div>
+  <div class="container kai-layout">
+    <div class="kai-copy">
+      <p class="kai-slogan">{content.slogan}</p>
+      <h2 id="home-kai-title">{content.title}</h2>
+      <p class="kai-description">{content.description}</p>
+      <p class="kai-confirmation">
+        <span aria-hidden="true"></span>{content.confirmation}
+      </p>
+      <div class="kai-actions">
+        <a class="kai-primary" href={content.primaryHref}
+          >{content.primaryLabel}</a
+        >
+        <a class="kai-secondary" href={content.secondaryHref}
+          >{content.secondaryLabel}<span aria-hidden="true">→</span></a
+        >
+      </div>
+    </div>
+
+    <article class="kai-response" aria-labelledby="kai-response-question">
+      <header class="kai-response-header">
+        <div class="kai-logo-frame">
+          <img src={kaiLogo.src} alt="KAI by KUEM" loading="lazy" />
+        </div>
+        <div class="kai-response-meta">
+          <span class="kai-panel-label">{content.panelLabel}</span>
+          <span class="kai-integration">
+            <span aria-hidden="true"></span>{content.integrationLabel}
+          </span>
+        </div>
+      </header>
+
+      <div class="kai-question" data-kai-reveal style="--kai-delay: 80ms">
+        <span class="kai-block-label">{content.questionLabel}</span>
+        <h3 id="kai-response-question">{content.question}</h3>
+      </div>
+
+      <div class="kai-analysis">
+        <section
+          class="kai-block kai-block-observation"
+          data-kai-reveal
+          style="--kai-delay: 220ms"
+        >
+          <div class="kai-block-heading">
+            <span class="kai-node" aria-hidden="true"></span>
+            <h4>{content.observationLabel}</h4>
+          </div>
+          <span class="kai-block-meta">{content.observationMeta}</span>
+          <p>{content.observation}</p>
+        </section>
+
+        <section
+          class="kai-block kai-block-inference"
+          data-kai-reveal
+          style="--kai-delay: 380ms"
+        >
+          <div class="kai-block-heading">
+            <span class="kai-node" aria-hidden="true"></span>
+            <h4>{content.inferenceLabel}</h4>
+          </div>
+          <span class="kai-block-meta">{content.inferenceMeta}</span>
+          <p>{content.inference}</p>
+        </section>
+      </div>
+
+      <section class="kai-sources" data-kai-reveal style="--kai-delay: 540ms">
+        <h4>{content.supportLabel}</h4>
+        <ul>
+          {
+            content.supportSources.map((source) => (
+              <li>
+                <span aria-hidden="true" />
+                {source}
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <section
+        class="kai-recommendation"
+        data-kai-reveal
+        style="--kai-delay: 700ms"
+      >
+        <div class="kai-block-heading">
+          <span class="kai-node" aria-hidden="true"></span>
+          <h4>{content.recommendationLabel}</h4>
+        </div>
+        <p>{content.recommendation}</p>
+        <div class="kai-recommendation-footer">
+          <span class="kai-approval">
+            <span aria-hidden="true"></span>{content.approvalStatus}
+          </span>
+          <span class="kai-review">
+            {content.reviewLabel}<span aria-hidden="true">→</span>
+          </span>
+        </div>
+      </section>
+    </article>
+  </div>
+</section>
+
+<script>
+  const kaiSections = document.querySelectorAll<HTMLElement>("[data-home-kai]");
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  kaiSections.forEach((section) => {
+    if (section.dataset.kaiInitialized === "true") return;
+    section.dataset.kaiInitialized = "true";
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      section.classList.add("is-visible");
+      return;
+    }
+
+    section.classList.add("kai-motion-ready");
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        section.classList.add("is-visible");
+        observer.disconnect();
+      },
+      { threshold: 0.22 },
+    );
+    observer.observe(section);
+  });
+</script>
+
+<style>
+  .home-kai {
+    --kai-indigo: #4f46e5;
+    --kai-violet: #7c3aed;
+    --kai-cyan: #22b8cf;
+    --kai-copper: #f06432;
+    --kai-carbon: #111427;
+    --kai-muted: #686d80;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: clamp(5.5rem, 8vw, 8.5rem);
+    background:
+      linear-gradient(rgba(17, 20, 39, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(17, 20, 39, 0.025) 1px, transparent 1px),
+      #f5f4fa;
+    background-size: 44px 44px;
+    color: var(--kai-carbon);
+  }
+
+  .kai-ambient {
+    position: absolute;
+    z-index: -1;
+    width: min(62vw, 920px);
+    aspect-ratio: 1;
+    top: 50%;
+    left: -16%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(124, 58, 237, 0.13),
+      rgba(79, 70, 229, 0.055) 42%,
+      transparent 70%
+    );
+    filter: blur(12px);
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .kai-layout {
+    display: grid;
+    grid-template-areas: "panel copy";
+    grid-template-columns: minmax(0, 1.28fr) minmax(340px, 0.92fr);
+    align-items: center;
+    gap: clamp(2.5rem, 5.2vw, 5rem);
+  }
+
+  .kai-copy {
+    grid-area: copy;
+    max-width: 510px;
+  }
+
+  .kai-slogan,
+  .kai-block-label,
+  .kai-panel-label,
+  .kai-block-heading h4,
+  .kai-sources h4 {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.105em;
+  }
+
+  .kai-slogan {
+    margin: 0 0 1rem;
+    color: var(--kai-indigo);
+    font-size: 0.8125rem;
+    line-height: 1.35;
+  }
+
+  .kai-copy h2 {
+    max-width: 12ch;
+    margin: 0 0 1.45rem;
+    color: var(--kai-carbon);
+    font-size: clamp(2.45rem, 3.9vw, 3.75rem);
+    line-height: 1.04;
+  }
+
+  .kai-description {
+    margin: 0;
+    color: #414659;
+    font-size: 1.0625rem;
+    line-height: 1.68;
+  }
+
+  .kai-confirmation {
+    display: grid;
+    grid-template-columns: 9px 1fr;
+    gap: 0.8rem;
+    align-items: start;
+    margin: 1.45rem 0 0;
+    color: #313649;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.55;
+  }
+
+  .kai-confirmation > span {
+    width: 9px;
+    height: 9px;
+    margin-top: 0.42rem;
+    background: var(--kai-copper);
+  }
+
+  .kai-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.35rem;
+    align-items: center;
+    margin-top: 2rem;
+  }
+
+  .kai-primary,
+  .kai-secondary {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    transition:
+      transform 180ms ease,
+      background-color 180ms ease,
+      border-color 180ms ease;
+  }
+
+  .kai-primary {
+    padding: 0.75rem 1.2rem;
+    border: 1px solid var(--kai-indigo);
+    background: var(--kai-indigo);
+    color: #fff;
+  }
+
+  .kai-secondary {
+    gap: 0.45rem;
+    color: var(--kai-carbon);
+  }
+
+  .kai-primary:hover,
+  .kai-primary:focus-visible,
+  .kai-secondary:hover,
+  .kai-secondary:focus-visible {
+    transform: translateY(-2px);
+  }
+
+  .kai-primary:hover,
+  .kai-primary:focus-visible {
+    border-color: #4647c9;
+    background: #4647c9;
+  }
+
+  .kai-primary:focus-visible,
+  .kai-secondary:focus-visible {
+    outline: 3px solid var(--kai-cyan);
+    outline-offset: 4px;
+  }
+
+  .kai-secondary span {
+    color: var(--kai-indigo);
+    transition: transform 180ms ease;
+  }
+
+  .kai-secondary:hover span,
+  .kai-secondary:focus-visible span {
+    transform: translateX(3px);
+  }
+
+  .kai-response {
+    grid-area: panel;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid #d9d5e6;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow:
+      0 28px 70px rgba(29, 24, 70, 0.13),
+      0 6px 18px rgba(17, 20, 39, 0.06);
+    backdrop-filter: blur(10px);
+  }
+
+  .kai-response-header {
+    display: grid;
+    grid-template-columns: minmax(190px, 0.8fr) minmax(210px, 1.2fr);
+    gap: 1.25rem;
+    align-items: center;
+    min-height: 108px;
+    padding: 0 1.5rem;
+    border-bottom: 1px solid #e2dfeb;
+    background: rgba(245, 244, 250, 0.7);
+  }
+
+  .kai-logo-frame {
+    width: 210px;
+    height: 82px;
+    overflow: hidden;
+  }
+
+  .kai-logo-frame img {
+    display: block;
+    width: 410px;
+    max-width: none;
+    transform: translate(-40px, -39px);
+  }
+
+  .kai-response-meta {
+    display: grid;
+    justify-items: end;
+    gap: 0.55rem;
+    text-align: right;
+  }
+
+  .kai-panel-label {
+    color: #5c6173;
+    font-size: 0.75rem;
+    line-height: 1.45;
+  }
+
+  .kai-integration {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    min-height: 28px;
+    padding: 0.25rem 0.55rem;
+    border: 1px solid rgba(47, 111, 237, 0.22);
+    border-radius: 4px;
+    background: rgba(47, 111, 237, 0.06);
+    color: #2457b9;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .kai-integration > span {
+    width: 7px;
+    height: 7px;
+    background: #2f6fed;
+  }
+
+  .kai-question,
+  .kai-block,
+  .kai-sources,
+  .kai-recommendation {
+    padding-inline: clamp(1.25rem, 2.4vw, 1.7rem);
+  }
+
+  .kai-question {
+    padding-block: 1.35rem 1.25rem;
+    border-bottom: 1px solid #e2dfeb;
+  }
+
+  .kai-block-label {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: var(--kai-indigo);
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .kai-question h3 {
+    max-width: 38ch;
+    margin: 0;
+    color: var(--kai-carbon);
+    font-size: clamp(1.0625rem, 1.55vw, 1.2rem);
+    line-height: 1.35;
+  }
+
+  .kai-analysis {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-bottom: 1px solid #e2dfeb;
+  }
+
+  .kai-block {
+    padding-block: 1.15rem 1.25rem;
+  }
+
+  .kai-block + .kai-block {
+    border-left: 1px solid #e2dfeb;
+  }
+
+  .kai-block-heading {
+    display: flex;
+    gap: 0.55rem;
+    align-items: center;
+  }
+
+  .kai-block-heading h4,
+  .kai-sources h4 {
+    margin: 0;
+    color: #313649;
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .kai-node {
+    display: block;
+    flex: 0 0 auto;
+    width: 8px;
+    height: 8px;
+  }
+
+  .kai-block-observation .kai-node {
+    background: var(--kai-cyan);
+  }
+
+  .kai-block-inference .kai-node {
+    background: var(--kai-violet);
+  }
+
+  .kai-block-meta {
+    display: block;
+    min-height: 34px;
+    margin: 0.55rem 0 0.3rem;
+    color: #74788a;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .kai-block p,
+  .kai-recommendation p {
+    margin: 0;
+    color: #353a4e;
+    font-size: 0.9375rem;
+    line-height: 1.52;
+  }
+
+  .kai-sources {
+    padding-block: 1rem 1.15rem;
+    border-bottom: 1px solid #e2dfeb;
+    background: rgba(236, 234, 246, 0.32);
+  }
+
+  .kai-sources ul {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin: 0.7rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .kai-sources li {
+    display: grid;
+    grid-template-columns: 6px 1fr;
+    gap: 0.45rem;
+    align-items: start;
+    color: #505568;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.38;
+  }
+
+  .kai-sources li > span {
+    width: 6px;
+    height: 6px;
+    margin-top: 0.38rem;
+    background: var(--kai-cyan);
+  }
+
+  .kai-recommendation {
+    position: relative;
+    padding-block: 1.2rem 1.3rem;
+    background: linear-gradient(
+      120deg,
+      rgba(79, 70, 229, 0.09),
+      rgba(124, 58, 237, 0.04) 65%,
+      transparent
+    );
+  }
+
+  .kai-recommendation::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 3px;
+    background: var(--kai-indigo);
+  }
+
+  .kai-recommendation .kai-node {
+    background: var(--kai-indigo);
+  }
+
+  .kai-recommendation p {
+    margin-top: 0.65rem;
+  }
+
+  .kai-recommendation-footer {
+    display: flex;
+    gap: 0.8rem 1.2rem;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid rgba(79, 70, 229, 0.16);
+  }
+
+  .kai-approval {
+    display: grid;
+    grid-template-columns: 7px 1fr;
+    gap: 0.5rem;
+    max-width: 32ch;
+    color: #565b6e;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .kai-approval > span {
+    width: 7px;
+    height: 7px;
+    margin-top: 0.37rem;
+    background: var(--kai-copper);
+  }
+
+  .kai-review {
+    display: inline-flex;
+    flex: 0 0 auto;
+    gap: 0.42rem;
+    align-items: center;
+    color: var(--kai-indigo);
+    font-size: 0.875rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .kai-motion-ready [data-kai-reveal] {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .kai-motion-ready.is-visible [data-kai-reveal] {
+    animation: kai-reveal 540ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--kai-delay);
+  }
+
+  @keyframes kai-reveal {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 1050px) {
+    .kai-layout {
+      grid-template-columns: minmax(0, 1.2fr) minmax(310px, 0.8fr);
+      gap: 2rem;
+    }
+
+    .kai-response-header {
+      grid-template-columns: 175px 1fr;
+      padding-inline: 1.2rem;
+    }
+
+    .kai-logo-frame {
+      width: 175px;
+    }
+
+    .kai-logo-frame img {
+      width: 380px;
+    }
+
+    .kai-analysis {
+      grid-template-columns: 1fr;
+    }
+
+    .kai-block + .kai-block {
+      border-top: 1px solid #e2dfeb;
+      border-left: 0;
+    }
+
+    .kai-block-meta {
+      min-height: 0;
+    }
+
+    .kai-sources ul {
+      grid-template-columns: 1fr;
+      gap: 0.45rem;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .home-kai {
+      padding-block: 5rem;
+    }
+
+    .kai-layout {
+      grid-template-areas:
+        "copy"
+        "panel";
+      grid-template-columns: minmax(0, 1fr);
+      gap: 3.25rem;
+    }
+
+    .kai-copy {
+      max-width: 680px;
+    }
+
+    .kai-copy h2 {
+      max-width: 15ch;
+    }
+
+    .kai-response {
+      width: min(100%, 720px);
+    }
+
+    .kai-analysis {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .kai-block + .kai-block {
+      border-top: 0;
+      border-left: 1px solid #e2dfeb;
+    }
+
+    .kai-block-meta {
+      min-height: 34px;
+    }
+
+    .kai-sources ul {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .home-kai {
+      padding: 5.25rem 0 4.25rem;
+      background-size: 36px 36px;
+    }
+
+    .kai-layout {
+      gap: 2.5rem;
+    }
+
+    .kai-copy h2 {
+      font-size: clamp(2.25rem, 11vw, 3rem);
+    }
+
+    .kai-description {
+      font-size: 1rem;
+    }
+
+    .kai-actions {
+      display: grid;
+      justify-items: start;
+    }
+
+    .kai-response-header {
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding-block: 0.45rem 1rem;
+    }
+
+    .kai-logo-frame {
+      width: 205px;
+      height: 72px;
+    }
+
+    .kai-response-meta {
+      justify-items: start;
+      text-align: left;
+    }
+
+    .kai-analysis {
+      grid-template-columns: 1fr;
+    }
+
+    .kai-block + .kai-block {
+      border-top: 1px solid #e2dfeb;
+      border-left: 0;
+    }
+
+    .kai-block-meta {
+      min-height: 0;
+    }
+
+    .kai-sources ul {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+
+    .kai-recommendation-footer {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-kai *,
+    .home-kai *::before,
+    .home-kai *::after {
+      scroll-behavior: auto !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    .kai-motion-ready [data-kai-reveal] {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
