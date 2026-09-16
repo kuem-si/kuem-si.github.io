@@ -190,6 +190,8 @@ abbr[title] {
 }
 .nx-roles {
   background: #f1f8fc;
+  /* Anchor jumps (#vloge) clear the sticky header. */
+  scroll-margin-top: 100px;
 }
 .nx-role-heading {
   display: flex;
@@ -231,9 +233,20 @@ abbr[title] {
   grid-template-columns: minmax(0, 1.75fr) minmax(240px, 0.7fr);
   gap: 2rem;
   align-items: center;
+  transition:
+    opacity 0.18s ease,
+    translate 0.18s ease;
 }
 .nx-role-panel[hidden] {
   display: none;
+}
+/* Subtle enter animation when a role panel becomes visible.
+   Browsers without @starting-style simply show the panel instantly. */
+@starting-style {
+  .nx-role-panel {
+    opacity: 0;
+    translate: 0 6px;
+  }
 }
 /* Without JS, show all role panels stacked instead of hiding them. */
 html:not(.js) .nx-role-panel[hidden] {
@@ -714,6 +727,9 @@ html:not(.js) .nx-role-panel[hidden] {
     scroll-behavior: auto;
   }
   .nx-module-card {
+    transition: none;
+  }
+  .nx-role-panel {
     transition: none;
   }
 }

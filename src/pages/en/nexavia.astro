@@ -11,7 +11,7 @@ import "../../styles/nexavia.css";
 // LCP hero: generate the full responsive candidate set at build time so the
 // <link rel="preload"> in <head> matches the rendered <img> exactly.
 const heroWidths = [960, 1440, 1920, 2197] as const;
-const heroSizes = "(min-width: 1100px) 800px, 100vw";
+const heroSizes = "(min-width: 1100px) 800px, (min-width: 760px) 60vw, 100vw";
 const heroImages = await Promise.all(
   heroWidths.map((width) =>
     getImage({ src: dashboard, width, format: "avif", quality: 90 }),
@@ -217,8 +217,7 @@ const stories = [
                     alt="Real operational overview of devices and their map in Nexavia"
                     width="2197"
                     height="1224"
-                    loading="lazy"
-                    format="avif"
+                    loading="lazy"                    fetchpriority="low"                    format="avif"
                     quality="90"
                   />
                 ) : (
