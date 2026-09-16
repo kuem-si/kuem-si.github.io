@@ -1,4 +1,5 @@
 ---
+import TrustedCompanies from "../components/TrustedCompanies.astro";
 import MainLayout from "../layouts/MainLayout.astro";
 import NexaviaIntegration from "../components/NexaviaIntegration.astro";
 import logo from "../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
@@ -96,11 +97,7 @@ const stories = [
   </section>
   <section class="nx-trust" aria-label="Zaupajo nam">
     <div class="container">
-      <p class="nx-eyebrow">ZAUPAJO NAM</p><div class="nx-trust-list">
-        <span>CMC Group</span><span>KOLEKTOR</span><span>Telegroup</span><span
-          >T-2</span
-        ><span>Vodotehnika</span>
-      </div>
+      <p class="nx-eyebrow">ZAUPAJO NAM</p><TrustedCompanies label="Zaupajo nam" />
     </div>
   </section>
   <section

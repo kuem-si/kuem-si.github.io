@@ -1,4 +1,5 @@
 ---
+import TrustedCompanies from "../TrustedCompanies.astro";
 import SeoHead from "../SeoHead.astro";
 import Chrome from "./SiteChromeEn.astro";
 import Architecture from "./SolutionsArchitectureEn.astro";
@@ -11,7 +12,6 @@ import {
 import "../../styles/global.css";
 import "../../styles/homepage.css";
 import "../../styles/solution-explorer.css";
-const partners = ["CMC Group", "Kolektor", "Telegroup", "T-2", "Vodotehnika"];
 const stories = [
   "Domplan",
   "Brezovica",
@@ -67,9 +67,7 @@ const stories = [
         </section>
         <section class="explorer-trust" aria-label="Trusted by">
           <div class="hp-wrap">
-            <h2 class="hp-eyebrow">TRUSTED BY</h2><ul>
-              {partners.map((name) => <li>{name}</li>)}
-            </ul>
+            <h2 class="hp-eyebrow">TRUSTED BY</h2><TrustedCompanies label="Trusted by" />
           </div>
         </section>
         <section class="explorer-benefits">

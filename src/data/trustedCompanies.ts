@@ -1,0 +1,17 @@
+export const trustedCompanies = [
+  "CMC Group",
+  "KolektorSisteh",
+  "Telegroup",
+  "T-2",
+  "Vodotehnika",
+  "Somobor Gas",
+  "MarinaCloud",
+  "Telekom Slovenije",
+  "Sparkasse",
+  "grad Gradiška",
+  "Elproing",
+  "Vodovod Sistema B",
+  "Infotrans",
+  "Domplan Energetika",
+  "JKP Brezovica",
+];

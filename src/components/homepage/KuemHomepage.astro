@@ -1,4 +1,5 @@
 ---
+import TrustedCompanies from "../TrustedCompanies.astro";
 import SeoHead from "../SeoHead.astro";
 import Header from "../Header.astro";
 import Icon from "./LineIcon.astro";
@@ -98,7 +99,7 @@ const stories = [
               boljše odločitve.
             </p>
             <div class="hp-actions">
-              <a class="hp-button" href="#nexavia"
+              <a class="hp-button" href="/nexavia"
                 >Poglejte Nexavio <span aria-hidden="true">→</span></a
               ><a class="hp-button hp-outline" href="#kontakt">Pogovorimo se</a>
             </div>
@@ -112,13 +113,7 @@ const stories = [
       </section>
       <section class="hp-trust" aria-label="Zaupajo nam">
         <div class="hp-wrap">
-          <h2 class="hp-eyebrow">Zaupajo nam</h2><ul>
-            {
-              ["CMC Group", "Kolektor", "Telegroup", "T-2", "Vodotehnika"].map(
-                (name) => <li>{name}</li>,
-              )
-            }
-          </ul>
+          <h2 class="hp-eyebrow">Zaupajo nam</h2><TrustedCompanies label="Zaupajo nam" />
         </div>
       </section>
 
@@ -142,7 +137,7 @@ const stories = [
               stanjem infrastrukture, hitrejše zaznavanje odstopanj in
               učinkovitejše ukrepanje.
             </p>
-            <a class="hp-button" href="#kontakt" data-nexavia-contact
+            <a class="hp-button" href="/nexavia"
               >Spoznajte Nexavio <span aria-hidden="true">→</span></a
             >
             <div class="hp-benefits">
@@ -561,16 +556,6 @@ const stories = [
           closeMenu();
       });
       matchMedia("(min-width: 1201px)").addEventListener("change", closeMenu);
-      document
-        .querySelector("[data-nexavia-contact]")
-        ?.addEventListener("click", (event) => {
-          event.preventDefault();
-          document.querySelector("#kontakt")?.scrollIntoView();
-          history.pushState(null, "", "#kontakt");
-          document
-            .querySelector<HTMLAnchorElement>("#nexavia-povprasevanje")
-            ?.focus({ preventScroll: true });
-        });
       const process = document.querySelector<HTMLElement>(".hp-process");
       const apiRoute = document.querySelector<SVGSVGElement>(".hp-api-route");
       const updateApiRoute = () => {

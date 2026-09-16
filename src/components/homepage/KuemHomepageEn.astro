@@ -1,4 +1,5 @@
 ---
+import TrustedCompanies from "../TrustedCompanies.astro";
 import SeoHead from "../SeoHead.astro";
 import Header from "../Header.astro";
 import Icon from "./LineIcon.astro";
@@ -96,7 +97,7 @@ const stories = [
               We connect field devices, existing systems and data in the Nexavia platform for clear monitoring, timely alerts and better decisions.
             </p>
             <div class="hp-actions">
-              <a class="hp-button" href="#nexavia"
+              <a class="hp-button" href="/en/nexavia"
                 >Discover Nexavia <span aria-hidden="true">→</span></a
               ><a class="hp-button hp-outline" href="#kontakt">Let’s talk</a>
             </div>
@@ -110,13 +111,7 @@ const stories = [
       </section>
       <section class="hp-trust" aria-label="Trusted by">
         <div class="hp-wrap">
-          <h2 class="hp-eyebrow">Trusted by</h2><ul>
-            {
-              ["CMC Group", "Kolektor", "Telegroup", "T-2", "Vodotehnika"].map(
-                (name) => <li>{name}</li>,
-              )
-            }
-          </ul>
+          <h2 class="hp-eyebrow">Trusted by</h2><TrustedCompanies label="Trusted by" />
         </div>
       </section>
 
@@ -137,7 +132,7 @@ const stories = [
             <p>
               Nexavia combines data from field devices, measurements and existing information systems. It provides a unified view of infrastructure, faster deviation detection and more effective action.
             </p>
-            <a class="hp-button" href="#kontakt" data-nexavia-contact
+            <a class="hp-button" href="/en/nexavia"
               >Meet Nexavia <span aria-hidden="true">→</span></a
             >
             <div class="hp-benefits">
@@ -552,16 +547,6 @@ const stories = [
           closeMenu();
       });
       matchMedia("(min-width: 1201px)").addEventListener("change", closeMenu);
-      document
-        .querySelector("[data-nexavia-contact]")
-        ?.addEventListener("click", (event) => {
-          event.preventDefault();
-          document.querySelector("#kontakt")?.scrollIntoView();
-          history.pushState(null, "", "#kontakt");
-          document
-            .querySelector<HTMLAnchorElement>("#nexavia-povprasevanje")
-            ?.focus({ preventScroll: true });
-        });
       const process = document.querySelector<HTMLElement>(".hp-process");
       const apiRoute = document.querySelector<SVGSVGElement>(".hp-api-route");
       const updateApiRoute = () => {
