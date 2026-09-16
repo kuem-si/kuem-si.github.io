@@ -1,4 +1,5 @@
 ---
+import { PUBLIC_CONTACT_ENDPOINT } from "astro:env/client";
 import type { Locale } from "../lib/i18n";
 import { countries } from "../lib/countries";
 
@@ -17,7 +18,7 @@ const {
 };
 const statusId = `${formId || "lead"}-status`;
 const countryListId = `${formId || "lead"}-countries`;
-const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? null;
+const endpoint = PUBLIC_CONTACT_ENDPOINT ?? null;
 const apiPath = endpoint ?? `${import.meta.env.BASE_URL}api/lead`;
 const copy =
   locale === "sl"
@@ -39,7 +40,7 @@ const copy =
         blocked: "Oddaja je blokirana.",
         submitting: "Pošiljanje...",
         success: "Hvala. Kmalu vas bomo kontaktirali.",
-        failed: "Oddaja ni uspela. Prosimo, pišite na info@kuem.eu.",
+        failed: "Oddaja ni uspela. Prosimo, pišite na info@kuem.si.",
         customRequired: "Vnesite prilagojeno zadevo.",
       }
     : {
@@ -60,7 +61,7 @@ const copy =
         blocked: "Submission blocked.",
         submitting: "Submitting...",
         success: "Thank you. We will contact you shortly.",
-        failed: "We could not submit the form. Please email info@kuem.eu.",
+        failed: "We could not submit the form. Please email info@kuem.si.",
         customRequired: "Please provide a custom subject.",
       };
 ---

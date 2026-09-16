@@ -1,9 +1,10 @@
 ---
+import { PUBLIC_CONTACT_ENDPOINT } from "astro:env/client";
 import MainLayout from "../layouts/MainLayout.astro";
 import type { Locale } from "../lib/i18n";
 const { locale } = Astro.props as { locale: Locale };
 const sl = locale === "sl";
-const contactEndpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? null;
+const contactEndpoint = PUBLIC_CONTACT_ENDPOINT ?? null;
 ---
 
 <MainLayout

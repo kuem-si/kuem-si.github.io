@@ -1,5 +1,108 @@
 ---
-import Redirect from "../components/Redirect.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import CTASection from "../components/CTASection.astro";
 ---
 
-<Redirect to="/en/utilities" />
+<MainLayout
+  title="Komunalne rešitve | KUEM"
+  description="Pametno merjenje vode in plina, nadzor infrastrukture in integracije za komunalne procese."
+>
+  <section class="hero">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">Glavni vir prihodkov</p>
+        <h1>Komunalne IoT rešitve za integracijo, zanesljivost in rast.</h1>
+        <p>
+          KUEM pomaga vodnim in plinskim podjetjem modernizirati merjenje in
+          nadzor infrastrukture brez motenj v obstoječih sistemih.
+        </p>
+      </div>
+      <div class="panel">
+        <h2>Pogoste tezave, ki jih resujemo</h2>
+        <ul>
+          <li>Pozno zaznavanje napak in ročno odčitavanje</li>
+          <li>Podatkovni silosi med telemetrijo, SCADA in obračunom</li>
+          <li>Izgube neobračunske vode in zahtevno zaznavanje puščanj</li>
+          <li>Omejen vpogled v razpršena sredstva</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container grid-3">
+      <article class="card">
+        <h2>Pametno merjenje vode</h2>
+        <p>
+          Daljinsko odčitavanje, opozorila na odstopanja pretoka in analitika po
+          območjih za zmanjševanje izgub.
+        </p>
+        <ul>
+          <li>Podpora za LoRaWAN in NB-IoT</li>
+          <li>Profili porabe in indikatorji puščanj</li>
+          <li>Avtomatiziran izvoz za obračun</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h2>Pametno merjenje plina</h2>
+        <p>
+          Varna telemetrija plinskih števcev z alarmi ob odstopanjih tlaka in
+          mogočih puščanjih.
+        </p>
+        <ul>
+          <li>NB-IoT optimizacija za globok notranji signal</li>
+          <li>Obravnava manipulacij in anomalij</li>
+          <li>Natančna in pogosta dostava merilnih podatkov</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h2>Nadzor infrastrukture</h2>
+        <p>
+          Vidljivost stanja in delovanja črpalk, ventilov, rezervoarjev in
+          oddaljenih lokacij.
+        </p>
+        <ul>
+          <li>Opozorjanje na podlagi pragov in trendov</li>
+          <li>Sprožilci za vzdrževalne procese</li>
+          <li>Operativne nadzorne plošče za terenske ekipe</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <div class="container split">
+      <article class="card">
+        <h2>Arhitektura pripravljena za integracije</h2>
+        <p>
+          Nexavia poveže merilne in senzorske podatke z vašim ekosistemom prek
+          odprtih API-jev, izvoznih adapterjev in prilagodljivih potekov.
+        </p>
+        <ul>
+          <li>SCADA povezljivost za operativne ekipe</li>
+          <li>Integracija z obračunom in ERP</li>
+          <li>Dostop po vlogah za različne uporabnike</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h2>Pristop pilot najprej</h2>
+        <p>
+          Začnite s ciljnim pilotom, ki potrdi kakovost podatkov, integracijsko
+          delovanje in operativno vrednost pred celotno uvedbo.
+        </p>
+        <ul>
+          <li>90-dnevna zasnova pilota</li>
+          <li>Skupna opredelitev KPI-jev in poročanja</li>
+          <li>Razširljiv načrt uvedbe na podlagi rezultatov</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <CTASection
+    title="Narišite komunalni pilot"
+    description="Z ekipo KUEM uskladite oskrbno območje, integracijski sklad in prioritete uvajanja."
+    ctaHref="/kontakt#contact-form"
+    ctaText="Kontaktirajte nas"
+  />
+</MainLayout>

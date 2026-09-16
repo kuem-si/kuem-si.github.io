@@ -1,19 +1,37 @@
-import { defineConfig } from "astro/config";
+import { defineConfig, envField } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import { alternatePath, getLocaleFromPath } from "./src/lib/i18n";
-import { redirectFromPaths } from "./src/lib/redirects";
-
-const isRedirectUrl = (url) => {
-  const pathname = new URL(url).pathname;
-  const clean = pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
-  return redirectFromPaths.has(clean);
-};
 
 export default defineConfig({
   site: "https://www.kuem.si",
   output: "static",
   // Freeze the canonical URL shape (directories with trailing slash).
   trailingSlash: "always",
+  // Native i18n declaration: Slovenian is the default locale and lives at the
+  // root (no prefix); English lives under /en/. Routing is manual because the
+  // site uses custom localized slugs (e.g. /resitve vs /en/solutions), which
+  // are handled by src/lib/i18n.ts. This declaration enables the astro:i18n
+  // helpers and type-safe locale handling across the project.
+  i18n: {
+    defaultLocale: "sl",
+    locales: ["sl", "en"],
+    routing: "manual",
+  },
+  env: {
+    schema: {
+      // Public endpoint that receives contact/lead form submissions.
+      PUBLIC_CONTACT_ENDPOINT: envField.string({
+        context: "client",
+        access: "public",
+        optional: true,
+      }),
+      // Odoo CRM credentials; only read by the dev-only POST API route.
+      ODOO_URL: envField.string({ context: "server", access: "secret", optional: true }),
+      ODOO_DB: envField.string({ context: "server", access: "secret", optional: true }),
+      ODOO_USERNAME: envField.string({ context: "server", access: "secret", optional: true }),
+      ODOO_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
+    },
+  },
   // Astro v7 defaults compressHTML to 'jsx', which strips whitespace between
   // inline elements and can change rendered text. Keep the v5/v6 HTML-aware
   // compression so the rendered output is byte-for-byte unchanged.
@@ -46,9 +64,8 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      // Only canonical URLs are submitted; legacy duplicate paths are
-      // emitted as redirect pages and excluded here.
-      filter: (url) => !isRedirectUrl(url),
+      // Every URL is canonical (legacy duplicates were removed); emit
+      // hreflang alternates for both locales.
       serialize: (item) => {
         const url = new URL(item.url);
         const pathname = url.pathname.replace(/\/$/, "") || "/";

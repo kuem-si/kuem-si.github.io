@@ -24,16 +24,16 @@ export const nexaviaPositioning: Record<Locale, string> = {
 
 const solutionTitles = {
   sl: [
-    ["daljinsko-odcitavanje-stevcev", "Daljinsko odčitavanje števcev", "/sl/resitve/daljinsko-odcitavanje-stevcev"],
-    ["digitalizacija-obcinske-infrastrukture", "Digitalizacija občinske infrastrukture", "/sl/resitve/digitalizacija-obcinske-infrastrukture"],
-    ["javna-razsvetljava", "Javna razsvetljava", "/sl/resitve/javna-razsvetljava"],
-    ["okoljski-monitoring", "Okoljski monitoring", "/sl/resitve/okoljski-monitoring"],
-    ["sole-in-vrtci", "Šole in vrtci", "/sl/resitve/sole-in-vrtci"],
-    ["odpadki", "Odpadki", "/sl/resitve/odpadki"],
-    ["promet-in-mobilnost", "Promet in mobilnost", "/sl/resitve/promet-in-mobilnost"],
-    ["haccp-temperaturni-monitoring", "HACCP temperaturni monitoring", "/sl/resitve/haccp-temperaturni-monitoring"],
-    ["turizem-kampi-marine", "Turizem, kampi in marine", "/sl/resitve/turizem-kampi-marine"],
-    ["data-centri", "Podatkovni centri", "/sl/resitve/data-centri"]
+    ["daljinsko-odcitavanje-stevcev", "Daljinsko odčitavanje števcev", "/resitve/daljinsko-odcitavanje-stevcev"],
+    ["digitalizacija-obcinske-infrastrukture", "Digitalizacija občinske infrastrukture", "/resitve/digitalizacija-obcinske-infrastrukture"],
+    ["javna-razsvetljava", "Javna razsvetljava", "/resitve/javna-razsvetljava"],
+    ["okoljski-monitoring", "Okoljski monitoring", "/resitve/okoljski-monitoring"],
+    ["sole-in-vrtci", "Šole in vrtci", "/resitve/sole-in-vrtci"],
+    ["odpadki", "Odpadki", "/resitve/odpadki"],
+    ["promet-in-mobilnost", "Promet in mobilnost", "/resitve/promet-in-mobilnost"],
+    ["haccp-temperaturni-monitoring", "HACCP temperaturni monitoring", "/resitve/haccp-temperaturni-monitoring"],
+    ["turizem-kampi-marine", "Turizem, kampi in marine", "/resitve/turizem-kampi-marine"],
+    ["data-centri", "Podatkovni centri", "/resitve/data-centri"]
   ],
   en: [
     ["remote-meter-reading", "Remote meter reading", "/en/solutions/remote-meter-reading"],

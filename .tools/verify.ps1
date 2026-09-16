@@ -14,8 +14,7 @@ Check "llms.txt lists SL solutions" ($llms -match "Daljinsko odčitavanje")
 # 2. sitemap
 $sm = Get-Content dist\sitemap-0.xml -Raw
 Check "sitemap has hreflang alternates" ($sm -match 'xhtml:link rel="alternate"')
-Check "sitemap excludes /about/ redirect" ($sm -notmatch '<loc>https://www\.kuem\.si/about/</loc>')
-Check "sitemap excludes /sl/ redirect" ($sm -notmatch '<loc>https://www\.kuem\.si/sl/</loc>')
+Check "no legacy pages in dist" (-not (Test-Path dist\about) -and -not (Test-Path dist\sl) -and -not (Test-Path dist\o-podjetju))
 Check "sitemap keeps /en/company" ($sm -match '<loc>https://www\.kuem\.si/en/company/</loc>')
 Check "sitemap keeps /o-nas" ($sm -match '<loc>https://www\.kuem\.si/o-nas/</loc>')
 
@@ -23,11 +22,10 @@ Check "sitemap keeps /o-nas" ($sm -match '<loc>https://www\.kuem\.si/o-nas/</loc
 $hits = Get-ChildItem dist -Recurse -Include *.html | Select-String -Pattern 'import\.meta' -List
 Check "no import.meta literals in dist" ($null -eq $hits)
 
-# 4. redirect page sample
-$r = Get-Content dist\about\index.html -Raw
-Check "redirect /about -> canonical en/company" ($r -match 'rel="canonical" href="https://www\.kuem\.si/en/company"')
-Check "redirect has noindex" ($r -match 'name="robots" content="noindex,follow"')
-Check "redirect has meta refresh" ($r -match 'http-equiv="refresh" content="0; url=https://www\.kuem\.si/en/company"')
+# 4. legacy routes must 404 (no redirect stubs are emitted anymore)
+Check "legacy /about route is gone" (-not (Test-Path dist\about))
+Check "legacy /sl route is gone" (-not (Test-Path dist\sl))
+Check "legacy /o-podjetju route is gone" (-not (Test-Path dist\o-podjetju))
 
 # 5. homepage head
 $h = Get-Content dist\index.html -Raw
@@ -58,8 +56,8 @@ $bTot = (Get-ChildItem dist-baseline -Recurse -File | Measure-Object -Property L
 Check ("dist smaller than baseline ({0:N2} MB vs {1:N2} MB)" -f ($tot/1MB), ($bTot/1MB)) ($tot -lt $bTot)
 
 # 9. no stale references to legacy paths in kept pages
-$bad = Get-ChildItem dist -Recurse -Filter *.html | Select-String -Pattern 'href="/sl/kontakt"|href="/sl/resitve"|href="/o-podjetju"|href="/sl/o-nas"|href="/sl/privacy"' -List
-Check "no internal links to redirect URLs" ($null -eq $bad)
+$bad = Get-ChildItem dist -Recurse -Filter *.html | Select-String -Pattern 'href="/sl/|href="/o-podjetju|href="/about"|href="/case-studies' -List
+Check "no internal links to removed URLs" ($null -eq $bad)
 
 Write-Output ""
 if ($ok) { Write-Output "ALL CHECKS PASSED" } else { Write-Output "SOME CHECKS FAILED" }

@@ -1,6 +1,6 @@
 ---
 import type { Locale } from "../lib/i18n";
-import { getEquivalentLocalePath } from "../data/routes";
+import { alternatePath, getLocaleFromPath } from "../lib/i18n";
 import { withBase } from "../lib/paths";
 
 const {
@@ -8,6 +8,9 @@ const {
   pathname = Astro.url.pathname,
   compact = false,
 } = Astro.props as { locale?: Locale; pathname?: string; compact?: boolean };
+
+const equivalentLocalePath = (target: Locale): string =>
+  getLocaleFromPath(pathname) === target ? pathname : alternatePath(pathname);
 
 const languages = [
   {
@@ -48,9 +51,7 @@ const languages = [
       languages.map((item) =>
         item.available ? (
           <a
-            href={withBase(
-              getEquivalentLocalePath(pathname, item.code as Locale),
-            )}
+            href={withBase(equivalentLocalePath(item.code as Locale))}
             aria-current={item.code === locale ? "true" : undefined}
             lang={item.code}
           >

@@ -261,3 +261,25 @@ export const solutionDetails: Record<SolutionDetailKey, Record<Locale, SolutionD
     }
   }
 };
+
+/**
+ * Per-locale URL slugs for the detailed solution pages. The Slovenian pages
+ * live at /resitve/{sl}/ and the English pages at /en/solutions/{en}/. Both
+ * locales share the same SolutionDetailKey.
+ */
+export const solutionDetailSlugs: {
+  key: SolutionDetailKey;
+  sl: string;
+  en: string;
+}[] = [
+  { key: "remoteMeterReading", sl: "daljinsko-odcitavanje-stevcev", en: "remote-meter-reading" },
+  { key: "municipalInfrastructure", sl: "digitalizacija-obcinske-infrastrukture", en: "municipal-infrastructure-digitalization" },
+  { key: "publicLighting", sl: "javna-razsvetljava", en: "public-lighting" },
+  { key: "environmentalMonitoring", sl: "okoljski-monitoring", en: "environmental-monitoring" },
+  { key: "schoolsKindergartens", sl: "sole-in-vrtci", en: "schools-and-kindergartens" },
+  { key: "waste", sl: "odpadki", en: "waste" },
+  { key: "trafficMobility", sl: "promet-in-mobilnost", en: "traffic-and-mobility" },
+  { key: "haccpTemperature", sl: "haccp-temperaturni-monitoring", en: "haccp-temperature-monitoring" },
+  { key: "tourismCampsMarinas", sl: "turizem-kampi-marine", en: "tourism-camps-marinas" },
+  { key: "dataCenters", sl: "data-centri", en: "data-centers" },
+];

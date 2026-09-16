@@ -1,3 +1,10 @@
+import {
+  ODOO_URL,
+  ODOO_DB,
+  ODOO_USERNAME,
+  ODOO_API_KEY,
+} from "astro:env/server";
+
 export type LeadPayload = {
   firstName: string;
   lastName: string;
@@ -18,10 +25,10 @@ type OdooConfig = {
 };
 
 const env = {
-  url: import.meta.env.ODOO_URL,
-  db: import.meta.env.ODOO_DB,
-  username: import.meta.env.ODOO_USERNAME,
-  apiKey: import.meta.env.ODOO_API_KEY
+  url: ODOO_URL,
+  db: ODOO_DB,
+  username: ODOO_USERNAME,
+  apiKey: ODOO_API_KEY
 };
 
 export function getOdooConfig(): OdooConfig | null {

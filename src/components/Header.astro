@@ -13,10 +13,7 @@ const contact = contactNavigation[locale];
 const isActive = (href: string) => {
   if (currentPath === href) return true;
   if (href === "/resitve")
-    return (
-      currentPath.startsWith("/resitve/") ||
-      currentPath.startsWith("/sl/resitve/")
-    );
+    return currentPath.startsWith("/resitve/");
   if (href === "/en/solutions") return currentPath.startsWith("/en/solutions/");
   return false;
 };

@@ -1,22 +1,8 @@
 export type Locale = "sl" | "en";
 export const DEFAULT_LOCALE: Locale = "sl";
-const legacyEnglishRootPaths = new Set([
-  "/about",
-  "/case-studies",
-  "/contact",
-  "/industrial-iot",
-  "/nexavia-platform",
-  "/partner-program",
-  "/privacy",
-  "/utilities",
-]);
 export function getLocaleFromPath(pathname: string): Locale {
   const clean = pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
-  return clean === "/en" ||
-    clean.startsWith("/en/") ||
-    legacyEnglishRootPaths.has(clean)
-    ? "en"
-    : "sl";
+  return clean === "/en" || clean.startsWith("/en/") ? "en" : "sl";
 }
 export const routePairs: Record<string, string> = {
   "/": "/en/",
@@ -26,19 +12,19 @@ export const routePairs: Record<string, string> = {
   "/resitve/integracije": "/en/solutions/integrations",
   "/resitve/napredna-analitika": "/en/solutions/advanced-analytics",
   "/resitve/upravljane-storitve": "/en/solutions/managed-services",
-  "/sl/resitve/daljinsko-odcitavanje-stevcev":
+  "/resitve/daljinsko-odcitavanje-stevcev":
     "/en/solutions/remote-meter-reading",
-  "/sl/resitve/data-centri": "/en/solutions/data-centers",
-  "/sl/resitve/digitalizacija-obcinske-infrastrukture":
+  "/resitve/data-centri": "/en/solutions/data-centers",
+  "/resitve/digitalizacija-obcinske-infrastrukture":
     "/en/solutions/municipal-infrastructure-digitalization",
-  "/sl/resitve/haccp-temperaturni-monitoring":
+  "/resitve/haccp-temperaturni-monitoring":
     "/en/solutions/haccp-temperature-monitoring",
-  "/sl/resitve/javna-razsvetljava": "/en/solutions/public-lighting",
-  "/sl/resitve/odpadki": "/en/solutions/waste",
-  "/sl/resitve/okoljski-monitoring": "/en/solutions/environmental-monitoring",
-  "/sl/resitve/promet-in-mobilnost": "/en/solutions/traffic-and-mobility",
-  "/sl/resitve/sole-in-vrtci": "/en/solutions/schools-and-kindergartens",
-  "/sl/resitve/turizem-kampi-marine": "/en/solutions/tourism-camps-marinas",
+  "/resitve/javna-razsvetljava": "/en/solutions/public-lighting",
+  "/resitve/odpadki": "/en/solutions/waste",
+  "/resitve/okoljski-monitoring": "/en/solutions/environmental-monitoring",
+  "/resitve/promet-in-mobilnost": "/en/solutions/traffic-and-mobility",
+  "/resitve/sole-in-vrtci": "/en/solutions/schools-and-kindergartens",
+  "/resitve/turizem-kampi-marine": "/en/solutions/tourism-camps-marinas",
   "/nexavia": "/en/nexavia",
   "/kai": "/en/kai",
   "/panoge": "/en/industries",
@@ -47,11 +33,11 @@ export const routePairs: Record<string, string> = {
   "/o-nas": "/en/company",
   "/kontakt": "/en/contact",
   "/zasebnost": "/en/privacy",
-  "/sl/platforma/nexavia": "/en/platform/nexavia",
-  "/sl/industrial-iot": "/en/industrial-iot",
-  "/sl/partner-program": "/en/partner-program",
-  "/sl/utilities": "/en/utilities",
-  "/sl/nexavia-platform": "/en/nexavia-platform",
+  "/industrial-iot": "/en/industrial-iot",
+  "/partner-program": "/en/partner-program",
+  "/utilities": "/en/utilities",
+  "/nexavia-platform": "/en/nexavia-platform",
+  "/platforma/nexavia": "/en/platform/nexavia",
 };
 const reversePairs = Object.fromEntries(
   Object.entries(routePairs).map(([sl, en]) => [
@@ -62,13 +48,9 @@ const reversePairs = Object.fromEntries(
 export function alternatePath(pathname: string): string {
   const clean = pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
   if (clean.startsWith("/en")) return reversePairs[clean] ?? "/";
-  if (legacyEnglishRootPaths.has(clean))
-    return reversePairs[clean] ?? `/sl${clean}`;
   return (
     routePairs[clean] ??
-    (clean.startsWith("/sl/")
-      ? `/en${clean.slice(3)}`
-      : `/en${clean === "/" ? "/" : clean}`)
+    `/en${clean === "/" ? "/" : clean}`
   );
 }
 export function stripLocalePrefix(pathname: string): string {

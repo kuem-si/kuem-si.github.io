@@ -79,7 +79,7 @@ export const useCases = [
     icon: "water",
     title: "Nepričakovana poraba vode",
     text: "Nexavia zazna odstopanje in o njem obvesti odgovorno osebo.",
-    href: "/sl/resitve/daljinsko-odcitavanje-stevcev",
+    href: "/resitve/daljinsko-odcitavanje-stevcev",
   },
   {
     icon: "energy",
@@ -91,7 +91,7 @@ export const useCases = [
     icon: "bike",
     title: "Načrtovanje kolesarskih povezav",
     text: "Podatki iz različnih virov se prikažejo na zemljevidu obremenjenosti in pomagajo pri načrtovanju infrastrukture.",
-    href: "/sl/resitve/promet-in-mobilnost",
+    href: "/resitve/promet-in-mobilnost",
   },
 ];
 export const partnership = [
