@@ -114,11 +114,11 @@ Use these exact core design tokens:
 
 ```css
 :root {
-  --kuem-carbon: #161A1D;
-  --kuem-concrete: #E8E6E1;
-  --kuem-copper: #F06432;
-  --kuem-petrol: #156B75;
-  --kuem-white: #FFFFFF;
+  --kuem-carbon: #161a1d;
+  --kuem-concrete: #e8e6e1;
+  --kuem-copper: #f06432;
+  --kuem-petrol: #156b75;
+  --kuem-white: #ffffff;
 }
 ```
 

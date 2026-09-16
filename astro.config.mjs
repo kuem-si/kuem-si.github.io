@@ -26,16 +26,41 @@ export default defineConfig({
         optional: true,
       }),
       // Odoo CRM credentials; only read by the dev-only POST API route.
-      ODOO_URL: envField.string({ context: "server", access: "secret", optional: true }),
-      ODOO_DB: envField.string({ context: "server", access: "secret", optional: true }),
-      ODOO_USERNAME: envField.string({ context: "server", access: "secret", optional: true }),
-      ODOO_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
+      ODOO_URL: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      ODOO_DB: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      ODOO_USERNAME: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      ODOO_API_KEY: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
     },
   },
   // Astro v7 defaults compressHTML to 'jsx', which strips whitespace between
   // inline elements and can change rendered text. Keep the v5/v6 HTML-aware
   // compression so the rendered output is byte-for-byte unchanged.
   compressHTML: true,
+  // Higher AVIF encode effort at build time = smaller files, same visual quality.
+  image: {
+    service: {
+      entrypoint: "astro/assets/services/sharp",
+      config: {
+        avif: { effort: 6 },
+      },
+    },
+  },
   // Prefetch same-origin links on hover/focus intent for instant navigations.
   prefetch: {
     prefetchAll: true,
@@ -75,9 +100,7 @@ export default defineConfig({
         const links = [
           { lang: locale === "sl" ? "sl-SI" : "en-GB", url: item.url },
         ];
-        if (
-          alternateUrl.pathname.replace(/\/$/, "") !== pathname
-        ) {
+        if (alternateUrl.pathname.replace(/\/$/, "") !== pathname) {
           links.push({
             lang: locale === "sl" ? "en-GB" : "sl-SI",
             url: alternateUrl.href,

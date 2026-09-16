@@ -48,10 +48,7 @@ const reversePairs = Object.fromEntries(
 export function alternatePath(pathname: string): string {
   const clean = pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
   if (clean.startsWith("/en")) return reversePairs[clean] ?? "/";
-  return (
-    routePairs[clean] ??
-    `/en${clean === "/" ? "/" : clean}`
-  );
+  return routePairs[clean] ?? `/en${clean === "/" ? "/" : clean}`;
 }
 export function stripLocalePrefix(pathname: string): string {
   return pathname.replace(/^\/en(?=\/|$)/, "") || "/";

@@ -3,6 +3,8 @@
  * Used by `SeoHead`/`JsonLd` components and by the generated `llms.txt`.
  */
 
+import { COMPANY_EMAIL } from "./company";
+
 const SITE = "https://www.kuem.si";
 const ORG_ID = `${SITE}/#organization`;
 
@@ -12,7 +14,7 @@ export const organization = {
   name: "KUEM",
   url: `${SITE}/`,
   logo: `${SITE}/favicon.svg`,
-  email: "info@kuem.si",
+  email: COMPANY_EMAIL,
   address: {
     "@type": "PostalAddress",
     addressLocality: "Kranj",

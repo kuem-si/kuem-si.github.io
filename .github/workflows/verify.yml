@@ -37,3 +37,9 @@ jobs:
 
       - name: Build site
         run: npm run build
+
+      - name: Verify output
+        run: npm run verify
+
+      - name: Format check
+        run: npm run format:check

@@ -9,6 +9,7 @@ import wordmark from "../../assets/brand/kuem/KUEM_Official_Wordmark.svg";
 import nexavia from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
 import dashboard from "../../assets/brand/nexavia/nexavia-noc-dashboard.png";
 import { nexaviaSoftware, kaiSoftware } from "../../data/organization";
+import { COMPANY_EMAIL } from "../../data/company";
 import {
   homeNavigationEn as homeNavigation,
   benefitsEn as benefits,
@@ -453,13 +454,13 @@ const stories = [
           </div><div class="hp-contact-options">
             <a
               class="hp-button"
-              href="mailto:info@kuem.si?subject=Dogovor%20za%20uvodni%20sestanek"
+              href={`mailto:${COMPANY_EMAIL}?subject=Dogovor%20za%20uvodni%20sestanek`}
               >Book an introductory meeting <span aria-hidden="true">→</span
               ></a
             ><a
               id="nexavia-povprasevanje"
               class="hp-demo-link"
-              href="mailto:info@kuem.si?subject=Predstavitev%20platforme%20Nexavia"
+              href={`mailto:${COMPANY_EMAIL}?subject=Predstavitev%20platforme%20Nexavia`}
               >I would like a Nexavia presentation <span aria-hidden="true">→</span></a
             >
           </div>

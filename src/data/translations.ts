@@ -17,7 +17,7 @@ export const commonLabels: Record<Locale, Record<string, string>> = {
     learnMore: "Learn more",
     references: "References",
     detailedReference: "Detailed reference",
-    nameOnlyReference: "Reference"
+    nameOnlyReference: "Reference",
   },
   sl: {
     home: "Domov",
@@ -35,8 +35,8 @@ export const commonLabels: Record<Locale, Record<string, string>> = {
     learnMore: "Več",
     references: "Reference",
     detailedReference: "Podrobna referenca",
-    nameOnlyReference: "Referenca"
-  }
+    nameOnlyReference: "Referenca",
+  },
 };
 
 export function t(locale: Locale, key: keyof typeof commonLabels.en): string {

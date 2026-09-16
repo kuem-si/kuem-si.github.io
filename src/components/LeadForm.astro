@@ -2,6 +2,7 @@
 import { PUBLIC_CONTACT_ENDPOINT } from "astro:env/client";
 import type { Locale } from "../lib/i18n";
 import { countries } from "../lib/countries";
+import { COMPANY_EMAIL } from "../data/company";
 
 const {
   heading = "Contact us",
@@ -40,7 +41,7 @@ const copy =
         blocked: "Oddaja je blokirana.",
         submitting: "Pošiljanje...",
         success: "Hvala. Kmalu vas bomo kontaktirali.",
-        failed: "Oddaja ni uspela. Prosimo, pišite na info@kuem.si.",
+        failed: `Oddaja ni uspela. Prosimo, pišite na ${COMPANY_EMAIL}.`,
         customRequired: "Vnesite prilagojeno zadevo.",
       }
     : {
@@ -61,7 +62,7 @@ const copy =
         blocked: "Submission blocked.",
         submitting: "Submitting...",
         success: "Thank you. We will contact you shortly.",
-        failed: "We could not submit the form. Please email info@kuem.si.",
+        failed: `We could not submit the form. Please email ${COMPANY_EMAIL}.`,
         customRequired: "Please provide a custom subject.",
       };
 ---

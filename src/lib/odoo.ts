@@ -28,7 +28,7 @@ const env = {
   url: ODOO_URL,
   db: ODOO_DB,
   username: ODOO_USERNAME,
-  apiKey: ODOO_API_KEY
+  apiKey: ODOO_API_KEY,
 };
 
 export function getOdooConfig(): OdooConfig | null {
@@ -37,11 +37,15 @@ export function getOdooConfig(): OdooConfig | null {
     url: env.url,
     db: env.db,
     username: env.username,
-    apiKey: env.apiKey
+    apiKey: env.apiKey,
   };
 }
 
-async function jsonRpc(url: string, method: string, params: unknown): Promise<any> {
+async function jsonRpc(
+  url: string,
+  method: string,
+  params: unknown,
+): Promise<any> {
   const response = await fetch(`${url}/jsonrpc`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -51,10 +55,10 @@ async function jsonRpc(url: string, method: string, params: unknown): Promise<an
       params: {
         service: "object",
         method,
-        args: params
+        args: params,
       },
-      id: Date.now()
-    })
+      id: Date.now(),
+    }),
   });
 
   if (!response.ok) {
@@ -79,19 +83,23 @@ async function authenticate(config: OdooConfig): Promise<number> {
       params: {
         service: "common",
         method: "authenticate",
-        args: [config.db, config.username, config.apiKey, {}]
+        args: [config.db, config.username, config.apiKey, {}],
       },
-      id: Date.now()
-    })
+      id: Date.now(),
+    }),
   });
 
   if (!response.ok) {
-    throw new Error(`Odoo authentication failed with status ${response.status}`);
+    throw new Error(
+      `Odoo authentication failed with status ${response.status}`,
+    );
   }
 
   const payload = await response.json();
   if (payload.error || typeof payload.result !== "number") {
-    throw new Error(payload.error?.data?.message ?? "Invalid Odoo authentication response");
+    throw new Error(
+      payload.error?.data?.message ?? "Invalid Odoo authentication response",
+    );
   }
 
   return payload.result;
@@ -108,7 +116,7 @@ export async function createOdooLead(payload: LeadPayload): Promise<number> {
     partnership: "Partnership",
     demo: "Demo",
     inquiry: "Inquiry",
-    custom: payload.customSubject?.trim() || "Custom"
+    custom: payload.customSubject?.trim() || "Custom",
   };
   const fullName = `${payload.firstName} ${payload.lastName}`.trim();
   const leadLabel = subjectLabels[payload.subject];
@@ -124,10 +132,10 @@ export async function createOdooLead(payload: LeadPayload): Promise<number> {
       payload.country ? `Country: ${payload.country}` : "",
       payload.sourcePage ? `Source Page: ${payload.sourcePage}` : "",
       "",
-      payload.message
+      payload.message,
     ]
       .filter(Boolean)
-      .join("\n")
+      .join("\n"),
   };
 
   const leadId = await jsonRpc(config.url, "execute_kw", [
@@ -136,7 +144,7 @@ export async function createOdooLead(payload: LeadPayload): Promise<number> {
     config.apiKey,
     "crm.lead",
     "create",
-    [leadValues]
+    [leadValues],
   ]);
 
   return leadId;

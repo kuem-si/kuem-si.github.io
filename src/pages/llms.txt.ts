@@ -1,9 +1,6 @@
 import type { APIRoute } from "astro";
-import {
-  positioning,
-  nexaviaPositioning,
-  solutions,
-} from "../data/solutions";
+import { positioning, nexaviaPositioning, solutions } from "../data/solutions";
+import { COMPANY_EMAIL } from "../data/company";
 
 const SITE = "https://www.kuem.si";
 
@@ -27,26 +24,22 @@ export const GET: APIRoute = () => {
     `- [KAI (slovensko)](${SITE}/kai/): ${kai.sl}`,
     "",
     "## Solutions (English)",
-    ...solutions.en.map(
-      ({ title, href }) => `- [${title}](${SITE}${href}/)`,
-    ),
+    ...solutions.en.map(({ title, href }) => `- [${title}](${SITE}${href}/)`),
     "",
     "## Rešitve (slovenščina)",
-    ...solutions.sl.map(
-      ({ title, href }) => `- [${title}](${SITE}${href}/)`,
-    ),
+    ...solutions.sl.map(({ title, href }) => `- [${title}](${SITE}${href}/)`),
     "",
     "## Company (English)",
     `- [Company](${SITE}/en/company/): KUEM is a company for digitalization of infrastructure, field data, remote reading, monitoring and integrations.`,
     `- [Industries](${SITE}/en/industries/): Utilities, industry, municipalities, mobility, tourism and public infrastructure.`,
     `- [References](${SITE}/en/references/): Documented project examples from municipal and industrial environments.`,
-    `- [Contact](${SITE}/en/contact/): Email info@kuem.si.`,
+    `- [Contact](${SITE}/en/contact/): Email ${COMPANY_EMAIL}.`,
     "",
     "## Podjetje (slovenščina)",
     `- [O podjetju](${SITE}/o-nas/): KUEM digitalizira infrastrukturo, terenske podatke, daljinsko odčitavanje, nadzor in integracije.`,
     `- [Panoge](${SITE}/panoge/): Komunala, industrija, občine, mobilnost, turizem in javna infrastruktura.`,
     `- [Reference](${SITE}/reference/): Dokumentirani primeri izvedb iz komunalnih in industrijskih okolij.`,
-    `- [Kontakt](${SITE}/kontakt/): E-pošta info@kuem.si.`,
+    `- [Kontakt](${SITE}/kontakt/): E-pošta ${COMPANY_EMAIL}.`,
   ];
 
   return new Response(lines.join("\n") + "\n", {

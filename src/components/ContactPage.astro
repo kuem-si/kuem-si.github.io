@@ -2,6 +2,7 @@
 import { PUBLIC_CONTACT_ENDPOINT } from "astro:env/client";
 import MainLayout from "../layouts/MainLayout.astro";
 import type { Locale } from "../lib/i18n";
+import { COMPANY_EMAIL } from "../data/company";
 const { locale } = Astro.props as { locale: Locale };
 const sl = locale === "sl";
 const contactEndpoint = PUBLIC_CONTACT_ENDPOINT ?? null;
@@ -83,11 +84,11 @@ const contactEndpoint = PUBLIC_CONTACT_ENDPOINT ?? null;
         ><p class="status" role="status" aria-live="polite"></p>
       </form><aside>
         <h2>{sl ? "Neposreden stik" : "Direct contact"}</h2><a
-          href="mailto:info@kuem.si">info@kuem.si</a
+          href={`mailto:${COMPANY_EMAIL}`}>{COMPANY_EMAIL}</a
         >
       </aside>
     </div>
-  </section><script is:inline define:vars={{ sl, endpoint: contactEndpoint }}>
+  </section><script is:inline define:vars={{ sl, endpoint: contactEndpoint, email: COMPANY_EMAIL }}>
     const form = document.querySelector("[data-contact]");
     form?.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -104,8 +105,8 @@ const contactEndpoint = PUBLIC_CONTACT_ENDPOINT ?? null;
       if (data.get("website")) return;
       if (!endpoint) {
         status.textContent = sl
-          ? "Pošiljanje še ni konfigurirano. Pišite na info@kuem.si."
-          : "Submission is not configured yet. Email info@kuem.si.";
+          ? `Pošiljanje še ni konfigurirano. Pišite na ${email}.`
+          : `Submission is not configured yet. Email ${email}.`;
         return;
       }
       status.textContent = sl ? "Pošiljanje …" : "Sending…";
@@ -122,8 +123,8 @@ const contactEndpoint = PUBLIC_CONTACT_ENDPOINT ?? null;
         f.reset();
       } catch {
         status.textContent = sl
-          ? "Pošiljanje ni uspelo. Pišite na info@kuem.si."
-          : "Submission failed. Email info@kuem.si.";
+          ? `Pošiljanje ni uspelo. Pišite na ${email}.`
+          : `Submission failed. Email ${email}.`;
       }
     });
   </script></MainLayout

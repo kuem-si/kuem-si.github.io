@@ -1,4 +1,5 @@
 import type { Locale } from "../lib/i18n";
+import { COMPANY_EMAIL } from "./company";
 export const solutions = {
   sl: [
     {
@@ -947,7 +948,7 @@ export const footerContent = {
       { label: "Zasebnost", href: "/zasebnost" },
     ],
     contactTitle: "KONTAKT",
-    email: "info@kuem.si",
+    email: COMPANY_EMAIL,
     contactLabel: "Kontaktirajte nas",
     contactHref: "/kontakt",
     privacyLabel: "Zasebnost",
@@ -993,7 +994,7 @@ export const footerContent = {
       { label: "Privacy", href: "/en/privacy" },
     ],
     contactTitle: "CONTACT",
-    email: "info@kuem.si",
+    email: COMPANY_EMAIL,
     contactLabel: "Contact us",
     contactHref: "/en/contact",
     privacyLabel: "Privacy",
