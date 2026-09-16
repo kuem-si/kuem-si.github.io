@@ -1,50 +1,66 @@
 ---
 import Icon from "./ArchitectureIcon.astro";
 import logo from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
-const cards = [
-  {
-    id: "devices",
-    icon: "devices",
-    title: "NAPRAVE IN SENZORJI",
-    sub: "Števci · senzorji · telemetrija",
+import type { Locale } from "../../lib/i18n";
+
+const { locale = "sl" } = Astro.props as { locale?: Locale };
+const copy = {
+  sl: {
+    sectionAria: "Arhitektura rešitve: od podatka do odločitve",
+    intro: "IZBERITE DEL REŠITVE",
+    introHint: "Kliknite posamezen korak za podrobnosti.",
+    micro: "OD PODATKA DO ODLOČITVE",
+    srOnly:
+      "Naprave in senzorji prek povezljivosti v Nexavio. Ločena pot: obstoječi sistemi prek API-integracij v Nexavio. KAI je analitični sloj Nexavie. Iz Nexavie do odločitve in ukrepa. NOC spremlja vse sloje in ni postaja podatkovnega toka.",
+    cards: [
+      { id: "devices", icon: "devices", title: "NAPRAVE IN SENZORJI", sub: "Števci · senzorji · telemetrija" },
+      { id: "radio", icon: "radio", title: "POVEZLJIVOST", sub: "LoRaWAN · NB-IoT · wM-Bus · LAN" },
+      { id: "systems", icon: "systems", title: "OBSTOJEČI SISTEMI", sub: "ERP · SCADA · GIS · zunanji viri" },
+      { id: "api", icon: "api", title: "API-INTEGRACIJE", sub: "Standardni vmesniki" },
+    ],
+    platformSub: "Zajem · obdelava · prikaz",
+    kaiSub: "Analitika · opozorila · priporočila",
+    action: "ODLOČITEV IN UKREP",
+    actionSub: "Človek ali avtomatizacija",
+    noc: "NOC IN UPRAVLJANE STORITVE",
+    nocSub: "Nadzor naprav · povezljivosti · alarmov · podpora",
+    nocSmall: "STALEN NADZOR<br />CELOTNE REŠITVE",
   },
-  {
-    id: "radio",
-    icon: "radio",
-    title: "POVEZLJIVOST",
-    sub: "LoRaWAN · NB-IoT · wM-Bus · LAN",
+  en: {
+    sectionAria: "Solution architecture: from data to decision",
+    intro: "CHOOSE A SOLUTION LAYER",
+    introHint: "Select a step for details.",
+    micro: "FROM DATA TO DECISION",
+    srOnly:
+      "Devices and sensors connect to Nexavia. Existing systems connect through API integrations. KAI is Nexavia’s analytics layer. Nexavia supports decisions and action, while NOC monitors every layer.",
+    cards: [
+      { id: "devices", icon: "devices", title: "DEVICES AND SENSORS", sub: "Meters · sensors · telemetry" },
+      { id: "radio", icon: "radio", title: "CONNECTIVITY", sub: "LoRaWAN · NB-IoT · wM-Bus · LAN" },
+      { id: "systems", icon: "systems", title: "EXISTING SYSTEMS", sub: "ERP · SCADA · GIS · external sources" },
+      { id: "api", icon: "api", title: "API INTEGRATIONS", sub: "Standard interfaces" },
+    ],
+    platformSub: "Acquisition · processing · visualization",
+    kaiSub: "Analytics · alerts · recommendations",
+    action: "DECISION AND ACTION",
+    actionSub: "Person or automation",
+    noc: "NOC AND MANAGED SERVICES",
+    nocSub: "Device · connectivity · alarm monitoring · support",
+    nocSmall: "CONTINUOUS MONITORING<br />OF THE ENTIRE SOLUTION",
   },
-  {
-    id: "systems",
-    icon: "systems",
-    title: "OBSTOJEČI SISTEMI",
-    sub: "ERP · SCADA · GIS · zunanji viri",
-  },
-  {
-    id: "api",
-    icon: "api",
-    title: "API-INTEGRACIJE",
-    sub: "Standardni vmesniki",
-  },
-];
+}[locale];
+const cards = copy.cards;
 ---
 
-<section
-  class="architecture"
-  aria-label="Arhitektura rešitve: od podatka do odločitve"
->
+<section class="architecture" aria-label={copy.sectionAria}>
   <div class="architecture-intro">
     <div>
-      <strong>IZBERITE DEL REŠITVE</strong><p>
-        Kliknite posamezen korak za podrobnosti.
+      <strong>{copy.intro}</strong><p>
+        {copy.introHint}
       </p>
-    </div><div class="micro">OD PODATKA DO ODLOČITVE</div>
+    </div><div class="micro">{copy.micro}</div>
   </div>
   <p class="sr-only">
-    Naprave in senzorji prek povezljivosti v Nexavio. Ločena pot: obstoječi
-    sistemi prek API-integracij v Nexavio. KAI je analitični sloj Nexavie. Iz
-    Nexavie do odločitve in ukrepa. NOC spremlja vse sloje in ni postaja
-    podatkovnega toka.
+    {copy.srOnly}
   </p>
   <div class="architecture-grid">
     <svg class="wires" aria-hidden="true"
@@ -102,7 +118,7 @@ const cards = [
         <span class="logo"
           ><img class="nexavia-wordmark" src={logo.src} alt="Nexavia" width="1200" height="360" /></span
         >
-        <strong>NEXAVIA</strong><span>Zajem · obdelava · prikaz</span><small
+        <strong>NEXAVIA</strong><span>{copy.platformSub}</span><small
           class="node-open"
           aria-hidden="true">›</small
         >
@@ -116,7 +132,7 @@ const cards = [
         aria-haspopup="dialog"
       >
         <Icon name="kai" /><span
-          ><strong>KAI</strong><span>Analitika · opozorila · priporočila</span
+          ><strong>KAI</strong><span>{copy.kaiSub}</span
           ></span
         ><small class="node-open" aria-hidden="true">›</small>
       </button>
@@ -130,8 +146,8 @@ const cards = [
       aria-expanded="false"
       aria-haspopup="dialog"
     >
-      <Icon name="action" /><strong>ODLOČITEV IN UKREP</strong><span
-        >Človek ali avtomatizacija</span
+      <Icon name="action" /><strong>{copy.action}</strong><span
+        >{copy.actionSub}</span
       ><small class="node-open" aria-hidden="true">›</small>
     </button>
     <button
@@ -144,9 +160,7 @@ const cards = [
       aria-haspopup="dialog"
     >
       <Icon name="noc" /><div>
-        <strong>NOC IN UPRAVLJANE STORITVE</strong><span
-          >Nadzor naprav · povezljivosti · alarmov · podpora</span
-        >
+        <strong>{copy.noc}</strong><span>{copy.nocSub}</span>
       </div><svg class="network" viewBox="0 0 260 40" aria-hidden="true"
         ><path d="M12 20h236" stroke="#7DB7AB"></path><g fill="#7DB7AB"
           ><circle cx="12" cy="20" r="7"></circle><circle cx="90" cy="20" r="7"
@@ -161,7 +175,7 @@ const cards = [
           fill="white"
           font-size="14">!</text
         ></svg
-      ><small>STALEN NADZOR<br />CELOTNE REŠITVE</small>
+      ><small set:html={copy.nocSmall}></small>
     </button>
   </div>
 </section>

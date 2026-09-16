@@ -1,5 +1,4 @@
 export type Locale = "sl" | "en";
-export const DEFAULT_LOCALE: Locale = "sl";
 export function getLocaleFromPath(pathname: string): Locale {
   const clean = pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
   return clean === "/en" || clean.startsWith("/en/") ? "en" : "sl";
@@ -48,12 +47,5 @@ const reversePairs = Object.fromEntries(
 export function alternatePath(pathname: string): string {
   const clean = pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
   if (clean.startsWith("/en")) return reversePairs[clean] ?? "/";
-  return routePairs[clean] ?? `/en${clean === "/" ? "/" : clean}`;
-}
-export function stripLocalePrefix(pathname: string): string {
-  return pathname.replace(/^\/en(?=\/|$)/, "") || "/";
-}
-export function withLocale(pathname: string, locale: Locale): string {
-  const clean = stripLocalePrefix(pathname);
-  return locale === "en" ? (clean === "/" ? "/en" : `/en${clean}`) : clean;
+  return routePairs[clean] ?? "/en/";
 }

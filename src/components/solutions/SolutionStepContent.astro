@@ -1,8 +1,37 @@
 ---
 import Icon from "./ServiceIcon.astro";
 import type { SolutionStep } from "../../data/solutionExplorer";
+import type { Locale } from "../../lib/i18n";
 import dashboard from "../../assets/brand/nexavia/nexavia-noc-dashboard.png";
-const { step } = Astro.props as { step: SolutionStep };
+const { step, locale = "sl" } = Astro.props as {
+  step: SolutionStep;
+  locale?: Locale;
+};
+const copy = {
+  sl: {
+    dashboardAlt:
+      "Dejanski prikaz Nexavie z zemljevidom naprav, kazalniki in opozorili",
+    dashboardCaption: "Predogled nadzorne plošče Nexavia",
+    actionAria: "Od opozorila do ukrepa",
+    actionSteps: ["Zaznano odstopanje", "Opozorilo odgovorni osebi", "Potrjen ukrep"],
+    status: "Stanje sistema",
+    monitoring: "24/7 nadzor",
+    statusLine: "Naprave · povezljivost · alarmi",
+  },
+  en: {
+    dashboardAlt: "Real Nexavia view with a device map, indicators and alerts",
+    dashboardCaption: "Nexavia dashboard preview",
+    actionAria: "From alert to action",
+    actionSteps: [
+      "Deviation detected",
+      "Responsible person notified",
+      "Action confirmed",
+    ],
+    status: "System status",
+    monitoring: "24/7 monitoring",
+    statusLine: "Devices · connectivity · alerts",
+  },
+}[locale];
 ---
 
 <h3 class="step-headline">{step.title}</h3>
@@ -15,25 +44,23 @@ const { step } = Astro.props as { step: SolutionStep };
           src={dashboard.src}
           width={dashboard.width}
           height={dashboard.height}
-          alt="Dejanski prikaz Nexavie z zemljevidom naprav, kazalniki in opozorili"
+          alt={copy.dashboardAlt}
         />
-        <figcaption>Predogled nadzorne plošče Nexavia</figcaption>
+        <figcaption>{copy.dashboardCaption}</figcaption>
       </>
     </figure>
   )
 }
 {
   step.visual === "action" && (
-    <ol class="step-action-flow" aria-label="Od opozorila do ukrepa">
-      {["Zaznano odstopanje", "Opozorilo odgovorni osebi", "Potrjen ukrep"].map(
-        (label, i) => (
-          <li>
-            <b aria-hidden="true">{i + 1}</b>
-            <Icon name={["bell", "people", "check"][i]} />
-            <span>{label}</span>
-          </li>
-        ),
-      )}
+    <ol class="step-action-flow" aria-label={copy.actionAria}>
+      {copy.actionSteps.map((label, i) => (
+        <li>
+          <b aria-hidden="true">{i + 1}</b>
+          <Icon name={["bell", "people", "check"][i]} />
+          <span>{label}</span>
+        </li>
+      ))}
     </ol>
   )
 }
@@ -43,8 +70,8 @@ const { step } = Astro.props as { step: SolutionStep };
       <>
         <div>
           <>
-            <strong>Stanje sistema</strong>
-            <span>24/7 nadzor</span>
+            <strong>{copy.status}</strong>
+            <span>{copy.monitoring}</span>
           </>
         </div>
         <svg viewBox="0 0 360 62" aria-hidden="true">
@@ -72,7 +99,7 @@ const { step } = Astro.props as { step: SolutionStep };
             </text>
           </>
         </svg>
-        <p>Naprave · povezljivost · alarmi</p>
+        <p>{copy.statusLine}</p>
       </>
     </div>
   )

@@ -1,0 +1,623 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import type { Locale } from "../../lib/i18n";
+import { industryExplorer, industryExplorerEn } from "../../data/industry-explorer";
+import nexaviaLogo from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
+import "../../styles/panoge.css";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const explorer = locale === "sl" ? industryExplorer : industryExplorerEn;
+const copy = {
+  sl: {
+    title: "Panoge | KUEM",
+    description:
+      "Podatki za okolja, ki morajo delovati. Izberite panogo in preverite, katere podatke spremljamo ter kaj z njimi pridobite.",
+    eyebrow: "PANOGE IN VERTIKALE",
+    h1: "Podatki za okolja, ki morajo delovati.",
+    heroP:
+      "Od komunalnih sistemov in javne infrastrukture do industrije, mobilnosti in turizma – rešitve prilagodimo dejanskemu okolju in načinu dela.",
+    choose: "Izberite svojo panogo",
+    talk: "Pogovorimo se",
+    contactHref: "/kontakt",
+    board1: "PODROČJA UPORABE",
+    board2: "ŠEST PANOG, ENA PLATFORMA",
+    referencesAria: "Izkušnje iz realnega okolja",
+    referencesEyebrow: "IZKUŠNJE IZ REALNEGA OKOLJA",
+    explorerEyebrow: "IZBERITE PODROČJE",
+    explorerH2: "Ista platforma. Različni operativni izzivi.",
+    explorerLead:
+      "Izberite panogo in preverite, katere podatke spremljamo ter kaj uporabnik z njimi pridobi.",
+    tablistAria: "Izberite panogo",
+    dashboardAria: "Demo prikaz Nexavia za izbrano panogo",
+    sidebar: ["Pregled", "Operacije", "Poraba", "Mobilnost", "Konfiguracija"],
+    headerTitle: "Pregled področja",
+    headerDemo: "Občina Kranj · Demo",
+    chartTitle: "Poraba v času",
+    chartAria: "Primer časovnega grafa z demo podatki",
+    mapAria: "Shematski demo zemljevid območja",
+    legend: "Normalno · Opozorilo · Alarm",
+    alertSmall: "Demo opozorilo za izbrano področje",
+    demoLabel: "DEMO PODATKI",
+    watchEyebrow: "SPREMLJAMO",
+    gainEyebrow: "UPORABNIK PRIDOBI",
+    examplesEyebrow: "PRIMERI IZ PRAKSE",
+    examplesLink: "Poglejte uspešne zgodbe",
+    referencesHref: "/reference",
+    resultsEyebrow: "SKUPNI REZULTATI",
+    resultsH2: "Različna okolja. Ista potreba po zanesljivih informacijah.",
+    outcomes: [
+      [
+        "◎",
+        "Enoten pregled",
+        "Pomembni podatki iz različnih virov so dostopni na enem mestu.",
+      ],
+      [
+        "♧",
+        "Pravočasno obveščanje",
+        "Odstopanja in dogodki dosežejo odgovorno osebo brez nepotrebnega iskanja.",
+      ],
+      [
+        "▥",
+        "Podlaga za ukrep",
+        "Zgodovina, kontekst in primerjave pomagajo sprejeti boljšo odločitev.",
+      ],
+    ],
+    storiesEyebrow: "USPEŠNE ZGODBE",
+    storiesH2: "Rešitve v realnem okolju.",
+    stories: [
+      [
+        "Brezovica",
+        "Pregled vodomerov in komunalne infrastrukture.",
+        "komunala-in-energija",
+      ],
+      ["Gradiška", "Kakovost zraka, hrup, promet in stanje okolja.", "okolje"],
+      ["Adria Mobil", "Energetski podatki proizvodnega okolja.", "industrija"],
+      [
+        "Novo mesto",
+        "Podatki za načrtovanje trajnostne mobilnosti.",
+        "mobilnost",
+      ],
+    ],
+    storyLink: "Preberite zgodbo",
+    closingH2: "Poiščimo pravi prvi korak za vaše okolje.",
+    closingP:
+      "Predstavite nam izziv. Skupaj preverimo podatke, obstoječo infrastrukturo in izvedljivo pot uvedbe.",
+    closingCta: "Dogovorite se za uvodni sestanek",
+    scriptChart: {
+      mobilnost: "Intenzivnost skozi čas",
+      okolje: "Meritve skozi čas",
+      default: "Poraba v času",
+    },
+    scriptView: {
+      mobilnost: "Mobilnost",
+      overview: "Pregled",
+      default: "Poraba",
+    },
+  },
+  en: {
+    title: "Industries | KUEM",
+    description:
+      "Data for environments that must work. Choose an industry and see what we monitor and what you gain.",
+    eyebrow: "INDUSTRIES AND VERTICALS",
+    h1: "Data for environments that must work.",
+    heroP:
+      "From utilities and public infrastructure to industry, mobility and tourism, we adapt solutions to the real environment and way of working.",
+    choose: "Choose your industry",
+    talk: "Let’s talk",
+    contactHref: "/en/contact",
+    board1: "APPLICATION AREAS",
+    board2: "SIX INDUSTRIES, ONE PLATFORM",
+    referencesAria: "Experience from real environments",
+    referencesEyebrow: "EXPERIENCE FROM REAL ENVIRONMENTS",
+    explorerEyebrow: "CHOOSE AN AREA",
+    explorerH2: "The same platform. Different operational challenges.",
+    explorerLead:
+      "Choose an industry to see which data we monitor and what the user gains.",
+    tablistAria: "Choose an industry",
+    dashboardAria: "Nexavia demo for the selected industry",
+    sidebar: ["Overview", "Operations", "Consumption", "Mobility", "Configuration"],
+    headerTitle: "Area overview",
+    headerDemo: "Municipality of Kranj · Demo",
+    chartTitle: "Consumption over time",
+    chartAria: "Example time chart with demo data",
+    mapAria: "Schematic demo map of the area",
+    legend: "Normal · Warning · Alarm",
+    alertSmall: "Demo alert for the selected area",
+    demoLabel: "DEMO DATA",
+    watchEyebrow: "WE MONITOR",
+    gainEyebrow: "USER BENEFITS",
+    examplesEyebrow: "REAL-WORLD EXAMPLES",
+    examplesLink: "View success stories",
+    referencesHref: "/en/references",
+    resultsEyebrow: "SHARED OUTCOMES",
+    resultsH2: "Different environments. The same need for reliable information.",
+    outcomes: [
+      [
+        "◎",
+        "Unified overview",
+        "Important data from different sources is available in one place.",
+      ],
+      [
+        "♧",
+        "Timely notifications",
+        "Deviations and events reach the responsible person without unnecessary searching.",
+      ],
+      [
+        "▥",
+        "Basis for action",
+        "History, context and comparisons support better decisions.",
+      ],
+    ],
+    storiesEyebrow: "SUCCESS STORIES",
+    storiesH2: "Solutions in real environments.",
+    stories: [
+      [
+        "Brezovica",
+        "Overview of water meters and utility infrastructure.",
+        "komunala-in-energija",
+      ],
+      [
+        "Gradiška",
+        "Air quality, noise, traffic and environmental conditions.",
+        "okolje",
+      ],
+      ["Adria Mobil", "Energy data from the production environment.", "industrija"],
+      ["Novo mesto", "Data for sustainable mobility planning.", "mobilnost"],
+    ],
+    storyLink: "Read the story",
+    closingH2: "Let’s find the right first step for your environment.",
+    closingP:
+      "Tell us about your challenge. Together we will assess the data, existing infrastructure and a feasible implementation path.",
+    closingCta: "Book an introductory meeting",
+    scriptChart: {
+      mobilnost: "Intensity over time",
+      okolje: "Measurements over time",
+      default: "Consumption over time",
+    },
+    scriptView: {
+      mobilnost: "Mobility",
+      overview: "Overview",
+      default: "Consumption",
+    },
+  },
+}[locale];
+const initial = explorer[0];
+const names = ["Domplan", "Brezovica", "Adria Mobil", "Gradiška", "Novo mesto", "Krk"];
+const scriptData = explorer.map(({ icon: _icon, ...rest }) => rest);
+---
+
+<MainLayout title={copy.title} description={copy.description}>
+  <div class="pi-page">
+    <section class="pi-hero" aria-labelledby="pi-title">
+      <div class="container pi-hero-grid">
+        <div class="pi-hero-copy">
+          <p class="pi-eyebrow">{copy.eyebrow}</p><h1 id="pi-title">
+            {copy.h1}
+          </h1><p>
+            {copy.heroP}
+          </p><div class="pi-actions">
+            <a class="btn btn-primary" href="#izberite-podrocje"
+              >{copy.choose} <span aria-hidden="true">→</span></a
+            ><a class="btn btn-secondary" href={copy.contactHref}
+              >{copy.talk} <span aria-hidden="true">→</span></a
+            >
+          </div>
+        </div>
+        <div class="pi-hero-board">
+          <div class="pi-board-heading">
+            <span>{copy.board1}</span><span>{copy.board2}</span>
+          </div><div class="pi-hero-cards">
+            {
+              explorer.map((industry, index) => (
+                <button
+                  type="button"
+                  class="pi-hero-card"
+                  data-hero-industry={industry.id}
+                  aria-pressed={index === 0 ? "true" : "false"}
+                >
+                  <>
+                    <img
+                      src={industry.icon}
+                      width="176"
+                      height="144"
+                      alt=""
+                      aria-hidden="true"
+                    />
+                    <span>{industry.name}</span>
+                    <b aria-hidden="true">›</b>
+                  </>
+                </button>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="pi-references" aria-label={copy.referencesAria}>
+      <div class="container">
+        <p class="pi-eyebrow">{copy.referencesEyebrow}</p><div
+          class="pi-reference-list"
+        >
+          {names.map((name) => <span>{name}</span>)}
+        </div>
+      </div>
+    </section>
+    <section
+      class="pi-explorer"
+      id="izberite-podrocje"
+      aria-labelledby="pi-explorer-title"
+    >
+      <div class="container">
+        <p class="pi-eyebrow">{copy.explorerEyebrow}</p><h2
+          id="pi-explorer-title"
+        >
+          {copy.explorerH2}
+        </h2><p class="pi-section-lead">
+          {copy.explorerLead}
+        </p><div class="pi-explorer-layout">
+          <div class="pi-tabs" role="tablist" aria-label={copy.tablistAria}>
+            {
+              explorer.map((industry, index) => (
+                <button
+                  type="button"
+                  role="tab"
+                  id={`pi-tab-${industry.id}`}
+                  aria-controls="pi-industry-panel"
+                  aria-selected={index === 0 ? "true" : "false"}
+                  tabindex={index === 0 ? 0 : -1}
+                  data-industry={industry.id}
+                >
+                  <>
+                    <img
+                      src={industry.icon}
+                      width="176"
+                      height="144"
+                      alt=""
+                      aria-hidden="true"
+                    />
+                    <span>{industry.name}</span>
+                    <b aria-hidden="true">›</b>
+                  </>
+                </button>
+              ))
+            }
+          </div>
+          <div
+            class="pi-panel"
+            id="pi-industry-panel"
+            role="tabpanel"
+            aria-labelledby={`pi-tab-${initial.id}`}
+            tabindex="0"
+          >
+            <div class="pi-panel-heading">
+              <span class="pi-panel-symbol"
+                ><img
+                  src={initial.icon}
+                  width="176"
+                  height="144"
+                  alt=""
+                  aria-hidden="true"
+                /></span
+              ><div>
+                <p class="pi-eyebrow" id="pi-industry-eyebrow">
+                  {initial.eyebrow}
+                </p><h3 id="pi-industry-title">{initial.name}</h3><p
+                  id="pi-industry-description"
+                >
+                  {initial.description}
+                </p>
+              </div>
+            </div>
+            <div class="pi-dashboard" aria-label={copy.dashboardAria}>
+              <div class="pi-app-sidebar">
+                <img
+                  src={nexaviaLogo.src}
+                  width="115"
+                  height="36"
+                  alt="Nexavia"
+                /><span>{copy.sidebar[0]}</span><span>{copy.sidebar[1]}</span
+                ><span class="pi-app-active">{copy.sidebar[2]}</span
+                ><span>{copy.sidebar[3]}</span><span>{copy.sidebar[4]}</span>
+              </div><div class="pi-app-main">
+                <div class="pi-app-header">
+                  <span>{copy.headerTitle}</span><span>{copy.headerDemo}</span>
+                </div><div class="pi-app-kpis">
+                  {
+                    initial.metrics.map((metric, index) => (
+                      <div>
+                        <>
+                          <span class="pi-kpi-icon" aria-hidden="true">
+                            {["◇", "ϟ", "▥"][index]}
+                          </span>
+                          <small data-metric-label={index}>{metric}</small>
+                          <strong data-metric-value={index}>
+                            {initial.metricValues[index]}
+                          </strong>
+                        </>
+                      </div>
+                    ))
+                  }
+                </div><div class="pi-app-visuals">
+                  <div class="pi-app-chart">
+                    <strong id="pi-chart-title">{copy.chartTitle}</strong><svg
+                      viewBox="0 0 440 190"
+                      role="img"
+                      aria-label={copy.chartAria}
+                      ><path
+                        d="M0 160H440M0 120H440M0 80H440M0 40H440"
+                        stroke="#e4edf3"></path><polyline
+                        points="0,142 20,135 40,142 60,124 80,130 100,120 120,125 140,108 160,116 180,100 200,110 220,93 240,103 260,84 280,94 300,74 320,90 340,72 360,85 380,57 400,65 420,42 440,52"
+                        fill="none"
+                        stroke="#3992df"
+                        stroke-width="3"></polyline><polyline
+                        points="0,154 20,149 40,151 60,145 80,143 100,142 120,137 140,135 160,139 180,131 200,129 220,130 240,125 260,121 280,125 300,115 320,111 340,116 360,107 380,98 400,102 420,90 440,94"
+                        fill="none"
+                        stroke="#55bec8"
+                        stroke-width="2"></polyline></svg
+                    >
+                  </div><div class="pi-app-map">
+                    <strong id="pi-map-title">{initial.map}</strong><svg
+                      viewBox="0 0 360 190"
+                      role="img"
+                      aria-label={copy.mapAria}
+                      ><rect width="360" height="190" fill="#f0f6f3"
+                      ></rect><path
+                        d="M0 165Q80 90 170 140T360 60M10 30Q130 120 220 30T360 150"
+                        fill="none"
+                        stroke="#9ed2e0"
+                        stroke-width="15"></path><path
+                        d="M0 165Q80 90 170 140T360 60M10 30Q130 120 220 30T360 150"
+                        fill="none"
+                        stroke="#fff"
+                        stroke-width="7"></path><path
+                        d="M40 0 90 190M190 0 245 190M315 0 270 190"
+                        stroke="#c9d5bf"
+                        stroke-width="3"></path><circle
+                        cx="76"
+                        cy="97"
+                        r="6"
+                        fill="#26ab66"></circle><circle
+                        cx="166"
+                        cy="124"
+                        r="6"
+                        fill="#f06432"></circle><circle
+                        cx="230"
+                        cy="76"
+                        r="6"
+                        fill="#26ab66"></circle><circle
+                        cx="308"
+                        cy="103"
+                        r="6"
+                        fill="#e6af39"></circle></svg
+                    ><small>{copy.legend}</small>
+                  </div>
+                </div><div class="pi-app-alert">
+                  <span aria-hidden="true">△</span><span
+                    ><strong id="pi-event-title">{initial.events}</strong><small
+                      >{copy.alertSmall}</small
+                    ></span
+                  ><b aria-hidden="true">›</b>
+                </div><span class="pi-demo-label">{copy.demoLabel}</span>
+              </div>
+            </div>
+            <div class="pi-panel-details">
+              <div>
+                <p class="pi-eyebrow">{copy.watchEyebrow}</p><ul
+                  id="pi-watch-list"
+                >
+                  {initial.watch.map((item) => <li>{item}</li>)}
+                </ul>
+              </div><div>
+                <p class="pi-eyebrow">{copy.gainEyebrow}</p><ul
+                  id="pi-gain-list"
+                >
+                  {initial.gain.map((item) => <li>{item}</li>)}
+                </ul>
+              </div>
+            </div><div class="pi-panel-references">
+              <div>
+                <p class="pi-eyebrow">{copy.examplesEyebrow}</p><strong
+                  id="pi-industry-references">{initial.references}</strong
+                >
+              </div><a href={copy.referencesHref}
+                >{copy.examplesLink} <span aria-hidden="true">→</span></a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="pi-results" aria-labelledby="pi-results-title">
+      <div class="container">
+        <p class="pi-eyebrow">{copy.resultsEyebrow}</p><h2 id="pi-results-title">
+          {copy.resultsH2}
+        </h2><div class="pi-result-grid">
+          {
+            copy.outcomes.map(([icon, title, outcomeCopy]) => (
+              <article>
+                <>
+                  <span aria-hidden="true">{icon}</span>
+                  <div>
+                    <>
+                      <h3>{title}</h3>
+                      <p>{outcomeCopy}</p>
+                    </>
+                  </div>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+    <section class="pi-stories" aria-labelledby="pi-stories-title">
+      <div class="container">
+        <p class="pi-eyebrow">{copy.storiesEyebrow}</p><h2 id="pi-stories-title">
+          {copy.storiesH2}
+        </h2><div class="pi-story-grid">
+          {
+            copy.stories.map(([name, storyCopy, icon]) => (
+              <article>
+                <>
+                  <img
+                    src={
+                      explorer.find((industry) => industry.id === icon)?.icon
+                    }
+                    width="176"
+                    height="144"
+                    alt=""
+                    aria-hidden="true"
+                  />
+                  <h3>{name}</h3>
+                  <p>{storyCopy}</p>
+                  <a href={copy.referencesHref}>
+                    {copy.storyLink} <span aria-hidden="true">→</span>
+                  </a>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+    <section class="pi-closing" aria-labelledby="pi-closing-title">
+      <div class="container">
+        <div>
+          <h2 id="pi-closing-title">
+            {copy.closingH2}
+          </h2><p>
+            {copy.closingP}
+          </p>
+        </div><a class="btn btn-primary" href={copy.contactHref}
+          >{copy.closingCta} <span aria-hidden="true">→</span></a
+        >
+      </div>
+    </section>
+  </div>
+</MainLayout>
+<script define:vars={{ data: scriptData, chart: copy.scriptChart, view: copy.scriptView }}>
+  const tabs = [
+    ...document.querySelectorAll(".pi-tabs [role='tab']"),
+  ];
+  const heroButtons = [
+    ...document.querySelectorAll(".pi-hero-card"),
+  ];
+  const panel = document.querySelector(".pi-panel");
+  const byId = new Map(data.map((item) => [item.id, item]));
+  const setText = (selector, value) => {
+    const node = document.querySelector(selector);
+    if (node) node.textContent = value;
+  };
+  const setList = (selector, items) => {
+    const list = document.querySelector(selector);
+    if (!list) return;
+    list.replaceChildren(
+      ...items.map((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        return li;
+      }),
+    );
+  };
+  function select(
+    id,
+    { history = true, scroll = false, focus = false } = {},
+  ) {
+    const item = byId.get(id);
+    if (!item || !panel) return;
+    tabs.forEach((tab) => {
+      const active = tab.dataset.industry === id;
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+      if (active && focus) tab.focus();
+    });
+    heroButtons.forEach((button) =>
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset.heroIndustry === id),
+      ),
+    );
+    panel.setAttribute("aria-labelledby", `pi-tab-${id}`);
+    panel.classList.add("pi-changing");
+    setText("#pi-industry-eyebrow", item.eyebrow);
+    setText("#pi-industry-title", item.name);
+    setText("#pi-industry-description", item.description);
+    setText("#pi-industry-references", item.references);
+    setText(
+      "#pi-chart-title",
+      id === "mobilnost"
+        ? chart.mobilnost
+        : id === "okolje"
+          ? chart.okolje
+          : chart.default,
+    );
+    setText("#pi-map-title", item.map);
+    setText("#pi-event-title", item.events);
+    const activeView =
+      id === "mobilnost"
+        ? view.mobilnost
+        : ["javna-infrastruktura", "okolje"].includes(id)
+          ? view.overview
+          : view.default;
+    document
+      .querySelectorAll<HTMLElement>(".pi-app-sidebar > span")
+      .forEach((viewEl) =>
+        viewEl.classList.toggle(
+          "pi-app-active",
+          viewEl.textContent?.trim() === activeView,
+        ),
+      );
+    item.metrics.forEach((label, index) => {
+      setText(`[data-metric-label="${index}"]`, label);
+      setText(`[data-metric-value="${index}"]`, item.metricValues[index]);
+    });
+    const symbol = document.querySelector(".pi-panel-symbol");
+    const chosen = tabs
+      .find((tab) => tab.dataset.industry === id)
+      ?.querySelector("img");
+    if (symbol && chosen) symbol.replaceChildren(chosen.cloneNode(true));
+    setList("#pi-watch-list", item.watch);
+    setList("#pi-gain-list", item.gain);
+    if (history && location.hash !== `#${id}`)
+      window.history.pushState({ industry: id }, "", `#${id}`);
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => panel.classList.remove("pi-changing")),
+    );
+    if (scroll)
+      panel.scrollIntoView({
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
+        block: "start",
+      });
+  }
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => select(tab.dataset.industry ?? ""));
+    tab.addEventListener("keydown", (event) => {
+      let next = index;
+      if (event.key === "ArrowRight" || event.key === "ArrowDown")
+        next = (index + 1) % tabs.length;
+      else if (event.key === "ArrowLeft" || event.key === "ArrowUp")
+        next = (index - 1 + tabs.length) % tabs.length;
+      else if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = tabs.length - 1;
+      else return;
+      event.preventDefault();
+      select(tabs[next].dataset.industry ?? "", { focus: true });
+    });
+  });
+  heroButtons.forEach((button) =>
+    button.addEventListener("click", () =>
+      select(button.dataset.heroIndustry ?? "", { scroll: true }),
+    ),
+  );
+  const fromHash = () =>
+    select(decodeURIComponent(location.hash.slice(1)), { history: false });
+  addEventListener("popstate", fromHash);
+  addEventListener("hashchange", fromHash);
+  fromHash();
+</script>

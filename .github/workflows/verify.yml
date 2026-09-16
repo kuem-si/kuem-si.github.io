@@ -43,3 +43,11 @@ jobs:
 
       - name: Format check
         run: npm run format:check
+
+      - name: Serve and Lighthouse audit
+        run: |
+          npx -y http-server dist -p 4173 --silent &
+          npx -y wait-on http://localhost:4173
+          npx -y lighthouse http://localhost:4173/ --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=.lh-home.json --chrome-flags="--headless=new --no-sandbox" --quiet
+          npx -y lighthouse http://localhost:4173/en/ --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=.lh-en.json --chrome-flags="--headless=new --no-sandbox" --quiet
+          node .tools/lighthouse-assert.mjs .lh-home.json .lh-en.json

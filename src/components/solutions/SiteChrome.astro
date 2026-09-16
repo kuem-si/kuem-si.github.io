@@ -1,13 +1,55 @@
 ---
 import wordmark from "../../assets/brand/kuem/KUEM_Official_Wordmark.svg";
 import Header from "../Header.astro";
-import { homeNavigation } from "../../data/homepage";
+import { homeNavigation, homeNavigationEn } from "../../data/homepage";
 import { footerContent } from "../../data/site";
-const { footer = false } = Astro.props as { footer?: boolean };
-const navigation = homeNavigation.map(([label, href]) => [
-  label,
-  href.startsWith("#") ? `/${href}` : href,
-]);
+import type { Locale } from "../../lib/i18n";
+const { footer = false, locale = "sl" } = Astro.props as {
+  footer?: boolean;
+  locale?: Locale;
+};
+const sl = locale === "sl";
+const navigation = (sl ? homeNavigation : homeNavigationEn).map(
+  ([label, href]) => [label, href.startsWith("#") ? `${sl ? "" : "/en"}/${href}` : href],
+);
+const copy = {
+  sl: {
+    homeAria: "KUEM – domača stran",
+    homeHref: "/",
+    region: "Kranj, Slovenija",
+    footerNav: "Navigacija v nogi",
+    footerHome: "Zasebnost",
+    rights: "Vse pravice pridržane.",
+    solutionsHref: "/resitve",
+    otherLocale: "/en/solutions",
+    otherLabel: "EN",
+    otherAria: "View solutions in English",
+    cta: "Dogovorite se za predstavitev",
+    menuOpen: "Odpri meni",
+    menuClose: "Zapri meni",
+    mainNav: "Glavna navigacija",
+    privacyHref: footerContent.sl.privacyHref,
+    email: footerContent.sl.email,
+  },
+  en: {
+    homeAria: "KUEM – home page",
+    homeHref: "/en/",
+    region: "Kranj, Slovenia",
+    footerNav: "Footer navigation",
+    footerHome: "Privacy",
+    rights: "All rights reserved.",
+    solutionsHref: "/en/solutions",
+    otherLocale: "/resitve",
+    otherLabel: "SL",
+    otherAria: "View solutions in Slovenian",
+    cta: "Book a presentation",
+    menuOpen: "Open menu",
+    menuClose: "Close menu",
+    mainNav: "Main navigation",
+    privacyHref: footerContent.en.privacyHref,
+    email: footerContent.en.email,
+  },
+}[locale];
 ---
 
 {
@@ -17,7 +59,7 @@ const navigation = homeNavigation.map(([label, href]) => [
         <>
           <div class="hp-footer-main">
             <>
-              <a href="/" aria-label="KUEM – domača stran">
+              <a href={copy.homeHref} aria-label={copy.homeAria}>
                 <img
                   class="hp-wordmark"
                   src={wordmark.src}
@@ -29,27 +71,25 @@ const navigation = homeNavigation.map(([label, href]) => [
               </a>
               <address>
                 <>
-                  <span>Kranj, Slovenija</span>
+                  <span>{copy.region}</span>
                   <span aria-hidden="true">|</span>
-                  <a href={`mailto:${footerContent.sl.email}`}>
-                    {footerContent.sl.email}
-                  </a>
+                  <a href={`mailto:${copy.email}`}>{copy.email}</a>
                 </>
               </address>
-              <nav aria-label="Navigacija v nogi">
+              <nav aria-label={copy.footerNav}>
                 {navigation.map(([label, href]) => (
                   <a href={href}>{label}</a>
                 ))}
-                <a href="/en/solutions" lang="en">
-                  EN
+                <a href={copy.otherLocale} lang={sl ? "en" : "sl"}>
+                  {copy.otherLabel}
                 </a>
               </nav>
             </>
           </div>
           <div class="hp-footer-legal">
             <>
-              <a href={footerContent.sl.privacyHref}>Zasebnost</a>
-              <p>© {new Date().getFullYear()} KUEM. Vse pravice pridržane.</p>
+              <a href={copy.privacyHref}>{copy.footerHome}</a>
+              <p>© {new Date().getFullYear()} KUEM. {copy.rights}</p>
             </>
           </div>
         </>
@@ -57,11 +97,11 @@ const navigation = homeNavigation.map(([label, href]) => [
     </footer>
   ) : (
     <>
-      <Header locale="sl" pathname="/resitve" />
+      <Header locale={locale} pathname={copy.solutionsHref} />
       <header class="hp-header legacy-site-header" aria-hidden="true">
         <div class="hp-wrap hp-header-inner">
           <>
-            <a href="/" aria-label="KUEM – domača stran">
+            <a href={copy.homeHref} aria-label={copy.homeAria}>
               <img
                 class="hp-wordmark"
                 src={wordmark.src}
@@ -75,7 +115,7 @@ const navigation = homeNavigation.map(([label, href]) => [
               type="button"
               aria-expanded="false"
               aria-controls="solutions-main-nav"
-              aria-label="Odpri meni"
+              aria-label={copy.menuOpen}
             >
               <>
                 <span />
@@ -83,24 +123,20 @@ const navigation = homeNavigation.map(([label, href]) => [
                 <span />
               </>
             </button>
-            <nav id="solutions-main-nav" aria-label="Glavna navigacija">
+            <nav id="solutions-main-nav" aria-label={copy.mainNav}>
               {navigation.map(([label, href]) => (
                 <a
                   href={href}
-                  aria-current={href === "/resitve" ? "page" : undefined}
+                  aria-current={href === copy.solutionsHref ? "page" : undefined}
                 >
                   {label}
                 </a>
               ))}
-              <a
-                href="/en/solutions"
-                lang="en"
-                aria-label="View solutions in English"
-              >
-                EN
+              <a href={copy.otherLocale} lang={sl ? "en" : "sl"} aria-label={copy.otherAria}>
+                {copy.otherLabel}
               </a>
-              <a class="hp-button" href="/#kontakt">
-                Dogovorite se za predstavitev <span aria-hidden="true">→</span>
+              <a class="hp-button" href={sl ? "/#kontakt" : "/en/contact"}>
+                {copy.cta} <span aria-hidden="true">→</span>
               </a>
             </nav>
           </>
@@ -109,28 +145,23 @@ const navigation = homeNavigation.map(([label, href]) => [
     </>
   )
 }
-<script>
-  const menu = document.querySelector<HTMLButtonElement>(".hp-menu");
+<script is:inline define:vars={{ menuOpen: copy.menuOpen, menuClose: copy.menuClose }}>
+  const menu = document.querySelector(".hp-menu");
   const nav = document.querySelector("#solutions-main-nav");
   const close = () => {
     menu?.setAttribute("aria-expanded", "false");
-    menu?.setAttribute("aria-label", "Odpri meni");
+    menu?.setAttribute("aria-label", menuOpen);
     nav?.classList.remove("is-open");
   };
   menu?.addEventListener("click", () => {
     const open = menu.getAttribute("aria-expanded") !== "true";
     menu.setAttribute("aria-expanded", String(open));
-    menu.setAttribute("aria-label", open ? "Zapri meni" : "Odpri meni");
+    menu.setAttribute("aria-label", open ? menuClose : menuOpen);
     nav?.classList.toggle("is-open", open);
   });
-  nav
-    ?.querySelectorAll("a")
-    .forEach((link) => link.addEventListener("click", close));
+  nav?.querySelectorAll("a").forEach((link) => link.addEventListener("click", close));
   document.addEventListener("keydown", (event) => {
-    if (
-      event.key === "Escape" &&
-      menu?.getAttribute("aria-expanded") === "true"
-    ) {
+    if (event.key === "Escape" && menu?.getAttribute("aria-expanded") === "true") {
       close();
       menu.focus();
     }

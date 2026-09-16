@@ -2,8 +2,8 @@
 import JsonLd from "./JsonLd.astro";
 import { alternatePath, getLocaleFromPath } from "../lib/i18n";
 import { organization, website } from "../data/organization";
-import sourceSansRegular from "../assets/brand/fonts/SourceSans3-Regular.woff2";
-import spaceGroteskBold from "../assets/brand/fonts/SpaceGrotesk-Bold.woff2";
+import sourceSansVariable from "../assets/brand/fonts/SourceSans3-variable.woff2";
+import spaceGroteskVariable from "../assets/brand/fonts/SpaceGrotesk-variable.woff2";
 const {
   title,
   description,
@@ -59,11 +59,15 @@ const structuredData = [
 /><link
   rel="canonical"
   href={canonical}
-/><link rel="alternate" hreflang={langTag} href={canonical} /><link
-  rel="alternate"
-  hreflang={otherLangTag}
-  href={alternate}
-/><link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site)} />
+/><link rel="alternate" hreflang={langTag} href={canonical} />{
+  !noindex && (
+    <><link rel="alternate" hreflang={otherLangTag} href={alternate} /><link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL("/", Astro.site)}
+    /></>
+  )
+}
 <meta property="og:type" content="website" /><meta
   property="og:site_name"
   content="KUEM"
@@ -96,14 +100,14 @@ const structuredData = [
   href="/favicon.svg"
 /><link
   rel="preload"
-  href={sourceSansRegular}
+  href={sourceSansVariable}
   as="font"
   type="font/woff2"
   crossorigin
   fetchpriority="high"
 /><link
   rel="preload"
-  href={spaceGroteskBold}
+  href={spaceGroteskVariable}
   as="font"
   type="font/woff2"
   crossorigin

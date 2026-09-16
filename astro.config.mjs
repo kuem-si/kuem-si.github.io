@@ -25,27 +25,6 @@ export default defineConfig({
         access: "public",
         optional: true,
       }),
-      // Odoo CRM credentials; only read by the dev-only POST API route.
-      ODOO_URL: envField.string({
-        context: "server",
-        access: "secret",
-        optional: true,
-      }),
-      ODOO_DB: envField.string({
-        context: "server",
-        access: "secret",
-        optional: true,
-      }),
-      ODOO_USERNAME: envField.string({
-        context: "server",
-        access: "secret",
-        optional: true,
-      }),
-      ODOO_API_KEY: envField.string({
-        context: "server",
-        access: "secret",
-        optional: true,
-      }),
     },
   },
   // Astro v7 defaults compressHTML to 'jsx', which strips whitespace between

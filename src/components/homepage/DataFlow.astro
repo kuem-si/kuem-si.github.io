@@ -1,38 +1,65 @@
 ---
 import Icon from "./LineIcon.astro";
 import nexavia from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
+import type { Locale } from "../../lib/i18n";
+
+const { locale = "sl" } = Astro.props as { locale?: Locale };
+const copy = {
+  sl: {
+    aria: "Naprave prek povezljivosti in obstoječi sistemi prek ločenih API-integracij pošiljajo podatke neposredno v Nexavio. Nexavia poveže podatke s KAI, ki podpira ukrepanje.",
+    devices: "Naprave",
+    devicesNote: "Senzorji, števci, telemetrija",
+    connectivity: "Povezljivost",
+    connectivityNote: "LoRaWAN, NB-IoT, mobilna in lokalna omrežja",
+    systems: "Obstoječi sistemi",
+    systemsNote: "ERP, SCADA, GIS in drugi viri",
+    apiNote: "Integracije in standardni vmesniki",
+    platformNote: "Platforma za podatke, prikaz in upravljanje",
+    kaiNote: "Analiza, opozorila in priporočila",
+    action: "Ukrep",
+    actionNote: "Boljše odločitve v praksi",
+  },
+  en: {
+    aria: "Devices through connectivity and existing systems through API integrations send data directly to Nexavia. Nexavia connects the data with KAI to support action.",
+    devices: "Devices",
+    devicesNote: "Sensors, meters, telemetry",
+    connectivity: "Connectivity",
+    connectivityNote: "LoRaWAN, NB-IoT, mobile and local networks",
+    systems: "Existing systems",
+    systemsNote: "ERP, SCADA, GIS and other sources",
+    apiNote: "Integrations and standard interfaces",
+    platformNote: "A platform for data, visualization and management",
+    kaiNote: "Analysis, alerts and recommendations",
+    action: "Action",
+    actionNote: "Better decisions in practice",
+  },
+}[locale];
 ---
 
-<div
-  class="hp-flow"
-  role="img"
-  aria-label="Naprave prek povezljivosti in obstoječi sistemi prek ločenih API-integracij pošiljajo podatke neposredno v Nexavio. Nexavia poveže podatke s KAI, ki podpira ukrepanje."
->
+<div class="hp-flow" role="img" aria-label={copy.aria}>
   <div class="hp-flow-inputs">
     <div class="hp-flow-lane">
       <div class="hp-node">
-        <Icon name="device" /><strong>Naprave</strong><small
-          >Senzorji, števci, telemetrija</small
+        <Icon name="device" /><strong>{copy.devices}</strong><small
+          >{copy.devicesNote}</small
         >
       </div>
       <span class="hp-connector" aria-hidden="true"></span>
       <div class="hp-node">
-        <Icon name="network" /><strong>Povezljivost</strong><small
-          >LoRaWAN, NB-IoT, mobilna in lokalna omrežja</small
+        <Icon name="network" /><strong>{copy.connectivity}</strong><small
+          >{copy.connectivityNote}</small
         >
       </div>
     </div>
     <div class="hp-flow-lane">
       <div class="hp-node">
-        <Icon name="database" /><strong>Obstoječi sistemi</strong><small
-          >ERP, SCADA, GIS in drugi viri</small
+        <Icon name="database" /><strong>{copy.systems}</strong><small
+          >{copy.systemsNote}</small
         >
       </div>
       <span class="hp-connector" aria-hidden="true"></span>
       <div class="hp-node">
-        <Icon name="api" /><strong>API</strong><small
-          >Integracije in standardni vmesniki</small
-        >
+        <Icon name="api" /><strong>API</strong><small>{copy.apiNote}</small>
       </div>
     </div>
   </div>
@@ -50,18 +77,16 @@ import nexavia from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
     <div class="hp-node hp-platform">
       <div class="hp-nexavia-mark">
         <img class="nexavia-wordmark" src={nexavia.src} width="1200" height="360" alt="Nexavia" />
-      </div><small>Platforma za podatke, prikaz in upravljanje</small>
+      </div><small>{copy.platformNote}</small>
     </div>
     <span class="hp-connector" aria-hidden="true"></span>
     <div class="hp-node hp-result">
-      <Icon name="chart" /><strong>KAI</strong><small
-        >Analiza, opozorila in priporočila</small
-      >
+      <Icon name="chart" /><strong>KAI</strong><small>{copy.kaiNote}</small>
     </div>
     <span class="hp-connector" aria-hidden="true"></span>
     <div class="hp-node hp-result">
-      <Icon name="check" /><strong>Ukrep</strong><small
-        >Boljše odločitve v praksi</small
+      <Icon name="check" /><strong>{copy.action}</strong><small
+        >{copy.actionNote}</small
       >
     </div>
   </div>

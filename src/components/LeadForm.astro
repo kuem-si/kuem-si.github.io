@@ -20,7 +20,6 @@ const {
 const statusId = `${formId || "lead"}-status`;
 const countryListId = `${formId || "lead"}-countries`;
 const endpoint = PUBLIC_CONTACT_ENDPOINT ?? null;
-const apiPath = endpoint ?? `${import.meta.env.BASE_URL}api/lead`;
 const copy =
   locale === "sl"
     ? {
@@ -72,7 +71,6 @@ const copy =
   id={formId}
   data-lead-form
   data-source-page={sourcePage}
-  data-api-path={apiPath}
 >
   <h3>{heading}</h3>
   <div class="form-grid">
@@ -146,7 +144,6 @@ const copy =
       const target = event.currentTarget;
       const status = target.querySelector(".form-status");
       const data = new FormData(target);
-      const apiPath = target.dataset.apiPath || "/api/lead";
       const subject = String(data.get("subject") || "");
       const customSubject = String(data.get("customSubject") || "").trim();
 
@@ -180,7 +177,7 @@ const copy =
       }
 
       try {
-        const response = await fetch(apiPath, {
+        const response = await fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),

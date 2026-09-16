@@ -139,6 +139,70 @@ check(
   ),
 );
 
+// 10. every internal link and fragment resolves in dist
+const decode = (value) => {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+};
+const resolveFile = (urlPath) => {
+  const decoded = decode(urlPath.replace(/[?#].*$/, ""));
+  const clean = decoded.startsWith("/") ? decoded.slice(1) : decoded;
+  const target = join(dist, clean === "" ? "index.html" : clean);
+  if (existsSync(target) && statSync(target).isFile()) return target;
+  if (existsSync(join(target, "index.html"))) return join(target, "index.html");
+  return null;
+};
+const srcsetFiles = (value) =>
+  value.split(/,\s*/).map((entry) => entry.trim().split(/\s+/)[0]);
+
+const broken = [];
+for (const file of htmlFiles) {
+  const html = read(file);
+  const filePath = file.replaceAll("\\", "/").replace(/^dist\//, "/");
+  const fileDir = filePath.slice(0, filePath.lastIndexOf("/"));
+  for (const match of html.matchAll(/\b(?:href|src)="([^"]+)"/g)) {
+    const raw = match[1];
+    if (
+      !raw ||
+      raw.startsWith("#") ||
+      /^(?:https?:|mailto:|tel:|data:|javascript:)/.test(raw)
+    )
+      continue;
+    const [rawPath, hash] = raw.split("#");
+    if (rawPath === "") continue; // same-page anchor
+    const absolute = rawPath.startsWith("/")
+      ? rawPath
+      : decode(join(fileDir, rawPath)).replaceAll("\\", "/");
+    const target = resolveFile(absolute);
+    if (!target) {
+      broken.push(`${file} -> ${raw}`);
+      continue;
+    }
+    if (hash) {
+      const targetHtml = read(target);
+      const escaped = hash.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      if (!new RegExp(`(?:id|name)="${escaped}"`).test(targetHtml))
+        broken.push(`${file} -> ${raw} (missing #${hash})`);
+    }
+  }
+  for (const match of html.matchAll(/\bsrcset="([^"]+)"/g)) {
+    for (const candidate of srcsetFiles(match[1])) {
+      const absolute = candidate.startsWith("/")
+        ? candidate
+        : decode(join(fileDir, candidate)).replaceAll("\\", "/");
+      if (!resolveFile(absolute)) broken.push(`${file} -> srcset ${candidate}`);
+    }
+  }
+}
+check(
+  "all internal links and fragments resolve",
+  broken.length === 0 ||
+    (console.log(`  ${broken.slice(0, 10).join("\n  ")}`), false),
+);
+
 console.log("");
 if (ok) {
   console.log("ALL CHECKS PASSED");

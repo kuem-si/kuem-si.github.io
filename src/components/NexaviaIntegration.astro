@@ -1,13 +1,83 @@
 ---
 import logo from "../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
-const sources = [
-  ["Naprave", ""],
-  ["ERP", "Enterprise Resource Planning"],
-  ["SCADA", "Supervisory Control and Data Acquisition"],
-  ["GIS", "Geographic Information System"],
-  ["Vreme in javni podatki", ""],
-] as const;
-const outcomes = ["Pregled stanja", "Opozorila", "Poročila", "KAI analiza"];
+import type { Locale } from "../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = {
+  sl: {
+    eyebrow: "POVEZLJIVA Z VAŠIM OKOLJEM",
+    title: "Vaši sistemi ostanejo. Podatki se povežejo v Nexavii.",
+    lead:
+      "Naprave, poslovni sistemi in zunanji viri se prek standardnih vmesnikov združijo v enoten operativni pogled.",
+    checks: [
+      "Brez nepotrebne zamenjave obstoječih sistemov",
+      "Postopna uvedba glede na vaše potrebe",
+    ],
+    link: "Kako poteka integracija",
+    linkHref: "/resitve/integracije",
+    cardEyebrow: "OD VIROV DO UPORABNE INFORMACIJE",
+    sourcesLabel: "VIRI",
+    platformLabel: "PLATFORMA",
+    platformTagline: "Povezovanje · obdelava · pravila",
+    outcomesLabel: "UPORABA",
+    sources: [
+      ["Naprave", ""],
+      ["ERP", "Enterprise Resource Planning"],
+      ["SCADA", "Supervisory Control and Data Acquisition"],
+      ["GIS", "Geographic Information System"],
+      ["Vreme in javni podatki", ""],
+    ],
+    outcomes: ["Pregled stanja", "Opozorila", "Poročila", "KAI analiza"],
+    features: [
+      [
+        "Vloge in dostopi",
+        "Nadzorovan dostop do podatkov in funkcionalnosti.",
+      ],
+      ["Sledljivost sprememb", "Evidenca aktivnosti in sprememb."],
+      [
+        "Prilagodljiva uvedba",
+        "Postopna uvedba glede na vaše potrebe.",
+      ],
+    ],
+  },
+  en: {
+    eyebrow: "CONNECTED TO YOUR ENVIRONMENT",
+    title: "Your systems remain. Data connects in Nexavia.",
+    lead:
+      "Devices, business systems and external sources connect through standard interfaces in one operational view.",
+    checks: [
+      "No unnecessary replacement of existing systems",
+      "Phased implementation tailored to your needs",
+    ],
+    link: "How integration works",
+    linkHref: "/en/solutions/integrations",
+    cardEyebrow: "FROM SOURCES TO USEFUL INFORMATION",
+    sourcesLabel: "SOURCES",
+    platformLabel: "PLATFORM",
+    platformTagline: "Connectivity · processing · rules",
+    outcomesLabel: "USE",
+    sources: [
+      ["Devices", ""],
+      ["ERP", "Enterprise Resource Planning"],
+      ["SCADA", "Supervisory Control and Data Acquisition"],
+      ["GIS", "Geographic Information System"],
+      ["Weather and public data", ""],
+    ],
+    outcomes: ["Status overview", "Alerts", "Reports", "KAI analysis"],
+    features: [
+      ["Roles and access", "Controlled access to data and functionality."],
+      ["Change traceability", "Record of activity and changes."],
+      [
+        "Adaptable implementation",
+        "Phased implementation tailored to your needs.",
+      ],
+    ],
+  },
+}[locale];
 ---
 
 <section
@@ -16,25 +86,22 @@ const outcomes = ["Pregled stanja", "Opozorila", "Poročila", "KAI analiza"];
 >
   <div class="container nx-integration-layout">
     <div class="nx-integration-copy">
-      <p class="nx-eyebrow">POVEZLJIVA Z VAŠIM OKOLJEM</p>
+      <p class="nx-eyebrow">{copy.eyebrow}</p>
       <h2 id="nx-integrations-title">
-        Vaši sistemi ostanejo. Podatki se povežejo v Nexavii.
+        {copy.title}
       </h2>
       <p class="nx-integration-lead">
-        Naprave, poslovni sistemi in zunanji viri se prek standardnih vmesnikov
-        združijo v enoten operativni pogled.
+        {copy.lead}
       </p>
       <ul class="nx-integration-checks">
-        <li>Brez nepotrebne zamenjave obstoječih sistemov</li><li>
-          Postopna uvedba glede na vaše potrebe
-        </li>
+        {copy.checks.map((check) => <li>{check}</li>)}
       </ul>
-      <a href="/resitve/integracije" class="nx-integration-link"
-        >Kako poteka integracija <span aria-hidden="true">→</span></a
+      <a href={copy.linkHref} class="nx-integration-link"
+        >{copy.link} <span aria-hidden="true">→</span></a
       >
     </div>
     <div class="nx-integration-card">
-      <p class="nx-eyebrow">OD VIROV DO UPORABNE INFORMACIJE</p>
+      <p class="nx-eyebrow">{copy.cardEyebrow}</p>
       <div class="nx-integration-diagram">
         <svg
           class="nx-connector-lines"
@@ -70,10 +137,10 @@ const outcomes = ["Pregled stanja", "Opozorila", "Poročila", "KAI analiza"];
           </g>
         </svg>
         <div class="nx-diagram-column nx-diagram-sources">
-          <h3>VIRI</h3>
+          <h3>{copy.sourcesLabel}</h3>
           <ul>
             {
-              sources.map((source, index) => (
+              copy.sources.map((source, index) => (
                 <li>
                   <>
                     <span class="nx-diagram-icon" aria-hidden="true">
@@ -127,16 +194,16 @@ const outcomes = ["Pregled stanja", "Opozorila", "Poročila", "KAI analiza"];
           </ul>
         </div>
         <div class="nx-diagram-column nx-diagram-platform">
-          <h3>PLATFORMA</h3><div class="nx-platform-box">
+          <h3>{copy.platformLabel}</h3><div class="nx-platform-box">
             <img src={logo.src} alt="Nexavia" width="280" height="85" /><p>
-              Povezovanje · obdelava · pravila
+              {copy.platformTagline}
             </p>
           </div>
         </div>
         <div class="nx-diagram-column nx-diagram-outcomes">
-          <h3>UPORABA</h3><ul>
+          <h3>{copy.outcomesLabel}</h3><ul>
             {
-              outcomes.map((outcome, index) => (
+              copy.outcomes.map((outcome, index) => (
                 <li>
                   <>
                     <span class="nx-diagram-icon" aria-hidden="true">
@@ -177,25 +244,15 @@ const outcomes = ["Pregled stanja", "Opozorila", "Poročila", "KAI analiza"];
         </div>
       </div>
       <div class="nx-integration-features">
-        <div>
-          <span aria-hidden="true">♙</span><p>
-            <strong>Vloge in dostopi</strong><small
-              >Nadzorovan dostop do podatkov in funkcionalnosti.</small
-            >
-          </p>
-        </div><div>
-          <span aria-hidden="true">▤</span><p>
-            <strong>Sledljivost sprememb</strong><small
-              >Evidenca aktivnosti in sprememb.</small
-            >
-          </p>
-        </div><div>
-          <span aria-hidden="true">⚙</span><p>
-            <strong>Prilagodljiva uvedba</strong><small
-              >Postopna uvedba glede na vaše potrebe.</small
-            >
-          </p>
-        </div>
+        {
+          copy.features.map(([name, text], i) => (
+            <div>
+              <span aria-hidden="true">{["♙", "▤", "⚙"][i]}</span><p>
+                <strong>{name}</strong><small>{text}</small>
+              </p>
+            </div>
+          ))
+        }
       </div>
     </div>
   </div>
