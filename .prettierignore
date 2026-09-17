@@ -1,0 +1,19 @@
+# Prettier defaults to .gitignore + .prettierignore as ignore paths, so existing
+# entries in .gitignore stay in effect. This file only excludes third-party /
+# generated agent assets that are not ours to reformat.
+
+# Third-party agent skills installed via `npx impeccable install` / `uipro init`
+.github/skills/
+.github/agents/
+.github/prompts/
+.github/hooks/
+.agents/
+.claude/
+.codex/
+.cursor/
+.kiro/
+.opencode/
+.gemini/
+
+# Impeccable working files (reports, screenshots, live session state)
+.impeccable/
