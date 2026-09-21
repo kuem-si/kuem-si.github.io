@@ -4,7 +4,7 @@ export const trustedCompanies = [
   "Telegroup",
   "T-2",
   "Vodotehnika",
-  "Somobor Gas",
+  "Sombor Gas",
   "MarinaCloud",
   "Telekom Slovenije",
   "Sparkasse",

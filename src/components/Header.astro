@@ -1,6 +1,7 @@
 ---
 import wordmark from "../assets/brand/kuem/KUEM_Official_Wordmark.svg";
-import { alternatePath, type Locale } from "../lib/i18n";
+import { type Locale } from "../lib/i18n";
+import LanguageSelector from "./LanguageSelector.astro";
 import { contactNavigation, primaryNavigation } from "../data/navigation";
 const { locale, pathname } = Astro.props as {
   locale: Locale;
@@ -52,9 +53,7 @@ const isActive = (href: string) => {
           ))
         }
         <li class="mobile-only">
-          <a href={alternatePath(pathname)} lang={sl ? "en" : "sl"}
-            >{sl ? "EN" : "SLO"}</a
-          >
+          <LanguageSelector {locale} {pathname} />
         </li>
         <li class="mobile-only mobile-contact-item">
           <a class="header-contact" href={contact.href}
@@ -63,9 +62,7 @@ const isActive = (href: string) => {
         </li>
       </ul>
     </nav><div class="header-actions">
-      <a class="lang" href={alternatePath(pathname)} lang={sl ? "en" : "sl"}
-        >{sl ? "EN" : "SLO"}</a
-      ><a class="header-contact" href={contact.href}
+      <LanguageSelector {locale} {pathname} /><a class="header-contact" href={contact.href}
         ><span>{contact.label}</span><i aria-hidden="true">→</i></a
       >
     </div>

@@ -1,4 +1,5 @@
 ---
+import LanguageSelector from "../LanguageSelector.astro";
 import TrustedCompanies from "../TrustedCompanies.astro";
 import SeoHead from "../SeoHead.astro";
 import Header from "../Header.astro";
@@ -62,12 +63,7 @@ const stories = [
         >
         <nav id="homepage-nav" aria-label="Main navigation">
           {homeNavigation.map(([label, href]) => <a href={href}>{label}</a>)}
-          <a
-            class="hp-language"
-            href="/"
-            lang="sl"
-            aria-label="View site in English">SLO</a
-          >
+          <LanguageSelector locale="en" pathname="/en/" />
           <a class="hp-button" href="#kontakt"
             >Book a presentation <span aria-hidden="true">→</span></a
           >
@@ -104,7 +100,7 @@ const stories = [
           </div>
           <div class="hp-hero-visual">
             <p class="hp-flow-caption">
-              Data connects<br />better communities
+              Data connects<br /> better communities
             </p><DataFlow />
           </div>
         </div>
@@ -315,7 +311,7 @@ const stories = [
                   Consumption deviates from the usual pattern. Check the
                   metering point and network status.
                 </p><a class="hp-button" href="/en/kai"
-                  >How it works zaznava <span aria-hidden="true">→</span></a
+                  >How it works <span aria-hidden="true">→</span></a
                 >
               </article>
               <figure class="hp-chart">
@@ -388,11 +384,11 @@ const stories = [
                         <summary>
                           {item.name}
                           <span class="hp-story-toggle" aria-hidden="true" />
-                          <span class="sr-only"> – reference details</span>
+                          <span class="sr-only"> – project details</span>
                         </summary>
                         <p>{item.detail}</p>
                         <a class="hp-text-link" href="/en/references">
-                          All references →
+                          Success Stories →
                         </a>
                       </>
                     </details>
@@ -449,13 +445,13 @@ const stories = [
           </div><div class="hp-contact-options">
             <a
               class="hp-button"
-              href="mailto:info@kuem.si?subject=Dogovor%20za%20uvodni%20sestanek"
+              href="mailto:info@kuem.si?subject=Introductory%20meeting"
               >Book an introductory meeting <span aria-hidden="true">→</span
               ></a
             ><a
               id="nexavia-povprasevanje"
               class="hp-demo-link"
-              href="mailto:info@kuem.si?subject=Predstavitev%20platforme%20Nexavia"
+              href="mailto:info@kuem.si?subject=Nexavia%20presentation"
               >I would like a Nexavia presentation <span aria-hidden="true">→</span></a
             >
           </div>
@@ -481,7 +477,7 @@ const stories = [
             >
           </address><nav aria-label="Footer navigation">
             {homeNavigation.map(([label, href]) => <a href={href}>{label}</a>)}
-            <a href="/en/" lang="en">SLO</a>
+            <LanguageSelector locale="en" pathname="/en/" />
           </nav>
         </div><div class="hp-footer-legal">
           <a href={footerContent.en.privacyHref}>Privacy</a><p>
@@ -490,7 +486,6 @@ const stories = [
         </div>
       </div>
     </footer>
-    <!-- TODO: V projektu ni potrjene telefonske številke ali uličnega naslova; dodajte ju po prejemu pravilnih podatkov. -->
     <dialog id="dashboard-preview" class="hp-dialog">
       <button
         type="button"

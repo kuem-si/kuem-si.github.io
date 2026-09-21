@@ -10,14 +10,14 @@ export const references: Reference[] = [
   {
     name: "DOMPLAN, d.d.",
     detail: {
-      en: "Approximately 1000 gas meters connected via NB-IoT.",
+      en: "Approximately 1,000 gas meters connected via NB-IoT.",
       sl: "Približno 1000 plinomerov, povezanih prek NB-IoT."
     }
   },
   {
     name: "Sombor-gas d.o.o.",
     detail: {
-      en: "Ongoing deployment of 4000 LoRaWAN adapters for remote gas meter reading.",
+      en: "Ongoing deployment of 4,000 LoRaWAN adapters for remote gas meter reading.",
       sl: "Uvajanje 4000 LoRaWAN adapterjev za daljinsko odčitavanje plinomerov je v teku."
     }
   },
@@ -34,7 +34,7 @@ export const references: Reference[] = [
     name: "JKP Brezovica d.o.o.",
     detail: {
       en:
-        "LoRaWAN network for 2800 water meters, approximately 300 currently connected; Flovac vacuum shaft monitoring; pilot of 14 LoRaWAN public-lighting units.",
+        "LoRaWAN network for 2,800 water meters, approximately 300 currently connected; Flovac vacuum shaft monitoring; pilot of 14 LoRaWAN public-lighting units.",
       sl:
         "LoRaWAN omrežje za 2800 vodomerov, trenutno približno 300 povezanih; nadzor Flovac vakuumskih jaškov; pilot 14 LoRaWAN enot javne razsvetljave."
     }
@@ -42,7 +42,7 @@ export const references: Reference[] = [
   {
     name: "Callidus Grupa d.o.o.",
     detail: {
-      en: "Krk public lighting implementation with approximately 1200 luminaires.",
+      en: "Krk public lighting implementation with approximately 1,200 luminaires.",
       sl: "Implementacija javne razsvetljave na Krku s približno 1200 svetilkami."
     }
   },

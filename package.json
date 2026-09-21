@@ -8,6 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "check:en": "node scripts/check-en-site.mjs",
     "format:check": "npx prettier --check ."
   },
   "dependencies": {

@@ -71,6 +71,7 @@ const reversePairs = Object.fromEntries(
 );
 export function alternatePath(pathname: string): string {
   const clean = pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
+  if (clean === "/404" || clean === "/404.html") return "/en/";
   if (clean.startsWith("/en")) return reversePairs[clean] ?? "/";
   if (legacyEnglishRootPaths.has(clean))
     return reversePairs[clean] ?? `/sl${clean}`;

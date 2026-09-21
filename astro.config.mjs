@@ -13,5 +13,12 @@ export default defineConfig({
     prefetchAll: true,
     defaultStrategy: "hover",
   },
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) =>
+        !/\/en\/(?:about|services(?:\/.*)?|solutions\/nexavia(?:\/.*)?|nexavia-platform|platform\/nexavia|case-studies)\/?$/.test(
+          new URL(page).pathname,
+        ),
+    }),
+  ],
 });

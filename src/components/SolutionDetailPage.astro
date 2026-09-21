@@ -13,6 +13,8 @@ const { locale = "en", solutionKey } = Astro.props as {
   solutionKey: SolutionDetailKey;
 };
 const page = solutionDetails[solutionKey][locale];
+const singleCoverage = locale === "en" &&
+  ["remoteMeterReading", "trafficMobility"].includes(solutionKey);
 const labels =
   locale === "sl"
     ? {
@@ -45,17 +47,17 @@ const labels =
       </div>
       <aside class="panel">
         <h2>{labels.focus}</h2>
-        <FeatureList items={page.focus.slice(0, 6)} />
+        <FeatureList items={singleCoverage ? page.focus : page.focus.slice(0, 6)} />
       </aside>
     </div>
   </section>
 
   <section>
     <div class="container split">
-      <article class="card">
+      {!singleCoverage && <article class="card">
         <h2>{labels.focus}</h2>
         <FeatureList items={page.focus} />
-      </article>
+      </article>}
       <article class="card">
         <h2>{labels.platform}</h2>
         <p>{labels.platformText}</p>

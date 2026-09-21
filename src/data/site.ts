@@ -64,7 +64,7 @@ export const solutions = {
       title: "Advanced analytics",
       summary:
         "We turn operational data into explainable indicators, events and support for action.",
-      tech: ["KPIs", "alarms", "reports", "near-real-time"],
+      tech: ["KPIs", "alarms", "reports", "Near-real-time monitoring"],
     },
     {
       slug: "managed-services",

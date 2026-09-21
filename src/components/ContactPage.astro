@@ -3,6 +3,7 @@ import MainLayout from "../layouts/MainLayout.astro";
 import type { Locale } from "../lib/i18n";
 const { locale } = Astro.props as { locale: Locale };
 const sl = locale === "sl";
+const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? "";
 ---
 
 <MainLayout
@@ -27,8 +28,8 @@ const sl = locale === "sl";
       </p>
     </div>
   </section><section class="section">
-    <div class="container split">
-      <form class="form" data-contact novalidate>
+    <div class="container split" id="demo-form">
+      <form class="form" id="contact-form" data-contact novalidate>
         <div class="form-grid">
           <label
             >{sl ? "Ime" : "Name"}<input
@@ -85,7 +86,7 @@ const sl = locale === "sl";
         >
       </aside>
     </div>
-  </section><script is:inline define:vars={{ sl }}>
+  </section><script is:inline define:vars={{ sl, endpoint }}>
     const form = document.querySelector("[data-contact]");
     form?.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -100,11 +101,10 @@ const sl = locale === "sl";
       }
       const data = new FormData(f);
       if (data.get("website")) return;
-      const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT;
       if (!endpoint) {
         status.textContent = sl
           ? "Pošiljanje še ni konfigurirano. Pišite na info@kuem.si."
-          : "Submission is not configured yet. Email info@kuem.si.";
+          : "Please send your inquiry to info@kuem.si.";
         return;
       }
       status.textContent = sl ? "Pošiljanje …" : "Sending…";

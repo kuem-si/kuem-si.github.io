@@ -1,0 +1,27 @@
+---
+import { legacyEnglishRedirects } from "../../data/legacyEnglishRedirects";
+export function getStaticPaths() {
+  return Object.entries(legacyEnglishRedirects).map(([legacy, target]) => ({
+    params: { legacy },
+    props: { target },
+  }));
+}
+const { target } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={new URL(target, Astro.site)} />
+    <meta name="robots" content="noindex,follow" />
+    <title>Page moved | KUEM</title>
+  </head>
+  <body>
+    <p>
+      This page has moved. <a href={target}>Continue to KUEM</a>.
+    </p>
+  </body>
+</html>

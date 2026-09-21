@@ -1,0 +1,54 @@
+---
+import { alternatePath, type Locale } from "../lib/i18n";
+const { locale, pathname = Astro.url.pathname } = Astro.props as {
+  locale: Locale;
+  pathname?: string;
+};
+const alternate = alternatePath(pathname);
+---
+
+<span
+  class="language-selector"
+  aria-label={locale === "sl" ? "Jezik" : "Language"}
+>
+  {locale === "sl" ? (
+    <span aria-current="true">SL</span>
+  ) : (
+    <a
+      href={alternate}
+      lang="sl"
+      hreflang="sl"
+      aria-label="View site in Slovenian"
+    >
+      SL
+    </a>
+  )}
+  <span aria-hidden="true">|</span>
+  {locale === "en" ? (
+    <span aria-current="true">EN</span>
+  ) : (
+    <a
+      href={alternate}
+      lang="en"
+      hreflang="en"
+      aria-label="View site in English"
+    >
+      EN
+    </a>
+  )}
+</span>
+
+<style>
+  .language-selector {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    white-space: nowrap;
+  }
+  .language-selector a {
+    color: inherit;
+  }
+  .language-selector [aria-current] {
+    font-weight: 600;
+  }
+</style>

@@ -1,4 +1,5 @@
 ---
+import LanguageSelector from "../LanguageSelector.astro";
 import wordmark from "../../assets/brand/kuem/KUEM_Official_Wordmark.svg";
 import Header from "../Header.astro";
 import { homeNavigationEn } from "../../data/homepage";
@@ -40,9 +41,7 @@ const navigation = homeNavigationEn.map(([label, href]) => [
                 {navigation.map(([label, href]) => (
                   <a href={href}>{label}</a>
                 ))}
-                <a href="/resitve" lang="sl">
-                  SL
-                </a>
+                <LanguageSelector locale="en" pathname="/en/solutions" />
               </nav>
             </>
           </div>
@@ -92,13 +91,7 @@ const navigation = homeNavigationEn.map(([label, href]) => [
                   {label}
                 </a>
               ))}
-              <a
-                href="/resitve"
-                lang="sl"
-                aria-label="View solutions in Slovenian"
-              >
-                SL
-              </a>
+              <LanguageSelector locale="en" pathname="/en/solutions" />
               <a class="hp-button" href="/en/contact">
                 Book a presentation <span aria-hidden="true">→</span>
               </a>

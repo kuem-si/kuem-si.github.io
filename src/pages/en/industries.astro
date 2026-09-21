@@ -32,7 +32,7 @@ const outcomes = [
 const stories = [
   [
     "Brezovica",
-    "Overview vodomerov in komunalne infrastrukture.",
+    "Overview of water meters and utility infrastructure.",
     "komunala-in-energija",
   ],
   ["Gradiška", "Air quality, noise, traffic and environmental conditions.", "okolje"],
@@ -109,8 +109,7 @@ const stories = [
         <p class="pi-eyebrow">CHOOSE AN AREA</p><h2 id="pi-explorer-title">
           The same platform. Different operational challenges.
         </h2><p class="pi-section-lead">
-          Choose an industry in preverite, katere podatke spremljamo ter kaj
-          uporabnik z njimi pridobi.
+          Choose an industry and see what data we monitor and how it supports everyday operations.
         </p><div class="pi-explorer-layout">
           <div class="pi-tabs" role="tablist" aria-label="Choose an industry">
             {
@@ -177,7 +176,7 @@ const stories = [
                   alt="Nexavia"
                 /><span>Overview</span><span>Operations</span><span
                   class="pi-app-active">Consumption</span
-                ><span>Mobilnost</span><span>Configuration</span>
+                ><span>Mobility</span><span>Configuration</span>
               </div><div class="pi-app-main">
                 <div class="pi-app-header">
                   <span>Area overview</span><span>Municipality of Kranj · Demo</span>
@@ -329,9 +328,7 @@ const stories = [
                   />
                   <h3>{name}</h3>
                   <p>{copy}</p>
-                  <a href="/en/references">
-                    Read the story <span aria-hidden="true">→</span>
-                  </a>
+
                 </>
               </article>
             ))
@@ -416,7 +413,7 @@ const stories = [
     setText("#pi-event-title", item.events);
     const activeView =
       id === "mobilnost"
-        ? "Mobilnost"
+        ? "Mobility"
         : ["javna-infrastruktura", "okolje"].includes(id)
           ? "Overview"
           : "Consumption";

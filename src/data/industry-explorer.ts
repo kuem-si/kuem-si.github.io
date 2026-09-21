@@ -215,6 +215,8 @@ const englishIndustryCopy: Record<string, Omit<Industry, "id" | "icon" | "metric
 export const industryExplorerEn: Industry[] = industryExplorer.map((item) => ({
   id: item.id,
   icon: item.icon,
-  metricValues: item.metricValues,
+  metricValues: item.metricValues.map((value) =>
+    /^\d{1,3}(\.\d{3})+$/.test(value) ? value.replaceAll(".", ",") : value,
+  ) as Industry["metricValues"],
   ...englishIndustryCopy[item.id],
 }));

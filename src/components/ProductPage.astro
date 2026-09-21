@@ -30,7 +30,7 @@ const features = isKai
         "Deluje z Nexavio",
       ]
     : [
-        "Analyses available context",
+        "Analyzes available context",
         "Separates observation from inference",
         "Shows supporting sources",
         "Recommends a next step",
@@ -58,6 +58,14 @@ const features = isKai
         "APIs and external integrations",
         "On-premises or cloud deployment",
       ];
+const kaiDescriptions = [
+  "Uses available infrastructure data to explain events in context.",
+  "Distinguishes what the data shows from conclusions drawn from it.",
+  "Identifies the available sources behind an explanation or recommendation.",
+  "Suggests a next step based on the available data and operational context.",
+  "Keeps people in control by asking for confirmation before taking action.",
+  "Uses data within Nexavia to support analysis, explanations and decisions.",
+];
 ---
 
 <MainLayout title={title} description={lead}
@@ -105,7 +113,9 @@ const features = isKai
                 <p>
                   {sl
                     ? "Funkcija je vezana na razpoložljive podatke, uporabniške pravice in preverjen operativni kontekst."
-                    : "The capability depends on available data, user permissions and verified operational context."}
+                    : isKai
+                      ? kaiDescriptions[i]
+                      : "The capability depends on available data, user permissions and verified operational context."}
                 </p>
               </>
             </article>
@@ -117,7 +127,7 @@ const features = isKai
     <div class="container split">
       <div>
         <h2>
-          {sl ? "Razumljiva arhitektura" : "Understandable architecture"}
+          {sl ? "Razumljiva arhitektura" : isKai ? "How KAI works" : "Understandable architecture"}
         </h2><p>
           {
             sl
@@ -125,7 +135,7 @@ const features = isKai
               : "Sources and devices connect through a communication layer to the operational environment, integrations and users. Deployment adapts to existing infrastructure."
           }
         </p>
-      </div><ol class="pipeline">
+      </div><ol class:list={["pipeline", { "kai-en-pipeline": isKai && !sl }]}>
         {
           (isKai
             ? sl
@@ -175,3 +185,13 @@ const features = isKai
       : undefined}
   /></MainLayout
 >
+
+<style>
+  @media (min-width: 981px) {
+    .kai-en-pipeline {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      min-width: 0;
+    }
+    .kai-en-pipeline li { overflow-wrap: anywhere; }
+  }
+</style>
