@@ -4,6 +4,12 @@
 .nx-closing {
   font-size: 16px;
 }
+figure {
+  margin: 0;
+}
+abbr[title] {
+  text-decoration: none;
+}
 .nx-hero h1,
 .nx-section h2,
 .nx-closing h2 {
@@ -184,6 +190,8 @@
 }
 .nx-roles {
   background: #f1f8fc;
+  /* Anchor jumps (#vloge) clear the sticky header. */
+  scroll-margin-top: 100px;
 }
 .nx-role-heading {
   display: flex;
@@ -225,9 +233,24 @@
   grid-template-columns: minmax(0, 1.75fr) minmax(240px, 0.7fr);
   gap: 2rem;
   align-items: center;
+  transition:
+    opacity 0.18s ease,
+    translate 0.18s ease;
 }
 .nx-role-panel[hidden] {
   display: none;
+}
+/* Subtle enter animation when a role panel becomes visible.
+   Browsers without @starting-style simply show the panel instantly. */
+@starting-style {
+  .nx-role-panel {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+/* Without JS, show all role panels stacked instead of hiding them. */
+html:not(.js) .nx-role-panel[hidden] {
+  display: grid;
 }
 .nx-role-screen {
   min-width: 0;
@@ -335,6 +358,8 @@
   padding: 1.4rem 0.8rem;
   background: white;
   box-shadow: 0 4px 15px rgba(27, 62, 85, 0.03);
+  /* Hover repaint (box-shadow/border) stays confined to this card. */
+  contain: content;
   transition:
     box-shadow 0.25s,
     border-color 0.25s;
@@ -664,11 +689,49 @@
     min-height: 0;
   }
 }
+/* Below-the-fold sections skip rendering until scrolled near, cutting initial
+   layout/paint cost. contain-intrinsic-size reserves scroll space so the
+   scrollbar stays stable. */
+.nx-roles,
+.nx-modules,
+.nx-kai,
+.nx-integrations,
+.nx-stories,
+.nx-closing {
+  content-visibility: auto;
+}
+.nx-roles {
+  contain-intrinsic-size: 900px;
+  contain-intrinsic-size: auto 900px;
+}
+.nx-modules {
+  contain-intrinsic-size: 700px;
+  contain-intrinsic-size: auto 700px;
+}
+.nx-kai {
+  contain-intrinsic-size: 700px;
+  contain-intrinsic-size: auto 700px;
+}
+.nx-integrations {
+  contain-intrinsic-size: 900px;
+  contain-intrinsic-size: auto 900px;
+}
+.nx-stories {
+  contain-intrinsic-size: 450px;
+  contain-intrinsic-size: auto 450px;
+}
+.nx-closing {
+  contain-intrinsic-size: 250px;
+  contain-intrinsic-size: auto 250px;
+}
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
   .nx-module-card {
+    transition: none;
+  }
+  .nx-role-panel {
     transition: none;
   }
 }

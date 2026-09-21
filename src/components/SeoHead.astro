@@ -1,43 +1,145 @@
 ---
+import JsonLd from "./JsonLd.astro";
+import { PUBLIC_CONTACT_ENDPOINT } from "astro:env/client";
 import { alternatePath, getLocaleFromPath } from "../lib/i18n";
+import { organization, website } from "../data/organization";
+import sourceSansVariable from "../assets/brand/fonts/SourceSans3-variable.woff2";
+import spaceGroteskVariable from "../assets/brand/fonts/SpaceGrotesk-variable.woff2";
+import globalCssUrl from "../styles/global.css?url";
+import criticalCss from "../styles/critical.css?raw";
 const {
   title,
   description,
   pathname = Astro.url.pathname,
   image = "/og-image.png",
   noindex = false,
+  jsonLd = [] as unknown[],
 } = Astro.props;
 const locale = getLocaleFromPath(pathname);
 const canonical = new URL(pathname, Astro.site);
 const alternate = new URL(alternatePath(pathname), Astro.site);
 const fullTitle = title.includes("KUEM") ? title : `${title} | KUEM`;
+const otherLocale = locale === "sl" ? "en" : "sl";
+const langTag = locale === "sl" ? "sl-SI" : "en-GB";
+const otherLangTag = otherLocale === "sl" ? "sl-SI" : "en-GB";
+const fontFaces = `
+@font-face{font-family:"Space Grotesk";src:url("${spaceGroteskVariable}") format("woff2");font-weight:300 700;font-display:swap}
+@font-face{font-family:"Source Sans 3";src:url("${sourceSansVariable}") format("woff2");font-weight:200 900;font-display:swap}`;
+const criticalStyle = fontFaces + criticalCss;
+const endpointOrigin = PUBLIC_CONTACT_ENDPOINT
+  ? new URL(PUBLIC_CONTACT_ENDPOINT).origin
+  : null;
+const csp = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:",
+  "font-src 'self'",
+  `connect-src 'self'${endpointOrigin ? ` ${endpointOrigin}` : ""}`,
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+].join("; ");
+const pageNode: Record<string, unknown> = {
+  "@type": "WebPage",
+  "@id": `${canonical.href}#webpage`,
+  url: canonical.href,
+  name: fullTitle,
+  description,
+  inLanguage: langTag,
+  isPartOf: { "@id": website["@id"] },
+  primaryImageOfPage: new URL(image, Astro.site).href,
+};
+const firstEntity = jsonLd[0] as { "@id"?: string } | undefined;
+if (firstEntity?.["@id"]) {
+  pageNode.mainEntity = { "@id": firstEntity["@id"] };
+}
+const structuredData = [
+  organization,
+  {
+    ...website,
+    url: canonical.href,
+    inLanguage: langTag,
+  },
+  pageNode,
+  ...jsonLd,
+];
 ---
 
 <meta charset="UTF-8" /><meta
   name="viewport"
-  content="width=device-width"
-/><title>{fullTitle}</title><meta name="description" content={description} />
-{noindex && <meta name="robots" content="noindex,follow" />}<link
+  content="width=device-width, initial-scale=1"
+/><meta http-equiv="Content-Security-Policy" content={csp} /><meta
+  name="color-scheme"
+  content="light"
+/><meta
+  name="theme-color"
+  content="#161a1d"
+/><title>{fullTitle}</title><meta name="description" content={description} /><meta
+  name="robots"
+  content={noindex
+    ? "noindex,follow"
+    : "index,follow,max-image-preview:large,max-snippet:-1"}
+/><link
   rel="canonical"
   href={canonical}
-/><link rel="alternate" hreflang={locale} href={canonical} /><link
-  rel="alternate"
-  hreflang={locale === "sl" ? "en" : "sl"}
-  href={alternate}
-/><link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site)} />
+/><link rel="alternate" hreflang={langTag} href={canonical} />{
+  !noindex && (
+    <><link rel="alternate" hreflang={otherLangTag} href={alternate} /><link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL("/", Astro.site)}
+    /></>
+  )
+}
 <meta property="og:type" content="website" /><meta
-  property="og:title"
-  content={fullTitle}
-/><meta property="og:description" content={description} /><meta
-  property="og:url"
-  content={canonical}
-/><meta property="og:image" content={new URL(image, Astro.site)} /><meta
-  property="og:image:alt"
-  content={fullTitle}
+  property="og:site_name"
+  content="KUEM"
+/><meta property="og:title" content={fullTitle} /><meta
+  property="og:description"
+  content={description}
+/><meta property="og:url" content={canonical} /><meta
+  property="og:image"
+  content={new URL(image, Astro.site)}
+/><meta property="og:image:alt" content={fullTitle} /><meta
+  property="og:image:width"
+  content="1200"
+/><meta property="og:image:height" content="630" /><meta
+  property="og:image:type"
+  content="image/png"
 /><meta
   property="og:locale"
   content={locale === "sl" ? "sl_SI" : "en_GB"}
-/><meta name="twitter:card" content="summary_large_image" /><link
+/><meta
+  property="og:locale:alternate"
+  content={otherLocale === "sl" ? "sl_SI" : "en_GB"}
+/><meta name="twitter:card" content="summary_large_image" /><meta
+  name="twitter:title"
+  content={fullTitle}
+/><meta name="twitter:description" content={description} /><meta
+  name="twitter:image"
+  content={new URL(image, Astro.site)}
+/><meta name="twitter:image:alt" content={fullTitle} /><style is:inline set:html={criticalStyle}></style
+><link rel="preload" as="style" href={globalCssUrl} /><link
+  rel="stylesheet"
+  href={globalCssUrl}
+  media="print"
+  onload="this.media='all'"
+/><noscript><link rel="stylesheet" href={globalCssUrl} /></noscript><link
   rel="icon"
   href="/favicon.svg"
-/>
+/><link
+  rel="preload"
+  href={sourceSansVariable}
+  as="font"
+  type="font/woff2"
+  crossorigin
+  fetchpriority="high"
+/><link
+  rel="preload"
+  href={spaceGroteskVariable}
+  as="font"
+  type="font/woff2"
+  crossorigin
+  fetchpriority="high"
+/><JsonLd data={structuredData} />

@@ -1,0 +1,272 @@
+/* Critical above-the-fold layer, inlined in <head> via SeoHead.
+   Fonts are declared separately (hashed URLs are injected at build time).
+   Keep this file free of url() references so it can be inlined raw. */
+:root {
+  --kuem-carbon: #161a1d;
+  --kuem-concrete: #e8e6e1;
+  --kuem-copper: #f06432;
+  --kuem-petrol: #156b75;
+  --kuem-white: #fff;
+  --ink: #161a1d;
+  --muted: #596065;
+  --line: #c9c7c1;
+  --container: 1180px;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  overflow-x: clip;
+  background: var(--kuem-concrete);
+  color: var(--ink);
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 18px;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+address {
+  font-style: normal;
+}
+h1,
+h2,
+h3 {
+  font-family: "Space Grotesk", sans-serif;
+  line-height: 1.05;
+  margin: 0 0 1rem;
+}
+h1 {
+  font-size: clamp(3rem, 7vw, 6.8rem);
+  letter-spacing: -0.055em;
+}
+h2 {
+  font-size: clamp(2rem, 4vw, 3.7rem);
+  letter-spacing: -0.035em;
+}
+h3 {
+  font-size: 1.35rem;
+}
+p {
+  line-height: 1.65;
+}
+.container {
+  width: min(var(--container), calc(100% - 2rem));
+  margin: auto;
+}
+.skip-link {
+  position: fixed;
+  top: -5rem;
+  left: 1rem;
+  z-index: 100;
+  background: var(--kuem-copper);
+  padding: 0.8rem;
+  color: #161a1d;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+:focus-visible {
+  outline: 3px solid var(--kuem-copper);
+  outline-offset: 4px;
+}
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(22, 26, 29, 0.78);
+  color: #fff;
+  border-bottom: 1px solid #343a3e;
+  backdrop-filter: blur(12px);
+}
+.site-header.is-scrolled {
+  background: rgba(22, 26, 29, 0.96);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+}
+.header-inner {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+}
+.brand img,
+.site-footer img {
+  filter: brightness(0) invert(1);
+}
+nav {
+  margin-left: auto;
+}
+.nav-list {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-list > li > a,
+.lang {
+  display: block;
+  padding: 0.75rem 0.58rem;
+  font-size: 0.88rem;
+}
+.nav-list a:hover,
+.nav-list a[aria-current] {
+  color: var(--kuem-copper);
+}
+.dropdown {
+  position: relative;
+}
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 235px;
+  padding: 0.45rem;
+  list-style: none;
+  background: #20262a;
+  border: 1px solid #3b4246;
+}
+.dropdown:hover .dropdown-menu,
+.dropdown:focus-within .dropdown-menu {
+  display: block;
+}
+.dropdown-menu a {
+  display: block;
+  padding: 0.65rem;
+}
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.menu-toggle {
+  display: none;
+}
+.mobile-only {
+  display: none !important;
+}
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 46px;
+  padding: 0.72rem 1.1rem;
+  border: 1px solid currentColor;
+  font-weight: 600;
+}
+.btn-primary {
+  background: var(--kuem-copper);
+  border-color: var(--kuem-copper);
+  color: #161a1d;
+}
+.btn-secondary {
+  background: transparent;
+  color: inherit;
+}
+.btn:hover {
+  transform: translateY(-2px);
+}
+.hero,
+.dark {
+  background-color: var(--kuem-carbon);
+  color: #fff;
+  background-image:
+    linear-gradient(rgba(21, 107, 117, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 107, 117, 0.13) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.hero {
+  min-height: 680px;
+  display: grid;
+  align-items: center;
+  padding: 7rem 0;
+}
+.contact-hero {
+  min-height: 520px;
+}
+.hero-grid,
+.split {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 4rem;
+  align-items: center;
+}
+.hero-grid > *,
+.split > * {
+  min-width: 0;
+}
+.eyebrow {
+  color: var(--kuem-copper);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-size: 0.8rem;
+}
+.lead {
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  max-width: 780px;
+}
+.hero p,
+.dark p,
+.site-footer p {
+  color: #c8ced1;
+}
+.actions {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+.data-visual {
+  position: relative;
+  min-height: 420px;
+  border: 1px solid #39535a;
+  background: rgba(22, 26, 29, 0.72);
+  overflow: hidden;
+}
+.data-visual svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.node-label {
+  position: absolute;
+  padding: 0.55rem 0.7rem;
+  border-left: 3px solid var(--kuem-copper);
+  background: #222a2e;
+  font-size: 0.84rem;
+}
+.node-label:nth-of-type(1) {
+  top: 12%;
+  left: 8%;
+}
+.node-label:nth-of-type(2) {
+  top: 42%;
+  left: 38%;
+}
+.node-label:nth-of-type(3) {
+  bottom: 12%;
+  right: 8%;
+}

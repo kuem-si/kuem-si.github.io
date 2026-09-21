@@ -1,0 +1,608 @@
+---
+import TrustedCompanies from "../TrustedCompanies.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import NexaviaIntegration from "../NexaviaIntegration.astro";
+import { getImage, Image } from "astro:assets";
+import type { Locale } from "../../lib/i18n";
+import logo from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
+import dashboard from "../../assets/brand/nexavia/nexavia-noc-dashboard.png";
+import { nexaviaSoftware } from "../../data/organization";
+import "../../styles/nexavia.css";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+// LCP hero: generate the full responsive candidate set at build time so the
+// <link rel="preload"> in <head> matches the rendered <img> exactly.
+const heroWidths = [960, 1440, 1920, 2197] as const;
+const heroSizes = "(min-width: 1100px) 800px, (min-width: 760px) 60vw, 100vw";
+const heroImages = await Promise.all(
+  heroWidths.map((width) =>
+    getImage({ src: dashboard, width, format: "avif", quality: 90 }),
+  ),
+);
+const heroSrcset = heroImages
+  .map((image, index) => `${image.src} ${heroWidths[index]}w`)
+  .join(", ");
+const heroSrc = heroImages[heroImages.length - 1].src;
+const copy = {
+  sl: {
+    description:
+      "Nexavia združi podatke infrastrukture v uporaben pregled, opozorila in podlago za ukrep.",
+    eyebrow: "PLATFORMA NEXAVIA",
+    h1: "Vsi podatki infrastrukture. En uporaben pogled.",
+    lead:
+      "Nexavia združi podatke naprav, obstoječih sistemov in zunanjih virov ter jih spremeni v pregled, opozorilo in podlago za ukrep.",
+    contactHref: "/kontakt",
+    cta: "Dogovorite se za predstavitev",
+    explore: "Oglejte si platformo",
+    traits: ["Modularna", "Prilagodljiva", "Povezljiva"],
+    dashAlt:
+      "Dejanski zaslon Nexavie: pregled naprav, alarmov in zemljevid infrastrukture",
+    status: "Podatki so posodobljeni",
+    trustAria: "Zaupajo nam",
+    trustEyebrow: "ZAUPAJO NAM",
+    trustLabel: "Zaupajo nam",
+    rolesEyebrow: "NEXAVIA V VSAKODNEVNEM DELU",
+    rolesH2: "Pravi pogled za vsako vlogo.",
+    rolesP: "Vsak uporabnik vidi podatke in orodja, ki jih potrebuje za svoje delo.",
+    tablistAria: "Uporabniške vloge",
+    roles: [
+      {
+        id: "vodstvo",
+        tab: "Vodstvo",
+        title: "Od kazalnika do odločitve.",
+        items: [
+          "Ključni kazalniki na enem mestu",
+          "Primerjava obdobij in lokacij",
+          "Poročila za hitrejše odločanje",
+        ],
+        icons: ["▥", "⌁", "▤"],
+      },
+      {
+        id: "operativa",
+        tab: "Operativa",
+        title: "Od opozorila do izvedenega ukrepa.",
+        items: [
+          "Pregled aktivnih dogodkov in alarmov",
+          "Hiter dostop do lokacije in naprave",
+          "Sledenje obravnavi in izvedenim ukrepom",
+        ],
+        icons: ["△", "⌖", "✓"],
+      },
+      {
+        id: "it",
+        tab: "IT in skrbniki",
+        title: "Nadzor nad uporabniki, podatki in povezavami.",
+        items: [
+          "Upravljanje naprav in virov podatkov",
+          "Uporabniške vloge in pravice dostopa",
+          "Pregled integracij in stanja sistema",
+        ],
+        icons: ["⌘", "♙", "⌁"],
+      },
+    ],
+    screenAlt: "Dejanski operativni pregled naprav in zemljevida v Nexavii",
+    demoNote: "Demo podatki",
+    demoH3: ["Pregled", "Upravljanje okolja"],
+    demoCards: [
+      ["Skupno število naprav", "Aktivni alarmi", "Območja"],
+      ["Viri podatkov", "Uporabniki", "Integracije"],
+    ],
+    demoActive: "Aktivno",
+    demoChart: ["Poraba skozi čas", "Stanje sistema"],
+    demoChartAria: "Primer trendnega grafa",
+    useCaseLink: "Poglejte primer uporabe",
+    modulesEyebrow: "MODULARNA PLATFORMA",
+    modulesH2: "Začnite z enim področjem. Razširite, ko potrebujete.",
+    modules: [
+      ["♧", "Voda in komunala", "Poraba, tlaki, izgube in kakovost."],
+      ["ϟ", "Energija", "Poraba, moč in odstopanja."],
+      ["◇", "Okolje", "Zrak, hrup in okoljski kazalniki."],
+      ["♧", "Mobilnost", "Prometni tokovi in trajnostna mobilnost."],
+      ["▥", "Javna infrastruktura", "Stanje objektov, naprav in vzdrževanja."],
+    ],
+    kaiEyebrow: "KAI V NEXAVII",
+    kaiH2: "Ko pregled ni dovolj, KAI izpostavi, kaj zahteva pozornost.",
+    kaiP:
+      "KAI analizira podatke znotraj Nexavie, zazna odstopanja in odgovorni osebi poda razumljivo opozorilo ter kontekst za naslednji korak.",
+    kaiBenefits: ["Zaznavanje odstopanj", "Razumljiva opozorila", "Podpora odločitvam"],
+    kaiHuman: "Človek ohrani nadzor nad odločitvijo.",
+    kaiPanelHead: "KAI — zaznano odstopanje",
+    kaiPriority: "Visoka prioriteta",
+    kaiAlert: "Nepričakovana sprememba porabe",
+    kaiAlertSmall: "Primer opozorila · Demo podatki",
+    kaiChartLabel: "Poraba skozi čas",
+    kaiChartAria: "Demo trend porabe z oranžno označeno anomalijo",
+    kaiRecommendation: "Priporočen naslednji korak",
+    kaiRecommendationP: "Preverite lokacijo in primerjajte zadnjih 7 dni.",
+    storiesEyebrow: "USPEŠNE ZGODBE",
+    storiesH2: "Nexavia v realnem okolju.",
+    stories: [
+      ["Domplan", "Daljinsko spremljanje plinomerov."],
+      ["Brezovica", "Pregled vodomerov in komunalne infrastrukture."],
+      ["Adria Mobil", "Energetski podatki proizvodnega okolja."],
+    ],
+    storiesLink: "Preberite zgodbo",
+    referencesHref: "/reference",
+    closingH2: "Poglejte Nexavio na svojih podatkih.",
+    closingP:
+      "Na kratkem prikazu vam pokažemo, kako bi platforma podprla vaš konkretni primer uporabe.",
+  },
+  en: {
+    description:
+      "Nexavia turns infrastructure data into a useful overview, alerts and a basis for action.",
+    eyebrow: "NEXAVIA PLATFORM",
+    h1: "All infrastructure data. One useful view.",
+    lead:
+      "Nexavia combines data from devices, existing systems and external sources and turns it into an overview, an alert and a basis for action.",
+    contactHref: "/en/contact",
+    cta: "Book a presentation",
+    explore: "Explore the platform",
+    traits: ["Modular", "Adaptable", "Connected"],
+    dashAlt: "Real Nexavia screen: overview of devices, alarms and infrastructure map",
+    status: "Data is up to date",
+    trustAria: "Trusted by",
+    trustEyebrow: "TRUSTED BY",
+    trustLabel: "Trusted by",
+    rolesEyebrow: "NEXAVIA IN EVERYDAY WORK",
+    rolesH2: "The right view for every role.",
+    rolesP: "Every user sees the data and tools they need for their work.",
+    tablistAria: "User roles",
+    roles: [
+      {
+        id: "vodstvo",
+        tab: "Management",
+        title: "From indicator to decision.",
+        items: [
+          "Key indicators in one place",
+          "Comparison of periods and locations",
+          "Reports for faster decisions",
+        ],
+        icons: ["▥", "⌁", "▤"],
+      },
+      {
+        id: "operativa",
+        tab: "Operations",
+        title: "From alert to completed action.",
+        items: [
+          "Overview of active events and alarms",
+          "Fast access to locations and devices",
+          "Tracking responses and completed actions",
+        ],
+        icons: ["△", "⌖", "✓"],
+      },
+      {
+        id: "it",
+        tab: "IT and administrators",
+        title: "Control over users, data and connections.",
+        items: [
+          "Device and data-source management",
+          "User roles and access rights",
+          "Overview of integrations and system status",
+        ],
+        icons: ["⌘", "♙", "⌁"],
+      },
+    ],
+    screenAlt: "Real operational overview of devices and their map in Nexavia",
+    demoNote: "Demo data",
+    demoH3: ["Overview", "Environment management"],
+    demoCards: [
+      ["Total devices", "Active alarms", "Areas"],
+      ["Data sources", "Users", "Integrations"],
+    ],
+    demoActive: "Active",
+    demoChart: ["Consumption over time", "System status"],
+    demoChartAria: "Example trend chart",
+    useCaseLink: "Book a presentation",
+    modulesEyebrow: "MODULAR PLATFORM",
+    modulesH2: "Start with one area. Expand when needed.",
+    modules: [
+      ["♧", "Water and utilities", "Consumption, pressure, losses and quality."],
+      ["ϟ", "Energy", "Consumption, power and deviations."],
+      ["◇", "Environment", "Air, noise and environmental indicators."],
+      ["♧", "Mobility", "Traffic flows and sustainable mobility."],
+      ["▥", "Public infrastructure", "Status of facilities, devices and maintenance."],
+    ],
+    kaiEyebrow: "KAI IN NEXAVIA",
+    kaiH2: "When an overview is not enough, KAI highlights what requires attention.",
+    kaiP:
+      "KAI analyzes data within Nexavia, detects deviations and gives the responsible person a clear alert and context for the next step.",
+    kaiBenefits: ["Deviation detection", "Clear alerts", "Decision support"],
+    kaiHuman: "People remain in control of decision-making.",
+    kaiPanelHead: "KAI — deviation detected",
+    kaiPriority: "High priority",
+    kaiAlert: "Unexpected consumption change",
+    kaiAlertSmall: "Alert example · Demo data",
+    kaiChartLabel: "Consumption over time",
+    kaiChartAria: "Demo consumption trend with an orange anomaly",
+    kaiRecommendation: "Recommended next step",
+    kaiRecommendationP: "Check the location and compare the last 7 days.",
+    storiesEyebrow: "SUCCESS STORIES",
+    storiesH2: "Nexavia in real environments.",
+    stories: [
+      ["Domplan", "Remote gas-meter monitoring."],
+      ["Brezovica", "Overview of water meters and utility infrastructure."],
+      ["Adria Mobil", "Energy data from the production environment."],
+    ],
+    storiesLink: "Read the story",
+    referencesHref: "/en/references",
+    closingH2: "See Nexavia with your data.",
+    closingP:
+      "In a short presentation, we show how the platform could support your specific use case.",
+  },
+}[locale];
+const breadcrumb = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "KUEM",
+      item: new URL("/", Astro.site).href,
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Nexavia",
+      item: new URL(Astro.url.pathname, Astro.site).href,
+    },
+  ],
+};
+---
+
+<MainLayout
+  title="Nexavia | KUEM"
+  description={copy.description}
+  jsonLd={[nexaviaSoftware, breadcrumb]}
+>
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    href={heroSrc}
+    imagesrcset={heroSrcset}
+    imagesizes={heroSizes}
+    fetchpriority="high"
+    type="image/avif"
+  />
+  <script is:inline slot="head">
+    document.documentElement.classList.add("js");
+  </script>
+  <section class="nx-hero" aria-labelledby="nx-title">
+    <div class="container nx-hero-grid">
+      <div class="nx-hero-copy">
+        <p class="nx-eyebrow">{copy.eyebrow}</p><h1 id="nx-title">
+          {copy.h1}
+        </h1><p class="nx-lead">
+          {copy.lead}
+        </p><div class="nx-actions">
+          <a class="btn btn-primary" href={copy.contactHref}
+            >{copy.cta} <span aria-hidden="true">→</span></a
+          ><a class="btn btn-secondary" href="#vloge"
+            >{copy.explore} <span aria-hidden="true">↘</span></a
+          >
+        </div><ul class="nx-traits">
+          {copy.traits.map((trait) => <li>{trait}</li>)}
+        </ul>
+      </div>
+      <figure class="nx-hero-visual">
+        <div class="nx-window">
+          <div class="nx-window-bar">
+            <span class="nx-dots" aria-hidden="true"><i></i><i></i><i></i></span
+            ><img src={logo.src} alt="Nexavia" width="125" height="40" />
+          </div><img
+            class="nx-dashboard"
+            src={heroSrc}
+            srcset={heroSrcset}
+            sizes={heroSizes}
+            width="2197"
+            height="1224"
+            alt={copy.dashAlt}
+            fetchpriority="high"
+            loading="eager"
+          />
+        </div><figcaption class="nx-status"
+          ><i aria-hidden="true"></i>{copy.status}</figcaption
+        >
+      </figure>
+    </div>
+  </section>
+  <section class="nx-trust" aria-label={copy.trustAria}>
+    <div class="container">
+      <p class="nx-eyebrow">{copy.trustEyebrow}</p
+      ><TrustedCompanies label={copy.trustLabel} />
+    </div>
+  </section>
+  <section
+    class="nx-section nx-roles"
+    id="vloge"
+    aria-labelledby="nx-roles-title"
+  >
+    <div class="container">
+      <div class="nx-role-heading">
+        <div>
+          <p class="nx-eyebrow">{copy.rolesEyebrow}</p><h2
+            id="nx-roles-title"
+          >
+            {copy.rolesH2}
+          </h2><p>
+            {copy.rolesP}
+          </p>
+        </div><div
+          class="nx-tabs"
+          role="tablist"
+          aria-label={copy.tablistAria}
+        >
+          {
+            copy.roles.map((role, i) => (
+              <button
+                id={`tab-${role.id}`}
+                type="button"
+                role="tab"
+                aria-selected={i === 0 ? "true" : "false"}
+                aria-controls={`panel-${role.id}`}
+                tabindex={i === 0 ? 0 : -1}
+                data-role={role.id}
+              >
+                {role.tab}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+      {
+        copy.roles.map((role, i) => (
+          <div
+            class="nx-role-panel"
+            id={`panel-${role.id}`}
+            role="tabpanel"
+            aria-labelledby={`tab-${role.id}`}
+            tabindex="0"
+            data-panel={role.id}
+            hidden={i !== 0}
+          >
+            <>
+              <figure class="nx-role-screen nx-window">
+                <div class="nx-window-bar">
+                  <>
+                    <span class="nx-dots" aria-hidden="true">
+                      <>
+                        <i />
+                        <i />
+                        <i />
+                      </>
+                    </span>
+                    <img src={logo.src} alt="Nexavia" width="120" height="36" />
+                  </>
+                </div>
+                {i === 1 ? (
+                  <Image
+                    src={dashboard}
+                    alt={copy.screenAlt}
+                    width="2197"
+                    height="1224"
+                    loading="lazy"
+                    fetchpriority="low"
+                    format="avif"
+                    quality="90"
+                  />
+                ) : (
+                  <div class="nx-demo">
+                    <p class="nx-demo-note">{copy.demoNote}</p>
+                    <h3>{i === 0 ? copy.demoH3[0] : copy.demoH3[1]}</h3>
+                    <div class="nx-demo-cards">
+                      {(i === 0 ? copy.demoCards[0] : copy.demoCards[1]).map(
+                        (x, j) => (
+                        <div>
+                          <small>{x}</small>
+                          <strong>
+                            {i === 0 ? [locale === "en" ? "1,248" : "1.248", "12", "5"][j] : copy.demoActive}
+                          </strong>
+                        </div>
+                      ))}
+                    </div>
+                    <div class="nx-demo-chart">
+                      <b>{i === 0 ? copy.demoChart[0] : copy.demoChart[1]}</b>
+                      <svg
+                        viewBox="0 0 360 120"
+                        role="img"
+                        aria-label={copy.demoChartAria}
+                      >
+                        <path
+                          d="M0 105H360M0 70H360M0 35H360"
+                          stroke="#dce8f0"
+                        />
+                        <path
+                          d="M0 95 L35 80 L65 88 L95 57 L125 77 L155 55 L185 63 L215 42 L245 65 L275 59 L305 31 L335 46 L360 18"
+                          fill="none"
+                          stroke="#3795df"
+                          stroke-width="3"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                )}
+              </figure>
+              <div class="nx-role-copy">
+                <>
+                  <h3>{role.title}</h3>
+                  <ul>
+                    {role.items.map((item, j) => (
+                      <li>
+                        <span aria-hidden="true">{role.icons[j]}</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <a href={copy.contactHref} class="nx-text-link">
+                    {copy.useCaseLink} →
+                  </a>
+                </>
+              </div>
+            </>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+  <section class="nx-section nx-modules" aria-labelledby="nx-modules-title">
+    <div class="container">
+      <p class="nx-eyebrow">{copy.modulesEyebrow}</p><h2 id="nx-modules-title">
+        {copy.modulesH2}
+      </h2><div class="nx-module-grid">
+        {
+          copy.modules.map(([, title, moduleCopy], index) => (
+            <article class="nx-module-card">
+              <>
+                <span class="nx-module-icon" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 48 48"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    {index === 0 && (
+                      <path d="M24 4C19 13 11 22 11 30a13 13 0 0 0 26 0C37 22 29 13 24 4Z M16 30c0 5 3 8 8 8" />
+                    )}
+                    {index === 1 && (
+                      <path d="M27 3 13 27h11l-3 18 15-26H25l2-16Z" />
+                    )}
+                    {index === 2 && (
+                      <path d="M39 7C21 8 9 18 9 31c0 7 5 11 12 11 15 0 21-19 18-35Z M13 38c5-10 12-16 21-23" />
+                    )}
+                    {index === 3 && (
+                      <>
+                        <circle cx="10" cy="34" r="8" />
+                        <circle cx="38" cy="34" r="8" />
+                        <path d="m10 34 11-18 8 18H10m19 0 9-18h-8m-9 0-3-6h-5" />
+                      </>
+                    )}
+                    {index === 4 && (
+                      <path d="M6 44V17h14v27m0-32V4h13v40m0-23h9v23M12 23h2m-2 7h2m12-18h2m-2 8h2m-2 8h2M3 44h42" />
+                    )}
+                  </svg>
+                </span>
+                <h3>{title}</h3>
+                <p>{moduleCopy}</p>
+                <span aria-hidden="true">→</span>
+              </>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <section class="nx-section nx-kai" aria-labelledby="nx-kai-title">
+    <div class="container nx-kai-grid">
+      <div>
+        <p class="nx-eyebrow">{copy.kaiEyebrow}</p><h2 id="nx-kai-title">
+          {copy.kaiH2}
+        </h2><p>
+          {copy.kaiP}
+        </p><ul class="nx-kai-benefits">
+          {copy.kaiBenefits.map((benefit) => <li>{benefit}</li>)}
+        </ul><p class="nx-human">{copy.kaiHuman}</p>
+      </div><div class="nx-kai-panel">
+        <div class="nx-kai-panel-head">
+          <strong>{copy.kaiPanelHead}</strong><span>{copy.kaiPriority}</span>
+        </div><div class="nx-alert">
+          <span aria-hidden="true">△</span><div>
+            <strong>{copy.kaiAlert}</strong><small>{copy.kaiAlertSmall}</small>
+          </div>
+        </div><p>{copy.kaiChartLabel}</p><svg
+          viewBox="0 0 460 150"
+          role="img"
+          aria-label={copy.kaiChartAria}
+          ><path d="M0 125H460M0 90H460M0 55H460M0 20H460" stroke="#e4edf3"
+          ></path><polyline
+            points="0,104 25,95 50,105 75,98 100,106 125,91 150,97 175,88 200,96 225,89 250,98 275,94 300,102 325,92 350,100 375,94 400,37 415,90 440,94 460,89"
+            fill="none"
+            stroke="#438ddd"
+            stroke-width="3"></polyline><circle
+            cx="400"
+            cy="37"
+            r="7"
+            fill="#f06432"></circle></svg
+        ><div class="nx-recommendation">
+          <strong>{copy.kaiRecommendation}</strong><p>
+            {copy.kaiRecommendationP}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <NexaviaIntegration locale={locale} />
+  <section class="nx-section nx-stories" aria-labelledby="nx-stories-title">
+    <div class="container">
+      <p class="nx-eyebrow">{copy.storiesEyebrow}</p><h2 id="nx-stories-title">
+        {copy.storiesH2}
+      </h2><div class="nx-story-grid">
+        {
+          copy.stories.map(([name, storyCopy]) => (
+            <article>
+              <>
+                <span aria-hidden="true">▥</span>
+                <div>
+                  <>
+                    <h3>{name}</h3>
+                    <p>{storyCopy}</p>
+                    {locale === "sl" && <a href={copy.referencesHref} class="nx-text-link">
+                      {copy.storiesLink} →
+                    </a>}
+                  </>
+                </div>
+              </>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <section class="nx-closing" aria-labelledby="nx-closing-title">
+    <div class="container nx-closing-inner">
+      <div>
+        <h2 id="nx-closing-title">{copy.closingH2}</h2><p>
+          {copy.closingP}
+        </p>
+      </div><a class="btn btn-primary" href={copy.contactHref}
+        >{copy.cta} →</a
+      >
+    </div>
+  </section>
+</MainLayout>
+<script>
+  const tabs = [
+    ...document.querySelectorAll<HTMLButtonElement>(".nx-tabs [role='tab']"),
+  ];
+  const panels = [...document.querySelectorAll<HTMLElement>(".nx-role-panel")];
+  function activate(tab: HTMLButtonElement, focus = false) {
+    tabs.forEach((item) => {
+      const selected = item === tab;
+      item.setAttribute("aria-selected", String(selected));
+      item.tabIndex = selected ? 0 : -1;
+    });
+    panels.forEach((panel) => {
+      panel.hidden = panel.dataset.panel !== tab.dataset.role;
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => activate(tab));
+    tab.addEventListener("keydown", (event) => {
+      let next = index;
+      if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+      else if (event.key === "ArrowLeft")
+        next = (index - 1 + tabs.length) % tabs.length;
+      else if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = tabs.length - 1;
+      else return;
+      event.preventDefault();
+      activate(tabs[next], true);
+    });
+  });
+</script>

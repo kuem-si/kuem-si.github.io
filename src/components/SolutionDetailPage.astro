@@ -7,6 +7,7 @@ import SectionHeader from "./SectionHeader.astro";
 import FeatureList from "./FeatureList.astro";
 import ReferenceNameCard from "./ReferenceNameCard.astro";
 import CTASection from "./CTASection.astro";
+import { organization } from "../data/organization";
 
 const { locale = "en", solutionKey } = Astro.props as {
   locale?: Locale;
@@ -15,6 +16,45 @@ const { locale = "en", solutionKey } = Astro.props as {
 const page = solutionDetails[solutionKey][locale];
 const singleCoverage = locale === "en" &&
   ["remoteMeterReading", "trafficMobility"].includes(solutionKey);
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const solutionsHref = locale === "sl" ? "/resitve" : "/en/solutions";
+const jsonLd = [
+  {
+    "@type": "Service",
+    name: page.seoTitle.replace(/ \| KUEM$/, ""),
+    description: page.metaDescription,
+    serviceType: page.title,
+    url: canonical.href,
+    provider: { "@id": organization["@id"] },
+    areaServed: {
+      "@type": "Country",
+      name: locale === "sl" ? "Slovenija" : "Slovenia",
+    },
+  },
+  {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: locale === "sl" ? "Domov" : "Home",
+        item: new URL(locale === "sl" ? "/" : "/en/", Astro.site).href,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: locale === "sl" ? "Rešitve" : "Solutions",
+        item: new URL(solutionsHref, Astro.site).href,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: page.title,
+        item: canonical.href,
+      },
+    ],
+  },
+];
 const labels =
   locale === "sl"
     ? {
@@ -37,7 +77,11 @@ const labels =
       };
 ---
 
-<MainLayout title={page.seoTitle} description={page.metaDescription}>
+<MainLayout
+  title={page.seoTitle}
+  description={page.metaDescription}
+  jsonLd={jsonLd}
+>
   <section class="hero">
     <div class="container hero-grid">
       <div>

@@ -1,0 +1,4 @@
+Contact: mailto:info@kuem.si
+Expires: 2027-09-16T00:00:00.000Z
+Preferred-Languages: sl, en
+Canonical: https://www.kuem.si/.well-known/security.txt

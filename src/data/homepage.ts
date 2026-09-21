@@ -79,7 +79,7 @@ export const useCases = [
     icon: "water",
     title: "Nepričakovana poraba vode",
     text: "Nexavia zazna odstopanje in o njem obvesti odgovorno osebo.",
-    href: "/sl/resitve/daljinsko-odcitavanje-stevcev",
+    href: "/resitve/daljinsko-odcitavanje-stevcev",
   },
   {
     icon: "energy",
@@ -91,7 +91,7 @@ export const useCases = [
     icon: "bike",
     title: "Načrtovanje kolesarskih povezav",
     text: "Podatki iz različnih virov se prikažejo na zemljevidu obremenjenosti in pomagajo pri načrtovanju infrastrukture.",
-    href: "/sl/resitve/promet-in-mobilnost",
+    href: "/resitve/promet-in-mobilnost",
   },
 ];
 export const partnership = [
@@ -126,32 +126,120 @@ export const homeNavigationEn = primaryNavigation.en.map(
   ({ label, href }) => [label, href] as const,
 );
 export const benefitsEn = [
-  { icon: "eye", title: "Unified overview", text: "All important data, systems and locations in one place." },
-  { icon: "bell", title: "Timely alerts", text: "Deviations and events reach the responsible person in time." },
-  { icon: "chart", title: "Data for better decisions", text: "Analytics supports infrastructure management and action planning." },
+  {
+    icon: "eye",
+    title: "Unified overview",
+    text: "All important data, systems and locations in one place.",
+  },
+  {
+    icon: "bell",
+    title: "Timely alerts",
+    text: "Deviations and events reach the responsible person in time.",
+  },
+  {
+    icon: "chart",
+    title: "Data for better decisions",
+    text: "Analytics supports infrastructure management and action planning.",
+  },
 ];
 export const stepsEn = [
-  { icon: "device", title: "Acquisition", text: "Sensors, meters, devices and field equipment." },
-  { icon: "network", title: "Transfer", text: "Connectivity adapted to the location and use case." },
-  { icon: "screen", title: "Nexavia", text: "One platform for receiving, processing, presenting and managing data." },
-  { icon: "chart", title: "Decision", text: "KAI, alerts, recommendations and support for concrete action." },
+  {
+    icon: "device",
+    title: "Acquisition",
+    text: "Sensors, meters, devices and field equipment.",
+  },
+  {
+    icon: "network",
+    title: "Transfer",
+    text: "Connectivity adapted to the location and use case.",
+  },
+  {
+    icon: "screen",
+    title: "Nexavia",
+    text: "One platform for receiving, processing, presenting and managing data.",
+  },
+  {
+    icon: "chart",
+    title: "Decision",
+    text: "KAI, alerts, recommendations and support for concrete action.",
+  },
 ];
 export const industriesEn = [
-  { icon: "water", title: "Water and utilities", text: "Monitoring networks, consumption, losses, pressure and quality.", reference: "Brezovica" },
-  { icon: "energy", title: "Energy", text: "Monitoring energy efficiency and unusual deviations.", reference: "Adria Mobil" },
-  { icon: "leaf", title: "Environment", text: "Measuring emissions, air quality, environmental indicators and noise.", reference: "Gradiška" },
-  { icon: "bike", title: "Mobility", text: "Monitoring traffic flows and supporting sustainable mobility planning.", reference: "Novo mesto" },
-  { icon: "building", title: "Public infrastructure", text: "Overview of distributed facilities, devices and maintenance.", reference: "Krk" },
+  {
+    icon: "water",
+    title: "Water and utilities",
+    text: "Monitoring networks, consumption, losses, pressure and quality.",
+    reference: "Brezovica",
+  },
+  {
+    icon: "energy",
+    title: "Energy",
+    text: "Monitoring energy efficiency and unusual deviations.",
+    reference: "Adria Mobil",
+  },
+  {
+    icon: "leaf",
+    title: "Environment",
+    text: "Measuring emissions, air quality, environmental indicators and noise.",
+    reference: "Gradiška",
+  },
+  {
+    icon: "bike",
+    title: "Mobility",
+    text: "Monitoring traffic flows and supporting sustainable mobility planning.",
+    reference: "Novo mesto",
+  },
+  {
+    icon: "building",
+    title: "Public infrastructure",
+    text: "Overview of distributed facilities, devices and maintenance.",
+    reference: "Krk",
+  },
 ];
 export const useCasesEn = [
-  { icon: "water", title: "Unexpected water consumption", text: "Nexavia detects the deviation and alerts the responsible person.", href: "/en/solutions/remote-meter-reading" },
-  { icon: "energy", title: "Energy deviations", text: "The system compares consumption over time and highlights unusual changes.", href: "/en/solutions/advanced-analytics" },
-  { icon: "bike", title: "Planning cycling connections", text: "Data from several sources is displayed on a usage map and supports infrastructure planning.", href: "/en/solutions/traffic-and-mobility" },
+  {
+    icon: "water",
+    title: "Unexpected water consumption",
+    text: "Nexavia detects the deviation and alerts the responsible person.",
+    href: "/en/solutions/remote-meter-reading",
+  },
+  {
+    icon: "energy",
+    title: "Energy deviations",
+    text: "The system compares consumption over time and highlights unusual changes.",
+    href: "/en/solutions/advanced-analytics",
+  },
+  {
+    icon: "bike",
+    title: "Planning cycling connections",
+    text: "Data from several sources is displayed on a usage map and supports infrastructure planning.",
+    href: "/en/solutions/traffic-and-mobility",
+  },
 ];
 export const partnershipEn = [
-  { icon: "device", title: "Different devices", text: "Sensors, meters and field equipment." },
-  { icon: "network", title: "Different connections", text: "LoRaWAN, NB-IoT, mobile and local networks." },
-  { icon: "database", title: "Existing-system integrations", text: "ERP, SCADA, GIS and standard interfaces." },
-  { icon: "chart", title: "Nexavia and KAI", text: "Data, analytics, alerts and recommendations." },
-  { icon: "people", title: "NOC and managed services", text: "Continuous monitoring, response, maintenance and expert support." },
+  {
+    icon: "device",
+    title: "Different devices",
+    text: "Sensors, meters and field equipment.",
+  },
+  {
+    icon: "network",
+    title: "Different connections",
+    text: "LoRaWAN, NB-IoT, mobile and local networks.",
+  },
+  {
+    icon: "database",
+    title: "Existing-system integrations",
+    text: "ERP, SCADA, GIS and standard interfaces.",
+  },
+  {
+    icon: "chart",
+    title: "Nexavia and KAI",
+    text: "Data, analytics, alerts and recommendations.",
+  },
+  {
+    icon: "people",
+    title: "NOC and managed services",
+    text: "Continuous monitoring, response, maintenance and expert support.",
+  },
 ];

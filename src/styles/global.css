@@ -1,25 +1,13 @@
 @font-face {
   font-family: "Space Grotesk";
-  src: url("../assets/brand/fonts/SpaceGrotesk-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Space Grotesk";
-  src: url("../assets/brand/fonts/SpaceGrotesk-Bold.woff2") format("woff2");
-  font-weight: 700;
+  src: url("../assets/brand/fonts/SpaceGrotesk-variable.woff2") format("woff2");
+  font-weight: 300 700;
   font-display: swap;
 }
 @font-face {
   font-family: "Source Sans 3";
-  src: url("../assets/brand/fonts/SourceSans3-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Source Sans 3";
-  src: url("../assets/brand/fonts/SourceSans3-Semibold.woff2") format("woff2");
-  font-weight: 600;
+  src: url("../assets/brand/fonts/SourceSans3-variable.woff2") format("woff2");
+  font-weight: 200 900;
   font-display: swap;
 }
 :root {
@@ -54,6 +42,9 @@ a {
 img {
   max-width: 100%;
   height: auto;
+}
+address {
+  font-style: normal;
 }
 h1,
 h2,
@@ -420,6 +411,11 @@ nav {
   margin: 0.5rem 0;
 }
 .form {
+  display: grid;
+  gap: 1rem;
+  max-width: 760px;
+}
+.lead-form {
   display: grid;
   gap: 1rem;
   max-width: 760px;

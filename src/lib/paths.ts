@@ -1,5 +1,10 @@
 export function withBase(path: string): string {
-  if (/^(https?:)?\/\//.test(path) || path.startsWith("mailto:") || path.startsWith("tel:") || path.startsWith("#")) {
+  if (
+    /^(https?:)?\/\//.test(path) ||
+    path.startsWith("mailto:") ||
+    path.startsWith("tel:") ||
+    path.startsWith("#")
+  ) {
     return path;
   }
 

@@ -1,0 +1,522 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import AboutIcon from "../AboutIcon.astro";
+import type { Locale } from "../../lib/i18n";
+import regionalMap from "../../assets/maps/kuem-regional-map.svg";
+import regionalMapEn from "../../assets/maps/kuem-regional-map-en.svg";
+import "../../styles/about.css";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = {
+  sl: {
+    title: "O nas | KUEM",
+    description:
+      "KUEM je slovensko tehnološko podjetje, ki povezuje razvoj programske opreme, komunikacijske tehnologije, integracije, teren in podporo.",
+    eyebrow: "O NAS",
+    h1: "Ljudje, ki tehnologijo spravimo v delovanje.",
+    heroP:
+      "KUEM je slovensko tehnološko podjetje. Naša ekipa združuje razvoj programske opreme, komunikacijske tehnologije, integracije, terensko izvedbo in podporo.",
+    factsId: "kuem-v-potezah",
+    meetUs: "Spoznajte nas",
+    contactId: "kontakt",
+    contactLabel: "Kontakt",
+    graphicAria: "Pot od terena prek sistemov do upravljanja",
+    graphicTagline: "OD IDEJE DO DELOVANJA.",
+    flowTitle: "Teren, sistemi in upravljanje",
+    flow: {
+      field: "TEREN",
+      fieldLine1: "PODATKI IZ REALNEGA",
+      fieldLine2: "OKOLJA",
+      systems: "SISTEMI",
+      systemsLine1: "POVEZOVANJE ZNANJ",
+      systemsLine2: "IN TEHNOLOGIJ",
+      management: "UPRAVLJANJE",
+      managementLine1: "UPORABNI PODATKI",
+      managementLine2: "ZA BOLJŠE ODLOČITVE",
+    },
+    factsEyebrow: "KUEM V NEKAJ POTEZAH",
+    factsH2: "Podjetje, zgrajeno na znanju in odgovornosti.",
+    facts: [
+      ["location", "SEDEŽ", "Kranj, Slovenija"],
+      ["presence", "PRISOTNOST", "Slovenija in širša regija"],
+      ["knowledge", "ZNANJA", "Razvoj · povezljivost · integracije · izvedba"],
+      ["people", "PRISTOP", "Od prvega ogleda do dolgoročne podpore"],
+    ],
+    teamEyebrow: "NAŠA EKIPA",
+    teamH2: "Različna znanja. Ena ekipa.",
+    teamP:
+      "Projekt pri nas ne potuje med nepovezanimi izvajalci. Strokovnjaki za teren, povezljivost, programsko opremo, integracije in podporo sodelujejo kot ena ekipa.",
+    expertise: [
+      [
+        "software",
+        "Programska oprema",
+        "Razvoj platform, uporabniških vmesnikov in podatkovnih rešitev.",
+      ],
+      [
+        "connectivity",
+        "Komunikacijske tehnologije",
+        "Načrtovanje zanesljive poti od terenske naprave do sistema.",
+      ],
+      [
+        "integration",
+        "Integracije in avtomatizacija",
+        "Povezovanje obstoječih sistemov, podatkov in procesov.",
+      ],
+      [
+        "field",
+        "Terenska izvedba in podpora",
+        "Uvedba, nadzor delovanja in pomoč po začetku uporabe.",
+      ],
+    ],
+    growthEyebrow: "NAŠ RAZVOJ",
+    growthH2: "Rastli smo iz realnih projektov.",
+    growthP: "Vsak naslednji korak je nastal iz konkretne potrebe naročnikov.",
+    growth: [
+      [
+        "01",
+        "Terenske rešitve",
+        "Začetki na terenu in razumevanje dejanskih infrastrukturnih izzivov.",
+      ],
+      [
+        "02",
+        "Povezovanje sistemov",
+        "Naprave, komunikacije in obstoječi sistemi so postali povezana celota.",
+      ],
+      [
+        "03",
+        "Lastna platforma Nexavia",
+        "Razvili smo enotno okolje za pregled in upravljanje podatkov.",
+      ],
+      [
+        "04",
+        "Napredna analitika KAI",
+        "Podatke nadgrajujemo s kontekstom in podporo pri odločanju.",
+      ],
+    ],
+    principlesEyebrow: "KAKO DELAMO",
+    principlesH2: "Neposredno, odgovorno in dolgoročno.",
+    principles: [
+      [
+        "document",
+        "Razumemo okolje",
+        "Predlagamo šele, ko poznamo teren, obstoječe sisteme in cilj.",
+      ],
+      [
+        "dialog",
+        "Govorimo jasno",
+        "Brez nepotrebnega žargona, skritih omejitev in praznih obljub.",
+      ],
+      [
+        "shield",
+        "Prevzamemo odgovornost",
+        "Rešitev obravnavamo kot celoto, ne kot skupek nepovezanih delov.",
+      ],
+      [
+        "infinity",
+        "Ostajamo dosegljivi",
+        "Sodelovanje se ne konča z uvedbo rešitve.",
+      ],
+    ],
+    regionEyebrow: "REGIONALNA PRISOTNOST",
+    regionH2: "Znanje razvijamo v Sloveniji. Rešitve uvajamo po regiji.",
+    regionP:
+      "Z naročniki in partnerji sodelujemo neposredno – od prvega ogleda do dolgoročne podpore.",
+    regionLink: "Oglejte si uspešne zgodbe",
+    referencesHref: "/reference",
+    mapAlt:
+      "Regionalna prisotnost podjetja KUEM v Sloveniji in državah jugovzhodne Evrope",
+    contactH2: "Pogovorimo se o vašem naslednjem projektu.",
+    contactP: "Najboljši pogovori se začnejo pri konkretnem izzivu.",
+    contactCta: "Dogovorite se za uvodni sestanek",
+    contactHref: "/kontakt",
+    companyLine: "KUEM d.o.o. · Kranj · Slovenija",
+  },
+  en: {
+    title: "About | KUEM",
+    description:
+      "KUEM is a Slovenian technology company combining software development, communication technologies, integrations, field delivery and support.",
+    eyebrow: "ABOUT US",
+    h1: "People who make technology work.",
+    heroP:
+      "KUEM is a Slovenian technology company. Our team combines software development, communication technologies, integrations, field delivery and support.",
+    factsId: "kuem-at-a-glance",
+    meetUs: "Meet us",
+    contactId: "contact",
+    contactLabel: "Contact",
+    graphicAria: "The path from field data through systems to management",
+    graphicTagline: "FROM IDEA TO OPERATION.",
+    flowTitle: "Field, systems and management",
+    flow: {
+      field: "FIELD",
+      fieldLine1: "DATA FROM THE REAL",
+      fieldLine2: "ENVIRONMENT",
+      systems: "SYSTEMS",
+      systemsLine1: "CONNECTING EXPERTISE",
+      systemsLine2: "AND TECHNOLOGY",
+      management: "MANAGEMENT",
+      managementLine1: "USEFUL DATA FOR",
+      managementLine2: "BETTER DECISIONS",
+    },
+    factsEyebrow: "KUEM AT A GLANCE",
+    factsH2: "A company built on expertise and responsibility.",
+    facts: [
+      ["location", "HEADQUARTERS", "Kranj, Slovenia"],
+      ["presence", "PRESENCE", "Slovenia and the wider region"],
+      [
+        "knowledge",
+        "EXPERTISE",
+        "Software · connectivity · integrations · delivery",
+      ],
+      ["people", "APPROACH", "From the first site visit to long-term support"],
+    ],
+    teamEyebrow: "OUR TEAM",
+    teamH2: "Different areas of expertise. One team.",
+    teamP:
+      "One team takes responsibility across the entire solution. Field, connectivity, software, integration and support specialists work together as one team.",
+    expertise: [
+      [
+        "software",
+        "Software development",
+        "Platforms, user interfaces and data solutions.",
+      ],
+      [
+        "connectivity",
+        "Communication technologies",
+        "Planning a reliable path from field devices to the system.",
+      ],
+      [
+        "integration",
+        "Integrations and automation",
+        "Connecting existing systems, data and processes.",
+      ],
+      [
+        "field",
+        "Field delivery and support",
+        "Deployment, operational monitoring and support after launch.",
+      ],
+    ],
+    growthEyebrow: "OUR EVOLUTION",
+    growthH2: "We grew from real projects.",
+    growthP: "Every next step emerged from a concrete customer need.",
+    growth: [
+      [
+        "01",
+        "Field solutions",
+        "We began in the field by understanding real infrastructure challenges.",
+      ],
+      [
+        "02",
+        "Connected systems",
+        "Devices, communications and existing systems became a connected whole.",
+      ],
+      [
+        "03",
+        "Our Nexavia platform",
+        "We developed a unified environment for data overview and management.",
+      ],
+      [
+        "04",
+        "Advanced KAI analytics",
+        "We enrich data with context and decision support.",
+      ],
+    ],
+    principlesEyebrow: "HOW WE WORK",
+    principlesH2: "Directly, responsibly and for the long term.",
+    principles: [
+      [
+        "document",
+        "We understand the environment",
+        "We make recommendations only after understanding the field, existing systems and the goal.",
+      ],
+      [
+        "dialog",
+        "We speak clearly",
+        "Without unnecessary jargon, hidden constraints or empty promises.",
+      ],
+      [
+        "shield",
+        "We take responsibility",
+        "We treat the solution as a whole, rather than a collection of disconnected parts.",
+      ],
+      [
+        "infinity",
+        "We remain available",
+        "Our cooperation does not end when the solution is deployed.",
+      ],
+    ],
+    regionEyebrow: "REGIONAL PRESENCE",
+    regionH2: "We develop expertise in Slovenia. We deploy solutions across the region.",
+    regionP:
+      "We work directly with customers and partners, from the first site visit to long-term support.",
+    regionLink: "View success stories",
+    referencesHref: "/en/references",
+    mapAlt:
+      "KUEM regional presence in Slovenia and Southeast European countries",
+    contactH2: "Let’s discuss your next project.",
+    contactP: "The best conversations begin with a concrete challenge.",
+    contactCta: "Book an introductory meeting",
+    contactHref: "/en/contact",
+    companyLine: "KUEM d.o.o. · Kranj · Slovenia",
+  },
+}[locale];
+---
+
+<MainLayout title={copy.title} description={copy.description}>
+  <div class="ab-page">
+    <section class="ab-hero" aria-labelledby="ab-title">
+      <div class="container ab-hero-grid">
+        <div class="ab-hero-copy">
+          <p class="ab-eyebrow">{copy.eyebrow}</p><h1 id="ab-title">
+            {copy.h1}
+          </h1><p>
+            {copy.heroP}
+          </p><div class="ab-actions">
+            <a class="btn btn-primary" href={`#${copy.factsId}`}
+              >{copy.meetUs} <span aria-hidden="true">↓</span></a
+            ><a class="btn btn-secondary" href={`#${copy.contactId}`}
+              >{copy.contactLabel} <span aria-hidden="true">→</span></a
+            >
+          </div>
+        </div>
+        <div class="ab-hero-graphic" aria-label={copy.graphicAria}>
+          <p>{copy.graphicTagline}</p><svg
+            viewBox="0 0 760 420"
+            role="img"
+            aria-labelledby="ab-flow-title"
+            ><title id="ab-flow-title">{copy.flowTitle}</title><g
+              class="ab-grid"
+              aria-hidden="true"
+              ><path
+                d="M0 370 120 290 220 338 360 238 490 310 630 214 760 274M0 403 170 315 290 370 410 285 560 348 720 265"
+              ></path></g
+            ><path class="ab-route" d="M70 300H225L330 190H485L580 76H704"
+            ></path><g class="ab-node"
+              ><rect x="66" y="296" width="9" height="9"></rect><rect
+                x="326"
+                y="186"
+                width="9"
+                height="9"></rect><rect x="576" y="72" width="9" height="9"
+              ></rect></g
+            ><g class="ab-flow-copy"
+              ><text x="68" y="260">{copy.flow.field}</text><text x="68" y="326"
+                >{copy.flow.fieldLine1}</text
+              ><text x="68" y="344">{copy.flow.fieldLine2}</text><text
+                x="328"
+                y="150">{copy.flow.systems}</text
+              ><text x="328" y="216">{copy.flow.systemsLine1}</text><text
+                x="328"
+                y="234">{copy.flow.systemsLine2}</text
+              ><text x="578" y="38">{copy.flow.management}</text><text
+                x="578"
+                y="101">{copy.flow.managementLine1}</text
+              ><text x="578" y="119">{copy.flow.managementLine2}</text></g
+            ><g class="ab-moving"
+              ><rect width="8" height="8"
+                ><animateMotion
+                  begin="indefinite"
+                  dur="14s"
+                  repeatCount="indefinite"
+                  path="M70 300H225L330 190H485L580 76H704"
+                ></animateMotion></rect
+              ></g
+            ></svg
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="ab-facts" id={copy.factsId} aria-labelledby="ab-facts-title">
+      <div class="container">
+        <p class="ab-eyebrow">{copy.factsEyebrow}</p><h2 id="ab-facts-title">
+          {copy.factsH2}
+        </h2><div class="ab-fact-grid">
+          {
+            copy.facts.map(([icon, title, factCopy]) => (
+              <article>
+                <>
+                  <AboutIcon name={icon} />
+                  <div>
+                    <>
+                      <h3>{title}</h3>
+                      {icon === "location" && (
+                        <a
+                          href="https://www.google.com/maps/place/Kuem,+d.o.o./@46.225098,14.3504742,1080m/data=!3m2!1e3!4b1!4m6!3m5!1s0x477b3f5740125f4d:0xd434a9b7180e2ba7!8m2!3d46.225098!4d14.3530491!16s%2Fg%2F11vdn6x3y3?entry=ttu&g_ep=EgoyMDI2MDkxMy4wIKXMDSoASAFQAw%3D%3D"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Ljubljanska cesta 24g
+                        </a>
+                      )}
+                      <p>{factCopy}</p>
+                    </>
+                  </div>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="ab-team" aria-labelledby="ab-team-title">
+      <div class="container ab-team-grid">
+        <div>
+          <p class="ab-eyebrow">{copy.teamEyebrow}</p><h2 id="ab-team-title">
+            {copy.teamH2}
+          </h2><p>
+            {copy.teamP}
+          </p>
+        </div><div class="ab-expertise">
+          {
+            copy.expertise.map(([icon, title, expertiseCopy]) => (
+              <article>
+                <>
+                  <span>
+                    <AboutIcon name={icon} />
+                  </span>
+                  <div>
+                    <>
+                      <h3>{title}</h3>
+                      <p>{expertiseCopy}</p>
+                    </>
+                  </div>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="ab-growth" aria-labelledby="ab-growth-title">
+      <div class="container">
+        <p class="ab-eyebrow">{copy.growthEyebrow}</p><h2 id="ab-growth-title">
+          {copy.growthH2}
+        </h2><p>
+          {copy.growthP}
+        </p><ol class="ab-timeline">
+          {
+            copy.growth.map(([number, title, growthCopy], index) => (
+              <li>
+                <>
+                  <div class="ab-step-icon" aria-hidden="true">
+                    {index === 0
+                      ? "⌁"
+                      : index === 1
+                        ? "↗"
+                        : index === 2
+                          ? "▣"
+                          : "▥"}
+                  </div>
+                  <span class="ab-step-node" />
+                  <strong>{number}</strong>
+                  <h3>{title}</h3>
+                  <p>{growthCopy}</p>
+                </>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section class="ab-principles" aria-labelledby="ab-principles-title">
+      <div class="container">
+        <p class="ab-eyebrow">{copy.principlesEyebrow}</p><h2
+          id="ab-principles-title"
+        >
+          {copy.principlesH2}
+        </h2><div class="ab-principle-grid">
+          {
+            copy.principles.map(([icon, title, principleCopy]) => (
+              <article>
+                <>
+                  <AboutIcon name={icon} />
+                  <h3>{title}</h3>
+                  <p>{principleCopy}</p>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="ab-region" aria-labelledby="ab-region-title">
+      <div class="container ab-region-grid">
+        <div>
+          <p class="ab-eyebrow">{copy.regionEyebrow}</p><h2
+            id="ab-region-title"
+          >
+            {copy.regionH2}
+          </h2><p>
+            {copy.regionP}
+          </p><a href={copy.referencesHref}
+            >{copy.regionLink} <span aria-hidden="true">→</span></a
+          >
+        </div><div class="ab-map">
+          <img
+            class="regional-map"
+            src={(locale === "en" ? regionalMapEn : regionalMap).src}
+            width="1100"
+            height="700"
+            alt={copy.mapAlt}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="ab-contact"
+      id={copy.contactId}
+      aria-labelledby="ab-contact-title"
+    >
+      <div class="container">
+        <h2 id="ab-contact-title">
+          {copy.contactH2}
+        </h2><p>{copy.contactP}</p><a
+          class="btn btn-primary"
+          href={copy.contactHref}
+          >{copy.contactCta} <span aria-hidden="true">→</span></a
+        ><small>{copy.companyLine}</small>
+      </div>
+    </section>
+  </div>
+</MainLayout>
+<script>
+  const graphic = document.querySelector<HTMLElement>(".ab-hero-graphic");
+  const svg = graphic?.querySelector<SVGSVGElement>("svg");
+  const motion = svg?.querySelector<SVGAnimateMotionElement>("animateMotion");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  let started = false;
+  const update = (visible: boolean) => {
+    if (!graphic || !svg || reduced.matches) {
+      graphic?.classList.remove("is-animated");
+      svg?.pauseAnimations();
+      return;
+    }
+    if (!visible || document.hidden) {
+      svg.pauseAnimations();
+      return;
+    }
+    if (!started) {
+      started = true;
+      motion?.beginElement();
+      graphic.classList.add("is-animated");
+    }
+    svg.unpauseAnimations();
+  };
+  if (graphic) {
+    const observer = new IntersectionObserver(
+      ([entry]) => update(Boolean(entry?.isIntersecting)),
+      { threshold: 0.15 },
+    );
+    observer.observe(graphic);
+  }
+</script>

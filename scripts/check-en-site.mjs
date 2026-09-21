@@ -51,7 +51,7 @@ for (const page of redesigned) {
   const text = visibleText(html);
   for (const phrase of bad)
     assert(!text.includes(phrase), `${page}: ${phrase}`);
-  assert.match(html, /<html[^>]*lang="en"/);
+  assert.match(html, /<html[^>]*lang="en(?:-[A-Za-z]+)?"/);
   assert.match(text, /SL \| EN/);
 }
 for (const slug of ["remote-meter-reading", "traffic-and-mobility"]) {

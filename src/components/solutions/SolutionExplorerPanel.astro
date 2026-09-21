@@ -1,6 +1,39 @@
 ---
-import { solutionSteps } from "../../data/solutionExplorer";
+import { solutionSteps, solutionStepsEn } from "../../data/solutionExplorer";
+import type { Locale } from "../../lib/i18n";
 import Content from "./SolutionStepContent.astro";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const steps = locale === "sl" ? solutionSteps : solutionStepsEn;
+const copy = {
+  sl: {
+    stepCountPrefix: "KORAK",
+    closeAria: "Zapri podrobnosti",
+    progressAria: "Izberite korak",
+    stepAriaPrefix: "Korak",
+    backClose: "Zapri",
+    backPrev: "Nazaj",
+    nextPrefix: "Naslednji:",
+    cta: "Dogovorite se za predstavitev",
+    ctaHref: "/#kontakt",
+  },
+  en: {
+    stepCountPrefix: "STEP",
+    closeAria: "Close details",
+    progressAria: "Choose a step",
+    stepAriaPrefix: "Step",
+    backClose: "Close",
+    backPrev: "Back",
+    nextPrefix: "Next:",
+    cta: "Book a presentation",
+    ctaHref: "/en/contact",
+  },
+}[locale];
+const count = String(steps.length).padStart(2, "0");
 ---
 
 <aside
@@ -12,16 +45,14 @@ import Content from "./SolutionStepContent.astro";
   hidden
 >
   <header class="panel-header">
-    <p class="hp-eyebrow" data-step-count>KORAK 01 / 06</p><h2
-      id="solution-panel-title"
-      tabindex="-1"
-    >
-      Naprave in senzorji
+    <p class="hp-eyebrow" data-step-count>{copy.stepCountPrefix} 01 / {count}</p
+    ><h2 id="solution-panel-title" tabindex="-1">
+      {steps[0].name}
     </h2><button
       type="button"
       class="panel-close"
       data-panel-close
-      aria-label="Zapri podrobnosti"
+      aria-label={copy.closeAria}
       ><svg viewBox="0 0 24 24" aria-hidden="true"
         ><path
           d="m5 5 14 14M19 5 5 19"
@@ -33,13 +64,13 @@ import Content from "./SolutionStepContent.astro";
   </header>
   <div class="panel-content" data-panel-content></div>
   <footer class="panel-footer">
-    <nav class="panel-progress" aria-label="Izberite korak">
+    <nav class="panel-progress" aria-label={copy.progressAria}>
       {
-        solutionSteps.map((step, i) => (
+        steps.map((step, i) => (
           <button
             type="button"
             data-panel-step={i}
-            aria-label={`Korak ${i + 1}: ${step.name}`}
+            aria-label={`${copy.stepAriaPrefix} ${i + 1}: ${step.name}`}
           >
             <span>{i + 1}</span>
           </button>
@@ -47,43 +78,43 @@ import Content from "./SolutionStepContent.astro";
       }
     </nav><div class="panel-actions">
       <button type="button" class="hp-button hp-outline" data-panel-back
-        >Zapri</button
+        >{copy.backClose}</button
       ><button type="button" class="hp-button" data-panel-next
-        >Naslednji: Povezljivost <span aria-hidden="true">→</span></button
-      ><a class="hp-button" href="/#kontakt" data-panel-cta hidden
-        >Dogovorite se za predstavitev <span aria-hidden="true">→</span></a
+        >{copy.nextPrefix} {steps[1].name}
+        <span aria-hidden="true">→</span></button
+      ><a class="hp-button" href={copy.ctaHref} data-panel-cta hidden
+        >{copy.cta} <span aria-hidden="true">→</span></a
       >
     </div>
   </footer>
 </aside>
 {
-  solutionSteps.map((step, i) => (
+  steps.map((step, i) => (
     <template data-step-template={i}>
-      <Content step={step} />
+      <Content step={step} locale={locale} />
     </template>
   ))
 }
-<script>
-  import { solutionSteps } from "../../data/solutionExplorer";
-  const panel = document.querySelector<HTMLElement>("#solution-panel")!;
-  const content = panel.querySelector<HTMLElement>("[data-panel-content]")!;
-  const title = panel.querySelector<HTMLElement>("#solution-panel-title")!;
-  const back = panel.querySelector<HTMLButtonElement>("[data-panel-back]")!;
-  const next = panel.querySelector<HTMLButtonElement>("[data-panel-next]")!;
-  const cta = panel.querySelector<HTMLElement>("[data-panel-cta]")!;
-  const shell = document.querySelector<HTMLElement>(".solutions-shell")!;
+<script define:vars={{ steps, copy }}>
+  const panel = document.querySelector("#solution-panel");
+  const content = panel.querySelector("[data-panel-content]");
+  const title = panel.querySelector("#solution-panel-title");
+  const back = panel.querySelector("[data-panel-back]");
+  const next = panel.querySelector("[data-panel-next]");
+  const cta = panel.querySelector("[data-panel-cta]");
+  const shell = document.querySelector(".solutions-shell");
   const mobile = matchMedia("(max-width: 767px)");
   let current = -1,
-    opener: HTMLElement | null = null,
+    opener = null,
     savedScroll = 0,
-    closeTimer: ReturnType<typeof setTimeout> | undefined;
+    closeTimer;
   const syncMode = () => {
     const modal = current >= 0 && mobile.matches;
     panel.setAttribute("aria-modal", String(modal));
     shell.inert = modal;
     document.body.classList.toggle("solution-modal", modal);
   };
-  const render = (index: number, focus = true) => {
+  const render = (index, focus = true) => {
     clearTimeout(closeTimer);
     if (index < 0) {
       const wasOpen = current >= 0;
@@ -92,7 +123,7 @@ import Content from "./SolutionStepContent.astro";
       document.body.classList.remove("explorer-open");
       syncMode();
       document
-        .querySelectorAll<HTMLElement>("[data-solution-step]")
+        .querySelectorAll("[data-solution-step]")
         .forEach((el) => {
           el.classList.remove("is-selected");
           el.setAttribute("aria-expanded", "false");
@@ -117,36 +148,36 @@ import Content from "./SolutionStepContent.astro";
     if (current < 0) {
       savedScroll = window.scrollY;
       if (!opener)
-        opener = document.querySelector<HTMLElement>(
+        opener = document.querySelector(
           `[data-solution-step="${index}"]`,
         );
     }
     current = index;
-    const step = solutionSteps[index];
+    const step = steps[index];
     title.textContent = step.name;
-    panel.querySelector("[data-step-count]")!.textContent =
-      `KORAK ${String(index + 1).padStart(2, "0")} / 06`;
-    const template = document.querySelector<HTMLTemplateElement>(
+    panel.querySelector("[data-step-count]").textContent =
+      `${copy.stepCountPrefix} ${String(index + 1).padStart(2, "0")} / 06`;
+    const template = document.querySelector(
       `[data-step-template="${index}"]`,
-    )!;
+    );
     content.replaceChildren(template.content.cloneNode(true));
     content.scrollTop = 0;
-    back.textContent = index === 0 ? "Zapri" : "Nazaj";
+    back.textContent = index === 0 ? copy.backClose : copy.backPrev;
     next.hidden = index === 5;
     cta.hidden = index !== 5;
     if (index < 5)
       next.replaceChildren(
-        document.createTextNode(`Naslednji: ${step.next} `),
+        document.createTextNode(`${copy.nextPrefix} ${step.next} `),
         Object.assign(document.createElement("span"), { textContent: "→" }),
       );
     panel
-      .querySelectorAll<HTMLElement>("[data-panel-step]")
+      .querySelectorAll("[data-panel-step]")
       .forEach((el, i) => {
         if (i === index) el.setAttribute("aria-current", "step");
         else el.removeAttribute("aria-current");
       });
     document
-      .querySelectorAll<HTMLElement>("[data-solution-step]")
+      .querySelectorAll("[data-solution-step]")
       .forEach((el) => {
         const selected = Number(el.dataset.solutionStep) === index;
         el.classList.toggle("is-selected", selected);
@@ -164,8 +195,8 @@ import Content from "./SolutionStepContent.astro";
       new CustomEvent("solution-step-change", { detail: index }),
     );
   };
-  const navigate = (index: number) => {
-    const hash = index >= 0 ? `#${solutionSteps[index].id}` : "";
+  const navigate = (index) => {
+    const hash = index >= 0 ? `#${steps[index].id}` : "";
     if (location.hash !== hash)
       history.pushState(
         { solutionStep: index },
@@ -175,7 +206,7 @@ import Content from "./SolutionStepContent.astro";
     render(index);
   };
   document.addEventListener("click", (event) => {
-    const trigger = (event.target as Element).closest<HTMLElement>(
+    const trigger = (event.target).closest(
       "[data-solution-step]",
     );
     if (!trigger) return;
@@ -183,12 +214,12 @@ import Content from "./SolutionStepContent.astro";
     navigate(Number(trigger.dataset.solutionStep));
   });
   panel
-    .querySelector("[data-panel-close]")!
+    .querySelector("[data-panel-close]")
     .addEventListener("click", () => navigate(-1));
   back.addEventListener("click", () => navigate(current - 1));
   next.addEventListener("click", () => navigate(Math.min(5, current + 1)));
   panel
-    .querySelectorAll<HTMLElement>("[data-panel-step]")
+    .querySelectorAll("[data-panel-step]")
     .forEach((button) =>
       button.addEventListener("click", () =>
         navigate(Number(button.dataset.panelStep)),
@@ -202,7 +233,7 @@ import Content from "./SolutionStepContent.astro";
     }
     if (event.key === "Tab") {
       const controls = [
-        ...panel.querySelectorAll<HTMLElement>("button,a[href]"),
+        ...panel.querySelectorAll("button,a[href]"),
       ].filter((el) => !el.hidden && el.getClientRects().length > 0);
       const first = controls[0],
         last = controls[controls.length - 1];
@@ -226,7 +257,7 @@ import Content from "./SolutionStepContent.astro";
   });
   const fromUrl = () => {
     const id = location.hash.slice(1);
-    const index = solutionSteps.findIndex((step) => step.id === id);
+    const index = steps.findIndex((step) => step.id === id);
     render(index);
   };
   window.addEventListener("popstate", fromUrl);

@@ -1,13 +1,38 @@
 ---
 import SolutionPage from "../../../components/SolutionPage.astro";
+import SolutionDetailPage from "../../../components/SolutionDetailPage.astro";
 import { solutions } from "../../../data/site";
-export function getStaticPaths() {
-  return solutions.en.map((solution) => ({
-    params: { slug: solution.slug },
-    props: { solution },
-  }));
+import {
+  solutionDetailSlugs,
+  type SolutionDetailKey,
+} from "../../../data/solutionDetails";
+
+interface Props {
+  kind: "category" | "detail";
+  solution?: (typeof solutions.en)[number];
+  solutionKey?: SolutionDetailKey;
 }
-const { solution } = Astro.props;
+
+export function getStaticPaths() {
+  return [
+    ...solutions.en.map((solution) => ({
+      params: { slug: solution.slug },
+      props: { kind: "category", solution } satisfies Props,
+    })),
+    ...solutionDetailSlugs.map(({ key, en }) => ({
+      params: { slug: en },
+      props: { kind: "detail", solutionKey: key } satisfies Props,
+    })),
+  ];
+}
+
+const { kind, solution, solutionKey } = Astro.props as Props;
 ---
 
-<SolutionPage locale="en" solution={solution} />
+{
+  kind === "detail" ? (
+    <SolutionDetailPage locale="en" solutionKey={solutionKey} />
+  ) : (
+    <SolutionPage locale="en" solution={solution!} />
+  )
+}

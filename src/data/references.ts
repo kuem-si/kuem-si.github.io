@@ -26,8 +26,8 @@ export const references: Reference[] = [
     name: "Mestna občina Novo mesto",
     detail: {
       en: "Traffic counting, especially cyclist counting.",
-      sl: "Štetje prometa, posebej štetje kolesarjev."
-    }
+      sl: "Štetje prometa, posebej štetje kolesarjev.",
+    },
   },
   { name: "JP VOKA SNAGA d.o.o." },
   {
@@ -50,27 +50,27 @@ export const references: Reference[] = [
     name: "Marina Cloud d.o.o.",
     detail: {
       en: "Joint solution for remote monitoring of water consumption in mobile homes.",
-      sl: "Skupna rešitev za daljinski nadzor porabe vode v mobilnih hišicah."
-    }
+      sl: "Skupna rešitev za daljinski nadzor porabe vode v mobilnih hišicah.",
+    },
   },
   {
     name: "Tropic Maloprodaja d.o.o.",
     detail: {
       en: "Temperature monitoring in refrigerators, freezers, salad bars and heated food areas.",
-      sl: "Spremljanje temperature v hladilnikih, zamrzovalnikih, solatnih barih in ogrevanih območjih s hrano."
-    }
+      sl: "Spremljanje temperature v hladilnikih, zamrzovalnikih, solatnih barih in ogrevanih območjih s hrano.",
+    },
   },
   {
     name: "Grad Gradiška",
     detail: {
       en: "Outdoor AQI monitoring, noise-level monitoring, traffic analysis and river-level monitoring.",
-      sl: "Zunanji nadzor AQI, spremljanje ravni hrupa, analiza prometa in spremljanje vodostaja reke."
-    }
+      sl: "Zunanji nadzor AQI, spremljanje ravni hrupa, analiza prometa in spremljanje vodostaja reke.",
+    },
   },
   { name: "MEA TRADE d.o.o." },
   { name: "NABLA-PLUS d.o.o." },
   { name: "T-2 d.o.o." },
-  { name: "Senzemo" }
+  { name: "Senzemo" },
 ];
 
 export function getDetailedReferences() {

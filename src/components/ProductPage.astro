@@ -5,6 +5,7 @@ import DataVisual from "./DataVisual.astro";
 import type { Locale } from "../lib/i18n";
 import nexavia from "../assets/brand/nexavia/official/NEXAVIA-web-White.svg";
 import kai from "../assets/brand/kai/KAI_by_KUEM_Dark.svg";
+import { nexaviaSoftware, kaiSoftware } from "../data/organization";
 const { locale, product } = Astro.props as {
   locale: Locale;
   product: "nexavia" | "kai";
@@ -68,7 +69,10 @@ const kaiDescriptions = [
 ];
 ---
 
-<MainLayout title={title} description={lead}
+<MainLayout
+  title={title}
+  description={lead}
+  jsonLd={[isKai ? kaiSoftware : nexaviaSoftware]}
   ><section class="hero">
     <div class="container hero-grid">
       <div>

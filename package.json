@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node .tools/minify-inline-svg.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "check:en": "node scripts/check-en-site.mjs",
+    "verify": "node .tools/verify.mjs",
     "format:check": "npx prettier --check ."
   },
   "dependencies": {
@@ -19,6 +20,7 @@
     "@astrojs/check": "^0.9.10",
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^1.0.0",
+    "svgo": "^4.1.0",
     "typescript": "^6.0.3"
   }
 }

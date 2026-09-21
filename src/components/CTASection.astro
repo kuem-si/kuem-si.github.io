@@ -1,7 +1,6 @@
 ---
 import { withBase } from "../lib/paths";
 import type { Locale } from "../lib/i18n";
-import { withLocale } from "../lib/i18n";
 
 const {
   title = "Start with a focused pilot",
@@ -16,7 +15,8 @@ const {
   ctaText?: string;
   locale?: Locale;
 };
-const href = ctaHref ?? `${withLocale("/contact", locale)}#demo-form`;
+const href =
+  ctaHref ?? `${locale === "sl" ? "/kontakt" : "/en/contact"}#demo-form`;
 ---
 
 <section class="cta-strip">
