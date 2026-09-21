@@ -46,7 +46,7 @@ const copy = {
     gainEyebrow: "UPORABNIK PRIDOBI",
     examplesEyebrow: "PRIMERI IZ PRAKSE",
     examplesLink: "Poglejte uspešne zgodbe",
-    referencesHref: "/reference",
+    referencesHref: "/reference/",
     resultsEyebrow: "SKUPNI REZULTATI",
     resultsH2: "Različna okolja. Ista potreba po zanesljivih informacijah.",
     outcomes: [
@@ -82,7 +82,6 @@ const copy = {
         "mobilnost",
       ],
     ],
-    storyLink: "Preberite zgodbo",
     closingH2: "Poiščimo pravi prvi korak za vaše okolje.",
     closingP:
       "Predstavite nam izziv. Skupaj preverimo podatke, obstoječo infrastrukturo in izvedljivo pot uvedbe.",
@@ -132,7 +131,7 @@ const copy = {
     gainEyebrow: "USER BENEFITS",
     examplesEyebrow: "REAL-WORLD EXAMPLES",
     examplesLink: "View success stories",
-    referencesHref: "/en/references",
+    referencesHref: "/en/references/",
     resultsEyebrow: "SHARED OUTCOMES",
     resultsH2: "Different environments. The same need for reliable information.",
     outcomes: [
@@ -474,9 +473,6 @@ const scriptData = explorer.map(({ icon: _icon, ...rest }) => rest);
                   />
                   <h3>{name}</h3>
                   <p>{storyCopy}</p>
-                  {locale === "sl" && <a href={copy.referencesHref}>
-                    {copy.storyLink} <span aria-hidden="true">→</span>
-                  </a>}
                 </>
               </article>
             ))

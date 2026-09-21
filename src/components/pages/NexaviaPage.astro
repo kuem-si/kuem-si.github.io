@@ -94,7 +94,7 @@ const copy = {
     demoActive: "Aktivno",
     demoChart: ["Poraba skozi čas", "Stanje sistema"],
     demoChartAria: "Primer trendnega grafa",
-    useCaseLink: "Poglejte primer uporabe",
+    useCaseLink: "Dogovorite se za predstavitev",
     modulesEyebrow: "MODULARNA PLATFORMA",
     modulesH2: "Začnite z enim področjem. Razširite, ko potrebujete.",
     modules: [
@@ -125,8 +125,6 @@ const copy = {
       ["Brezovica", "Pregled vodomerov in komunalne infrastrukture."],
       ["Adria Mobil", "Energetski podatki proizvodnega okolja."],
     ],
-    storiesLink: "Preberite zgodbo",
-    referencesHref: "/reference",
     closingH2: "Poglejte Nexavio na svojih podatkih.",
     closingP:
       "Na kratkem prikazu vam pokažemo, kako bi platforma podprla vaš konkretni primer uporabe.",
@@ -227,8 +225,6 @@ const copy = {
       ["Brezovica", "Overview of water meters and utility infrastructure."],
       ["Adria Mobil", "Energy data from the production environment."],
     ],
-    storiesLink: "Read the story",
-    referencesHref: "/en/references",
     closingH2: "See Nexavia with your data.",
     closingP:
       "In a short presentation, we show how the platform could support your specific use case.",
@@ -551,9 +547,6 @@ const breadcrumb = {
                   <>
                     <h3>{name}</h3>
                     <p>{storyCopy}</p>
-                    {locale === "sl" && <a href={copy.referencesHref} class="nx-text-link">
-                      {copy.storiesLink} →
-                    </a>}
                   </>
                 </div>
               </>

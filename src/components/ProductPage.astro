@@ -59,7 +59,14 @@ const features = isKai
         "APIs and external integrations",
         "On-premises or cloud deployment",
       ];
-const kaiDescriptions = [
+const kaiDescriptions = sl ? [
+  "Podatke infrastrukture uporabi za razlago dogodkov v njihovem operativnem kontekstu.",
+  "Jasno loči, kaj kažejo podatki, od razlage ali sklepa, ki iz njih izhaja.",
+  "Pri razlagi ali priporočilu pokaže razpoložljive podatkovne vire, na katerih temelji.",
+  "Na podlagi razpoložljivih podatkov in konteksta predlaga naslednji operativni korak.",
+  "Človek ohrani nadzor, saj je pred izvedbo ukrepa potrebna njegova potrditev.",
+  "Za analizo, razlage in podporo odločanju uporablja podatke znotraj Nexavie.",
+] : [
   "Uses available infrastructure data to explain events in context.",
   "Distinguishes what the data shows from conclusions drawn from it.",
   "Identifies the available sources behind an explanation or recommendation.",
@@ -81,7 +88,7 @@ const kaiDescriptions = [
           width="300"
           alt={isKai ? "KAI by KUEM" : "Nexavia"}
         /><h1>{title}</h1><p class="lead">{lead}</p>{
-          isKai && <p>Works with Nexavia</p>
+          isKai && <p>{sl ? "Deluje z Nexavio" : "Works with Nexavia"}</p>
         }
       </div><DataVisual
         labels={isKai
@@ -115,10 +122,10 @@ const kaiDescriptions = [
                 <span class="index">0{i + 1}</span>
                 <h3>{x}</h3>
                 <p>
-                  {sl
-                    ? "Funkcija je vezana na razpoložljive podatke, uporabniške pravice in preverjen operativni kontekst."
-                    : isKai
-                      ? kaiDescriptions[i]
+                  {isKai
+                    ? kaiDescriptions[i]
+                    : sl
+                      ? "Funkcija je vezana na razpoložljive podatke, uporabniške pravice in preverjen operativni kontekst."
                       : "The capability depends on available data, user permissions and verified operational context."}
                 </p>
               </>
@@ -131,7 +138,7 @@ const kaiDescriptions = [
     <div class="container split">
       <div>
         <h2>
-          {sl ? "Razumljiva arhitektura" : isKai ? "How KAI works" : "Understandable architecture"}
+          {isKai ? (sl ? "Kako KAI deluje" : "How KAI works") : (sl ? "Razumljiva arhitektura" : "Understandable architecture")}
         </h2><p>
           {
             sl

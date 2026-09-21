@@ -157,7 +157,8 @@
 .explorer-stories li:last-child {
   border: 0;
 }
-.explorer-stories a {
+.explorer-stories a,
+.explorer-stories .story-customer {
   display: flex;
   min-height: 48px;
   align-items: center;
@@ -648,7 +649,8 @@
   .explorer-stories li:last-child {
     border: 1px solid #d3e2e5;
   }
-  .explorer-stories a {
+  .explorer-stories a,
+.explorer-stories .story-customer {
     padding: 8px 12px;
   }
   .explorer-copy h1 {

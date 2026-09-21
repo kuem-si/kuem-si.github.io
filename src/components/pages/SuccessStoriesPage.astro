@@ -1,0 +1,39 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import CTA from "../CTA.astro";
+import { publishedSuccessStories } from "../../data/successStories";
+import type { Locale } from "../../lib/i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const sl = locale === "sl";
+const title = sl ? "Uspešne zgodbe" : "Success Stories";
+const description = sl
+  ? "Kako KUEM povezuje naprave, sisteme in podatke v resničnih operativnih okoljih."
+  : "Explore how KUEM connects devices, systems and data across real operating environments.";
+---
+
+<MainLayout {title} {description}>
+  <section class="hero">
+    <div class="container">
+      <h1>{title}</h1>
+      <p class="lead">{description}</p>
+    </div>
+  </section>
+  <section class="section" aria-label={sl ? "Projekti" : "Projects"}>
+    <div class="container grid-3">
+      {publishedSuccessStories.map((story) => (
+        <article class="card" id={story.slug} data-success-story={story.slug}>
+          <p class="story-industry">{story.industry[locale]}</p>
+          <h2>{story.customer}</h2>
+          <p>{story.summary[locale]}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+  <CTA {locale} />
+</MainLayout>
+
+<style>
+  .card h2 { font-size: 1.65rem; }
+  .story-industry { margin-top: 0; font-weight: 600; color: var(--kuem-petrol); }
+</style>

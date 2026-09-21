@@ -42,7 +42,7 @@ const copy = {
     examplesEyebrow: "PRIMERI IZ PRAKSE",
     examplesH2: "Od podatka do konkretnega rezultata.",
     storiesEyebrow: "USPEŠNE ZGODBE",
-    storiesHref: "/reference",
+    storiesHref: "/reference/",
     closingH2: "Začnimo z enim konkretnim izzivom.",
     closingP:
       "Izberemo primer uporabe, preverimo razpoložljive podatke in predlagamo izvedljiv prvi korak.",
@@ -70,7 +70,7 @@ const copy = {
     examplesEyebrow: "REAL-WORLD EXAMPLES",
     examplesH2: "From data to a concrete result.",
     storiesEyebrow: "SUCCESS STORIES",
-    storiesHref: "/en/references",
+    storiesHref: "/en/references/",
     closingH2: "Let’s start with one concrete challenge.",
     closingP:
       "We select a use case, review the available data and propose a feasible first step.",
@@ -206,14 +206,12 @@ const stories = ["Domplan", "Brezovica", "Adria Mobil", "Gradiška", "Novo mesto
                 {
                   stories.map((name) => (
                     <li>
-                      <a href={copy.storiesHref}>
-                        {name}
-                        <span aria-hidden="true">↗</span>
-                      </a>
+                      <span class="story-customer">{name}</span>
                     </li>
                   ))
                 }
               </ul>
+              <a href={copy.storiesHref}>{sl ? "Poglejte uspešne zgodbe" : "View success stories"} →</a>
             </div>
           </div>
         </section>
