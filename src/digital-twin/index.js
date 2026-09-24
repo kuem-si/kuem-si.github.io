@@ -10,6 +10,34 @@ if (root) {
   const overlayOpacity = root.querySelector("[data-overlay-opacity]");
   const overlayToggle = root.querySelector("[data-overlay-toggle]");
   const resizeEdges = root.querySelectorAll("[data-overlay-resize]");
+  const screenViewport = root.querySelector(".xdr-screen");
+  const screenBezel = root.querySelector(".xdr-bezel");
+  const centerSideResizeEdges = () => {
+    if (!screenViewport || !screenBezel) return;
+    const screenRect = screenViewport.getBoundingClientRect();
+    const bezelRect = screenBezel.getBoundingClientRect();
+    // The screen's upper content is tucked under the bezel lip; bias the grip
+    // center slightly down so the visible marks align with the bezel midpoint.
+    const center = screenRect.top - bezelRect.top + screenRect.height / 2 + 18;
+    resizeEdges.forEach((edge) => {
+      if (edge.dataset.overlayResize === "left" || edge.dataset.overlayResize === "right") {
+        edge.style.top = `${center}px`;
+        edge.style.transform = "translateY(-50%)";
+      } else if (edge.dataset.overlayResize === "bottom") {
+        const lowerBezelGap = bezelRect.bottom - screenRect.bottom;
+        const handleHeight = edge.getBoundingClientRect().height;
+        // Center the visible stroke inside the display's lower frame lip.
+        const handleCenter = bezelRect.height - Math.max(1, lowerBezelGap) / 2 - 2;
+        edge.style.bottom = "auto";
+        edge.style.top = `${handleCenter - handleHeight / 2}px`;
+      }
+    });
+  };
+  if (screenViewport && screenBezel) {
+    if ("ResizeObserver" in window) new ResizeObserver(centerSideResizeEdges).observe(screenViewport);
+    window.addEventListener("resize", centerSideResizeEdges, { passive: true });
+    requestAnimationFrame(centerSideResizeEdges);
+  }
   if (workspace && fullscreenButton) {
     const updateFullscreenButton = () => {
       const active = document.fullscreenElement === workspace;
@@ -97,25 +125,47 @@ if (root) {
     resizeEdges.forEach((edge) => edge.addEventListener("pointerdown", (event) => {
       const frame = workspace.getBoundingClientRect();
       const overlay = screenOverlay.getBoundingClientRect();
-      const resizeWidth = edge.dataset.overlayResize === "width";
-      const start = { x: event.clientX, y: event.clientY, width: overlay.width, height: overlay.height, left: overlay.left - frame.left };
+      const direction = edge.dataset.overlayResize;
+      const resizeWidth = direction === "left" || direction === "right" || direction === "width" || direction.length === 2;
+      const resizeHeight = direction === "bottom" || direction === "height" || direction.length === 2;
+      const west = direction === "left" || direction === "width" || direction.includes("w");
+      const north = direction.includes("n");
+      const start = {
+        x: event.clientX,
+        y: event.clientY,
+        width: overlay.width,
+        height: overlay.height,
+        left: overlay.left - frame.left,
+        top: overlay.top - frame.top,
+      };
       edge.setPointerCapture(event.pointerId);
       const resize = (moveEvent) => {
         if (moveEvent.pointerId !== event.pointerId) return;
         screenOverlay.classList.add("is-resized");
+        let width = start.width;
+        let height = start.height;
+        let left = start.left;
+        let top = start.top;
         if (resizeWidth) {
           const minWidth = Math.min(300, frame.width - 16);
-          const maxWidth = Math.max(minWidth, Math.min(frame.width - 16, start.left + start.width - 8));
-          const width = Math.max(minWidth, Math.min(maxWidth, start.width + start.left - (moveEvent.clientX - frame.left)));
-          screenOverlay.style.width = `${width}px`;
-          screenOverlay.style.left = `${start.left + start.width - width}px`;
-          screenOverlay.style.right = "auto";
-        } else {
-          const minHeight = Math.min(180, frame.height - 16);
-          const maxHeight = Math.max(minHeight, Math.min(frame.height - 16, frame.height - (overlay.top - frame.top) - 8));
-          const height = Math.max(minHeight, Math.min(maxHeight, start.height + moveEvent.clientY - start.y));
-          screenOverlay.style.height = `${height}px`;
+          const maxWidth = Math.max(minWidth, Math.min(frame.width - 16, west ? start.left + start.width - 8 : frame.width - start.left - 8));
+          const deltaX = moveEvent.clientX - start.x;
+          width = Math.max(minWidth, Math.min(maxWidth, start.width + deltaX * (west ? -1 : 1)));
+          if (west) left = start.left + start.width - width;
         }
+        if (resizeHeight) {
+          const minHeight = Math.min(180, frame.height - 16);
+          const maxHeight = Math.max(minHeight, Math.min(frame.height - 16, north ? start.top + start.height - 8 : frame.height - start.top - 8));
+          const deltaY = moveEvent.clientY - start.y;
+          height = Math.max(minHeight, Math.min(maxHeight, start.height + deltaY * (north ? -1 : 1)));
+          if (north) top = start.top + start.height - height;
+        }
+        screenOverlay.style.width = `${width}px`;
+        screenOverlay.style.height = `${height}px`;
+        screenOverlay.style.left = `${left}px`;
+        screenOverlay.style.top = `${top}px`;
+        screenOverlay.style.right = "auto";
+        centerSideResizeEdges();
       };
       const finish = (endEvent) => {
         if (endEvent.pointerId !== event.pointerId) return;

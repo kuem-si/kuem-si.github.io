@@ -425,3 +425,117 @@
 /* Keep the dashboard visibility control above the floating dashboard overlay. */
 .twin-workspace .twin-controls{position:relative;z-index:8}
 .twin-workspace .twin-controls [data-overlay-toggle]{position:relative;z-index:9}
+/* Independent corner grips resize width and height together. */
+.twin-workspace .xdr-resize-corner{position:absolute;z-index:11;width:18px;height:18px;padding:0;border:0;border-radius:3px;background:transparent;touch-action:none}
+.twin-workspace .xdr-corner-nw{top:38px;left:0;cursor:nwse-resize}
+.twin-workspace .xdr-corner-ne{top:38px;right:0;cursor:nesw-resize}
+.twin-workspace .xdr-corner-sw{bottom:0;left:0;cursor:nesw-resize}
+.twin-workspace .xdr-corner-se{right:0;bottom:0;cursor:nwse-resize}
+.twin-workspace .xdr-resize-corner:after{position:absolute;top:5px;left:5px;width:8px;height:8px;border:solid #8da2a7;border-width:1px 0 0 1px;content:"";opacity:.45}
+.twin-workspace .xdr-corner-ne:after,.twin-workspace .xdr-corner-sw:after{transform:rotate(90deg)}
+.twin-workspace .xdr-corner-se:after{transform:rotate(180deg)}
+.twin-workspace .xdr-display:hover .xdr-resize-corner:after,.twin-workspace .xdr-resize-corner:focus-visible:after{opacity:.95}
+/* Make all four resize corners visible and easy to find on the bezel. */
+.twin-workspace .xdr-resize-corner{width:22px;height:22px;border-radius:3px;background:#10171955}
+.twin-workspace .xdr-corner-nw{top:38px;left:1px}
+.twin-workspace .xdr-corner-ne{top:38px;right:1px}
+.twin-workspace .xdr-corner-sw{bottom:1px;left:1px}
+.twin-workspace .xdr-corner-se{right:1px;bottom:1px}
+.twin-workspace .xdr-resize-corner:after{inset:4px;top:4px;left:4px;width:auto;height:auto;border:0;border-radius:1px;background:repeating-linear-gradient(135deg,#b4c5c9 0 1px,transparent 1px 4px);opacity:.8;transform:none}
+.twin-workspace .xdr-corner-ne:after,.twin-workspace .xdr-corner-sw:after{background:repeating-linear-gradient(45deg,#b4c5c9 0 1px,transparent 1px 4px)}
+.twin-workspace .xdr-display:hover .xdr-resize-corner:after,.twin-workspace .xdr-resize-corner:focus-visible:after{opacity:1}
+@container display-overlay (max-width:520px){.twin-workspace .xdr-corner-nw,.twin-workspace .xdr-corner-ne{top:52px}}
+/* Minimal resize marks at all four display corners. */
+.twin-workspace .xdr-resize-corner{width:18px;height:18px;border-radius:0;background:transparent}
+.twin-workspace .xdr-corner-nw{top:38px;left:1px}
+.twin-workspace .xdr-corner-ne{top:38px;right:1px}
+.twin-workspace .xdr-corner-sw{bottom:1px;left:1px}
+.twin-workspace .xdr-corner-se{right:1px;bottom:1px}
+.twin-workspace .xdr-resize-corner:after{top:5px;left:5px;right:auto;bottom:auto;width:8px;height:8px;border:solid #82949a;border-width:1px 0 0 1px;border-radius:0;background:none;opacity:.65;transform:none}
+.twin-workspace .xdr-corner-ne:after{transform:rotate(90deg)}
+.twin-workspace .xdr-corner-sw:after{transform:rotate(-90deg)}
+.twin-workspace .xdr-corner-se:after{transform:rotate(180deg)}
+.twin-workspace .xdr-display:hover .xdr-resize-corner:after,.twin-workspace .xdr-resize-corner:focus-visible:after{opacity:1}
+@container display-overlay (max-width:520px){.twin-workspace .xdr-corner-nw,.twin-workspace .xdr-corner-ne{top:52px}}
+/* Keep both lower-corner resize marks visually identical. */
+.twin-workspace .xdr-corner-sw:after,.twin-workspace .xdr-corner-se:after{transform:none}
+/* Only the two lower corners are resize handles; align each grip to its corner. */
+.twin-workspace .xdr-resize-edge{display:none!important}
+.twin-workspace .xdr-resize-corner{position:absolute!important;z-index:20!important;display:block!important;width:22px!important;height:22px!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;opacity:1!important;touch-action:none}
+.twin-workspace .xdr-corner-sw{right:auto!important;bottom:0!important;left:0!important;top:auto!important;cursor:nesw-resize}
+.twin-workspace .xdr-corner-se{right:0!important;bottom:0!important;left:auto!important;top:auto!important;cursor:nwse-resize}
+.twin-workspace .xdr-resize-corner:after{position:absolute;top:auto!important;right:auto!important;bottom:5px!important;left:5px!important;width:9px!important;height:9px!important;border:0!important;border-bottom:1px solid #a8b5b9!important;border-left:1px solid #a8b5b9!important;border-radius:0!important;background:none!important;content:"";opacity:.9!important;transform:none!important}
+.twin-workspace .xdr-corner-se:after{right:5px!important;left:auto!important;border-right:1px solid #a8b5b9!important;border-left:0!important}
+.twin-workspace .xdr-display:hover .xdr-resize-corner:after{border-color:#e1e8e9!important;opacity:1!important}
+/* Keep the dashboard responsive without a horizontal scrollbar; retain vertical page scrolling. */
+.twin-workspace .xdr-screen{overflow-x:hidden!important;overflow-y:auto!important}
+/* Ensure the lower-left screen corner has the same visible resize cue as lower-right. */
+.twin-workspace .xdr-corner-sw,.twin-workspace .xdr-corner-se{bottom:2px!important;width:20px!important;height:20px!important;z-index:30!important}
+.twin-workspace .xdr-corner-sw{left:2px!important}
+.twin-workspace .xdr-corner-se{right:2px!important}
+.twin-workspace .xdr-corner-sw:after,.twin-workspace .xdr-corner-se:after{bottom:3px!important;width:8px!important;height:8px!important;border-bottom:1px solid #e1e8e9!important;opacity:.9!important}
+.twin-workspace .xdr-corner-sw:after{left:3px!important;border-left:1px solid #e1e8e9!important}
+.twin-workspace .xdr-corner-se:after{right:3px!important;border-right:1px solid #e1e8e9!important}
+/* Pin both bottom resize marks to the display frame, just inside the screen corners. */
+.twin-workspace .xdr-corner-sw,.twin-workspace .xdr-corner-se{position:absolute!important;z-index:30!important;bottom:8px!important;width:20px!important;height:20px!important}
+.twin-workspace .xdr-corner-sw{left:8px!important;right:auto!important;top:auto!important}
+.twin-workspace .xdr-corner-se{right:8px!important;left:auto!important;top:auto!important}
+.twin-workspace .xdr-corner-sw:after,.twin-workspace .xdr-corner-se:after{position:absolute!important;bottom:3px!important;top:auto!important;width:8px!important;height:8px!important;border-bottom:1px solid #e1e8e9!important;opacity:.9!important;transform:none!important}
+.twin-workspace .xdr-corner-sw:after{left:3px!important;right:auto!important;border-left:1px solid #e1e8e9!important;border-right:0!important}
+.twin-workspace .xdr-corner-se:after{right:3px!important;left:auto!important;border-right:1px solid #e1e8e9!important;border-left:0!important}
+/* Use real text glyphs so both lower-corner resize controls remain unmistakable. */
+.twin-workspace .xdr-resize-corner{display:grid!important;place-items:center!important;overflow:visible!important;color:#dce5e7!important;font:600 13px/1 system-ui,sans-serif!important;text-shadow:0 1px 2px #000!important;background:transparent!important}
+.twin-workspace .xdr-resize-corner:after{content:none!important}
+.twin-workspace .xdr-corner-sw{left:8px!important;bottom:8px!important;right:auto!important}
+.twin-workspace .xdr-corner-se{right:8px!important;bottom:8px!important;left:auto!important}
+/* Match the two lower screen resize cues with small neutral browser-style grips. */
+.twin-workspace .xdr-resize-corner{display:block!important;width:12px!important;height:12px!important;padding:0!important;border:1px solid #8b969b!important;border-radius:2px!important;background:#d9dfe1!important;box-shadow:0 0 0 1px #ffffff77!important;opacity:.95!important}
+.twin-workspace .xdr-corner-sw{left:8px!important;right:auto!important;bottom:8px!important}
+.twin-workspace .xdr-corner-se{right:8px!important;left:auto!important;bottom:8px!important}
+.twin-workspace .xdr-resize-corner:after{position:absolute!important;inset:2px!important;width:auto!important;height:auto!important;border:0!important;background:repeating-linear-gradient(135deg,#69777c 0 1px,transparent 1px 3px)!important;content:""!important;opacity:.8!important;transform:none!important}
+/* Remove boxed grips; use only a subtle diagonal resize mark at each lower corner. */
+.twin-workspace .xdr-resize-corner{display:block!important;width:14px!important;height:14px!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;opacity:1!important}
+.twin-workspace .xdr-corner-sw{left:8px!important;right:auto!important;bottom:8px!important}
+.twin-workspace .xdr-corner-se{right:8px!important;left:auto!important;bottom:8px!important}
+.twin-workspace .xdr-resize-corner:after{position:absolute!important;inset:3px!important;width:auto!important;height:auto!important;border:0!important;background:repeating-linear-gradient(135deg,transparent 0 2px,#aab6ba 2px 3px,transparent 3px 5px)!important;content:""!important;opacity:.9!important;transform:none!important}
+.twin-workspace .xdr-display:hover .xdr-resize-corner:after{background:repeating-linear-gradient(135deg,transparent 0 2px,#eef3f4 2px 3px,transparent 3px 5px)!important}
+/* Match the left lower cue to the small down-arrow visible at the right scrollbar end. */
+.twin-workspace .xdr-corner-sw:after{inset:auto!important;left:4px!important;right:auto!important;bottom:4px!important;width:0!important;height:0!important;border-top:4px solid #7d898d!important;border-right:3px solid transparent!important;border-bottom:0!important;border-left:3px solid transparent!important;background:none!important;content:""!important;opacity:.9!important;transform:none!important}
+/* Small down-arrow at the screen's lower-left to mirror the scrollbar's lower-right cue. */
+.twin-workspace .xdr-corner-sw{display:grid!important;place-items:center!important;left:8px!important;right:auto!important;bottom:13px!important;width:10px!important;height:10px!important;color:#7d898d!important;font:700 8px/1 Arial,sans-serif!important;text-shadow:none!important}
+.twin-workspace .xdr-corner-sw:after{content:none!important}
+/* Paint the lower-left cue on the overlay itself, above the scroll viewport. */
+.twin-workspace .xdr-display:before{position:absolute!important;z-index:100!important;left:9px!important;bottom:13px!important;width:0!important;height:0!important;border-top:4px solid #7d898d!important;border-right:3px solid transparent!important;border-bottom:0!important;border-left:3px solid transparent!important;content:""!important;pointer-events:none!important}
+.twin-workspace .xdr-corner-sw{color:transparent!important;text-shadow:none!important}
+/* Suppress the horizontal scrollbar end grip; mirror the vertical down-arrow at lower-left. */
+.twin-workspace .xdr-screen{overflow-x:hidden!important;overflow-y:auto!important;scrollbar-width:thin}
+.twin-workspace .xdr-screen::-webkit-scrollbar:horizontal{display:none!important;height:0!important}
+.twin-workspace .xdr-display:before{content:none!important}
+.twin-workspace .xdr-corner-sw{display:none!important}
+/* Remove the visible lower-right resize artifact while retaining its hit area. */
+.twin-workspace .xdr-corner-se{background:transparent!important;border:0!important;box-shadow:none!important}
+.twin-workspace .xdr-corner-se:after{content:none!important}
+/* Centered single-axis resize grips on the screen's left, right, and bottom edges. */
+.twin-workspace .xdr-bezel{position:relative}
+.twin-workspace .xdr-resize-edge{position:absolute!important;z-index:32!important;display:block!important;padding:0!important;border:0!important;background:transparent!important;touch-action:none}
+.twin-workspace .xdr-resize-left,.twin-workspace .xdr-resize-right{top:50%;width:14px;height:52px;transform:translateY(-50%);cursor:ew-resize}
+.twin-workspace .xdr-resize-left{left:0}
+.twin-workspace .xdr-resize-right{right:0}
+.twin-workspace .xdr-resize-left:after,.twin-workspace .xdr-resize-right:after{position:absolute;top:9px;bottom:9px;left:6px;width:2px;border-radius:2px;background:#94a4a8;content:"";opacity:.65}
+.twin-workspace .xdr-resize-left:after{left:2px}
+.twin-workspace .xdr-resize-right:after{left:auto;right:2px}
+.twin-workspace .xdr-overlay-tools>.xdr-drag-icon{display:flex;align-items:center;justify-content:center;width:22px;height:22px;flex:none;cursor:move}
+.twin-workspace .xdr-overlay-tools>.xdr-drag-icon:before{display:none}
+.twin-workspace .xdr-drag-icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.twin-workspace .xdr-overlay-tools label.xdr-opacity-control{display:flex;align-items:center;gap:5px;margin-left:auto;padding:0;border:0;background:transparent}
+.twin-workspace .xdr-opacity-control svg{width:14px;height:14px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round}
+.twin-workspace .xdr-opacity-control .xdr-sun-low{opacity:.6}
+.twin-workspace .xdr-opacity-control .xdr-sun-high{opacity:1}
+.twin-workspace .xdr-opacity-control input{width:92px}
+.twin-workspace .xdr-overlay-tools{box-sizing:border-box;width:100%;margin-left:0;border:0!important;border-style:none!important;border-color:transparent!important;outline:0!important;box-shadow:none!important;background-clip:padding-box;border-radius:8px 8px 0 0;overflow:visible!important}
+.twin-workspace .xdr-overlay-tools:before,.twin-workspace .xdr-overlay-tools:after{content:none!important}
+.twin-workspace .xdr-display{background:#111719;border-radius:8px}
+@container display-overlay (max-width:520px){.twin-workspace .xdr-overlay-tools{align-items:center!important;flex-direction:row!important;justify-content:space-between!important;gap:8px!important;min-height:38px!important;padding:6px 9px!important}.twin-workspace .xdr-overlay-tools label.xdr-opacity-control{margin-left:auto!important}.twin-workspace .xdr-opacity-control input{width:72px!important}}
+.twin-workspace .xdr-resize-bottom{bottom:15px;left:50%;width:54px;height:12px;transform:translateX(-50%);cursor:ns-resize}
+.twin-workspace .xdr-resize-bottom:after{position:absolute;top:5px;right:9px;left:9px;height:2px;border-radius:2px;background:#94a4a8;content:"";opacity:.65}
+.twin-workspace .xdr-resize-edge:hover:after,.twin-workspace .xdr-resize-edge:focus-visible:after{background:#e4edef;opacity:1}
