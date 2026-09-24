@@ -393,12 +393,15 @@ if (root) {
     const houseWaterReading = `${(0.84 + meterDrift).toFixed(2).replace(".", decimals)} m³/d`;
     const officeWaterReading = `${(12.6 + meterDrift * 10).toFixed(1).replace(".", decimals)} m³/d`;
     const factoryGasReading = `${(34.2 + meterDrift * 10).toFixed(1).replace(".", decimals)} m³/h`;
+    const electricityReading = `${(18.6 + meterDrift * 4).toFixed(1).replace(".", decimals)} kWh`;
     $("#meter-house-water").textContent = houseWaterReading;
     $("#city-popover-house-water-value").textContent = houseWaterReading;
     $("#meter-office-water").textContent = officeWaterReading;
     $("#city-popover-office-water-value").textContent = officeWaterReading;
     $("#meter-factory-gas").textContent = factoryGasReading;
     $("#city-popover-factory-gas-value").textContent = factoryGasReading;
+    $("#meter-electricity").textContent = electricityReading;
+    $("#city-popover-electricity-value").textContent = electricityReading;
     const sensorDrift = [0, 0.02, -0.01, 0.03, 0.01, -0.02, 0][index % 7];
     const vibrationReading = `${(0.42 + sensorDrift).toFixed(2).replace(".", decimals)} mm/s`;
     const riverReading = `${(1.36 + sensorDrift).toFixed(2).replace(".", decimals)} m`;
@@ -423,9 +426,11 @@ if (root) {
       const level = step.states[i];
       const building = root.querySelector(`[data-building="${device.id}"]`);
       const row = root.querySelector(`[data-row="${device.id}"]`);
-      building.style.setProperty("--light-level", level);
-      building.classList.toggle("is-lit", level > 0);
-      if (!alertAssets.includes(device.id)) building.setAttribute(
+      if (building) {
+        building.style.setProperty("--light-level", level);
+        building.classList.toggle("is-lit", level > 0);
+      }
+      if (building && !alertAssets.includes(device.id)) building.setAttribute(
         "aria-label",
         `${device.name}: ${level === 1 ? (en ? "on" : "vključeno") : level ? (en ? "dimmed to 50%" : "zatemnjeno na 50 %") : en ? "off" : "izklopljeno"}. ${en ? "Change lighting." : "Spremeni osvetlitev."}`,
       );
@@ -445,6 +450,13 @@ if (root) {
       row.querySelector(".twin-watts").textContent =
         `${Math.round(device.watts * level)} W`;
     });
+    root.querySelectorAll("[data-scene-light]").forEach((control) => {
+      const deviceIndex = devices.findIndex((device) => device.id === control.dataset.sceneLight);
+      const isLit = deviceIndex >= 0 && step.states[deviceIndex] > 0;
+      control.setAttribute("aria-pressed", String(isLit));
+      control.classList.toggle("is-lit", isLit);
+    });
+    root.querySelector("[data-city-art]")?.classList.toggle("is-factory-lit", step.states[4] > 0);
   }
 
   function next() {
@@ -486,17 +498,99 @@ if (root) {
     schedule();
   });
   $("#twin-next").addEventListener("click", next);
-  root.querySelectorAll(".city-cyclist-motion").forEach((cyclist) => {
-      cyclist.addEventListener("animationiteration", () => {
+  root.querySelectorAll(".city-road-cyclist").forEach((cyclist) => {
+    cyclist.addEventListener("animationiteration", () => {
+      cyclistCount += 1;
+      const count = en ? `${cyclistCount} today` : `${cyclistCount} danes`;
+      $("#sensor-cyclists").textContent = count;
+      $("#city-popover-cyclists-value").textContent = String(cyclistCount);
+      $("#twin-event").textContent = `${en ? "Cyclist completed a road crossing" : "Kolesar je prevozil cestni odsek"} · ${count}.`;
+      $("#twin-step").textContent = en ? "Cyclist counter triggered" : "Števec kolesarjev je zaznal prehod";
+    });
+  });
+  root.querySelectorAll("[data-scene-light]").forEach((control) => {
+    control.addEventListener("click", () => {
+      const deviceIndex = devices.findIndex((device) => device.id === control.dataset.sceneLight);
+      if (deviceIndex < 0) return;
+      const states = [...steps[index].states];
+      states[deviceIndex] = states[deviceIndex] ? 0 : 1;
+      const device = devices[deviceIndex];
+      paused = true;
+      $("#twin-pause").textContent = en ? "Resume animation" : "Nadaljuj animacijo";
+      $("#twin-pause").setAttribute("aria-pressed", "true");
+      const value = states[deviceIndex] ? (en ? "on" : "vključena") : (en ? "off" : "izklopljena");
+      render({ ...steps[index], states, text: `${device.name}: ${en ? "manual change" : "ročna sprememba"}`, rule: en ? "Manual demonstration change" : "Ročna demonstracijska sprememba", event: `${device.id}: ${en ? "lighting" : "razsvetljava"} ${value}.` });
+      steps[index] = { ...steps[index], states };
+      schedule();
+    });
+  });
+  const sensorTriggers = {
+    "water-level": {
+      panel: "water",
+      name: en ? "River level sensor" : "Senzor gladine reke",
+      event: () => `${en ? "River level" : "Gladina reke"}: ${$("#sensor-water-level").firstChild.textContent}.`,
+    },
+    air: {
+      panel: "air",
+      name: en ? "Air quality sensor" : "Senzor kakovosti zraka",
+      event: () => `${en ? "Air quality" : "Kakovost zraka"}: PM10 ${$("#sensor-air-pm10").firstChild.textContent}, ${$("#sensor-air-climate").textContent}.`,
+    },
+    "water-meter": {
+      panel: "house-water",
+      name: en ? "House water meter" : "Vodomer hiše",
+      event: () => `${en ? "House water meter" : "Vodomer hiše"}: ${$("#meter-house-water").textContent}.`,
+    },
+    "gas-meter": {
+      panel: "factory-gas",
+      name: en ? "Factory gas meter" : "Plinomer tovarne",
+      event: () => `${en ? "Factory gas meter" : "Plinomer tovarne"}: ${$("#meter-factory-gas").textContent}.`,
+    },
+    electricity: {
+      panel: "electricity",
+      name: en ? "Factory electricity meter" : "Električni števec tovarne",
+      event: () => `${en ? "Factory electricity meter" : "Električni števec tovarne"}: ${$("#meter-electricity").textContent}.`,
+    },
+    cyclists: {
+      panel: "cyclists",
+      name: en ? "Cyclist counter" : "Števec kolesarjev",
+      event: () => {
         cyclistCount += 1;
-        $("#sensor-cyclists").textContent = en
-          ? `${cyclistCount} today`
-          : `${cyclistCount} danes`;
+        const count = en ? `${cyclistCount} today` : `${cyclistCount} danes`;
+        $("#sensor-cyclists").textContent = count;
         $("#city-popover-cyclists-value").textContent = String(cyclistCount);
+        return `${en ? "Cyclist passed the counter" : "Kolesar je peljal mimo števca"} · ${count}.`;
+      },
+    },
+  };
+  root.querySelectorAll("[data-scene-sensor]").forEach((control) => {
+    control.addEventListener("click", () => {
+      const sensor = sensorTriggers[control.dataset.sceneSensor];
+      if (!sensor) return;
+      paused = true;
+      $("#twin-pause").textContent = en ? "Resume animation" : "Nadaljuj animacijo";
+      $("#twin-pause").setAttribute("aria-pressed", "true");
+      root.querySelectorAll(".city-sensor-popover[data-pinned='true']").forEach((item) => {
+        item.dataset.pinned = "false";
+        item.style.opacity = "";
+        item.style.visibility = "";
+        item.style.pointerEvents = "";
       });
+      const popover = root.querySelector(`[data-sensor-popover="${sensor.panel}"]`);
+      if (popover) {
+        popover.dataset.pinned = "true";
+        popover.style.opacity = "1";
+        popover.style.visibility = "visible";
+        popover.style.pointerEvents = "auto";
+      }
+      $("#twin-event").textContent = sensor.event();
+      $("#twin-step").textContent = sensor.name;
+      $("#twin-rule-status").textContent = en ? "Manual sensor trigger · dashboard updated" : "Ročni prožilnik senzorja · nadzorna plošča posodobljena";
+      schedule();
+    });
   });
   devices.forEach((device, i) => {
     const building = root.querySelector(`[data-building="${device.id}"]`);
+    if (!building) return;
     const toggle = () => {
       paused = true;
       $("#twin-pause").textContent = en
