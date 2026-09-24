@@ -1,0 +1,73 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import "../styles/digital-twin.css";
+
+const buildings = [
+  { id: "BLDG_01", name: "Mestna hiša", x: 180, y: 238, w: 150, h: 112, depth: 35, tone: "civic" },
+  { id: "BLDG_02", name: "Poslovna stavba", x: 440, y: 192, w: 150, h: 158, depth: 35, tone: "office" },
+  { id: "BLDG_03", name: "Stanovanjski blok", x: 700, y: 226, w: 150, h: 124, depth: 35, tone: "home" },
+];
+---
+
+<MainLayout title="Digitalni dvojček mesta | KUEM" description="Interaktivni koncept mini mesta in Nexavia nadzorne plošče." noindex>
+  <div class="twin-page" data-twin-root>
+    <div class="twin-intro">
+      <div>
+        <p class="twin-path"><a href="/nexavia/">Nexavia</a> <span aria-hidden="true">/</span> Koncept digitalnega dvojčka</p>
+        <h1>Mesto, ki pokaže, kaj se dogaja s podatki.</h1>
+        <p class="twin-lead">Zamišljena maketa poveže tri stavbe, senzor svetlobe in prehod z nadzorno ploščo. Ko se razsvetljava spremeni, se isti dogodek pokaže tudi v Nexavii.</p>
+      </div>
+      <div class="twin-intro-note"><strong>Interaktivni koncept</strong><span>Simulirani podatki · brez povezave z napravami</span></div>
+    </div>
+
+    <section class="twin-workspace" aria-label="Digitalni dvojček in nadzorna plošča">
+      <div class="twin-city-panel">
+        <div class="twin-panel-head"><div><h2>Mini mesto</h2><p>Izometrični pogled · kliknite stavbo za ročno spremembo</p></div><span class="twin-live"><span></span> Simulacija teče</span></div>
+        <div class="twin-scene-wrap">
+          <svg class="twin-scene" viewBox="0 0 1040 575" role="img" aria-labelledby="city-title city-desc">
+            <title id="city-title">Zamišljeno mini mesto s tremi stavbami</title>
+            <desc id="city-desc">Tri stavbe ob cesti. Osvetljena okna se spreminjajo skupaj s podatki na nadzorni plošči.</desc>
+            <defs>
+              <pattern id="ground-dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#d2dde8" /></pattern>
+              <filter id="window-glow" x="-120%" y="-120%" width="340%" height="340%"><feGaussianBlur stdDeviation="6" /></filter>
+            </defs>
+            <rect width="1040" height="575" fill="#eaf1f6" />
+            <rect width="1040" height="575" fill="url(#ground-dots)" />
+            <path d="M0 385 L1040 385 L1040 492 L0 492 Z" fill="#c3d1dd" />
+            <path d="M0 396 H1040 M0 482 H1040" stroke="#aebfce" stroke-width="2" />
+            <path d="M25 440 H1015" stroke="#f8fbfd" stroke-width="3" stroke-dasharray="24 18" />
+            <path d="M100 395 L100 483 M365 395 L365 483 M625 395 L625 483 M895 395 L895 483" stroke="#e8f0f5" stroke-width="2" />
+            <path class="twin-telemetry-path" d="M90 150 C185 128 302 126 400 115 S610 117 715 95 S894 105 958 150" fill="none" stroke="#55a6d7" stroke-width="2" stroke-dasharray="6 8" />
+            <circle class="twin-packet" r="5" fill="#1685c2"><animateMotion dur="6s" repeatCount="indefinite" path="M90 150 C185 128 302 126 400 115 S610 117 715 95 S894 105 958 150" /></circle>
+            {buildings.map((b) => <g class="twin-building" data-building={b.id} tabindex="0" role="button" aria-label={`${b.name}: spremeni osvetlitev`}>
+              <path d={`M${b.x} ${b.y} l${b.depth} -22 h${b.w} l-${b.depth} 22 Z`} class="twin-roof" />
+              <path d={`M${b.x+b.w} ${b.y} l${b.depth} -22 v${b.h} l-${b.depth} 22 Z`} class="twin-side" />
+              <rect x={b.x} y={b.y} width={b.w} height={b.h} rx="2" class={`twin-front twin-${b.tone}`} />
+              {[0,1,2].map((row) => [0,1,2,3].map((col) => <rect class="twin-window" x={b.x+17+col*31} y={b.y+17+row*28} width="18" height="14" rx="2" />))}
+              <rect x={b.x+63} y={b.y+b.h-30} width="26" height="30" fill="#536b80" />
+              <path d={`M${b.x-8} ${b.y+b.h+2} h${b.w+44}`} stroke="#b9c9d7" stroke-width="5" />
+              <text x={b.x+b.w/2} y={b.y+b.h+31} text-anchor="middle" class="twin-svg-label">{b.name}</text>
+              <circle cx={b.x+b.w-6} cy={b.y-10} r="7" class="twin-building-indicator" />
+            </g>)}
+            <g class="twin-sensor"><path d="M95 362 v-83" stroke="#536e81" stroke-width="6" /><circle cx="95" cy="275" r="13" fill="#1685c2" /><circle cx="95" cy="275" r="5" fill="white" /><text x="95" y="258" text-anchor="middle" class="twin-svg-label">Senzor svetlobe</text></g>
+            <g><path d="M958 361 v-82" stroke="#536e81" stroke-width="6" /><rect x="941" y="258" width="34" height="29" rx="5" fill="#264963" /><circle cx="958" cy="273" r="5" fill="#56c59b" /><text x="958" y="248" text-anchor="middle" class="twin-svg-label">Prehod GW_01</text></g>
+            <path d="M0 528 H1040" stroke="#d2dfe8" /><text x="28" y="552" class="twin-svg-caption">KONCEPTNA POSTAVITEV · NI FIZIČNA MAKETA</text>
+          </svg>
+        </div>
+        <div class="twin-controls"><button type="button" id="twin-pause" aria-pressed="false">Začasno ustavi</button><button type="button" id="twin-next">Naslednji dogodek</button><span id="twin-step" aria-live="polite">Senzor bere svetlobo okolice</span></div>
+      </div>
+      <aside class="twin-dashboard" aria-label="Nexavia nadzorna plošča, simulacija">
+        <div class="twin-dashboard-top"><div class="twin-brand">NEXAVIA <span>by KUEM</span></div><span class="twin-demo-pill">DEMO PODATKI</span></div>
+        <div class="twin-dashboard-body"><div class="twin-dashboard-heading"><div><h2>Pregled naprav</h2><p>Mini mesto · 3 svetlobni tokokrogi</p></div><span class="twin-sync">● Sinhronizirano</span></div>
+          <div class="twin-kpis"><div><span>Aktivne naprave</span><strong id="twin-active">0 / 3</strong><small>Simulirani izhodi</small></div><div><span>Skupna moč</span><strong id="twin-power">0 W</strong><small>Izračun iz stanja luči</small></div><div><span>Svetloba okolice</span><strong id="twin-lux">46 lx</strong><small>Senzor LIGHT_01</small></div></div>
+          <div class="twin-rule"><span class="twin-rule-icon">i</span><div><strong>Pravilo: svetloba &lt; 25 lx</strong><p id="twin-rule-status">Čaka na naslednjo meritev</p></div></div>
+          <div class="twin-table-heading"><h3>Stanje stavb</h3><span>Posodobitve v realnem času*</span></div>
+          <div class="twin-table" role="table" aria-label="Stanje razsvetljave stavb"><div class="twin-tr twin-th" role="row"><span role="columnheader">Naprava</span><span role="columnheader">Stanje</span><span role="columnheader">Moč</span></div>{buildings.map((b) => <div class="twin-tr" role="row" data-row={b.id}><span role="cell"><b>{b.name}</b><small>{b.id}</small></span><span role="cell" class="twin-state">Izklopljeno</span><span role="cell" class="twin-watts">0 W</span></div>)}</div>
+          <div class="twin-event"><h3>Zadnji dogodek</h3><p id="twin-event">Čakanje na podatkovni dogodek …</p><small>*V realnem času znotraj te simulacije. Brez povezave z živo Nexavio.</small></div>
+        </div>
+      </aside>
+    </section>
+    <p class="twin-footnote">Ta stran je prototip možne razstavne makete. Vrednosti in dogodki so simulirani; fizična postavitev ter povezava z Nexavio bosta določeni kasneje.</p>
+  </div>
+  <script src="../digital-twin/index.js"></script>
+</MainLayout>

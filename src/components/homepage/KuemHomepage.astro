@@ -12,6 +12,7 @@ import dashboard from "../../assets/brand/nexavia/nexavia-noc-dashboard.png";
 import { nexaviaSoftware, kaiSoftware } from "../../data/organization";
 import { COMPANY_EMAIL } from "../../data/company";
 import type { Locale } from "../../lib/i18n";
+import { withBase } from "../../lib/paths";
 import {
   homeNavigation,
   homeNavigationEn,
@@ -280,7 +281,7 @@ const stories = [
           ><span></span><span></span><span></span></button
         >
         <nav id="homepage-nav" aria-label={copy.navAria}>
-          {nav.map(([label, href]) => <a href={href}>{label}</a>)}
+          {nav.map(([label, href]) => <a href={withBase(href)}>{label}</a>)}
           <LanguageSelector {locale} />
           <a class="hp-button" href="#kontakt"
             >{copy.headerCta} <span aria-hidden="true">→</span></a
@@ -311,7 +312,7 @@ const stories = [
               {copy.heroIntro}
             </p>
             <div class="hp-actions">
-              <a class="hp-button" href={copy.heroCtaHref}
+              <a class="hp-button" href={withBase(copy.heroCtaHref)}
                 >{copy.heroCta} <span aria-hidden="true">→</span></a
               ><a class="hp-button hp-outline" href="#kontakt">{copy.heroCtaOutline}</a>
             </div>
@@ -347,7 +348,7 @@ const stories = [
             <p>
               {copy.productP}
             </p>
-            <a class="hp-button" href={copy.productCtaHref}
+            <a class="hp-button" href={withBase(copy.productCtaHref)}
               >{copy.productCta} <span aria-hidden="true">→</span></a
             >
             <div class="hp-benefits">
@@ -509,7 +510,7 @@ const stories = [
               {copy.kaiP}
             </p><p class="hp-kai-emphasis">
               {copy.kaiEmphasis}
-            </p><a class="hp-button hp-outline" href={copy.kaiCtaHref}
+            </p><a class="hp-button hp-outline" href={withBase(copy.kaiCtaHref)}
               >{copy.kaiCta} <span aria-hidden="true">→</span></a
             >
           </div>
@@ -522,7 +523,7 @@ const stories = [
                   <span aria-hidden="true">△</span> {copy.alertTitle}
                 </p><h3>{copy.alertH3}</h3><p>
                   {copy.alertP}
-                </p><a class="hp-button" href={copy.alertCtaHref}
+                </p><a class="hp-button" href={withBase(copy.alertCtaHref)}
                   >{copy.alertCta} <span aria-hidden="true">→</span></a
                 >
               </article>
@@ -577,7 +578,7 @@ const stories = [
                       <>
                         <h3>{item.title}</h3>
                         <p>{item.text}</p>
-                        <a class="hp-text-link" href={item.href}>
+                        <a class="hp-text-link" href={withBase(item.href)}>
                           {copy.usecaseCta} <span aria-hidden="true">→</span>
                         </a>
                       </>
@@ -600,7 +601,7 @@ const stories = [
                           <span class="sr-only">{copy.storiesSrOnly}</span>
                         </summary>
                         <p>{item.detail}</p>
-                        <a class="hp-text-link" href={copy.storiesAllHref}>
+                        <a class="hp-text-link" href={withBase(copy.storiesAllHref)}>
                           {copy.storiesAllText} →
                         </a>
                       </>
@@ -688,7 +689,7 @@ const stories = [
             <LanguageSelector {locale} />
           </nav>
         </div><div class="hp-footer-legal">
-          <a href={site.privacyHref}>{copy.privacy}</a><p>
+          <a href={withBase(site.privacyHref)}>{copy.privacy}</a><p>
             © {new Date().getFullYear()} KUEM. {copy.copyright}
           </p>
         </div>

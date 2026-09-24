@@ -3,6 +3,7 @@ import LanguageSelector from "./LanguageSelector.astro";
 import wordmark from "../assets/brand/kuem/KUEM_Official_Wordmark.svg";
 import { footerContent } from "../data/site";
 import { type Locale } from "../lib/i18n";
+import { ensureTrailingSlash } from "../lib/paths";
 
 const { locale } = Astro.props as { locale: Locale };
 const sl = locale === "sl";
@@ -37,7 +38,7 @@ const currentYear = new Date().getFullYear();
           {
             content.products.map((item) => (
               <li>
-                <a class="footer-product" href={item.href}>
+                <a class="footer-product" href={ensureTrailingSlash(item.href)}>
                   <span>{item.label}</span>
                   <small>{item.description}</small>
                 </a>
@@ -56,7 +57,7 @@ const currentYear = new Date().getFullYear();
           {
             content.company.map((item) => (
               <li>
-                <a href={item.href}>{item.label}</a>
+                <a href={ensureTrailingSlash(item.href)}>{item.label}</a>
               </li>
             ))
           }
@@ -68,7 +69,7 @@ const currentYear = new Date().getFullYear();
         <a class="footer-email" href={`mailto:${content.email}`}
           >{content.email}</a
         >
-        <a class="footer-contact-link" href={content.contactHref}>
+        <a class="footer-contact-link" href={ensureTrailingSlash(content.contactHref)}>
           {content.contactLabel}<span aria-hidden="true">→</span>
         </a>
       </address>
@@ -77,7 +78,7 @@ const currentYear = new Date().getFullYear();
     <div class="footer-legal">
       <p>© {currentYear} KUEM d.o.o. {content.copyright}</p>
       <div class="footer-legal-links">
-        <a href={content.privacyHref}>{content.privacyLabel}</a>
+        <a href={ensureTrailingSlash(content.privacyHref)}>{content.privacyLabel}</a>
         <nav class="footer-languages" aria-label={content.languageLabel}><LanguageSelector {locale} /></nav>
       </div>
     </div>
