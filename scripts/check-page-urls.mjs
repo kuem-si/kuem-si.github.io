@@ -67,14 +67,28 @@ if (!args.includes("--http-only")) {
   )) {
     check(pageUrl(url) === url, `sitemap: noncanonical ${url}`);
   }
-  const expected = new Set(
+  const currentPaths = new Set(current.map(({ path }) => path));
+  const pairedPaths = new Set(
     Object.entries(routePairs).flatMap((pair) => pair.map(pageUrl)),
   );
-  assert.deepEqual(
-    new Set(current.map(({ path }) => path)),
-    expected,
-    "Route pairs must cover every current generated page",
+  const generatedPairedPaths = new Set(
+    [...pairedPaths].filter((path) => currentPaths.has(path)),
   );
+  const missingPairedPages = [...pairedPaths].filter(
+    (path) => !currentPaths.has(path) && !redirects[path],
+  );
+  check(
+    missingPairedPages.length === 0,
+    `route pairs point to missing current pages: ${missingPairedPages.join(", ")}`,
+  );
+  for (const path of currentPaths) {
+    if (generatedPairedPaths.has(path)) continue;
+    const alternate = pageUrl(alternatePath(path));
+    check(
+      !currentPaths.has(alternate),
+      `${path}: generated translated page ${alternate} is missing from route pairs`,
+    );
+  }
   for (const { path, html } of pages) {
     check(
       canonical(html) === origin + (redirects[path] ?? path),
