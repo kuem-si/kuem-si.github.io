@@ -1,11 +1,12 @@
-// Normalize generated page references, not requests. GitHub Pages handles the
-// actual HTTP directory redirect. Keep query/fragment bytes and assets intact.
+// Normalize generated page references. Keep query/fragment bytes and assets intact.
 export function pageUrl(value: string): string {
   const match = value.match(/^(https:\/\/www\.kuem\.si)?(\/[^?#]*)([?#].*)?$/);
   if (!match || match[2].startsWith("//")) return value;
   const [, origin = "", path, suffix = ""] = match;
-  if (path.endsWith("/") || /\.[^/]+$/.test(path)) return value;
-  return `${origin}${path}/${suffix}`;
+  if (/\.[^/]+$/.test(path)) return value;
+  if (path === "/") return `${origin}${path}${suffix}`;
+  const normalizedPath = path.endsWith("/") ? path : `${path}/`;
+  return `${origin}${normalizedPath}${suffix}`;
 }
 
 function normalizeData(value: unknown): unknown {

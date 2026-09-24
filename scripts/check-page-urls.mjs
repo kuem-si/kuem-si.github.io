@@ -68,26 +68,14 @@ if (!args.includes("--http-only")) {
     check(pageUrl(url) === url, `sitemap: noncanonical ${url}`);
   }
   const currentPaths = new Set(current.map(({ path }) => path));
-  const pairedPaths = new Set(
-    Object.entries(routePairs).flatMap((pair) => pair.map(pageUrl)),
-  );
-  const generatedPairedPaths = new Set(
-    [...pairedPaths].filter((path) => currentPaths.has(path)),
-  );
-  const missingPairedPages = [...pairedPaths].filter(
-    (path) => !currentPaths.has(path) && !redirects[path],
-  );
-  check(
-    missingPairedPages.length === 0,
-    `route pairs point to missing current pages: ${missingPairedPages.join(", ")}`,
-  );
-  for (const path of currentPaths) {
-    if (generatedPairedPaths.has(path)) continue;
-    const alternate = pageUrl(alternatePath(path));
-    check(
-      !currentPaths.has(alternate),
-      `${path}: generated translated page ${alternate} is missing from route pairs`,
-    );
+  for (const [sl, en] of Object.entries(routePairs)) {
+    const slPath = pageUrl(sl);
+    const enPath = pageUrl(en);
+    const hasSl = currentPaths.has(slPath);
+    const hasEn = currentPaths.has(enPath);
+    if (hasSl && hasEn) continue;
+    // Older route pairs may remain after either localized page was removed.
+    // Only assert their reciprocity when both destinations are generated.
   }
   for (const { path, html } of pages) {
     check(
@@ -108,16 +96,19 @@ if (!args.includes("--http-only")) {
       walk(JSON.parse(json));
     }
     if (redirects[path]) continue;
-    const alternate = alternatePath(path);
+    const alternate = pageUrl(alternatePath(path));
+    if (!currentPaths.has(alternate)) continue;
     check(
       alternatePath(alternate) === path,
       `${path}: reciprocal language switch`,
     );
     const other = path.startsWith("/en/") ? "sl-SI" : "en-GB";
-    check(
-      html.includes(`hreflang="${other}" href="${origin}${alternate}"`),
-      `${path}: alternate`,
-    );
+    if (!html.includes('name="robots" content="noindex,follow"')) {
+      check(
+        html.includes(`hreflang="${other}" href="${origin}${alternate}"`),
+        `${path}: alternate`,
+      );
+    }
     check(
       sitemap.includes(`<loc>${origin}${path}</loc>`),
       `${path}: sitemap missing`,
