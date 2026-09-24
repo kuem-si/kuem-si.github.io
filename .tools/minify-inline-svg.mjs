@@ -36,6 +36,9 @@ const svgoOptions = {
           cleanupIds: false,
           removeDesc: false,
           removeEmptyContainers: false,
+          // Astro scope attributes and JS hooks are intentionally empty.
+          // Removing them disconnects SVGs from their CSS and interactions.
+          removeEmptyAttrs: false,
           removeHiddenElems: false,
           removeUselessStrokeAndFill: false,
         },

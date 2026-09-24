@@ -237,14 +237,10 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  background: #ffffffdf;
-  border: 1px solid #d4e3e8;
-  border-radius: 7px;
   padding: 14px 10px;
   min-height: 114px;
   flex: 1;
   min-width: 0;
-  box-shadow: 0 3px 12px #32627303;
 }
 .hp-node .hp-icon {
   width: 26px;
@@ -262,30 +258,9 @@
   color: #637380;
 }
 .hp-connector {
-  position: relative;
   flex: 0 0 22px;
-  height: 1px;
-  background: var(--hp-petrol);
-}
-.hp-connector:after {
-  content: "";
-  position: absolute;
-  right: 1px;
-  top: -3px;
-  width: 6px;
-  height: 6px;
-  border-top: 1px solid var(--hp-petrol);
-  border-right: 1px solid var(--hp-petrol);
-  transform: rotate(45deg);
 }
 .hp-connector:before {
-  content: "";
-  position: absolute;
-  top: -2px;
-  left: 0;
-  width: 4px;
-  height: 4px;
-  background: var(--hp-orange);
   animation: hp-travel 5s linear infinite;
 }
 .hp-flow-lane:nth-child(2) .hp-connector:before {

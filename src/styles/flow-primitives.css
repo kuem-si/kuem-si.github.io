@@ -1,0 +1,36 @@
+/* Unchanged homepage flow surfaces and geometry. Layout and motion stay local. */
+.hp-node,
+.nx-flow-card {
+  background: #ffffffdf;
+  border: 1px solid #d4e3e8;
+  border-radius: 7px;
+  box-shadow: 0 3px 12px #32627303;
+}
+.hp-connector,
+.nx-integration-connector {
+  position: relative;
+  height: 1px;
+  background: var(--hp-petrol, var(--kuem-petrol));
+}
+.hp-connector:after,
+.nx-integration-connector:after {
+  content: "";
+  position: absolute;
+  right: 1px;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid var(--hp-petrol, var(--kuem-petrol));
+  border-right: 1px solid var(--hp-petrol, var(--kuem-petrol));
+  transform: rotate(45deg);
+}
+.hp-connector:before,
+.nx-integration-connector:before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  background: var(--hp-orange, var(--kuem-copper));
+}

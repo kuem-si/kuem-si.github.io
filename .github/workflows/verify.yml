@@ -41,6 +41,17 @@ jobs:
       - name: Verify output
         run: npm run verify
 
+      - name: Verify canonical page URLs
+        run: npm run check:urls
+
+      - name: Verify HTTP directory redirects in development
+        run: |
+          npm run dev -- --host 127.0.0.1 --port 4321 &
+          dev_pid=$!
+          trap 'kill "$dev_pid"' EXIT
+          npx -y wait-on --timeout 60000 http://127.0.0.1:4321/
+          npm run check:urls -- --base http://127.0.0.1:4321 --current-only
+
       - name: Format check
         run: npm run format:check
 

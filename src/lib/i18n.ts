@@ -32,10 +32,6 @@ export const routePairs: Record<string, string> = {
   "/o-nas": "/en/company",
   "/kontakt": "/en/contact",
   "/zasebnost": "/en/privacy",
-  "/industrial-iot": "/en/industrial-iot",
-  "/partner-program": "/en/partner-program",
-  "/utilities": "/en/utilities",
-  "/nexavia-platform": "/en/nexavia-platform",
 };
 const reversePairs = Object.fromEntries(
   Object.entries(routePairs).map(([sl, en]) => [
@@ -46,6 +42,9 @@ const reversePairs = Object.fromEntries(
 export function alternatePath(pathname: string): string {
   const clean = pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
   if (clean === "/404" || clean === "/404.html") return "/en/";
-  if (clean.startsWith("/en")) return reversePairs[clean] ?? "/";
-  return routePairs[clean] ?? "/en/";
+  const target =
+    clean === "/en" || clean.startsWith("/en/")
+      ? (reversePairs[clean] ?? "/")
+      : (routePairs[clean] ?? "/en/");
+  return target.endsWith("/") ? target : `${target}/`;
 }

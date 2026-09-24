@@ -1,5 +1,8 @@
 ---
+import LegacyRedirect from "../../components/LegacyRedirect.astro";
 import { legacyEnglishRedirects } from "../../data/legacyEnglishRedirects";
+// LegacyRedirect supplies the document; no automatically injected page scripts.
+export const partial = true;
 export function getStaticPaths() {
   return Object.entries(legacyEnglishRedirects).map(([legacy, target]) => ({
     params: { legacy },
@@ -9,19 +12,4 @@ export function getStaticPaths() {
 const { target } = Astro.props;
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta http-equiv="refresh" content={`0;url=${target}`} />
-    <link rel="canonical" href={new URL(target, Astro.site)} />
-    <meta name="robots" content="noindex,follow" />
-    <title>Page moved | KUEM</title>
-  </head>
-  <body>
-    <p>
-      This page has moved. <a href={target}>Continue to KUEM</a>.
-    </p>
-  </body>
-</html>
+<LegacyRedirect {target} locale="en" />

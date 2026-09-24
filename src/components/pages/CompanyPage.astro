@@ -24,20 +24,13 @@ const copy = {
     meetUs: "Spoznajte nas",
     contactId: "kontakt",
     contactLabel: "Kontakt",
-    graphicAria: "Pot od terena prek sistemov do upravljanja",
     graphicTagline: "OD IDEJE DO DELOVANJA.",
-    flowTitle: "Teren, sistemi in upravljanje",
-    flow: {
-      field: "TEREN",
-      fieldLine1: "PODATKI IZ REALNEGA",
-      fieldLine2: "OKOLJA",
-      systems: "SISTEMI",
-      systemsLine1: "POVEZOVANJE ZNANJ",
-      systemsLine2: "IN TEHNOLOGIJ",
-      management: "UPRAVLJANJE",
-      managementLine1: "UPORABNI PODATKI",
-      managementLine2: "ZA BOLJŠE ODLOČITVE",
-    },
+    flow: [
+      ["TEREN", "Razumemo realno okolje in konkretni izziv."],
+      ["POVEZOVANJE", "Združimo naprave, sisteme in znanja."],
+      ["REŠITEV", "Razvijemo programsko opremo, integracije in avtomatizacijo."],
+      ["DELOVANJE", "Podatke spremenimo v pregled, opozorila in boljše odločitve."],
+    ],
     factsEyebrow: "KUEM V NEKAJ POTEZAH",
     factsH2: "Podjetje, zgrajeno na znanju in odgovornosti.",
     facts: [
@@ -147,20 +140,13 @@ const copy = {
     meetUs: "Meet us",
     contactId: "contact",
     contactLabel: "Contact",
-    graphicAria: "The path from field data through systems to management",
     graphicTagline: "FROM IDEA TO OPERATION.",
-    flowTitle: "Field, systems and management",
-    flow: {
-      field: "FIELD",
-      fieldLine1: "DATA FROM THE REAL",
-      fieldLine2: "ENVIRONMENT",
-      systems: "SYSTEMS",
-      systemsLine1: "CONNECTING EXPERTISE",
-      systemsLine2: "AND TECHNOLOGY",
-      management: "MANAGEMENT",
-      managementLine1: "USEFUL DATA FOR",
-      managementLine2: "BETTER DECISIONS",
-    },
+    flow: [
+      ["FIELD", "We understand the real environment and the specific challenge."],
+      ["CONNECTION", "We connect devices, systems and expertise."],
+      ["SOLUTION", "We develop software, integrations and automation."],
+      ["OPERATION", "We turn data into insight, alerts and better decisions."],
+    ],
     factsEyebrow: "KUEM AT A GLANCE",
     factsH2: "A company built on expertise and responsibility.",
     facts: [
@@ -282,49 +268,17 @@ const copy = {
             >
           </div>
         </div>
-        <div class="ab-hero-graphic" aria-label={copy.graphicAria}>
-          <p>{copy.graphicTagline}</p><svg
-            viewBox="0 0 760 420"
-            role="img"
-            aria-labelledby="ab-flow-title"
-            ><title id="ab-flow-title">{copy.flowTitle}</title><g
-              class="ab-grid"
-              aria-hidden="true"
-              ><path
-                d="M0 370 120 290 220 338 360 238 490 310 630 214 760 274M0 403 170 315 290 370 410 285 560 348 720 265"
-              ></path></g
-            ><path class="ab-route" d="M70 300H225L330 190H485L580 76H704"
-            ></path><g class="ab-node"
-              ><rect x="66" y="296" width="9" height="9"></rect><rect
-                x="326"
-                y="186"
-                width="9"
-                height="9"></rect><rect x="576" y="72" width="9" height="9"
-              ></rect></g
-            ><g class="ab-flow-copy"
-              ><text x="68" y="260">{copy.flow.field}</text><text x="68" y="326"
-                >{copy.flow.fieldLine1}</text
-              ><text x="68" y="344">{copy.flow.fieldLine2}</text><text
-                x="328"
-                y="150">{copy.flow.systems}</text
-              ><text x="328" y="216">{copy.flow.systemsLine1}</text><text
-                x="328"
-                y="234">{copy.flow.systemsLine2}</text
-              ><text x="578" y="38">{copy.flow.management}</text><text
-                x="578"
-                y="101">{copy.flow.managementLine1}</text
-              ><text x="578" y="119">{copy.flow.managementLine2}</text></g
-            ><g class="ab-moving"
-              ><rect width="8" height="8"
-                ><animateMotion
-                  begin="indefinite"
-                  dur="14s"
-                  repeatCount="indefinite"
-                  path="M70 300H225L330 190H485L580 76H704"
-                ></animateMotion></rect
-              ></g
-            ></svg
-          >
+        <div class="ab-hero-graphic">
+          <p id="ab-flow-title">{copy.graphicTagline}</p>
+          <ol class="ab-flow" aria-labelledby="ab-flow-title">
+            {copy.flow.map(([title, description], index) => (
+              <li>
+                <span class="ab-flow-node" aria-hidden="true" />
+                <h3><span>{String(index + 1).padStart(2, "0")} · </span>{title}</h3>
+                <p>{description}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
     </section>
@@ -400,18 +354,9 @@ const copy = {
           {copy.growthP}
         </p><ol class="ab-timeline">
           {
-            copy.growth.map(([number, title, growthCopy], index) => (
+            copy.growth.map(([number, title, growthCopy]) => (
               <li>
                 <>
-                  <div class="ab-step-icon" aria-hidden="true">
-                    {index === 0
-                      ? "⌁"
-                      : index === 1
-                        ? "↗"
-                        : index === 2
-                          ? "▣"
-                          : "▥"}
-                  </div>
                   <span class="ab-step-node" />
                   <strong>{number}</strong>
                   <h3>{title}</h3>
@@ -489,34 +434,3 @@ const copy = {
     </section>
   </div>
 </MainLayout>
-<script>
-  const graphic = document.querySelector<HTMLElement>(".ab-hero-graphic");
-  const svg = graphic?.querySelector<SVGSVGElement>("svg");
-  const motion = svg?.querySelector<SVGAnimateMotionElement>("animateMotion");
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-  let started = false;
-  const update = (visible: boolean) => {
-    if (!graphic || !svg || reduced.matches) {
-      graphic?.classList.remove("is-animated");
-      svg?.pauseAnimations();
-      return;
-    }
-    if (!visible || document.hidden) {
-      svg.pauseAnimations();
-      return;
-    }
-    if (!started) {
-      started = true;
-      motion?.beginElement();
-      graphic.classList.add("is-animated");
-    }
-    svg.unpauseAnimations();
-  };
-  if (graphic) {
-    const observer = new IntersectionObserver(
-      ([entry]) => update(Boolean(entry?.isIntersecting)),
-      { threshold: 0.15 },
-    );
-    observer.observe(graphic);
-  }
-</script>

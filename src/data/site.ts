@@ -667,7 +667,7 @@ export const homeKai = {
     secondaryLabel: "Dogovorite se za predstavitev",
     secondaryHref: "/kontakt",
     panelLabel: "PRIMER OPERATIVNEGA ODGOVORA",
-    integrationLabel: "Works with Nexavia",
+    integrationLabel: "Deluje z Nexavio",
     questionLabel: "VPRAŠANJE",
     question: "Zakaj podatki iz izbranega območja niso popolni?",
     observationLabel: "OPAŽANJE",

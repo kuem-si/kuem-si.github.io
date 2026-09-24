@@ -146,7 +146,7 @@ const kaiDescriptions = sl ? [
               : "Sources and devices connect through a communication layer to the operational environment, integrations and users. Deployment adapts to existing infrastructure."
           }
         </p>
-      </div><ol class:list={["pipeline", { "kai-en-pipeline": isKai && !sl }]}>
+      </div><ol class:list={["pipeline", { "kai-pipeline": isKai }]}>
         {
           (isKai
             ? sl
@@ -199,10 +199,10 @@ const kaiDescriptions = sl ? [
 
 <style>
   @media (min-width: 981px) {
-    .kai-en-pipeline {
+    .kai-pipeline {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       min-width: 0;
     }
-    .kai-en-pipeline li { overflow-wrap: anywhere; }
+    .kai-pipeline li { overflow-wrap: anywhere; }
   }
 </style>

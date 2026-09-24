@@ -12,6 +12,7 @@ import {
   explorerExamples,
   explorerExamplesEn,
 } from "../../data/solutionExplorer";
+import "../../styles/flow-primitives.css";
 import "../../styles/homepage.css";
 import "../../styles/solution-explorer.css";
 
@@ -26,7 +27,7 @@ const copy = {
     seoTitle: "Rešitve | KUEM – Od zajema podatka do upravljane storitve",
     seoDescription:
       "Raziščite celotno KUEM rešitev: od naprav in obstoječih sistemov prek Nexavie do odločitev in upravljanih storitev.",
-    pathname: "/resitve",
+    pathname: "/resitve/",
     skip: "Preskoči na vsebino",
     eyebrow: "REŠITVE KUEM",
     h1: "Od zajema podatka do upravljane storitve.",
@@ -54,7 +55,7 @@ const copy = {
     seoTitle: "Solutions | KUEM – From data acquisition to managed service",
     seoDescription:
       "Explore the complete KUEM solution: from devices and existing systems through Nexavia to decisions and managed services.",
-    pathname: "/en/solutions",
+    pathname: "/en/solutions/",
     skip: "Skip to content",
     eyebrow: "KUEM SOLUTIONS",
     h1: "From data acquisition to managed service.",
@@ -211,7 +212,7 @@ const stories = ["Domplan", "Brezovica", "Adria Mobil", "Gradiška", "Novo mesto
                   ))
                 }
               </ul>
-              <a href={copy.storiesHref}>{sl ? "Poglejte uspešne zgodbe" : "View success stories"} →</a>
+              <a href={copy.storiesHref}>{locale === "sl" ? "Poglejte uspešne zgodbe" : "View success stories"} →</a>
             </div>
           </div>
         </section>

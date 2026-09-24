@@ -1,0 +1,16 @@
+---
+import LegacyRedirect from "../components/LegacyRedirect.astro";
+import { legacySlovenianRedirects } from "../data/legacySlovenianRedirects";
+// The component supplies its own complete minimal document. Suppress Astro's
+// automatic page scripts (including prefetch) on compatibility redirects.
+export const partial = true;
+export function getStaticPaths() {
+  return Object.entries(legacySlovenianRedirects).map(([legacy, target]) => ({
+    params: { legacy },
+    props: { target },
+  }));
+}
+const { target } = Astro.props;
+---
+
+<LegacyRedirect {target} locale="sl" />

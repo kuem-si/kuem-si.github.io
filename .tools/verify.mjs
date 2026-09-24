@@ -3,6 +3,7 @@
 // Usage: node .tools/verify.mjs
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { checkRedirects } from "../scripts/check-redirects.mjs";
 
 let ok = true;
 const check = (label, cond) => {
@@ -41,12 +42,6 @@ check(
   sm.includes('xhtml:link rel="alternate"'),
 );
 check(
-  "no legacy pages in dist",
-  !existsSync(join(dist, "about")) &&
-    !existsSync(join(dist, "sl")) &&
-    !existsSync(join(dist, "o-podjetju")),
-);
-check(
   "sitemap keeps /en/company",
   sm.includes("https://www.kuem.si/en/company/"),
 );
@@ -59,13 +54,8 @@ check(
   !htmlFiles.some((p) => read(p).includes("import.meta")),
 );
 
-// 4. legacy routes are gone
-check("legacy /about route is gone", !existsSync(join(dist, "about")));
-check("legacy /sl route is gone", !existsSync(join(dist, "sl")));
-check(
-  "legacy /o-podjetju route is gone",
-  !existsSync(join(dist, "o-podjetju")),
-);
+// 4. Legacy URLs contain only static redirects to canonical pages.
+check("legacy redirects, canonical targets and sitemap", checkRedirects() > 0);
 
 // 5. homepage head
 const head =

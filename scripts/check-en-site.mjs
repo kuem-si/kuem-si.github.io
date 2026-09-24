@@ -77,6 +77,9 @@ const redirects = {
   "nexavia-platform": "nexavia",
   "platform/nexavia": "nexavia",
   "case-studies": "references",
+  "industrial-iot": "industries",
+  utilities: "solutions/remote-meter-reading",
+  "partner-program": "contact",
 };
 const sitemap = read("sitemap-0.xml");
 for (const [source, target] of Object.entries(redirects)) {

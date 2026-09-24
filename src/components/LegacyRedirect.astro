@@ -1,0 +1,24 @@
+---
+import type { Locale } from "../lib/i18n";
+const { target, locale } = Astro.props as { target: string; locale: Locale };
+const sl = locale === "sl";
+---
+
+<!-- Partial routes skip automatic document injection; retain standards mode. -->
+<Fragment set:html="<!doctype html>" />
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={new URL(target, Astro.site)} />
+    <meta name="robots" content="noindex,follow" />
+    <title>{sl ? "Stran je premaknjena" : "Page moved"} | KUEM</title>
+  </head>
+  <body>
+    <p>
+      {sl ? "Stran je premaknjena." : "This page has moved."}
+      <a href={target}>{sl ? "Nadaljujte na KUEM" : "Continue to KUEM"}</a>.
+    </p>
+  </body>
+</html>

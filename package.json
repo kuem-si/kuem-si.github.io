@@ -9,6 +9,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "check:en": "node scripts/check-en-site.mjs",
+    "check:sl": "node scripts/check-sl-site.mjs",
+    "check:urls": "node scripts/check-page-urls.mjs",
     "verify": "node .tools/verify.mjs",
     "format:check": "npx prettier --check ."
   },

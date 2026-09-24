@@ -10,4 +10,7 @@ export const legacyEnglishRedirects: Record<string, string> = {
   "nexavia-platform": "/en/nexavia/",
   "platform/nexavia": "/en/nexavia/",
   "case-studies": "/en/references/",
+  "industrial-iot": "/en/industries/",
+  utilities: "/en/solutions/remote-meter-reading/",
+  "partner-program": "/en/contact/",
 };

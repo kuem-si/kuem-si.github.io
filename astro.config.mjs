@@ -1,12 +1,21 @@
 import { defineConfig, envField } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import { alternatePath, getLocaleFromPath } from "./src/lib/i18n";
+import { legacyEnglishRedirects } from "./src/data/legacyEnglishRedirects";
+import { legacySlovenianRedirects } from "./src/data/legacySlovenianRedirects";
+
+const legacyPaths = new Set([
+  ...Object.keys(legacyEnglishRedirects).map((path) => `/en/${path}/`),
+  ...Object.keys(legacySlovenianRedirects).map((path) => `/${path}/`),
+]);
 
 export default defineConfig({
   site: "https://www.kuem.si",
   output: "static",
   // Freeze the canonical URL shape (directories with trailing slash).
   trailingSlash: "always",
+  // GitHub Pages issues native HTTP 301 redirects for these directories.
+  build: { format: "directory" },
   // Native i18n declaration: Slovenian is the default locale and lives at the
   // root (no prefix); English lives under /en/. Routing is manual because the
   // site uses custom localized slugs (e.g. /resitve vs /en/solutions), which
@@ -46,6 +55,39 @@ export default defineConfig({
     defaultStrategy: "hover",
   },
   vite: {
+    plugins: [
+      {
+        name: "kuem-dev-trailing-slash",
+        // Astro rejects slashless page URLs before application middleware runs.
+        // Match the directory redirects provided by the static production host.
+        configureServer: {
+          order: "post",
+          handler(server) {
+            // Astro prepends its slash-mismatch 404 in a post hook. Install
+            // this redirect after that hook, ahead of the mismatch handler.
+            return () =>
+              server.middlewares.stack.unshift({
+                route: "",
+                handle(req, res, next) {
+                  const url = new URL(req.url ?? "/", "http://localhost");
+                  const { pathname } = url;
+                  if (
+                    (req.method !== "GET" && req.method !== "HEAD") ||
+                    pathname.endsWith("/") ||
+                    pathname.startsWith("//") ||
+                    /^\/(?:@|_|src\/|node_modules\/)/.test(pathname) ||
+                    /\.[^/]+$/.test(pathname)
+                  ) {
+                    return next();
+                  }
+                  res.writeHead(301, { Location: `${pathname}/${url.search}` });
+                  res.end();
+                },
+              });
+          },
+        },
+      },
+    ],
     build: {
       // Vite 8 default, made explicit: minify CSS with Lightning CSS.
       cssMinify: "lightningcss",
@@ -68,11 +110,8 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      filter: (page) =>
-        !/\/en\/(?:about|services(?:\/.*)?|solutions\/nexavia(?:\/.*)?|nexavia-platform|platform\/nexavia|case-studies)\/?$/.test(
-          new URL(page).pathname,
-        ),
-      // Every URL is canonical (legacy duplicates were removed); emit
+      filter: (page) => !legacyPaths.has(new URL(page).pathname),
+      // Every included URL is canonical; emit
       // hreflang alternates for both locales.
       serialize: (item) => {
         const url = new URL(item.url);
