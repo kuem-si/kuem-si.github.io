@@ -1,10 +1,11 @@
 ---
 import { alternatePath, type Locale } from "../lib/i18n";
+import { ensureTrailingSlash } from "../lib/paths";
 const { locale, pathname = Astro.url.pathname } = Astro.props as {
   locale: Locale;
   pathname?: string;
 };
-const alternate = alternatePath(pathname);
+const alternate = ensureTrailingSlash(alternatePath(pathname));
 ---
 
 <span

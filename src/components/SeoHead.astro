@@ -2,6 +2,7 @@
 import JsonLd from "./JsonLd.astro";
 import { PUBLIC_CONTACT_ENDPOINT } from "astro:env/client";
 import { alternatePath, getLocaleFromPath } from "../lib/i18n";
+import { ensureTrailingSlash } from "../lib/paths";
 import { organization, website } from "../data/organization";
 import sourceSansVariable from "../assets/brand/fonts/SourceSans3-variable.woff2";
 import spaceGroteskVariable from "../assets/brand/fonts/SpaceGrotesk-variable.woff2";
@@ -16,8 +17,8 @@ const {
   jsonLd = [] as unknown[],
 } = Astro.props;
 const locale = getLocaleFromPath(pathname);
-const canonical = new URL(pathname, Astro.site);
-const alternate = new URL(alternatePath(pathname), Astro.site);
+const canonical = new URL(ensureTrailingSlash(pathname), Astro.site);
+const alternate = new URL(ensureTrailingSlash(alternatePath(pathname)), Astro.site);
 const fullTitle = title.includes("KUEM") ? title : `${title} | KUEM`;
 const otherLocale = locale === "sl" ? "en" : "sl";
 const langTag = locale === "sl" ? "sl-SI" : "en-GB";

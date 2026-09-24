@@ -1,6 +1,7 @@
 ---
 import wordmark from "../assets/brand/kuem/KUEM_Official_Wordmark.svg";
 import { type Locale } from "../lib/i18n";
+import { ensureTrailingSlash } from "../lib/paths";
 import LanguageSelector from "./LanguageSelector.astro";
 import { contactNavigation, primaryNavigation } from "../data/navigation";
 const { locale, pathname } = Astro.props as {
@@ -43,7 +44,7 @@ const isActive = (href: string) => {
         {
           nav.map(({ label, href }) => (
             <li>
-              <a href={href} aria-current={isActive(href) ? "page" : undefined}>
+              <a href={ensureTrailingSlash(href)} aria-current={isActive(href) ? "page" : undefined}>
                 {label}
               </a>
             </li>
@@ -53,13 +54,13 @@ const isActive = (href: string) => {
           <LanguageSelector {locale} {pathname} />
         </li>
         <li class="mobile-only mobile-contact-item">
-          <a class="header-contact" href={contact.href}
+          <a class="header-contact" href={ensureTrailingSlash(contact.href)}
             ><span>{contact.shortLabel}</span><i aria-hidden="true">→</i></a
           >
         </li>
       </ul>
     </nav><div class="header-actions">
-      <LanguageSelector {locale} {pathname} /><a class="header-contact" href={contact.href}
+      <LanguageSelector {locale} {pathname} /><a class="header-contact" href={ensureTrailingSlash(contact.href)}
         ><span>{contact.label}</span><i aria-hidden="true">→</i></a
       >
     </div>
