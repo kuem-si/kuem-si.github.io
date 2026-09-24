@@ -8,6 +8,7 @@ if (root) {
   const screenOverlay = root.querySelector(".xdr-display");
   const overlayDrag = root.querySelector("[data-overlay-drag]");
   const overlayOpacity = root.querySelector("[data-overlay-opacity]");
+  const overlayToggle = root.querySelector("[data-overlay-toggle]");
   const resizeEdges = root.querySelectorAll("[data-overlay-resize]");
   if (workspace && fullscreenButton) {
     const updateFullscreenButton = () => {
@@ -30,6 +31,7 @@ if (root) {
   }
   if (workspace && screenOverlay && overlayDrag) {
     const keepOverlayVisible = () => {
+      if (screenOverlay.classList.contains("is-minimized")) return;
       const frame = workspace.getBoundingClientRect();
       const overlay = screenOverlay.getBoundingClientRect();
       if (!frame.width || !frame.height) return;
@@ -43,12 +45,26 @@ if (root) {
       screenOverlay.style.top = `${top}px`;
       screenOverlay.style.right = "auto";
     };
+    const setOverlayMinimized = (minimized) => {
+      screenOverlay.classList.toggle("is-minimized", minimized);
+      if (overlayToggle) {
+        overlayToggle.setAttribute("aria-pressed", String(!minimized));
+        overlayToggle.textContent = minimized
+          ? (en ? "Show dashboard" : "Prikaži nadzorno ploščo")
+          : (en ? "Hide dashboard" : "Skrij nadzorno ploščo");
+      }
+      if (!minimized) requestAnimationFrame(keepOverlayVisible);
+    };
+    setOverlayMinimized(window.matchMedia("(max-width: 980px)").matches);
+    overlayToggle?.addEventListener("click", () => {
+      setOverlayMinimized(!screenOverlay.classList.contains("is-minimized"));
+    });
     requestAnimationFrame(keepOverlayVisible);
     window.addEventListener("resize", keepOverlayVisible, { passive: true });
     document.addEventListener("fullscreenchange", () => requestAnimationFrame(keepOverlayVisible));
     let overlayDragStart = null;
     overlayDrag.addEventListener("pointerdown", (event) => {
-      if (event.target.closest("input")) return;
+      if (event.target.closest("input, button")) return;
       const frame = workspace.getBoundingClientRect();
       const overlay = screenOverlay.getBoundingClientRect();
       overlayDragStart = {

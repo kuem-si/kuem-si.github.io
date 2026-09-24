@@ -411,3 +411,17 @@
 .twin-workspace:fullscreen .twin-scene-wrap{overflow:hidden}
 .twin-workspace:fullscreen .city-art{width:min(100%,calc((100dvh - 88px)*1.5));height:auto;max-width:100%;aspect-ratio:3/2;flex:none;object-fit:initial}
 .twin-workspace:fullscreen .city-photo{width:100%;height:100%;object-fit:contain}
+/* Dashboard can be tucked away, with a clear restore control on compact screens. */
+.twin-workspace .xdr-display.is-minimized{display:none}
+.twin-workspace .xdr-overlay-tools [data-overlay-minimize]{flex:none;width:24px;height:24px;padding:0;border:1px solid #ffffff35;border-radius:4px;background:#ffffff0d;color:#e8f1ef;font:600 17px/1 system-ui,sans-serif;cursor:pointer}
+.twin-workspace .xdr-overlay-tools [data-overlay-minimize]:hover{background:#ffffff20}
+.twin-workspace .xdr-restore{position:absolute;top:12px;right:12px;z-index:12;min-height:36px;padding:7px 11px;border:1px solid #52727a;border-radius:6px;background:#14272ee8;color:#eaf4f2;font:600 12px/1.2 system-ui,sans-serif;box-shadow:0 4px 14px #07131755;cursor:pointer}
+.twin-workspace .xdr-restore:hover{background:#203c43}
+.twin-workspace .xdr-restore:focus-visible,.twin-workspace .xdr-overlay-tools [data-overlay-minimize]:focus-visible{outline:2px solid #77d2c5;outline-offset:2px}
+.twin-workspace .xdr-restore[hidden]{display:none}
+@media(max-width:700px){.twin-workspace .xdr-restore{top:10px;right:10px;max-width:calc(100% - 20px)}}
+.twin-workspace .xdr-restore{display:inline-flex;align-items:center;justify-content:center;min-height:40px}
+.twin-workspace .xdr-restore[hidden]{display:none!important}
+/* Keep the dashboard visibility control above the floating dashboard overlay. */
+.twin-workspace .twin-controls{position:relative;z-index:8}
+.twin-workspace .twin-controls [data-overlay-toggle]{position:relative;z-index:9}
