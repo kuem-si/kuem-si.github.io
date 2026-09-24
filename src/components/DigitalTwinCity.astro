@@ -1,0 +1,354 @@
+---
+interface Props {
+  locale: "sl" | "en";
+}
+
+const { locale } = Astro.props;
+const en = locale === "en";
+---
+
+<div class="city-art" data-city-art>
+  <img
+    class="city-photo"
+    src="/images/digital-twin-city-marina-ultra.webp"
+    width="1536"
+    height="1024"
+    alt={
+      en
+        ? "Photorealistic miniature smart city with varied homes and shops along a second street, a coastal marina with piers and boats, glass office, factory, stadium, skyscraper, river and bridge"
+        : "Fotorealistično miniaturno pametno mesto z raznolikimi hišami in trgovinami ob drugi ulici, obalno marino s pomoli in plovili, stekleno poslovno stavbo, tovarno, stadionom, nebotičnikom, reko in mostom"
+    }
+    fetchpriority="high"
+  />
+  <svg
+    class="city-hotspots"
+    viewBox="0 0 1536 1024"
+    preserveAspectRatio="xMidYMid meet"
+    role="group"
+    aria-label={en ? "Interactive city assets" : "Interaktivni mestni elementi"}
+  >
+    <defs>
+      <clipPath id="city-river-water" clipPathUnits="userSpaceOnUse">
+        <path d="M686 546C704 544 720 556 740 571C761 587 779 599 802 611L795 622C774 610 753 595 733 580C713 566 699 561 686 560Z M849 656C869 656 885 668 902 685C919 701 937 716 950 739C969 764 998 775 1058 787L1048 800C994 831 936 864 882 886C847 900 815 903 786 895L714 864C727 840 752 816 784 791C806 771 817 747 819 723C821 701 814 683 821 668C826 662 838 656 849 656Z" />
+      </clipPath>
+      <filter id="city-river-blue-pixels">
+        <feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 -1.2 0 1.2 0 -.025" />
+      </filter>
+      <mask id="city-river-blue-mask" x="0" y="0" width="1536" height="1024" maskUnits="userSpaceOnUse" style="mask-type:alpha">
+        <image href="/images/digital-twin-city-marina-ultra.webp" x="0" y="0" width="1536" height="1024" preserveAspectRatio="none" filter="url(#city-river-blue-pixels)" />
+      </mask>
+      <filter id="city-river-refraction" x="43%" y="53%" width="26%" height="38%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency=".025 .04" numOctaves="2" seed="8" result="waterNoise">
+          <animate attributeName="baseFrequency" values=".018 .03;.035 .052;.018 .03" dur="5s" repeatCount="indefinite" />
+        </feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="waterNoise" scale="4" xChannelSelector="R" yChannelSelector="G">
+          <animate attributeName="scale" values="4;10;6;9;4" dur="6s" repeatCount="indefinite" />
+        </feDisplacementMap>
+      </filter>
+      <linearGradient id="meter-case" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#e2e0d3" />
+        <stop offset=".48" stop-color="#b9bcb3" />
+        <stop offset="1" stop-color="#858d88" />
+      </linearGradient>
+      <linearGradient id="meter-gas-case" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#c4b18a" />
+        <stop offset=".5" stop-color="#a49473" />
+        <stop offset="1" stop-color="#756b57" />
+      </linearGradient>
+      <linearGradient id="meter-lcd" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#302d26" />
+        <stop offset="1" stop-color="#171b1a" />
+      </linearGradient>
+      <clipPath id="office-visible-facade">
+        <path d="M863 132 1007 112 1070 143 1070 292 1035 313 867 275Z" />
+      </clipPath>
+    </defs>
+    <g class="city-river-surface" clip-path="url(#city-river-water)" mask="url(#city-river-blue-mask)" aria-hidden="true">
+      <image href="/images/digital-twin-city-marina-ultra.webp" x="0" y="0" width="1536" height="1024" preserveAspectRatio="none" filter="url(#city-river-refraction)" />
+    </g>
+    <g
+      class="city-asset twin-building"
+      data-building="HOUSE_01"
+      tabindex="0"
+      role="button"
+      aria-label={en ? "Garden house lighting" : "Razsvetljava hiše z vrtom"}
+    >
+      <polygon
+        points="102,360 285,368 398,477 359,622 194,604 88,518"
+        class="city-hit"
+      />
+      <path
+        d="M184 440 291 480 297 554 190 509Z M296 482 351 455 359 530 299 557Z"
+        class="city-light-overlay"
+      />
+      <path
+        d="M150 470 181 453M160 488 192 471M181 500 208 484M310 496 343 477M311 516 345 497"
+        class="city-glow-lines"
+      />
+      <text x="245" y="644" class="city-asset-label">
+        {en ? "GARDEN HOUSE" : "HIŠA Z VRTOM"}
+      </text>
+    </g>
+    <g class="city-asset twin-building city-alert" data-building="OFFICE_01" tabindex="0" role="button" aria-label={en ? "Office building lighting" : "Razsvetljava poslovne stavbe"}>
+      <polygon points="870,145 1005,122 1062,151 1060,474 999,503 870,466" class="city-hit" />
+      <path d="M883 183 993 201 993 465 883 438Z M1004 203 1047 180 1047 443 1004 466Z" class="city-light-overlay" clip-path="url(#office-visible-facade)" />
+      <path d="m892 221 96 17m-96 21 96 17m-96 20 96 17m-96 20 96 17m-96 20 96 17m-96 20 96 17m-96 19 96 16m18-258 34-18m-34 54 34-18m-34 54 34-18m-34 54 34-18m-34 54 34-18m-34 54 34-18m-34 54 34-18m-34 54 34-18" class="city-glow-lines" clip-path="url(#office-visible-facade)" />
+      <text x="967" y="520" class="city-asset-label">{en ? "GLASS OFFICE" : "STEKLENA PISARNA"}</text>
+      <circle cx="1039" cy="166" r="14" class="city-alert-marker" /><text x="1039" y="172" class="city-alert-glyph">!</text>
+    </g>
+    <g class="city-asset twin-building" data-building="FACTORY_01" tabindex="0" role="button" aria-label={en ? "Factory lighting" : "Razsvetljava tovarne"}>
+      <polygon points="350,592 641,555 786,612 782,721 692,766 651,829 271,754 257,676" class="city-hit" />
+      <path d="M371 642 410 653 410 670 371 660Z M620 701 654 690 654 713 620 725Z M667 686 700 675 700 699 667 711Z M715 666 743 656 743 680 715 691Z" class="city-factory-window-dark" />
+      <path d="M371 642 410 653 410 670 371 660Z M620 701 654 690 654 713 620 725Z M667 686 700 675 700 699 667 711Z M715 666 743 656 743 680 715 691Z" class="city-light-overlay" />
+      <path d="M374 649 407 658m-33 5 33 8m-22-22v20m12-17v20m226 14 24-8m-24 15 24-8m-13-11v22m91-36 23-8m-23 15 23-8m-12-11v22m26-36 19-7m-19 14 19-7m-10-10v20" class="city-glow-lines" />
+      <text x="516" y="850" class="city-asset-label">{en ? "FACTORY" : "TOVARNA"}</text>
+      <circle cx="759" cy="590" r="14" class="city-alert-marker" /><text x="759" y="596" class="city-alert-glyph">!</text>
+    </g>
+    <g class="city-meter city-meter-water city-house-water" tabindex="0" role="group" aria-label={en ? "Garden house water meter" : "Vodomer hiše z vrtom"} aria-describedby="city-popover-house-water" data-sensor-popover-trigger="house-water">
+      <rect x="315" y="461" width="66" height="80" rx="8" class="city-sensor-hit" />
+      <circle cx="348" cy="494" r="17" class="city-sensor-wave" />
+      <circle cx="348" cy="494" r="17" class="city-sensor-wave city-sensor-wave-delayed" />
+      <circle cx="348" cy="494" r="11" class="city-sensor-glow" />
+      <path class="city-meter-pipe" d="M314 493h12m44 0h10" />
+      <rect class="city-meter-case" x="326" y="467" width="44" height="55" rx="5" />
+      <rect class="city-meter-screen" x="331" y="473" width="34" height="19" rx="2" />
+      <text class="city-meter-value" x="348" y="486">{en ? "0.84" : "0,84"}</text>
+      <circle class="city-meter-dial" cx="348" cy="505" r="7" />
+      <circle class="city-meter-screw" cx="331" cy="472" r="1.5" /><circle class="city-meter-screw" cx="365" cy="472" r="1.5" />
+      <text class="city-meter-model" x="348" y="535">WM</text>
+    </g>
+    <g class="city-meter city-meter-water city-office-water" tabindex="0" role="group" aria-label={en ? "Office water meter" : "Vodomer poslovne stavbe"} aria-describedby="city-popover-office-water" data-sensor-popover-trigger="office-water">
+      <rect x="1016" y="401" width="65" height="73" rx="8" class="city-sensor-hit" />
+      <circle cx="1051" cy="431" r="17" class="city-sensor-wave" />
+      <circle cx="1051" cy="431" r="17" class="city-sensor-wave city-sensor-wave-delayed" />
+      <circle cx="1051" cy="431" r="11" class="city-sensor-glow" />
+      <path class="city-meter-pipe" d="M1020 430h10m42 0h9" />
+      <rect class="city-meter-case" x="1030" y="407" width="42" height="49" rx="5" />
+      <rect class="city-meter-screen" x="1035" y="412" width="32" height="17" rx="2" />
+      <text class="city-meter-value" x="1051" y="424">{en ? "12.6" : "12,6"}</text>
+      <circle class="city-meter-dial" cx="1051" cy="441" r="6" />
+      <circle class="city-meter-screw" cx="1035" cy="412" r="1.5" /><circle class="city-meter-screw" cx="1067" cy="412" r="1.5" />
+      <text class="city-meter-model" x="1051" y="468">WM</text>
+    </g>
+    <g class="city-meter city-meter-gas city-factory-gas" tabindex="0" role="group" aria-label={en ? "Factory gas meter" : "Plinomer tovarne"} aria-describedby="city-popover-factory-gas" data-sensor-popover-trigger="factory-gas">
+      <rect x="681" y="660" width="72" height="80" rx="8" class="city-sensor-hit" />
+      <circle cx="723" cy="692" r="17" class="city-sensor-wave city-sensor-wave-secondary" />
+      <circle cx="723" cy="692" r="17" class="city-sensor-wave city-sensor-wave-secondary city-sensor-wave-delayed" />
+      <circle cx="723" cy="692" r="11" class="city-sensor-glow city-sensor-glow-secondary" />
+      <path class="city-meter-pipe city-meter-gas-pipe" d="M688 690h13m44 0h12" />
+      <rect class="city-meter-case city-meter-gas-case" x="701" y="666" width="44" height="53" rx="4" />
+      <rect class="city-meter-screen" x="706" y="672" width="34" height="18" rx="2" />
+      <text class="city-meter-value" x="723" y="685">{en ? "34.2" : "34,2"}</text>
+      <circle class="city-meter-dial" cx="723" cy="703" r="7" />
+      <circle class="city-meter-screw" cx="706" cy="671" r="1.5" /><circle class="city-meter-screw" cx="740" cy="671" r="1.5" />
+      <text class="city-meter-model" x="723" y="731">GM</text>
+    </g>
+    <g class="city-asset city-static" aria-hidden="true">
+      <polygon
+        points="424,376 569,366 695,444 696,600 601,689 454,637 419,533"
+        class="city-hit"
+      />
+    </g>
+    <g
+      class="city-asset twin-building"
+      data-building="STADIUM_01"
+      tabindex="0"
+      role="button"
+      aria-label={en ? "Stadium lighting" : "Razsvetljava stadiona"}
+    >
+      <polygon
+        points="497,286 616,255 804,254 954,279 1045,326 1024,421 937,474 692,473 578,420 522,361"
+        class="city-hit"
+      />
+      <path d="M679 357Q796 338 925 360L906 403Q799 385 699 402Z" class="city-field-dark" />
+      <path d="M679 357Q796 338 925 360L906 403Q799 385 699 402Z" class="city-field-glow" />
+      <g aria-hidden="true">
+        <circle class="city-floodlight-shutter" cx="641" cy="310" r="8" /><circle class="city-floodlight-beam" cx="641" cy="310" r="7" />
+        <circle class="city-floodlight-shutter" cx="741" cy="278" r="8" /><circle class="city-floodlight-beam" cx="741" cy="278" r="7" />
+        <circle class="city-floodlight-shutter" cx="853" cy="282" r="8" /><circle class="city-floodlight-beam" cx="853" cy="282" r="7" />
+        <circle class="city-floodlight-shutter" cx="929" cy="308" r="8" /><circle class="city-floodlight-beam" cx="929" cy="308" r="7" />
+        <circle class="city-floodlight-shutter" cx="977" cy="326" r="8" /><circle class="city-floodlight-beam" cx="977" cy="326" r="7" />
+        <circle class="city-floodlight-shutter" cx="1038" cy="356" r="8" /><circle class="city-floodlight-beam" cx="1038" cy="356" r="7" />
+      </g>
+      <text x="805" y="486" class="city-asset-label">
+        {en ? "CITY STADIUM" : "MESTNI STADION"}
+      </text>
+    </g>
+    <g class="city-asset twin-building city-streetlight" data-building="LAMP_02" tabindex="0" role="button" aria-label={en ? "Street light 2 status" : "Stanje ulične svetilke 2"}>
+      <circle cx="743" cy="586" r="25" class="city-hit" /><circle cx="743" cy="575" r="13" class="city-lamp-glow" />
+      <text x="743" y="622" class="city-asset-label city-small-label">{en ? "STREET LIGHT 2" : "SVETILKA 2"}</text>
+    </g>
+    <g class="city-asset twin-building city-streetlight" data-building="LAMP_03" tabindex="0" role="button" aria-label={en ? "Street light 3 status" : "Stanje ulične svetilke 3"}>
+      <circle cx="986" cy="638" r="25" class="city-hit" /><circle cx="986" cy="627" r="13" class="city-lamp-glow" />
+      <text x="986" y="674" class="city-asset-label city-small-label">{en ? "STREET LIGHT 3" : "SVETILKA 3"}</text>
+    </g>
+    <g class="city-asset twin-building city-streetlight" data-building="LAMP_04" tabindex="0" role="button" aria-label={en ? "Street light 4 status" : "Stanje ulične svetilke 4"}>
+      <circle cx="1394" cy="450" r="25" class="city-hit" /><circle cx="1394" cy="439" r="13" class="city-lamp-glow" />
+      <text x="1394" y="486" class="city-asset-label city-small-label">{en ? "STREET LIGHT 4" : "SVETILKA 4"}</text>
+    </g>
+    <g
+      class="city-asset twin-building"
+      data-building="TOWER_01"
+      tabindex="0"
+      role="button"
+      aria-label={en ? "Skyscraper lighting" : "Razsvetljava nebotičnika"}
+    >
+      <polygon
+        points="1050,62 1203,38 1275,75 1283,437 1193,509 1058,465"
+        class="city-hit"
+      />
+      <path
+        d="M1072 102 1192 124 1190 454 1072 420Z M1202 126 1254 101 1258 420 1200 455Z"
+        class="city-light-overlay"
+      />
+      <path
+        d="M1080 162 1186 182M1080 219 1185 239M1080 278 1184 296M1080 338 1183 354M1208 176 1249 156M1208 234 1249 215M1208 292 1249 273M1208 351 1249 332"
+        class="city-glow-lines"
+      />
+      <text x="1167" y="530" class="city-asset-label">
+        {en ? "SKYSCRAPER" : "NEBOTIČNIK"}
+      </text>
+    </g>
+    <g
+      class="city-asset twin-building city-streetlight"
+      data-building="LAMP_01"
+      tabindex="0"
+      role="button"
+      aria-label={en ? "Street light status" : "Stanje ulične svetilke"}
+    >
+      <circle cx="399" cy="583" r="28" class="city-hit" />
+      <circle cx="399" cy="583" r="15" class="city-lamp-glow" />
+      <text x="399" y="621" class="city-asset-label city-small-label">
+        {en ? "STREET LIGHT" : "SVETILKA"}
+      </text>
+    </g>
+    <g class="city-infrastructure-sensor city-vibration-sensor" tabindex="0" role="group" aria-label={en ? "Bridge vibration sensor" : "Senzor tresljajev mostu"} aria-describedby="city-popover-vibration" data-sensor-popover-trigger="vibration">
+      <circle cx="884" cy="613" r="20" class="city-sensor-hit" />
+      <circle cx="884" cy="613" r="10" class="city-sensor-wave" />
+      <circle cx="884" cy="613" r="10" class="city-sensor-wave city-sensor-wave-delayed" />
+      <circle cx="884" cy="613" r="7" class="city-sensor-glow" />
+      <path d="M866 615v8m0-5h10" class="city-sensor-mount" />
+      <rect x="875" y="607" width="17" height="12" rx="2" class="city-sensor-case" />
+      <circle cx="888" cy="613" r="1.7" class="city-sensor-led" />
+    </g>
+    <g class="city-infrastructure-sensor city-water-level-sensor" tabindex="0" role="group" aria-label={en ? "River level sensor" : "Senzor gladine reke"} aria-describedby="city-popover-water" data-sensor-popover-trigger="water">
+      <circle cx="1007" cy="647" r="20" class="city-sensor-hit" />
+      <circle cx="1007" cy="647" r="10" class="city-sensor-wave" />
+      <circle cx="1007" cy="647" r="10" class="city-sensor-wave city-sensor-wave-delayed" />
+      <circle cx="1007" cy="647" r="7" class="city-sensor-glow" />
+      <path d="M1007 647v52" class="city-gauge-post" />
+      <path d="M1003 655h8m-8 7h5m-5 7h8m-8 7h5m-5 7h8m-8 7h5m-5 7h8" class="city-gauge-tick" />
+      <rect x="1000" y="641" width="15" height="13" rx="2" class="city-sensor-case" />
+      <circle cx="1011" cy="647" r="1.5" class="city-sensor-led" />
+    </g>
+    <g class="city-infrastructure-sensor city-air-sensor" tabindex="0" role="group" aria-label={en ? "Air quality, temperature and humidity sensor" : "Senzor kakovosti zraka, temperature in vlage"} aria-describedby="city-popover-air" data-sensor-popover-trigger="air">
+      <circle cx="1072" cy="516" r="23" class="city-sensor-hit" />
+      <circle cx="1072" cy="516" r="12" class="city-sensor-wave" />
+      <circle cx="1072" cy="516" r="12" class="city-sensor-wave city-sensor-wave-delayed" />
+      <circle cx="1072" cy="516" r="8" class="city-sensor-glow" />
+      <path d="M1071 502v55" class="city-sensor-mount" />
+      <path d="M1062 498h18l4 5v29l-4 4h-18l-4-4v-29Z" class="city-sensor-case" />
+      <path d="M1062 510h18m-18 5h18m-18 5h18m-18 5h18" class="city-sensor-vents" />
+      <circle cx="1077" cy="501" r="1.5" class="city-sensor-led" />
+    </g>
+    <g class="city-infrastructure-sensor city-cycle-counter" tabindex="0" role="group" aria-label={en ? "Bridge cyclist counter" : "Števec kolesarjev na mostu"} aria-describedby="city-popover-cyclists" data-sensor-popover-trigger="cyclists">
+      <rect x="790" y="566" width="190" height="62" rx="14" class="city-sensor-hit" />
+      <circle cx="813" cy="599" r="10" class="city-sensor-wave" />
+      <circle cx="813" cy="599" r="10" class="city-sensor-wave city-sensor-wave-delayed" />
+      <circle cx="813" cy="599" r="7" class="city-sensor-glow" />
+      <circle cx="959" cy="580" r="10" class="city-sensor-wave city-sensor-wave-secondary" />
+      <circle cx="959" cy="580" r="10" class="city-sensor-wave city-sensor-wave-secondary city-sensor-wave-delayed" />
+      <circle cx="959" cy="580" r="7" class="city-sensor-glow city-sensor-glow-secondary" />
+      <path d="M813 606v18m0-18 7-5m144-23v18m0-18-7-5" class="city-sensor-mount" />
+      <rect x="805" y="591" width="17" height="15" rx="2" class="city-counter-housing" />
+      <rect x="808" y="594" width="11" height="7" rx="1" class="city-counter-display" />
+      <text x="813.5" y="599.5" class="city-counter-digits">124</text>
+      <circle cx="817" cy="603" r="1.2" class="city-sensor-led" />
+      <rect x="951" y="572" width="17" height="15" rx="2" class="city-counter-housing" />
+      <rect x="954" y="575" width="11" height="7" rx="1" class="city-counter-display" />
+      <path d="M822 597Q888 578 951 578" class="city-counter-beam" />
+      <g class="city-counter-tag">
+        <rect x="846" y="555" width="83" height="18" rx="8" />
+        <text x="887.5" y="567">{en ? "CYCLE COUNT" : "ŠTEVEC KOLESARJEV"}</text>
+      </g>
+    </g>
+    <g class="city-cyclist-motion cyclist-one" aria-hidden="true">
+      <g transform="translate(800 618)">
+        <g class="city-rider-shadow"><ellipse cx="15" cy="2" rx="21" ry="3" /></g>
+        <g class="city-bike">
+          <circle cx="3" cy="0" r="5.6" class="city-bike-tire" /><circle cx="26" cy="-6" r="5.6" class="city-bike-tire" />
+          <circle cx="3" cy="0" r="4.4" class="city-bike-rim" /><circle cx="26" cy="-6" r="4.4" class="city-bike-rim" />
+          <path d="m3 0 8-12 8 10H3l8-12 7 2m-5-2 7-1 6 9m-11-8 6-5" class="city-bike-frame cyclist-blue" />
+          <circle cx="11" cy="-12" r="1.6" class="city-bike-hub" /><circle cx="19" cy="-2" r="1.4" class="city-bike-hub" />
+          <path d="M8-25h7m-4 13 2-1m7 0 3-1" class="city-bike-detail" />
+        </g>
+        <g class="city-rider cyclist-blue">
+          <path d="M11-21q1-2 4-1l5 6-4 5-7-3-1-4Z" class="city-rider-jersey" />
+          <path d="m12-19-3 7 8 1m-7-8 7 5 5-2m-12 5-5 9m9-9 5 7" class="city-rider-limbs" />
+          <path d="m10-20-1-4 4-3 5 2 2 5-4 1-3-3-2 4Z" class="city-rider-head" />
+          <path d="m10-24 1-4q5-4 10 0l-1 2-7-1-2 4Z" class="city-rider-helmet" />
+          <path d="M14-24q3 2 5 3" class="city-rider-face" />
+        </g>
+      </g>
+    </g>
+    <g class="city-cyclist-motion cyclist-two" aria-hidden="true">
+      <g transform="translate(800 630)">
+        <g class="city-rider-shadow"><ellipse cx="15" cy="2" rx="21" ry="3" /></g>
+        <g class="city-bike">
+          <circle cx="3" cy="0" r="5.6" class="city-bike-tire" /><circle cx="26" cy="-6" r="5.6" class="city-bike-tire" />
+          <circle cx="3" cy="0" r="4.4" class="city-bike-rim" /><circle cx="26" cy="-6" r="4.4" class="city-bike-rim" />
+          <path d="m3 0 8-12 8 10H3l8-12 7 2m-5-2 7-1 6 9m-11-8 6-5" class="city-bike-frame cyclist-orange" />
+          <circle cx="11" cy="-12" r="1.6" class="city-bike-hub" /><circle cx="19" cy="-2" r="1.4" class="city-bike-hub" />
+          <path d="M8-25h7m-4 13 2-1m7 0 3-1" class="city-bike-detail" />
+        </g>
+        <g class="city-rider cyclist-orange">
+          <path d="M11-21q1-2 4-1l5 6-4 5-7-3-1-4Z" class="city-rider-jersey" />
+          <path d="m12-19-3 7 8 1m-7-8 7 5 5-2m-12 5-5 9m9-9 5 7" class="city-rider-limbs" />
+          <path d="m10-20-1-4 4-3 5 2 2 5-4 1-3-3-2 4Z" class="city-rider-head" />
+          <path d="m10-24 1-4q5-4 10 0l-1 2-7-1-2 4Z" class="city-rider-helmet" />
+          <path d="M14-24q3 2 5 3" class="city-rider-face" />
+        </g>
+      </g>
+    </g>
+  </svg>
+  <div class="city-sensor-popover city-popover-vibration" id="city-popover-vibration" role="tooltip" data-sensor-popover="vibration">
+    <div class="city-popover-top"><i></i>{en ? "LIVE SENSOR" : "TIPALO V ŽIVO"}<span>BRIDGE_VIB_01</span></div>
+    <strong>{en ? "Bridge vibration" : "Tresljaji mostu"}</strong>
+    <div class="city-popover-reading"><b id="city-popover-vibration-value">0.42 mm/s</b><small>{en ? "Normal range" : "Običajno območje"}</small></div>
+  </div>
+  <div class="city-sensor-popover city-popover-house-water" id="city-popover-house-water" role="tooltip" data-sensor-popover="house-water">
+    <div class="city-popover-top"><i></i>{en ? "LIVE METER" : "MERILNIK V ŽIVO"}<span>HOUSE_WATER_01</span></div>
+    <strong>{en ? "Garden house water" : "Poraba vode · hiša"}</strong>
+    <div class="city-popover-reading"><b id="city-popover-house-water-value">0.84 m³/d</b><small>{en ? "Daily flow" : "Dnevni pretok"}</small></div>
+  </div>
+  <div class="city-sensor-popover city-popover-office-water" id="city-popover-office-water" role="tooltip" data-sensor-popover="office-water">
+    <div class="city-popover-top"><i></i>{en ? "LIVE METER" : "MERILNIK V ŽIVO"}<span>OFFICE_WATER_01</span></div>
+    <strong>{en ? "Office water" : "Poraba vode · pisarna"}</strong>
+    <div class="city-popover-reading"><b id="city-popover-office-water-value">12.6 m³/d</b><small>{en ? "Daily flow" : "Dnevni pretok"}</small></div>
+  </div>
+  <div class="city-sensor-popover city-popover-factory-gas" id="city-popover-factory-gas" role="tooltip" data-sensor-popover="factory-gas">
+    <div class="city-popover-top"><i></i>{en ? "LIVE METER" : "MERILNIK V ŽIVO"}<span>FACTORY_GAS_01</span></div>
+    <strong>{en ? "Factory gas" : "Poraba plina · tovarna"}</strong>
+    <div class="city-popover-reading"><b id="city-popover-factory-gas-value">34.2 m³/h</b><small>{en ? "Current flow" : "Trenutni pretok"}</small></div>
+  </div>
+  <div class="city-sensor-popover city-popover-water" id="city-popover-water" role="tooltip" data-sensor-popover="water">
+    <div class="city-popover-top"><i></i>{en ? "LIVE SENSOR" : "TIPALO V ŽIVO"}<span>RIVER_LEVEL_01</span></div>
+    <strong>{en ? "River level" : "Gladina reke"}</strong>
+    <div class="city-popover-reading"><b id="city-popover-water-value">1.36 m</b><small>{en ? "Current level" : "Trenutna gladina"}</small></div>
+  </div>
+  <div class="city-sensor-popover city-popover-air" id="city-popover-air" role="tooltip" data-sensor-popover="air">
+    <div class="city-popover-top"><i></i>{en ? "LIVE SENSOR" : "TIPALO V ŽIVO"}<span>AIR_QUALITY_01</span></div>
+    <strong>{en ? "Air quality" : "Kakovost zraka"}</strong>
+    <div class="city-popover-grid"><span>PM10<b id="city-popover-air-pm10">18 µg/m³</b></span><span>{en ? "Temperature" : "Temperatura"}<b id="city-popover-air-temp">18.7 °C</b></span><span>{en ? "Humidity" : "Vlaga"}<b id="city-popover-air-humidity">56 %</b></span></div>
+  </div>
+  <div class="city-sensor-popover city-popover-cyclists" id="city-popover-cyclists" role="tooltip" data-sensor-popover="cyclists">
+    <div class="city-popover-top"><i></i>{en ? "LIVE SENSOR" : "TIPALO V ŽIVO"}<span>CYCLE_COUNT_01</span></div>
+    <strong>{en ? "Cyclist counter" : "Števec kolesarjev"}</strong>
+    <div class="city-popover-reading"><b id="city-popover-cyclists-value">124</b><small>{en ? "Passages today" : "Prehodov danes"}</small></div>
+  </div>
+  <div class="city-photo-caption" aria-hidden="true">
+    {en
+      ? "LIVE MODEL · SIMULATED ASSET DATA"
+      : "ŽIVI MODEL · SIMULIRANI PODATKI"}
+  </div>
+</div>
