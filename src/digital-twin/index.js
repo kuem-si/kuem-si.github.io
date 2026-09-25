@@ -1,6 +1,9 @@
+import { initCyclists } from "./cyclists.js";
+
 const root = document.querySelector("[data-twin-root]");
 
 if (root) {
+  initCyclists(root);
   const en = document.documentElement.lang.startsWith("en");
   const cityWrap = root.querySelector(".twin-scene-wrap");
   const workspace = root.querySelector(".twin-workspace");
@@ -347,7 +350,6 @@ if (root) {
   let index = 0;
   let paused = false;
   let visible = true;
-  let cyclistCount = 124;
   let timer;
 
   function render(step) {
@@ -417,8 +419,6 @@ if (root) {
     $("#sensor-air-climate").textContent = `${airTemperature} °C · ${airHumidity}${en ? "% RH" : " % RH"}`;
     $("#city-popover-air-temp").textContent = `${airTemperature} °C`;
     $("#city-popover-air-humidity").textContent = `${airHumidity}${en ? "%" : " %"}`;
-    $("#sensor-cyclists").textContent = en ? `${cyclistCount} today` : `${cyclistCount} danes`;
-    $("#city-popover-cyclists-value").textContent = String(cyclistCount);
     $("#twin-rule-status").textContent = step.rule;
     $("#twin-event").textContent = step.event;
     $("#twin-step").textContent = step.text;
@@ -498,16 +498,6 @@ if (root) {
     schedule();
   });
   $("#twin-next").addEventListener("click", next);
-  root.querySelectorAll(".city-road-cyclist").forEach((cyclist) => {
-    cyclist.addEventListener("animationiteration", () => {
-      cyclistCount += 1;
-      const count = en ? `${cyclistCount} today` : `${cyclistCount} danes`;
-      $("#sensor-cyclists").textContent = count;
-      $("#city-popover-cyclists-value").textContent = String(cyclistCount);
-      $("#twin-event").textContent = `${en ? "Cyclist completed a road crossing" : "Kolesar je prevozil cestni odsek"} · ${count}.`;
-      $("#twin-step").textContent = en ? "Cyclist counter triggered" : "Števec kolesarjev je zaznal prehod";
-    });
-  });
   root.querySelectorAll("[data-scene-light]").forEach((control) => {
     control.addEventListener("click", () => {
       const deviceIndex = devices.findIndex((device) => device.id === control.dataset.sceneLight);
@@ -549,17 +539,6 @@ if (root) {
       panel: "electricity",
       name: en ? "Factory electricity meter" : "Električni števec tovarne",
       event: () => `${en ? "Factory electricity meter" : "Električni števec tovarne"}: ${$("#meter-electricity").textContent}.`,
-    },
-    cyclists: {
-      panel: "cyclists",
-      name: en ? "Cyclist counter" : "Števec kolesarjev",
-      event: () => {
-        cyclistCount += 1;
-        const count = en ? `${cyclistCount} today` : `${cyclistCount} danes`;
-        $("#sensor-cyclists").textContent = count;
-        $("#city-popover-cyclists-value").textContent = String(cyclistCount);
-        return `${en ? "Cyclist passed the counter" : "Kolesar je peljal mimo števca"} · ${count}.`;
-      },
     },
   };
   root.querySelectorAll("[data-scene-sensor]").forEach((control) => {

@@ -47,6 +47,11 @@
 .city-hotspots{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .city-art--modular{aspect-ratio:3/2;background:#e5e9ec;container-type:inline-size}
 .city-art--modular .city-photo{object-fit:contain}
+.city-cyclists{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:2}
+.city-cyclist-art{fill:none;stroke:#253036;stroke-width:1.15;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 1px #17202780)}
+.city-cyclist-rider{stroke:var(--jersey);stroke-width:2.5}
+.city-cyclist-head{fill:#bb967c;stroke:#49423b;stroke-width:.6}
+@media(prefers-reduced-motion:reduce){.city-cyclists{display:none}}
 .city-art--modular .city-hotspots{display:none}
 .city-art--modular .city-hotspots [data-sensor-popover-trigger]{pointer-events:none}
 .city-factory-light-effect{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;opacity:0;transition:opacity .45s ease}
@@ -62,26 +67,7 @@
 .city-scene-light[aria-pressed="true"]>span{background:#ffe38a;box-shadow:0 0 11px 5px #ffc94eaa}
 .city-scene-light--home{left:22%;top:24%}.city-scene-light--public{left:68%;top:29%}.city-scene-light--factory{left:23%;top:62%}.city-scene-light--utility{left:69%;top:62%}
 .city-scene-water-level{left:66%;top:53%}.city-scene-air{left:77%;top:22%}.city-scene-water{left:28%;top:32%}.city-scene-gas{left:39%;top:63%}.city-scene-electricity{left:32%;top:74%}.city-scene-cyclists{left:54%;top:29%}
-.city-road-cyclist{position:absolute;z-index:2;left:16%;top:35.1%;width:31px;height:30px;filter:drop-shadow(0 1px 1px #071315aa);animation:road-cycle-horizontal 11s linear infinite;pointer-events:none}
-.city-road-cyclist--two{animation-delay:-5.5s}
-.city-road-cyclist--turn{animation-name:road-cycle-turn;animation-duration:13s;animation-delay:-1.6s}
-.city-road-cyclist--vertical{left:48.5%;top:14%;transform:rotate(90deg);animation-name:road-cycle-vertical;animation-duration:8s}
-.city-road-cyclist--three{animation-delay:-4s}
-.city-road-cyclist--four{animation-delay:0s;left:48.5%}
-.city-road-cyclist i{position:absolute;display:block}
-.bike-wheel{top:18px;width:10px;height:10px;border:1.5px solid #17252a;border-radius:50%;background:radial-gradient(circle,#c5d0d2 0 1px,transparent 1.4px);box-shadow:inset 0 0 0 1px #aab5b7}
 .bike-wheel--back{left:1px}.bike-wheel--front{left:20px}
-.bike-frame{left:5px;top:18px;width:17px;height:9px;border-left:1.6px solid #b94c32;border-bottom:1.6px solid #b94c32;transform:skew(-27deg);background:linear-gradient(148deg,transparent 46%,#b94c32 48% 54%,transparent 56%),linear-gradient(28deg,transparent 46%,#b94c32 48% 54%,transparent 56%)}
-.rider-body{left:11px;top:8px;width:9px;height:11px;border-radius:5px 4px 2px 2px;background:linear-gradient(100deg,#316d85,#5a9ab1 60%,#244c63);transform:rotate(24deg);box-shadow:1px 1px 1px #152b35}
-.rider-head{left:16px;top:3px;width:5px;height:6px;border-radius:50%;background:linear-gradient(130deg,#ddb391,#a97555);box-shadow:0 0 0 .6px #493d36}
-.rider-helmet{left:15px;top:1px;width:7px;height:4px;border-radius:5px 5px 2px 2px;background:#d6a83d;border-bottom:1px solid #624a20}
-.rider-arm{top:12px;width:2px;height:8px;border-radius:2px;background:#d0a17c;transform-origin:top center}
-.rider-arm--front{left:17px;transform:rotate(-38deg)}.rider-arm--back{left:12px;transform:rotate(25deg)}
-.rider-leg{top:16px;width:2.5px;height:7px;border-radius:2px;background:#283b42;transform-origin:top center}
-.rider-leg--front{left:16px;transform:rotate(28deg)}.rider-leg--back{left:12px;transform:rotate(-34deg)}
-@keyframes road-cycle-horizontal{from{translate:0 0}to{translate:calc(68cqw - 100%) 0}}
-@keyframes road-cycle-vertical{from{translate:0 0}to{translate:0 38cqw}}
-@keyframes road-cycle-turn{0%{translate:0 0;transform:rotate(0deg)}48%{translate:calc(34cqw - 100%) 0;transform:rotate(0deg)}55%{translate:calc(34cqw - 100%) 0;transform:rotate(90deg)}100%{translate:calc(34cqw - 100%) 24cqw;transform:rotate(90deg)}}
 .city-scene-sensor>span{font:800 clamp(8px,.85vw,12px)/1 ui-monospace,monospace;color:#8ee4e8}
 .city-scene-sensor small{color:#e4f1ec}
 .city-art--modular .city-sensor-popover{z-index:8}

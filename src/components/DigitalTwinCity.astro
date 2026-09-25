@@ -5,6 +5,7 @@ interface Props {
 
 const { locale } = Astro.props;
 const en = locale === "en";
+const cyclistColors = ["#ae4439", "#3b6670", "#aa906a", "#5d735c"];
 ---
 
 <div class="city-art city-art--modular" data-city-art>
@@ -20,6 +21,18 @@ const en = locale === "en";
     }
     fetchpriority="high"
   />
+  <svg class="city-cyclists" viewBox="0 0 1536 1024" aria-hidden="true" focusable="false">
+    <defs><clipPath id="city-cyclist-maquette"><path d="M65 770 338 98 1217 98 1475 770Z" /></clipPath></defs>
+    <path data-cyclist-route="bridge" d="M 650 792 C 666 730 701 620 728 559 C 742 529 767 511 806 510 C 918 515 1052 545 1190 580 C 1315 614 1439 648 1545 680" fill="none" />
+    <path data-cyclist-route="central" d="M 738 82 C 737 170 738 245 738 317 C 738 354 744 379 778 386 C 874 395 994 399 1108 404 C 1188 407 1267 410 1338 414" fill="none" />
+    <path data-cyclist-route="westbound" d="M 1360 376 C 1213 375 1060 374 891 359 C 720 346 501 330 210 315" fill="none" />
+    <path data-cyclist-route="residential" d="M 218 333 C 381 341 563 357 700 368 C 752 373 775 349 778 312 C 783 252 781 158 781 82" fill="none" />
+    <g clip-path="url(#city-cyclist-maquette)">
+      {cyclistColors.map((color, index) => (
+        <g class="city-cyclist" data-cyclist={index}><g class="city-cyclist-art" style={`--jersey:${color}`} transform={index === 2 ? "scale(1 -1)" : undefined}><circle cx="-5" cy="4" r="3.2"/><circle cx="6" cy="4" r="3.2"/><path d="m-5 4 4-6 7 6h-11l7-7 4 7"/><path class="city-cyclist-rider" d="m-1-2 1-5 4-2 2 4-4 3-2 4m0-9-3-2m5 7 2 3"/><circle class="city-cyclist-head" cx="4" cy="-11" r="2.4"/></g></g>
+      ))}
+    </g>
+  </svg>
   <svg class="city-factory-light-effect" viewBox="0 0 1536 1024" aria-hidden="true">
     <defs>
       <linearGradient id="factory-window-glow" x1="0" y1="0" x2="0" y2="1">
@@ -54,18 +67,6 @@ const en = locale === "en";
     <button class="city-scene-control city-scene-sensor city-scene-gas" type="button" data-scene-sensor="gas-meter" aria-describedby="city-popover-factory-gas"><span>GAS</span><small>{en ? "METER" : "PLINOMER"}</small></button>
     <button class="city-scene-control city-scene-sensor city-scene-electricity" type="button" data-scene-sensor="electricity" aria-describedby="city-popover-electricity"><span>kWh</span><small>{en ? "POWER" : "ELEKTRIKA"}</small></button>
     <button class="city-scene-control city-scene-sensor city-scene-cyclists" type="button" data-scene-sensor="cyclists" aria-describedby="city-popover-cyclists"><span>↗</span><small>{en ? "CYCLE" : "KOLESARJI"}</small></button>
-    <span class="city-road-cyclist city-road-cyclist--turn" aria-hidden="true">
-      <i class="rider-helmet"></i><i class="rider-head"></i><i class="rider-body"></i><i class="rider-arm rider-arm--front"></i><i class="rider-arm rider-arm--back"></i><i class="rider-leg rider-leg--front"></i><i class="rider-leg rider-leg--back"></i><i class="bike-frame"></i><i class="bike-wheel bike-wheel--front"></i><i class="bike-wheel bike-wheel--back"></i>
-    </span>
-    <span class="city-road-cyclist city-road-cyclist--two" aria-hidden="true">
-      <i class="rider-helmet"></i><i class="rider-head"></i><i class="rider-body"></i><i class="rider-arm rider-arm--front"></i><i class="rider-arm rider-arm--back"></i><i class="rider-leg rider-leg--front"></i><i class="rider-leg rider-leg--back"></i><i class="bike-frame"></i><i class="bike-wheel bike-wheel--front"></i><i class="bike-wheel bike-wheel--back"></i>
-    </span>
-    <span class="city-road-cyclist city-road-cyclist--vertical city-road-cyclist--three" aria-hidden="true">
-      <i class="rider-helmet"></i><i class="rider-head"></i><i class="rider-body"></i><i class="rider-arm rider-arm--front"></i><i class="rider-arm rider-arm--back"></i><i class="rider-leg rider-leg--front"></i><i class="rider-leg rider-leg--back"></i><i class="bike-frame"></i><i class="bike-wheel bike-wheel--front"></i><i class="bike-wheel bike-wheel--back"></i>
-    </span>
-    <span class="city-road-cyclist city-road-cyclist--vertical city-road-cyclist--four" aria-hidden="true">
-      <i class="rider-helmet"></i><i class="rider-head"></i><i class="rider-body"></i><i class="rider-arm rider-arm--front"></i><i class="rider-arm rider-arm--back"></i><i class="rider-leg rider-leg--front"></i><i class="rider-leg rider-leg--back"></i><i class="bike-frame"></i><i class="bike-wheel bike-wheel--front"></i><i class="bike-wheel bike-wheel--back"></i>
-    </span>
   </div>
 
   <div class="city-sensor-popover city-popover-vibration" id="city-popover-vibration" role="tooltip" data-sensor-popover="vibration">
