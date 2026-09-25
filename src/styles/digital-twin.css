@@ -48,7 +48,6 @@
 .city-art--modular{aspect-ratio:3/2;background:#e5e9ec;container-type:inline-size}
 .city-art--modular .city-photo{object-fit:contain}
 .city-traffic{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:2}
-.city-vehicle-art{filter:drop-shadow(0 1px 1px #17202780)}
 .city-vehicle-shadow{fill:#152027;fill-opacity:.18}
 .city-vehicle-wheels{fill:#252b2c}
 .city-vehicle-side{fill:var(--side);stroke:#344148;stroke-width:.55}
@@ -207,6 +206,9 @@
 .twin-meter-readings>div>span,.twin-sensor-readings>div>span{min-width:0}
 .twin-meter-readings small,.twin-sensor-readings small{display:block;color:#92a0ac;font-size:7px}
 .twin-meter-readings strong,.twin-sensor-readings strong{color:#34536c;font-size:9px;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+#sensor-cyclists{transition:color .6s ease}
+#sensor-cyclists.is-counted{color:#168760}
+@media(prefers-reduced-motion:reduce){#sensor-cyclists{transition:none}}
 .twin-sensor-readings strong small{font-weight:400}
 .city-photo-caption{position:absolute;left:14px;bottom:12px;color:#f2f8ef;font:700 9px system-ui,sans-serif;letter-spacing:1.1px;text-shadow:0 1px 5px #0c191d}
 
