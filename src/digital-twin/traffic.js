@@ -41,6 +41,16 @@ const OCCLUDERS = {
   // South parapet of the bridge with the two lamp posts standing on it.
   parapet:
     "837,517 848,517 848,523 870.5,526.6 870.5,458 868,458 868,452 878,452 878,458 875,458 875,527.3 1000,546 1150,570 1200,582.5 1203,583 1203,532 1198,532 1198,518 1212,518 1212,532 1207.5,532 1207.5,584 1222,587 1222,640 837,640",
+  // Street lamps standing at the kerb in front of the sidewalks.
+  gardenLamp: "513,276 522,276 522,288 519,288 519,322 516,322 516,288 513,288",
+  cornerLamp:
+    "698,400 707,400 707,411 703.5,411 703.5,464 700.8,464 700.8,411 698,411",
+  plazaLamp:
+    "887,315 897,315 897,327 893.5,327 893.5,354 890.5,354 890.5,327 887,327",
+  fountainLamp:
+    "1013,313 1022,313 1022,327 1019,327 1019,363 1016,363 1016,327 1013,327",
+  eastLamp:
+    "1256,341 1264,341 1264,353 1261.5,353 1261.5,380 1258.5,380 1258.5,353 1256,353",
 };
 
 // Lane centres as [x, y, cyclist offset]. The offset (ground units) keeps
@@ -188,8 +198,262 @@ const ROUTES = {
   },
 };
 
+// Sidewalk and plaza paths. Each is walked in both directions, walkers keeping
+// to the right (offset in ground units). "fade" marks ends at a building door,
+// where walkers step in or out instead of leaving the board.
+const WALKS = {
+  bridgeWalk: {
+    occluders: ["cornerLamp"],
+    points: [
+      [1400, 601],
+      [1350, 589],
+      [1300, 577],
+      [1250, 563],
+      [1200, 548],
+      [1150, 535],
+      [1100, 523],
+      [1050, 513],
+      [1000, 505],
+      [950, 498],
+      [900, 493],
+      [873, 491],
+      [850, 486],
+      [820, 474],
+      [805, 458],
+      [798, 440],
+      [794, 431],
+      [775, 430],
+      [750, 430],
+      [725, 429],
+      [712, 438],
+      [697, 452],
+      [690, 472],
+      [684, 495],
+      [674, 520],
+      [662, 545],
+      [646, 575],
+      [638, 600],
+      [628, 632],
+      [619, 655],
+      [609, 678],
+      [600, 700],
+      [592, 722],
+      [585, 742],
+      [578, 770],
+    ],
+  },
+  // Garden sidewalk, over the west road zebra and down past the factory.
+  gardenCross: {
+    occluders: ["gardenLamp", "westLamp", "cornerLamp"],
+    points: [
+      [250, 307],
+      [300, 309],
+      [400, 312.5],
+      [500, 316],
+      [600, 320.5],
+      [640, 324],
+      [660, 328],
+      [665, 337],
+      [667, 352],
+      [668, 368],
+      [672, 382],
+      [684, 398],
+      [698, 414],
+      [706, 428],
+      [700, 446],
+      [692, 466],
+      [686, 490],
+      [674, 520],
+      [662, 545],
+      [646, 575],
+      [638, 600],
+      [628, 632],
+      [619, 655],
+      [609, 678],
+      [600, 700],
+      [592, 722],
+      [585, 742],
+      [578, 770],
+    ],
+  },
+  westWalk: {
+    occluders: ["gardenLamp", "westLamp"],
+    fade: [false, true],
+    points: [
+      [250, 307],
+      [300, 309],
+      [400, 312.5],
+      [500, 316],
+      [600, 320.5],
+      [650, 325],
+      [700, 330],
+      [725, 329],
+      [738, 326],
+      [760, 326],
+      [790, 326],
+      [815, 327],
+      [838, 329],
+      [855, 326],
+      [857, 310],
+      [863, 293],
+      [880, 277],
+      [905, 265],
+      [945, 254],
+      [990, 242],
+      [1040, 234],
+      [1075, 226],
+      [1085, 221],
+    ],
+  },
+  plazaFront: {
+    occluders: ["plazaLamp", "fountainLamp", "eastLamp"],
+    points: [
+      [1310, 380],
+      [1250, 375],
+      [1200, 371],
+      [1150, 367],
+      [1100, 363],
+      [1050, 359],
+      [1000, 356],
+      [950, 353],
+      [900, 350],
+      [860, 347],
+      [840, 340],
+      [830, 320],
+      [826, 290],
+      [824, 250],
+      [823, 200],
+      [823, 150],
+      [823, 99],
+      [823, 70],
+    ],
+  },
+  plazaStroll: {
+    occluders: ["eastLamp"],
+    fade: [true, false],
+    points: [
+      [1142, 222],
+      [1128, 236],
+      [1115, 250],
+      [1100, 270],
+      [1092, 295],
+      [1096, 320],
+      [1100, 338],
+      [1106, 356],
+      [1150, 367],
+      [1200, 371],
+      [1250, 375],
+      [1310, 380],
+    ],
+  },
+};
+const WALK_OFFSET = 2.5;
+
+// People with something to do. A path is a short stroll walked back and
+// forth; at each end they stop in a pose, turned to "face" (ground heading in
+// radians: 0 east, π/2 toward the camera, -π/2 away). "carry" says whether
+// they pick up (true) or put down (false) a box when leaving that stop.
+// People indoors are only seen through the window glass, passing behind the
+// window frames.
+const FOUNTAIN_JET = [1020, 272];
+// Lawn in front of the first house, where two children play catch.
+const LAWN = [
+  [362, 268],
+  [440, 264],
+  [447, 284],
+  [368, 291],
+];
+const CHILD_SIZE = 0.66;
+const ACTORS = [
+  {
+    // INDUSTRIJA: at the workbenches behind the large front window.
+    window: { rects: [[369, 478, 411, 514]], frames: [380, 391, 403] },
+    path: [
+      [375, 510],
+      [390, 511.5],
+      [405, 513],
+    ],
+    stops: [
+      { pose: "work", face: -1.9, time: [3, 7] },
+      { pose: "work", face: -1.25, time: [3, 7] },
+    ],
+  },
+  {
+    // Yard: unloading the truck, carrying boxes over to the pallets.
+    path: [
+      [528, 588],
+      [524, 572],
+      [516, 555],
+      [512, 542],
+    ],
+    stops: [
+      { pose: "lift", face: 0.3, time: [1.8, 2.6], carry: false },
+      { pose: "load", face: -2, time: [1.5, 2.2], carry: true },
+    ],
+  },
+  {
+    // JAVNI PROSTOR, lower floor: on the phone, then looking out.
+    window: {
+      rects: [[1015, 191, 1116, 223]],
+      frames: [1034, 1050, 1065, 1080, 1096],
+    },
+    path: [
+      [1022, 219],
+      [1060, 219.5],
+      [1105, 220],
+    ],
+    stops: [
+      { pose: "phone", face: 1.57, time: [4, 8] },
+      { pose: null, face: 1.4, time: [2, 4] },
+    ],
+  },
+  {
+    // JAVNI PROSTOR, upper floor: at a desk, then talking to colleagues.
+    window: {
+      rects: [[1016, 157, 1119, 181]],
+      frames: [1036, 1052.5, 1067.5, 1082.5, 1100],
+    },
+    path: [
+      [1028, 182],
+      [1062, 182],
+      [1096, 182],
+    ],
+    stops: [
+      { pose: "work", face: -1.57, time: [5, 9] },
+      { pose: "talk", face: 1.2, time: [3, 6] },
+    ],
+  },
+  {
+    // Fountain: two visitors delighted by it, photographing, pointing,
+    // waving and turning to each other.
+    at: [984, 317],
+    partner: 5,
+    script: [
+      ["photo", 3.5],
+      ["point", 2.2],
+      ["wave", 2.4],
+      ["talk", 1.8],
+    ],
+  },
+  {
+    at: [997, 322.5],
+    partner: 4,
+    script: [
+      ["wave", 2.6],
+      ["clap", 2],
+      ["point", 2.4],
+      ["talk", 1.8],
+    ],
+  },
+  // STANOVANJSKI: two children playing catch on the lawn.
+  { kid: true, at: [380, 280], partner: 7 },
+  { kid: true, at: [425, 275], partner: 6 },
+];
+
 // Lanes closer than this (ground units, centre to centre) are in conflict.
+// Walkers only conflict with traffic where a path actually crosses a road.
 const CONFLICT_DISTANCE = 15;
+const WALK_CONFLICT_DISTANCE = 9;
 // CYCLE_COUNT_01 watches the north road just above the junction crosswalk.
 const COUNTER = { y: 300, minX: 740, maxX: 790 };
 
@@ -246,6 +510,28 @@ const JERSEYS = [
 ];
 const FRAMES = ["#2a2f33", "#7a3128", "#5d6a70", "#2f4a5e"];
 const HELMETS = ["#e4e0d6", "#2b3034", "#b9bcb8"];
+// Muted, everyday clothing so no two walkers look alike.
+const OUTFIT = {
+  tops: [
+    "#2e3b55",
+    "#3f4f3a",
+    "#5a6340",
+    "#7a2e32",
+    "#8c9094",
+    "#e3ded3",
+    "#23262a",
+    "#4b6a8c",
+    "#c49a3a",
+    "#2f6b6b",
+    "#a55f45",
+    "#6b5a7a",
+  ],
+  bottoms: ["#344860", "#23262a", "#4a4d52", "#c8b79a", "#7c7355", "#5b6f86"],
+  skirts: ["#2a2d33", "#7a2e32", "#3f5a6e", "#8a7a5a"],
+  shoes: ["#1d1f22", "#c9c4ba", "#5a3d2b", "#2d2f33"],
+  skins: ["#f1d2b6", "#e2b48f", "#c68e62", "#9c6a44", "#6e4a31", "#f5dcc6"],
+  hairs: ["#1f1a17", "#3b2a1e", "#6b4a2e", "#a0663a", "#c9a66b", "#9a9894"],
+};
 
 const KINDS = {
   car: {
@@ -257,6 +543,16 @@ const KINDS = {
     lateral: 22,
     bendBrake: 12,
     respawn: [10, 28],
+  },
+  pedestrian: {
+    accel: 3,
+    brake: 5,
+    minGap: 2.5,
+    headway: 0.8,
+    cruise: [7.5, 10.5],
+    lateral: 8,
+    bendBrake: 3,
+    respawn: [4, 18],
   },
   cyclist: {
     accel: 6,
@@ -272,59 +568,111 @@ const KINDS = {
 const CAR_COUNT = 5;
 const CYCLIST_COUNT = 3;
 const CYCLIST_SIZE = 1.15;
+const PEDESTRIAN_COUNT = 8;
+const PEDESTRIAN_SIZE = 1.1;
+// Ground distance covered by one step.
+const STEP = 4.6;
 
 const random = (min, max) => min + Math.random() * (max - min);
 const pick = (list) => list[Math.floor(Math.random() * list.length)];
 const f2 = (value) => Math.round(value * 100) / 100;
 const f3 = (value) => Math.round(value * 1000) / 1000;
+// Lets the browser breathe between chunks of set-up work.
+const idle = () =>
+  new Promise((resolve) =>
+    (window.requestIdleCallback ?? setTimeout)(() => resolve(), {
+      timeout: 100,
+    }),
+  );
 const angleDelta = (from, to) =>
   Math.atan2(Math.sin(to - from), Math.cos(to - from));
 
+const BOARD_CORNERS = [
+  [345, 99],
+  [1206, 99],
+  [1442, 767],
+  [95, 757],
+];
+function onBoard(x, y) {
+  for (let i = 0; i < 4; i++) {
+    const [x0, y0] = BOARD_CORNERS[i];
+    const [x1, y1] = BOARD_CORNERS[(i + 1) % 4];
+    if ((x1 - x0) * (y - y0) - (y1 - y0) * (x - x0) < 0) return false;
+  }
+  return true;
+}
+
 // Every stretch where two lanes cross or merge becomes a shared cell; each
 // lane records where (in ground distance) it enters and leaves the cell.
-function findConflicts(lanes) {
-  for (const lane of lanes) lane.cells = [];
-  for (let p = 0; p < lanes.length; p++)
+async function findConflicts(lanes) {
+  // Each lane is bucketed once on a coarse grid (and boxed) so only nearby
+  // samples of two lanes are ever compared.
+  const key = (x, y) => Math.floor(x / 40) * 100 + Math.floor(y / 40);
+  for (const lane of lanes) {
+    lane.cells = [];
+    lane.grid = new Map();
+    lane.box = [Infinity, Infinity, -Infinity, -Infinity];
+    for (let j = 0; j <= lane.length; j += 3) {
+      const [x, y] = [lane.x[j], lane.y[j]];
+      const cell = key(x, y);
+      if (!lane.grid.has(cell)) lane.grid.set(cell, []);
+      lane.grid.get(cell).push(j);
+      lane.box = [
+        Math.min(lane.box[0], x),
+        Math.min(lane.box[1], y),
+        Math.max(lane.box[2], x),
+        Math.max(lane.box[3], y),
+      ];
+    }
+  }
+  for (let p = 0; p < lanes.length; p++) {
+    await idle();
     for (let q = p + 1; q < lanes.length; q++) {
       const [first, second] = [lanes[p], lanes[q]];
+      // Walkers pass each other on sidewalks; they never reserve against
+      // each other.
+      if (first.walk && second.walk) continue;
+      const limit =
+        first.walk || second.walk ? WALK_CONFLICT_DISTANCE : CONFLICT_DISTANCE;
+      const [a, b] = [first.box, second.box];
+      if (
+        a[0] > b[2] + 40 ||
+        b[0] > a[2] + 40 ||
+        a[1] > b[3] + 40 ||
+        b[1] > a[3] + 40
+      )
+        continue;
       const hits = [];
-      // Bucket the second lane on a coarse grid so only nearby samples are
-      // compared.
-      const grid = new Map();
-      const key = (x, y) => Math.floor(x / 40) * 100 + Math.floor(y / 40);
-      for (let j = 0; j <= second.length; j += 3) {
-        const cell = key(second.x[j], second.y[j]);
-        if (!grid.has(cell)) grid.set(cell, []);
-        grid.get(cell).push(j);
-      }
       for (let i = 0; i <= first.length; i += 3) {
-        const near = [];
-        for (let gx = -1; gx <= 1; gx++)
-          for (let gy = -1; gy <= 1; gy++)
-            near.push(
-              ...(grid.get(key(first.x[i], first.y[i]) + gx * 100 + gy) ?? []),
-            );
-        let closest = Infinity;
-        let match = 0;
-        for (const j of near) {
-          const my = (first.y[i] + second.y[j]) / 2;
-          const s = depthScale(my);
-          const gap = Math.hypot(
-            (first.x[i] - second.x[j]) / s,
-            (first.y[i] - second.y[j]) / (s * foreshortening(my)),
-          );
-          if (gap < closest) {
-            closest = gap;
-            match = j;
+        const x = first.x[i];
+        const y = first.y[i];
+        if (x < b[0] - 40 || x > b[2] + 40 || y < b[1] - 40 || y > b[3] + 40)
+          continue;
+        // Off the board nothing is visible, so nothing can collide.
+        if (!onBoard(x, y)) continue;
+        const home = key(x, y);
+        // Screen distance that can still be within reach at this depth.
+        const reach = limit * depthScale(y) * 1.2;
+        // Every sample pair within reach counts, so each lane gets the full
+        // stretch where the other one is close.
+        for (let g = 0; g < 9; g++)
+          for (const j of second.grid.get(
+            home + (Math.floor(g / 3) - 1) * 100 + (g % 3) - 1,
+          ) ?? []) {
+            const dx = x - second.x[j];
+            const dy = y - second.y[j];
+            if (Math.abs(dx) > reach || Math.abs(dy) > reach) continue;
+            const my = (y + second.y[j]) / 2;
+            const s = depthScale(my);
+            const gap = Math.hypot(dx / s, dy / (s * foreshortening(my)));
+            if (gap < limit) hits.push([i, j]);
           }
-        }
-        if (closest < CONFLICT_DISTANCE) hits.push([i, match]);
       }
       let cluster = null;
       const close = () => {
         if (!cluster) return;
         const cell = { holders: new Set() };
-        // Nearest-point matching is narrow along each lane; pad both spans.
+        // Pad both spans for the width of whoever is crossing.
         first.cells.push({ cell, in: cluster[0] - 6, out: cluster[1] + 6 });
         second.cells.push({ cell, in: cluster[2] - 6, out: cluster[3] + 6 });
         cluster = null;
@@ -338,12 +686,17 @@ function findConflicts(lanes) {
       }
       close();
     }
+  }
   for (const lane of lanes) lane.cells.sort((a, b) => a.in - b.in);
 }
 
 // Centripetal Catmull-Rom through the waypoints, resampled every ground unit.
 function buildRoute(name, route) {
-  const points = route.points;
+  const points = route.points.map(([x, y, offset]) => [
+    x,
+    y,
+    offset ?? (route.walk ? WALK_OFFSET : 0),
+  ]);
   const dense = [];
   for (let i = 0; i < points.length - 1; i++) {
     const p1 = points[i];
@@ -397,9 +750,16 @@ function buildRoute(name, route) {
     y: new Float32Array(count),
     offset: new Float32Array(count),
     heading: new Float32Array(count),
-    limit: { car: new Float32Array(count), cyclist: new Float32Array(count) },
+    limit: Object.fromEntries(
+      (route.walk ? ["pedestrian"] : ["car", "cyclist"]).map((kind) => [
+        kind,
+        new Float32Array(count),
+      ]),
+    ),
     clipId: `city-traffic-clip-${name}`,
     occluders: route.occluders,
+    walk: Boolean(route.walk),
+    fade: route.fade ?? [false, false],
   };
   for (let i = 0, j = 0; i < count; i++) {
     while (along[j + 1] < i) j++;
@@ -681,27 +1041,341 @@ function styleCyclist(cyclist) {
   return 6.5 * CYCLIST_SIZE;
 }
 
+// Pedestrians: limbs are strokes between projected joints and the torso and
+// head are ground-plane slices, so a walker reads correctly from any side.
+// Legs, arms and a slight bob follow the distance walked.
+function createPedestrian(layer) {
+  const element = svg(
+    "g",
+    {
+      class: "city-traffic-pedestrian",
+      fill: "none",
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round",
+    },
+    layer,
+  );
+  const shadow = svg(
+    "ellipse",
+    { rx: 2.1, ry: 1.6, fill: "#0b1014", "fill-opacity": 0.24 },
+    element,
+  );
+  const limb = () => svg("polyline", {}, element);
+  // Far-side limbs first, torso, then near-side limbs and head on top.
+  const legs = [limb(), limb()];
+  const shoes = [limb(), limb()];
+  const farArm = [limb(), limb()];
+  // Coat hem or skirt, hips, and upper body are single strokes whose width
+  // follows the viewing angle; the shoulders are a slice seen from above.
+  const body = () => svg("polyline", { "stroke-linecap": "butt" }, element);
+  const coat = body();
+  const torso = [body(), body()];
+  const shoulders = svg("ellipse", { rx: 0.95, ry: 1.7 }, element);
+  const nearArm = [limb(), limb()];
+  // A cardboard box, shown only while carrying.
+  const box = svg(
+    "g",
+    { fill: "#a9824f", stroke: "#6d5232", "stroke-width": 0.2 },
+    element,
+  );
+  const boxSlices = [0, 1, 2].map(() =>
+    svg("rect", { x: 0.6, y: -1.6, width: 2.8, height: 3.2, rx: 0.25 }, box),
+  );
+  box.style.display = "none";
+  const head = svg("circle", { r: 0.95 }, element);
+  const longHair = svg("ellipse", { cx: -0.55, rx: 0.8, ry: 1.05 }, element);
+  const hair = svg("ellipse", { cx: -0.2, rx: 1, ry: 0.95 }, element);
+  return {
+    element,
+    shadow,
+    legs,
+    shoes,
+    farArm,
+    coat,
+    torso,
+    shoulders,
+    nearArm,
+    box,
+    boxSlices,
+    head,
+    longHair,
+    hair,
+    size: 0,
+  };
+}
+
+// Children have relatively larger heads.
+function makeChild(walker) {
+  walker.head.setAttribute("r", 1.25);
+  walker.hair.setAttribute("rx", 1.3);
+  walker.hair.setAttribute("ry", 1.25);
+  walker.longHair.setAttribute("rx", 1.05);
+  walker.longHair.setAttribute("ry", 1.3);
+}
+
+function dressPedestrian(walker, taken) {
+  const top = pick(OUTFIT.tops.filter((color) => !taken.includes(color)));
+  const skin = pick(OUTFIT.skins);
+  const style = Math.random();
+  const coat = style < 0.25;
+  const skirt = style >= 0.25 && style < 0.45;
+  const sleeve = style > 0.85 ? skin : top;
+  const bottom = skirt ? pick(OUTFIT.skirts) : pick(OUTFIT.bottoms);
+  const legs = skirt ? skin : bottom;
+  for (const leg of walker.legs) leg.setAttribute("stroke", legs);
+  const shoes = pick(OUTFIT.shoes);
+  for (const shoe of walker.shoes) shoe.setAttribute("stroke", shoes);
+  for (const arm of [walker.farArm, walker.nearArm]) {
+    arm[0].setAttribute("stroke", sleeve);
+    arm[1].setAttribute("stroke", skin);
+  }
+  // A long coat or a skirt covers the upper legs; otherwise hidden.
+  walker.coat.style.display = coat || skirt ? "" : "none";
+  walker.coat.setAttribute("stroke", coat ? top : bottom);
+  walker.hem = skirt ? 1.85 : 1.6;
+  walker.torso[0].setAttribute("stroke", coat ? top : bottom);
+  walker.torso[1].setAttribute("stroke", top);
+  walker.shoulders.setAttribute("fill", top);
+  walker.head.setAttribute("fill", skin);
+  const hair = pick(OUTFIT.hairs);
+  walker.hair.setAttribute("fill", hair);
+  walker.longHair.setAttribute("fill", hair);
+  walker.longHair.style.display = Math.random() < 0.35 ? "" : "none";
+  walker.top = top;
+  return 1.8;
+}
+
+// Arm poses for people doing something. Each returns the elbow and hand of
+// one arm as [forward, sideways, height] in ground units, for side +1 (right)
+// or -1 (left), at time t in seconds.
+const POSES = {
+  // Hands busy at a workbench or desk.
+  work: (t, side) => [
+    0.9,
+    side * 1.6,
+    8.6,
+    1.7 + 0.25 * Math.sin(t * 6 + side),
+    side * 0.8,
+    8.2 + 0.2 * Math.sin(t * 5 + side * 2),
+  ],
+  // Bent forward, setting a box down on the pallets.
+  lift: (t, side) => [1, side * 1.5, 7.4, 1.8, side * 0.9, 5.6],
+  // Holding a box in front of the body.
+  carry: (t, side) => [0.8, side * 1.6, 8.3, 1.5, side * 1.15, 8],
+  // Reaching up into the truck for a box.
+  load: (t, side) => [1.1, side * 1.4, 9.8, 2.1, side * 1, 10.3],
+  // Right hand at the ear, left arm across the body.
+  phone: (t, side) =>
+    side > 0
+      ? [0.3, 1.9, 9.6, 0.4, 1.05, 11.4]
+      : [0.4, -1.7, 8.6, 1, -0.6, 8.9],
+  // Talking with the hands.
+  talk: (t, side) => [
+    0.6,
+    side * 1.8,
+    8.6,
+    1.3 + 0.3 * Math.sin(t * 4 + side * 1.3),
+    side * 1.2,
+    9 + 0.4 * Math.sin(t * 3.3 + side),
+  ],
+  // Both hands in front of the face, holding a phone to take a picture.
+  photo: (t, side) => [0.7, side * 1.5, 9.8, 1.35, side * 0.35, 11.2],
+  // Right arm pointing up at the jet.
+  point: (t, side) =>
+    side > 0
+      ? [1.2, 1.5, 10.6, 2.6, 1.2, 11.8 + 0.15 * Math.sin(t * 3)]
+      : [0, -1.85, 8.4, 0.1, -1.9, 6.6],
+  // Both arms up, waving.
+  wave: (t, side) => [
+    0.2,
+    side * 2.3,
+    11.6,
+    0.4 + 0.3 * Math.sin(t * 9 + side),
+    side * (2.2 + 0.5 * Math.sin(t * 9 + side * 1.5)),
+    13.4,
+  ],
+  // Holding the ball in both hands, ready to throw.
+  ready: (t, side) => [0.7, side * 1.3, 8.8, 1.2, side * 0.45, 9.1],
+  // Right arm following through after a throw.
+  throw: (t, side) =>
+    side > 0 ? [1.1, 1.4, 10.6, 2.2, 1.1, 11.3] : [0.5, -1.8, 8.6, 1, -1.5, 8],
+  // Hands out in front, waiting for the ball.
+  catch: (t, side) => [1, side * 1.5, 9.2, 1.8, side * 0.9, 9.8],
+  // Clapping in front of the chest.
+  clap: (t, side) => [
+    0.8,
+    side * 1.6,
+    9,
+    1.3,
+    side * (0.25 + 0.35 * (0.5 + 0.5 * Math.sin(t * 8))),
+    9.4,
+  ],
+};
+
+// Poses a walker for this frame. Feet swing alternately along the heading
+// with a slight lift, arms swing against the legs, and the body bobs a
+// little at mid-stride. Limbs on the side facing away from the camera are
+// drawn behind the torso.
+function drawPedestrian(entity, x, y, size, k, cos, sin, ground) {
+  const walker = entity.art;
+  const phase = (entity.stride / STEP) * Math.PI;
+  const swing = Math.sin(phase);
+  const amplitude =
+    2.1 * Math.min(1, entity.speed / (0.6 * entity.cruise || 1));
+  const hop = entity.hop || 0;
+  const bob = 0.22 * (1 - Math.abs(swing)) * (amplitude / 2.1) + hop;
+  const point = (u, v, h) =>
+    `${f2(x + size * (u * cos - v * sin))},${f2(
+      y + size * k * (u * sin + v * cos) - h * RISE * size,
+    )}`;
+  const pose = POSES[entity.pose];
+  const weight = pose ? entity.poseWeight : 0;
+  const near = cos >= 0 ? 1 : -1;
+  for (let i = 0; i < 2; i++) {
+    // i = 0 is the far side, i = 1 the near side.
+    const side = i ? near : -near;
+    const forward = side * swing;
+    const foot = amplitude * forward;
+    const lift = Math.max(0, side * Math.cos(phase)) * 0.28 * amplitude + hop;
+    walker.legs[i].setAttribute(
+      "points",
+      `${point(0, side * 0.7, 6.6 + bob)} ${point(
+        foot * 0.45 + 0.25,
+        side * 0.7,
+        3.4 + lift * 0.4,
+      )} ${point(foot, side * 0.7, 0.35 + lift)}`,
+    );
+    walker.shoes[i].setAttribute(
+      "points",
+      `${point(foot - 0.2, side * 0.7, 0.3 + lift)} ${point(
+        foot + 0.8,
+        side * 0.7,
+        0.25 + lift,
+      )}`,
+    );
+    const arm = i ? walker.nearArm : walker.farArm;
+    const hand = -foot * 0.6;
+    // Elbow and hand as [forward, sideways, height]; a pose blends in over
+    // the natural arm swing.
+    const joints = [hand * 0.45, side * 1.85, 8.4, hand, side * 1.9, 6.6];
+    if (weight) {
+      const target = pose(entity.poseTime, side);
+      for (let j = 0; j < 6; j++) joints[j] += (target[j] - joints[j]) * weight;
+    }
+    const [eu, ev, eh, hu, hv, hh] = joints;
+    const wrist = point(
+      eu + (hu - eu) * 0.75,
+      ev + (hv - ev) * 0.75,
+      eh + (hh - eh) * 0.75 + bob,
+    );
+    arm[0].setAttribute(
+      "points",
+      `${point(0.1, side * 1.7, 10.1 + bob)} ${point(eu, ev, eh + bob)} ${wrist}`,
+    );
+    arm[1].setAttribute("points", `${wrist} ${point(hu, hv, hh + bob)}`);
+  }
+  if (Math.abs(size - walker.size) > 0.01) {
+    walker.size = size;
+    for (const leg of walker.legs)
+      leg.setAttribute("stroke-width", f2(1.25 * size));
+    for (const shoe of walker.shoes)
+      shoe.setAttribute("stroke-width", f2(1.05 * size));
+    for (const arm of [walker.farArm, walker.nearArm]) {
+      arm[0].setAttribute("stroke-width", f2(0.9 * size));
+      arm[1].setAttribute("stroke-width", f2(0.75 * size));
+    }
+  }
+  walker.shadow.setAttribute("transform", ground(0));
+  // Visible width of an upright body section with the given half depth and
+  // half width, seen from the camera.
+  const width = (depth, half) =>
+    f2(2 * size * Math.hypot(depth * cos, half * sin));
+  const section = (node, from, to, depth, half) => {
+    node.setAttribute("points", `${point(0, 0, from)} ${point(0, 0, to)}`);
+    node.setAttribute("stroke-width", width(depth, half));
+  };
+  section(walker.coat, 5.3 + bob, 7 + bob, 1.05, walker.hem);
+  section(walker.torso[0], 6.6 + bob, 7.6 + bob, 0.9, 1.4);
+  section(walker.torso[1], 7.5 + bob, 10 + bob, 0.95, 1.55);
+  walker.shoulders.setAttribute("transform", ground(10 + bob));
+  const [hx, hy] = point(0.05, 0, 11.55 + bob).split(",");
+  walker.head.setAttribute(
+    "transform",
+    `translate(${hx} ${hy}) scale(${f3(size)})`,
+  );
+  walker.longHair.setAttribute("transform", ground(11.2 + bob));
+  walker.hair.setAttribute("transform", ground(12.1 + bob));
+  // The box sits in front of the body, or behind it when walking away.
+  walker.box.style.display = entity.carrying ? "" : "none";
+  if (entity.carrying) {
+    walker.boxSlices.forEach((slice, index) =>
+      slice.setAttribute("transform", ground(6.9 + index * 1.1 + bob)),
+    );
+    const before = sin >= 0 ? walker.nearArm[0] : walker.coat;
+    if (walker.box.nextSibling !== before)
+      walker.element.insertBefore(walker.box, before);
+  }
+  // Walkers step out of and into building doors instead of popping in.
+  const [fadeIn, fadeOut] = entity.lane?.fade ?? [false, false];
+  const opacity = Math.min(
+    fadeIn ? Math.min(1, entity.distance / 8) : 1,
+    fadeOut ? Math.min(1, (entity.lane.length - entity.distance) / 8) : 1,
+  );
+  if (
+    Math.abs(opacity - entity.opacity) > 0.01 ||
+    (opacity === 1) !== (entity.opacity === 1)
+  ) {
+    entity.opacity = opacity;
+    walker.element.style.opacity = opacity === 1 ? "" : f2(opacity);
+  }
+}
+
 export function initTraffic(root) {
   const scene = root.querySelector("[data-city-art]");
   const layer = scene?.querySelector("[data-traffic-layer]");
   if (!layer) return;
   let setInView = null;
+  let starting = null;
+  let visible = false;
   // Routes and artwork are only built once the maquette nears the viewport.
   new IntersectionObserver(
     ([entry]) => {
-      if (entry.isIntersecting) setInView ??= startTraffic(root, layer);
-      setInView?.(entry.isIntersecting);
+      visible = entry.isIntersecting;
+      if (visible)
+        starting ??= startTraffic(root, layer).then((set) => {
+          setInView = set;
+          set(visible);
+        });
+      setInView?.(visible);
     },
     { rootMargin: "200px" },
   ).observe(scene);
 }
 
-function startTraffic(root, layer) {
+async function startTraffic(root, layer) {
   const host = layer.ownerSVGElement;
 
-  const lanes = Object.entries(ROUTES).map(([name, route]) =>
-    buildRoute(name, route),
-  );
+  const specs = [
+    ...Object.entries(ROUTES),
+    ...Object.entries(WALKS).flatMap(([name, walk]) => [
+      [name, { ...walk, walk: true }],
+      [
+        `${name}Back`,
+        {
+          ...walk,
+          walk: true,
+          points: [...walk.points].reverse(),
+          fade: walk.fade && [walk.fade[1], walk.fade[0]],
+        },
+      ],
+    ]),
+  ];
+  // One lane per idle slice keeps every set-up task short.
+  const lanes = [];
+  for (const [name, spec] of specs) {
+    lanes.push(buildRoute(name, spec));
+    await idle();
+  }
   const defs = svg("defs", {}, null);
   host.insertBefore(defs, host.firstChild);
   for (const lane of lanes) {
@@ -713,12 +1387,21 @@ function startTraffic(root, layer) {
     const holes = lane.occluders.map((key) => `M${OCCLUDERS[key]}Z`).join("");
     svg("path", { d: BOARD + holes, "clip-rule": "evenodd" }, clip);
   }
-  findConflicts(lanes);
+  await findConflicts(lanes);
 
   const traffic = [];
-  for (let i = 0; i < CAR_COUNT + CYCLIST_COUNT; i++) {
-    const kind = i < CAR_COUNT ? "car" : "cyclist";
-    const art = kind === "car" ? createCar(layer) : createCyclist(layer);
+  const create = {
+    car: createCar,
+    cyclist: createCyclist,
+    pedestrian: createPedestrian,
+  };
+  const kinds = [
+    ...Array(CAR_COUNT).fill("car"),
+    ...Array(CYCLIST_COUNT).fill("cyclist"),
+    ...Array(PEDESTRIAN_COUNT).fill("pedestrian"),
+  ];
+  for (const kind of kinds) {
+    const art = create[kind](layer);
     art.element.style.display = "none";
     traffic.push({
       kind,
@@ -739,10 +1422,120 @@ function startTraffic(root, layer) {
       braking: false,
       variant: null,
       phase: random(0, 100),
+      // Distance walked (drives the gait) and last drawn position.
+      stride: 0,
+      x: 0,
+      y: 0,
+      opacity: 1,
     });
   }
 
-  const paintOrder = [...traffic];
+  const actors = ACTORS.map((spec, index) => {
+    const art = createPedestrian(layer);
+    const clipId = `city-traffic-actor-${index}`;
+    const clip = svg(
+      "clipPath",
+      { id: clipId, clipPathUnits: "userSpaceOnUse" },
+      defs,
+    );
+    let d = BOARD;
+    if (spec.window) {
+      // Window glass, with the frames cut out so people pass behind them.
+      d = "";
+      for (const [x0, y0, x1, y1] of spec.window.rects) {
+        d += `M${x0} ${y0}H${x1}V${y1}H${x0}Z`;
+        for (const frame of spec.window.frames)
+          if (frame > x0 && frame < x1)
+            d += `M${frame - 0.6} ${y0}H${frame + 0.6}V${y1}H${frame - 0.6}Z`;
+      }
+      // Seen through glass, against the lit interior.
+      art.element.setAttribute("opacity", 0.82);
+    }
+    svg("path", { d, "clip-rule": "evenodd" }, clip);
+    art.element.setAttribute("clip-path", `url(#${clipId})`);
+    const lanes = spec.path && [
+      buildRoute(`actor${index}`, {
+        points: spec.path.map(([x, y]) => [x, y, 0]),
+        walk: true,
+        occluders: [],
+      }),
+      buildRoute(`actor${index}Back`, {
+        points: [...spec.path].reverse().map(([x, y]) => [x, y, 0]),
+        walk: true,
+        occluders: [],
+      }),
+    ];
+    return {
+      kind: "pedestrian",
+      spec,
+      art,
+      lanes,
+      lane: lanes?.[0] ?? null,
+      // Starts paused at the first stop, part way through it.
+      stop: 0,
+      pause: spec.stops ? random(0.5, spec.stops[0].time[1]) : 0,
+      step: 0,
+      scriptTime: random(0, 2),
+      distance: 0,
+      speed: 0,
+      cruise: random(6.5, 8.5),
+      stride: 0,
+      heading: spec.stops ? spec.stops[0].face : 0,
+      pose: spec.stops?.[0].pose ?? spec.script?.[0][0] ?? null,
+      poseWeight: 1,
+      poseTime: random(0, 10),
+      carrying: false,
+      hop: 0,
+      pos: spec.at && [...spec.at],
+      face: 0,
+      size: spec.kid ? CHILD_SIZE : 1,
+      depth: -1,
+      x: 0,
+      y: 0,
+      opacity: 1,
+    };
+  });
+  for (const actor of actors) {
+    dressPedestrian(
+      actor.art,
+      actors.map((other) => other.art.top),
+    );
+    if (actor.spec.kid) makeChild(actor.art);
+  }
+
+  // The children's ball and its shadow on the grass.
+  const kids = actors.filter((actor) => actor.spec.kid);
+  const ball = {
+    art: {
+      element: svg("g", { "clip-path": "url(#city-traffic-actor-6)" }, layer),
+    },
+    depth: -1,
+  };
+  const ballShadow = svg(
+    "ellipse",
+    { fill: "#0b1014", "fill-opacity": 0.25 },
+    ball.art.element,
+  );
+  const ballBody = svg(
+    "circle",
+    { r: 1.2, fill: "#d9473c", stroke: "#8e2a24", "stroke-width": 0.3 },
+    ball.art.element,
+  );
+  // Catch: whoever holds the ball waits a moment (sometimes running to a new
+  // spot first), throws it in an arc, and the other catches it with a hop.
+  const game = {
+    holder: 0,
+    phase: "hold",
+    timer: random(0.8, 1.6),
+    flight: 0,
+    duration: 1,
+    arc: 8,
+    from: [0, 0, 0],
+    to: [0, 0, 0],
+    target: null,
+  };
+
+  const paintOrder = [...traffic, ...actors, ball];
   const queue = [];
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const counterPanel = root.querySelector("#sensor-cyclists");
@@ -781,8 +1574,19 @@ function startTraffic(root, layer) {
   // set off, and never places anything on top of existing traffic.
   function chooseLane(entity) {
     let total = 0;
+    const walking = entity.kind === "pedestrian";
     const weights = lanes.map((lane) => {
+      if (lane.walk !== walking) return 0;
       const others = onLane(lane);
+      if (others.some((other) => other.distance < 70)) return 0;
+      // Walkers favour paths with a zebra crossing, so crossings are common.
+      if (walking && lane.cells.length) {
+        const weight =
+          2.5 /
+          (1 + others.filter((other) => other.kind === entity.kind).length);
+        total += weight;
+        return weight;
+      }
       if (others.some((other) => other.distance < 70)) return 0;
       let weight =
         1 / (1 + others.filter((other) => other.kind === entity.kind).length);
@@ -823,6 +1627,11 @@ function startTraffic(root, layer) {
         CAR_VARIANTS.filter((variant) => !used.includes(variant)),
       );
       entity.half = styleCar(art, entity.variant);
+    } else if (entity.kind === "pedestrian") {
+      const taken = traffic
+        .filter((other) => other.lane && other.kind === "pedestrian")
+        .map((other) => other.art.top);
+      entity.half = dressPedestrian(art, taken);
     } else {
       entity.half = styleCyclist(art);
     }
@@ -844,14 +1653,16 @@ function startTraffic(root, layer) {
   // Scatter the opening scene: some traffic already under way, the rest
   // arriving later. Nobody starts inside the junction or on another entity.
   for (const entity of traffic) {
-    if (Math.random() < (entity.kind === "car" ? 0.45 : 0.3)) {
+    if (Math.random() < (entity.kind === "cyclist" ? 0.3 : 0.45)) {
       retire(entity);
       entity.wait = random(0.5, entity.kind === "car" ? 9 : 16);
       continue;
     }
     let placed = false;
     for (let attempt = 0; attempt < 20 && !placed; attempt++) {
-      const lane = pick(lanes);
+      const lane = pick(
+        lanes.filter((item) => item.walk === (entity.kind === "pedestrian")),
+      );
       const distance = random(0.08, 0.85) * lane.length;
       const clear =
         onLane(lane).every(
@@ -887,11 +1698,21 @@ function startTraffic(root, layer) {
       const lane = entity.lane;
       if (!lane) continue;
       const cells = lane.cells;
-      while (
-        entity.next < entity.until &&
-        entity.distance - entity.half > cells[entity.next].out + 2
-      )
-        cells[entity.next++].cell.holders.delete(entity);
+      if (entity.kind === "pedestrian") {
+        // A walker keeps the whole crossing until they are on the far
+        // pavement, so traffic waits for them to cross completely.
+        if (
+          entity.next < entity.until &&
+          entity.distance - entity.half > cells[entity.until - 1].out + 2
+        )
+          while (entity.next < entity.until)
+            cells[entity.next++].cell.holders.delete(entity);
+      } else
+        while (
+          entity.next < entity.until &&
+          entity.distance - entity.half > cells[entity.next].out + 2
+        )
+          cells[entity.next++].cell.holders.delete(entity);
       if (
         entity.next < entity.until ||
         entity.next >= cells.length ||
@@ -946,8 +1767,10 @@ function startTraffic(root, layer) {
     const drift =
       entity.kind === "car"
         ? 0.03 * Math.sin(time * 0.21 + entity.phase)
-        : 0.045 * Math.sin(time * 0.37 + entity.phase) +
-          0.02 * Math.sin(time * 0.93 + entity.phase * 1.7);
+        : entity.kind === "pedestrian"
+          ? 0.06 * Math.sin(time * 0.29 + entity.phase)
+          : 0.045 * Math.sin(time * 0.37 + entity.phase) +
+            0.02 * Math.sin(time * 0.93 + entity.phase * 1.7);
     const desired = Math.max(
       3,
       Math.min(entity.cruise * (1 + drift), lane.limit[entity.kind][index]),
@@ -974,6 +1797,32 @@ function startTraffic(root, layer) {
             : minGap;
       }
     }
+    // Walkers on other paths merging or overtaking: fall in behind anyone
+    // just ahead who is heading the same way.
+    if (entity.kind === "pedestrian")
+      for (const other of traffic) {
+        if (other === entity || other.kind !== "pedestrian" || !other.lane)
+          continue;
+        if (
+          other.lane === lane ||
+          Math.cos(other.heading - entity.heading) < 0.3
+        )
+          continue;
+        const s = depthScale(entity.y);
+        const dx = (other.x - entity.x) / s;
+        const dy = (other.y - entity.y) / (s * foreshortening(entity.y));
+        const cos = Math.cos(entity.heading);
+        const sin = Math.sin(entity.heading);
+        const ahead = dx * cos + dy * sin;
+        if (ahead <= 0 || ahead > 14 || Math.abs(dy * cos - dx * sin) > 2.6)
+          continue;
+        const candidate = ahead - other.half - entity.half;
+        if (candidate < gap) {
+          gap = candidate;
+          leaderSpeed = other.speed;
+          spacing = minGap;
+        }
+      }
     if (entity.queued) {
       const stop =
         lane.cells[entity.next].in - entity.distance - entity.half - 1.5;
@@ -998,6 +1847,168 @@ function startTraffic(root, layer) {
     return Math.max(-2.5 * brake, result);
   }
 
+  // Scripted people: stroll between stops and do something at each, or, at
+  // the fountain, run through a loop of reactions.
+  function updateActors(delta) {
+    for (const actor of actors) {
+      const { spec } = actor;
+      actor.poseTime += delta;
+      if (spec.kid) continue;
+      if (spec.script) {
+        actor.scriptTime += delta;
+        let [pose, duration] = spec.script[actor.step];
+        if (actor.scriptTime > duration) {
+          actor.scriptTime = 0;
+          actor.step = (actor.step + 1) % spec.script.length;
+          [pose, duration] = spec.script[actor.step];
+        }
+        actor.pose = pose;
+        actor.poseWeight = Math.min(1, actor.poseWeight + delta * 3);
+        actor.hop =
+          pose === "wave" ? 0.45 * Math.abs(Math.sin(actor.poseTime * 6.5)) : 0;
+        continue;
+      }
+      const stop = spec.stops[actor.stop];
+      if (actor.pause > 0) {
+        actor.pause -= delta;
+        actor.speed = 0;
+        actor.pose = stop.pose ?? actor.pose;
+        actor.poseWeight = stop.pose
+          ? Math.min(1, actor.poseWeight + delta * 3)
+          : Math.max(0, actor.poseWeight - delta * 3);
+        if (actor.pause <= 0) {
+          if (stop.carry !== undefined) actor.carrying = stop.carry;
+          actor.lane = actor.lanes[actor.stop === 0 ? 0 : 1];
+          actor.distance = 0;
+        }
+        continue;
+      }
+      // Walking: a box is carried in both hands, otherwise arms swing.
+      actor.pose = actor.carrying ? "carry" : actor.pose;
+      actor.poseWeight = actor.carrying
+        ? Math.min(1, actor.poseWeight + delta * 3)
+        : Math.max(0, actor.poseWeight - delta * 3);
+      actor.speed = Math.min(actor.cruise, actor.speed + 3 * delta);
+      const step = actor.speed * delta;
+      actor.distance += step;
+      actor.stride += step;
+      if (actor.distance >= actor.lane.length) {
+        actor.distance = actor.lane.length;
+        actor.stop = actor.stop === 0 ? 1 : 0;
+        actor.pause = random(...spec.stops[actor.stop].time);
+      }
+    }
+  }
+
+  // Where a child's hands hold the ball, in world units.
+  function handsOf(kid) {
+    const s = depthScale(kid.pos[1]);
+    const reach = 1.2 * PEDESTRIAN_SIZE * CHILD_SIZE * s;
+    return [
+      kid.pos[0] + reach * Math.cos(kid.heading),
+      kid.pos[1] + reach * foreshortening(kid.pos[1]) * Math.sin(kid.heading),
+      (9.2 + kid.hop) * PEDESTRIAN_SIZE * CHILD_SIZE,
+    ];
+  }
+
+  function updateGame(delta) {
+    const holder = kids[game.holder];
+    const other = kids[1 - game.holder];
+    for (const kid of kids) {
+      kid.hop = Math.max(0, kid.hop - delta * 2.5);
+      kid.speed = 0;
+    }
+    const facing = (kid, [x, y]) =>
+      Math.atan2((y - kid.pos[1]) / foreshortening(kid.pos[1]), x - kid.pos[0]);
+    if (game.phase === "run") {
+      // Run with the ball to a new spot on the lawn.
+      const [tx, ty] = game.target;
+      const s = depthScale(holder.pos[1]);
+      const dx = (tx - holder.pos[0]) / s;
+      const dy = (ty - holder.pos[1]) / (s * foreshortening(holder.pos[1]));
+      const left = Math.hypot(dx, dy);
+      const step = Math.min(left, 12 * delta);
+      holder.pos[0] += (dx / (left || 1)) * step * s;
+      holder.pos[1] +=
+        (dy / (left || 1)) * step * s * foreshortening(holder.pos[1]);
+      holder.stride += step * 1.6;
+      holder.speed = 12;
+      holder.face = facing(holder, game.target);
+      if (left < 0.5) {
+        game.phase = "hold";
+        game.timer = random(0.5, 1.1);
+      }
+    } else if (game.phase === "hold") {
+      holder.face = facing(holder, other.pos);
+      game.timer -= delta;
+      if (game.timer <= 0) {
+        game.phase = "flight";
+        game.flight = 0;
+        game.from = handsOf(holder);
+        game.duration = random(0.9, 1.25);
+        game.arc = random(5, 9);
+        holder.pose = "throw";
+        holder.poseTime = 0;
+      }
+    } else {
+      game.flight += delta;
+      other.pose = "catch";
+      other.face = facing(other, holder.pos);
+      game.to = handsOf(other);
+      if (game.flight >= game.duration) {
+        game.holder = 1 - game.holder;
+        other.hop = 0.9;
+        game.phase = "hold";
+        game.timer = random(0.7, 1.6);
+        // Sometimes run off with the ball before throwing it back.
+        if (Math.random() < 0.35) {
+          const [a, b, c, d] = LAWN;
+          const u = random(0.1, 0.9);
+          const v = random(0.15, 0.85);
+          game.target = [
+            (a[0] + (b[0] - a[0]) * u) * (1 - v) +
+              (d[0] + (c[0] - d[0]) * u) * v,
+            (a[1] + (b[1] - a[1]) * u) * (1 - v) +
+              (d[1] + (c[1] - d[1]) * u) * v,
+          ];
+          game.phase = "run";
+        }
+      }
+    }
+    // The thrower follows through, then both settle to holding or waiting.
+    if (holder.pose === "throw" && game.phase !== "flight") holder.pose = null;
+    const current = kids[game.holder];
+    if (game.phase !== "flight") current.pose = "ready";
+    for (const kid of kids) {
+      kid.poseWeight = kid.pose
+        ? Math.min(1, kid.poseWeight + delta * 5)
+        : Math.max(0, kid.poseWeight - delta * 3);
+      if (kid !== current && game.phase !== "flight") kid.pose = null;
+    }
+  }
+
+  function drawBall() {
+    let x;
+    let y;
+    let h;
+    if (game.phase === "flight") {
+      const u = Math.min(1, game.flight / game.duration);
+      [x, y, h] = game.from.map((value, i) => value + (game.to[i] - value) * u);
+      h += 4 * game.arc * u * (1 - u);
+    } else [x, y, h] = handsOf(kids[game.holder]);
+    const s = depthScale(y);
+    const k = foreshortening(y);
+    ballShadow.setAttribute("cx", f2(x));
+    ballShadow.setAttribute("cy", f2(y));
+    ballShadow.setAttribute("rx", f2(1.4 * s));
+    ballShadow.setAttribute("ry", f2(1.4 * s * k));
+    ballBody.setAttribute(
+      "transform",
+      `translate(${f2(x)} ${f2(y - h * RISE * s)}) scale(${f3(s)})`,
+    );
+    ball.depth = y + 0.5;
+  }
+
   function update(delta) {
     clock += delta;
     for (const entity of traffic) {
@@ -1008,13 +2019,17 @@ function startTraffic(root, layer) {
       if (lane) spawn(entity, lane, 0);
       else entity.wait = 1.2;
     }
+    updateActors(delta);
+    updateGame(delta);
     updateCrossings();
     for (const entity of traffic) {
       if (!entity.lane) continue;
       const value = acceleration(entity, clock);
       const previous = entity.distance;
       entity.speed = Math.max(0, entity.speed + value * delta);
-      entity.distance += Math.min(entity.speed * delta, Math.max(0, clearance));
+      const step = Math.min(entity.speed * delta, Math.max(0, clearance));
+      entity.distance += step;
+      entity.stride += step;
       const braking = value < -6 && entity.speed > 1;
       if (entity.kind === "car" && braking !== entity.braking)
         for (const lamp of entity.art.tails)
@@ -1050,16 +2065,26 @@ function startTraffic(root, layer) {
       const k = foreshortening(y);
       const cos = Math.cos(entity.heading);
       const sin = Math.sin(entity.heading);
-      if (entity.kind === "cyclist") {
+      if (entity.kind !== "car") {
         const offset =
           lane.offset[index] +
           (lane.offset[index + 1] - lane.offset[index]) * t +
-          0.3 * Math.sin(clock * 1.6 + entity.phase);
+          (entity.kind === "cyclist"
+            ? 0.3 * Math.sin(clock * 1.6 + entity.phase)
+            : 0);
         x -= s * sin * offset;
         y += s * k * cos * offset;
       }
-      // Cyclists are drawn a touch over scale so they stay legible.
-      const size = entity.kind === "cyclist" ? s * CYCLIST_SIZE : s;
+      entity.x = x;
+      entity.y = y;
+      // Cyclists and walkers are drawn a touch over scale to stay legible.
+      const size =
+        s *
+        (entity.kind === "cyclist"
+          ? CYCLIST_SIZE
+          : entity.kind === "pedestrian"
+            ? PEDESTRIAN_SIZE
+            : 1);
       const a = f3(size * cos);
       const b = f3(size * k * sin);
       const c = f3(-size * sin);
@@ -1070,6 +2095,8 @@ function startTraffic(root, layer) {
       if (entity.kind === "car") {
         for (const item of art.layers)
           item.node.setAttribute("transform", ground(item.height));
+      } else if (entity.kind === "pedestrian") {
+        drawPedestrian(entity, x, y, size, k, cos, sin, ground);
       } else {
         art.shadow.setAttribute("transform", ground(0));
         art.spine.setAttribute("transform", ground(2.6));
@@ -1088,6 +2115,51 @@ function startTraffic(root, layer) {
       }
       entity.depth = y;
     }
+    for (const actor of actors) {
+      let x;
+      let y;
+      let target;
+      if (actor.spec.kid) {
+        [x, y] = actor.pos;
+        target = actor.face;
+      } else if (actor.spec.at) {
+        [x, y] = actor.pos;
+        // Face the jet, or the companion while talking.
+        const [tx, ty] =
+          actor.pose === "talk" ? actors[actor.spec.partner].pos : FOUNTAIN_JET;
+        target = Math.atan2((ty - y) / foreshortening(y), tx - x);
+      } else {
+        const lane = actor.lane;
+        const index = Math.min(lane.length - 1, Math.floor(actor.distance));
+        const t = Math.min(1, actor.distance - index);
+        x = lane.x[index] + (lane.x[index + 1] - lane.x[index]) * t;
+        y = lane.y[index] + (lane.y[index + 1] - lane.y[index]) * t;
+        target =
+          actor.pause > 0
+            ? actor.spec.stops[actor.stop].face
+            : lane.heading[index];
+      }
+      // Turning on the spot is slower than following a path.
+      actor.heading +=
+        angleDelta(actor.heading, target) *
+        (delta ? 1 - Math.exp(-delta * (actor.speed > 0.5 ? 12 : 4)) : 1);
+      const s = depthScale(y);
+      const k = foreshortening(y);
+      const cos = Math.cos(actor.heading);
+      const sin = Math.sin(actor.heading);
+      const size = s * PEDESTRIAN_SIZE * actor.size;
+      const a = f3(size * cos);
+      const b = f3(size * k * sin);
+      const c = f3(-size * sin);
+      const d = f3(size * k * cos);
+      const ground = (height) =>
+        `matrix(${a} ${b} ${c} ${d} ${f2(x)} ${f2(y - height * RISE * size)})`;
+      actor.x = x;
+      actor.y = y;
+      drawPedestrian(actor, x, y, size, k, cos, sin, ground);
+      actor.depth = y;
+    }
+    drawBall();
     // Nearer traffic (lower on screen) paints over traffic behind it; the
     // DOM is only reordered when two entities actually swap depth.
     let sorted = true;
