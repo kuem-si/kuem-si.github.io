@@ -1,5 +1,6 @@
 import { initTraffic } from "./traffic.js";
 import { initWater } from "./water.js";
+import { initSmoke } from "./smoke.js";
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -60,6 +61,7 @@ async function loadMaquette(root, en) {
 function initCityTwin(root) {
   initTraffic(root);
   initWater(root);
+  initSmoke(root);
   const en = document.documentElement.lang.startsWith("en");
   const cityWrap = root.querySelector(".twin-scene-wrap");
   const workspace = root.querySelector(".twin-workspace");

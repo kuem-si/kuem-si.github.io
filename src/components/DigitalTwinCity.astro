@@ -19,6 +19,17 @@ const plan = {
   dimTop: "M335 70 1217 74M335 62v16M1217 66v16",
   dimSide: "M307 92 38 764M299 89l16 6M30 761l16 6",
 };
+// KUEM wordmark (src/assets/brand/kuem/KUEM_Official_Wordmark.svg, letters
+// at 69–356 × 71–141), engraved into the bottom right of the base's front face.
+const wordmark = [
+  "M69.07,141.15V71.45h19.14v26.51l21.21-26.51h21.6l-25.33,31.22l27.1,38.49h-21.99l-17.28-25.62l-5.3,5.5v20.13H69.07z",
+  "M172.54,141.15c-5.56,0-10.29-0.93-14.19-2.8c-3.9-1.87-7.04-4.43-9.43-7.71c-2.39-3.27-4.14-6.99-5.25-11.14c-1.11-4.16-1.67-8.49-1.67-13.01V71.45h13.55v35.05c0,2.88,0.28,5.68,0.83,8.39c0.55,2.72,1.49,5.15,2.8,7.31c1.31,2.16,3.04,3.86,5.2,5.11c2.16,1.24,4.84,1.87,8.05,1.87c3.27,0,6-0.64,8.2-1.91c2.19-1.28,3.93-2.99,5.2-5.15c1.28-2.16,2.21-4.6,2.8-7.31c0.59-2.71,0.88-5.48,0.88-8.3V71.45h13.45v35.05c0,4.78-0.57,9.26-1.72,13.45c-1.15,4.19-2.95,7.87-5.4,11.04c-2.45,3.18-5.61,5.66-9.47,7.46C182.52,140.25,177.91,141.15,172.54,141.15z",
+  "M269.83,135.06v6.09H223V71.45h45.95v6.09h-39.07v25.13h34.07v5.79h-34.07v26.61H269.83z",
+  "M352.69,141.15V78.32l-29.26,49.38h-2.36l-29.26-49.38v62.83h-3.44V71.45h3.14l30.73,51.84l30.73-51.84h3.14v69.71H352.69z",
+];
+// 38 px cap height, following the base's slight tilt.
+const engraveTransform = "translate(1266 826) rotate(0.5) scale(0.5429) translate(-69 -71)";
+
 const modules = [
   { letter: "A", x: 520, y: 236, name: en ? "Residential" : "Stanovanjski" },
   { letter: "B", x: 1010, y: 236, name: en ? "Public space" : "Javni prostor" },
@@ -85,10 +96,88 @@ const lanePatch =
     alt={photoAlt}
     decoding="async"
   />
-  <noscript><img class="city-photo" src={photoSrc} width="1536" height="1024" alt={photoAlt} /></noscript>
+  <noscript>
+    <img class="city-photo" src={photoSrc} width="1536" height="1024" alt={photoAlt} />
+    <style>.city-loader,.city-loader-edge{display:none}.city-art.is-loading{scale:1}.city-art.is-loading .engrave-wipe{transform:none}</style>
+  </noscript>
   <svg class="city-traffic" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
     <image href={lanePatch} x="703" y="498" width="21" height="32" />
     <g data-traffic-layer></g>
+  </svg>
+  <svg class="city-engraving" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" role="img" aria-label="KUEM">
+    <defs>
+      {/* An incised cut lit from above: darker floor, shadowed upper wall,
+          light catching the lower wall, and a fine chamfer on the surface. */}
+      <filter id="engrave-cut" x="-4%" y="-12%" width="108%" height="124%" color-interpolation-filters="sRGB">
+        <feFlood flood-color="#17191b" result="floorColor" />
+        <feComposite in="floorColor" in2="SourceAlpha" operator="in" result="floor" />
+        <feOffset in="SourceAlpha" dy="3.2" result="down" />
+        <feComposite in="SourceAlpha" in2="down" operator="out" result="upperWallArea" />
+        <feGaussianBlur in="upperWallArea" stdDeviation="0.9" result="upperWallSoft" />
+        <feFlood flood-color="#040505" flood-opacity=".95" />
+        <feComposite in2="upperWallSoft" operator="in" result="upperWall" />
+        <feOffset in="SourceAlpha" dy="-2.4" result="up" />
+        <feComposite in="SourceAlpha" in2="up" operator="out" result="lowerWallArea" />
+        <feFlood flood-color="#9aa6ab" flood-opacity=".5" />
+        <feComposite in2="lowerWallArea" operator="in" result="lowerWall" />
+        <feMerge result="cut"><feMergeNode in="floor" /><feMergeNode in="upperWall" /><feMergeNode in="lowerWall" /></feMerge>
+        <feComposite in="cut" in2="SourceAlpha" operator="in" result="inside" />
+        <feComposite in="up" in2="SourceAlpha" operator="out" result="chamferArea" />
+        <feFlood flood-color="#6d777c" flood-opacity=".32" />
+        <feComposite in2="chamferArea" operator="in" result="chamfer" />
+        <feMerge><feMergeNode in="chamfer" /><feMergeNode in="inside" /></feMerge>
+      </filter>
+      <clipPath id="engrave-letters" transform={engraveTransform}>
+        {wordmark.map((d) => <path d={d} />)}
+      </clipPath>
+      <clipPath id="engrave-progress" transform={engraveTransform}>
+        <rect class="engrave-wipe" x="60" y="55" width="305" height="100" />
+      </clipPath>
+      <linearGradient id="engrave-heat-fill">
+        <stop offset="0" stop-color="#ff5a14" stop-opacity="0" />
+        <stop offset=".62" stop-color="#ff7a24" stop-opacity=".6" />
+        <stop offset=".9" stop-color="#ffc56a" stop-opacity=".95" />
+        <stop offset="1" stop-color="#fff6de" />
+      </linearGradient>
+      <radialGradient id="engrave-spot-fill">
+        <stop offset="0" stop-color="#fff" />
+        <stop offset=".22" stop-color="#fff3d2" />
+        <stop offset=".5" stop-color="#ff9b3d" stop-opacity=".55" />
+        <stop offset="1" stop-color="#ff6a1a" stop-opacity="0" />
+      </radialGradient>
+      <radialGradient id="engrave-glow-fill">
+        <stop offset="0" stop-color="#ffb566" stop-opacity=".5" />
+        <stop offset="1" stop-color="#ff8a33" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id="engrave-sheen-fill" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#fff" stop-opacity="0" />
+        <stop offset=".5" stop-color="#fff" stop-opacity=".5" />
+        <stop offset="1" stop-color="#fff" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <g clip-path="url(#engrave-progress)">
+      <g filter="url(#engrave-cut)" transform={engraveTransform}>
+        {wordmark.map((d) => <path d={d} />)}
+      </g>
+    </g>
+    {/* Laser engraving, played once after the model is revealed. */}
+    <g class="engrave-fx" aria-hidden="true">
+      <g clip-path="url(#engrave-letters)">
+        <g transform={engraveTransform}>
+          <rect class="engrave-heat" x="-60" y="55" width="120" height="100" fill="url(#engrave-heat-fill)" />
+          <rect class="engrave-sheen" x="0" y="40" width="70" height="130" fill="url(#engrave-sheen-fill)" />
+        </g>
+      </g>
+      <g transform={engraveTransform}>
+        <g class="engrave-laser">
+          <ellipse class="engrave-glow" cx="60" cy="106" rx="90" ry="62" fill="url(#engrave-glow-fill)" />
+          <g class="engrave-raster">
+            <circle cx="60" cy="71" r="16" fill="url(#engrave-spot-fill)" />
+            <circle class="engrave-core" cx="60" cy="71" r="2.6" fill="#fff" />
+          </g>
+        </g>
+      </g>
+    </g>
   </svg>
   <svg class="city-lighting" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
     {lightingDevices.map(({ id, off: [x, y, width, height] }) => (
@@ -177,6 +266,9 @@ const lanePatch =
           <text class="plan-module-name" x={module.x} y={module.y + 26}>{module.name}</text>
         </g>
       ))}
+      <g class="plan-logo" transform={engraveTransform}>
+        {wordmark.map((d, i) => <path class="plan-line plan-line--logo" d={d} pathLength="1" style={`--d:${1.25 + i * 0.12}s`} />)}
+      </g>
     </svg>
     <div class="city-loader-scan"></div>
     <div class="city-loader-top">
