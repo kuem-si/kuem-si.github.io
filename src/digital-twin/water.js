@@ -281,7 +281,8 @@ export function initWater(root) {
   }
 
   function draw(time) {
-    if (!photo.complete) return;
+    // An <img> without a src yet also reports complete, so check its size too.
+    if (!photo.complete || !photo.naturalWidth) return;
     const t = time / 1000;
     for (const layer of layers) {
       const { patch, canvas, context, mask, scale } = layer;
@@ -339,7 +340,7 @@ export function initWater(root) {
     }
   }
 
-  if (photo.complete) layout();
+  if (photo.complete && photo.naturalWidth) layout();
   else photo.addEventListener("load", layout, { once: true });
   new ResizeObserver(layout).observe(art);
   new IntersectionObserver(

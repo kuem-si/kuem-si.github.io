@@ -5,6 +5,26 @@ interface Props {
 
 const { locale } = Astro.props;
 const en = locale === "en";
+const photoSrc = "/images/digital-twin-city-modular.png";
+const photoAlt = en
+  ? "Photorealistic 60 by 60 centimetre miniature city maquette assembled from four 30 by 30 centimetre modules: homes, civic square, factory, river and bridge"
+  : "Fotorealistična maketa mesta velikosti 60 × 60 cm, sestavljena iz štirih modulov velikosti 30 × 30 cm: hiše, javni trg, tovarna, reka in most";
+// Loader blueprint, traced from the photo (1536 × 1024) so it turns into the
+// model in place: board frame, base, module seams and dimension lines.
+const plan = {
+  frame: "M335 96 1217 101 1472 777 65 768Z",
+  board: "M345 99H1206L1442 767 95 757Z",
+  base: "M65 768 70 873 1462 897 1472 777",
+  seams: "M767 99 766 764M244 366 1300 369",
+  dimTop: "M335 70 1217 74M335 62v16M1217 66v16",
+  dimSide: "M307 92 38 764M299 89l16 6M30 761l16 6",
+};
+const modules = [
+  { letter: "A", x: 520, y: 236, name: en ? "Residential" : "Stanovanjski" },
+  { letter: "B", x: 1010, y: 236, name: en ? "Public space" : "Javni prostor" },
+  { letter: "C", x: 480, y: 566, name: en ? "Industry" : "Industrija" },
+  { letter: "D", x: 1080, y: 566, name: en ? "Water & infrastructure" : "Voda in infrastruktura" },
+];
 
 // Controllable lighting devices, in photo pixels (1536 × 1024). `off` is the
 // unlit patch made by scripts/generate-twin-lighting.mjs, `shape` outlines the
@@ -55,19 +75,17 @@ const lanePatch =
   "data:image/webp;base64,UklGRs4BAABXRUJQVlA4WAoAAAAQAAAAFAAAHwAAQUxQSN4AAAABCijWti1TxnF3SySqu2+AFZBJU3GJLMG1T8Ml0WYHSHN3d/jsZQevRAQDt40UefGYep9Ao/jiEoXQVZKKK+qRkhwyajq6hru4JsMqpaVrfn0L57s4xSJQ2be0d3V/hUt9FDAVdS6cfH4TIS9IkTm2Te2TXljQGHLC0Q+DRDFHVzp68W2WCynVl9s3Py2QRVtMCW9/28o2piiFIxdWFyxKydSLlUyxUhH5tMJIhdKw/G0vy6K0bjhsCBBwAbgL8ETAlwZ8vcAPAftkwI8LjAEsMMBowUIIi+u/gg37BRBWUDggygAAABAFAJ0BKhUAIAA+MRaJQ6IhIRQEACADBLOuwChSkLYwxiJJOUHzhX7rJdYzCGP+sEAA/vI73jh46BfY6TCzxYZ1A9F4rcGvkY4BzBq6O/kXxqp1YixVz4OBpoKLsuGI6Vx60DQnompT5EK8RWtJewHk+6twnvWq11DKA0FYx/PPo6BG6cDNV7DVUGgd0osVqSMWNr6wqfxCoSvm7cEIr3ee8f+HykBZ+eDd+zErffhhluZY5EeSB1RClH774Br/fMNEqKQXnAujAAA=";
 ---
 
-<div class="city-art city-art--modular" data-city-art>
+<div class="city-art city-art--modular is-loading" data-city-art aria-busy="true">
+  {/* The photo is fetched by the inline script at the end, so the loader can show real progress. */}
   <img
     class="city-photo"
-    src="/images/digital-twin-city-modular.png"
+    data-src={photoSrc}
     width="1536"
     height="1024"
-    alt={
-      en
-        ? "Photorealistic 60 by 60 centimetre miniature city maquette assembled from four 30 by 30 centimetre modules: homes, civic square, factory, river and bridge"
-        : "Fotorealistična maketa mesta velikosti 60 × 60 cm, sestavljena iz štirih modulov velikosti 30 × 30 cm: hiše, javni trg, tovarna, reka in most"
-    }
-    fetchpriority="high"
+    alt={photoAlt}
+    decoding="async"
   />
+  <noscript><img class="city-photo" src={photoSrc} width="1536" height="1024" alt={photoAlt} /></noscript>
   <svg class="city-traffic" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
     <image href={lanePatch} x="703" y="498" width="21" height="32" />
     <g data-traffic-layer></g>
@@ -141,4 +159,66 @@ const lanePatch =
     <strong>{en ? "Cyclist counter" : "Števec kolesarjev"}</strong>
     <div class="city-popover-reading"><b id="city-popover-cyclists-value">124</b><small>{en ? "Passages today" : "Prehodov danes"}</small></div>
   </div>
+
+  <div class="city-loader" data-city-loader aria-hidden="true">
+    <svg class="city-loader-plan" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" focusable="false">
+      <path class="plan-surface" d={plan.board} />
+      <path class="plan-line plan-line--frame" d={plan.frame} pathLength="1" style="--d:0s" />
+      <path class="plan-line" d={plan.board} pathLength="1" style="--d:.18s" />
+      <path class="plan-line plan-line--base" d={plan.base} pathLength="1" style="--d:.42s" />
+      <path class="plan-line plan-line--seam" d={plan.seams} pathLength="1" style="--d:.6s" />
+      <path class="plan-line plan-line--dim" d={plan.dimTop} pathLength="1" style="--d:.8s" />
+      <path class="plan-line plan-line--dim" d={plan.dimSide} pathLength="1" style="--d:.9s" />
+      <text class="plan-dim-text" x="776" y="52">600 mm</text>
+      <text class="plan-dim-text" transform="translate(150 430) rotate(-68)">600 mm</text>
+      {modules.map((module, i) => (
+        <g class="plan-module" style={`--d:${1 + i * 0.09}s`}>
+          <text class="plan-module-letter" x={module.x} y={module.y}>{module.letter}</text>
+          <text class="plan-module-name" x={module.x} y={module.y + 26}>{module.name}</text>
+        </g>
+      ))}
+    </svg>
+    <div class="city-loader-scan"></div>
+    <div class="city-loader-top">
+      <span><i></i>KUEM · {en ? "Digital twin" : "Digitalni dvojček"}</span>
+      <span>{en ? "Model 60 × 60 cm · 4 modules" : "Maketa 60 × 60 cm · 4 moduli"}</span>
+    </div>
+    <div class="city-loader-hud">
+      <div>
+        <p class="city-loader-kicker">{en ? "Building the digital twin" : "Gradnja digitalnega dvojčka"}</p>
+        <p class="city-loader-stage" data-loader-stage>{en ? "Loading the city model" : "Nalaganje modela mesta"}</p>
+      </div>
+      <p class="city-loader-pct"><span data-loader-pct>0</span><small>%</small></p>
+    </div>
+    <div class="city-loader-bar"><span></span></div>
+  </div>
+  <div class="city-loader-edge" aria-hidden="true"></div>
+
+  <script is:inline>
+    // Start the photo download while the page is still parsing, and keep
+    // byte progress for the loader. The download fills the HTTP cache, which
+    // the <img> then loads from (the site's CSP does not allow blob: images).
+    (() => {
+      const art = document.currentScript.parentElement;
+      const src = art.querySelector(".city-photo").dataset.src;
+      const state = { loaded: 0, total: 0, listeners: new Set() };
+      art.twinPhoto = state;
+      state.ready = (async () => {
+        try {
+          const response = await fetch(src);
+          if (!response.ok || !response.body) return;
+          state.total = Number(response.headers.get("content-length")) || 0;
+          const reader = response.body.getReader();
+          for (;;) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            state.loaded += value.length;
+            state.listeners.forEach((listener) => listener(state));
+          }
+        } catch {
+          // The <img> loads the photo itself.
+        }
+      })().then(() => src);
+    })();
+  </script>
 </div>

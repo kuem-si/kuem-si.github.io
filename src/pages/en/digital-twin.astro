@@ -4,6 +4,12 @@ import "../../styles/digital-twin.css";
 import DigitalTwinCity from "../../components/DigitalTwinCity.astro";
 import nexaviaLogo from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
 
+// Each tab is one digital twin. The first tab is always started on page load;
+// the others start the first time they are opened (see src/digital-twin/index.js).
+const tabs = [
+  { id: "city", title: "Smart city", meta: "60 × 60 cm model · 7 devices" },
+];
+
 const buildings = [
   { id: "HOUSE_01", controllable: true, name: "Garden house" },
   { id: "OFFICE_01", controllable: true, name: "Office building" },
@@ -36,6 +42,15 @@ const buildings = [
       </div>
     </div>
 
+    <div class="twin-tabs" role="tablist" aria-label="Digital twins">
+      {tabs.map((tab, i) => (
+        <button type="button" role="tab" class="twin-tab" id={`twin-tab-${tab.id}`} aria-controls={`twin-panel-${tab.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1} data-twin-tab-trigger>
+          <span class="twin-tab-index">{String(i + 1).padStart(2, "0")}</span>
+          <span class="twin-tab-text"><b>{tab.title}</b><small>{tab.meta}</small></span>
+        </button>
+      ))}
+    </div>
+    <div class="twin-tab-panel" role="tabpanel" id="twin-panel-city" aria-labelledby="twin-tab-city" data-twin-tab="city">
     <section class="twin-workspace" aria-label="Digital twin and dashboard">
       <div class="twin-city-panel">
         <div class="twin-panel-head">
@@ -199,6 +214,7 @@ const buildings = [
         <button type="button" class="xdr-resize-corner xdr-corner-se" data-overlay-resize="se" aria-label="Resize from the bottom-right edge of the screen"></button>
       </div>
     </section>
+    </div>
   </div>
   <script src="../../digital-twin/index.js"></script>
 </MainLayout>

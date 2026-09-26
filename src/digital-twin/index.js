@@ -1,9 +1,63 @@
 import { initTraffic } from "./traffic.js";
 import { initWater } from "./water.js";
 
-const root = document.querySelector("[data-twin-root]");
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-if (root) {
+// Brings the maquette in: real download progress over a blueprint of the
+// board, then the blueprint retracts behind a scan edge to reveal the model.
+async function loadMaquette(root, en) {
+  const art = root.querySelector("[data-city-art]");
+  const photo = art?.querySelector(".city-photo");
+  const loader = art?.querySelector("[data-city-loader]");
+  if (!art || !photo) return;
+  const stage = loader?.querySelector("[data-loader-stage]");
+  const percent = loader?.querySelector("[data-loader-pct]");
+  const quick = reducedMotion.matches;
+  // Let the blueprint finish drawing even when the photo is cached.
+  const drawn = wait(quick ? 0 : 1500);
+  const progress = (value) => {
+    art.style.setProperty("--load", value.toFixed(3));
+    if (percent) percent.textContent = String(Math.round(value * 100));
+  };
+  const download = art.twinPhoto;
+  let src = photo.dataset.src;
+  if (download) {
+    const onBytes = ({ loaded, total }) => total && progress(Math.min(1, loaded / total) * 0.86);
+    download.listeners.add(onBytes);
+    onBytes(download);
+    if (!download.total) loader?.classList.add("is-indeterminate");
+    src = await download.ready;
+    download.listeners.delete(onBytes);
+    loader?.classList.remove("is-indeterminate");
+  }
+  photo.src = src;
+  await photo.decode().catch(() => {});
+  progress(0.86);
+  if (stage) stage.textContent = en ? "Loading the lighting" : "Nalaganje razsvetljave";
+  await Promise.all(
+    [...art.querySelectorAll(".city-light-off")].map((patch) => {
+      const image = new Image();
+      image.src = patch.getAttribute("href");
+      return image.decode().catch(() => {});
+    }),
+  );
+  progress(0.95);
+  if (stage) stage.textContent = en ? "Starting the simulation" : "Zagon simulacije";
+  await drawn;
+  progress(1);
+  await wait(quick ? 0 : 260);
+  art.classList.remove("is-loading");
+  art.classList.add("is-revealing");
+  await wait(quick ? 220 : 1250);
+  art.classList.remove("is-revealing");
+  art.classList.add("is-ready");
+  art.removeAttribute("aria-busy");
+  loader?.remove();
+  art.querySelector(".city-loader-edge")?.remove();
+}
+
+function initCityTwin(root) {
   initTraffic(root);
   initWater(root);
   const en = document.documentElement.lang.startsWith("en");
@@ -384,6 +438,8 @@ if (root) {
   let index = 0;
   let paused = false;
   let visible = true;
+  // The simulation starts once the maquette has been revealed.
+  let ready = false;
   let timer;
 
   function render(step) {
@@ -512,6 +568,7 @@ if (root) {
   function schedule() {
     clearInterval(timer);
     if (
+      ready &&
       !paused &&
       visible &&
       !window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -734,4 +791,50 @@ if (root) {
     .addEventListener("change", schedule);
   render(steps[index]);
   schedule();
+  loadMaquette(root, en).then(() => {
+    ready = true;
+    schedule();
+  });
 }
+
+// One initialiser per tab, keyed by the panel's data-twin-tab.
+const tabInitializers = { city: initCityTwin };
+
+function initTwinTabs(page) {
+  const tabs = [...page.querySelectorAll("[data-twin-tab-trigger]")];
+  const started = new Set();
+  const panelOf = (tab) => page.querySelector(`#${tab.getAttribute("aria-controls")}`);
+  function select(tab, focus) {
+    tabs.forEach((other) => {
+      const active = other === tab;
+      other.setAttribute("aria-selected", String(active));
+      other.tabIndex = active ? 0 : -1;
+      const panel = panelOf(other);
+      if (panel) panel.hidden = !active;
+    });
+    if (focus) tab.focus();
+    // Each twin starts the first time its tab is shown; hidden tabs pause
+    // themselves through their own visibility observers.
+    const panel = panelOf(tab);
+    const id = panel?.dataset.twinTab;
+    if (id && !started.has(id)) {
+      started.add(id);
+      tabInitializers[id]?.(panel);
+    }
+  }
+  tabs.forEach((tab, i) => {
+    tab.addEventListener("click", () => select(tab));
+    tab.addEventListener("keydown", (event) => {
+      const target = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[event.key];
+      if (target === undefined) return;
+      event.preventDefault();
+      select(tabs[(target + tabs.length) % tabs.length], true);
+    });
+  });
+  // The first tab is always the one started on page load.
+  if (tabs.length) select(tabs[0]);
+  else page.querySelectorAll("[data-twin-tab]").forEach((panel) => tabInitializers[panel.dataset.twinTab]?.(panel));
+}
+
+const page = document.querySelector("[data-twin-root]");
+if (page) initTwinTabs(page);

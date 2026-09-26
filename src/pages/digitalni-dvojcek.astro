@@ -4,6 +4,12 @@ import "../styles/digital-twin.css";
 import DigitalTwinCity from "../components/DigitalTwinCity.astro";
 import nexaviaLogo from "../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
 
+// Each tab is one digital twin. The first tab is always started on page load;
+// the others start the first time they are opened (see src/digital-twin/index.js).
+const tabs = [
+  { id: "city", title: "Pametno mesto", meta: "Maketa 60 × 60 cm · 7 naprav" },
+];
+
 const buildings = [
   { id: "HOUSE_01", controllable: true, name: "Hiša z vrtom" },
   { id: "OFFICE_01", controllable: true, name: "Poslovna stavba" },
@@ -36,6 +42,15 @@ const buildings = [
       </div>
     </div>
 
+    <div class="twin-tabs" role="tablist" aria-label="Digitalni dvojčki">
+      {tabs.map((tab, i) => (
+        <button type="button" role="tab" class="twin-tab" id={`twin-tab-${tab.id}`} aria-controls={`twin-panel-${tab.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1} data-twin-tab-trigger>
+          <span class="twin-tab-index">{String(i + 1).padStart(2, "0")}</span>
+          <span class="twin-tab-text"><b>{tab.title}</b><small>{tab.meta}</small></span>
+        </button>
+      ))}
+    </div>
+    <div class="twin-tab-panel" role="tabpanel" id="twin-panel-city" aria-labelledby="twin-tab-city" data-twin-tab="city">
     <section
       class="twin-workspace"
       aria-label="Digitalni dvojček in nadzorna plošča"
@@ -204,6 +219,7 @@ const buildings = [
         <button type="button" class="xdr-resize-corner xdr-corner-se" data-overlay-resize="se" aria-label="Spremeni velikost iz spodnjega desnega roba zaslona"></button>
       </div>
     </section>
+    </div>
   </div>
   <script src="../digital-twin/index.js"></script>
 </MainLayout>
