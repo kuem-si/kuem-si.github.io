@@ -5,15 +5,13 @@ import DigitalTwinCity from "../components/DigitalTwinCity.astro";
 import nexaviaLogo from "../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
 
 const buildings = [
-  { id: "HOUSE_01", name: "Hiša z vrtom" },
-  { id: "STADIUM_01", name: "Mestni stadion" },
-  { id: "TOWER_01", name: "Nebotičnik" },
-  { id: "OFFICE_01", name: "Poslovna stavba" },
-  { id: "FACTORY_01", name: "Tovarna" },
-  { id: "LAMP_01", name: "Ulična svetilka" },
-  { id: "LAMP_02", name: "Ulična svetilka 2" },
-  { id: "LAMP_03", name: "Ulična svetilka 3" },
-  { id: "LAMP_04", name: "Ulična svetilka 4" },
+  { id: "HOUSE_01", controllable: true, name: "Hiša z vrtom" },
+  { id: "OFFICE_01", controllable: true, name: "Poslovna stavba" },
+  { id: "FACTORY_01", controllable: true, name: "Tovarna" },
+  { id: "LAMP_01", controllable: true, name: "Ulična svetilka 1" },
+  { id: "LAMP_02", controllable: true, name: "Ulična svetilka 2" },
+  { id: "LAMP_03", controllable: true, name: "Ulična svetilka 3" },
+  { id: "LAMP_04", controllable: true, name: "Ulična svetilka 4" },
 ];
 ---
 
@@ -46,6 +44,7 @@ const buildings = [
         <div class="twin-panel-head">
           <div>
             <p>Pogled mesta · povlecite za raziskovanje</p>
+            <p class="twin-hint" data-device-hint><span aria-hidden="true"></span>Kliknite svetilko ali stavbo za vklop ali izklop</p>
           </div>
           <span class="twin-live">
             <span></span> Simulacija teče
@@ -66,6 +65,9 @@ const buildings = [
           </button>
           <button type="button" id="twin-next">
             Naslednji dogodek
+          </button>
+          <button type="button" class="twin-auto" data-devices-auto hidden>
+            Vrni samodejno upravljanje
           </button>
           <span id="twin-step" aria-live="polite">
             Senzor bere svetlobo okolice
@@ -98,7 +100,7 @@ const buildings = [
                   <div>
                     <h2>Pregled naprav</h2>
                     <p>
-                      5 stavb · 4 ulične svetilke · demonstracijski podatki
+                      3 stavbe · 4 ulične svetilke · demonstracijski podatki
                     </p>
                   </div>
                   <span class="twin-sync"><i></i> Sinhronizirano</span>
@@ -106,7 +108,7 @@ const buildings = [
                 <div class="twin-kpis">
                   <div>
                     <span>Aktivne naprave</span>
-                    <strong id="twin-active">0 / 9</strong>
+                    <strong id="twin-active">0 / 7</strong>
                     <small>Po mestu</small>
                   </div>
                   <div>
@@ -145,16 +147,24 @@ const buildings = [
                     <div class="twin-tr" role="row" data-row={b.id}>
                       <span role="cell">
                         <b>{b.name}</b>
-                        <small>{b.id}</small>
+                        <small>{b.id}{b.controllable && <span class="twin-mode" data-mode-tag hidden> · ročno</span>}</small>
                       </span>
-                      <span role="cell" class="twin-state">
-                        Izklopljeno
+                      <span role="cell" class="twin-state-cell">
+                        <span class="twin-state">Izklopljeno</span>
+                        {b.controllable && (
+                          <button type="button" class="twin-switch" role="switch" aria-checked="false" data-device-switch={b.id} aria-label={"Razsvetljava: " + b.name}><span></span></button>
+                        )}
                       </span>
                       <span role="cell" class="twin-watts">
                         0 W
                       </span>
                     </div>
                   ))}
+                </div>
+                <div class="twin-lamp-group" role="group" aria-label="Ulična razsvetljava">
+                  <span>Ulična razsvetljava</span>
+                  <button type="button" data-lamp-group="1">Vklopi vse</button>
+                  <button type="button" data-lamp-group="0">Izklopi vse</button>
                 </div>
                 <div class="twin-alerts" aria-live="polite">
                   <h3><span>!</span> Aktivni alarmi <b id="twin-alarm-count">2</b></h3>

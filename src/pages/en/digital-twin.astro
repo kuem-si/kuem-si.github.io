@@ -5,15 +5,13 @@ import DigitalTwinCity from "../../components/DigitalTwinCity.astro";
 import nexaviaLogo from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
 
 const buildings = [
-  { id: "HOUSE_01", name: "Garden house" },
-  { id: "STADIUM_01", name: "City stadium" },
-  { id: "TOWER_01", name: "Skyscraper" },
-  { id: "OFFICE_01", name: "Office building" },
-  { id: "FACTORY_01", name: "Factory" },
-  { id: "LAMP_01", name: "Street light" },
-  { id: "LAMP_02", name: "Street light 2" },
-  { id: "LAMP_03", name: "Street light 3" },
-  { id: "LAMP_04", name: "Street light 4" },
+  { id: "HOUSE_01", controllable: true, name: "Garden house" },
+  { id: "OFFICE_01", controllable: true, name: "Office building" },
+  { id: "FACTORY_01", controllable: true, name: "Factory" },
+  { id: "LAMP_01", controllable: true, name: "Street light 1" },
+  { id: "LAMP_02", controllable: true, name: "Street light 2" },
+  { id: "LAMP_03", controllable: true, name: "Street light 3" },
+  { id: "LAMP_04", controllable: true, name: "Street light 4" },
 ];
 ---
 
@@ -43,6 +41,7 @@ const buildings = [
         <div class="twin-panel-head">
           <div>
             <p>City view · drag to explore</p>
+            <p class="twin-hint" data-device-hint><span aria-hidden="true"></span>Click a street light or building to switch it on or off</p>
           </div>
           <span class="twin-live">
             <span></span> Simulation running
@@ -63,6 +62,9 @@ const buildings = [
           </button>
           <button type="button" id="twin-next">
             Next event
+          </button>
+          <button type="button" class="twin-auto" data-devices-auto hidden>
+            Restore automatic control
           </button>
           <span id="twin-step" aria-live="polite">
             Sensor is reading ambient light
@@ -94,14 +96,14 @@ const buildings = [
                 <div class="twin-dashboard-heading">
                   <div>
                     <h2>Device overview</h2>
-                    <p>5 buildings · 4 street lights · simulated data</p>
+                    <p>3 buildings · 4 street lights · simulated data</p>
                   </div>
                   <span class="twin-sync"><i></i> Synchronized</span>
                 </div>
                 <div class="twin-kpis">
                   <div>
                     <span>Active devices</span>
-                    <strong id="twin-active">0 / 9</strong>
+                    <strong id="twin-active">0 / 7</strong>
                     <small>Across the city</small>
                   </div>
                   <div>
@@ -140,16 +142,24 @@ const buildings = [
                     <div class="twin-tr" role="row" data-row={b.id}>
                       <span role="cell">
                         <b>{b.name}</b>
-                        <small>{b.id}</small>
+                        <small>{b.id}{b.controllable && <span class="twin-mode" data-mode-tag hidden> · manual</span>}</small>
                       </span>
-                      <span role="cell" class="twin-state">
-                        Off
+                      <span role="cell" class="twin-state-cell">
+                        <span class="twin-state">Off</span>
+                        {b.controllable && (
+                          <button type="button" class="twin-switch" role="switch" aria-checked="false" data-device-switch={b.id} aria-label={"Lighting: " + b.name}><span></span></button>
+                        )}
                       </span>
                       <span role="cell" class="twin-watts">
                         0 W
                       </span>
                     </div>
                   ))}
+                </div>
+                <div class="twin-lamp-group" role="group" aria-label="Street lighting">
+                  <span>Street lighting</span>
+                  <button type="button" data-lamp-group="1">All on</button>
+                  <button type="button" data-lamp-group="0">All off</button>
                 </div>
                 <div class="twin-alerts" aria-live="polite">
                   <h3><span>!</span> Active alarms <b id="twin-alarm-count">2</b></h3>
@@ -161,6 +171,7 @@ const buildings = [
                   <div><span>House water meter<small>HOUSE_WATER_01</small></span><strong id="meter-house-water">0.84 m³/d</strong></div>
                   <div><span>Office water meter<small>OFFICE_WATER_01</small></span><strong id="meter-office-water">12.6 m³/d</strong></div>
                   <div><span>Factory gas meter<small>FACTORY_GAS_01</small></span><strong id="meter-factory-gas">34.2 m³/h</strong></div>
+                  <div><span>Factory electricity<small>FACTORY_POWER_01</small></span><strong id="meter-electricity">18.6 kWh</strong></div>
                 </div>
                 <div class="twin-sensor-readings">
                   <div class="twin-meter-heading"><h3>Infrastructure sensors</h3><span>Live readings</span></div>

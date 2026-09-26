@@ -184,6 +184,11 @@ if (root) {
       event.preventDefault();
     }));
   }
+  // A press only becomes a drag once it moves past this many CSS pixels, so a
+  // tap on a lamp or building stays a click and a drag never switches lights.
+  const dragThreshold = { mouse: 5, pen: 8, touch: 10 };
+  let lastPointerType = "mouse";
+  let dragged = false;
   if (cityWrap) {
     let panX = 0;
     let panY = 0;
@@ -201,22 +206,47 @@ if (root) {
       if (art) art.style.transform = `translate3d(${panX}px, ${panY}px, 0)`;
     };
     cityWrap.addEventListener("pointerdown", (event) => {
-      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
-      cityWrap.setPointerCapture(event.pointerId);
+      lastPointerType = event.pointerType;
+      dragged = false;
+      pointers.set(event.pointerId, {
+        x: event.clientX,
+        y: event.clientY,
+        startX: event.clientX,
+        startY: event.clientY,
+        dragging: false,
+      });
       if (pointers.size === 1) dragStart = {
         x: event.clientX, y: event.clientY, panX, panY,
       };
       else dragStart = null;
     });
     cityWrap.addEventListener("pointermove", (event) => {
-      if (!pointers.has(event.pointerId)) return;
-      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      const pointer = pointers.get(event.pointerId);
+      if (!pointer) return;
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
+      if (!pointer.dragging) {
+        const moved = Math.hypot(pointer.x - pointer.startX, pointer.y - pointer.startY);
+        if (moved < (dragThreshold[event.pointerType] ?? 6)) return;
+        pointer.dragging = true;
+        dragged = true;
+        // Capture only once it is a drag, so short presses still click the
+        // lamp, building or sensor under the pointer.
+        cityWrap.setPointerCapture(event.pointerId);
+      }
       if (pointers.size === 1 && dragStart) {
         panX = dragStart.panX + event.clientX - dragStart.x;
         panY = dragStart.panY + event.clientY - dragStart.y;
         renderPan();
       }
     });
+    // Swallow the click that follows a drag.
+    cityWrap.addEventListener("click", (event) => {
+      if (event.detail && dragged) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    }, true);
     const releasePointer = (event) => {
       pointers.delete(event.pointerId);
       if (pointers.size === 1) {
@@ -231,19 +261,21 @@ if (root) {
   }
   const devices = [
     { id: "HOUSE_01", name: en ? "Garden house" : "Hiša z vrtom", watts: 28 },
-    {
-      id: "STADIUM_01",
-      name: en ? "City stadium" : "Mestni stadion",
-      watts: 420,
-    },
-    { id: "TOWER_01", name: en ? "Skyscraper" : "Nebotičnik", watts: 186 },
     { id: "OFFICE_01", name: en ? "Office building" : "Poslovna stavba", watts: 120 },
     { id: "FACTORY_01", name: en ? "Factory" : "Tovarna", watts: 210 },
     { id: "LAMP_01", name: en ? "Street light 1" : "Ulična svetilka 1", watts: 65 },
     { id: "LAMP_02", name: en ? "Street light 2" : "Ulična svetilka 2", watts: 62 },
     { id: "LAMP_03", name: en ? "Street light 3" : "Ulična svetilka 3", watts: 68 },
     { id: "LAMP_04", name: en ? "Street light 4" : "Ulična svetilka 4", watts: 64 },
-  ];
+  ].map((device) => ({
+    ...device,
+    // The one state for each device, read by the maquette and the dashboard.
+    // `mode` is "auto" while the simulated lighting rule drives the device,
+    // and "manual" after a visitor's command, until control is handed back.
+    state: 0,
+    mode: "auto",
+  }));
+  const deviceById = new Map(devices.map((device) => [device.id, device]));
   const alertAssets = ["OFFICE_01", "FACTORY_01"];
   const steps = en
     ? [
@@ -264,30 +296,30 @@ if (root) {
         {
           text: "The garden house lights switch on",
           lux: 18,
-          states: [1, 0, 0, 0, 0, 0, 0, 0, 0],
+          states: [1, 0, 0, 0, 0, 0, 0],
           rule: "Active · automatic lighting control",
           event: "HOUSE_01: lighting switched on.",
         },
         {
-          text: "The stadium floodlights switch on",
+          text: "The office building lights switch on",
           lux: 18,
-          states: [1, 1, 0, 0, 0, 0, 0, 0, 0],
+          states: [1, 1, 0, 0, 0, 0, 0],
           rule: "Active · automatic lighting control",
-          event: "STADIUM_01: floodlights switched on.",
+          event: "OFFICE_01: lighting switched on.",
         },
         {
-          text: "The skyscraper facade lights come on",
+          text: "The factory lights come on",
           lux: 18,
-          states: [1, 1, 1, 0, 0, 0, 0, 0, 0],
+          states: [1, 1, 1, 0, 0, 0, 0],
           rule: "Active · brightness adjustment",
-          event: "TOWER_01: facade lighting switched on.",
+          event: "FACTORY_01: lighting switched on.",
         },
         {
-          text: "Street light responds to falling daylight",
+          text: "Street lights respond to falling daylight",
           lux: 18,
-          states: [1, 1, 1, 0, 0, 1, 1, 1, 1],
+          states: [1, 1, 1, 1, 1, 1, 1],
           rule: "Automatic lighting active",
-          event: "LAMP_01: street light switched on.",
+          event: "LAMP_01–LAMP_04: street lights switched on.",
         },
         {
           text: "Daylight returns · system switches lights off",
@@ -315,30 +347,30 @@ if (root) {
         {
           text: "V hiši z vrtom se prižgejo luči",
           lux: 18,
-          states: [1, 0, 0, 0, 0, 0, 0, 0, 0],
+          states: [1, 0, 0, 0, 0, 0, 0],
           rule: "Aktivno · samodejni vklop razsvetljave",
           event: "HOUSE_01: luči so vključene.",
         },
         {
-          text: "Prižgejo se reflektorji na stadionu",
+          text: "V poslovni stavbi se prižgejo luči",
           lux: 18,
-          states: [1, 1, 0, 0, 0, 0, 0, 0, 0],
+          states: [1, 1, 0, 0, 0, 0, 0],
           rule: "Aktivno · samodejni vklop razsvetljave",
-          event: "STADIUM_01: reflektorji so vključeni.",
+          event: "OFFICE_01: razsvetljava je vključena.",
         },
         {
-          text: "Zasveti fasadna osvetlitev nebotičnika",
+          text: "Tovarna vklopi razsvetljavo",
           lux: 18,
-          states: [1, 1, 1, 0, 0, 0, 0, 0, 0],
+          states: [1, 1, 1, 0, 0, 0, 0],
           rule: "Aktivno · prilagoditev svetlosti",
-          event: "TOWER_01: fasadna osvetlitev je vključena.",
+          event: "FACTORY_01: razsvetljava je vključena.",
         },
         {
-          text: "Ulična svetilka zazna padec dnevne svetlobe",
+          text: "Ulične svetilke zaznajo padec dnevne svetlobe",
           lux: 18,
-          states: [1, 1, 1, 0, 0, 1, 1, 1, 1],
+          states: [1, 1, 1, 1, 1, 1, 1],
           rule: "Samodejna razsvetljava je aktivna",
-          event: "LAMP_01: ulična svetilka je vključena.",
+          event: "LAMP_01–LAMP_04: ulične svetilke so vključene.",
         },
         {
           text: "Svetloba se vrne · sistem ugasne luči",
@@ -384,13 +416,6 @@ if (root) {
     const alarmCount = $("#twin-alarm-count");
     if (alarmCount) alarmCount.textContent = String(downSensors.length);
     $(".twin-demo-pill").innerHTML = `<i></i> ${downSensors.length} ${en ? "ALARMS" : "ALARMI"}`;
-    const power = devices.reduce(
-      (total, device, i) => total + device.watts * step.states[i],
-      0,
-    );
-    $("#twin-active").textContent =
-      `${step.states.filter(Boolean).length} / ${devices.length}`;
-    $("#twin-power").textContent = `${Math.round(power)} W`;
     $("#twin-lux").textContent = `${step.lux} lx`;
     const meterDrift = [0, 0.02, 0.01, 0.04, 0.03, 0.06, 0.02][index % 7];
     const decimals = en ? "." : ",";
@@ -421,44 +446,63 @@ if (root) {
     $("#sensor-air-climate").textContent = `${airTemperature} °C · ${airHumidity}${en ? "% RH" : " % RH"}`;
     $("#city-popover-air-temp").textContent = `${airTemperature} °C`;
     $("#city-popover-air-humidity").textContent = `${airHumidity}${en ? "%" : " %"}`;
-    $("#twin-rule-status").textContent = step.rule;
-    $("#twin-event").textContent = step.event;
-    $("#twin-step").textContent = step.text;
+    // A visitor's command stays the latest event for a moment before the
+    // simulation's next entry replaces it.
+    if (performance.now() >= commandShownUntil) {
+      $("#twin-rule-status").textContent = step.rule;
+      logEvent(step.event);
+      $("#twin-step").textContent = step.text;
+    }
+    // The lighting rule proposes states; devices under manual control keep
+    // the visitor's choice.
     devices.forEach((device, i) => {
-      const level = step.states[i];
-      const building = root.querySelector(`[data-building="${device.id}"]`);
+      if (device.mode === "auto") device.state = step.states[i];
+    });
+    renderDevices();
+  }
+
+  const timeFormat = new Intl.DateTimeFormat(en ? "en-GB" : "sl-SI", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+  let commandShownUntil = 0;
+  function logEvent(text) {
+    $("#twin-event").textContent = `${timeFormat.format(new Date())} · ${text}`;
+  }
+
+  // Projects the device state onto everything that shows it: the maquette's
+  // light patches and hotspots, the dashboard rows, and the KPI totals.
+  function renderDevices(changed = []) {
+    let power = 0;
+    let active = 0;
+    devices.forEach((device) => {
+      const on = device.state > 0;
+      const watts = Math.round(device.watts * device.state);
+      power += watts;
+      if (on) active++;
+      root.querySelector(`[data-light-off="${device.id}"]`)?.classList.toggle("is-off", !on);
+      root.querySelector(`[data-device="${device.id}"]`)?.setAttribute("aria-pressed", String(on));
       const row = root.querySelector(`[data-row="${device.id}"]`);
-      if (building) {
-        building.style.setProperty("--light-level", level);
-        building.classList.toggle("is-lit", level > 0);
+      if (!row) return;
+      const state = row.querySelector(".twin-state");
+      state.textContent = on ? (en ? "On" : "Vklopljeno") : en ? "Off" : "Izklopljeno";
+      state.dataset.state = on ? "on" : "off";
+      row.querySelector(".twin-watts").textContent = `${watts} W`;
+      row.querySelector("[data-device-switch]")?.setAttribute("aria-checked", String(on));
+      const modeTag = row.querySelector("[data-mode-tag]");
+      if (modeTag) modeTag.hidden = device.mode !== "manual";
+      if (changed.includes(device.id)) {
+        row.classList.remove("is-updated");
+        void row.offsetWidth;
+        row.classList.add("is-updated");
       }
-      if (building && !alertAssets.includes(device.id)) building.setAttribute(
-        "aria-label",
-        `${device.name}: ${level === 1 ? (en ? "on" : "vključeno") : level ? (en ? "dimmed to 50%" : "zatemnjeno na 50 %") : en ? "off" : "izklopljeno"}. ${en ? "Change lighting." : "Spremeni osvetlitev."}`,
-      );
-      row.querySelector(".twin-state").textContent =
-        level === 1
-          ? en
-            ? "On"
-            : "Vključeno"
-          : level
-            ? en
-              ? "Dimmed 50%"
-              : "Zatemnjeno 50 %"
-            : en
-              ? "Off"
-              : "Izklopljeno";
-      row.querySelector(".twin-state").dataset.state = level ? "on" : "off";
-      row.querySelector(".twin-watts").textContent =
-        `${Math.round(device.watts * level)} W`;
     });
-    root.querySelectorAll("[data-scene-light]").forEach((control) => {
-      const deviceIndex = devices.findIndex((device) => device.id === control.dataset.sceneLight);
-      const isLit = deviceIndex >= 0 && step.states[deviceIndex] > 0;
-      control.setAttribute("aria-pressed", String(isLit));
-      control.classList.toggle("is-lit", isLit);
-    });
-    root.querySelector("[data-city-art]")?.classList.toggle("is-factory-lit", step.states[4] > 0);
+    $("#twin-active").textContent = `${active} / ${devices.length}`;
+    $("#twin-power").textContent = `${power} W`;
+    updateChip();
+    const autoButton = $("[data-devices-auto]");
+    if (autoButton) autoButton.hidden = !devices.some((device) => device.mode === "manual");
   }
 
   function next() {
@@ -492,30 +536,14 @@ if (root) {
     $("#twin-pause").setAttribute("aria-pressed", String(paused));
     $(".twin-live").lastChild.textContent = paused
       ? en
-        ? " Manual control"
-        : " Ročno upravljanje"
+        ? " Simulation paused"
+        : " Simulacija ustavljena"
       : en
         ? " Simulation running"
         : " Simulacija teče";
     schedule();
   });
   $("#twin-next").addEventListener("click", next);
-  root.querySelectorAll("[data-scene-light]").forEach((control) => {
-    control.addEventListener("click", () => {
-      const deviceIndex = devices.findIndex((device) => device.id === control.dataset.sceneLight);
-      if (deviceIndex < 0) return;
-      const states = [...steps[index].states];
-      states[deviceIndex] = states[deviceIndex] ? 0 : 1;
-      const device = devices[deviceIndex];
-      paused = true;
-      $("#twin-pause").textContent = en ? "Resume animation" : "Nadaljuj animacijo";
-      $("#twin-pause").setAttribute("aria-pressed", "true");
-      const value = states[deviceIndex] ? (en ? "on" : "vključena") : (en ? "off" : "izklopljena");
-      render({ ...steps[index], states, text: `${device.name}: ${en ? "manual change" : "ročna sprememba"}`, rule: en ? "Manual demonstration change" : "Ročna demonstracijska sprememba", event: `${device.id}: ${en ? "lighting" : "razsvetljava"} ${value}.` });
-      steps[index] = { ...steps[index], states };
-      schedule();
-    });
-  });
   const sensorTriggers = {
     "water-level": {
       panel: "water",
@@ -563,49 +591,138 @@ if (root) {
         popover.style.visibility = "visible";
         popover.style.pointerEvents = "auto";
       }
-      $("#twin-event").textContent = sensor.event();
+      logEvent(sensor.event());
       $("#twin-step").textContent = sensor.name;
       $("#twin-rule-status").textContent = en ? "Manual sensor trigger · dashboard updated" : "Ročni prožilnik senzorja · nadzorna plošča posodobljena";
       schedule();
     });
   });
-  devices.forEach((device, i) => {
-    const building = root.querySelector(`[data-building="${device.id}"]`);
-    if (!building) return;
+  // Visitor commands, from the maquette, the dashboard rows or the street
+  // lighting group. They change only this page's simulated devices.
+  const lamps = devices.filter((device) => device.id.startsWith("LAMP_")).map((device) => device.id);
+  const chip = $("[data-device-chip]");
+  let chipTimer;
+  function command(ids, on, subject = ids[0]) {
+    ids.forEach((id) => {
+      const device = deviceById.get(id);
+      device.state = on ? 1 : 0;
+      device.mode = "manual";
+    });
+    renderDevices(ids);
+    const verb = en ? (on ? "on" : "off") : on ? "vklop" : "izklop";
+    logEvent(`${subject} · ${en ? "Manual command" : "Ročni ukaz"}: ${verb}`);
+    const name = ids.length > 1
+      ? (en ? "Street lights" : "Ulične svetilke")
+      : deviceById.get(ids[0]).name;
+    const result = en ? (on ? "on" : "off") : on ? "vklopljeno" : "izklopljeno";
+    $("#twin-step").textContent = `${name}: ${result} · ${en ? "manual command" : "ročni ukaz"}`;
+    $("#twin-rule-status").textContent = en
+      ? "Manual override · the lighting rule leaves these devices as set"
+      : "Ročno upravljanje · samodejno pravilo teh naprav ne preglasi";
+    commandShownUntil = performance.now() + 6000;
+    $("[data-device-hint]")?.classList.add("is-quiet");
+  }
+  function updateChip() {
+    const device = deviceById.get(chip?.dataset.id);
+    if (!device) return;
+    chip.querySelector("b").textContent = device.id;
+    chip.querySelector("span").textContent = device.state
+      ? (en ? "On" : "Vklopljeno")
+      : en ? "Off" : "Izklopljeno";
+    chip.dataset.state = device.state ? "on" : "off";
+  }
+  function showChip(hotspot, linger) {
+    if (!chip) return;
+    const [x, y] = hotspot.dataset.anchor.split(" ").map(Number);
+    chip.style.left = `${(x / 1536) * 100}%`;
+    chip.style.top = `${(y / 1024) * 100}%`;
+    chip.dataset.id = hotspot.dataset.device;
+    updateChip();
+    // Near the top edge of the maquette the chip drops below its anchor.
+    const art = chip.offsetParent;
+    chip.classList.toggle("is-below", (y / 1024) * (art?.clientHeight ?? 0) < chip.offsetHeight + 22);
+    chip.classList.toggle("is-focus", hotspot.matches(":focus-visible"));
+    chip.classList.add("is-visible");
+    clearTimeout(chipTimer);
+    if (linger) chipTimer = setTimeout(hideChip, 1600);
+  }
+  function hideChip() {
+    clearTimeout(chipTimer);
+    chip?.classList.remove("is-visible");
+  }
+  const hotspots = new Map();
+  root.querySelectorAll("[data-device]").forEach((hotspot) => {
+    const device = deviceById.get(hotspot.dataset.device);
+    if (!device) return;
     const toggle = () => {
-      paused = true;
-      $("#twin-pause").textContent = en
-        ? "Resume animation"
-        : "Nadaljuj animacijo";
-      $("#twin-pause").setAttribute("aria-pressed", "true");
-      const states = [...steps[index].states];
-      states[i] = states[i] ? 0 : 1;
-      const value = states[i]
-        ? en
-          ? "on"
-          : "vključena"
-        : en
-          ? "off"
-          : "izklopljena";
-      render({
-        ...steps[index],
-        states,
-        text: `${device.name}: ${en ? "manual change" : "ročna sprememba"}`,
-        rule: en
-          ? "Manual demonstration change"
-          : "Ročna demonstracijska sprememba",
-        event: `${device.id}: ${en ? "lighting" : "razsvetljava"} ${value}.`,
-      });
-      steps[index] = { ...steps[index], states };
-      schedule();
+      command([device.id], !device.state);
+      // Hover and keyboard focus keep the chip up; after a tap it fades out.
+      const held = hotspot.matches(":focus-visible") || (lastPointerType === "mouse" && hotspot.matches(":hover"));
+      showChip(hotspot, !held);
     };
-    building.addEventListener("click", toggle);
-    building.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        toggle();
+    hotspots.set(hotspot, toggle);
+    hotspot.addEventListener("click", toggle);
+    hotspot.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      if (!event.repeat) toggle();
+    });
+    hotspot.addEventListener("pointerenter", (event) => {
+      if (event.pointerType === "mouse") showChip(hotspot);
+    });
+    hotspot.addEventListener("pointerleave", (event) => {
+      if (event.pointerType === "mouse") hideChip();
+    });
+    hotspot.addEventListener("focus", () => {
+      if (hotspot.matches(":focus-visible")) showChip(hotspot);
+    });
+    hotspot.addEventListener("blur", hideChip);
+  });
+  // Lamps are a few pixels wide on a phone. A tap that misses every target
+  // goes to the nearest device within reach instead.
+  cityWrap?.addEventListener("click", (event) => {
+    if (lastPointerType === "mouse" || !event.detail) return;
+    if (event.target.closest("[data-device], button, a, .city-sensor-popover")) return;
+    let nearest;
+    let reach = 24;
+    hotspots.forEach((toggle, hotspot) => {
+      const box = hotspot.getBoundingClientRect();
+      const dx = Math.max(box.left - event.clientX, 0, event.clientX - box.right);
+      const dy = Math.max(box.top - event.clientY, 0, event.clientY - box.bottom);
+      const distance = Math.hypot(dx, dy);
+      if (distance < reach) {
+        reach = distance;
+        nearest = hotspot;
       }
     });
+    if (nearest) hotspots.get(nearest)();
+  });
+  root.querySelectorAll("[data-device-switch]").forEach((control) => {
+    control.addEventListener("click", () => {
+      const device = deviceById.get(control.dataset.deviceSwitch);
+      command([device.id], !device.state);
+    });
+  });
+  root.querySelectorAll("[data-lamp-group]").forEach((control) => {
+    control.addEventListener("click", () => {
+      command(lamps, control.dataset.lampGroup === "1", "LAMP_01–LAMP_04");
+    });
+  });
+  $("[data-devices-auto]")?.addEventListener("click", (event) => {
+    const released = devices.filter((device) => device.mode === "manual");
+    released.forEach((device) => {
+      device.mode = "auto";
+    });
+    // Keep keyboard focus nearby once this control hides itself.
+    if (document.activeElement === event.currentTarget) $("#twin-next")?.focus();
+    commandShownUntil = 0;
+    render(steps[index]);
+    renderDevices(released.map((device) => device.id));
+    logEvent(en
+      ? `Automatic control restored · ${released.length} ${released.length === 1 ? "device" : "devices"}`
+      : `Samodejno upravljanje obnovljeno · naprav: ${released.length}`);
+    $("#twin-rule-status").textContent = steps[index].rule;
+    commandShownUntil = performance.now() + 4000;
   });
   const observer = new IntersectionObserver(([entry]) => {
     visible = entry.isIntersecting;
