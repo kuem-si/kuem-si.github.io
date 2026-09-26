@@ -47,6 +47,7 @@
 .city-hotspots{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .city-art--modular{aspect-ratio:3/2;background:#e5e9ec;container-type:inline-size}
 .city-art--modular .city-photo{object-fit:contain}
+.city-water{position:absolute;pointer-events:none;z-index:1}
 .city-traffic{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:2}
 .city-art--modular .city-hotspots{display:none}
 .city-art--modular .city-hotspots [data-sensor-popover-trigger]{pointer-events:none}

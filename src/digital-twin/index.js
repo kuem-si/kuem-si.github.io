@@ -1,9 +1,11 @@
 import { initTraffic } from "./traffic.js";
+import { initWater } from "./water.js";
 
 const root = document.querySelector("[data-twin-root]");
 
 if (root) {
   initTraffic(root);
+  initWater(root);
   const en = document.documentElement.lang.startsWith("en");
   const cityWrap = root.querySelector(".twin-scene-wrap");
   const workspace = root.querySelector(".twin-workspace");
