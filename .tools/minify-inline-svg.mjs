@@ -41,6 +41,11 @@ const svgoOptions = {
           removeEmptyAttrs: false,
           removeHiddenElems: false,
           removeUselessStrokeAndFill: false,
+          // Keep group transforms on their groups. Moving them onto children
+          // breaks children whose transform is animated in CSS (the CSS
+          // property overrides the attribute, dropping the placement).
+          moveGroupAttrsToElems: false,
+          collapseGroups: false,
         },
       },
     },
