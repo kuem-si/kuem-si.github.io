@@ -40,9 +40,9 @@ const RIVER = [
     [1131, 611],
     [1136, 625],
     [1120, 639],
-    [1104, 645],
-    [1095, 662],
-    [1097, 690],
+    [1097, 647],
+    [1080, 663],
+    [1084, 690],
     [1089, 714],
     [1074, 738],
     [1056, 749],
@@ -51,8 +51,8 @@ const RIVER = [
     [841, 747],
     [860, 734],
     [875, 705],
-    [878, 685],
-    [885, 665],
+    [890, 686],
+    [895, 665],
     [893, 640],
     [899, 620],
   ],
@@ -99,15 +99,27 @@ export function initWater(root) {
     canvas.width = mask.width = Math.round(AREA.width * photoScale * ratio);
     canvas.height = mask.height = Math.round(AREA.height * photoScale * ratio);
     scale = canvas.width / AREA.width;
-    const shape = mask.getContext("2d");
-    shape.filter = `blur(${2.5 * scale}px)`;
-    shape.fillStyle = "#000";
+    // The water outline is pulled in from the banks and softly feathered, so
+    // the displacement fades out before it reaches rocks and reeds.
+    const outline = document.createElement("canvas");
+    outline.width = mask.width;
+    outline.height = mask.height;
+    const shape = outline.getContext("2d");
+    shape.lineJoin = "round";
+    shape.lineWidth = 9 * scale;
     for (const polygon of RIVER) {
       shape.beginPath();
       for (const [x, y] of polygon)
         shape.lineTo((x - AREA.x) * scale, (y - AREA.y) * scale);
+      shape.closePath();
+      shape.globalCompositeOperation = "source-over";
       shape.fill();
+      shape.globalCompositeOperation = "destination-out";
+      shape.stroke();
     }
+    const feather = mask.getContext("2d");
+    feather.filter = `blur(${5 * scale}px)`;
+    feather.drawImage(outline, 0, 0);
     draw(performance.now());
   }
 
@@ -121,14 +133,17 @@ export function initWater(root) {
       const y = AREA.y + row / scale;
       // Ripples shrink and tighten toward the back of the board.
       const depth = 0.6 + (y - 410) / 900;
+      // Sideways sway plus a slow vertical swell that stretches and squeezes
+      // the reflections, as real ripples do.
       const shift =
         depth *
-        (1.3 * Math.sin(y * (0.22 / depth) - t * 1.3) +
-          0.65 * Math.sin(y * (0.08 / depth) + t * 0.8));
+        (3 * Math.sin(y * (0.2 / depth) - t * 1.3) +
+          1.5 * Math.sin(y * (0.07 / depth) + t * 0.8));
+      const swell = depth * 1.7 * Math.sin(y * (0.13 / depth) - t * 1.6);
       context.drawImage(
         photo,
         AREA.x - shift,
-        y,
+        y + swell,
         AREA.width,
         2 / scale,
         0,
