@@ -457,48 +457,21 @@ const WALK_CONFLICT_DISTANCE = 9;
 // CYCLE_COUNT_01 watches the north road just above the junction crosswalk.
 const COUNTER = { y: 300, minX: 740, maxX: 790 };
 
-const CAR_BODIES = {
-  sedan: {
-    length: 33,
-    width: 13.5,
-    belt: 6,
-    roof: 10.5,
-    cabin: [-9.5, 5.5],
-    top: [-7.5, 3],
-  },
-  hatch: {
-    length: 30,
-    width: 13,
-    belt: 6,
-    roof: 10.8,
-    cabin: [-12.5, 4.5],
-    top: [-11.6, 2],
-  },
-  suv: {
-    length: 34,
-    width: 14.5,
-    belt: 7.5,
-    roof: 12.5,
-    cabin: [-14.5, 5.5],
-    top: [-13.8, 2.5],
-  },
-  van: {
-    length: 36,
-    width: 14.5,
-    belt: 7.5,
-    roof: 14,
-    cabin: [-17.5, 10],
-    top: [-17, 7.5],
-  },
-};
+// Traffic mix. `side` and `roof` tones default to shades of the paint.
+// Real traffic is mostly white, silver, grey and black, with the odd colour.
 const CAR_VARIANTS = [
   { body: "sedan", paint: "#d9d4c9", side: "#a9a499", roof: "#e3dfd5" },
-  { body: "hatch", paint: "#8d9295", side: "#676c70", roof: "#979c9f" },
   { body: "sedan", paint: "#35465e", side: "#253041", roof: "#3d5069" },
   { body: "hatch", paint: "#8f4038", side: "#672e29", roof: "#98463e" },
+  { body: "hatch", paint: "#9a9fa3" },
+  { body: "estate", paint: "#8d9295", side: "#676c70", roof: "#979c9f" },
+  { body: "estate", paint: "#2b2f33" },
   { body: "suv", paint: "#2a2d30", side: "#191b1d", roof: "#33373a" },
-  { body: "van", paint: "#c3c3bd", side: "#95958f", roof: "#cdcdc7" },
   { body: "suv", paint: "#6d7470", side: "#4d5350", roof: "#777e7a" },
+  { body: "van", paint: "#c3c3bd", side: "#95958f", roof: "#cdcdc7" },
+  { body: "sports", paint: "#b3261e" },
+  { body: "bus", paint: "#d6d5ce", side: "#b3b2ab", roof: "#dcdbd4", stripe: "#1f6f80" },
+  { body: "truck", paint: "#2f5a78", box: "#d3d1ca" },
 ];
 const JERSEYS = [
   "#a9463c",
@@ -820,138 +793,310 @@ function svg(tag, attributes, parent) {
   return element;
 }
 
-// Cars are stacked horizontal slices (shadow, sills, body, lamps, glass,
-// roof) projected through the camera model, so each reads as a small solid.
+// Cars are stacked horizontal slices projected through the camera model, so
+// each reads as a small solid: the lower slices show along the edge facing
+// the camera as the vehicle's sides. A car element is rebuilt for its body
+// type each time it enters the board.
 function createCar(layer) {
-  const element = svg("g", { class: "city-traffic-car" }, layer);
-  const slice = (node) => ({ node, height: 0 });
-  const shadow = slice(svg("g", {}, element));
-  const shade = svg(
-    "rect",
-    { fill: "#0b1014", "fill-opacity": 0.13 },
-    shadow.node,
-  );
-  const contact = svg(
-    "rect",
-    { fill: "#0b1014", "fill-opacity": 0.22 },
-    shadow.node,
-  );
-  const under = slice(svg("rect", { fill: "#15191c" }, element));
-  const sides = [0, 1, 2].map(() => slice(svg("rect", {}, element)));
-  const lamps = slice(svg("g", {}, element));
-  const heads = [0, 1].map(() => svg("rect", { fill: "#f3e3bd" }, lamps.node));
-  const tails = [0, 1].map(() =>
-    svg("rect", { fill: "#b5332b", "fill-opacity": 0.6 }, lamps.node),
-  );
-  const top = slice(
-    svg(
-      "rect",
-      { stroke: "#0b1014", "stroke-opacity": 0.28, "stroke-width": 0.35 },
-      element,
-    ),
-  );
-  const glass = [0, 1].map((index) =>
-    slice(svg("rect", { fill: index ? "#34434d" : "#1c262d" }, element)),
-  );
-  const roof = slice(
-    svg(
-      "rect",
-      { stroke: "#0b1014", "stroke-opacity": 0.22, "stroke-width": 0.3 },
-      element,
-    ),
-  );
-  const layers = [shadow, under, ...sides, lamps, top, ...glass, roof];
-  return {
-    element,
-    layers,
-    shade,
-    contact,
-    under,
-    sides,
-    lamps,
-    heads,
-    tails,
-    top,
-    glass,
-    roof,
-  };
+  return { element: svg("g", { class: "city-traffic-car" }, layer), layers: [], tails: [] };
 }
 
 function styleCar(car, variant) {
-  const body = CAR_BODIES[variant.body];
-  const { length: l, width: w, belt } = body;
-  const rect = (node, x0, x1, y0, y1, radius) => {
-    node.setAttribute("x", f2(x0));
-    node.setAttribute("y", f2(y0));
-    node.setAttribute("width", f2(x1 - x0));
-    node.setAttribute("height", f2(y1 - y0));
-    node.setAttribute("rx", radius);
-  };
-  rect(car.shade, -l / 2 - 1.5, l / 2 + 1.5, -w / 2 - 1.5, w / 2 + 1.5, 5.5);
-  rect(car.contact, -l / 2 - 0.3, l / 2 + 0.3, -w / 2 - 0.3, w / 2 + 0.3, 3.5);
-  rect(
-    car.under.node,
-    -l / 2 + 0.8,
-    l / 2 - 0.8,
-    -w / 2 + 0.3,
-    w / 2 - 0.3,
-    2.5,
-  );
-  car.under.height = 0.6;
-  car.sides.forEach((side, index) => {
-    rect(side.node, -l / 2, l / 2, -w / 2, w / 2, 2.2);
-    side.node.setAttribute("fill", variant.side);
-    side.height = 1.6 + ((belt - 2.7) * index) / 2;
-  });
-  // Lamps sit just under the body top, so they only show on the end facing
-  // the camera.
-  car.lamps.height = belt - 1.5;
-  car.heads.forEach((lamp, index) =>
-    rect(
-      lamp,
-      l / 2 - 1.4,
-      l / 2 - 0.1,
-      index ? w / 2 - 3.2 : -w / 2 + 1,
-      index ? w / 2 - 1 : -w / 2 + 3.2,
-      0.6,
-    ),
-  );
-  car.tails.forEach((lamp, index) =>
-    rect(
-      lamp,
-      -l / 2 + 0.1,
-      -l / 2 + 1.3,
-      index ? w / 2 - 3 : -w / 2 + 1,
-      index ? w / 2 - 1 : -w / 2 + 3,
-      0.6,
-    ),
-  );
-  rect(car.top.node, -l / 2, l / 2, -w / 2, w / 2, 2.4);
-  car.top.node.setAttribute("fill", variant.paint);
-  car.top.height = belt;
-  rect(
-    car.glass[0].node,
-    body.cabin[0],
-    body.cabin[1],
-    -w / 2 + 0.7,
-    w / 2 - 0.7,
-    2.4,
-  );
-  car.glass[0].height = belt + 0.9;
-  rect(
-    car.glass[1].node,
-    body.cabin[0] + 0.6,
-    body.cabin[1] - 0.8,
-    -w / 2 + 1,
-    w / 2 - 1,
-    2.2,
-  );
-  car.glass[1].height = (belt + body.roof) / 2 + 0.5;
-  rect(car.roof.node, body.top[0], body.top[1], -w / 2 + 1.3, w / 2 - 1.3, 2);
-  car.roof.node.setAttribute("fill", variant.roof);
-  car.roof.height = body.roof;
-  return l / 2;
+  car.element.replaceChildren();
+  car.element.dataset.body = variant.body;
+  car.layers = [];
+  car.tails = [];
+  const tones = { side: mix(variant.paint, "#0b1014", 0.3), roof: mix(variant.paint, "#ffffff", 0.05), ...variant };
+  return BODY_BUILDERS[variant.body](car, tones);
 }
+
+// --- Detailed bodies -------------------------------------------------------
+// Each body is a list of height slices built in paint order. Units are ground
+// units (about 6.9 per metre); x runs along the vehicle (front +x).
+let carSerial = 0;
+const lerp = (a, b, t) => a + (b - a) * t;
+
+// Blends two #rrggbb colours.
+function mix(from, to, amount) {
+  const channel = (hex, i) => parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16);
+  return `#${[0, 1, 2]
+    .map((i) => Math.round(lerp(channel(from, i), channel(to, i), amount)).toString(16).padStart(2, "0"))
+    .join("")}`;
+}
+
+// Plan outline seen from above: straight sides, ends that round off and
+// narrow by `taper`.
+function outline(length, width, { nose = 0.25, tail = 0.22, taper = 0.14, x = 0 } = {}) {
+  const hl = length / 2;
+  const hw = width / 2;
+  const end = hw * (1 - taper);
+  const n = length * nose;
+  const t = length * tail;
+  const p = (u, v) => `${f2(x + u)} ${f2(v)}`;
+  return (
+    `M${p(-hl + t, -hw)}L${p(hl - n, -hw)}` +
+    `C${p(hl - n * 0.35, -hw)} ${p(hl, -end)} ${p(hl, 0)}` +
+    `C${p(hl, end)} ${p(hl - n * 0.35, hw)} ${p(hl - n, hw)}` +
+    `L${p(-hl + t, hw)}` +
+    `C${p(-hl + t * 0.35, hw)} ${p(-hl, end)} ${p(-hl, 0)}` +
+    `C${p(-hl, -end)} ${p(-hl + t * 0.35, -hw)} ${p(-hl + t, -hw)}Z`
+  );
+}
+
+function bodyKit(car) {
+  const id = `city-car-${++carSerial}`;
+  const defs = svg("defs", {}, car.element);
+  let clips = 0;
+  const layer = (height, node) => {
+    car.layers.push({ node, height });
+    return node;
+  };
+  return {
+    id,
+    // A filled slice at `height`.
+    slab: (height, d, fill, extra = {}) => layer(height, svg("path", { d, fill, ...extra }, car.element)),
+    group: (height, extra = {}) => layer(height, svg("g", extra, car.element)),
+    // A clip path of the given outline, for slices that vary along the body.
+    clip(d) {
+      const clipId = `${id}-clip-${++clips}`;
+      svg("path", { d }, svg("clipPath", { id: clipId }, defs));
+      return clipId;
+    },
+    // Paint with a highlight down the middle, as on a curved panel.
+    sheen(color, name) {
+      const gradient = svg("linearGradient", { id: `${id}-${name}`, x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+      [
+        [0, mix(color, "#0b1014", 0.3)],
+        [0.26, color],
+        [0.5, mix(color, "#ffffff", 0.2)],
+        [0.74, color],
+        [1, mix(color, "#0b1014", 0.3)],
+      ].forEach(([offset, stop]) => svg("stop", { offset, "stop-color": stop }, gradient));
+      return `url(#${id}-${name})`;
+    },
+    // Glass darkening towards the front, catching the sky towards the rear.
+    glass(name, light) {
+      const gradient = svg("linearGradient", { id: `${id}-${name}`, x1: 1, y1: 0, x2: 0, y2: 0 }, defs);
+      svg("stop", { offset: 0, "stop-color": "#141d23" }, gradient);
+      svg("stop", { offset: 1, "stop-color": light }, gradient);
+      return `url(#${id}-${name})`;
+    },
+    defs,
+  };
+}
+
+function shadowSlices(kit, length, width, shape) {
+  const shadow = kit.group(0);
+  svg("path", { d: outline(length + 3, width + 3, shape), fill: "#0b1014", "fill-opacity": 0.13 }, shadow);
+  svg("path", { d: outline(length + 0.6, width + 0.6, shape), fill: "#0b1014", "fill-opacity": 0.24 }, shadow);
+}
+
+// Tyres as dark slices at each wheel, flush with the body sides.
+function wheelSlices(kit, height, axles, width, tyre, radius) {
+  const group = kit.group(height, { fill: "#131517" });
+  for (const x of axles)
+    for (const side of [-1, 1])
+      svg(
+        "rect",
+        { x: f2(x - radius), y: f2(side > 0 ? width / 2 - tyre : -width / 2), width: f2(radius * 2), height: f2(tyre), rx: f2(radius * 0.45) },
+        group,
+      );
+}
+
+function lampSlices(kit, car, { length, width, headHeight, tailHeight, inset = 3.2, size = 2.1 }) {
+  const heads = kit.group(headHeight, { fill: "#f3e7cd" });
+  const tails = kit.group(tailHeight, { fill: "#b5332b", "fill-opacity": 0.6 });
+  for (const side of [-1, 1]) {
+    const y = side > 0 ? width / 2 - inset : -width / 2 + inset - size;
+    svg("rect", { x: f2(length / 2 - 1.7), y: f2(y), width: 1.5, height: f2(size), rx: 0.6 }, heads);
+    car.tails.push(svg("rect", { x: f2(-length / 2 + 0.2), y: f2(y), width: 1.4, height: f2(size), rx: 0.6 }, tails));
+  }
+}
+
+// Passenger car proportions: length, width, plan shape, axle positions,
+// wheel radius, sill/belt/roof heights, and where the glasshouse starts and
+// ends at the belt and at the roof (rake of windscreen and rear window).
+const PASSENGER_CARS = {
+  sedan: { L: 33, W: 13.5, shape: { nose: 0.15, tail: 0.12, taper: 0.13 }, axles: [-9.8, 9.8], wheel: 2.3, sill: 2, belt: 6, roof: 10.2, cabin: { belt: [-10.2, 6.2], roof: [-8.2, 2.3] } },
+  hatch: { L: 28.5, W: 12.8, shape: { nose: 0.16, tail: 0.08, taper: 0.12 }, axles: [-8.8, 8.6], wheel: 2.2, sill: 2, belt: 6, roof: 10.4, cabin: { belt: [-12.9, 4.4], roof: [-12.3, 1.2] } },
+  estate: { L: 33, W: 13.4, shape: { nose: 0.15, tail: 0.08, taper: 0.12 }, axles: [-9.6, 9.9], wheel: 2.3, sill: 2, belt: 6, roof: 10.4, cabin: { belt: [-15.6, 6.2], roof: [-15.2, 2.2] }, rails: true },
+  suv: { L: 32, W: 14, shape: { nose: 0.14, tail: 0.08, taper: 0.1 }, axles: [-9.8, 9.6], wheel: 2.6, sill: 2.6, belt: 7.2, roof: 12.2, cabin: { belt: [-14.6, 5.4], roof: [-14.2, 1.9] }, rails: true },
+  sports: { L: 31, W: 13.6, shape: { nose: 0.2, tail: 0.14, taper: 0.16 }, axles: [-8.8, 9.5], wheel: 2.4, sill: 1.6, belt: 4.4, roof: 7.6, cabin: { belt: [-11.2, 3.8], roof: [-7.4, -0.6] }, glassInset: [1.8, 3.4], spoiler: true },
+};
+
+function passengerBody(car, variant) {
+  const spec = PASSENGER_CARS[variant.body];
+  const { L, W, shape, axles, wheel, sill, belt, roof } = spec;
+  const kit = bodyKit(car);
+  const body = (inset) => outline(L - inset, W - inset, shape);
+  shadowSlices(kit, L, W, shape);
+  wheelSlices(kit, 0.6, axles, W, 2.1, wheel);
+  wheelSlices(kit, 1.5, axles, W, 2.1, wheel);
+  // Sill tucked under, then the sides up to a lighter shoulder line.
+  kit.slab(sill, body(1.6), mix(variant.side, "#0b1014", 0.35));
+  wheelSlices(kit, sill + 0.4, axles, W, 2, wheel - 0.1);
+  for (let height = sill + 1; height < belt - 1.4; height += 1)
+    kit.slab(height, body(height === sill + 1 ? 0.6 : 0.1), variant.side);
+  kit.slab(belt - 1, body(0), mix(variant.side, variant.paint, 0.55));
+  lampSlices(kit, car, { length: L, width: W, headHeight: belt - 1.4, tailHeight: belt - 0.9 });
+  // Bonnet and boot, with a highlight down the middle.
+  kit.slab(belt, body(0.3), kit.sheen(variant.paint, "paint"), { stroke: "#0b1014", "stroke-opacity": 0.22, "stroke-width": 0.3 });
+  if (spec.spoiler)
+    kit.slab(belt + 0.8, `M${f2(-L / 2 + 0.6)} ${f2(-W / 2 + 1.2)}h1.8v${f2(W - 2.4)}h-1.8z`, "#1d2124");
+  // Glasshouse: raked windscreen and rear window, narrowing towards the roof.
+  const [insetLow, insetHigh] = spec.glassInset ?? [1.4, 2.8];
+  const cabin = (t, extra = 0) => {
+    const front = lerp(spec.cabin.belt[1], spec.cabin.roof[1], t);
+    const rear = lerp(spec.cabin.belt[0], spec.cabin.roof[0], t);
+    return outline(front - rear, lerp(W - insetLow, W - insetHigh, t) + extra, { nose: 0.16, tail: 0.14, taper: 0.08, x: (front + rear) / 2 });
+  };
+  const step = (roof - belt - 1.3) / 3;
+  kit.slab(belt + 0.9, cabin(0), kit.glass("glass-low", "#3a4b55"));
+  kit.slab(belt + 0.9 + step, cabin(0.34), kit.glass("glass-mid", "#4a5d68"));
+  kit.slab(belt + 0.9 + step * 2, cabin(0.68), kit.glass("glass-high", "#5b6e78"));
+  kit.slab(roof, cabin(1), kit.sheen(variant.roof, "roof"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 });
+  if (spec.rails) {
+    const rails = kit.group(roof + 0.5, { fill: "#2a2f33" });
+    const [rear, front] = spec.cabin.roof;
+    const half = (W - insetHigh) / 2 - 0.7;
+    for (const y of [-half - 0.3, half - 0.3])
+      svg("rect", { x: f2(rear + 1), y: f2(y), width: f2(front - rear - 2), height: 0.6, rx: 0.3 }, rails);
+  }
+  return L / 2;
+}
+
+// Slices whose footprint is the body outline but whose fill changes along
+// the vehicle (e.g. a windscreen at the front), clipped to the outline.
+function bandSlice(kit, height, d, base, caps) {
+  const group = kit.group(height, { "clip-path": `url(#${kit.clip(d)})` });
+  svg("path", { d, fill: base }, group);
+  for (const [x0, x1, fill] of caps)
+    svg("rect", { x: f2(x0), y: -20, width: f2(x1 - x0), height: 40, fill }, group);
+}
+
+// Panel van: bonnet and a raked windscreen up front, tall painted body
+// behind, with cab side windows.
+function vanBody(car, variant) {
+  const kit = bodyKit(car);
+  const L = 36;
+  const W = 14.2;
+  const shape = { nose: 0.12, tail: 0.05, taper: 0.1 };
+  const body = (inset) => outline(L - inset, W - inset, shape);
+  const axles = [-11.5, 11];
+  shadowSlices(kit, L, W, shape);
+  wheelSlices(kit, 0.6, axles, W, 2.2, 2.4);
+  wheelSlices(kit, 1.5, axles, W, 2.2, 2.4);
+  kit.slab(2.2, body(1.6), mix(variant.side, "#0b1014", 0.35));
+  wheelSlices(kit, 2.6, axles, W, 2.1, 2.3);
+  for (let height = 3.2; height < 6.4; height += 1) kit.slab(height, body(0.1), variant.side);
+  lampSlices(kit, car, { length: L, width: W, headHeight: 5, tailHeight: 6 });
+  const glass = "#2c3a43";
+  for (let height = 7; height < 14; height += 1) {
+    // Windscreen raked back as it rises; cab side windows behind it.
+    const rake = (height - 7) * 0.55;
+    bandSlice(kit, height, body(0), variant.side, [
+      [L / 2 - 3.2 - rake, L / 2 + 1, height > 7.6 ? glass : variant.side],
+      [L / 2 - 9.5, L / 2 - 4.2 - rake, height > 8.4 && height < 12.8 ? glass : variant.side],
+    ]);
+  }
+  // Roof from the tail to the top of the windscreen.
+  kit.slab(14.5, outline(29.5, W - 0.5, { nose: 0.08, tail: 0.05, taper: 0.06, x: -3.25 }), kit.sheen(variant.roof, "roof"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 });
+  return L / 2;
+}
+
+// Box truck: cab-over cab at the front, cargo box behind on a dark chassis,
+// twin rear wheels. Slices of both blocks are painted in height order.
+function truckBody(car, variant) {
+  const kit = bodyKit(car);
+  const L = 60;
+  const W = 16.2;
+  const box = variant.box;
+  const shape = { nose: 0.02, tail: 0.02, taper: 0.03 };
+  const cab = (inset) => outline(13 - inset, W - inset, { nose: 0.12, tail: 0.04, taper: 0.06, x: 23.5 });
+  const cargo = (inset) => outline(46 - inset, 17 - inset, { nose: 0.02, tail: 0.02, taper: 0.01, x: -7 });
+  shadowSlices(kit, L, 17, shape);
+  const axles = [22, -14];
+  const slices = [
+    [0.8, () => wheelSlices(kit, 0.8, axles, W, 3.2, 3.2)],
+    [2.1, () => wheelSlices(kit, 2.1, axles, W, 3.2, 3.2)],
+    [2.6, () => kit.slab(2.6, outline(L - 4, 9, shape), "#1b1e20")],
+    [3.4, () => wheelSlices(kit, 3.4, axles, W, 3, 3)],
+  ];
+  for (let height = 3.2; height <= 16.4; height += 1.1)
+    slices.push([height, () => bandSlice(kit, height, cab(height < 4 ? 1 : 0), variant.side, [[28.8 - Math.max(0, height - 9) * 0.1, 31, height > 9.5 ? "#26343c" : variant.side], [23.5, 27.2, height > 10 && height < 15.5 ? "#26343c" : variant.side]])]);
+  slices.push([17.2, () => kit.slab(17.2, cab(0.2), kit.sheen(variant.paint, "cab"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 })]);
+  for (let height = 4.6; height <= 21.4; height += 1.2) slices.push([height, () => kit.slab(height, cargo(0), mix(box, "#0b1014", 0.1))]);
+  slices.push([22.4, () => kit.slab(22.4, cargo(0), kit.sheen(box, "box"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.35 })]);
+  slices.push([4.4, () => {
+    const heads = kit.group(4.4, { fill: "#f3e7cd" });
+    for (const y of [-W / 2 + 1.4, W / 2 - 3.6]) svg("rect", { x: f2(L / 2 - 1.6), y: f2(y), width: 1.4, height: 2.2, rx: 0.6 }, heads);
+  }]);
+  slices.push([5.2, () => {
+    const tails = kit.group(5.2, { fill: "#b5332b", "fill-opacity": 0.6 });
+    for (const y of [-8.1, 5.9]) car.tails.push(svg("rect", { x: -30.2, y, width: 1.4, height: 2.2, rx: 0.6 }, tails));
+  }]);
+  slices.sort((a, b) => a[0] - b[0]).forEach(([, make]) => make());
+  return L / 2;
+}
+
+function busBody(car, variant) {
+  const kit = bodyKit(car);
+  const L = 83;
+  const W = 17.6;
+  const shape = { nose: 0.04, tail: 0.035, taper: 0.07 };
+  const body = (inset) => outline(L - inset, W - inset, shape);
+  const axles = [-22.8, 24.5];
+  shadowSlices(kit, L, W, shape);
+  wheelSlices(kit, 0.8, axles, W, 2.6, 3.4);
+  wheelSlices(kit, 2.2, axles, W, 2.6, 3.4);
+  kit.slab(2, body(1.4), mix(variant.side, "#0b1014", 0.45));
+  wheelSlices(kit, 3.4, axles, W, 2.4, 3.2);
+  // Windows with pillars, repeating along the body.
+  const windows = svg("pattern", { id: `${kit.id}-windows`, patternUnits: "userSpaceOnUse", width: 10, height: 40, x: 0.5, y: -20 }, kit.defs);
+  // Pillars in a tone between paint and glass, so they stay continuous lines
+  // when the side is seen at an angle.
+  svg("rect", { width: 10, height: 40, fill: mix(variant.side, "#1b262d", 0.55) }, windows);
+  svg("rect", { x: 1.3, width: 8.7, height: 40, fill: "#1b262d" }, windows);
+  // Window-band slices keep a solid windscreen at the front and a solid
+  // panel at the rear, clipped to the body's rounded outline.
+  const clip = svg("clipPath", { id: `${kit.id}-body` }, kit.defs);
+  svg("path", { d: body(0) }, clip);
+  const band = (height) => {
+    const group = kit.group(height, { "clip-path": `url(#${kit.id}-body)` });
+    svg("path", { d: body(0), fill: `url(#${kit.id}-windows)` }, group);
+    svg("rect", { x: f2(L / 2 - 3.2), y: f2(-W / 2), width: 4, height: f2(W), fill: "#1b262d" }, group);
+    svg("rect", { x: f2(-L / 2 - 1), y: f2(-W / 2), width: 3.4, height: f2(W), fill: variant.side }, group);
+  };
+  const heights = [];
+  for (let height = 3; height < 9; height += 1.5) heights.push(height);
+  for (let height = 9; height < 18; height += 0.9) heights.push(height);
+  heights.push(18, 19.5);
+  for (const height of heights) {
+    if (height >= 9 && height < 18) band(height);
+    else kit.slab(height, body(0), height < 7.5 || height >= 18 ? variant.side : variant.stripe);
+  }
+  lampSlices(kit, car, { length: L, width: W, headHeight: 3.6, tailHeight: 5.6, inset: 3.4, size: 2.4 });
+  // Lit destination display above the windscreen.
+  kit.slab(18.8, `M${f2(L / 2 - 1.3)} -5.2h1.2v10.4h-1.2z`, "#f2a33a");
+  kit.slab(21, body(0), kit.sheen(variant.roof, "roof"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.35 });
+  // Roof hatches and the air-conditioning unit.
+  const hatches = kit.group(21.1, { fill: "#2b3236", "fill-opacity": 0.55 });
+  for (const x of [-18, -29]) svg("rect", { x, y: -2.6, width: 5.4, height: 5.2, rx: 0.6 }, hatches);
+  kit.slab(22, outline(18, 11.6, { nose: 0.2, tail: 0.2, taper: 0.1, x: 9 }), mix(variant.roof, "#0b1014", 0.18));
+  kit.slab(23.2, outline(17.4, 11, { nose: 0.2, tail: 0.2, taper: 0.1, x: 9 }), kit.sheen(mix(variant.roof, "#0b1014", 0.06), "unit"));
+  return L / 2;
+}
+
+const BODY_BUILDERS = {
+  sedan: passengerBody,
+  hatch: passengerBody,
+  estate: passengerBody,
+  suv: passengerBody,
+  sports: passengerBody,
+  van: vanBody,
+  bus: busBody,
+  truck: truckBody,
+};
 
 // Cyclists combine a side profile drawn in the vertical plane of travel with
 // ground-plane slices that keep their width when seen end-on.
@@ -1623,9 +1768,8 @@ async function startTraffic(root, layer) {
       const used = traffic
         .filter((other) => other.lane && other.kind === "car")
         .map((other) => other.variant);
-      entity.variant = pick(
-        CAR_VARIANTS.filter((variant) => !used.includes(variant)),
-      );
+      const unused = CAR_VARIANTS.filter((variant) => !used.includes(variant));
+      entity.variant = pick(unused.length ? unused : CAR_VARIANTS);
       entity.half = styleCar(art, entity.variant);
     } else if (entity.kind === "pedestrian") {
       const taken = traffic
