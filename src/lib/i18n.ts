@@ -34,7 +34,7 @@ export const routePairs: Record<string, string> = {
   "/o-nas": "/en/company",
   "/kontakt": "/en/contact",
   "/zasebnost": "/en/privacy",
-  "/digitalni-dvojcek": "/en/digital-twin",
+  "/nexavia/razstavni-prostor": "/en/nexavia/showcase-room",
   "/industrial-iot": "/en/industrial-iot",
   "/partner-program": "/en/partner-program",
   "/utilities": "/en/utilities",

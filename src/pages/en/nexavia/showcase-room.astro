@@ -1,11 +1,11 @@
 ---
-import MainLayout from "../../layouts/MainLayout.astro";
-import "../../styles/digital-twin.css";
-import DigitalTwinCity from "../../components/DigitalTwinCity.astro";
-import nexaviaLogo from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
+import MainLayout from "../../../layouts/MainLayout.astro";
+import "../../../styles/nexavia-showcase-room.css";
+import ShowcaseRoomMaquette from "../../../components/nexavia/ShowcaseRoomMaquette.astro";
+import nexaviaLogo from "../../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
 
-// Each tab is one digital twin. The first tab is always started on page load;
-// the others start the first time they are opened (see src/digital-twin/index.js).
+// Each tab is one maquette. The first tab is always started on page load;
+// the others start the first time they are opened (see src/nexavia/showcase-room/index.js).
 const tabs = [
   { id: "city", title: "Smart city", meta: "60 × 60 cm model · 7 devices" },
 ];
@@ -22,8 +22,8 @@ const buildings = [
 ---
 
 <MainLayout
-  title="City digital twin | KUEM"
-  description="Interactive concept of a mini city connected to a Nexavia dashboard."
+  title="Nexavia showcase room | KUEM"
+  description="The Nexavia showcase room: an interactive digital twin of a mini city connected to a Nexavia dashboard."
   noindex
 >
   <div class="twin-page" data-twin-root>
@@ -31,7 +31,7 @@ const buildings = [
       <div>
         <p class="twin-path">
           <a href="/en/nexavia/">Nexavia</a> <span aria-hidden="true">/</span>{" "}
-          Digital twin concept
+          Showcase room
         </p>
         <h1>A city that shows what is happening in its data.</h1>
         <p class="twin-lead">
@@ -42,7 +42,7 @@ const buildings = [
       </div>
     </div>
 
-    <div class="twin-tabs" role="tablist" aria-label="Digital twins">
+    <div class="twin-tabs" role="tablist" aria-label="Showcase room maquettes">
       {tabs.map((tab, i) => (
         <button type="button" role="tab" class="twin-tab" id={`twin-tab-${tab.id}`} aria-controls={`twin-panel-${tab.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1} data-twin-tab-trigger>
           <span class="twin-tab-index">{String(i + 1).padStart(2, "0")}</span>
@@ -51,19 +51,20 @@ const buildings = [
       ))}
     </div>
     <div class="twin-tab-panel" role="tabpanel" id="twin-panel-city" aria-labelledby="twin-tab-city" data-twin-tab="city">
-    <section class="twin-workspace" aria-label="Digital twin and dashboard">
+    <section class="twin-workspace" aria-label="Showcase room and dashboard">
       <div class="twin-city-panel">
         <div class="twin-panel-head">
           <div>
             <p>City view · drag to explore</p>
             <p class="twin-hint" data-device-hint><span aria-hidden="true"></span>Click a street light or building to switch it on or off</p>
+            <p class="twin-hint twin-hint--panel" data-device-hint><span aria-hidden="true"></span>Parts of the Nexavia dashboard are interactive too – switch a single device or all street lights at once.</p>
           </div>
           <span class="twin-live">
             <span></span> Simulation running
           </span>
         </div>
         <div class="twin-scene-wrap">
-          <DigitalTwinCity locale="en" />
+          <ShowcaseRoomMaquette locale="en" />
         </div>
         <div class="twin-controls">
           <button type="button" data-city-fullscreen aria-pressed="false">
@@ -216,5 +217,5 @@ const buildings = [
     </section>
     </div>
   </div>
-  <script src="../../digital-twin/index.js"></script>
+  <script src="../../../nexavia/showcase-room/index.js"></script>
 </MainLayout>

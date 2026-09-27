@@ -5,7 +5,7 @@ interface Props {
 
 const { locale } = Astro.props;
 const en = locale === "en";
-const photoSrc = "/images/digital-twin-city-modular.png";
+const photoSrc = "/images/nexavia/showcase-room/maquette.png";
 const photoAlt = en
   ? "Photorealistic 60 by 60 centimetre miniature city maquette assembled from four 30 by 30 centimetre modules: homes, civic square, factory, river and bridge"
   : "Fotorealistična maketa mesta velikosti 60 × 60 cm, sestavljena iz štirih modulov velikosti 30 × 30 cm: hiše, javni trg, tovarna, reka in most";
@@ -38,7 +38,7 @@ const modules = [
 ];
 
 // Controllable lighting devices, in photo pixels (1536 × 1024). `off` is the
-// unlit patch made by scripts/generate-twin-lighting.mjs, `shape` outlines the
+// unlit patch made by scripts/generate-showcase-room-lighting.mjs, `shape` outlines the
 // asset for hover and focus, and `hit` is a larger invisible target for lamps.
 const lamp = (x: number, top: number, bottom: number) => ({
   shape: `M${x - 6} ${top}h12v${bottom - top}h-12z`,
@@ -181,9 +181,10 @@ const lanePatch =
   </svg>
   <svg class="city-lighting" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
     {lightingDevices.map(({ id, off: [x, y, width, height] }) => (
-      <image class="city-light-off" data-light-off={id} href={`/images/digital-twin/lights/${id.toLowerCase()}-off.webp`} x={x} y={y} width={width} height={height} />
+      <image class="city-light-off" data-light-off={id} href={`/images/nexavia/showcase-room/lights/${id.toLowerCase()}-off.webp`} x={x} y={y} width={width} height={height} />
     ))}
   </svg>
+  <div class="city-focus" aria-hidden="true"></div>
   <svg class="city-devices" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" role="group" aria-label={en ? "Remotely controlled lighting" : "Daljinsko upravljana razsvetljava"}>
     {lightingDevices.map(({ id, label, shape, hit, anchor }) => (
       <g class="city-device" data-device={id} data-anchor={anchor.join(" ")} role="button" tabindex="0" aria-pressed="false" aria-label={`${label}, ${id}`}>
@@ -272,12 +273,12 @@ const lanePatch =
     </svg>
     <div class="city-loader-scan"></div>
     <div class="city-loader-top">
-      <span><i></i>KUEM · {en ? "Digital twin" : "Digitalni dvojček"}</span>
+      <span><i></i>KUEM · {en ? "Nexavia showcase room" : "Razstavni prostor Nexavia"}</span>
       <span>{en ? "Model 60 × 60 cm · 4 modules" : "Maketa 60 × 60 cm · 4 moduli"}</span>
     </div>
     <div class="city-loader-hud">
       <div>
-        <p class="city-loader-kicker">{en ? "Building the digital twin" : "Gradnja digitalnega dvojčka"}</p>
+        <p class="city-loader-kicker">{en ? "Building the interactive model" : "Gradnja interaktivne makete"}</p>
         <p class="city-loader-stage" data-loader-stage>{en ? "Loading the city model" : "Nalaganje modela mesta"}</p>
       </div>
       <p class="city-loader-pct"><span data-loader-pct>0</span><small>%</small></p>

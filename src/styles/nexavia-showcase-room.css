@@ -582,6 +582,11 @@
 .twin-city-panel .twin-panel-head .twin-hint{display:flex;align-items:center;gap:.5rem;margin-top:.35rem;color:#d3e3dd;font-size:.8rem;transition:opacity .4s ease}
 .twin-hint>span{flex:none;width:6px;height:6px;border-radius:50%;background:#f3c969;box-shadow:0 0 0 3px #f3c96926}
 .twin-city-panel .twin-panel-head .twin-hint.is-quiet{opacity:.55}
+.twin-city-panel .twin-panel-head .twin-hint--panel{margin-top:.2rem}
+/* Dots sit on the first line when a hint wraps. */
+.twin-city-panel .twin-panel-head .twin-hint{align-items:flex-start}
+.twin-hint>span{margin-top:.45em}
+.twin-hint--panel>span{border-radius:2px;background:#6fb6e8;box-shadow:0 0 0 3px #6fb6e826}
 .twin-controls .twin-auto:before{content:"↺";margin-right:.4rem}
 .twin-state-cell{display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0}
 .twin-switch{position:relative;flex:none;width:22px;height:12px;padding:0;border:0;border-radius:6px;background:#c3cfd8;cursor:pointer;transition:background .18s ease}
@@ -600,7 +605,7 @@
 .twin-lamp-group button:focus-visible{outline:2px solid #2582d4;outline-offset:1px}
 @media(prefers-reduced-motion:reduce){.city-light-off,.city-device-shape,.city-device-chip,.twin-switch,.twin-switch>span,.twin-hint{transition:none}.twin-tr.is-updated{animation:none}}
 
-/* Digital-twin tabs: one tab per twin; the active tab takes the dark tone of the scene below it. */
+/* Showcase tabs: one tab per maquette; the active tab takes the dark tone of the scene below it. */
 .twin-tabs{display:flex;gap:4px;width:max-content;max-width:100%;margin:0 0 1rem;padding:4px;overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 1px 2px #1d3e580d;scrollbar-width:none}
 .twin-tabs::-webkit-scrollbar{display:none}
 .twin-tab{display:flex;align-items:center;gap:.75rem;min-height:52px;padding:.5rem 1.15rem .5rem .55rem;border:0;border-radius:9px;background:transparent;color:var(--muted);font:inherit;text-align:left;white-space:nowrap;cursor:pointer;transition:background .2s ease,color .2s ease,box-shadow .2s ease}
@@ -633,8 +638,10 @@
 @keyframes plan-fade{to{opacity:.045}}
 @keyframes plan-text{to{opacity:1}}
 @keyframes plan-rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.city-loader-scan{position:absolute;left:0;right:0;top:-30%;height:30%;background:linear-gradient(#8fe3e000,#8fe3e00d 70%,#8fe3e026);border-bottom:1px solid #8fe3e04d;animation:loader-scan 2.8s cubic-bezier(.45,0,.55,1) 1.2s infinite;pointer-events:none}
-@keyframes loader-scan{to{top:100%}}
+/* One scan line, placed by loading progress: top at 0 %, bottom at 100 %, with a soft trail above it. */
+.city-loader-scan{position:absolute;left:0;right:0;top:0;height:30%;background:linear-gradient(#8fe3e000,#8fe3e00b 70%,#8fe3e024);transform:translateY(calc((var(--load,0) / .3 - 1) * 100%));pointer-events:none}
+.city-loader-scan:after,.city-loader-edge{background:linear-gradient(90deg,transparent,#bdf5ee 18%,#fff 50%,#bdf5ee 82%,transparent);box-shadow:0 0 22px 3px #8fe3e099}
+.city-loader-scan:after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px}
 .city-loader-top{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;gap:12px;padding:clamp(10px,2.2cqw,26px) clamp(12px,2.6cqw,30px);color:#79a7a1;font:600 clamp(7px,.85cqw,11px)/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.2em;text-transform:uppercase}
 .city-loader-top i{display:inline-block;width:6px;height:6px;margin-right:.7em;border-radius:50%;background:#8fe3e0;box-shadow:0 0 8px #8fe3e0;vertical-align:.1em;animation:loader-blink 1.6s ease-in-out infinite}
 @keyframes loader-blink{50%{opacity:.35}}
@@ -649,16 +656,15 @@
 .city-loader-top{inset:1.6% 1.6% auto}
 .city-loader-hud{inset:auto 1.6% 1.8%}
 .city-loader-bar{inset:auto 1.6% 1.6%}
-.city-loader-bar span{display:block;width:calc(var(--load,0) * 100%);height:100%;background:linear-gradient(90deg,#2aa7b8,#bdf5ee);box-shadow:0 0 14px #8fe3e0b3;transition:width .35s cubic-bezier(.16,1,.3,1)}
-.city-loader.is-indeterminate .city-loader-bar span{width:28%;animation:loader-bar 1.5s ease-in-out infinite}
-@keyframes loader-bar{from{transform:translateX(-100%)}to{transform:translateX(360%)}}
-.city-loader-edge{position:absolute;left:0;right:0;top:0;z-index:21;height:1px;background:linear-gradient(90deg,transparent,#bdf5ee 18%,#fff 50%,#bdf5ee 82%,transparent);box-shadow:0 0 22px 3px #8fe3e099;opacity:0;pointer-events:none}
+.city-loader-bar span{display:block;width:calc(var(--load,0) * 100%);height:100%;background:linear-gradient(90deg,#2aa7b8,#bdf5ee);box-shadow:0 0 14px #8fe3e0b3}
+/* The reveal edge starts where the scan line finished (the bottom) and travels back up. */
+.city-loader-edge{position:absolute;left:0;right:0;top:calc(100% - 1px);z-index:21;height:1px;opacity:0;pointer-events:none}
 .city-art.is-revealing .city-loader{animation:loader-retract 1.2s cubic-bezier(.7,0,.2,1) forwards}
 .city-art.is-revealing .city-loader-edge{animation:loader-edge 1.2s cubic-bezier(.7,0,.2,1) forwards}
 .city-art.is-revealing .city-loader-hud,.city-art.is-revealing .city-loader-top{opacity:0;transform:translateY(6px)}
 .city-art.is-revealing .city-loader-scan{display:none}
-@keyframes loader-retract{to{clip-path:inset(100% 0 0 0)}}
-@keyframes loader-edge{0%{top:0;opacity:0}8%,90%{opacity:1}100%{top:100%;opacity:0}}
+@keyframes loader-retract{to{clip-path:inset(0 0 100% 0)}}
+@keyframes loader-edge{0%{top:calc(100% - 1px);opacity:1}90%{opacity:1}100%{top:0;opacity:0}}
 /* Chimney smoke rises in front of the road behind it, so it sits above the traffic. */
 .city-smoke{position:absolute;z-index:3;pointer-events:none}
 /* KUEM wordmark engraved into the base. After the reveal a laser raster-scans it in:
@@ -684,6 +690,82 @@
 @keyframes engrave-sheen{0%{opacity:0;transform:translateX(-20px)}20%,80%{opacity:.55}100%{opacity:0;transform:translateX(360px)}}
 .plan-line--logo{stroke:#d9fffb;stroke-width:.9;filter:drop-shadow(0 0 2px #8fe3e0)}
 @media(prefers-reduced-motion:reduce){.city-art.is-ready :is(.engrave-wipe,.engrave-heat,.engrave-laser,.engrave-raster,.engrave-core,.engrave-sheen){animation:none}.city-art.is-ready .engrave-wipe{transform:none}}
+/* Guided scenarios: launcher strip, camera focus, lower-third player, notification toast. */
+.twin-scenarios{display:flex;align-items:center;gap:6px;padding:0 1.5rem .9rem;overflow-x:auto;scrollbar-width:none}
+.twin-scenarios::-webkit-scrollbar{display:none}
+.twin-scenarios-label{flex:none;margin-right:.35rem;color:#8fb8b3;font:600 .68rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em;text-transform:uppercase}
+.twin-scenario-chip{display:flex;flex:none;align-items:center;gap:.55rem;min-height:38px;padding:.35rem .8rem .35rem .4rem;border:1px solid #3b575d;border-radius:999px;background:#1a2f35;color:#e3f0ec;font:inherit;font-size:.8rem;cursor:pointer;transition:background .2s ease,border-color .2s ease,color .2s ease}
+.twin-scenario-chip i{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#8fe3e014;color:#8fe3e0;font:600 .64rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;font-style:normal}
+.twin-scenario-chip b{font-weight:600;white-space:nowrap}
+.twin-scenario-chip small{color:#7fa39e;font-size:.7rem;font-variant-numeric:tabular-nums}
+.twin-scenario-chip:hover:not(:disabled){border-color:#8fe3e066;background:#21383f}
+.twin-scenario-chip[aria-pressed=true]{border-color:#8fe3e0;background:#8fe3e01a;color:#fff}
+.twin-scenario-chip[aria-pressed=true] i{background:#8fe3e0;color:#0c1a1f}
+.twin-scenario-chip:focus-visible{outline:2px solid #8fe3e0;outline-offset:2px}
+.twin-scenario-chip:disabled{opacity:.45;cursor:progress}
+.twin-controls button:disabled{opacity:.45;cursor:not-allowed}
+@property --focus-x{syntax:"<percentage>";inherits:false;initial-value:50%}
+@property --focus-y{syntax:"<percentage>";inherits:false;initial-value:50%}
+@property --focus-r{syntax:"<percentage>";inherits:false;initial-value:60%}
+.city-art{transition:scale 1.3s cubic-bezier(.45,0,.2,1),translate 1.3s cubic-bezier(.45,0,.2,1)}
+/* Flat compositing: the unused 3D context made the zoomed maquette paint over the player's glass. */
+.twin-scene-wrap{perspective:none}
+.city-art{transform-style:flat}
+.twin-scene-wrap.has-scenario .city-scene-control,.twin-scene-wrap.has-scenario .city-module-guides{opacity:.3;transition:opacity .6s ease}
+.city-focus{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;background:radial-gradient(ellipse var(--focus-r) calc(var(--focus-r) * 1.1) at var(--focus-x) var(--focus-y),transparent 0 45%,#040b0e8c 100%);transition:opacity .8s ease,--focus-x 1.2s cubic-bezier(.65,0,.35,1),--focus-y 1.2s cubic-bezier(.65,0,.35,1),--focus-r 1.2s cubic-bezier(.65,0,.35,1)}
+.city-focus.is-active{opacity:1}
+.scenario-player{position:absolute;left:16px;bottom:16px;z-index:12;width:min(430px,calc(100% - 32px));padding:14px 16px 12px;border:1px solid #8fe3e02e;border-radius:14px;background:#0a171be0;-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);box-shadow:0 18px 40px #02080a73;color:#e8f3f0;text-align:left;outline:none;animation:scenario-in .5s cubic-bezier(.16,1,.3,1)}
+.scenario-player[hidden]{display:none}
+.scenario-player:focus-visible{box-shadow:0 0 0 2px #8fe3e0,0 18px 40px #02080a73}
+@keyframes scenario-in{from{opacity:0;translate:0 12px}}
+.scenario-player header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.scenario-kicker{color:#8fe3e0;font:600 .66rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.14em;text-transform:uppercase}
+.scenario-player button{display:grid;place-items:center;padding:0;border:1px solid #ffffff1f;border-radius:50%;background:#ffffff0a;color:#e8f3f0;cursor:pointer;transition:background .2s ease,border-color .2s ease}
+.scenario-player button:hover{background:#ffffff1a;border-color:#ffffff40}
+.scenario-player button:focus-visible{outline:2px solid #8fe3e0;outline-offset:2px}
+.scenario-player svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.scenario-close{width:28px;height:28px}
+.scenario-body{display:flex;gap:14px;align-items:flex-start}
+.scenario-time{flex:none;margin:2px 0 0;color:#f2fbf9;font:200 1.7rem/1 system-ui,sans-serif;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.scenario-title{margin:0 0 4px;color:#fff;font-size:1rem;font-weight:650;letter-spacing:-.01em}
+.scenario-text{margin:0;color:#c3d7d2;font-size:.84rem;line-height:1.45}
+.scenario-progress{display:flex;gap:4px;margin:12px 0 10px}
+.scenario-progress i{flex:1;height:3px;overflow:hidden;border-radius:2px;background:#ffffff1f}
+.scenario-progress b{display:block;width:0;height:100%;background:linear-gradient(90deg,#2aa7b8,#bdf5ee)}
+.scenario-progress .is-done b{width:100%}
+.scenario-progress .is-current b{animation:scenario-step var(--step-ms,6800ms) linear forwards}
+.scenario-player.is-paused .scenario-progress .is-current b{animation-play-state:paused}
+@keyframes scenario-step{to{width:100%}}
+.scenario-player footer{display:flex;align-items:center;gap:6px}
+.scenario-prev,.scenario-next{width:32px;height:32px}
+.scenario-player .scenario-play{width:38px;height:38px;border-color:#8fe3e066;background:#8fe3e01f}
+.scenario-count{margin-left:auto;color:#8fb8b3;font-size:.72rem;font-variant-numeric:tabular-nums}
+.scenario-toast{position:absolute;top:16px;left:16px;z-index:12;display:flex;gap:10px;align-items:flex-start;width:min(300px,calc(100% - 32px));padding:11px 13px;border:1px solid #ffffff24;border-radius:12px;background:#f7fbfaf0;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 14px 30px #02080a59;color:#17303a;opacity:0;translate:0 -10px;pointer-events:none;transition:opacity .35s ease,translate .5s cubic-bezier(.16,1,.3,1)}
+.scenario-toast.is-visible{opacity:1;translate:0 0}
+.scenario-toast-icon{display:grid;place-items:center;flex:none;width:30px;height:30px;border-radius:8px;background:#e05a47;color:#fff}
+.scenario-toast-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.scenario-toast small{display:block;color:#6b8290;font:600 .62rem/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase}
+.scenario-toast b{display:block;margin:2px 0 1px;font-size:.86rem}
+.scenario-toast span>span{display:block;color:#4b6273;font-size:.76rem}
+/* Dashboard states driven by scenarios. */
+.twin-workspace .is-spotlit{position:relative;border-radius:4px;box-shadow:0 0 0 2px #2582d4,0 0 0 6px #2582d41f;transition:box-shadow .3s ease}
+.twin-tr.is-offline .twin-state{color:#9aa7b2;font-style:italic}
+.twin-tr.is-offline b{color:#8797a4}
+.twin-meter-readings.is-stale strong,.twin-sensor-readings.is-stale strong{color:#9aa7b2;text-decoration:line-through dotted #b8c3cc}
+.twin-sync{transition:color .3s ease,background .3s ease,border-color .3s ease}
+.xdr-display .twin-sync.is-lost{border-color:#f1c9c9;background:#fff5f4;color:#b8443b}
+.xdr-display .twin-sync.is-lost i{background:#d9534a}
+.twin-live.is-directed{color:#7cc8f0}
+.twin-live.is-directed>span{background:#7cc8f0;box-shadow:0 0 0 3px #7cc8f029}
+@media(max-width:700px){.twin-scenarios{padding:0 1rem .8rem}.scenario-player{position:relative;left:auto;bottom:auto;width:auto;margin:0;border-radius:0;border-width:1px 0 0;animation:none}.scenario-time{font-size:1.35rem}.scenario-toast{top:10px;left:10px}}
+@media(prefers-reduced-motion:reduce){.city-art,.city-focus,.scenario-toast{transition:none}.scenario-player{animation:none}.scenario-progress .is-current b{animation:none;width:50%}}
+/* Status pill: green while the simulation runs, orange while it is stopped. */
+.twin-live{transition:color .25s ease}
+.twin-live.is-stopped{color:#f0a04b}
+.twin-live.is-stopped>span{background:#f0a04b;box-shadow:0 0 0 3px #f0a04b29}
+/* The narration under the maquette appears once the model is loaded. */
+.twin-controls #twin-step{transition:opacity .6s ease .2s}
+.twin-city-panel:has(.city-art:not(.is-ready)) #twin-step{visibility:hidden;opacity:0;transition:none}
 /* The Nexavia screen waits for the model, then glides in as the reveal finishes. */
 .twin-workspace:has(.city-art.is-loading) .xdr-display{visibility:hidden}
 .twin-workspace:has(.city-art.is-revealing) .xdr-display{animation:nx-enter .85s cubic-bezier(.16,1,.3,1) .35s both}

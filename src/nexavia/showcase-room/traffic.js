@@ -1,4 +1,4 @@
-// Miniature traffic for the digital-twin maquette photo.
+// Miniature traffic for the showcase room maquette photo.
 // Geometry uses the photo's 1536 × 1024 viewBox. Distances, sizes and speeds
 // are in "ground units": photo pixels measured on the board at mid-depth.
 

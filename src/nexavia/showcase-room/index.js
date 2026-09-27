@@ -1,12 +1,14 @@
 import { initTraffic } from "./traffic.js";
 import { initWater } from "./water.js";
 import { initSmoke } from "./smoke.js";
+import { initScenarios } from "./scenarios.js";
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Brings the maquette in: real download progress over a blueprint of the
-// board, then the blueprint retracts behind a scan edge to reveal the model.
+// Brings the maquette in. One scan line travels down the blueprint as the
+// model loads, then turns into the reveal edge and travels back up while the
+// model materialises from the base.
 async function loadMaquette(root, en) {
   const art = root.querySelector("[data-city-art]");
   const photo = art?.querySelector(".city-photo");
@@ -15,39 +17,77 @@ async function loadMaquette(root, en) {
   const stage = loader?.querySelector("[data-loader-stage]");
   const percent = loader?.querySelector("[data-loader-pct]");
   const quick = reducedMotion.matches;
-  // Let the blueprint finish drawing even when the photo is cached.
-  const drawn = wait(quick ? 0 : 1500);
-  const progress = (value) => {
-    art.style.setProperty("--load", value.toFixed(3));
+
+  // Loading progress (0–1) from the real stages, and the value shown on
+  // screen. The shown value only moves forward and never runs ahead of a
+  // fixed minimum duration, so a fast or cached load always plays the same
+  // single sweep while the blueprint finishes drawing; a slow load follows
+  // the real download.
+  const minDuration = quick ? 0 : 3000;
+  let target = 0;
+  let loaded = false;
+  let indeterminate = false;
+  let shown = 0;
+  let finish;
+  const swept = new Promise((resolve) => (finish = resolve));
+  const start = performance.now();
+  let last = start;
+  // Stage text follows the shown progress, so it always matches the sweep.
+  const stages = en
+    ? [[0.86, "Loading the lighting"], [0.95, "Starting the simulation"]]
+    : [[0.86, "Nalaganje razsvetljave"], [0.95, "Zagon simulacije"]];
+  const render = (value) => {
+    art.style.setProperty("--load", value.toFixed(4));
     if (percent) percent.textContent = String(Math.round(value * 100));
+    const label = stages.findLast(([from]) => value >= from)?.[1];
+    if (stage && label && stage.textContent !== label) stage.textContent = label;
   };
+  const frame = (now) => {
+    const dt = Math.min(0.1, (now - last) / 1000);
+    last = now;
+    const elapsed = now - start;
+    let goal = target;
+    // Without a known file size, creep forward on a slowing curve.
+    if (indeterminate) goal = Math.max(goal, 0.86 * (1 - Math.exp(-elapsed / 4000)));
+    goal = Math.min(goal, minDuration ? elapsed / minDuration : 1);
+    shown = quick ? goal : shown + (goal - shown) * Math.min(1, dt * 5);
+    if (loaded && goal >= 1 && shown > 0.996) {
+      render(1);
+      finish();
+      return;
+    }
+    render(shown);
+    requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+
   const download = art.twinPhoto;
   let src = photo.dataset.src;
   if (download) {
-    const onBytes = ({ loaded, total }) => total && progress(Math.min(1, loaded / total) * 0.86);
+    const onBytes = ({ loaded: bytes, total }) => {
+      if (total) target = Math.max(target, Math.min(1, bytes / total) * 0.86);
+    };
     download.listeners.add(onBytes);
     onBytes(download);
-    if (!download.total) loader?.classList.add("is-indeterminate");
+    indeterminate = !download.total;
     src = await download.ready;
     download.listeners.delete(onBytes);
-    loader?.classList.remove("is-indeterminate");
+    indeterminate = false;
   }
   photo.src = src;
   await photo.decode().catch(() => {});
-  progress(0.86);
-  if (stage) stage.textContent = en ? "Loading the lighting" : "Nalaganje razsvetljave";
+  target = 0.86;
   await Promise.all(
-    [...art.querySelectorAll(".city-light-off")].map((patch) => {
+    [...art.querySelectorAll(".city-light-off")].map(async (patch) => {
       const image = new Image();
       image.src = patch.getAttribute("href");
-      return image.decode().catch(() => {});
+      await image.decode().catch(() => {});
     }),
   );
-  progress(0.95);
-  if (stage) stage.textContent = en ? "Starting the simulation" : "Zagon simulacije";
-  await drawn;
-  progress(1);
-  await wait(quick ? 0 : 260);
+  target = 1;
+  loaded = true;
+  await swept;
+  await wait(quick ? 0 : 160);
   art.classList.remove("is-loading");
   art.classList.add("is-revealing");
   await wait(quick ? 220 : 1250);
@@ -154,6 +194,7 @@ function initCityTwin(root) {
     let overlayDragStart = null;
     overlayDrag.addEventListener("pointerdown", (event) => {
       if (event.target.closest("input, button")) return;
+      screenOverlay.dataset.placed = "visitor";
       const frame = workspace.getBoundingClientRect();
       const overlay = screenOverlay.getBoundingClientRect();
       overlayDragStart = {
@@ -184,6 +225,7 @@ function initCityTwin(root) {
       screenOverlay.style.setProperty("--overlay-opacity", String(Number(overlayOpacity.value) / 100));
     });
     resizeEdges.forEach((edge) => edge.addEventListener("pointerdown", (event) => {
+      screenOverlay.dataset.placed = "visitor";
       const frame = workspace.getBoundingClientRect();
       const overlay = screenOverlay.getBoundingClientRect();
       const direction = edge.dataset.overlayResize;
@@ -330,6 +372,8 @@ function initCityTwin(root) {
     // and "manual" after a visitor's command, until control is handed back.
     state: 0,
     mode: "auto",
+    // False while the device cannot reach Nexavia (e.g. gateway outage).
+    online: true,
   }));
   const deviceById = new Map(devices.map((device) => [device.id, device]));
   const alertAssets = ["OFFICE_01", "FACTORY_01"];
@@ -442,6 +486,8 @@ function initCityTwin(root) {
   let visible = true;
   // The simulation starts once the maquette has been revealed.
   let ready = false;
+  // True while a guided scenario directs the scene; the rule is suspended.
+  let directed = false;
   let timer;
 
   function render(step) {
@@ -525,8 +571,9 @@ function initCityTwin(root) {
     second: "2-digit",
   });
   let commandShownUntil = 0;
-  function logEvent(text) {
-    $("#twin-event").textContent = `${timeFormat.format(new Date())} · ${text}`;
+  // `time` overrides the real clock, e.g. a guided scenario's own clock.
+  function logEvent(text, time = timeFormat.format(new Date())) {
+    $("#twin-event").textContent = `${time} · ${text}`;
   }
 
   // Projects the device state onto everything that shows it: the maquette's
@@ -536,16 +583,31 @@ function initCityTwin(root) {
     let active = 0;
     devices.forEach((device) => {
       const on = device.state > 0;
+      const dimmed = on && device.state < 1;
       const watts = Math.round(device.watts * device.state);
       power += watts;
       if (on) active++;
-      root.querySelector(`[data-light-off="${device.id}"]`)?.classList.toggle("is-off", !on);
+      const patch = root.querySelector(`[data-light-off="${device.id}"]`);
+      if (patch) {
+        patch.classList.toggle("is-off", !on);
+        // A dimmed light shows part of its unlit patch.
+        patch.style.opacity = dimmed ? String((1 - device.state) * 0.85) : "";
+      }
       root.querySelector(`[data-device="${device.id}"]`)?.setAttribute("aria-pressed", String(on));
       const row = root.querySelector(`[data-row="${device.id}"]`);
       if (!row) return;
       const state = row.querySelector(".twin-state");
-      state.textContent = on ? (en ? "On" : "Vklopljeno") : en ? "Off" : "Izklopljeno";
-      state.dataset.state = on ? "on" : "off";
+      row.classList.toggle("is-offline", !device.online);
+      if (!device.online) {
+        state.textContent = en ? "Offline" : "Ni povezave";
+        state.dataset.state = "offline";
+      } else {
+        const percent = Math.round(device.state * 100);
+        state.textContent = dimmed
+          ? en ? `Dimmed ${percent}%` : `Zatemnjeno ${percent} %`
+          : on ? (en ? "On" : "Vklopljeno") : en ? "Off" : "Izklopljeno";
+        state.dataset.state = on ? "on" : "off";
+      }
       row.querySelector(".twin-watts").textContent = `${watts} W`;
       row.querySelector("[data-device-switch]")?.setAttribute("aria-checked", String(on));
       const modeTag = row.querySelector("[data-mode-tag]");
@@ -571,6 +633,7 @@ function initCityTwin(root) {
     clearInterval(timer);
     if (
       ready &&
+      !directed &&
       !paused &&
       visible &&
       !window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -583,8 +646,10 @@ function initCityTwin(root) {
         window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     );
   }
-  $("#twin-pause").addEventListener("click", () => {
-    paused = !paused;
+  // Pause state is shown in two places: the pause button and the status
+  // pill (green while running, orange while stopped).
+  function setPaused(value) {
+    paused = value;
     $("#twin-pause").textContent = paused
       ? en
         ? "Resume animation"
@@ -593,7 +658,9 @@ function initCityTwin(root) {
         ? "Pause"
         : "Začasno ustavi";
     $("#twin-pause").setAttribute("aria-pressed", String(paused));
-    $(".twin-live").lastChild.textContent = paused
+    const status = $(".twin-live");
+    status.classList.toggle("is-stopped", paused);
+    status.lastChild.textContent = paused
       ? en
         ? " Simulation paused"
         : " Simulacija ustavljena"
@@ -601,7 +668,8 @@ function initCityTwin(root) {
         ? " Simulation running"
         : " Simulacija teče";
     schedule();
-  });
+  }
+  $("#twin-pause").addEventListener("click", () => setPaused(!paused));
   $("#twin-next").addEventListener("click", next);
   const sensorTriggers = {
     "water-level": {
@@ -634,9 +702,7 @@ function initCityTwin(root) {
     control.addEventListener("click", () => {
       const sensor = sensorTriggers[control.dataset.sceneSensor];
       if (!sensor) return;
-      paused = true;
-      $("#twin-pause").textContent = en ? "Resume animation" : "Nadaljuj animacijo";
-      $("#twin-pause").setAttribute("aria-pressed", "true");
+      setPaused(true);
       root.querySelectorAll(".city-sensor-popover[data-pinned='true']").forEach((item) => {
         item.dataset.pinned = "false";
         item.style.opacity = "";
@@ -653,7 +719,6 @@ function initCityTwin(root) {
       logEvent(sensor.event());
       $("#twin-step").textContent = sensor.name;
       $("#twin-rule-status").textContent = en ? "Manual sensor trigger · dashboard updated" : "Ročni prožilnik senzorja · nadzorna plošča posodobljena";
-      schedule();
     });
   });
   // Visitor commands, from the maquette, the dashboard rows or the street
@@ -679,7 +744,7 @@ function initCityTwin(root) {
       ? "Manual override · the lighting rule leaves these devices as set"
       : "Ročno upravljanje · samodejno pravilo teh naprav ne preglasi";
     commandShownUntil = performance.now() + 6000;
-    $("[data-device-hint]")?.classList.add("is-quiet");
+    root.querySelectorAll("[data-device-hint]").forEach((hint) => hint.classList.add("is-quiet"));
   }
   function updateChip() {
     const device = deviceById.get(chip?.dataset.id);
@@ -744,7 +809,7 @@ function initCityTwin(root) {
     if (event.target.closest("[data-device], button, a, .city-sensor-popover")) return;
     let nearest;
     let reach = 24;
-    hotspots.forEach((toggle, hotspot) => {
+    for (const hotspot of hotspots.keys()) {
       const box = hotspot.getBoundingClientRect();
       const dx = Math.max(box.left - event.clientX, 0, event.clientX - box.right);
       const dy = Math.max(box.top - event.clientY, 0, event.clientY - box.bottom);
@@ -753,7 +818,7 @@ function initCityTwin(root) {
         reach = distance;
         nearest = hotspot;
       }
-    });
+    }
     if (nearest) hotspots.get(nearest)();
   });
   root.querySelectorAll("[data-device-switch]").forEach((control) => {
@@ -791,11 +856,184 @@ function initCityTwin(root) {
   window
     .matchMedia("(prefers-reduced-motion: reduce)")
     .addEventListener("change", schedule);
+  // Scene direction for guided scenarios (scenarios.js). Scenarios drive the
+  // same devices and dashboard as everything else; entering saves the scene
+  // and leaving puts it back exactly as it was, manual overrides included.
+  const art = root.querySelector("[data-city-art]");
+  const focusLayer = art?.querySelector(".city-focus");
+  const readings = {
+    "house-water": ["#meter-house-water", "#city-popover-house-water-value"],
+    river: ["#sensor-water-level", "#city-popover-water-value"],
+    vibration: ["#sensor-vibration", "#city-popover-vibration-value"],
+    cyclists: ["#sensor-cyclists", "#city-popover-cyclists-value"],
+  };
+  const controls = ["#twin-pause", "#twin-next", "[data-devices-auto]"];
+  let saved = null;
+  const direction = {
+    en,
+    devices: deviceById,
+    enter() {
+      saved = { paused, devices: devices.map(({ state, mode, online }) => ({ state, mode, online })) };
+      directed = true;
+      schedule();
+      controls.forEach((selector) => $(selector) && ($(selector).disabled = true));
+      const status = $(".twin-live");
+      status.classList.remove("is-stopped");
+      status.classList.add("is-directed");
+      status.lastChild.textContent = en ? " Guided scenario" : " Vodeni scenarij";
+    },
+    exit() {
+      if (!saved) return;
+      devices.forEach((device, i) => Object.assign(device, saved.devices[i]));
+      direction.setAlarms(null);
+      direction.setSync(true);
+      direction.setStale(false);
+      direction.pin(null);
+      direction.spotlight(null);
+      direction.focus(null);
+      controls.forEach((selector) => $(selector) && ($(selector).disabled = false));
+      $(".twin-live").classList.remove("is-directed");
+      directed = false;
+      commandShownUntil = 0;
+      render(steps[index]);
+      setPaused(saved.paused);
+      saved = null;
+    },
+    setLevel(id, level) {
+      deviceById.get(id).state = level;
+      renderDevices([id]);
+    },
+    setOnline(ids, online) {
+      ids.forEach((id) => (deviceById.get(id).online = online));
+      renderDevices(online ? ids : []);
+    },
+    setReading(key, text, note) {
+      const [panelSelector, popoverSelector] = readings[key];
+      const panel = $(panelSelector);
+      if (panel) {
+        // Sensor readings keep a <small> note after the value text.
+        if (panel.firstElementChild) panel.firstChild.textContent = text;
+        else panel.textContent = text;
+        if (note !== undefined && panel.querySelector("small")) panel.querySelector("small").textContent = note;
+      }
+      const popover = $(popoverSelector);
+      if (popover) popover.textContent = text;
+    },
+    // Opens one sensor popover on the maquette (or none).
+    pin(name) {
+      root.querySelectorAll(".city-sensor-popover[data-pinned='true']").forEach((item) => {
+        item.dataset.pinned = "false";
+        item.style.opacity = item.style.visibility = item.style.pointerEvents = "";
+      });
+      const popover = name && root.querySelector(`[data-sensor-popover="${name}"]`);
+      if (!popover) return;
+      popover.dataset.pinned = "true";
+      popover.style.opacity = "1";
+      popover.style.visibility = "visible";
+      popover.style.pointerEvents = "auto";
+    },
+    // Replaces the alarm list with the scenario's alarms (null restores it).
+    setAlarms(list) {
+      const box = $(".twin-alerts");
+      if (!box) return;
+      box.querySelectorAll(".is-scenario").forEach((item) => item.remove());
+      if (!list) return;
+      box.querySelectorAll("[data-alarm]").forEach((item) => (item.hidden = true));
+      list.forEach(([id, text]) => {
+        const item = document.createElement("p");
+        item.className = "is-scenario";
+        item.append(Object.assign(document.createElement("strong"), { textContent: id }), Object.assign(document.createElement("span"), { textContent: text }));
+        box.append(item);
+      });
+      $("#twin-alarm-count").textContent = String(list.length);
+      $(".twin-demo-pill").innerHTML = `<i></i> ${list.length} ${en ? "ALARMS" : "ALARMI"}`;
+    },
+    setSync(ok) {
+      const sync = $(".twin-sync");
+      if (!sync) return;
+      sync.classList.toggle("is-lost", !ok);
+      sync.lastChild.textContent = ok ? (en ? " Synchronised" : " Sinhronizirano") : en ? " Connection lost" : " Povezava prekinjena";
+    },
+    setStale(stale) {
+      root.querySelectorAll(".twin-meter-readings, .twin-sensor-readings").forEach((block) => block.classList.toggle("is-stale", stale));
+    },
+    // Draws attention to one part of the dashboard and scrolls it into view
+    // inside the dashboard's own viewport (never the page).
+    spotlight(target) {
+      root.querySelectorAll(".is-spotlit").forEach((item) => item.classList.remove("is-spotlit"));
+      const element = typeof target === "string" ? $(target) : target;
+      if (!element) return;
+      element.classList.add("is-spotlit");
+      const viewport = root.querySelector(".xdr-screen");
+      if (!viewport || !viewport.clientHeight) return;
+      const offset = element.getBoundingClientRect().top - viewport.getBoundingClientRect().top;
+      if (offset < 0 || offset > viewport.clientHeight - element.offsetHeight - 16)
+        viewport.scrollTo({ top: viewport.scrollTop + offset - viewport.clientHeight / 3, behavior: reducedMotion.matches ? "auto" : "smooth" });
+    },
+    log: (text, time) => logEvent(text, time),
+    narrate({ rule, text }) {
+      if (rule) $("#twin-rule-status").textContent = rule;
+      if (text) $("#twin-step").textContent = text;
+    },
+    // Camera: zoom towards a point (photo px) and spotlight it, centring it in
+    // the part of the maquette not covered by the dashboard or the player.
+    focus(target) {
+      if (!art) return;
+      if (!target) {
+        art.style.scale = art.style.translate = "";
+        focusLayer?.classList.remove("is-active");
+        return;
+      }
+      const { x, y, zoom = 1, radius = 0.3, spot = true } = target;
+      const wrap = cityWrap.getBoundingClientRect();
+      let right = wrap.right;
+      let bottom = wrap.bottom;
+      const screen = root.querySelector(".xdr-display:not(.is-minimized)");
+      if (screen) {
+        const box = screen.getBoundingClientRect();
+        if (box.width && box.left > wrap.left + wrap.width * 0.35 && box.top < wrap.bottom) right = Math.min(right, box.left - 12);
+      }
+      const player = root.querySelector("[data-scenario-player]");
+      if (player && !player.hidden && getComputedStyle(player).position === "absolute")
+        bottom = Math.min(bottom, player.getBoundingClientRect().top - 8);
+      const artLeft = wrap.left + art.offsetLeft;
+      const artTop = wrap.top + art.offsetTop;
+      const centreX = ((wrap.left + right) / 2 - artLeft) / art.offsetWidth;
+      const centreY = ((wrap.top + bottom) / 2 - artTop) / art.offsetHeight;
+      const clamp = (value) => Math.min(0, Math.max(1 - zoom, value));
+      const tx = clamp(centreX - (x / 1536) * zoom);
+      const ty = clamp(centreY - (y / 1024) * zoom);
+      art.style.scale = String(zoom);
+      art.style.translate = `${(tx * 100).toFixed(3)}% ${(ty * 100).toFixed(3)}%`;
+      if (focusLayer) {
+        focusLayer.style.setProperty("--focus-x", `${((x / 1536) * 100).toFixed(2)}%`);
+        focusLayer.style.setProperty("--focus-y", `${((y / 1024) * 100).toFixed(2)}%`);
+        focusLayer.style.setProperty("--focus-r", `${(radius * 100).toFixed(1)}%`);
+        focusLayer.classList.toggle("is-active", spot);
+      }
+    },
+  };
+  const scenarios = initScenarios(root, direction);
+  // The floating dashboard starts below the scenario launcher so every
+  // scenario stays reachable, until the visitor places it themselves.
+  const launcher = root.querySelector(".twin-scenarios");
+  const clearLauncher = () => {
+    if (!screenOverlay || !launcher || !workspace || screenOverlay.dataset.placed) return;
+    if (screenOverlay.classList.contains("is-minimized") || document.fullscreenElement) return;
+    const frame = workspace.getBoundingClientRect();
+    const below = launcher.getBoundingClientRect().bottom - frame.top + 10;
+    if (screenOverlay.getBoundingClientRect().top - frame.top < below) screenOverlay.style.top = `${below}px`;
+  };
+  requestAnimationFrame(() => requestAnimationFrame(clearLauncher));
+  window.addEventListener("resize", () => requestAnimationFrame(clearLauncher), { passive: true });
+  overlayToggle?.addEventListener("click", () => requestAnimationFrame(clearLauncher));
+
   render(steps[index]);
   schedule();
   loadMaquette(root, en).then(() => {
     ready = true;
     schedule();
+    scenarios?.enable();
   });
 }
 

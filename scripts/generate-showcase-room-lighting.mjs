@@ -1,4 +1,4 @@
-// Builds the "lights off" patches for the digital-twin maquette.
+// Builds the "lights off" patches for the Nexavia showcase room maquette.
 //
 // The maquette photo is a dusk shot with every light already on, so the lit
 // state is simply the photo. For each controllable device this script derives
@@ -7,14 +7,14 @@
 // walls and paving is taken back out. The patches are layered over the photo
 // in the same 1536 × 1024 coordinate space and faded in when a device is off.
 //
-// Usage: node scripts/generate-twin-lighting.mjs [--preview <dir>]
+// Usage: node scripts/generate-showcase-room-lighting.mjs [--preview <dir>]
 
 import sharp from "sharp";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 
-const SOURCE = "public/images/digital-twin-city-modular.png";
-const OUT_DIR = "public/images/digital-twin/lights";
+const SOURCE = "public/images/nexavia/showcase-room/maquette.png";
+const OUT_DIR = "public/images/nexavia/showcase-room/lights";
 
 // Areas are in photo pixels, traced from the photo.
 // - glass: window and door glazing, which goes dark.
