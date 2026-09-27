@@ -697,29 +697,126 @@ function initCityTwin(root) {
       name: en ? "Factory electricity meter" : "Električni števec tovarne",
       event: () => `${en ? "Factory electricity meter" : "Električni števec tovarne"}: ${$("#meter-electricity").textContent}.`,
     },
+    "office-water": {
+      panel: "office-water",
+      name: en ? "Office water meter" : "Vodomer pisarne",
+      event: () => `${en ? "Office water meter" : "Vodomer pisarne"}: ${$("#meter-office-water").textContent}.`,
+    },
+    vibration: {
+      panel: "vibration",
+      name: en ? "Bridge vibration sensor" : "Senzor tresljajev mostu",
+      event: () => `${en ? "Bridge vibration" : "Tresljaji mostu"}: ${$("#sensor-vibration").firstChild.textContent}.`,
+    },
+    cyclists: {
+      panel: "cyclists",
+      name: en ? "Cyclist counter" : "Števec kolesarjev",
+      event: () => `${en ? "Cyclist counter" : "Števec kolesarjev"}: ${$("#sensor-cyclists").textContent}.`,
+    },
   };
+  // Opens one reading card on the maquette (or none) and marks its pin.
+  function pinCard(name) {
+    root.querySelectorAll(".city-sensor-popover[data-pinned='true']").forEach((item) => (item.dataset.pinned = "false"));
+    root.querySelectorAll("[data-sensor-pin]").forEach((pin) => pin.setAttribute("aria-expanded", String(pin.dataset.sensorPin === name)));
+    const popover = name && root.querySelector(`[data-sensor-popover="${name}"]`);
+    if (popover) popover.dataset.pinned = "true";
+  }
+  const openCard = () => root.querySelector("[data-sensor-pin][aria-expanded='true']");
   root.querySelectorAll("[data-scene-sensor]").forEach((control) => {
     control.addEventListener("click", () => {
       const sensor = sensorTriggers[control.dataset.sceneSensor];
       if (!sensor) return;
-      setPaused(true);
-      root.querySelectorAll(".city-sensor-popover[data-pinned='true']").forEach((item) => {
-        item.dataset.pinned = "false";
-        item.style.opacity = "";
-        item.style.visibility = "";
-        item.style.pointerEvents = "";
-      });
-      const popover = root.querySelector(`[data-sensor-popover="${sensor.panel}"]`);
-      if (popover) {
-        popover.dataset.pinned = "true";
-        popover.style.opacity = "1";
-        popover.style.visibility = "visible";
-        popover.style.pointerEvents = "auto";
+      // A second click on the open pin closes its card.
+      if (control.getAttribute("aria-expanded") === "true") {
+        pinCard(null);
+        return;
       }
+      setPaused(true);
+      pinCard(sensor.panel);
       logEvent(sensor.event());
       $("#twin-step").textContent = sensor.name;
       $("#twin-rule-status").textContent = en ? "Manual sensor trigger · dashboard updated" : "Ročni prožilnik senzorja · nadzorna plošča posodobljena";
     });
+  });
+  // A visitor's card closes on Escape or a click elsewhere; a guided
+  // scenario keeps the card it opened.
+  root.addEventListener("click", (event) => {
+    if (directed || !openCard()) return;
+    if (event.target.closest("[data-sensor-pin], .city-sensor-popover")) return;
+    pinCard(null);
+  });
+  root.addEventListener("keydown", (event) => {
+    const pin = openCard();
+    if (event.key !== "Escape" || directed || !pin) return;
+    pinCard(null);
+    pin.focus({ preventScroll: true });
+  });
+  const sensorsToggle = root.querySelector("[data-sensors-toggle]");
+  sensorsToggle?.addEventListener("click", () => {
+    const on = sensorsToggle.getAttribute("aria-pressed") !== "true";
+    sensorsToggle.setAttribute("aria-pressed", String(on));
+    sensorsToggle.closest("[data-city-art]").dataset.overlays = on ? "on" : "off";
+    if (!on) pinCard(null);
+  });
+  // Live readings. Each card keeps a short history for its sparkline; its pin
+  // pulses on every new reading, shows it in the hover label and turns to an
+  // alarm at the sensor's threshold (data-alert).
+  root.querySelectorAll("[data-sensor-popover]").forEach((card, n) => {
+    const value = card.querySelector("[data-sensor-value]");
+    if (!value) return;
+    const pin = root.querySelector(`[data-sensor-pin="${card.dataset.sensorPopover}"]`);
+    const tag = pin?.querySelector("[data-sensor-tag]");
+    const alert = Number(card.dataset.alert) || Infinity;
+    const read = () => parseFloat(value.textContent.replace(",", "."));
+    // Seed a plausible recent history so the sparkline is never empty; the
+    // cyclist counter only ever counts up.
+    const first = read() || 0;
+    const counting = card.dataset.sensorPopover === "cyclists";
+    const history = Array.from({ length: 24 }, (_, i) =>
+      counting
+        ? Math.max(0, first - Math.round((23 - i) * 1.6))
+        : first * (1 + 0.05 * Math.sin(i * 0.7 + n) + 0.025 * Math.sin(i * 1.9 + n * 2)),
+    );
+    history[history.length - 1] = first;
+    const ns = "http://www.w3.org/2000/svg";
+    const spark = document.createElementNS(ns, "svg");
+    spark.setAttribute("class", "city-popover-spark");
+    spark.setAttribute("viewBox", "0 0 100 28");
+    spark.setAttribute("preserveAspectRatio", "none");
+    spark.setAttribute("aria-hidden", "true");
+    const area = spark.appendChild(document.createElementNS(ns, "path"));
+    const line = spark.appendChild(document.createElementNS(ns, "path"));
+    card.append(spark);
+    const draw = () => {
+      const low = Math.min(...history);
+      const range = Math.max(...history) - low || Math.abs(low) * 0.1 || 1;
+      const points = history.map((v, i) => `${((i / (history.length - 1)) * 100).toFixed(2)} ${(25 - ((v - low) / range) * 21).toFixed(2)}`);
+      line.setAttribute("d", `M${points.join("L")}`);
+      area.setAttribute("d", `M${points.join("L")}L100 28L0 28Z`);
+    };
+    let lastPush = 0;
+    const update = () => {
+      const v = read();
+      if (Number.isNaN(v)) return;
+      // Animated readings change every frame; they fill one history slot.
+      const now = performance.now();
+      if (now - lastPush < 500) history[history.length - 1] = v;
+      else {
+        history.push(v);
+        history.shift();
+        lastPush = now;
+      }
+      draw();
+      const state = v >= alert ? "alert" : "normal";
+      card.dataset.state = state;
+      if (!pin) return;
+      pin.dataset.state = state;
+      if (tag) tag.textContent = value.textContent;
+      if (!pin.classList.contains("is-tick")) pin.classList.add("is-tick");
+    };
+    pin?.addEventListener("animationend", () => pin.classList.remove("is-tick"));
+    new MutationObserver(update).observe(value, { childList: true, characterData: true, subtree: true });
+    draw();
+    if (tag) tag.textContent = value.textContent;
   });
   // Visitor commands, from the maquette, the dashboard rows or the street
   // lighting group. They change only this page's simulated devices.
@@ -920,18 +1017,7 @@ function initCityTwin(root) {
       if (popover) popover.textContent = text;
     },
     // Opens one sensor popover on the maquette (or none).
-    pin(name) {
-      root.querySelectorAll(".city-sensor-popover[data-pinned='true']").forEach((item) => {
-        item.dataset.pinned = "false";
-        item.style.opacity = item.style.visibility = item.style.pointerEvents = "";
-      });
-      const popover = name && root.querySelector(`[data-sensor-popover="${name}"]`);
-      if (!popover) return;
-      popover.dataset.pinned = "true";
-      popover.style.opacity = "1";
-      popover.style.visibility = "visible";
-      popover.style.pointerEvents = "auto";
-    },
+    pin: pinCard,
     // Replaces the alarm list with the scenario's alarms (null restores it).
     setAlarms(list) {
       const box = $(".twin-alerts");

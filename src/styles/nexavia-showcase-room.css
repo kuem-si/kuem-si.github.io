@@ -51,27 +51,46 @@
 .city-traffic{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:2}
 .city-art--modular .city-hotspots{display:none}
 .city-art--modular .city-hotspots [data-sensor-popover-trigger]{pointer-events:none}
-.city-scene-controls{position:absolute;inset:0;z-index:4;pointer-events:none}
-.city-scene-control{position:absolute;pointer-events:auto;display:grid;place-items:center;gap:2px;width:clamp(38px,5.4%,66px);min-height:clamp(38px,5.4%,66px);padding:4px;border:1px solid #e1f2f1;border-radius:8px;background:#102a32e8;color:#f1faf4;box-shadow:0 2px 9px #091b20a3;cursor:pointer;font:700 clamp(7px,.72vw,10px)/1 system-ui,sans-serif;transition:background .18s ease,transform .18s ease,border-color .18s ease}
-.city-scene-control:hover,.city-scene-control:focus-visible{background:#14546a;transform:translateY(-2px);outline:2px solid #b4f3f4;outline-offset:2px}
-.city-scene-control small{font-size:.8em;letter-spacing:.06em;white-space:nowrap}
-.city-scene-water-level{left:66%;top:53%}.city-scene-air{left:77%;top:22%}.city-scene-water{left:28%;top:32%}.city-scene-gas{left:39%;top:63%}.city-scene-electricity{left:32%;top:74%}.city-scene-cyclists{left:54%;top:29%}
+/* Sensor pins: a quiet dot where each device sits on the model. Hover names
+   it with its live reading; a click opens its card, which grows out of the
+   pin on a leader line. Positions are photo pixels as percentages (--x, --y). */
+.city-art [data-tone=water]{--tone:#6fe3ef}.city-art [data-tone=air]{--tone:#86e3a4}.city-art [data-tone=mobility]{--tone:#b9a8ff}.city-art [data-tone=gas]{--tone:#ffb760}.city-art [data-tone=power]{--tone:#ffdf6e}.city-art [data-tone=structure]{--tone:#d9e2e6}.city-art [data-state=alert]{--tone:#ff6f5b}
+.city-sensors{position:absolute;inset:0;z-index:4;pointer-events:none;transition:opacity .3s ease,visibility .3s}
+.city-sensor{--hit:clamp(28px,3.4cqw,44px);position:absolute;left:var(--x);top:var(--y);width:var(--hit);height:var(--hit);margin:calc(var(--hit)/-2) 0 0 calc(var(--hit)/-2);padding:0;border:0;border-radius:50%;background:none;pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity .4s ease}
+.city-sensor:hover,.city-sensor:focus-visible,.city-sensor[aria-expanded=true]{z-index:1}
+.city-sensor:focus-visible{outline:none}
+.city-sensor-dot{position:absolute;left:50%;top:50%;width:9px;height:9px;border-radius:50%;background:var(--tone);box-shadow:0 0 0 1.5px #fffffff0,0 0 0 4.5px #0a171b52,0 3px 8px #000000a6;translate:-50% -50%;transition:scale .25s cubic-bezier(.2,.8,.2,1),background-color .3s ease,box-shadow .25s ease}
+.city-sensor-dot:before{content:"";position:absolute;inset:-1.5px;border:1.5px solid var(--tone);border-radius:50%;opacity:0}
+.city-sensor:hover .city-sensor-dot,.city-sensor:focus-visible .city-sensor-dot{scale:1.25}
+.city-sensor:focus-visible .city-sensor-dot{box-shadow:0 0 0 1.5px #fff,0 0 0 5px var(--tone),0 3px 8px #000000a6}
+.city-sensor[aria-expanded=true] .city-sensor-dot{scale:1.35;box-shadow:0 0 0 1.5px #fff,0 0 0 5px color-mix(in srgb,var(--tone) 45%,transparent),0 0 16px var(--tone)}
+.city-sensor.is-tick .city-sensor-dot:before{animation:sensor-ping 1.4s cubic-bezier(.2,.7,.2,1)}
+.city-sensor[data-state=alert] .city-sensor-dot:before{animation:sensor-ping 1.6s cubic-bezier(.2,.7,.2,1) infinite}
+@keyframes sensor-ping{0%{opacity:.95;scale:1}100%{opacity:0;scale:3.4}}
+.city-sensor-tag{position:absolute;left:50%;bottom:calc(50% + 14px);display:flex;align-items:center;gap:6px;padding:5px 9px 5px 8px;border:1px solid #ffffff1f;border-radius:999px;background:#0b181cd9;-webkit-backdrop-filter:blur(10px) saturate(1.3);backdrop-filter:blur(10px) saturate(1.3);box-shadow:0 6px 18px #0612154d,inset 0 1px #ffffff14;color:#e8f0ec;font:600 10px/1 system-ui,sans-serif;white-space:nowrap;pointer-events:none;opacity:0;translate:-50% 4px;transition:opacity .18s ease,translate .22s cubic-bezier(.2,.8,.2,1)}
+.city-sensor-tag:after{content:"";position:absolute;left:50%;top:100%;width:1px;height:10px;background:linear-gradient(#ffffff99,#ffffff00);translate:-50% 0}
+.city-sensor-tag b{color:var(--tone);font:700 9px/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.04em}
+.city-sensor-tag span{font-variant-numeric:tabular-nums}
+.city-sensor-tag span:empty{display:none}
+.city-sensor:hover .city-sensor-tag,.city-sensor:focus-visible .city-sensor-tag{opacity:1;translate:-50% 0}
+.city-sensor[aria-expanded=true] .city-sensor-tag{opacity:0}
+.city-sensors:has([aria-expanded=true]) .city-sensor:not([aria-expanded=true]){opacity:.5}
+.city-sensors-toggle{position:absolute;right:12px;bottom:12px;z-index:6;display:flex;align-items:center;gap:8px;padding:6px 11px 6px 8px;border:1px solid #ffffff26;border-radius:999px;background:#0b181cc2;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 6px 18px #0612153d;color:#dfe9e5;font:600 11px/1 system-ui,sans-serif;letter-spacing:.02em;cursor:pointer;transition:background .2s ease}
+.city-sensors-toggle:hover{background:#12262ce6}
+.city-sensors-toggle:focus-visible{outline:2px solid #8fe3e0;outline-offset:2px}
+.city-sensors-toggle i{position:relative;width:22px;height:12px;border-radius:999px;background:#ffffff2e;transition:background .2s ease}
+.city-sensors-toggle i:after{content:"";position:absolute;left:2px;top:2px;width:8px;height:8px;border-radius:50%;background:#fff;transition:translate .22s cubic-bezier(.2,.8,.2,1)}
+.city-sensors-toggle[aria-pressed=true] i{background:#3fb9b0}
+.city-sensors-toggle[aria-pressed=true] i:after{translate:10px 0}
+.city-art[data-overlays=off] .city-sensors,.city-art[data-overlays=off] .city-module-guides{opacity:0;visibility:hidden}
+@media(prefers-reduced-motion:reduce){.city-sensor,.city-sensor-dot,.city-sensor-tag,.city-sensor-popover,.city-sensors-toggle i:after{transition:none}.city-sensor-dot:before,.city-sensor.is-tick .city-sensor-dot:before{animation:none}.city-sensor[data-state=alert] .city-sensor-dot:before{animation:none;opacity:.8;scale:2}}
 .bike-wheel--back{left:1px}.bike-wheel--front{left:20px}
-.city-scene-sensor>span{font:800 clamp(8px,.85vw,12px)/1 ui-monospace,monospace;color:#8ee4e8}
-.city-scene-sensor small{color:#e4f1ec}
-.city-art--modular .city-sensor-popover{z-index:8}
-.city-art--modular .city-popover-house-water{left:28%;top:38%;transform:translate(-50%,-105%)}
-.city-art--modular .city-popover-factory-gas{left:39%;top:69%;transform:translate(-50%,10px)}
-.city-art--modular .city-popover-electricity{left:38%;top:80%;transform:translate(-50%,10px)}
-.city-art--modular .city-popover-water{left:66%;top:60%;transform:translate(-50%,10px)}
-.city-art--modular .city-popover-air{left:77%;top:30%;transform:translate(-50%,-105%)}
-.city-art--modular .city-popover-cyclists{left:54%;top:38%;transform:translate(-50%,10px)}
 .city-module-guides{position:absolute;inset:0;pointer-events:none;color:#fff;font:800 clamp(10px,1vw,15px)/1 system-ui,sans-serif;text-shadow:0 1px 4px #101a20,0 0 8px #101a20}
 .city-module-label{position:absolute;display:flex;align-items:center;gap:.4em;letter-spacing:.08em}
 .city-module-label::before{content:"";width:1.8em;height:1.8em;border-radius:50%;background:#123d5a;border:1px solid #d7edfa;box-shadow:0 2px 7px #081b28aa}
 .city-module-label small{font-size:.68em;letter-spacing:.11em}
-.city-module-label--a{left:25%;top:21%}
-.city-module-label--b{left:64%;top:21%}
+.city-module-label--a{left:21%;top:27%}
+.city-module-label--b{left:57%;top:28%}
 .city-module-label--c{left:25%;top:56%}
 .city-module-label--d{left:64%;top:56%}
 .city-river-surface{pointer-events:none;opacity:.86}
@@ -141,36 +160,31 @@
 .city-counter-digits{fill:#b6ffbe;font:700 4.5px ui-monospace,monospace;text-anchor:middle}
 .city-counter-tag rect{fill:#102326;stroke:#7ee0d2;stroke-width:1.2}
 .city-counter-tag text{fill:#d7fff4;font:700 6px system-ui,sans-serif;letter-spacing:.45px;text-anchor:middle}
-.city-sensor-popover{position:absolute;z-index:5;width:216px;max-width:calc(100% - 16px);padding:10px 11px 9px;border:1px solid #8adbd1;border-radius:5px;background:linear-gradient(145deg,rgba(14,30,33,.97),rgba(27,48,49,.96));box-shadow:0 8px 22px #06141670,inset 0 1px #e4fff422;color:#eff8ec;font:11px/1.35 system-ui,sans-serif;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .18s ease,visibility .18s ease,transform .18s ease}
-.city-popover-vibration{left:57.5%;top:59.5%;transform:translate(-50%,calc(-100% - 12px))}
-.city-popover-house-water{left:22.5%;top:46%;transform:translate(-50%,-105%)}
-.city-popover-office-water{left:68.5%;top:40%;transform:translate(-50%,-105%)}
-.city-popover-factory-gas{left:47%;top:69%;transform:translate(-50%,12px)}
-.city-popover-water{left:65.5%;top:63%;transform:translate(7%,8px)}
-.city-popover-air{left:70%;top:50%;transform:translate(5%,-105%)}
-.city-popover-cyclists{left:52.5%;top:59%;transform:translate(-50%,12px)}
-.city-popover-vibration:before,.city-popover-water:before,.city-popover-air:before,.city-popover-cyclists:before{position:absolute;width:7px;height:7px;content:"";background:#172d30;border-right:1px solid #8adbd1;border-bottom:1px solid #8adbd1;transform:rotate(45deg)}
-.city-popover-vibration:before{left:calc(50% - 4px);bottom:-5px}
-.city-popover-house-water:before,.city-popover-office-water:before{left:calc(50% - 4px);bottom:-5px}
-.city-popover-factory-gas:before{left:calc(50% - 4px);top:-5px;transform:rotate(225deg)}
-.city-popover-water:before{left:10px;top:-5px;transform:rotate(225deg)}
-.city-popover-air:before{left:12px;bottom:-5px}
-.city-popover-cyclists:before{left:calc(50% - 4px);top:-5px;transform:rotate(225deg)}
-.city-popover-top{display:flex;align-items:center;gap:5px;margin-bottom:5px;color:#9fd4c9;font:700 8px/1 system-ui,sans-serif;letter-spacing:.09em}
-.city-popover-top i{width:6px;height:6px;flex:none;border-radius:50%;background:#64dfae;box-shadow:0 0 7px #64dfae}
-.city-popover-top span{margin-left:auto;color:#789793;font-size:7px;letter-spacing:.03em}
-.city-sensor-popover>strong{display:block;margin-bottom:6px;color:#f2f4e8;font-size:12px;font-weight:700}
-.city-popover-reading{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding-top:6px;border-top:1px solid #e3fff21f}
-.city-popover-reading b{color:#a7f2dc;font:700 16px/1.1 ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums}
-.city-popover-reading small{color:#a8bab0;font-size:9px}
-.city-popover-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding-top:6px;border-top:1px solid #e3fff21f}
-.city-popover-grid span{color:#9ab1a7;font-size:8px}
-.city-popover-grid b{display:block;margin-top:2px;color:#a7f2dc;font:700 10px ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+.city-sensor-popover{--lead:18px;--ax:-50%;--lx:50%;position:absolute;left:var(--x);top:var(--y);z-index:8;width:224px;max-width:calc(100% - 16px);padding:11px 12px 10px;border:1px solid #ffffff1f;border-radius:12px;background:linear-gradient(160deg,#132a30d9,#0814178c 70%),#0a1619b3;-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);box-shadow:0 18px 40px #02080a66,0 2px 6px #02080a40,inset 0 1px #ffffff17;color:#eef5f1;font:11px/1.35 system-ui,sans-serif;opacity:0;visibility:hidden;pointer-events:none;translate:var(--ax) calc(-100% - var(--lead) + 6px);transition:opacity .2s ease,visibility .2s,translate .3s cubic-bezier(.2,.8,.2,1)}
+.city-sensor-popover[data-side=below]{translate:var(--ax) calc(var(--lead) - 6px)}
+.city-sensor-popover[data-align=start]{--ax:-28px;--lx:28px}
+.city-sensor-popover[data-align=end]{--ax:calc(-100% + 28px);--lx:calc(100% - 28px)}
+.city-sensor-popover[data-pinned=true]{opacity:1;visibility:visible;pointer-events:auto;translate:var(--ax) calc(-100% - var(--lead))}
+.city-sensor-popover[data-side=below][data-pinned=true]{translate:var(--ax) var(--lead)}
+.city-sensor-popover:before{content:"";position:absolute;left:var(--lx);top:100%;width:1px;height:calc(var(--lead) - 7px);background:linear-gradient(color-mix(in srgb,var(--tone) 80%,transparent),transparent);translate:-50% 0}
+.city-sensor-popover[data-side=below]:before{top:auto;bottom:100%;background:linear-gradient(transparent,color-mix(in srgb,var(--tone) 80%,transparent))}
+.city-sensor-popover:after{content:"";position:absolute;left:14px;right:14px;top:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--tone),transparent);opacity:.7}
+.city-popover-top{display:flex;align-items:center;gap:6px;margin-bottom:6px;color:#9fb6b0;font:600 8.5px/1 system-ui,sans-serif;letter-spacing:.12em}
+.city-popover-top i{width:6px;height:6px;flex:none;border-radius:50%;background:var(--tone);box-shadow:0 0 8px var(--tone)}
+.city-popover-top span{margin-left:auto;color:#6f8a86;font:600 8px/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.02em}
+.city-sensor-popover>strong{display:block;margin-bottom:8px;color:#f4f7f2;font-size:13px;font-weight:600;letter-spacing:-.005em}
+.city-popover-reading{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding-top:8px;border-top:1px solid #ffffff14}
+.city-popover-reading b{color:#f6fbf9;font:600 20px/1.05 ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.city-popover-reading small{color:#93a8a2;font-size:9.5px}
+.city-popover-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding-top:8px;border-top:1px solid #ffffff14}
+.city-popover-grid span{color:#93a8a2;font-size:8.5px}
+.city-popover-grid b{display:block;margin-top:3px;color:#f6fbf9;font:600 11px ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+.city-popover-spark{display:block;width:100%;height:28px;margin-top:9px;overflow:visible}
+.city-popover-spark path:first-child{fill:color-mix(in srgb,var(--tone) 16%,transparent);stroke:none}
+.city-popover-spark path:nth-child(2){fill:none;stroke:var(--tone);stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.city-sensor-popover[data-state=alert]{border-color:#ff6f5b66}
+.city-sensor-popover[data-state=alert] .city-popover-reading b,.city-sensor-popover[data-state=alert] .city-popover-grid span:first-child b{color:#ffb4a8}
 .city-art:has(.city-house-water[data-sensor-popover-trigger]:hover,.city-house-water[data-sensor-popover-trigger]:focus-visible,.city-popover-house-water:hover) .city-popover-house-water,.city-art:has(.city-office-water[data-sensor-popover-trigger]:hover,.city-office-water[data-sensor-popover-trigger]:focus-visible,.city-popover-office-water:hover) .city-popover-office-water,.city-art:has(.city-factory-gas[data-sensor-popover-trigger]:hover,.city-factory-gas[data-sensor-popover-trigger]:focus-visible,.city-popover-factory-gas:hover) .city-popover-factory-gas,.city-art:has(.city-vibration-sensor:hover,.city-vibration-sensor:focus-visible,.city-popover-vibration:hover) .city-popover-vibration,.city-art:has(.city-water-level-sensor:hover,.city-water-level-sensor:focus-visible,.city-popover-water:hover) .city-popover-water,.city-art:has(.city-air-sensor:hover,.city-air-sensor:focus-visible,.city-popover-air:hover) .city-popover-air,.city-art:has(.city-cycle-counter:hover,.city-cycle-counter:focus-visible,.city-popover-cyclists:hover) .city-popover-cyclists{opacity:1;visibility:visible;pointer-events:auto}
-.city-art:has(.city-popover-water:hover) .city-popover-water{transform:translate(7%,0)}
-.city-art:has([data-scene-sensor="water-level"]:hover,[data-scene-sensor="water-level"]:focus-visible,.city-popover-water:hover) .city-popover-water,.city-art:has([data-scene-sensor="air"]:hover,[data-scene-sensor="air"]:focus-visible,.city-popover-air:hover) .city-popover-air,.city-art:has([data-scene-sensor="water-meter"]:hover,[data-scene-sensor="water-meter"]:focus-visible,.city-popover-house-water:hover) .city-popover-house-water,.city-art:has([data-scene-sensor="gas-meter"]:hover,[data-scene-sensor="gas-meter"]:focus-visible,.city-popover-factory-gas:hover) .city-popover-factory-gas,.city-art:has([data-scene-sensor="electricity"]:hover,[data-scene-sensor="electricity"]:focus-visible,.city-popover-electricity:hover) .city-popover-electricity,.city-art:has([data-scene-sensor="cyclists"]:hover,[data-scene-sensor="cyclists"]:focus-visible,.city-popover-cyclists:hover) .city-popover-cyclists{opacity:1;visibility:visible;pointer-events:auto}
-.city-art:has(.city-popover-air:hover) .city-popover-air{transform:translate(5%,-100%)}
-.city-art:has(.city-popover-cyclists:hover) .city-popover-cyclists{transform:translate(-50%,4px)}
 .twin-scene-wrap{position:relative;perspective:1500px;perspective-origin:50% 48%;touch-action:none;cursor:grab;overscroll-behavior:contain}.twin-scene-wrap:active{cursor:grabbing}.city-art{transform-origin:top left;transform-style:preserve-3d;backface-visibility:hidden;image-rendering:auto}.city-photo{image-rendering:auto}
 .twin-alerts{margin-top:9px;padding:8px 9px;border:1px solid #f1c9c9;border-radius:4px;background:#fff9f8}
 .twin-alerts h3{display:flex;align-items:center;gap:5px;margin:0 0 5px;color:#a94444;font-size:9px}
@@ -711,7 +725,7 @@
 /* Flat compositing: the unused 3D context made the zoomed maquette paint over the player's glass. */
 .twin-scene-wrap{perspective:none}
 .city-art{transform-style:flat}
-.twin-scene-wrap.has-scenario .city-scene-control,.twin-scene-wrap.has-scenario .city-module-guides{opacity:.3;transition:opacity .6s ease}
+.twin-scene-wrap.has-scenario .city-sensor:not([aria-expanded=true]),.twin-scene-wrap.has-scenario .city-module-guides{opacity:.3;transition:opacity .6s ease}
 .city-focus{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;background:radial-gradient(ellipse var(--focus-r) calc(var(--focus-r) * 1.1) at var(--focus-x) var(--focus-y),transparent 0 45%,#040b0e8c 100%);transition:opacity .8s ease,--focus-x 1.2s cubic-bezier(.65,0,.35,1),--focus-y 1.2s cubic-bezier(.65,0,.35,1),--focus-r 1.2s cubic-bezier(.65,0,.35,1)}
 .city-focus.is-active{opacity:1}
 .scenario-player{position:absolute;left:16px;bottom:16px;z-index:12;width:min(430px,calc(100% - 32px));padding:14px 16px 12px;border:1px solid #8fe3e02e;border-radius:14px;background:#0a171be0;-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);box-shadow:0 18px 40px #02080a73;color:#e8f3f0;text-align:left;outline:none;animation:scenario-in .5s cubic-bezier(.16,1,.3,1)}
@@ -773,3 +787,5 @@
 @container (max-width:640px){.plan-dim-text,.plan-module-name,.plan-line--dim,.city-loader-top span:last-child,.city-loader-kicker{display:none}.plan-module-letter{font-size:64px}}
 @media(prefers-reduced-motion:reduce){.city-art,.city-art.is-loading{scale:1;transition:none}.plan-line{animation:none;stroke-dashoffset:0}.plan-surface{animation:none;opacity:.045}.plan-dim-text,.plan-module{animation:none;opacity:1}.city-loader-scan,.city-loader-top i{animation:none;display:none}.city-art.is-revealing .city-loader{animation:loader-fade .22s ease forwards}.city-art.is-revealing .city-loader-edge{animation:none}.twin-workspace:has(.city-art.is-revealing) .xdr-display{animation:none}}
 @keyframes loader-fade{to{opacity:0}}
+/* On a narrow model a reading card docks along its bottom edge instead of covering the pins. */
+@container (max-width:560px){.city-sensor-popover[data-side]{left:8px;right:8px;top:auto;bottom:8px;width:auto;max-width:none;padding:9px 10px 8px;translate:0 8px}.city-sensor-popover[data-side][data-pinned=true]{translate:0 0}.city-sensor-popover:before{display:none}.city-sensor-popover>strong{margin-bottom:5px;font-size:12px}.city-popover-reading{padding-top:5px}.city-popover-reading b{font-size:16px}.city-popover-spark{height:20px;margin-top:6px}.city-sensors-toggle{top:8px;right:8px;bottom:auto;gap:6px;padding:4px 8px 4px 6px;font-size:10px}}

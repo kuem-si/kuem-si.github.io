@@ -80,6 +80,38 @@ const lightingDevices: LightingDevice[] = [
   { id: "LAMP_03", label: en ? "Street light 3" : "Ulična svetilka 3", off: [668, 392, 84, 98], ...lamp(703, 401, 465) },
   { id: "LAMP_04", label: en ? "Street light 4" : "Ulična svetilka 4", off: [1172, 504, 74, 100], ...lamp(1207.5, 518, 585) },
 ];
+// Sensors and meters, pinned where each device sits on the model, in photo
+// pixels (1536 × 1024). `scene` is the trigger in index.js, `card` the
+// reading card it opens, `side` where the card opens and `alert` the reading
+// at which the pin turns to an alarm.
+type Sensor = {
+  scene: string;
+  card: string;
+  id: string;
+  tone: "water" | "air" | "mobility" | "gas" | "power" | "structure";
+  tag: string;
+  label: string;
+  at: [number, number];
+  side: "above" | "below";
+  align?: "start" | "end";
+  alert?: number;
+};
+const sensors: Sensor[] = [
+  { scene: "water-meter", card: "house-water", id: "HOUSE_WATER_01", tone: "water", tag: "H₂O", label: en ? "House water meter" : "Vodomer hiše", at: [452, 214], side: "below" },
+  { scene: "office-water", card: "office-water", id: "OFFICE_WATER_01", tone: "water", tag: "H₂O", label: en ? "Office water meter" : "Vodomer pisarne", at: [1128, 220], side: "below" },
+  { scene: "air", card: "air", id: "AIR_QUALITY_01", tone: "air", tag: "PM10", label: en ? "Air quality sensor" : "Senzor kakovosti zraka", at: [1181, 228], side: "below", align: "end", alert: 50 },
+  { scene: "cyclists", card: "cyclists", id: "CYCLE_COUNT_01", tone: "mobility", tag: en ? "Bikes" : "Kolesa", label: en ? "Cyclist counter" : "Števec kolesarjev", at: [764, 300], side: "below" },
+  { scene: "gas-meter", card: "factory-gas", id: "FACTORY_GAS_01", tone: "gas", tag: en ? "Gas" : "Plin", label: en ? "Factory gas meter" : "Plinomer tovarne", at: [332, 489], side: "above", align: "start" },
+  { scene: "electricity", card: "electricity", id: "FACTORY_POWER_01", tone: "power", tag: "kWh", label: en ? "Factory electricity meter" : "Električni števec tovarne", at: [590, 520], side: "above" },
+  { scene: "vibration", card: "vibration", id: "BRIDGE_VIB_01", tone: "structure", tag: "mm/s", label: en ? "Bridge vibration sensor" : "Senzor tresljajev mostu", at: [940, 543], side: "above", alert: 0.8 },
+  { scene: "water-level", card: "water", id: "RIVER_LEVEL_01", tone: "water", tag: en ? "Level" : "Gladina", at: [1012, 610], label: en ? "River level sensor" : "Senzor gladine reke", side: "below", alert: 1.8 },
+];
+const at = ([x, y]: [number, number]) => `--x:${((x / 1536) * 100).toFixed(3)}%;--y:${((y / 1024) * 100).toFixed(3)}%`;
+// Placement for a reading card: it opens from its sensor's pin.
+const cardAt = (card: string) => {
+  const sensor = sensors.find((item) => item.card === card)!;
+  return { style: at(sensor.at), "data-side": sensor.side, "data-align": sensor.align, "data-tone": sensor.tone, "data-alert": sensor.alert };
+};
 // Asphalt copied from further down the lane, covering the figure baked into
 // the southbound lane so animated traffic never drives through it.
 const lanePatch =
@@ -200,54 +232,55 @@ const lanePatch =
     <span class="city-module-label city-module-label--c">C <small>{en ? "INDUSTRY" : "INDUSTRIJA"}</small></span>
     <span class="city-module-label city-module-label--d">D <small>{en ? "WATER & INFRASTRUCTURE" : "VODA IN INFRASTRUKTURA"}</small></span>
   </div>
-  <div class="city-scene-controls" aria-label={en ? "Interactive module sensors" : "Interaktivni senzorji modulov"}>
-    <button class="city-scene-control city-scene-sensor city-scene-water-level" type="button" data-scene-sensor="water-level" aria-describedby="city-popover-water"><span>↕</span><small>{en ? "LEVEL" : "GLADINA"}</small></button>
-    <button class="city-scene-control city-scene-sensor city-scene-air" type="button" data-scene-sensor="air" aria-describedby="city-popover-air"><span>PM</span><small>{en ? "AIR" : "ZRAK"}</small></button>
-    <button class="city-scene-control city-scene-sensor city-scene-water" type="button" data-scene-sensor="water-meter" aria-describedby="city-popover-house-water"><span>H₂O</span><small>{en ? "METER" : "VODOMER"}</small></button>
-    <button class="city-scene-control city-scene-sensor city-scene-gas" type="button" data-scene-sensor="gas-meter" aria-describedby="city-popover-factory-gas"><span>GAS</span><small>{en ? "METER" : "PLINOMER"}</small></button>
-    <button class="city-scene-control city-scene-sensor city-scene-electricity" type="button" data-scene-sensor="electricity" aria-describedby="city-popover-electricity"><span>kWh</span><small>{en ? "POWER" : "ELEKTRIKA"}</small></button>
-    <button class="city-scene-control city-scene-sensor city-scene-cyclists" type="button" data-scene-sensor="cyclists" aria-describedby="city-popover-cyclists"><span>↗</span><small>{en ? "CYCLE" : "KOLESARJI"}</small></button>
+  <div class="city-sensors" role="group" aria-label={en ? "Sensors and meters on the model" : "Senzorji in merilniki na maketi"}>
+    {sensors.map((sensor, i) => (
+      <button class="city-sensor" type="button" data-scene-sensor={sensor.scene} data-sensor-pin={sensor.card} data-tone={sensor.tone} aria-label={`${sensor.label}, ${sensor.id}`} aria-expanded="false" aria-controls={`city-popover-${sensor.card}`} style={`${at(sensor.at)};--i:${i}`}>
+        <span class="city-sensor-dot"></span>
+        <span class="city-sensor-tag" aria-hidden="true"><b>{sensor.tag}</b><span data-sensor-tag></span></span>
+      </button>
+    ))}
   </div>
+  <button class="city-sensors-toggle" type="button" data-sensors-toggle aria-pressed="true"><i></i>{en ? "Sensors" : "Senzorji"}</button>
 
-  <div class="city-sensor-popover city-popover-vibration" id="city-popover-vibration" role="tooltip" data-sensor-popover="vibration">
+  <div class="city-sensor-popover city-popover-vibration" id="city-popover-vibration" role="group" aria-label={en ? "Bridge vibration" : "Tresljaji mostu"} data-sensor-popover="vibration" {...cardAt("vibration")}>
     <div class="city-popover-top"><i></i>{en ? "LIVE SENSOR" : "TIPALO V ŽIVO"}<span>BRIDGE_VIB_01</span></div>
     <strong>{en ? "Bridge vibration" : "Tresljaji mostu"}</strong>
-    <div class="city-popover-reading"><b id="city-popover-vibration-value">0.42 mm/s</b><small>{en ? "Normal range" : "Običajno območje"}</small></div>
+    <div class="city-popover-reading"><b id="city-popover-vibration-value" data-sensor-value>0.42 mm/s</b><small>{en ? "Normal range" : "Običajno območje"}</small></div>
   </div>
-  <div class="city-sensor-popover city-popover-house-water" id="city-popover-house-water" role="tooltip" data-sensor-popover="house-water">
+  <div class="city-sensor-popover city-popover-house-water" id="city-popover-house-water" role="group" aria-label={en ? "Garden house water" : "Poraba vode · hiša"} data-sensor-popover="house-water" {...cardAt("house-water")}>
     <div class="city-popover-top"><i></i>{en ? "LIVE METER" : "MERILNIK V ŽIVO"}<span>HOUSE_WATER_01</span></div>
     <strong>{en ? "Garden house water" : "Poraba vode · hiša"}</strong>
-    <div class="city-popover-reading"><b id="city-popover-house-water-value">0.84 m³/d</b><small>{en ? "Daily flow" : "Dnevni pretok"}</small></div>
+    <div class="city-popover-reading"><b id="city-popover-house-water-value" data-sensor-value>0.84 m³/d</b><small>{en ? "Daily flow" : "Dnevni pretok"}</small></div>
   </div>
-  <div class="city-sensor-popover city-popover-office-water" id="city-popover-office-water" role="tooltip" data-sensor-popover="office-water">
+  <div class="city-sensor-popover city-popover-office-water" id="city-popover-office-water" role="group" aria-label={en ? "Office water" : "Poraba vode · pisarna"} data-sensor-popover="office-water" {...cardAt("office-water")}>
     <div class="city-popover-top"><i></i>{en ? "LIVE METER" : "MERILNIK V ŽIVO"}<span>OFFICE_WATER_01</span></div>
     <strong>{en ? "Office water" : "Poraba vode · pisarna"}</strong>
-    <div class="city-popover-reading"><b id="city-popover-office-water-value">12.6 m³/d</b><small>{en ? "Daily flow" : "Dnevni pretok"}</small></div>
+    <div class="city-popover-reading"><b id="city-popover-office-water-value" data-sensor-value>12.6 m³/d</b><small>{en ? "Daily flow" : "Dnevni pretok"}</small></div>
   </div>
-  <div class="city-sensor-popover city-popover-factory-gas" id="city-popover-factory-gas" role="tooltip" data-sensor-popover="factory-gas">
+  <div class="city-sensor-popover city-popover-factory-gas" id="city-popover-factory-gas" role="group" aria-label={en ? "Factory gas" : "Poraba plina · tovarna"} data-sensor-popover="factory-gas" {...cardAt("factory-gas")}>
     <div class="city-popover-top"><i></i>{en ? "LIVE METER" : "MERILNIK V ŽIVO"}<span>FACTORY_GAS_01</span></div>
     <strong>{en ? "Factory gas" : "Poraba plina · tovarna"}</strong>
-    <div class="city-popover-reading"><b id="city-popover-factory-gas-value">34.2 m³/h</b><small>{en ? "Current flow" : "Trenutni pretok"}</small></div>
+    <div class="city-popover-reading"><b id="city-popover-factory-gas-value" data-sensor-value>34.2 m³/h</b><small>{en ? "Current flow" : "Trenutni pretok"}</small></div>
   </div>
-  <div class="city-sensor-popover city-popover-electricity" id="city-popover-electricity" role="tooltip" data-sensor-popover="electricity">
+  <div class="city-sensor-popover city-popover-electricity" id="city-popover-electricity" role="group" aria-label={en ? "Electricity use · factory" : "Poraba elektrike · tovarna"} data-sensor-popover="electricity" {...cardAt("electricity")}>
     <div class="city-popover-top"><i></i>{en ? "LIVE METER" : "MERILNIK V ŽIVO"}<span>FACTORY_POWER_01</span></div>
     <strong>{en ? "Electricity use · factory" : "Poraba elektrike · tovarna"}</strong>
-    <div class="city-popover-reading"><b id="city-popover-electricity-value">18.6 kWh</b><small>{en ? "Current day" : "Danes"}</small></div>
+    <div class="city-popover-reading"><b id="city-popover-electricity-value" data-sensor-value>18.6 kWh</b><small>{en ? "Current day" : "Danes"}</small></div>
   </div>
-  <div class="city-sensor-popover city-popover-water" id="city-popover-water" role="tooltip" data-sensor-popover="water">
+  <div class="city-sensor-popover city-popover-water" id="city-popover-water" role="group" aria-label={en ? "River level" : "Gladina reke"} data-sensor-popover="water" {...cardAt("water")}>
     <div class="city-popover-top"><i></i>{en ? "LIVE SENSOR" : "TIPALO V ŽIVO"}<span>RIVER_LEVEL_01</span></div>
     <strong>{en ? "River level" : "Gladina reke"}</strong>
-    <div class="city-popover-reading"><b id="city-popover-water-value">1.36 m</b><small>{en ? "Current level" : "Trenutna gladina"}</small></div>
+    <div class="city-popover-reading"><b id="city-popover-water-value" data-sensor-value>1.36 m</b><small>{en ? "Current level" : "Trenutna gladina"}</small></div>
   </div>
-  <div class="city-sensor-popover city-popover-air" id="city-popover-air" role="tooltip" data-sensor-popover="air">
+  <div class="city-sensor-popover city-popover-air" id="city-popover-air" role="group" aria-label={en ? "Air quality" : "Kakovost zraka"} data-sensor-popover="air" {...cardAt("air")}>
     <div class="city-popover-top"><i></i>{en ? "LIVE SENSOR" : "TIPALO V ŽIVO"}<span>AIR_QUALITY_01</span></div>
     <strong>{en ? "Air quality" : "Kakovost zraka"}</strong>
-    <div class="city-popover-grid"><span>PM10<b id="city-popover-air-pm10">18 µg/m³</b></span><span>{en ? "Temperature" : "Temperatura"}<b id="city-popover-air-temp">18.7 °C</b></span><span>{en ? "Humidity" : "Vlaga"}<b id="city-popover-air-humidity">56 %</b></span></div>
+    <div class="city-popover-grid"><span>PM10<b id="city-popover-air-pm10" data-sensor-value>18 µg/m³</b></span><span>{en ? "Temperature" : "Temperatura"}<b id="city-popover-air-temp">18.7 °C</b></span><span>{en ? "Humidity" : "Vlaga"}<b id="city-popover-air-humidity">56 %</b></span></div>
   </div>
-  <div class="city-sensor-popover city-popover-cyclists" id="city-popover-cyclists" role="tooltip" data-sensor-popover="cyclists">
+  <div class="city-sensor-popover city-popover-cyclists" id="city-popover-cyclists" role="group" aria-label={en ? "Cyclist counter" : "Števec kolesarjev"} data-sensor-popover="cyclists" {...cardAt("cyclists")}>
     <div class="city-popover-top"><i></i>{en ? "LIVE SENSOR" : "TIPALO V ŽIVO"}<span>CYCLE_COUNT_01</span></div>
     <strong>{en ? "Cyclist counter" : "Števec kolesarjev"}</strong>
-    <div class="city-popover-reading"><b id="city-popover-cyclists-value">124</b><small>{en ? "Passages today" : "Prehodov danes"}</small></div>
+    <div class="city-popover-reading"><b id="city-popover-cyclists-value" data-sensor-value>124</b><small>{en ? "Passages today" : "Prehodov danes"}</small></div>
   </div>
 
   <div class="city-loader" data-city-loader aria-hidden="true">
