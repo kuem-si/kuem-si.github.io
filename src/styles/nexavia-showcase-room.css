@@ -49,6 +49,8 @@
 .city-art--modular .city-photo{object-fit:contain}
 .city-water{position:absolute;pointer-events:none;z-index:1}
 .city-traffic{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:2}
+.city-traffic-wake{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.city-beacons{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:1}
 .city-art--modular .city-hotspots{display:none}
 .city-art--modular .city-hotspots [data-sensor-popover-trigger]{pointer-events:none}
 /* Sensor pins: a quiet dot where each device sits on the model. Hover names
@@ -89,10 +91,6 @@
 .city-module-label{position:absolute;display:flex;align-items:center;gap:.4em;letter-spacing:.08em}
 .city-module-label::before{content:"";width:1.8em;height:1.8em;border-radius:50%;background:#123d5a;border:1px solid #d7edfa;box-shadow:0 2px 7px #081b28aa}
 .city-module-label small{font-size:.68em;letter-spacing:.11em}
-.city-module-label--a{left:21%;top:27%}
-.city-module-label--b{left:57%;top:28%}
-.city-module-label--c{left:25%;top:56%}
-.city-module-label--d{left:64%;top:56%}
 .city-river-surface{pointer-events:none;opacity:.86}
 .city-asset{outline:none;cursor:pointer}
 .city-static,.city-static-lamp{pointer-events:none}
@@ -201,9 +199,9 @@
 .twin-meter-readings>div>span,.twin-sensor-readings>div>span{min-width:0}
 .twin-meter-readings small,.twin-sensor-readings small{display:block;color:#92a0ac;font-size:7px}
 .twin-meter-readings strong,.twin-sensor-readings strong{color:#34536c;font-size:9px;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
-#sensor-cyclists{transition:color .6s ease}
-#sensor-cyclists.is-counted{color:#168760}
-@media(prefers-reduced-motion:reduce){#sensor-cyclists{transition:none}}
+.twin-sensor-readings [data-reading=cyclists]{transition:color .6s ease}
+.twin-sensor-readings [data-reading=cyclists].is-counted{color:#168760}
+@media(prefers-reduced-motion:reduce){.twin-sensor-readings [data-reading=cyclists]{transition:none}}
 .twin-sensor-readings strong small{font-weight:400}
 .city-photo-caption{position:absolute;left:14px;bottom:12px;color:#f2f8ef;font:700 9px system-ui,sans-serif;letter-spacing:1.1px;text-shadow:0 1px 5px #0c191d}
 
@@ -631,6 +629,11 @@
 .twin-tab-text b{display:block;font-size:.93rem;font-weight:700;letter-spacing:-.01em}
 .twin-tab-text small{display:block;margin-top:2px;font-size:.72rem;opacity:.68}
 .twin-tab-panel[hidden]{display:none}
+/* Every tab's intro shares one cell, so the header keeps its height when tabs change. */
+.twin-intros{display:grid;margin-bottom:2.5rem}
+.twin-intros>.twin-intro{grid-area:1/1;margin-bottom:0}
+.twin-intros>.twin-intro[hidden]{display:flex;visibility:hidden}
+@media(max-width:640px){.twin-intros>.twin-intro[hidden]{display:block}}
 
 /* Maquette loader: a blueprint of the board in the photo's own geometry, real download progress, then a scan-edge reveal. */
 .city-art{scale:1;transition:scale 1.7s cubic-bezier(.16,1,.3,1)}
@@ -778,8 +781,8 @@
 .twin-live.is-stopped{color:#f0a04b}
 .twin-live.is-stopped>span{background:#f0a04b;box-shadow:0 0 0 3px #f0a04b29}
 /* The narration under the maquette appears once the model is loaded. */
-.twin-controls #twin-step{transition:opacity .6s ease .2s}
-.twin-city-panel:has(.city-art:not(.is-ready)) #twin-step{visibility:hidden;opacity:0;transition:none}
+.twin-controls [data-ui=step]{transition:opacity .6s ease .2s}
+.twin-city-panel:has(.city-art:not(.is-ready)) [data-ui=step]{visibility:hidden;opacity:0;transition:none}
 /* The Nexavia screen waits for the model, then glides in as the reveal finishes. */
 .twin-workspace:has(.city-art.is-loading) .xdr-display{visibility:hidden}
 .twin-workspace:has(.city-art.is-revealing) .xdr-display{animation:nx-enter .85s cubic-bezier(.16,1,.3,1) .35s both}
@@ -789,3 +792,8 @@
 @keyframes loader-fade{to{opacity:0}}
 /* On a narrow model a reading card docks along its bottom edge instead of covering the pins. */
 @container (max-width:560px){.city-sensor-popover[data-side]{left:8px;right:8px;top:auto;bottom:8px;width:auto;max-width:none;padding:9px 10px 8px;translate:0 8px}.city-sensor-popover[data-side][data-pinned=true]{translate:0 0}.city-sensor-popover:before{display:none}.city-sensor-popover>strong{margin-bottom:5px;font-size:12px}.city-popover-reading{padding-top:5px}.city-popover-reading b{font-size:16px}.city-popover-spark{height:20px;margin-top:6px}.city-sensors-toggle{top:8px;right:8px;bottom:auto;gap:6px;padding:4px 8px 4px 6px;font-size:10px}}
+
+/* A pier light's reflection shimmers on the moving water and fades with the light. */
+.city-light-glint{transition:opacity .26s cubic-bezier(.3,0,.2,1);animation:city-glint 2.6s ease-in-out infinite alternate}
+@keyframes city-glint{from{filter:brightness(.75)}to{filter:brightness(1.2)}}
+@media(prefers-reduced-motion:reduce){.city-light-glint{animation:none}}

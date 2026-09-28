@@ -1,16 +1,18 @@
 ---
+import type { Scene } from "./showcase/types";
+
 interface Props {
   locale: "sl" | "en";
+  // Scopes element ids, so several maquettes can share a page.
+  twin: string;
+  scene: Scene;
 }
 
-const { locale } = Astro.props;
+const { locale, twin, scene } = Astro.props;
 const en = locale === "en";
-const photoSrc = "/images/nexavia/showcase-room/maquette.png";
-const photoAlt = en
-  ? "Photorealistic 60 by 60 centimetre miniature city maquette assembled from four 30 by 30 centimetre modules: homes, civic square, factory, river and bridge"
-  : "Fotorealistična maketa mesta velikosti 60 × 60 cm, sestavljena iz štirih modulov velikosti 30 × 30 cm: hiše, javni trg, tovarna, reka in most";
-// Loader blueprint, traced from the photo (1536 × 1024) so it turns into the
-// model in place: board frame, base, module seams and dimension lines.
+// Loader blueprint, traced from the city photo (scene pixels 1536 × 1024) so
+// it turns into the model in place: board frame, base, module seams and
+// dimension lines. The marina maquette is rendered in the same geometry.
 const plan = {
   frame: "M335 96 1217 101 1472 777 65 768Z",
   board: "M345 99H1206L1442 767 95 757Z",
@@ -30,117 +32,42 @@ const wordmark = [
 // 38 px cap height, following the base's slight tilt.
 const engraveTransform = "translate(1266 826) rotate(0.5) scale(0.5429) translate(-69 -71)";
 
-const modules = [
-  { letter: "A", x: 520, y: 236, name: en ? "Residential" : "Stanovanjski" },
-  { letter: "B", x: 1010, y: 236, name: en ? "Public space" : "Javni prostor" },
-  { letter: "C", x: 480, y: 566, name: en ? "Industry" : "Industrija" },
-  { letter: "D", x: 1080, y: 566, name: en ? "Water & infrastructure" : "Voda in infrastruktura" },
-];
-
-// Controllable lighting devices, in photo pixels (1536 × 1024). `off` is the
-// unlit patch made by scripts/generate-showcase-room-lighting.mjs, `shape` outlines the
-// asset for hover and focus, and `hit` is a larger invisible target for lamps.
-const lamp = (x: number, top: number, bottom: number) => ({
-  shape: `M${x - 6} ${top}h12v${bottom - top}h-12z`,
-  hit: `M${x - 22} ${top - 8}h44v${bottom - top + 16}h-44z`,
-  anchor: [x, top + 7],
-});
-type LightingDevice = {
-  id: string;
-  label: string;
-  off: number[];
-  shape: string;
-  hit?: string;
-  anchor: number[];
-};
-const lightingDevices: LightingDevice[] = [
-  {
-    id: "HOUSE_01",
-    label: en ? "Garden house lighting" : "Razsvetljava hiše z vrtom",
-    off: [404, 104, 158, 124],
-    shape: "M406 144 442 124 507 100 545 141 540 150 557 168 553 195 540 207 480 221 415 213 410 160Z",
-    anchor: [476, 120],
-  },
-  {
-    id: "OFFICE_01",
-    label: en ? "Office building lighting" : "Razsvetljava poslovne stavbe",
-    off: [972, 144, 190, 90],
-    shape: "M984 95 1162 101 1173 142 1171 233 972 230 973 150Z",
-    anchor: [1074, 122],
-  },
-  {
-    id: "FACTORY_01",
-    label: en ? "Factory lighting" : "Razsvetljava tovarne",
-    off: [340, 424, 290, 124],
-    shape: "M335 436 412 358 623 386 622 540 560 540 430 528 335 512Z",
-    anchor: [604, 468],
-  },
-  { id: "LAMP_01", label: en ? "Street light 1" : "Ulična svetilka 1", off: [612, 280, 72, 116], ...lamp(646.5, 294, 380) },
-  { id: "LAMP_02", label: en ? "Street light 2" : "Ulična svetilka 2", off: [986, 304, 70, 76], ...lamp(1018.5, 316, 364) },
-  { id: "LAMP_03", label: en ? "Street light 3" : "Ulična svetilka 3", off: [668, 392, 84, 98], ...lamp(703, 401, 465) },
-  { id: "LAMP_04", label: en ? "Street light 4" : "Ulična svetilka 4", off: [1172, 504, 74, 100], ...lamp(1207.5, 518, 585) },
-];
-// Sensors and meters, pinned where each device sits on the model, in photo
-// pixels (1536 × 1024). `scene` is the trigger in index.js, `card` the
-// reading card it opens, `side` where the card opens and `alert` the reading
-// at which the pin turns to an alarm.
-type Sensor = {
-  scene: string;
-  card: string;
-  id: string;
-  tone: "water" | "air" | "mobility" | "gas" | "power" | "structure";
-  tag: string;
-  label: string;
-  at: [number, number];
-  side: "above" | "below";
-  align?: "start" | "end";
-  alert?: number;
-};
-const sensors: Sensor[] = [
-  { scene: "water-meter", card: "house-water", id: "HOUSE_WATER_01", tone: "water", tag: "H₂O", label: en ? "House water meter" : "Vodomer hiše", at: [452, 214], side: "below" },
-  { scene: "office-water", card: "office-water", id: "OFFICE_WATER_01", tone: "water", tag: "H₂O", label: en ? "Office water meter" : "Vodomer pisarne", at: [1128, 220], side: "below" },
-  { scene: "air", card: "air", id: "AIR_QUALITY_01", tone: "air", tag: "PM10", label: en ? "Air quality sensor" : "Senzor kakovosti zraka", at: [1181, 228], side: "below", align: "end", alert: 50 },
-  { scene: "cyclists", card: "cyclists", id: "CYCLE_COUNT_01", tone: "mobility", tag: en ? "Bikes" : "Kolesa", label: en ? "Cyclist counter" : "Števec kolesarjev", at: [764, 300], side: "below" },
-  { scene: "gas-meter", card: "factory-gas", id: "FACTORY_GAS_01", tone: "gas", tag: en ? "Gas" : "Plin", label: en ? "Factory gas meter" : "Plinomer tovarne", at: [332, 489], side: "above", align: "start" },
-  { scene: "electricity", card: "electricity", id: "FACTORY_POWER_01", tone: "power", tag: "kWh", label: en ? "Factory electricity meter" : "Električni števec tovarne", at: [590, 520], side: "above" },
-  { scene: "vibration", card: "vibration", id: "BRIDGE_VIB_01", tone: "structure", tag: "mm/s", label: en ? "Bridge vibration sensor" : "Senzor tresljajev mostu", at: [940, 543], side: "above", alert: 0.8 },
-  { scene: "water-level", card: "water", id: "RIVER_LEVEL_01", tone: "water", tag: en ? "Level" : "Gladina", at: [1012, 610], label: en ? "River level sensor" : "Senzor gladine reke", side: "below", alert: 1.8 },
-];
-const at = ([x, y]: [number, number]) => `--x:${((x / 1536) * 100).toFixed(3)}%;--y:${((y / 1024) * 100).toFixed(3)}%`;
-// Placement for a reading card: it opens from its sensor's pin.
-const cardAt = (card: string) => {
-  const sensor = sensors.find((item) => item.card === card)!;
-  return { style: at(sensor.at), "data-side": sensor.side, "data-align": sensor.align, "data-tone": sensor.tone, "data-alert": sensor.alert };
-};
-// Asphalt copied from further down the lane, covering the figure baked into
-// the southbound lane so animated traffic never drives through it.
-const lanePatch =
-  "data:image/webp;base64,UklGRs4BAABXRUJQVlA4WAoAAAAQAAAAFAAAHwAAQUxQSN4AAAABCijWti1TxnF3SySqu2+AFZBJU3GJLMG1T8Ml0WYHSHN3d/jsZQevRAQDt40UefGYep9Ao/jiEoXQVZKKK+qRkhwyajq6hru4JsMqpaVrfn0L57s4xSJQ2be0d3V/hUt9FDAVdS6cfH4TIS9IkTm2Te2TXljQGHLC0Q+DRDFHVzp68W2WCynVl9s3Py2QRVtMCW9/28o2piiFIxdWFyxKydSLlUyxUhH5tMJIhdKw/G0vy6K0bjhsCBBwAbgL8ETAlwZ8vcAPAftkwI8LjAEsMMBowUIIi+u/gg37BRBWUDggygAAABAFAJ0BKhUAIAA+MRaJQ6IhIRQEACADBLOuwChSkLYwxiJJOUHzhX7rJdYzCGP+sEAA/vI73jh46BfY6TCzxYZ1A9F4rcGvkY4BzBq6O/kXxqp1YixVz4OBpoKLsuGI6Vx60DQnompT5EK8RWtJewHk+6twnvWq11DKA0FYx/PPo6BG6cDNV7DVUGgd0osVqSMWNr6wqfxCoSvm7cEIr3ee8f+HykBZ+eDd+zErffhhluZY5EeSB1RClH774Br/fMNEqKQXnAujAAA=";
+const at = ([x, y]: number[]) => `--x:${((x / 1536) * 100).toFixed(3)}%;--y:${((y / 1024) * 100).toFixed(3)}%`;
+const id = (name: string) => `${twin}-${name}`;
+const kindLabel = (kind: "sensor" | "meter") => (kind === "meter" ? (en ? "LIVE METER" : "MERILNIK V ŽIVO") : en ? "LIVE SENSOR" : "TIPALO V ŽIVO");
 ---
 
-<div class="city-art city-art--modular is-loading" data-city-art aria-busy="true">
+<div class="city-art city-art--modular is-loading" data-city-art data-water-src={scene.water} aria-busy="true">
   {/* The photo is fetched by the inline script at the end, so the loader can show real progress. */}
   <img
     class="city-photo"
-    data-src={photoSrc}
-    width="1536"
-    height="1024"
-    alt={photoAlt}
+    data-src={scene.photo}
+    width={scene.width}
+    height={scene.height}
+    alt={scene.alt}
     decoding="async"
   />
   <noscript>
-    <img class="city-photo" src={photoSrc} width="1536" height="1024" alt={photoAlt} />
+    <img class="city-photo" src={scene.photo} width={scene.width} height={scene.height} alt={scene.alt} />
     <style>.city-loader,.city-loader-edge{display:none}.city-art.is-loading{scale:1}.city-art.is-loading .engrave-wipe{transform:none}</style>
   </noscript>
+  <svg class="city-lighting" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    {scene.lighting.map(({ id: device, off: [x, y, width, height] }) => (
+      <image class="city-light-off" data-light-off={device} href={`${scene.lightsDir}/${device.toLowerCase()}-off.webp`} x={x} y={y} width={width} height={height} />
+    ))}
+    {scene.glints?.map(({ id: device, box: [x, y, width, height] }) => (
+      <image class="city-light-glint" data-light-glint={device} href={`${scene.lightsDir}/${device.toLowerCase()}-glint.webp`} x={x} y={y} width={width} height={height} preserveAspectRatio="none" />
+    ))}
+  </svg>
   <svg class="city-traffic" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
-    <image href={lanePatch} x="703" y="498" width="21" height="32" />
+    {scene.lanePatch && <image href={scene.lanePatch.href} x={scene.lanePatch.x} y={scene.lanePatch.y} width={scene.lanePatch.width} height={scene.lanePatch.height} />}
     <g data-traffic-layer></g>
   </svg>
   <svg class="city-engraving" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" role="img" aria-label="KUEM">
     <defs>
       {/* An incised cut lit from above: darker floor, shadowed upper wall,
           light catching the lower wall, and a fine chamfer on the surface. */}
-      <filter id="engrave-cut" x="-4%" y="-12%" width="108%" height="124%" color-interpolation-filters="sRGB">
+      <filter id={id("engrave-cut")} x="-4%" y="-12%" width="108%" height="124%" color-interpolation-filters="sRGB">
         <feFlood flood-color="#17191b" result="floorColor" />
         <feComposite in="floorColor" in2="SourceAlpha" operator="in" result="floor" />
         <feOffset in="SourceAlpha" dy="3.2" result="down" />
@@ -159,67 +86,62 @@ const lanePatch =
         <feComposite in2="chamferArea" operator="in" result="chamfer" />
         <feMerge><feMergeNode in="chamfer" /><feMergeNode in="inside" /></feMerge>
       </filter>
-      <clipPath id="engrave-letters" transform={engraveTransform}>
+      <clipPath id={id("engrave-letters")} transform={engraveTransform}>
         {wordmark.map((d) => <path d={d} />)}
       </clipPath>
-      <clipPath id="engrave-progress" transform={engraveTransform}>
+      <clipPath id={id("engrave-progress")} transform={engraveTransform}>
         <rect class="engrave-wipe" x="60" y="55" width="305" height="100" />
       </clipPath>
-      <linearGradient id="engrave-heat-fill">
+      <linearGradient id={id("engrave-heat-fill")}>
         <stop offset="0" stop-color="#ff5a14" stop-opacity="0" />
         <stop offset=".62" stop-color="#ff7a24" stop-opacity=".6" />
         <stop offset=".9" stop-color="#ffc56a" stop-opacity=".95" />
         <stop offset="1" stop-color="#fff6de" />
       </linearGradient>
-      <radialGradient id="engrave-spot-fill">
+      <radialGradient id={id("engrave-spot-fill")}>
         <stop offset="0" stop-color="#fff" />
         <stop offset=".22" stop-color="#fff3d2" />
         <stop offset=".5" stop-color="#ff9b3d" stop-opacity=".55" />
         <stop offset="1" stop-color="#ff6a1a" stop-opacity="0" />
       </radialGradient>
-      <radialGradient id="engrave-glow-fill">
+      <radialGradient id={id("engrave-glow-fill")}>
         <stop offset="0" stop-color="#ffb566" stop-opacity=".5" />
         <stop offset="1" stop-color="#ff8a33" stop-opacity="0" />
       </radialGradient>
-      <linearGradient id="engrave-sheen-fill" x1="0" y1="0" x2="1" y2="0">
+      <linearGradient id={id("engrave-sheen-fill")} x1="0" y1="0" x2="1" y2="0">
         <stop offset="0" stop-color="#fff" stop-opacity="0" />
         <stop offset=".5" stop-color="#fff" stop-opacity=".5" />
         <stop offset="1" stop-color="#fff" stop-opacity="0" />
       </linearGradient>
     </defs>
-    <g clip-path="url(#engrave-progress)">
-      <g filter="url(#engrave-cut)" transform={engraveTransform}>
+    <g clip-path={`url(#${id("engrave-progress")})`}>
+      <g filter={`url(#${id("engrave-cut")})`} transform={engraveTransform}>
         {wordmark.map((d) => <path d={d} />)}
       </g>
     </g>
     {/* Laser engraving, played once after the model is revealed. */}
     <g class="engrave-fx" aria-hidden="true">
-      <g clip-path="url(#engrave-letters)">
+      <g clip-path={`url(#${id("engrave-letters")})`}>
         <g transform={engraveTransform}>
-          <rect class="engrave-heat" x="-60" y="55" width="120" height="100" fill="url(#engrave-heat-fill)" />
-          <rect class="engrave-sheen" x="0" y="40" width="70" height="130" fill="url(#engrave-sheen-fill)" />
+          <rect class="engrave-heat" x="-60" y="55" width="120" height="100" fill={`url(#${id("engrave-heat-fill")})`} />
+          <rect class="engrave-sheen" x="0" y="40" width="70" height="130" fill={`url(#${id("engrave-sheen-fill")})`} />
         </g>
       </g>
       <g transform={engraveTransform}>
         <g class="engrave-laser">
-          <ellipse class="engrave-glow" cx="60" cy="106" rx="90" ry="62" fill="url(#engrave-glow-fill)" />
+          <ellipse class="engrave-glow" cx="60" cy="106" rx="90" ry="62" fill={`url(#${id("engrave-glow-fill")})`} />
           <g class="engrave-raster">
-            <circle cx="60" cy="71" r="16" fill="url(#engrave-spot-fill)" />
+            <circle cx="60" cy="71" r="16" fill={`url(#${id("engrave-spot-fill")})`} />
             <circle class="engrave-core" cx="60" cy="71" r="2.6" fill="#fff" />
           </g>
         </g>
       </g>
     </g>
   </svg>
-  <svg class="city-lighting" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
-    {lightingDevices.map(({ id, off: [x, y, width, height] }) => (
-      <image class="city-light-off" data-light-off={id} href={`/images/nexavia/showcase-room/lights/${id.toLowerCase()}-off.webp`} x={x} y={y} width={width} height={height} />
-    ))}
-  </svg>
   <div class="city-focus" aria-hidden="true"></div>
   <svg class="city-devices" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" role="group" aria-label={en ? "Remotely controlled lighting" : "Daljinsko upravljana razsvetljava"}>
-    {lightingDevices.map(({ id, label, shape, hit, anchor }) => (
-      <g class="city-device" data-device={id} data-anchor={anchor.join(" ")} role="button" tabindex="0" aria-pressed="false" aria-label={`${label}, ${id}`}>
+    {scene.lighting.map(({ id: device, label, shape, hit, anchor }) => (
+      <g class="city-device" data-device={device} data-anchor={anchor.join(" ")} role="button" tabindex="0" aria-pressed="false" aria-label={`${label}, ${device}`}>
         {hit && <path class="city-device-hit" d={hit} />}
         <path class="city-device-shape" d={shape} />
       </g>
@@ -227,14 +149,13 @@ const lanePatch =
   </svg>
   <div class="city-device-chip" aria-hidden="true" data-device-chip><b></b><i></i><span></span></div>
   <div class="city-module-guides" aria-hidden="true">
-    <span class="city-module-label city-module-label--a">A <small>{en ? "RESIDENTIAL" : "STANOVANJSKI"}</small></span>
-    <span class="city-module-label city-module-label--b">B <small>{en ? "PUBLIC SPACE" : "JAVNI PROSTOR"}</small></span>
-    <span class="city-module-label city-module-label--c">C <small>{en ? "INDUSTRY" : "INDUSTRIJA"}</small></span>
-    <span class="city-module-label city-module-label--d">D <small>{en ? "WATER & INFRASTRUCTURE" : "VODA IN INFRASTRUKTURA"}</small></span>
+    {scene.modules.map((module) => (
+      <span class="city-module-label" style={`left:${module.label[0]}%;top:${module.label[1]}%`}>{module.letter} <small>{module.name.toUpperCase()}</small></span>
+    ))}
   </div>
   <div class="city-sensors" role="group" aria-label={en ? "Sensors and meters on the model" : "Senzorji in merilniki na maketi"}>
-    {sensors.map((sensor, i) => (
-      <button class="city-sensor" type="button" data-scene-sensor={sensor.scene} data-sensor-pin={sensor.card} data-tone={sensor.tone} aria-label={`${sensor.label}, ${sensor.id}`} aria-expanded="false" aria-controls={`city-popover-${sensor.card}`} style={`${at(sensor.at)};--i:${i}`}>
+    {scene.sensors.map((sensor, i) => (
+      <button class="city-sensor" type="button" data-sensor-pin={sensor.key} data-sensor-name={sensor.label} data-sensor-event={sensor.event} data-sensor-event-note={sensor.eventNote ? "" : undefined} data-tone={sensor.tone} aria-label={`${sensor.label}, ${sensor.id}`} aria-expanded="false" aria-controls={id(`popover-${sensor.key}`)} style={`${at(sensor.at)};--i:${i}`}>
         <span class="city-sensor-dot"></span>
         <span class="city-sensor-tag" aria-hidden="true"><b>{sensor.tag}</b><span data-sensor-tag></span></span>
       </button>
@@ -242,46 +163,21 @@ const lanePatch =
   </div>
   <button class="city-sensors-toggle" type="button" data-sensors-toggle aria-pressed="true"><i></i>{en ? "Sensors" : "Senzorji"}</button>
 
-  <div class="city-sensor-popover city-popover-vibration" id="city-popover-vibration" role="group" aria-label={en ? "Bridge vibration" : "Tresljaji mostu"} data-sensor-popover="vibration" {...cardAt("vibration")}>
-    <div class="city-popover-top"><i></i>{en ? "LIVE SENSOR" : "TIPALO V ŽIVO"}<span>BRIDGE_VIB_01</span></div>
-    <strong>{en ? "Bridge vibration" : "Tresljaji mostu"}</strong>
-    <div class="city-popover-reading"><b id="city-popover-vibration-value" data-sensor-value>0.42 mm/s</b><small>{en ? "Normal range" : "Običajno območje"}</small></div>
-  </div>
-  <div class="city-sensor-popover city-popover-house-water" id="city-popover-house-water" role="group" aria-label={en ? "Garden house water" : "Poraba vode · hiša"} data-sensor-popover="house-water" {...cardAt("house-water")}>
-    <div class="city-popover-top"><i></i>{en ? "LIVE METER" : "MERILNIK V ŽIVO"}<span>HOUSE_WATER_01</span></div>
-    <strong>{en ? "Garden house water" : "Poraba vode · hiša"}</strong>
-    <div class="city-popover-reading"><b id="city-popover-house-water-value" data-sensor-value>0.84 m³/d</b><small>{en ? "Daily flow" : "Dnevni pretok"}</small></div>
-  </div>
-  <div class="city-sensor-popover city-popover-office-water" id="city-popover-office-water" role="group" aria-label={en ? "Office water" : "Poraba vode · pisarna"} data-sensor-popover="office-water" {...cardAt("office-water")}>
-    <div class="city-popover-top"><i></i>{en ? "LIVE METER" : "MERILNIK V ŽIVO"}<span>OFFICE_WATER_01</span></div>
-    <strong>{en ? "Office water" : "Poraba vode · pisarna"}</strong>
-    <div class="city-popover-reading"><b id="city-popover-office-water-value" data-sensor-value>12.6 m³/d</b><small>{en ? "Daily flow" : "Dnevni pretok"}</small></div>
-  </div>
-  <div class="city-sensor-popover city-popover-factory-gas" id="city-popover-factory-gas" role="group" aria-label={en ? "Factory gas" : "Poraba plina · tovarna"} data-sensor-popover="factory-gas" {...cardAt("factory-gas")}>
-    <div class="city-popover-top"><i></i>{en ? "LIVE METER" : "MERILNIK V ŽIVO"}<span>FACTORY_GAS_01</span></div>
-    <strong>{en ? "Factory gas" : "Poraba plina · tovarna"}</strong>
-    <div class="city-popover-reading"><b id="city-popover-factory-gas-value" data-sensor-value>34.2 m³/h</b><small>{en ? "Current flow" : "Trenutni pretok"}</small></div>
-  </div>
-  <div class="city-sensor-popover city-popover-electricity" id="city-popover-electricity" role="group" aria-label={en ? "Electricity use · factory" : "Poraba elektrike · tovarna"} data-sensor-popover="electricity" {...cardAt("electricity")}>
-    <div class="city-popover-top"><i></i>{en ? "LIVE METER" : "MERILNIK V ŽIVO"}<span>FACTORY_POWER_01</span></div>
-    <strong>{en ? "Electricity use · factory" : "Poraba elektrike · tovarna"}</strong>
-    <div class="city-popover-reading"><b id="city-popover-electricity-value" data-sensor-value>18.6 kWh</b><small>{en ? "Current day" : "Danes"}</small></div>
-  </div>
-  <div class="city-sensor-popover city-popover-water" id="city-popover-water" role="group" aria-label={en ? "River level" : "Gladina reke"} data-sensor-popover="water" {...cardAt("water")}>
-    <div class="city-popover-top"><i></i>{en ? "LIVE SENSOR" : "TIPALO V ŽIVO"}<span>RIVER_LEVEL_01</span></div>
-    <strong>{en ? "River level" : "Gladina reke"}</strong>
-    <div class="city-popover-reading"><b id="city-popover-water-value" data-sensor-value>1.36 m</b><small>{en ? "Current level" : "Trenutna gladina"}</small></div>
-  </div>
-  <div class="city-sensor-popover city-popover-air" id="city-popover-air" role="group" aria-label={en ? "Air quality" : "Kakovost zraka"} data-sensor-popover="air" {...cardAt("air")}>
-    <div class="city-popover-top"><i></i>{en ? "LIVE SENSOR" : "TIPALO V ŽIVO"}<span>AIR_QUALITY_01</span></div>
-    <strong>{en ? "Air quality" : "Kakovost zraka"}</strong>
-    <div class="city-popover-grid"><span>PM10<b id="city-popover-air-pm10" data-sensor-value>18 µg/m³</b></span><span>{en ? "Temperature" : "Temperatura"}<b id="city-popover-air-temp">18.7 °C</b></span><span>{en ? "Humidity" : "Vlaga"}<b id="city-popover-air-humidity">56 %</b></span></div>
-  </div>
-  <div class="city-sensor-popover city-popover-cyclists" id="city-popover-cyclists" role="group" aria-label={en ? "Cyclist counter" : "Števec kolesarjev"} data-sensor-popover="cyclists" {...cardAt("cyclists")}>
-    <div class="city-popover-top"><i></i>{en ? "LIVE SENSOR" : "TIPALO V ŽIVO"}<span>CYCLE_COUNT_01</span></div>
-    <strong>{en ? "Cyclist counter" : "Števec kolesarjev"}</strong>
-    <div class="city-popover-reading"><b id="city-popover-cyclists-value" data-sensor-value>124</b><small>{en ? "Passages today" : "Prehodov danes"}</small></div>
-  </div>
+  {scene.sensors.map((sensor) => (
+    <div class="city-sensor-popover" id={id(`popover-${sensor.key}`)} role="group" aria-label={sensor.card.title} data-sensor-popover={sensor.key} data-side={sensor.side} data-align={sensor.align} data-tone={sensor.tone} data-alert={sensor.alert} style={at(sensor.at)}>
+      <div class="city-popover-top"><i></i>{kindLabel(sensor.card.kind)}<span>{sensor.id}</span></div>
+      <strong>{sensor.card.title}</strong>
+      {sensor.card.grid ? (
+        <div class="city-popover-grid">
+          {sensor.card.grid.map((cell, i) => (
+            <span>{cell.label}<b data-reading={cell.key} data-sensor-value={i === 0 ? "" : undefined}>{cell.value}</b></span>
+          ))}
+        </div>
+      ) : (
+        <div class="city-popover-reading"><b data-reading={sensor.key} data-sensor-value>{sensor.card.value}</b><small>{sensor.card.note}</small></div>
+      )}
+    </div>
+  ))}
 
   <div class="city-loader" data-city-loader aria-hidden="true">
     <svg class="city-loader-plan" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" focusable="false">
@@ -294,10 +190,10 @@ const lanePatch =
       <path class="plan-line plan-line--dim" d={plan.dimSide} pathLength="1" style="--d:.9s" />
       <text class="plan-dim-text" x="776" y="52">600 mm</text>
       <text class="plan-dim-text" transform="translate(150 430) rotate(-68)">600 mm</text>
-      {modules.map((module, i) => (
+      {scene.modules.map((module, i) => (
         <g class="plan-module" style={`--d:${1 + i * 0.09}s`}>
-          <text class="plan-module-letter" x={module.x} y={module.y}>{module.letter}</text>
-          <text class="plan-module-name" x={module.x} y={module.y + 26}>{module.name}</text>
+          <text class="plan-module-letter" x={module.plan[0]} y={module.plan[1]}>{module.letter}</text>
+          <text class="plan-module-name" x={module.plan[0]} y={module.plan[1] + 26}>{module.name}</text>
         </g>
       ))}
       <g class="plan-logo" transform={engraveTransform}>
@@ -307,12 +203,12 @@ const lanePatch =
     <div class="city-loader-scan"></div>
     <div class="city-loader-top">
       <span><i></i>KUEM · {en ? "Nexavia showcase room" : "Razstavni prostor Nexavia"}</span>
-      <span>{en ? "Model 60 × 60 cm · 4 modules" : "Maketa 60 × 60 cm · 4 moduli"}</span>
+      <span>{scene.loader.subject}</span>
     </div>
     <div class="city-loader-hud">
       <div>
         <p class="city-loader-kicker">{en ? "Building the interactive model" : "Gradnja interaktivne makete"}</p>
-        <p class="city-loader-stage" data-loader-stage>{en ? "Loading the city model" : "Nalaganje modela mesta"}</p>
+        <p class="city-loader-stage" data-loader-stage>{scene.loader.stage}</p>
       </div>
       <p class="city-loader-pct"><span data-loader-pct>0</span><small>%</small></p>
     </div>
@@ -324,12 +220,14 @@ const lanePatch =
     // Start the photo download while the page is still parsing, and keep
     // byte progress for the loader. The download fills the HTTP cache, which
     // the <img> then loads from (the site's CSP does not allow blob: images).
+    // A maquette on a tab that is not shown yet waits until it is opened.
     (() => {
       const art = document.currentScript.parentElement;
       const src = art.querySelector(".city-photo").dataset.src;
       const state = { loaded: 0, total: 0, listeners: new Set() };
       art.twinPhoto = state;
-      state.ready = (async () => {
+      const panel = art.closest("[data-twin-tab]");
+      const download = async () => {
         try {
           const response = await fetch(src);
           if (!response.ok || !response.body) return;
@@ -344,7 +242,9 @@ const lanePatch =
         } catch {
           // The <img> loads the photo itself.
         }
-      })().then(() => src);
+      };
+      if (!panel || !panel.hidden) state.ready = download().then(() => src);
+      else state.start = () => (state.ready ??= download().then(() => src));
     })();
   </script>
 </div>

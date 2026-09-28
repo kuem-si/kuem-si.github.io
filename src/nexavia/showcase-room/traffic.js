@@ -2,6 +2,8 @@
 // Geometry uses the photo's 1536 × 1024 viewBox. Distances, sizes and speeds
 // are in "ground units": photo pixels measured on the board at mid-depth.
 
+import { createWakes } from "./wake.js";
+
 const SVG_NS = "http://www.w3.org/2000/svg";
 
 // Camera fitted to the board: the square board narrows toward the back (depth
@@ -537,7 +539,20 @@ const KINDS = {
     bendBrake: 6,
     respawn: [14, 34],
   },
+  boat: {
+    accel: 2.2,
+    brake: 3.5,
+    minGap: 14,
+    headway: 2.5,
+    cruise: [13, 19],
+    lateral: 5,
+    bendBrake: 1.6,
+    respawn: [4, 16],
+  },
 };
+// Which lanes each kind uses.
+const MODE = { car: "road", cyclist: "road", pedestrian: "walk", boat: "water" };
+const LANE_KINDS = { road: ["car", "cyclist"], walk: ["pedestrian"], water: ["boat"] };
 const CAR_COUNT = 5;
 const CYCLIST_COUNT = 3;
 const CYCLIST_SIZE = 1.15;
@@ -664,11 +679,12 @@ async function findConflicts(lanes) {
 }
 
 // Centripetal Catmull-Rom through the waypoints, resampled every ground unit.
-function buildRoute(name, route) {
+function buildRoute(name, route, { prefix = "city", counter = null } = {}) {
+  const mode = route.mode ?? (route.walk ? "walk" : "road");
   const points = route.points.map(([x, y, offset]) => [
     x,
     y,
-    offset ?? (route.walk ? WALK_OFFSET : 0),
+    offset ?? (mode === "walk" ? WALK_OFFSET : 0),
   ]);
   const dense = [];
   for (let i = 0; i < points.length - 1; i++) {
@@ -724,14 +740,12 @@ function buildRoute(name, route) {
     offset: new Float32Array(count),
     heading: new Float32Array(count),
     limit: Object.fromEntries(
-      (route.walk ? ["pedestrian"] : ["car", "cyclist"]).map((kind) => [
-        kind,
-        new Float32Array(count),
-      ]),
+      LANE_KINDS[mode].map((kind) => [kind, new Float32Array(count)]),
     ),
-    clipId: `city-traffic-clip-${name}`,
+    clipId: `${prefix}-traffic-clip-${name}`,
     occluders: route.occluders,
-    walk: Boolean(route.walk),
+    mode,
+    walk: mode === "walk",
     fade: route.fade ?? [false, false],
   };
   for (let i = 0, j = 0; i < count; i++) {
@@ -770,15 +784,27 @@ function buildRoute(name, route) {
         Math.sqrt(limit[i + 1] ** 2 + 2 * bendBrake),
       );
   }
-  for (let i = 0; i < count; i++) {
+  // Timed stops (e.g. a landing): the lane position nearest each waypoint.
+  if (route.stops)
+    lane.stops = route.stops.map(({ point, time }) => {
+      const [px, py] = route.points[point];
+      let at = 0;
+      let best = Infinity;
+      for (let i = 0; i < count; i++) {
+        const d = (lane.x[i] - px) ** 2 + (lane.y[i] - py) ** 2;
+        if (d < best) [best, at] = [d, i];
+      }
+      return { at, time };
+    });
+  for (let i = 0; i < count && counter; i++) {
     const x = lane.x[i];
     const y = lane.y[i];
     if (
       lane.counter === undefined &&
       i > 0 &&
-      x >= COUNTER.minX &&
-      x <= COUNTER.maxX &&
-      (lane.y[i - 1] - COUNTER.y) * (y - COUNTER.y) <= 0
+      x >= counter.minX &&
+      x <= counter.maxX &&
+      (lane.y[i - 1] - counter.y) * (y - counter.y) <= 0
     )
       lane.counter = i;
   }
@@ -1100,6 +1126,171 @@ const BODY_BUILDERS = {
 
 // Cyclists combine a side profile drawn in the vertical plane of travel with
 // ground-plane slices that keep their width when seen end-on.
+// --- Boats ------------------------------------------------------------------
+// Built like the cars: horizontal slices from the waterline up (height 0 is
+// the water surface), plus "profiles", vertical shapes along the keel line
+// for masts and sails (drawn with negative y upwards, as on screen). Wakes are
+// left in the water by wake.js. Units are ground units
+// (about 1.8 per board millimetre).
+function createBoat(layer) {
+  return { element: svg("g", { class: "city-traffic-boat" }, layer), layers: [], tails: [], profiles: [], beam: 0 };
+}
+
+// Hull outline seen from above: a fine bow and a square transom.
+const hullOutline = (length, width, x = 0) => outline(length, width, { nose: 0.42, tail: 0.04, taper: 0.9, x });
+
+const BOAT_VARIANTS = [
+  { type: "sail", hull: "#f2f0ea", stripe: "#1d3450", canvas: "#1e3a5a", sails: true },
+  { type: "sail", hull: "#1f3550", stripe: "#f2f0ea", canvas: "#c9bfa6", sails: true },
+  { type: "sail", hull: "#f2f0ea", stripe: "#7a1f1f", canvas: "#2f4f6f", sails: true },
+  { type: "motor", hull: "#f4f3ef", stripe: "#23313f", canvas: "#2f4f6f" },
+  { type: "motor", hull: "#e9e6de", stripe: "#0f1a24", canvas: "#6b6f72" },
+  { type: "fishing", hull: "#2c5f8a", stripe: "#f1efe9", canvas: "#b0452f" },
+  { type: "fishing", hull: "#b8412f", stripe: "#f1efe9", canvas: "#2c6b4f" },
+  { type: "rib", hull: "#50575c", stripe: "#e0572f", canvas: "#2b2f33" },
+  { type: "tour", hull: "#f3f2ec", stripe: "#1f5f8a", canvas: "#1f5f8a" },
+];
+
+// Sails are up out at sea; in the harbour boats come in under engine. The
+// tour boat keeps to its harbour round.
+function pickBoat(lane, used) {
+  const tour = lane.name.startsWith("harbourTour");
+  const sea = lane.name.startsWith("sea");
+  const fits = BOAT_VARIANTS.filter((variant) => (tour ? variant.type === "tour" || variant.type === "motor" : variant.type !== "tour" && (sea || variant.type !== "sail" || Math.random() < 0.5)));
+  const fresh = fits.filter((variant) => !used.includes(variant));
+  return pick(fresh.length ? fresh : fits);
+}
+
+// Red, green and white navigation lights.
+function navLights(kit, length, width, height) {
+  const lights = kit.group(height);
+  for (const [side, color] of [
+    [-1, "#ff5a44"],
+    [1, "#4cff86"],
+  ]) {
+    svg("circle", { cx: f2(length * 0.22), cy: f2(side * width * 0.36), r: 2.2, fill: color, "fill-opacity": 0.25 }, lights);
+    svg("circle", { cx: f2(length * 0.22), cy: f2(side * width * 0.36), r: 0.8, fill: color }, lights);
+  }
+  svg("circle", { cx: f2(-length / 2 + 1.2), cy: 0, r: 0.8, fill: "#fff8e6" }, lights);
+}
+
+function boatHull(kit, variant, length, width, freeboard) {
+  const hull = (inset) => hullOutline(length - inset, width - inset);
+  const shadow = kit.group(0);
+  svg("path", { d: hullOutline(length + 3, width + 3), fill: "#021014", "fill-opacity": 0.28 }, shadow);
+  kit.slab(0.4, hull(1.2), mix(variant.hull, "#0b1014", 0.35));
+  kit.slab(1.2, hull(0.5), variant.stripe);
+  for (let height = 2.2; height < freeboard - 0.4; height += 1) kit.slab(height, hull(0), mix(variant.hull, "#0b1014", 0.12 - height * 0.01));
+}
+
+function boatProfile(boat, extra = {}) {
+  const node = svg("g", extra, boat.element);
+  boat.profiles.push({ node });
+  return node;
+}
+
+function styleBoat(boat, variant, lane) {
+  boat.element.replaceChildren();
+  boat.layers = [];
+  boat.tails = [];
+  boat.profiles = [];
+  const kit = bodyKit(boat);
+  const sails = variant.sails && lane.name.startsWith("sea");
+  if (variant.type === "sail") {
+    const L = 60;
+    const W = 19;
+    boat.beam = W;
+    boatHull(kit, variant, L, W, 6);
+    kit.slab(6, hullOutline(L - 0.6, W - 0.6), kit.sheen("#f1efe9", "deck"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 });
+    kit.slab(6.2, `M${f2(-L / 2 + 2)} ${f2(-W * 0.28)}h14v${f2(W * 0.56)}h-14z`, "#a8805a");
+    kit.slab(8, outline(L * 0.34, W * 0.56, { nose: 0.3, tail: 0.1, taper: 0.3, x: -2 }), "#e8e6df");
+    kit.slab(8.6, outline(L * 0.32, W * 0.5, { nose: 0.3, tail: 0.1, taper: 0.3, x: -2 }), "#2c3a43");
+    kit.slab(9.4, outline(L * 0.3, W * 0.46, { nose: 0.3, tail: 0.1, taper: 0.3, x: -2 }), kit.sheen("#f4f2ec", "roof"));
+    navLights(kit, L, W, 6.4);
+    const mast = 8;
+    const profile = boatProfile(boat);
+    if (sails) {
+      // Mainsail and jib, full of wind.
+      svg("path", { d: `M${mast - 1} -10L${mast - 1} -104Q${mast - 16} -60 ${mast - 30} -12Z`, fill: "#f7f5ee", "fill-opacity": 0.96, stroke: "#c9c6bd", "stroke-width": 0.5 }, profile);
+      svg("path", { d: `M${mast + 1} -96L${L / 2 - 2} -8Q${mast + 14} -30 ${mast + 2} -12Z`, fill: "#eceae2", "fill-opacity": 0.94, stroke: "#c9c6bd", "stroke-width": 0.5 }, profile);
+    } else {
+      svg("path", { d: `M${mast - 30} -12.5h29v-3h-29z`, fill: variant.canvas }, profile);
+    }
+    svg("path", { d: `M${mast} -6V-108`, stroke: "#c9cdcf", "stroke-width": 1.1 }, profile);
+    svg("path", { d: `M${mast} -108L${L / 2 - 1} -7M${mast} -108L${-L / 2 + 1} -7`, stroke: "#3a4045", "stroke-width": 0.3, "stroke-opacity": 0.8 }, profile);
+    svg("circle", { cx: mast, cy: -108, r: 1.1, fill: "#fff8e6" }, profile);
+    return L / 2;
+  }
+  if (variant.type === "motor") {
+    const L = 68;
+    const W = 22;
+    boat.beam = W;
+    boatHull(kit, variant, L, W, 7);
+    kit.slab(7, hullOutline(L - 0.6, W - 0.6), kit.sheen("#f3f1ec", "deck"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 });
+    kit.slab(7.2, `M${f2(-L / 2 + 1.5)} ${f2(-W * 0.36)}h11v${f2(W * 0.72)}h-11z`, "#a8805a");
+    const cabin = (inset, x = -3) => outline(L * 0.5 - inset, W * 0.78 - inset, { nose: 0.35, tail: 0.08, taper: 0.4, x });
+    for (let height = 8; height < 13; height += 1) kit.slab(height, cabin(0), height > 9.4 && height < 12 ? "#26343e" : "#eeede8");
+    kit.slab(13, cabin(0.6), kit.sheen("#f6f5f1", "roof"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 });
+    kit.slab(14.2, outline(L * 0.26, W * 0.6, { nose: 0.2, tail: 0.1, taper: 0.2, x: -9 }), "#f0efea");
+    kit.slab(17.5, outline(L * 0.2, W * 0.62, { nose: 0.1, tail: 0.1, taper: 0.1, x: -11 }), variant.canvas);
+    // Cabin lights at dusk.
+    const glow = kit.group(10.6, { fill: "#ffd99a", "fill-opacity": 0.85 });
+    for (const x of [-12, -4, 4]) for (const side of [-1, 1]) svg("rect", { x, y: f2(side * W * 0.39 - 0.6), width: 5, height: 1.2, rx: 0.5 }, glow);
+    navLights(kit, L, W, 7.4);
+    const profile = boatProfile(boat);
+    svg("path", { d: "M-6 -17V-25M-6 -25h-4", stroke: "#dfe2e3", "stroke-width": 0.9 }, profile);
+    return L / 2;
+  }
+  if (variant.type === "fishing") {
+    const L = 46;
+    const W = 16;
+    boat.beam = W;
+    boatHull(kit, variant, L, W, 6);
+    kit.slab(6, hullOutline(L - 0.8, W - 0.8), "#cfd2cf");
+    kit.slab(6.4, `M${f2(-L / 2 + 3)} -5.5h13v11h-13z`, variant.canvas);
+    const house = (inset) => outline(L * 0.26 - inset, W * 0.66 - inset, { nose: 0.1, tail: 0.1, taper: 0.1, x: 5 });
+    for (let height = 7; height < 14; height += 1) kit.slab(height, house(0), height > 9.4 && height < 12.2 ? "#27343d" : "#f1efe9");
+    kit.slab(14, house(0.5), kit.sheen("#e9e7e0", "roof"));
+    navLights(kit, L, W, 6.4);
+    const profile = boatProfile(boat);
+    svg("path", { d: "M5 -14V-34M5 -30L-18 -8", stroke: "#3a4045", "stroke-width": 0.8 }, profile);
+    svg("circle", { cx: 5, cy: -34, r: 1.1, fill: "#fff8e6" }, profile);
+    return L / 2;
+  }
+  if (variant.type === "rib") {
+    const L = 32;
+    const W = 14;
+    boat.beam = W;
+    const shadow = kit.group(0);
+    svg("path", { d: hullOutline(L + 3, W + 3), fill: "#021014", "fill-opacity": 0.28 }, shadow);
+    for (let height = 0.6; height < 3.6; height += 1) kit.slab(height, hullOutline(L, W), height < 1.4 ? variant.stripe : mix(variant.hull, "#0b1014", 0.1));
+    kit.slab(3.6, hullOutline(L - 4, W - 5), "#2a2e31");
+    kit.slab(5.5, `M-2 -2.8h6v5.6h-6z`, "#e9e7e0");
+    kit.slab(7.5, `M-6 -2.2h4v4.4h-4z`, "#34495e");
+    kit.slab(5, `M${f2(-L / 2 - 1.5)} -1.8h3.5v3.6h-3.5z`, "#15181a");
+    navLights(kit, L, W, 3.8);
+    return L / 2;
+  }
+  // Tour boat: long cabin with lit windows and an open upper deck.
+  const L = 112;
+  const W = 30;
+  boat.beam = W;
+  boatHull(kit, variant, L, W, 8);
+  kit.slab(8, hullOutline(L - 0.6, W - 0.6), kit.sheen("#f1f0ec", "deck"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 });
+  const cabin = (inset) => outline(L * 0.72 - inset, W * 0.84 - inset, { nose: 0.12, tail: 0.06, taper: 0.2, x: -4 });
+  for (let height = 9; height < 18; height += 1) kit.slab(height, cabin(0), height > 10.4 && height < 15.6 ? "#ffd99a" : "#f2f1ec");
+  kit.slab(18, cabin(0.4), kit.sheen("#f4f3ef", "roof"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 });
+  // Window mullions on the lit band.
+  const mullions = kit.group(15.2, { fill: "#f2f1ec" });
+  for (let x = -40; x < 32; x += 6) for (const side of [-1, 1]) svg("rect", { x, y: f2(side * W * 0.42 - 0.8), width: 1, height: 1.6 }, mullions);
+  const rail = kit.group(21, { fill: "none", stroke: "#dfe2e3", "stroke-width": 0.6 });
+  svg("path", { d: cabin(1.2) }, rail);
+  const people = kit.group(20.5);
+  for (let i = 0; i < 9; i++) svg("circle", { cx: f2(-34 + i * 7.5 + random(-1.5, 1.5)), cy: f2(random(-8, 8)), r: 1.5, fill: pick(OUTFIT.tops) }, people);
+  navLights(kit, L, W, 8.4);
+  return L / 2;
+}
+
 function createCyclist(layer) {
   const element = svg("g", { class: "city-traffic-cyclist" }, layer);
   const shadow = svg(
@@ -1475,7 +1666,19 @@ function drawPedestrian(entity, x, y, size, k, cos, sin, ground) {
   }
 }
 
-export function initTraffic(root) {
+// The city's map: its routes, walks, scenery in front of them and the scripted
+// people around the fountain. Other maquettes pass their own (marina.js).
+const CITY = {
+  id: "city",
+  routes: ROUTES,
+  walks: WALKS,
+  occluders: OCCLUDERS,
+  actors: ACTORS,
+  counts: { car: CAR_COUNT, cyclist: CYCLIST_COUNT, pedestrian: PEDESTRIAN_COUNT },
+  counter: COUNTER,
+};
+
+export function initTraffic(root, map = CITY) {
   const scene = root.querySelector("[data-city-art]");
   const layer = scene?.querySelector("[data-traffic-layer]");
   if (!layer) return;
@@ -1487,7 +1690,7 @@ export function initTraffic(root) {
     ([entry]) => {
       visible = entry.isIntersecting;
       if (visible)
-        starting ??= startTraffic(root, layer).then((set) => {
+        starting ??= startTraffic(root, layer, map).then((set) => {
           setInView = set;
           set(visible);
         });
@@ -1497,12 +1700,17 @@ export function initTraffic(root) {
   ).observe(scene);
 }
 
-async function startTraffic(root, layer) {
+async function startTraffic(root, layer, map) {
   const host = layer.ownerSVGElement;
-
+  const board = map.board ?? BOARD;
+  // Walks run both ways; walks may also sit among the routes (mode "walk").
+  const walks = {
+    ...(map.walks ?? {}),
+    ...Object.fromEntries(Object.entries(map.routes).filter(([, route]) => route.mode === "walk")),
+  };
   const specs = [
-    ...Object.entries(ROUTES),
-    ...Object.entries(WALKS).flatMap(([name, walk]) => [
+    ...Object.entries(map.routes).filter(([, route]) => route.mode !== "walk"),
+    ...Object.entries(walks).flatMap(([name, walk]) => [
       [name, { ...walk, walk: true }],
       [
         `${name}Back`,
@@ -1518,33 +1726,40 @@ async function startTraffic(root, layer) {
   // One lane per idle slice keeps every set-up task short.
   const lanes = [];
   for (const [name, spec] of specs) {
-    lanes.push(buildRoute(name, spec));
+    lanes.push(buildRoute(name, spec, { prefix: map.id, counter: map.counter }));
     await idle();
   }
   const defs = svg("defs", {}, null);
   host.insertBefore(defs, host.firstChild);
   for (const lane of lanes) {
+    if (map.masks) {
+      // A mask, so overlapping outlines of scenery still hide what is behind.
+      const mask = svg("mask", { id: lane.clipId, maskUnits: "userSpaceOnUse", x: 0, y: 0, width: 1536, height: 1024 }, defs);
+      svg("path", { d: board, fill: "#fff" }, mask);
+      for (const key of lane.occluders) svg("path", { d: `M${map.occluders[key]}Z`, fill: "#000" }, mask);
+      lane.clipAttribute = ["mask", `url(#${lane.clipId})`];
+      continue;
+    }
     const clip = svg(
       "clipPath",
       { id: lane.clipId, clipPathUnits: "userSpaceOnUse" },
       defs,
     );
-    const holes = lane.occluders.map((key) => `M${OCCLUDERS[key]}Z`).join("");
-    svg("path", { d: BOARD + holes, "clip-rule": "evenodd" }, clip);
+    const holes = lane.occluders.map((key) => `M${map.occluders[key]}Z`).join("");
+    svg("path", { d: board + holes, "clip-rule": "evenodd" }, clip);
+    lane.clipAttribute = ["clip-path", `url(#${lane.clipId})`];
   }
   await findConflicts(lanes);
+  const wakes = map.counts.boat ? createWakes(host, board) : null;
 
   const traffic = [];
   const create = {
     car: createCar,
     cyclist: createCyclist,
     pedestrian: createPedestrian,
+    boat: createBoat,
   };
-  const kinds = [
-    ...Array(CAR_COUNT).fill("car"),
-    ...Array(CYCLIST_COUNT).fill("cyclist"),
-    ...Array(PEDESTRIAN_COUNT).fill("pedestrian"),
-  ];
+  const kinds = Object.entries(map.counts).flatMap(([kind, count]) => Array(count).fill(kind));
   for (const kind of kinds) {
     const art = create[kind](layer);
     art.element.style.display = "none";
@@ -1566,6 +1781,9 @@ async function startTraffic(root, layer) {
       queued: false,
       braking: false,
       variant: null,
+      // Next timed stop on the lane, and the time left there.
+      stop: 0,
+      dwell: -1,
       phase: random(0, 100),
       // Distance walked (drives the gait) and last drawn position.
       stride: 0,
@@ -1575,15 +1793,15 @@ async function startTraffic(root, layer) {
     });
   }
 
-  const actors = ACTORS.map((spec, index) => {
+  const actors = (map.actors ?? []).map((spec, index) => {
     const art = createPedestrian(layer);
-    const clipId = `city-traffic-actor-${index}`;
+    const clipId = `${map.id}-traffic-actor-${index}`;
     const clip = svg(
       "clipPath",
       { id: clipId, clipPathUnits: "userSpaceOnUse" },
       defs,
     );
-    let d = BOARD;
+    let d = board;
     if (spec.window) {
       // Window glass, with the frames cut out so people pass behind them.
       d = "";
@@ -1650,12 +1868,14 @@ async function startTraffic(root, layer) {
 
   // The children's ball and its shadow on the grass.
   const kids = actors.filter((actor) => actor.spec.kid);
+  const hasGame = kids.length >= 2;
   const ball = {
     art: {
-      element: svg("g", { "clip-path": "url(#city-traffic-actor-6)" }, layer),
+      element: svg("g", { "clip-path": `url(#${map.id}-traffic-actor-6)` }, layer),
     },
     depth: -1,
   };
+  if (!hasGame) ball.art.element.remove();
   const ballShadow = svg(
     "ellipse",
     { fill: "#0b1014", "fill-opacity": 0.25 },
@@ -1680,11 +1900,11 @@ async function startTraffic(root, layer) {
     target: null,
   };
 
-  const paintOrder = [...traffic, ...actors, ball];
+  const paintOrder = [...traffic, ...actors, ...(hasGame ? [ball] : [])];
   const queue = [];
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const counterPanel = root.querySelector("#sensor-cyclists");
-  const counterPopover = root.querySelector("#city-popover-cyclists-value");
+  const counterPanel = root.querySelector(".twin-dashboard [data-reading=cyclists]");
+  const counterPopover = root.querySelector(".city-sensor-popover [data-reading=cyclists]");
   const en = document.documentElement.lang.startsWith("en");
   let cyclistCount = 124;
   let counterPulse = 0;
@@ -1721,7 +1941,7 @@ async function startTraffic(root, layer) {
     let total = 0;
     const walking = entity.kind === "pedestrian";
     const weights = lanes.map((lane) => {
-      if (lane.walk !== walking) return 0;
+      if (lane.mode !== MODE[entity.kind]) return 0;
       const others = onLane(lane);
       if (others.some((other) => other.distance < 70)) return 0;
       // Walkers favour paths with a zebra crossing, so crossings are common.
@@ -1764,7 +1984,15 @@ async function startTraffic(root, layer) {
     entity.next = lane.cells.findIndex((item) => item.in > distance);
     if (entity.next < 0) entity.next = lane.cells.length;
     entity.until = entity.next;
-    if (entity.kind === "car") {
+    entity.stop = lane.stops ? lane.stops.findIndex((item) => item.at > distance) : -1;
+    if (entity.stop < 0) entity.stop = lane.stops?.length ?? 0;
+    entity.dwell = -1;
+    if (entity.kind === "boat") {
+      const used = traffic.filter((other) => other.lane && other.kind === "boat").map((other) => other.variant);
+      entity.variant = pickBoat(lane, used);
+      entity.half = styleBoat(art, entity.variant, lane);
+      wakes?.start(entity, lane.occluders.map((key) => map.occluders[key]), art.beam);
+    } else if (entity.kind === "car") {
       const used = traffic
         .filter((other) => other.lane && other.kind === "car")
         .map((other) => other.variant);
@@ -1779,11 +2007,12 @@ async function startTraffic(root, layer) {
     } else {
       entity.half = styleCyclist(art);
     }
-    art.element.setAttribute("clip-path", `url(#${lane.clipId})`);
+    art.element.setAttribute(...lane.clipAttribute);
     art.element.style.display = "";
   }
 
   function retire(entity) {
+    if (entity.kind === "boat") wakes?.stop(entity);
     entity.depth = -1;
     for (const item of entity.lane?.cells ?? [])
       item.cell.holders.delete(entity);
@@ -1804,9 +2033,9 @@ async function startTraffic(root, layer) {
     }
     let placed = false;
     for (let attempt = 0; attempt < 20 && !placed; attempt++) {
-      const lane = pick(
-        lanes.filter((item) => item.walk === (entity.kind === "pedestrian")),
-      );
+      const choices = lanes.filter((item) => item.mode === MODE[entity.kind]);
+      if (!choices.length) break;
+      const lane = pick(choices);
       const distance = random(0.08, 0.85) * lane.length;
       const clear =
         onLane(lane).every(
@@ -1967,6 +2196,16 @@ async function startTraffic(root, layer) {
           spacing = minGap;
         }
       }
+    // A timed stop ahead (a landing, the fuel dock): come to rest on it.
+    const timed = lane.stops?.[entity.stop];
+    if (timed) {
+      const stop = timed.at - entity.distance;
+      if (stop < gap) {
+        gap = Math.max(0, stop);
+        leaderSpeed = 0;
+        spacing = 0;
+      }
+    }
     if (entity.queued) {
       const stop =
         lane.cells[entity.next].in - entity.distance - entity.half - 1.5;
@@ -2164,13 +2403,24 @@ async function startTraffic(root, layer) {
       else entity.wait = 1.2;
     }
     updateActors(delta);
-    updateGame(delta);
+    if (hasGame) updateGame(delta);
     updateCrossings();
     for (const entity of traffic) {
       if (!entity.lane) continue;
       const value = acceleration(entity, clock);
       const previous = entity.distance;
       entity.speed = Math.max(0, entity.speed + value * delta);
+      // Waiting at a timed stop, then on to the next one.
+      const timed = entity.lane.stops?.[entity.stop];
+      if (timed && entity.distance >= timed.at - 1.5 && entity.speed < 1) {
+        if (entity.dwell < 0) entity.dwell = timed.time;
+        entity.dwell -= delta;
+        entity.speed = 0;
+        if (entity.dwell <= 0) {
+          entity.stop++;
+          entity.dwell = -1;
+        }
+      }
       const step = Math.min(entity.speed * delta, Math.max(0, clearance));
       entity.distance += step;
       entity.stride += step;
@@ -2239,6 +2489,15 @@ async function startTraffic(root, layer) {
       if (entity.kind === "car") {
         for (const item of art.layers)
           item.node.setAttribute("transform", ground(item.height));
+      } else if (entity.kind === "boat") {
+        // Riding the swell, leaving a wake in the water.
+        wakes?.track(entity, x, y, s, k, clock);
+        const bob = 0.5 * Math.sin(clock * 1.7 + entity.phase) + 0.25 * Math.sin(clock * 2.9 + entity.phase * 2);
+        for (const item of art.layers)
+          item.node.setAttribute("transform", ground(item.height + (item.height > 0 ? bob : 0)));
+        const lift = f2(y - bob * RISE * size);
+        for (const item of art.profiles)
+          item.node.setAttribute("transform", `matrix(${a} ${b} 0 ${f3(RISE * size)} ${f2(x)} ${lift})`);
       } else if (entity.kind === "pedestrian") {
         drawPedestrian(entity, x, y, size, k, cos, sin, ground);
       } else {
@@ -2303,7 +2562,8 @@ async function startTraffic(root, layer) {
       drawPedestrian(actor, x, y, size, k, cos, sin, ground);
       actor.depth = y;
     }
-    drawBall();
+    if (hasGame) drawBall();
+    wakes?.draw(clock);
     // Nearer traffic (lower on screen) paints over traffic behind it; the
     // DOM is only reordered when two entities actually swap depth.
     let sorted = true;

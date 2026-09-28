@@ -1,226 +1,45 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro";
 import "../../styles/nexavia-showcase-room.css";
-import ShowcaseRoomMaquette from "../../components/nexavia/ShowcaseRoomMaquette.astro";
-import nexaviaLogo from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
+import ShowcaseTwin from "../../components/nexavia/ShowcaseTwin.astro";
+import { cityTwin } from "../../components/nexavia/showcase/city";
+import { marinaTwin } from "../../components/nexavia/showcase/marina";
 
-// Each tab is one maquette. The first tab is always started on page load;
-// the others start the first time they are opened (see src/nexavia/showcase-room/index.js).
-const tabs = [
-  { id: "city", title: "Pametno mesto", meta: "Maketa 60 × 60 cm · 7 naprav" },
-];
-
-const buildings = [
-  { id: "HOUSE_01", controllable: true, name: "Hiša z vrtom" },
-  { id: "OFFICE_01", controllable: true, name: "Poslovna stavba" },
-  { id: "FACTORY_01", controllable: true, name: "Tovarna" },
-  { id: "LAMP_01", controllable: true, name: "Ulična svetilka 1" },
-  { id: "LAMP_02", controllable: true, name: "Ulična svetilka 2" },
-  { id: "LAMP_03", controllable: true, name: "Ulična svetilka 3" },
-  { id: "LAMP_04", controllable: true, name: "Ulična svetilka 4" },
-];
+// Each tab is one maquette. The first tab starts on page load (or the tab
+// named in the URL hash, e.g. #marina); the others start the first time they
+// are opened (see src/nexavia/showcase-room/index.js).
+const twins = [cityTwin(false), marinaTwin(false)];
 ---
 
 <MainLayout
   title="Razstavni prostor Nexavia | KUEM"
-  description="Razstavni prostor Nexavia: interaktivni digitalni dvojček mini mesta z nadzorno ploščo Nexavia."
+  description="Razstavni prostor Nexavia: interaktivna digitalna dvojčka mini mesta in pametne marine z nadzorno ploščo Nexavia."
   noindex
 >
   <div class="twin-page" data-twin-root>
-    <div class="twin-intro">
-      <div>
-        <p class="twin-path">
-          <a href="/nexavia/">Nexavia</a> <span aria-hidden="true">/</span>{" "}
-          Razstavni prostor
-        </p>
-        <h1>Mesto, ki pokaže, kaj se dogaja s podatki.</h1>
-        <p class="twin-lead">
-          Mesto povezuje upravljanje razsvetljave, števce porabe ter senzorje
-          tresljajev mostu, gladine reke, kakovosti zraka in kolesarskega
-          prometa. Meritve in dogodki se prikazujejo v Nexavii.
-        </p>
+    <div class="twin-intros">
+    {twins.map((twin, i) => (
+      <div class="twin-intro" data-twin-intro={twin.id} hidden={i !== 0}>
+        <div>
+          <p class="twin-path">
+            <a href="/nexavia/">Nexavia</a> <span aria-hidden="true">/</span> Razstavni prostor
+          </p>
+          <h1>{twin.intro.title}</h1>
+          <p class="twin-lead">{twin.intro.lead}</p>
+        </div>
       </div>
+    ))}
     </div>
 
     <div class="twin-tabs" role="tablist" aria-label="Makete razstavnega prostora">
-      {tabs.map((tab, i) => (
-        <button type="button" role="tab" class="twin-tab" id={`twin-tab-${tab.id}`} aria-controls={`twin-panel-${tab.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1} data-twin-tab-trigger>
+      {twins.map((twin, i) => (
+        <button type="button" role="tab" class="twin-tab" id={`twin-tab-${twin.id}`} aria-controls={`twin-panel-${twin.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1} data-twin-tab-trigger>
           <span class="twin-tab-index">{String(i + 1).padStart(2, "0")}</span>
-          <span class="twin-tab-text"><b>{tab.title}</b><small>{tab.meta}</small></span>
+          <span class="twin-tab-text"><b>{twin.tab.title}</b><small>{twin.tab.meta}</small></span>
         </button>
       ))}
     </div>
-    <div class="twin-tab-panel" role="tabpanel" id="twin-panel-city" aria-labelledby="twin-tab-city" data-twin-tab="city">
-    <section
-      class="twin-workspace"
-      aria-label="Razstavni prostor in nadzorna plošča"
-    >
-      <div class="twin-city-panel">
-        <div class="twin-panel-head">
-          <div>
-            <p>Pogled mesta · povlecite za raziskovanje</p>
-            <p class="twin-hint" data-device-hint><span aria-hidden="true"></span>Kliknite svetilko ali stavbo za vklop ali izklop</p>
-            <p class="twin-hint twin-hint--panel" data-device-hint><span aria-hidden="true"></span>Tudi deli nadzorne plošče Nexavia so interaktivni – preklopite posamezno napravo ali vse ulične svetilke hkrati.</p>
-          </div>
-          <span class="twin-live">
-            <span></span> Simulacija teče
-          </span>
-        </div>
-        <div class="twin-scene-wrap">
-          <ShowcaseRoomMaquette locale="sl" />
-        </div>
-        <div class="twin-controls">
-          <button type="button" data-city-fullscreen aria-pressed="false">
-            Odpri celozaslonski pogled
-          </button>
-          <button type="button" data-overlay-toggle aria-pressed="true">
-            Skrij nadzorno ploščo
-          </button>
-          <button type="button" id="twin-pause" aria-pressed="false">
-            Začasno ustavi
-          </button>
-          <button type="button" id="twin-next">
-            Naslednji dogodek
-          </button>
-          <button type="button" class="twin-auto" data-devices-auto hidden>
-            Vrni samodejno upravljanje
-          </button>
-          <span id="twin-step" aria-live="polite">
-            Senzor bere svetlobo okolice
-          </span>
-        </div>
-      </div>
-      <div
-        class="xdr-display"
-        aria-label="Zaslon Apple Pro Display XDR s prikazom demonstracijskega brskalnika"
-      >
-        <div class="xdr-overlay-tools" data-overlay-drag>
-          <span class="xdr-drag-icon" role="img" aria-label="Premakni nadzorno ploščo" title="Premakni nadzorno ploščo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M2 12h20M12 2l-3 3m3-3 3 3M12 22l-3-3m3 3 3-3M2 12l3-3m-3 3 3 3m16-3-3-3m3 3-3 3"/></svg></span>
-          <label class="xdr-opacity-control" title="Prosojnost nadzorne plošče"><svg class="xdr-sun-low" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 1v2m0 18v2M1 12h2m18 0h2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42m0-15.56-1.42 1.42M5.64 18.36l-1.42 1.42"/></svg><input type="range" min="35" max="100" value="100" data-overlay-opacity aria-label="Prosojnost nadzorne plošče" /><svg class="xdr-sun-high" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M1 12h2m18 0h2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42m0-15.56-1.42 1.42M5.64 18.36l-1.42 1.42"/></svg></label>
-        </div>
-        <div class="xdr-bezel" aria-label="Odzivna simulacija nadzorne plošče Nexavia">
-          <div class="xdr-screen">
-            <aside
-              class="twin-dashboard"
-              aria-label="Nexavia nadzorna plošča, simulacija"
-            >
-              <div class="twin-dashboard-top">
-                <div class="twin-brand"><img src={nexaviaLogo.src} alt="Nexavia" /><span>Network Operations Center</span></div>
-                <span class="twin-demo-pill"><i></i> DEMO</span>
-              </div>
-              <nav class="nx-demo-nav" aria-label="Razdelki nadzorne plošče Nexavia">
-                <span class="is-current"><b>▦</b> Pregled</span><span><b>⌘</b> Naprave</span><span><b>◉</b> Prehodi</span><span><b>▤</b> Alarmi</span>
-              </nav>
-              <div class="twin-dashboard-body">
-                <div class="twin-dashboard-heading">
-                  <div>
-                    <h2>Pregled naprav</h2>
-                    <p>
-                      3 stavbe · 4 ulične svetilke · demonstracijski podatki
-                    </p>
-                  </div>
-                  <span class="twin-sync"><i></i> Sinhronizirano</span>
-                </div>
-                <div class="twin-kpis">
-                  <div>
-                    <span>Aktivne naprave</span>
-                    <strong id="twin-active">0 / 7</strong>
-                    <small>Po mestu</small>
-                  </div>
-                  <div>
-                    <span>Skupna moč</span>
-                    <strong id="twin-power">0 W</strong>
-                    <small>Trenutna simulacija</small>
-                  </div>
-                  <div>
-                    <span>Svetloba okolice</span>
-                    <strong id="twin-lux">46 lx</strong>
-                    <small>Senzor LIGHT_01</small>
-                  </div>
-                </div>
-                <div class="twin-rule">
-                  <span class="twin-rule-icon">i</span>
-                  <div>
-                    <strong>Pravilo: svetloba &lt; 25 lx</strong>
-                    <p id="twin-rule-status">Čaka na naslednjo meritev</p>
-                  </div>
-                </div>
-                <div class="twin-table-heading">
-                  <h3>Stanje naprav</h3>
-                  <span>Simulacija v živo</span>
-                </div>
-                <div
-                  class="twin-table"
-                  role="table"
-                  aria-label="Stanje razsvetljave stavb"
-                >
-                  <div class="twin-tr twin-th" role="row">
-                    <span role="columnheader">Naprava</span>
-                    <span role="columnheader">Stanje</span>
-                    <span role="columnheader">Moč</span>
-                  </div>
-                  {buildings.map((b) => (
-                    <div class="twin-tr" role="row" data-row={b.id}>
-                      <span role="cell">
-                        <b>{b.name}</b>
-                        <small>{b.id}{b.controllable && <span class="twin-mode" data-mode-tag hidden> · ročno</span>}</small>
-                      </span>
-                      <span role="cell" class="twin-state-cell">
-                        <span class="twin-state">Izklopljeno</span>
-                        {b.controllable && (
-                          <button type="button" class="twin-switch" role="switch" aria-checked="false" data-device-switch={b.id} aria-label={"Razsvetljava: " + b.name}><span></span></button>
-                        )}
-                      </span>
-                      <span role="cell" class="twin-watts">
-                        0 W
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                <div class="twin-lamp-group" role="group" aria-label="Ulična razsvetljava">
-                  <span>Ulična razsvetljava</span>
-                  <button type="button" data-lamp-group="1">Vklopi vse</button>
-                  <button type="button" data-lamp-group="0">Izklopi vse</button>
-                </div>
-                <div class="twin-alerts" aria-live="polite">
-                  <h3><span>!</span> Aktivni alarmi <b id="twin-alarm-count">2</b></h3>
-                  <p data-alarm="OFFICE_01"><strong>OFFICE_01</strong><span>Senzor se ne odziva · 12 min</span></p>
-                  <p data-alarm="FACTORY_01"><strong>FACTORY_01</strong><span>Šibek signal prehoda · 4 min</span></p>
-                </div>
-                <div class="twin-meter-readings">
-                  <div class="twin-meter-heading"><h3>Meritve števcev</h3><span>Telemetrija v živo</span></div>
-                  <div><span>Vodomer hiše z vrtom<small>HOUSE_WATER_01</small></span><strong id="meter-house-water">0,84 m³/d</strong></div>
-                  <div><span>Vodomer poslovne stavbe<small>OFFICE_WATER_01</small></span><strong id="meter-office-water">12,6 m³/d</strong></div>
-                  <div><span>Plinomer tovarne<small>FACTORY_GAS_01</small></span><strong id="meter-factory-gas">34,2 m³/h</strong></div>
-                  <div><span>Elektrika tovarne<small>FACTORY_POWER_01</small></span><strong id="meter-electricity">18,6 kWh</strong></div>
-                </div>
-                <div class="twin-sensor-readings">
-                  <div class="twin-meter-heading"><h3>Senzorji infrastrukture</h3><span>Meritve v živo</span></div>
-                  <div><span>Tresljaji mostu<small>BRIDGE_VIB_01</small></span><strong id="sensor-vibration">0,42 mm/s<small>Običajno</small></strong></div>
-                  <div><span>Gladina reke<small>RIVER_LEVEL_01</small></span><strong id="sensor-water-level">1,36 m<small>Normalno območje</small></strong></div>
-                  <div><span>Kakovost zraka<small>AIR_QUALITY_01 · PM10</small></span><strong id="sensor-air-pm10">18 µg/m³<small id="sensor-air-climate">18,7 °C · 56 % RH</small></strong></div>
-                  <div><span>Števec kolesarjev<small>CYCLE_COUNT_01</small></span><strong id="sensor-cyclists">124 danes</strong></div>
-                </div>
-                <div class="twin-event">
-                  <h3>Zadnji dogodek</h3>
-                  <p id="twin-event">Čakanje na podatkovni dogodek …</p>
-                  <small>
-                    *V realnem času znotraj te simulacije. Brez povezave z živo
-                    Nexavio.
-                  </small>
-                </div>
-              </div>
-            </aside>
-          </div>
-          <button type="button" class="xdr-resize-edge xdr-resize-left" data-overlay-resize="left" aria-label="Spremeni širino zaslona z levega roba"></button>
-          <button type="button" class="xdr-resize-edge xdr-resize-right" data-overlay-resize="right" aria-label="Spremeni širino zaslona z desnega roba"></button>
-          <button type="button" class="xdr-resize-edge xdr-resize-bottom" data-overlay-resize="bottom" aria-label="Spremeni višino zaslona s spodnjega roba"></button>
-        </div>
-        <button type="button" class="xdr-resize-corner xdr-corner-sw" data-overlay-resize="sw" aria-label="Spremeni velikost iz spodnjega levega roba zaslona"></button>
-        <button type="button" class="xdr-resize-corner xdr-corner-se" data-overlay-resize="se" aria-label="Spremeni velikost iz spodnjega desnega roba zaslona"></button>
-      </div>
-    </section>
-    </div>
+    {twins.map((twin, i) => <ShowcaseTwin locale="sl" twin={twin} selected={i === 0} />)}
   </div>
   <script src="../../nexavia/showcase-room/index.js"></script>
 </MainLayout>

@@ -1,221 +1,45 @@
 ---
 import MainLayout from "../../../layouts/MainLayout.astro";
 import "../../../styles/nexavia-showcase-room.css";
-import ShowcaseRoomMaquette from "../../../components/nexavia/ShowcaseRoomMaquette.astro";
-import nexaviaLogo from "../../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
+import ShowcaseTwin from "../../../components/nexavia/ShowcaseTwin.astro";
+import { cityTwin } from "../../../components/nexavia/showcase/city";
+import { marinaTwin } from "../../../components/nexavia/showcase/marina";
 
-// Each tab is one maquette. The first tab is always started on page load;
-// the others start the first time they are opened (see src/nexavia/showcase-room/index.js).
-const tabs = [
-  { id: "city", title: "Smart city", meta: "60 × 60 cm model · 7 devices" },
-];
-
-const buildings = [
-  { id: "HOUSE_01", controllable: true, name: "Garden house" },
-  { id: "OFFICE_01", controllable: true, name: "Office building" },
-  { id: "FACTORY_01", controllable: true, name: "Factory" },
-  { id: "LAMP_01", controllable: true, name: "Street light 1" },
-  { id: "LAMP_02", controllable: true, name: "Street light 2" },
-  { id: "LAMP_03", controllable: true, name: "Street light 3" },
-  { id: "LAMP_04", controllable: true, name: "Street light 4" },
-];
+// Each tab is one maquette. The first tab starts on page load (or the tab
+// named in the URL hash, e.g. #marina); the others start the first time they
+// are opened (see src/nexavia/showcase-room/index.js).
+const twins = [cityTwin(true), marinaTwin(true)];
 ---
 
 <MainLayout
   title="Nexavia showcase room | KUEM"
-  description="The Nexavia showcase room: an interactive digital twin of a mini city connected to a Nexavia dashboard."
+  description="The Nexavia showcase room: interactive digital twins of a mini city and a smart marina, connected to a Nexavia dashboard."
   noindex
 >
   <div class="twin-page" data-twin-root>
-    <div class="twin-intro">
-      <div>
-        <p class="twin-path">
-          <a href="/en/nexavia/">Nexavia</a> <span aria-hidden="true">/</span>{" "}
-          Showcase room
-        </p>
-        <h1>A city that shows what is happening in its data.</h1>
-        <p class="twin-lead">
-          The demonstration city combines controllable lighting, utility
-          meters, and bridge, river, air-quality and cyclist sensors. Live
-          readings and lighting events appear in Nexavia.
-        </p>
+    <div class="twin-intros">
+    {twins.map((twin, i) => (
+      <div class="twin-intro" data-twin-intro={twin.id} hidden={i !== 0}>
+        <div>
+          <p class="twin-path">
+            <a href="/en/nexavia/">Nexavia</a> <span aria-hidden="true">/</span> Showcase room
+          </p>
+          <h1>{twin.intro.title}</h1>
+          <p class="twin-lead">{twin.intro.lead}</p>
+        </div>
       </div>
+    ))}
     </div>
 
     <div class="twin-tabs" role="tablist" aria-label="Showcase room maquettes">
-      {tabs.map((tab, i) => (
-        <button type="button" role="tab" class="twin-tab" id={`twin-tab-${tab.id}`} aria-controls={`twin-panel-${tab.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1} data-twin-tab-trigger>
+      {twins.map((twin, i) => (
+        <button type="button" role="tab" class="twin-tab" id={`twin-tab-${twin.id}`} aria-controls={`twin-panel-${twin.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1} data-twin-tab-trigger>
           <span class="twin-tab-index">{String(i + 1).padStart(2, "0")}</span>
-          <span class="twin-tab-text"><b>{tab.title}</b><small>{tab.meta}</small></span>
+          <span class="twin-tab-text"><b>{twin.tab.title}</b><small>{twin.tab.meta}</small></span>
         </button>
       ))}
     </div>
-    <div class="twin-tab-panel" role="tabpanel" id="twin-panel-city" aria-labelledby="twin-tab-city" data-twin-tab="city">
-    <section class="twin-workspace" aria-label="Showcase room and dashboard">
-      <div class="twin-city-panel">
-        <div class="twin-panel-head">
-          <div>
-            <p>City view · drag to explore</p>
-            <p class="twin-hint" data-device-hint><span aria-hidden="true"></span>Click a street light or building to switch it on or off</p>
-            <p class="twin-hint twin-hint--panel" data-device-hint><span aria-hidden="true"></span>Parts of the Nexavia dashboard are interactive too – switch a single device or all street lights at once.</p>
-          </div>
-          <span class="twin-live">
-            <span></span> Simulation running
-          </span>
-        </div>
-        <div class="twin-scene-wrap">
-          <ShowcaseRoomMaquette locale="en" />
-        </div>
-        <div class="twin-controls">
-          <button type="button" data-city-fullscreen aria-pressed="false">
-            Open full screen
-          </button>
-          <button type="button" data-overlay-toggle aria-pressed="true">
-            Hide dashboard
-          </button>
-          <button type="button" id="twin-pause" aria-pressed="false">
-            Pause
-          </button>
-          <button type="button" id="twin-next">
-            Next event
-          </button>
-          <button type="button" class="twin-auto" data-devices-auto hidden>
-            Restore automatic control
-          </button>
-          <span id="twin-step" aria-live="polite">
-            Sensor is reading ambient light
-          </span>
-        </div>
-      </div>
-      <div
-        class="xdr-display"
-        aria-label="Nexavia responsive dashboard simulation"
-      >
-        <div class="xdr-overlay-tools" data-overlay-drag>
-          <span class="xdr-drag-icon" role="img" aria-label="Move dashboard" title="Move dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M2 12h20M12 2l-3 3m3-3 3 3M12 22l-3-3m3 3 3-3M2 12l3-3m-3 3 3 3m16-3-3-3m3 3-3 3"/></svg></span>
-          <label class="xdr-opacity-control" title="Dashboard opacity"><svg class="xdr-sun-low" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 1v2m0 18v2M1 12h2m18 0h2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42m0-15.56-1.42 1.42M5.64 18.36l-1.42 1.42"/></svg><input type="range" min="35" max="100" value="100" data-overlay-opacity aria-label="Dashboard opacity" /><svg class="xdr-sun-high" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M1 12h2m18 0h2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42m0-15.56-1.42 1.42M5.64 18.36l-1.42 1.42"/></svg></label>
-        </div>
-        <div class="xdr-bezel" aria-label="Responsive Nexavia dashboard simulation">
-          <div class="xdr-screen">
-            <aside
-              class="twin-dashboard"
-              aria-label="Nexavia dashboard simulation"
-            >
-              <div class="twin-dashboard-top">
-                <div class="twin-brand"><img src={nexaviaLogo.src} alt="Nexavia" /><span>Network Operations Center</span></div>
-                <span class="twin-demo-pill"><i></i> DEMO</span>
-              </div>
-              <nav class="nx-demo-nav" aria-label="Nexavia dashboard sections">
-                <span class="is-current"><b>▦</b> Overview</span><span><b>⌘</b> Devices</span><span><b>◉</b> Gateways</span><span><b>▤</b> Alarms</span>
-              </nav>
-              <div class="twin-dashboard-body">
-                <div class="twin-dashboard-heading">
-                  <div>
-                    <h2>Device overview</h2>
-                    <p>3 buildings · 4 street lights · simulated data</p>
-                  </div>
-                  <span class="twin-sync"><i></i> Synchronized</span>
-                </div>
-                <div class="twin-kpis">
-                  <div>
-                    <span>Active devices</span>
-                    <strong id="twin-active">0 / 7</strong>
-                    <small>Across the city</small>
-                  </div>
-                  <div>
-                    <span>Total power</span>
-                    <strong id="twin-power">0 W</strong>
-                    <small>Current simulation</small>
-                  </div>
-                  <div>
-                    <span>Ambient light</span>
-                    <strong id="twin-lux">46 lx</strong>
-                    <small>Sensor LIGHT_01</small>
-                  </div>
-                </div>
-                <div class="twin-rule">
-                  <span class="twin-rule-icon">i</span>
-                  <div>
-                    <strong>Rule: light &lt; 25 lx</strong>
-                    <p id="twin-rule-status">Waiting for next reading</p>
-                  </div>
-                </div>
-                <div class="twin-table-heading">
-                  <h3>Device status</h3>
-                  <span>Live simulation</span>
-                </div>
-                <div
-                  class="twin-table"
-                  role="table"
-                  aria-label="Building lighting status"
-                >
-                  <div class="twin-tr twin-th" role="row">
-                    <span role="columnheader">Device</span>
-                    <span role="columnheader">Status</span>
-                    <span role="columnheader">Power</span>
-                  </div>
-                  {buildings.map((b) => (
-                    <div class="twin-tr" role="row" data-row={b.id}>
-                      <span role="cell">
-                        <b>{b.name}</b>
-                        <small>{b.id}{b.controllable && <span class="twin-mode" data-mode-tag hidden> · manual</span>}</small>
-                      </span>
-                      <span role="cell" class="twin-state-cell">
-                        <span class="twin-state">Off</span>
-                        {b.controllable && (
-                          <button type="button" class="twin-switch" role="switch" aria-checked="false" data-device-switch={b.id} aria-label={"Lighting: " + b.name}><span></span></button>
-                        )}
-                      </span>
-                      <span role="cell" class="twin-watts">
-                        0 W
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                <div class="twin-lamp-group" role="group" aria-label="Street lighting">
-                  <span>Street lighting</span>
-                  <button type="button" data-lamp-group="1">All on</button>
-                  <button type="button" data-lamp-group="0">All off</button>
-                </div>
-                <div class="twin-alerts" aria-live="polite">
-                  <h3><span>!</span> Active alarms <b id="twin-alarm-count">2</b></h3>
-                  <p data-alarm="OFFICE_01"><strong>OFFICE_01</strong><span>Sensor not responding · 12 min</span></p>
-                  <p data-alarm="FACTORY_01"><strong>FACTORY_01</strong><span>Gateway signal weak · 4 min</span></p>
-                </div>
-                <div class="twin-meter-readings">
-                  <div class="twin-meter-heading"><h3>Meter readings</h3><span>Live telemetry</span></div>
-                  <div><span>House water meter<small>HOUSE_WATER_01</small></span><strong id="meter-house-water">0.84 m³/d</strong></div>
-                  <div><span>Office water meter<small>OFFICE_WATER_01</small></span><strong id="meter-office-water">12.6 m³/d</strong></div>
-                  <div><span>Factory gas meter<small>FACTORY_GAS_01</small></span><strong id="meter-factory-gas">34.2 m³/h</strong></div>
-                  <div><span>Factory electricity<small>FACTORY_POWER_01</small></span><strong id="meter-electricity">18.6 kWh</strong></div>
-                </div>
-                <div class="twin-sensor-readings">
-                  <div class="twin-meter-heading"><h3>Infrastructure sensors</h3><span>Live readings</span></div>
-                  <div><span>Bridge vibration<small>BRIDGE_VIB_01</small></span><strong id="sensor-vibration">0.42 mm/s<small>Normal</small></strong></div>
-                  <div><span>River level<small>RIVER_LEVEL_01</small></span><strong id="sensor-water-level">1.36 m<small>Normal range</small></strong></div>
-                  <div><span>Air quality<small>AIR_QUALITY_01 · PM10</small></span><strong id="sensor-air-pm10">18 µg/m³<small id="sensor-air-climate">18.7 °C · 56% RH</small></strong></div>
-                  <div><span>Cyclist counter<small>CYCLE_COUNT_01</small></span><strong id="sensor-cyclists">124 today</strong></div>
-                </div>
-                <div class="twin-event">
-                  <h3>Latest event</h3>
-                  <p id="twin-event">Waiting for a data event …</p>
-                  <small>
-                    *Real time within this simulation. Not connected to a live
-                    Nexavia system.
-                  </small>
-                </div>
-              </div>
-            </aside>
-          </div>
-          <button type="button" class="xdr-resize-edge xdr-resize-left" data-overlay-resize="left" aria-label="Resize screen width from the left edge"></button>
-          <button type="button" class="xdr-resize-edge xdr-resize-right" data-overlay-resize="right" aria-label="Resize screen width from the right edge"></button>
-          <button type="button" class="xdr-resize-edge xdr-resize-bottom" data-overlay-resize="bottom" aria-label="Resize screen height from the bottom edge"></button>
-        </div>
-        <button type="button" class="xdr-resize-corner xdr-corner-sw" data-overlay-resize="sw" aria-label="Resize from the bottom-left edge of the screen"></button>
-        <button type="button" class="xdr-resize-corner xdr-corner-se" data-overlay-resize="se" aria-label="Resize from the bottom-right edge of the screen"></button>
-      </div>
-    </section>
-    </div>
+    {twins.map((twin, i) => <ShowcaseTwin locale="en" twin={twin} selected={i === 0} />)}
   </div>
   <script src="../../../nexavia/showcase-room/index.js"></script>
 </MainLayout>

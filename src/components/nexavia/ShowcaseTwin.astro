@@ -1,0 +1,148 @@
+---
+import ShowcaseRoomMaquette from "./ShowcaseRoomMaquette.astro";
+import nexaviaLogo from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
+import type { Twin } from "./showcase/types";
+
+// One showcase tab: the maquette and its Nexavia dashboard. Element hooks are
+// data attributes (data-ui, data-reading, …) scoped to the panel, so several
+// twins can share the page; src/nexavia/showcase-room/twin.js drives them.
+interface Props {
+  locale: "sl" | "en";
+  twin: Twin;
+  selected: boolean;
+}
+
+const { locale, twin, selected } = Astro.props;
+const en = locale === "en";
+const t = (sl: string, english: string) => (en ? english : sl);
+const { dashboard } = twin;
+---
+
+<div class="twin-tab-panel" role="tabpanel" id={`twin-panel-${twin.id}`} aria-labelledby={`twin-tab-${twin.id}`} data-twin-tab={twin.id} hidden={!selected}>
+  <section class="twin-workspace" aria-label={t("Razstavni prostor in nadzorna plošča", "Showcase room and dashboard")}>
+    <div class="twin-city-panel">
+      <div class="twin-panel-head">
+        <div>
+          <p>{twin.panel.view}</p>
+          <p class="twin-hint" data-device-hint><span aria-hidden="true"></span>{twin.panel.hint}</p>
+          <p class="twin-hint twin-hint--panel" data-device-hint><span aria-hidden="true"></span>{twin.panel.hintPanel}</p>
+        </div>
+        <span class="twin-live">
+          <span></span> {t("Simulacija teče", "Simulation running")}
+        </span>
+      </div>
+      <div class="twin-scene-wrap">
+        <ShowcaseRoomMaquette locale={locale} twin={twin.id} scene={twin.scene} />
+      </div>
+      <div class="twin-controls">
+        <button type="button" data-city-fullscreen aria-pressed="false">{t("Odpri celozaslonski pogled", "Open full screen")}</button>
+        <button type="button" data-overlay-toggle aria-pressed="true">{t("Skrij nadzorno ploščo", "Hide dashboard")}</button>
+        <button type="button" data-ui="pause" aria-pressed="false">{t("Začasno ustavi", "Pause")}</button>
+        <button type="button" data-ui="next">{t("Naslednji dogodek", "Next event")}</button>
+        <button type="button" class="twin-auto" data-devices-auto hidden>{t("Vrni samodejno upravljanje", "Restore automatic control")}</button>
+        <span data-ui="step" aria-live="polite">{twin.panel.step}</span>
+      </div>
+    </div>
+    <div class="xdr-display" aria-label={t("Zaslon Apple Pro Display XDR s prikazom demonstracijskega brskalnika", "Nexavia responsive dashboard simulation")}>
+      <div class="xdr-overlay-tools" data-overlay-drag>
+        <span class="xdr-drag-icon" role="img" aria-label={t("Premakni nadzorno ploščo", "Move dashboard")} title={t("Premakni nadzorno ploščo", "Move dashboard")}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M2 12h20M12 2l-3 3m3-3 3 3M12 22l-3-3m3 3 3-3M2 12l3-3m-3 3 3 3m16-3-3-3m3 3-3 3" /></svg></span>
+        <label class="xdr-opacity-control" title={t("Prosojnost nadzorne plošče", "Dashboard opacity")}><svg class="xdr-sun-low" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 1v2m0 18v2M1 12h2m18 0h2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42m0-15.56-1.42 1.42M5.64 18.36l-1.42 1.42" /></svg><input type="range" min="35" max="100" value="100" data-overlay-opacity aria-label={t("Prosojnost nadzorne plošče", "Dashboard opacity")} /><svg class="xdr-sun-high" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" /><path d="M12 1v2m0 18v2M1 12h2m18 0h2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42m0-15.56-1.42 1.42M5.64 18.36l-1.42 1.42" /></svg></label>
+      </div>
+      <div class="xdr-bezel" aria-label={t("Odzivna simulacija nadzorne plošče Nexavia", "Responsive Nexavia dashboard simulation")}>
+        <div class="xdr-screen">
+          <aside class="twin-dashboard" aria-label={t("Nexavia nadzorna plošča, simulacija", "Nexavia dashboard simulation")}>
+            <div class="twin-dashboard-top">
+              <div class="twin-brand"><img src={nexaviaLogo.src} alt="Nexavia" /><span>Network Operations Center</span></div>
+              <span class="twin-demo-pill"><i></i> DEMO</span>
+            </div>
+            <nav class="nx-demo-nav" aria-label={t("Razdelki nadzorne plošče Nexavia", "Nexavia dashboard sections")}>
+              <span class="is-current"><b>▦</b> {t("Pregled", "Overview")}</span><span><b>⌘</b> {t("Naprave", "Devices")}</span><span><b>◉</b> {t("Prehodi", "Gateways")}</span><span><b>▤</b> {t("Alarmi", "Alarms")}</span>
+            </nav>
+            <div class="twin-dashboard-body">
+              <div class="twin-dashboard-heading">
+                <div>
+                  <h2>{dashboard.title}</h2>
+                  <p>{dashboard.subtitle}</p>
+                </div>
+                <span class="twin-sync"><i></i> {t("Sinhronizirano", "Synchronized")}</span>
+              </div>
+              <div class="twin-kpis">
+                {dashboard.kpis.map((kpi) => (
+                  <div>
+                    <span>{kpi.label}</span>
+                    <strong data-ui={kpi.key}>{kpi.value}</strong>
+                    <small>{kpi.note}</small>
+                  </div>
+                ))}
+              </div>
+              <div class="twin-rule">
+                <span class="twin-rule-icon">i</span>
+                <div>
+                  <strong>{dashboard.rule}</strong>
+                  <p data-ui="rule-status">{dashboard.ruleStatus}</p>
+                </div>
+              </div>
+              <div class="twin-table-heading">
+                <h3>{t("Stanje naprav", "Device status")}</h3>
+                <span>{t("Simulacija v živo", "Live simulation")}</span>
+              </div>
+              <div class="twin-table" role="table" aria-label={t("Stanje razsvetljave", "Lighting status")}>
+                <div class="twin-tr twin-th" role="row">
+                  <span role="columnheader">{t("Naprava", "Device")}</span>
+                  <span role="columnheader">{t("Stanje", "Status")}</span>
+                  <span role="columnheader">{t("Moč", "Power")}</span>
+                </div>
+                {dashboard.devices.map((device) => (
+                  <div class="twin-tr" role="row" data-row={device.id}>
+                    <span role="cell">
+                      <b>{device.name}</b>
+                      <small>{device.id}<span class="twin-mode" data-mode-tag hidden>{t(" · ročno", " · manual")}</span></small>
+                    </span>
+                    <span role="cell" class="twin-state-cell">
+                      <span class="twin-state">{t("Izklopljeno", "Off")}</span>
+                      <button type="button" class="twin-switch" role="switch" aria-checked="false" data-device-switch={device.id} aria-label={`${t("Razsvetljava", "Lighting")}: ${device.name}`}><span></span></button>
+                    </span>
+                    <span role="cell" class="twin-watts">0 W</span>
+                  </div>
+                ))}
+              </div>
+              <div class="twin-lamp-group" role="group" aria-label={dashboard.group}>
+                <span>{dashboard.group}</span>
+                <button type="button" data-lamp-group="1">{t("Vklopi vse", "All on")}</button>
+                <button type="button" data-lamp-group="0">{t("Izklopi vse", "All off")}</button>
+              </div>
+              <div class="twin-alerts" aria-live="polite">
+                <h3><span>!</span> {t("Aktivni alarmi", "Active alarms")} <b data-ui="alarm-count">{dashboard.alarms.length}</b></h3>
+                {dashboard.alarms.map((alarm) => (
+                  <p data-alarm={alarm.id}><strong>{alarm.id}</strong><span>{alarm.text}</span></p>
+                ))}
+              </div>
+              <div class="twin-meter-readings">
+                <div class="twin-meter-heading"><h3>{dashboard.meters.title}</h3><span>{t("Telemetrija v živo", "Live telemetry")}</span></div>
+                {dashboard.meters.rows.map((row) => (
+                  <div><span>{row.label}<small>{row.id}</small></span><strong data-reading={row.key}>{row.value}{row.note && <small>{row.note}</small>}</strong></div>
+                ))}
+              </div>
+              <div class="twin-sensor-readings">
+                <div class="twin-meter-heading"><h3>{dashboard.sensors.title}</h3><span>{t("Meritve v živo", "Live readings")}</span></div>
+                {dashboard.sensors.rows.map((row) => (
+                  <div><span>{row.label}<small>{row.id}</small></span><strong data-reading={row.key}>{row.value}{row.note && <small>{row.note}</small>}</strong></div>
+                ))}
+              </div>
+              <div class="twin-event">
+                <h3>{t("Zadnji dogodek", "Latest event")}</h3>
+                <p data-ui="event">{t("Čakanje na podatkovni dogodek …", "Waiting for a data event …")}</p>
+                <small>{t("*V realnem času znotraj te simulacije. Brez povezave z živo Nexavio.", "*Real time within this simulation. Not connected to a live Nexavia system.")}</small>
+              </div>
+            </div>
+          </aside>
+        </div>
+        <button type="button" class="xdr-resize-edge xdr-resize-left" data-overlay-resize="left" aria-label={t("Spremeni širino zaslona z levega roba", "Resize screen width from the left edge")}></button>
+        <button type="button" class="xdr-resize-edge xdr-resize-right" data-overlay-resize="right" aria-label={t("Spremeni širino zaslona z desnega roba", "Resize screen width from the right edge")}></button>
+        <button type="button" class="xdr-resize-edge xdr-resize-bottom" data-overlay-resize="bottom" aria-label={t("Spremeni višino zaslona s spodnjega roba", "Resize screen height from the bottom edge")}></button>
+      </div>
+      <button type="button" class="xdr-resize-corner xdr-corner-sw" data-overlay-resize="sw" aria-label={t("Spremeni velikost iz spodnjega levega roba zaslona", "Resize from the bottom-left edge of the screen")}></button>
+      <button type="button" class="xdr-resize-corner xdr-corner-se" data-overlay-resize="se" aria-label={t("Spremeni velikost iz spodnjega desnega roba zaslona", "Resize from the bottom-right edge of the screen")}></button>
+    </div>
+  </section>
+</div>
