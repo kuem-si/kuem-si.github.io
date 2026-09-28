@@ -33,7 +33,7 @@ export const city = {
       lux: 46,
       states: off(),
       rule: t("Pogoj ni izpolnjen · razsvetljava izklopljena", "Condition not met · lighting is off"),
-      event: t("Senzor svetlobe je izmeril 46 lx.", "Light sensor measured 46 lx."),
+      log: [["reading", t("LIGHT_01 · Svetloba okolice 46 lx", "LIGHT_01 · Ambient light 46 lx")]],
     },
     {
       at: "dusk",
@@ -41,7 +41,10 @@ export const city = {
       lux: 18,
       states: off(),
       rule: t("Pogoj izpolnjen · ukaz se pošilja prek GW_01", "Condition met · command sent via GW_01"),
-      event: t("Prehod GW_01 je posredoval meritev 18 lx.", "Gateway GW_01 relayed a reading of 18 lx."),
+      log: [
+        ["reading", t("LIGHT_01 · Svetloba okolice 18 lx · prek prehoda GW_01", "LIGHT_01 · Ambient light 18 lx · via gateway GW_01")],
+        ["decision", t("Pravilo svetloba < 25 lx izpolnjeno (18 lx) → vklop razsvetljave, stavbo za stavbo", "Rule light < 25 lx met (18 lx) → lighting on, one building at a time")],
+      ],
     },
     {
       at: "dusk+10",
@@ -49,7 +52,7 @@ export const city = {
       lux: 18,
       states: [1, 0, 0, 0, 0, 0, 0],
       rule: t("Aktivno · samodejni vklop razsvetljave", "Active · automatic lighting control"),
-      event: t("HOUSE_01: luči so vključene.", "HOUSE_01: lighting switched on."),
+      log: [["command", t("HOUSE_01 · Razsvetljava vklopljena", "HOUSE_01 · Lighting switched on")]],
     },
     {
       at: "dusk+20",
@@ -57,7 +60,7 @@ export const city = {
       lux: 18,
       states: [1, 1, 0, 0, 0, 0, 0],
       rule: t("Aktivno · samodejni vklop razsvetljave", "Active · automatic lighting control"),
-      event: t("OFFICE_01: razsvetljava je vključena.", "OFFICE_01: lighting switched on."),
+      log: [["command", t("OFFICE_01 · Razsvetljava vklopljena", "OFFICE_01 · Lighting switched on")]],
     },
     {
       at: "dusk+30",
@@ -65,7 +68,7 @@ export const city = {
       lux: 18,
       states: [1, 1, 1, 0, 0, 0, 0],
       rule: t("Aktivno · prilagoditev svetlosti", "Active · brightness adjustment"),
-      event: t("FACTORY_01: razsvetljava je vključena.", "FACTORY_01: lighting switched on."),
+      log: [["command", t("FACTORY_01 · Razsvetljava vklopljena", "FACTORY_01 · Lighting switched on")]],
     },
     {
       at: "dusk+40",
@@ -73,7 +76,7 @@ export const city = {
       lux: 18,
       states: [1, 1, 1, 1, 1, 1, 1],
       rule: t("Samodejna razsvetljava je aktivna", "Automatic lighting active"),
-      event: t("LAMP_01–LAMP_04: ulične svetilke so vključene.", "LAMP_01–LAMP_04: street lights switched on."),
+      log: [["command", t("LAMP_01–LAMP_04 · Ulične svetilke vklopljene", "LAMP_01–LAMP_04 · Street lights switched on")]],
     },
     {
       at: "dawn",
@@ -81,7 +84,11 @@ export const city = {
       lux: 46,
       states: off(),
       rule: t("Pogoj ni več izpolnjen · luči izklopljene", "Condition no longer met · lights switched off"),
-      event: t("Senzor je izmeril 46 lx. Vse luči so izklopljene.", "Sensor measured 46 lx. All lights are off."),
+      log: [
+        ["reading", t("LIGHT_01 · Svetloba okolice 46 lx", "LIGHT_01 · Ambient light 46 lx")],
+        ["decision", t("Pravilo svetloba < 25 lx ni več izpolnjeno → izklop razsvetljave", "Rule light < 25 lx no longer met → lighting off")],
+        ["command", t("Vse luči izklopljene", "All lights switched off")],
+      ],
     },
   ],
   // The office sensor stays down; the factory's weak gateway signal clears
@@ -110,6 +117,93 @@ export const city = {
 function scenarios(t, n) {
   return [
     {
+      // One reading followed from the sensor to the command it leads to.
+      id: "how-it-works",
+      intro: true,
+      title: t("Kako deluje: od senzorja do odločitve", "How it works: sensor to decision"),
+      setup(api) {
+        api.showFlow(true);
+        ALL.forEach((id) => api.setLevel(id, 0));
+        api.setAlarms([]);
+        api.pin("lux");
+        api.narrate({ rule: t("Čaka na naslednjo meritev", "Waiting for next reading") });
+      },
+      steps: [
+        {
+          time: "19:52",
+          focus: { x: 1080, y: 130, zoom: 1.7, radius: 0.22 },
+          title: t("Senzor meri", "A sensor measures"),
+          text: t(
+            "Senzor svetlobe LIGHT_01 na strehi poslovne stavbe meri dnevno svetlobo. Ob mraku pade pod 25 lx. Senzor deluje na baterijo in meritev pošlje vsakih 5 minut.",
+            "Light sensor LIGHT_01 on the office roof measures daylight. At dusk it falls below 25 lx. The sensor runs on a battery and reports every 5 minutes.",
+          ),
+          run() {},
+        },
+        {
+          time: "19:52",
+          title: t("Radio jo ponese do prehoda", "Radio carries it to the gateway"),
+          text: t(
+            "Meritev po radiu LoRaWAN potuje do prehoda GW_01. En prehod pokrije celo mesto, zato noben senzor ne potrebuje kabla.",
+            "The reading travels by LoRaWAN radio to gateway GW_01. One gateway covers the whole city, so no sensor needs a cable.",
+          ),
+          run(api) {
+            api.send("lux");
+            api.log(t("LIGHT_01 · Svetloba okolice pod 25 lx", "LIGHT_01 · Ambient light below 25 lx"), "19:52", "reading");
+          },
+        },
+        {
+          time: "19:52",
+          title: t("Nexavia jo prejme", "Nexavia receives it"),
+          text: t(
+            "Prehod meritev prek interneta posreduje Nexavii, ki jo shrani skupaj s časom. Ploščica svetlobe okolice na nadzorni plošči se posodobi.",
+            "The gateway forwards the reading over the internet to Nexavia, which stores it with its time. The ambient light tile on the dashboard updates.",
+          ),
+          run(api) {
+            api.spotlight(api.$ui("lux")?.parentElement);
+            api.log(t("GW_01 → Nexavia · meritev shranjena", "GW_01 → Nexavia · reading stored"), "19:52", "system");
+          },
+        },
+        {
+          time: "19:53",
+          title: t("Pravilo odloči", "A rule decides"),
+          text: t(
+            "Nexavia vsako novo meritev preveri glede na pravila. Svetloba pod 25 lx izpolni pravilo razsvetljave, zato Nexavia odloči, da prižge luči.",
+            "Nexavia checks each new reading against its rules. Light below 25 lx meets the lighting rule, so Nexavia decides to switch the lights on.",
+          ),
+          run(api) {
+            api.spotlight(".twin-rule");
+            api.narrate({ rule: t("Pogoj izpolnjen · svetloba < 25 lx", "Condition met · light < 25 lx") });
+            api.log(t("Pravilo svetloba < 25 lx izpolnjeno → vklop uličnih svetilk", "Rule light < 25 lx met → street lights on"), "19:53", "decision");
+          },
+        },
+        {
+          time: "19:53",
+          focus: { x: 900, y: 420, zoom: 1.2, radius: 0.45 },
+          title: t("Ukaz gre nazaj", "A command goes back"),
+          text: t(
+            "Nexavia prek prehoda pošlje ukaz vsaki ulični svetilki – rumeni paketi. Svetilke potrdijo in nadzorna plošča jih prikaže kot vklopljene.",
+            "Nexavia sends a command back through the gateway to each street light – the yellow packets. The lights confirm, and the dashboard shows them on.",
+          ),
+          run(api) {
+            LAMPS.forEach((id) => api.setLevel(id, 1));
+            api.spotlight(api.$row("LAMP_01"));
+            api.log(t("LAMP_01–LAMP_04 · Ukaz: vklop", "LAMP_01–LAMP_04 · Command: switch on"), "19:53", "command");
+          },
+        },
+        {
+          time: "19:54",
+          title: t("Vse je zabeleženo", "Everything is on record"),
+          text: t(
+            "Časovnica hrani celotno verigo: meritev, odločitev, ukaz. Zdaj poskusite sami – kliknite kateri koli senzor, da pošlje meritev, ali preklopite luč.",
+            "The timeline keeps the whole chain: reading, decision, command. Now try it yourself – click any sensor to send a reading, or switch a light.",
+          ),
+          run(api) {
+            api.spotlight(".twin-event");
+          },
+        },
+      ],
+    },
+    {
       id: "water-leak",
       title: t("Nočno puščanje vode", "Water leak at night"),
       setup(api) {
@@ -136,7 +230,7 @@ function scenarios(t, n) {
           text: t("Števec HOUSE_WATER_01 zazna stalen pretok, čeprav v hiši nihče ne porablja vode.", "Meter HOUSE_WATER_01 detects a steady flow although nobody in the house is using water."),
           run(api, play) {
             play.count("house-water", 0, 0.36, (v) => `${n(v, 2)} m³/h`);
-            api.log(t("HOUSE_WATER_01 · Nočni pretok 0,36 m³/h", "HOUSE_WATER_01 · Night flow 0.36 m³/h"), "02:14");
+            api.log(t("HOUSE_WATER_01 · Nočni pretok 0,36 m³/h", "HOUSE_WATER_01 · Night flow 0.36 m³/h"), "02:14", "reading");
           },
         },
         {
@@ -147,7 +241,7 @@ function scenarios(t, n) {
             api.setReading("house-water", `${n(0.36, 2)} m³/h`);
             api.setAlarms([["HOUSE_WATER_01", t("Sum puščanja · 30 min", "Suspected leak · 30 min")]]);
             api.spotlight(".twin-alerts");
-            api.log(t("HOUSE_WATER_01 · Alarm: sum puščanja", "HOUSE_WATER_01 · Alarm: suspected leak"), "02:44");
+            api.log(t("HOUSE_WATER_01 · Alarm: sum puščanja", "HOUSE_WATER_01 · Alarm: suspected leak"), "02:44", "alarm");
           },
         },
         {
@@ -156,7 +250,7 @@ function scenarios(t, n) {
           text: t("Lastnik in vzdrževalec prejmeta SMS in e-pošto. Glavni ventil lahko zapreta na daljavo.", "The owner and the caretaker get an SMS and an email. They can close the main valve remotely."),
           run(api, play) {
             play.toast(t("Sum puščanja vode", "Suspected water leak"), t("Hiša z vrtom · 0,36 m³/h že 30 min", "Garden house · 0.36 m³/h for 30 min"), "02:45");
-            api.log(t("Obvestilo poslano · SMS in e-pošta", "Notification sent · SMS and email"), "02:45");
+            api.log(t("Obvestilo poslano · SMS in e-pošta", "Notification sent · SMS and email"), "02:45", "notify");
           },
         },
         {
@@ -167,7 +261,7 @@ function scenarios(t, n) {
             play.count("house-water", 0.36, 0, (v) => `${n(v, 2)} m³/h`);
             api.setAlarms([]);
             api.spotlight(api.$reading("house-water"));
-            api.log(t("HOUSE_WATER_01 · Ventil zaprt · alarm zaprt", "HOUSE_WATER_01 · Valve closed · alarm closed"), "02:52");
+            api.log(t("HOUSE_WATER_01 · Ventil zaprt · alarm zaprt", "HOUSE_WATER_01 · Valve closed · alarm closed"), "02:52", "command");
           },
         },
       ],
@@ -199,7 +293,7 @@ function scenarios(t, n) {
           text: t("Po nalivu gladina hitro narašča – skoraj 30 cm v dveh urah.", "After a downpour the level climbs fast – almost 30 cm in two hours."),
           run(api, play) {
             play.count("water", 1.36, 1.64, (v) => `${n(v, 2)} m`, t("Narašča", "Rising"));
-            api.log(t("RIVER_LEVEL_01 · Gladina 1,64 m · narašča", "RIVER_LEVEL_01 · Level 1.64 m · rising"), "16:20");
+            api.log(t("RIVER_LEVEL_01 · Gladina 1,64 m · narašča", "RIVER_LEVEL_01 · Level 1.64 m · rising"), "16:20", "reading");
           },
         },
         {
@@ -214,7 +308,7 @@ function scenarios(t, n) {
               ["BRIDGE_VIB_01", t("Povišani tresljaji 0,91 mm/s", "Elevated vibration 0.91 mm/s")],
             ]);
             api.spotlight(".twin-alerts");
-            api.log(t("RIVER_LEVEL_01 · Alarm: opozorilna gladina", "RIVER_LEVEL_01 · Alarm: warning level"), "17:05");
+            api.log(t("RIVER_LEVEL_01 · Alarm: opozorilna gladina", "RIVER_LEVEL_01 · Alarm: warning level"), "17:05", "alarm");
           },
         },
         {
@@ -226,7 +320,7 @@ function scenarios(t, n) {
             api.setLevel("LAMP_04", 1);
             api.spotlight(api.$row("LAMP_04"));
             play.toast(t("Opozorilo: gladina reke", "Warning: river level"), t("1,84 m · obveščena civilna zaščita", "1.84 m · civil protection notified"), "17:06");
-            api.log(t("LAMP_04 · Varnostna razsvetljava mostu vklopljena", "LAMP_04 · Bridge safety lighting on"), "17:06");
+            api.log(t("LAMP_04 · Varnostna razsvetljava mostu vklopljena", "LAMP_04 · Bridge safety lighting on"), "17:06", "command");
           },
         },
         {
@@ -240,7 +334,7 @@ function scenarios(t, n) {
             api.setLevel("LAMP_04", 0);
             api.setAlarms([]);
             api.spotlight(api.$reading("water"));
-            api.log(t("RIVER_LEVEL_01 · Gladina 1,52 m · alarm zaprt", "RIVER_LEVEL_01 · Level 1.52 m · alarm closed"), "22:30");
+            api.log(t("RIVER_LEVEL_01 · Gladina 1,52 m · alarm zaprt", "RIVER_LEVEL_01 · Level 1.52 m · alarm closed"), "22:30", "alarm");
           },
         },
       ],
@@ -272,7 +366,7 @@ function scenarios(t, n) {
           run(api) {
             LAMPS.forEach((id) => api.setLevel(id, 0.5));
             api.spotlight(api.$ui("power"));
-            api.log(t("LAMP_01–LAMP_04 · Zatemnitev na 50 %", "LAMP_01–LAMP_04 · Dimmed to 50%"), "00:30");
+            api.log(t("LAMP_01–LAMP_04 · Zatemnitev na 50 %", "LAMP_01–LAMP_04 · Dimmed to 50%"), "00:30", "command");
           },
         },
         {
@@ -284,7 +378,7 @@ function scenarios(t, n) {
             api.setLevel("LAMP_03", 1);
             api.setReading("cyclists", t("125 danes", "125 today"));
             api.spotlight(api.$row("LAMP_03"));
-            api.log(t("LAMP_03 · Gibanje zaznano · 100 %", "LAMP_03 · Movement detected · 100%"), "01:12");
+            api.log(t("LAMP_03 · Gibanje zaznano · 100 %", "LAMP_03 · Movement detected · 100%"), "01:12", "reading");
           },
         },
         {
@@ -293,7 +387,7 @@ function scenarios(t, n) {
           text: t("Ko je ulica spet prazna, se svetilka ponovno zatemni.", "Once the street is empty again, the light dims back down."),
           run(api) {
             api.setLevel("LAMP_03", 0.5);
-            api.log(t("LAMP_03 · Zatemnitev na 50 %", "LAMP_03 · Dimmed to 50%"), "01:14");
+            api.log(t("LAMP_03 · Zatemnitev na 50 %", "LAMP_03 · Dimmed to 50%"), "01:14", "command");
           },
         },
         {
@@ -304,7 +398,7 @@ function scenarios(t, n) {
           run(api, play) {
             LAMPS.forEach((id) => api.setLevel(id, 0));
             play.toast(t("Prihranek noči", "Tonight's saving"), t("0,80 kWh · 36 % manj energije", "0.80 kWh · 36% less energy"), "06:40");
-            api.log(t("Ulična razsvetljava izklopljena · prihranek 0,80 kWh", "Street lighting off · 0.80 kWh saved"), "06:40");
+            api.log(t("Ulična razsvetljava izklopljena · prihranek 0,80 kWh", "Street lighting off · 0.80 kWh saved"), "06:40", "command");
           },
         },
       ],
@@ -339,7 +433,7 @@ function scenarios(t, n) {
             api.setSync(false);
             api.setAlarms([["GW_01", t("Prehod ne odgovarja · 3 min", "Gateway not responding · 3 min")]]);
             api.spotlight(".twin-table");
-            api.log(t("GW_01 · Alarm: prehod ne odgovarja", "GW_01 · Alarm: gateway not responding"), "09:12");
+            api.log(t("GW_01 · Alarm: prehod ne odgovarja", "GW_01 · Alarm: gateway not responding"), "09:12", "alarm");
           },
         },
         {
@@ -357,7 +451,7 @@ function scenarios(t, n) {
           text: t("Nexavia samodejno odpre servisni nalog. Serviser zamenja napajalnik prehoda.", "Nexavia opens a service ticket automatically. A technician replaces the gateway's power supply."),
           run(api, play) {
             play.toast(t("Servisni nalog #2481", "Service ticket #2481"), t("GW_01 · zamenjava napajalnika", "GW_01 · power supply replacement"), "09:41");
-            api.log(t("Servisni nalog #2481 odprt · GW_01", "Service ticket #2481 opened · GW_01"), "09:41");
+            api.log(t("Servisni nalog #2481 odprt · GW_01", "Service ticket #2481 opened · GW_01"), "09:41", "notify");
           },
         },
         {
@@ -370,7 +464,7 @@ function scenarios(t, n) {
             api.setStale(false);
             api.setAlarms([]);
             api.spotlight(".twin-table");
-            api.log(t("GW_01 · 7 naprav ponovno povezanih · 30 min podatkov prenesenih", "GW_01 · 7 devices reconnected · 30 min of data uploaded"), "09:42");
+            api.log(t("GW_01 · 7 naprav ponovno povezanih · 30 min podatkov prenesenih", "GW_01 · 7 devices reconnected · 30 min of data uploaded"), "09:42", "system");
           },
         },
       ],

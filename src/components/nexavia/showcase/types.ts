@@ -3,7 +3,7 @@
 // src/nexavia/showcase-room/ (city.js, marina.js). Maquette coordinates are
 // scene pixels (1536 × 1024), the geometry both maquettes share.
 
-export type Tone = "water" | "air" | "mobility" | "gas" | "power" | "structure";
+export type Tone = "water" | "air" | "mobility" | "gas" | "power" | "structure" | "light";
 
 export interface LightingDevice {
   id: string;
@@ -32,6 +32,11 @@ export interface Sensor {
   side: "above" | "below";
   align?: "start" | "end";
   alert?: number;
+  // How often the real device reports ("every 5 min"); absent for devices
+  // that report on every change.
+  every?: string;
+  // What Nexavia does with the readings, e.g. the rule they feed.
+  uses?: string;
   card: {
     kind: "sensor" | "meter";
     title: string;

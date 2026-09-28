@@ -1,5 +1,5 @@
 import { initScenarios } from "./scenarios.js";
-import { initDaylight, luxAt, parseTime, sunTimes, wrap } from "./daylight.js";
+import { formatTime, initDaylight, luxAt, parseTime, sunTimes, wrap } from "./daylight.js";
 import { initDataFlow } from "./dataflow.js";
 
 // One showcase twin: a maquette and its Nexavia dashboard, driven by a
@@ -9,7 +9,8 @@ import { initDataFlow } from "./dataflow.js";
 //   steps(t)         the automatic lighting program, one entry per event, each
 //                    at a time of day: `at` is "day", "dawn" (the morning
 //                    reading that ends the night), or "dusk" (the evening
-//                    reading that trips the rule) plus minutes, "dusk+10"
+//                    reading that trips the rule) plus minutes, "dusk+10";
+//                    `log` is the step's timeline entries, [[kind, text]]
 //   alarms(index)    ids of the standing alarms shown at a program step
 //   tick(index, api) drifts the live readings for a program step
 //   scenarios(t, n)  guided scenarios (see scenarios.js)
@@ -444,14 +445,15 @@ export function initTwin(root, config) {
   ]);
   const flow = initDataFlow(root, { gateway: config.gateway });
 
-  // Sets the time of day: the sky, the ambient light reading and, unless a
-  // scenario directs the scene, the program step for that hour.
-  const luxReading = ui("lux");
+  // Sets the time of day: the sky, the ambient light reading (the dashboard
+  // tile and the light sensor's card) and, unless a scenario directs the
+  // scene, the program step for that hour.
+  const luxReadings = root.querySelectorAll('[data-reading="lux"]');
   function setClock(hours, ease = false) {
     clock = wrap(hours);
     sky?.setTime(clock, ease);
     const lux = `${luxAt(clock, maxLux)} lx`;
-    if (luxReading && luxReading.textContent !== lux) luxReading.textContent = lux;
+    luxReadings.forEach((element) => element.textContent !== lux && (element.textContent = lux));
     if (directed) return;
     const at = stepAt(clock);
     if (at === index) return;
@@ -464,15 +466,25 @@ export function initTwin(root, config) {
     setClock(clock + rate(clock) * dt);
     clockFrame = requestAnimationFrame(runClock);
   }
-  // Between steps the meters and sensors keep reporting.
+  // Between steps the meters and sensors keep reporting; the light sensor's
+  // value follows the clock, so only its report is sent here.
   let reports = 0;
-  const report = () => config.tick(++reports, readingApi);
+  const report = () => {
+    config.tick(++reports, readingApi);
+    flow?.uplink("lux");
+    received.set("lux", performance.now());
+  };
 
+  // When each reading last reached Nexavia, for the sensor cards.
+  const received = new Map();
   // Readings: every element showing a reading carries data-reading="key" —
   // the dashboard row and the sensor's card on the maquette. `card` is the
   // card's own text where it differs from the dashboard's.
   function setReading(key, text, note, card = text) {
-    if (!quiet) flow?.uplink(key);
+    if (!quiet) {
+      flow?.uplink(key);
+      received.set(key, performance.now());
+    }
     root.querySelectorAll(`[data-reading="${key}"]`).forEach((element) => {
       const onCard = element.closest(".city-sensor-popover");
       const value = onCard ? card : text;
@@ -495,16 +507,24 @@ export function initTwin(root, config) {
     $(".twin-demo-pill").innerHTML = `<i></i> ${count} ${en ? "ALARMS" : "ALARMI"}`;
   }
 
-  function render(step) {
+  // `log: false` re-applies a step without adding it to the timeline again.
+  function render(step, { log = true } = {}) {
     const standing = config.alarms(index);
     root.querySelectorAll("[data-alarm]").forEach((alarm) => (alarm.hidden = !standing.includes(alarm.dataset.alarm)));
     setDemoPill(standing.length);
     config.tick(index, readingApi);
-    // A visitor's command stays the latest event for a moment before the
-    // simulation's next entry replaces it.
+    if (!quiet && log) {
+      // The light reading that moves the program on travels up first.
+      if (step.log.some(([kind]) => kind === "reading")) {
+        flow?.uplink("lux", { now: true });
+        received.set("lux", performance.now());
+      }
+      step.log.forEach(([kind, text]) => logEvent(text, undefined, kind));
+    }
+    // A visitor's command stays the current status for a moment before the
+    // simulation's next step replaces it.
     if (performance.now() >= commandShownUntil) {
       ui("rule-status").textContent = step.rule;
-      logEvent(step.event);
       ui("step").textContent = step.text;
     }
     // The lighting rule proposes states; devices under manual control keep
@@ -515,15 +535,44 @@ export function initTwin(root, config) {
     renderDevices();
   }
 
-  const timeFormat = new Intl.DateTimeFormat(en ? "en-GB" : "sl-SI", {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
   let commandShownUntil = 0;
-  // `time` overrides the real clock, e.g. a guided scenario's own clock.
-  function logEvent(text, time = timeFormat.format(new Date())) {
-    ui("event").textContent = `${time} · ${text}`;
+  // The dashboard's timeline: the latest events, newest first, each typed so
+  // a visitor can follow a reading to the decision and the command it led
+  // to. An entry that names a sensor or device (by its id at the start of
+  // the text, or `target`) points at it on the maquette.
+  const timeline = ui("timeline");
+  const TIMELINE_LENGTH = 7;
+  const kinds = {
+    reading: t("Meritev", "Reading"),
+    decision: t("Odločitev", "Decision"),
+    command: t("Ukaz", "Command"),
+    alarm: t("Alarm", "Alarm"),
+    notify: t("Obvestilo", "Notification"),
+    manual: t("Ročno", "Manual"),
+    system: "Nexavia",
+  };
+  const targets = new Map([
+    ...[...root.querySelectorAll("[data-sensor-pin][data-sensor-id]")].map((pin) => [pin.dataset.sensorId, `sensor:${pin.dataset.sensorPin}`]),
+    ...devices.map(({ id }) => [id, `device:${id}`]),
+  ]);
+  // `time` is the model's clock unless given, e.g. a guided scenario's own.
+  function logEvent(text, time = formatTime(clock), kind = "system", target = targets.get(/^[A-Z][A-Z0-9_]*/.exec(text)?.[0])) {
+    if (!timeline) return;
+    const item = document.createElement("li");
+    item.dataset.kind = kinds[kind] ? kind : "system";
+    const entry = document.createElement(target ? "button" : "div");
+    entry.className = "twin-timeline-entry";
+    if (target) {
+      entry.type = "button";
+      entry.dataset.target = target;
+      entry.title = t("Pokaži na maketi", "Show on the model");
+    }
+    const part = (tag, className, content) => Object.assign(document.createElement(tag), { className, textContent: content });
+    entry.append(part("time", "", time), part("span", "twin-timeline-kind", kinds[item.dataset.kind]), part("span", "twin-timeline-text", text));
+    item.append(entry);
+    timeline.querySelector(".is-empty")?.remove();
+    timeline.prepend(item);
+    while (timeline.children.length > TIMELINE_LENGTH) timeline.lastElementChild.remove();
   }
 
   // The maquette shows a device's light once its command arrives: at once,
@@ -634,7 +683,24 @@ export function initTwin(root, config) {
     if (popover) popover.dataset.pinned = "true";
   }
   const openCard = () => root.querySelector("[data-sensor-pin][aria-expanded='true']");
-  // A click on a pin opens its card and logs the sensor's current reading.
+  // Sends a sensor's current reading to Nexavia on request: a packet travels
+  // to the gateway (shown even while the data flow is off) and the timeline
+  // logs the reading once it arrives, or its loss while the gateway is down.
+  function sendReading(key, { log = true } = {}) {
+    if (quiet) return;
+    const pin = $(`[data-sensor-pin="${key}"]`);
+    const id = pin?.dataset.sensorId ?? key;
+    const arrive = () => {
+      received.set(key, performance.now());
+      renderAge();
+      if (!log) return;
+      const note = pin?.hasAttribute("data-sensor-event-note") && readingNote(key);
+      logEvent(`${id} · ${pin?.dataset.sensorEvent ?? key}: ${readingText(key)}${note ? `, ${note}` : ""}`, undefined, "reading");
+    };
+    const lost = () => log && logEvent(`${id} · ${t("Meritev ni dostavljena – prehod brez povezave", "Reading not delivered – gateway offline")}`, undefined, "alarm");
+    if (!flow?.uplink(key, { now: true, trace: true, arrive, lost })) arrive();
+  }
+  // A click on a pin opens its card and sends the sensor's reading.
   root.querySelectorAll("[data-sensor-pin]").forEach((control) => {
     control.addEventListener("click", () => {
       // A second click on the open pin closes its card.
@@ -643,19 +709,46 @@ export function initTwin(root, config) {
         return;
       }
       const key = control.dataset.sensorPin;
-      setPaused(true);
+      if (!directed) setPaused(true);
       pinCard(key);
-      const note = control.hasAttribute("data-sensor-event-note") && readingNote(key);
-      logEvent(`${control.dataset.sensorEvent}: ${readingText(key)}${note ? `, ${note}` : ""}.`);
+      sendReading(key);
+      renderAge();
       ui("step").textContent = control.dataset.sensorName;
-      ui("rule-status").textContent = t("Ročni prožilnik senzorja · nadzorna plošča posodobljena", "Manual sensor trigger · dashboard updated");
+      root.querySelectorAll("[data-device-hint]").forEach((hint) => hint.classList.add("is-quiet"));
     });
+  });
+  root.querySelectorAll("[data-sensor-send]").forEach((control) => control.addEventListener("click", () => sendReading(control.dataset.sensorSend)));
+  // Each card names the gateway its readings travel through, and how long
+  // ago the last one arrived.
+  root.querySelectorAll("[data-card-gateway]").forEach((element) => (element.textContent = config.gateway?.id ?? "–"));
+  function renderAge() {
+    const card = root.querySelector(".city-sensor-popover[data-pinned='true']");
+    const age = card?.querySelector("[data-card-age]");
+    if (!age) return;
+    const at = received.get(card.dataset.sensorPopover);
+    const seconds = at === undefined ? null : Math.round((performance.now() - at) / 1000);
+    age.textContent =
+      seconds === null ? "–" : seconds < 2 ? t("pravkar", "just now") : seconds < 60 ? t(`pred ${seconds} s`, `${seconds} s ago`) : t(`pred ${Math.floor(seconds / 60)} min`, `${Math.floor(seconds / 60)} min ago`);
+  }
+  setInterval(renderAge, 1000);
+  // A timeline entry points at its sensor or device on the maquette.
+  timeline?.addEventListener("click", (event) => {
+    const entry = event.target.closest("[data-target]");
+    if (!entry) return;
+    const [type, name] = entry.dataset.target.split(":");
+    if (type === "sensor") {
+      pinCard(name);
+      renderAge();
+    } else {
+      const hotspot = $(`[data-device="${name}"]`);
+      if (hotspot) showChip(hotspot, true);
+    }
   });
   // A visitor's card closes on Escape or a click elsewhere; a guided
   // scenario keeps the card it opened.
   root.addEventListener("click", (event) => {
     if (directed || !openCard()) return;
-    if (event.target.closest("[data-sensor-pin], .city-sensor-popover")) return;
+    if (event.target.closest("[data-sensor-pin], .city-sensor-popover, .twin-timeline [data-target]")) return;
     pinCard(null);
   });
   root.addEventListener("keydown", (event) => {
@@ -742,7 +835,7 @@ export function initTwin(root, config) {
       device.mode = "manual";
     });
     renderDevices(ids);
-    logEvent(`${subject} · ${t("Ročni ukaz", "Manual command")}: ${on ? t("vklop", "on") : t("izklop", "off")}`);
+    logEvent(`${subject} · ${t("Ročni ukaz prek nadzorne plošče", "Command from the dashboard")}: ${on ? t("vklop", "on") : t("izklop", "off")}`, undefined, "manual");
     const name = ids.length > 1 ? group.name : deviceById.get(ids[0]).name;
     const result = on ? t("vklopljeno", "on") : t("izklopljeno", "off");
     ui("step").textContent = `${name}: ${result} · ${t("ročni ukaz", "manual command")}`;
@@ -842,12 +935,14 @@ export function initTwin(root, config) {
     // Keep keyboard focus nearby once this control hides itself.
     if (document.activeElement === event.currentTarget) ui("next")?.focus();
     commandShownUntil = 0;
-    render(steps[index]);
+    render(steps[index], { log: false });
     renderDevices(released.map((device) => device.id));
     logEvent(
       en
         ? `Automatic control restored · ${released.length} ${released.length === 1 ? "device" : "devices"}`
         : `Samodejno upravljanje obnovljeno · naprav: ${released.length}`,
+      undefined,
+      "manual",
     );
     ui("rule-status").textContent = steps[index].rule;
     commandShownUntil = performance.now() + 4000;
@@ -875,6 +970,8 @@ export function initTwin(root, config) {
         clock,
         devices: devices.map(({ state, mode, online }) => ({ state, mode, online })),
         readings: [...root.querySelectorAll("[data-reading]")].map((element) => [element, element.innerHTML]),
+        timeline: timeline ? [...timeline.children] : [],
+        flow: flow?.isOn() ?? false,
       };
       directed = true;
       schedule();
@@ -905,6 +1002,9 @@ export function initTwin(root, config) {
       commandShownUntil = 0;
       render(steps[index]);
       setClock(saved.clock, true);
+      // The timeline and the data flow go back to how the visitor left them.
+      timeline?.replaceChildren(...saved.timeline);
+      if (flow && flow.isOn() !== saved.flow) flow.show(saved.flow);
       quiet = false;
       setPaused(saved.paused);
       saved = null;
@@ -931,8 +1031,21 @@ export function initTwin(root, config) {
       renderDevices(online ? ids : []);
     },
     setReading,
+    // Sends a sensor's reading to Nexavia, as a visitor's click on its pin.
+    send: (key) => sendReading(key, { log: false }),
+    // Shows the data flow (restored when the scenario ends).
+    showFlow(on) {
+      if (flow && flow.isOn() !== on) flow.show(on);
+    },
+    // Empties the timeline; a scenario fills it with its own events.
+    clearLog() {
+      timeline?.replaceChildren();
+    },
     // Opens one sensor popover on the maquette (or none).
-    pin: pinCard,
+    pin(name) {
+      pinCard(name);
+      renderAge();
+    },
     // Replaces the alarm list with the scenario's alarms (null restores it).
     setAlarms(list) {
       const box = $(".twin-alerts");
@@ -975,7 +1088,9 @@ export function initTwin(root, config) {
     $row: (id) => $(`[data-row="${id}"]`),
     $reading: (key) => $(`.twin-dashboard [data-reading="${key}"]`)?.parentElement,
     $ui: (name) => ui(name),
-    log: (text, time) => logEvent(text, time),
+    // `kind` types the timeline entry: reading, decision, command, alarm,
+    // notify, manual or system.
+    log: (text, time, kind) => logEvent(text, time, kind),
     narrate({ rule, text }) {
       if (rule) ui("rule-status").textContent = rule;
       if (text) ui("step").textContent = text;

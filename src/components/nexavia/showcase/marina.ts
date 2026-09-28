@@ -28,7 +28,7 @@ export function marinaTwin(en: boolean): Twin {
     },
     panel: {
       view: t("Pogled marine · povlecite za raziskovanje", "Marina view · drag to explore"),
-      hint: t("Kliknite luč na pomolu, hotel, restavracijo ali sanitarije za vklop ali izklop", "Click a pier light, the hotel, restaurant or sanitary block to switch it on or off"),
+      hint: t("Kliknite senzor, da pošlje meritev, ali luč na pomolu, hotel, restavracijo oz. sanitarije za vklop in izklop", "Click a sensor to send a reading, or a pier light, the hotel, restaurant or sanitary block to switch it on or off"),
       hintPanel: t(
         "Tudi deli nadzorne plošče Nexavia so interaktivni – preklopite posamezno napravo ali vse luči na pomolih hkrati.",
         "Parts of the Nexavia dashboard are interactive too – switch a single device or all pier lights at once.",
@@ -63,6 +63,20 @@ export function marinaTwin(en: boolean): Twin {
       ],
       sensors: [
         {
+          key: "lux",
+          id: "LIGHT_02",
+          tone: "light",
+          tag: "lx",
+          label: t("Senzor svetlobe", "Light sensor"),
+          event: t("Svetloba okolice", "Ambient light"),
+          at: [330, 212],
+          side: "below",
+          align: "start",
+          every: t("vsakih 5 min", "every 5 min"),
+          uses: t("Pravilo: svetloba < 25 lx → vklop razsvetljave", "Rule: light < 25 lx → lighting on"),
+          card: { kind: "sensor", title: t("Svetloba okolice", "Ambient light"), value: "52 lx", note: t("Streha hotela", "Hotel roof") },
+        },
+        {
           key: "sea-level",
           id: "SEA_LEVEL_01",
           tone: "water",
@@ -72,6 +86,8 @@ export function marinaTwin(en: boolean): Twin {
           at: at("sea-level"),
           side: "below",
           alert: 0.7,
+          every: t("vsakih 5 min", "every 5 min"),
+          uses: t("Pravilo: gladina > +0,70 m → izklop priključkov", "Rule: sea level > +0.70 m → pedestals cut off"),
           card: { kind: "sensor", title: t("Gladina morja", "Sea level"), value: d("+0.42 m"), note: t("Nad srednjo gladino", "Above mean sea level") },
         },
         {
@@ -83,6 +99,7 @@ export function marinaTwin(en: boolean): Twin {
           event: t("Električni števec hotela", "Hotel electricity meter"),
           at: at("hotel-power"),
           side: "above",
+          every: t("vsakih 15 min", "every 15 min"),
           card: { kind: "meter", title: t("Poraba elektrike · hotel", "Electricity use · hotel"), value: d("38.5 kW"), note: t("Trenutna moč", "Current load") },
         },
         {
@@ -106,6 +123,7 @@ export function marinaTwin(en: boolean): Twin {
           event: t("Zasedenost privezov", "Berth occupancy"),
           at: at("berths"),
           side: "above",
+          uses: t("Pravilo: zaseden privez → začni obračun storitev", "Rule: berth occupied → start billing services"),
           card: { kind: "sensor", title: t("Zasedeni privezi", "Occupied berths"), value: String(berths.occupied), note: t(`od ${berths.total} privezov`, `of ${berths.total} berths`) },
         },
         {
@@ -117,6 +135,7 @@ export function marinaTwin(en: boolean): Twin {
           event: t("Elektrika na pomolu B", "Pier B shore power"),
           at: at("shore-power"),
           side: "above",
+          every: t("vsakih 15 min", "every 15 min"),
           card: { kind: "meter", title: t("Elektrika na privezih · pomol B", "Shore power · pier B"), value: d("46.8 kWh"), note: t("Danes", "Today") },
         },
         {
@@ -129,6 +148,8 @@ export function marinaTwin(en: boolean): Twin {
           at: at("sanitary-water"),
           side: "below",
           align: "end",
+          every: t("vsakih 15 min", "every 15 min"),
+          uses: t("Pravilo: nočni pretok > 0,2 m³/h 20 min → alarm puščanja", "Rule: night flow > 0.2 m³/h for 20 min → leak alarm"),
           card: { kind: "meter", title: t("Poraba vode · sanitarije", "Water use · sanitary block"), value: d("0.84 m³/h"), note: t("Trenutni pretok", "Current flow") },
         },
         {
@@ -141,6 +162,7 @@ export function marinaTwin(en: boolean): Twin {
           at: at("fuel"),
           side: "above",
           align: "end",
+          every: t("vsako uro", "every hour"),
           card: { kind: "sensor", title: t("Zaloga goriva · točilnica", "Fuel stock · fuel dock"), value: t("72 %", "72%"), note: t("Rezervoar 20 m³", "20 m³ tank") },
         },
         {
@@ -155,6 +177,8 @@ export function marinaTwin(en: boolean): Twin {
           side: "above",
           align: "start",
           alert: 25,
+          every: t("vsako minuto", "every minute"),
+          uses: t("Pravilo: sunki > 30 kn → opozorilo lastnikom plovil", "Rule: gusts > 30 kn → warn boat owners"),
           card: {
             kind: "sensor",
             title: t("Veter in vreme", "Wind and weather"),

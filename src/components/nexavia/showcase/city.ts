@@ -22,7 +22,7 @@ export function cityTwin(en: boolean): Twin {
     },
     panel: {
       view: t("Pogled mesta · povlecite za raziskovanje", "City view · drag to explore"),
-      hint: t("Kliknite svetilko ali stavbo za vklop ali izklop", "Click a street light or building to switch it on or off"),
+      hint: t("Kliknite senzor, da pošlje meritev, ali svetilko oz. stavbo za vklop in izklop", "Click a sensor to send a reading, or a street light or building to switch it on or off"),
       hintPanel: t(
         "Tudi deli nadzorne plošče Nexavia so interaktivni – preklopite posamezno napravo ali vse ulične svetilke hkrati.",
         "Parts of the Nexavia dashboard are interactive too – switch a single device or all street lights at once.",
@@ -73,6 +73,20 @@ export function cityTwin(en: boolean): Twin {
       ],
       sensors: [
         {
+          key: "lux",
+          id: "LIGHT_01",
+          tone: "light",
+          tag: "lx",
+          label: t("Senzor svetlobe", "Light sensor"),
+          event: t("Svetloba okolice", "Ambient light"),
+          at: [1150, 108],
+          side: "below",
+          align: "end",
+          every: t("vsakih 5 min", "every 5 min"),
+          uses: t("Pravilo: svetloba < 25 lx → vklop razsvetljave", "Rule: light < 25 lx → lighting on"),
+          card: { kind: "sensor", title: t("Svetloba okolice", "Ambient light"), value: "46 lx", note: t("Streha poslovne stavbe", "Office building roof") },
+        },
+        {
           key: "house-water",
           id: "HOUSE_WATER_01",
           tone: "water",
@@ -81,6 +95,8 @@ export function cityTwin(en: boolean): Twin {
           event: t("Vodomer hiše", "House water meter"),
           at: [452, 214],
           side: "below",
+          every: t("vsakih 15 min", "every 15 min"),
+          uses: t("Pravilo: nočni pretok > 0,1 m³/h 30 min → alarm puščanja", "Rule: night flow > 0.1 m³/h for 30 min → leak alarm"),
           card: { kind: "meter", title: t("Poraba vode · hiša", "Garden house water"), value: d("0.84 m³/d"), note: t("Dnevni pretok", "Daily flow") },
         },
         {
@@ -92,6 +108,7 @@ export function cityTwin(en: boolean): Twin {
           event: t("Vodomer pisarne", "Office water meter"),
           at: [1128, 220],
           side: "below",
+          every: t("vsakih 15 min", "every 15 min"),
           card: { kind: "meter", title: t("Poraba vode · pisarna", "Office water"), value: d("12.6 m³/d"), note: t("Dnevni pretok", "Daily flow") },
         },
         {
@@ -106,6 +123,8 @@ export function cityTwin(en: boolean): Twin {
           side: "below",
           align: "end",
           alert: 50,
+          every: t("vsakih 10 min", "every 10 min"),
+          uses: t("Alarm: PM10 ≥ 50 µg/m³", "Alarm: PM10 ≥ 50 µg/m³"),
           card: {
             kind: "sensor",
             title: t("Kakovost zraka", "Air quality"),
@@ -138,6 +157,7 @@ export function cityTwin(en: boolean): Twin {
           at: [332, 489],
           side: "above",
           align: "start",
+          every: t("vsakih 15 min", "every 15 min"),
           card: { kind: "meter", title: t("Poraba plina · tovarna", "Factory gas"), value: d("34.2 m³/h"), note: t("Trenutni pretok", "Current flow") },
         },
         {
@@ -149,6 +169,7 @@ export function cityTwin(en: boolean): Twin {
           event: t("Električni števec tovarne", "Factory electricity meter"),
           at: [590, 520],
           side: "above",
+          every: t("vsakih 15 min", "every 15 min"),
           card: { kind: "meter", title: t("Poraba elektrike · tovarna", "Electricity use · factory"), value: d("18.6 kWh"), note: t("Danes", "Current day") },
         },
         {
@@ -161,6 +182,8 @@ export function cityTwin(en: boolean): Twin {
           at: [940, 543],
           side: "above",
           alert: 0.8,
+          every: t("vsakih 5 min", "every 5 min"),
+          uses: t("Alarm: tresljaji ≥ 0,8 mm/s", "Alarm: vibration ≥ 0.8 mm/s"),
           card: { kind: "sensor", title: t("Tresljaji mostu", "Bridge vibration"), value: d("0.42 mm/s"), note: t("Običajno območje", "Normal range") },
         },
         {
@@ -173,6 +196,8 @@ export function cityTwin(en: boolean): Twin {
           at: [1012, 610],
           side: "below",
           alert: 1.8,
+          every: t("vsakih 5 min", "every 5 min"),
+          uses: t("Pravilo: gladina reke > 1,80 m → alarm", "Rule: river level > 1.80 m → alarm"),
           card: { kind: "sensor", title: t("Gladina reke", "River level"), value: d("1.36 m"), note: t("Trenutna gladina", "Current level") },
         },
       ],

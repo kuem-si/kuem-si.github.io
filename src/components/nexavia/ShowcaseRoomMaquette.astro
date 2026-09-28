@@ -35,6 +35,9 @@ const engraveTransform = "translate(1266 826) rotate(0.5) scale(0.5429) translat
 const at = ([x, y]: number[]) => `--x:${((x / 1536) * 100).toFixed(3)}%;--y:${((y / 1024) * 100).toFixed(3)}%`;
 const id = (name: string) => `${twin}-${name}`;
 const kindLabel = (kind: "sensor" | "meter") => (kind === "meter" ? (en ? "LIVE METER" : "MERILNIK V ŽIVO") : en ? "LIVE SENSOR" : "TIPALO V ŽIVO");
+// What the card says a device's readings are for, when no rule uses them.
+const defaultUse = (kind: "sensor" | "meter") =>
+  kind === "meter" ? (en ? "Consumption history and reports" : "Zgodovina porabe in poročila") : en ? "Measurement history and trends" : "Zgodovina meritev in trendi";
 ---
 
 <div class="city-art city-art--modular is-loading" data-city-art data-water-src={scene.water} aria-busy="true">
@@ -155,7 +158,7 @@ const kindLabel = (kind: "sensor" | "meter") => (kind === "meter" ? (en ? "LIVE 
   </div>
   <div class="city-sensors" role="group" aria-label={en ? "Sensors and meters on the model" : "Senzorji in merilniki na maketi"}>
     {scene.sensors.map((sensor, i) => (
-      <button class="city-sensor" type="button" data-sensor-pin={sensor.key} data-at={sensor.at.join(" ")} data-sensor-name={sensor.label} data-sensor-event={sensor.event} data-sensor-event-note={sensor.eventNote ? "" : undefined} data-tone={sensor.tone} aria-label={`${sensor.label}, ${sensor.id}`} aria-expanded="false" aria-controls={id(`popover-${sensor.key}`)} style={`${at(sensor.at)};--i:${i}`}>
+      <button class="city-sensor" type="button" data-sensor-pin={sensor.key} data-sensor-id={sensor.id} data-at={sensor.at.join(" ")} data-sensor-name={sensor.label} data-sensor-event={sensor.event} data-sensor-event-note={sensor.eventNote ? "" : undefined} data-tone={sensor.tone} aria-label={`${sensor.label}, ${sensor.id}`} aria-expanded="false" aria-controls={id(`popover-${sensor.key}`)} style={`${at(sensor.at)};--i:${i}`}>
         <span class="city-sensor-dot"></span>
         <span class="city-sensor-tag" aria-hidden="true"><b>{sensor.tag}</b><span data-sensor-tag></span></span>
       </button>
@@ -179,6 +182,18 @@ const kindLabel = (kind: "sensor" | "meter") => (kind === "meter" ? (en ? "LIVE 
       ) : (
         <div class="city-popover-reading"><b data-reading={sensor.key} data-sensor-value>{sensor.card.value}</b><small>{sensor.card.note}</small></div>
       )}
+      {/* How the device reaches Nexavia and what its readings are for. The
+          gateway and the reading's age are filled in by twin.js. */}
+      <dl class="city-popover-meta">
+        <div>
+          <dt>{en ? "Reports" : "Pošilja"}</dt>
+          <dd>{sensor.every ? <>{sensor.every}<small>{en ? "every few seconds in this demo" : "v demu na nekaj sekund"}</small></> : en ? "on every change" : "ob vsaki spremembi"}</dd>
+        </div>
+        <div><dt>{en ? "Via" : "Prek"}</dt><dd><span data-card-gateway></span> · LoRaWAN</dd></div>
+        <div><dt>{en ? "Last received" : "Zadnja meritev"}</dt><dd data-card-age>–</dd></div>
+        <div><dt>{en ? "Used for" : "Uporaba"}</dt><dd>{sensor.uses ?? defaultUse(sensor.card.kind)}</dd></div>
+      </dl>
+      <button type="button" class="city-popover-send" data-sensor-send={sensor.key}><i aria-hidden="true"></i>{en ? "Send reading now" : "Pošlji meritev zdaj"}</button>
     </div>
   ))}
 

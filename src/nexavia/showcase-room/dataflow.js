@@ -63,6 +63,9 @@ export function initDataFlow(root, { gateway }) {
   let online = true;
   const live = new Set();
   let frame = 0;
+  // Traced packets in flight (see send).
+  let tracing = 0;
+  let traceTimer = 0;
 
   function tick(now) {
     for (const packet of live) {
@@ -89,19 +92,30 @@ export function initDataFlow(root, { gateway }) {
     live.delete(packet);
     packet.node.remove();
     if (--packet.end.busy <= 0) packet.end.link.classList.remove("is-active");
-    if (arrived && !packet.fail) packet.arrive?.();
+    if (arrived) (packet.fail ? packet.lost : packet.arrive)?.();
+    if (packet.trace && --tracing <= 0) {
+      // Keep the traced link up while the beam to Nexavia plays out.
+      clearTimeout(traceTimer);
+      traceTimer = setTimeout(() => tracing <= 0 && host.classList.remove("is-tracing"), BEAM + 500);
+    }
   }
 
   // One packet along an end's link, from the device to the gateway (or back
-  // with `reverse`).
-  function send(end, { color, delay = 0, reverse = false, fail = false, arrive }) {
+  // with `reverse`). A traced packet shows its own link while the data flow
+  // is switched off.
+  function send(end, { color, delay = 0, reverse = false, fail = false, trace = false, arrive, lost }) {
     const node = svg("g", { class: "flow-packet", style: `color:${color};visibility:hidden` }, packets);
     svg("circle", { class: "flow-packet-halo", r: 11 }, node);
     svg("circle", { class: "flow-packet-core", r: 4.6 }, node);
     svg("circle", { class: "flow-packet-spark", r: 1.8 }, node);
     end.busy++;
     end.link.classList.add("is-active");
-    live.add({ node, end, reverse, fail, arrive, start: performance.now() + delay, duration: TRIP });
+    if (trace) {
+      tracing++;
+      clearTimeout(traceTimer);
+      host.classList.add("is-tracing");
+    }
+    live.add({ node, end, reverse, fail, trace, arrive, lost, start: performance.now() + delay, duration: TRIP });
     if (!frame) frame = requestAnimationFrame(tick);
   }
 
@@ -113,25 +127,36 @@ export function initDataFlow(root, { gateway }) {
   }
 
   const lastUplink = new Map();
-  function uplink(key) {
-    if (!on || !online || reducedMotion.matches) return;
+  // A reading from a sensor. Readings are spaced out per sensor unless `now`;
+  // `trace` sends one even while the data flow is switched off (a visitor
+  // asked for it). `arrive` runs once the reading reaches Nexavia, `lost` if
+  // the gateway cannot pass it on. Returns whether a packet was sent, so the
+  // caller knows `arrive` or `lost` will follow.
+  function uplink(key, { now = false, trace = false, arrive, lost } = {}) {
+    if (!(on || trace) || reducedMotion.matches) return false;
+    if (!online && !trace) return false;
     const end = ends.get(`sensor:${key}`);
-    if (!end) return;
-    const now = performance.now();
-    if (now - (lastUplink.get(key) ?? -Infinity) < UPLINK_GAP) return;
-    lastUplink.set(key, now);
+    if (!end) return false;
+    const time = performance.now();
+    if (!now && time - (lastUplink.get(key) ?? -Infinity) < UPLINK_GAP) return false;
+    lastUplink.set(key, time);
     const color = getComputedStyle(end.pin).getPropertyValue("--tone").trim() || "#8fe3e0";
     // Readings that change together leave their sensors a moment apart.
     send(end, {
       color,
-      delay: Math.random() * 600,
+      delay: now ? 0 : Math.random() * 600,
+      fail: !online,
+      trace: !on,
+      lost,
       arrive() {
         replay(station, "is-hit");
         beam("up", color);
         const row = root.querySelector(`.twin-dashboard [data-reading="${key}"]`)?.parentElement;
         if (row) replay(row, "is-received");
+        arrive?.();
       },
     });
+    return true;
   }
 
   // A command for a device. Returns how long it takes to arrive, so the
@@ -160,6 +185,9 @@ export function initDataFlow(root, { gateway }) {
   return {
     uplink,
     downlink,
+    // Shows or hides the data flow, as the visitor's toggle does.
+    show: set,
+    isOn: () => on,
     // The gateway loses and regains its connection to Nexavia.
     setOnline(value) {
       online = value;

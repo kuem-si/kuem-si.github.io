@@ -3,7 +3,7 @@
 // direction API from twin.js; nothing here keeps its own device state. The
 // scenario lists live with each twin (city.js, marina.js).
 //
-// A scenario is { id, title, setup(api), steps: [{ time, title, text,
+// A scenario is { id, title, intro?, setup(api), steps: [{ time, title, text,
 // focus?, run(api, play) }] }; `play.count` animates a reading and
 // `play.toast` shows a notification on the maquette.
 //
@@ -35,24 +35,44 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
   const t = (sl, english) => (en ? english : sl);
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const format = (ms) => `${Math.floor(ms / 60000)}:${String(Math.round((ms % 60000) / 1000)).padStart(2, "0")}`;
+  // Time between two "hh:mm" clock times, across midnight: "30 min",
+  // "5 h 20 min", or "" for none.
+  const elapsed = (from, to) => {
+    const minutes = (text) => text.split(":").reduce((hours, part) => hours * 60 + Number(part), 0);
+    const gap = (((minutes(to) - minutes(from)) % 1440) + 1440) % 1440;
+    if (!gap) return "";
+    const hours = Math.floor(gap / 60);
+    const rest = gap % 60;
+    return [hours && `${hours} h`, rest && `${rest} min`].filter(Boolean).join(" ");
+  };
 
   // Launcher.
   const launcher = document.createElement("div");
   launcher.className = "twin-scenarios";
   launcher.setAttribute("role", "group");
   launcher.setAttribute("aria-label", t("Vodeni scenariji", "Guided scenarios"));
-  launcher.innerHTML = `<span class="twin-scenarios-label">${t("Vodeni scenariji", "Guided scenarios")}</span>`;
-  scenarios.forEach((scenario, i) => {
+  // The introduction (`intro: true`) comes first, marked as the place to
+  // start, ahead of the numbered scenarios.
+  const label = `<span class="twin-scenarios-label">${t("Vodeni scenariji", "Guided scenarios")}</span>`;
+  launcher.innerHTML = scenarios.some((scenario) => scenario.intro) ? "" : label;
+  let number = 0;
+  scenarios.forEach((scenario) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "twin-scenario-chip";
     button.dataset.scenario = scenario.id;
     button.disabled = true;
     button.setAttribute("aria-pressed", "false");
-    button.innerHTML = `<i>${String(i + 1).padStart(2, "0")}</i><b></b><small>${format(scenario.steps.length * STEP_MS)}</small>`;
+    const mark = scenario.intro ? icons.play : String(++number).padStart(2, "0");
+    button.innerHTML = `<i>${mark}</i><b></b><small>${format(scenario.steps.length * STEP_MS)}</small>`;
     button.querySelector("b").textContent = scenario.title;
     button.addEventListener("click", () => (active === scenario ? stop() : start(scenario)));
-    launcher.append(button);
+    if (scenario.intro) {
+      button.classList.add("is-intro");
+      button.insertAdjacentHTML("afterbegin", `<span class="twin-scenario-start">${t("Začnite tukaj", "Start here")}</span>`);
+      launcher.prepend(button);
+      button.insertAdjacentHTML("afterend", label);
+    } else launcher.append(button);
   });
   panel.querySelector(".twin-panel-head")?.after(launcher);
 
@@ -174,6 +194,8 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
     current = Math.max(0, Math.min(active.steps.length - 1, index));
     finished = false;
     api.quiet(true);
+    // The timeline holds this scenario's events up to this step.
+    api.clearLog();
     active.setup(api);
     let focus = null;
     active.steps.forEach((step, i) => {
@@ -184,7 +206,11 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
     const step = active.steps[current];
     step.run(api, effects(false));
     api.setClock(step.time);
+    // The scenario's clock is simulated: the time since the previous step
+    // shows how much the story skipped.
     ui.time.textContent = step.time;
+    const gap = current ? elapsed(active.steps[current - 1].time, step.time) : "";
+    if (gap) ui.time.append(Object.assign(document.createElement("small"), { textContent: `+${gap}` }));
     ui.title.textContent = step.title;
     ui.text.textContent = step.text;
     ui.count.textContent = t(`Korak ${current + 1} / ${active.steps.length}`, `Step ${current + 1} of ${active.steps.length}`);

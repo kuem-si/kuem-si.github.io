@@ -129,7 +129,7 @@ export const marina = {
       lux: 52,
       states: off(),
       rule: t("Pogoj ni izpolnjen · razsvetljava izklopljena", "Condition not met · lighting is off"),
-      event: t("Senzor svetlobe v marini je izmeril 52 lx.", "The marina light sensor measured 52 lx."),
+      log: [["reading", t("LIGHT_02 · Svetloba okolice 52 lx", "LIGHT_02 · Ambient light 52 lx")]],
     },
     {
       at: "dusk",
@@ -137,7 +137,10 @@ export const marina = {
       lux: 21,
       states: off(),
       rule: t("Pogoj izpolnjen · ukaz se pošilja prek GW_02", "Condition met · command sent via GW_02"),
-      event: t("Prehod GW_02 je posredoval meritev 21 lx.", "Gateway GW_02 relayed a reading of 21 lx."),
+      log: [
+        ["reading", t("LIGHT_02 · Svetloba okolice 21 lx · prek prehoda GW_02", "LIGHT_02 · Ambient light 21 lx · via gateway GW_02")],
+        ["decision", t("Pravilo svetloba < 25 lx izpolnjeno (21 lx) → vklop razsvetljave, najprej pomoli", "Rule light < 25 lx met (21 lx) → lighting on, piers first")],
+      ],
     },
     {
       at: "dusk+10",
@@ -145,7 +148,7 @@ export const marina = {
       lux: 21,
       states: [0, 0, 0, 1, 1, 1, 1],
       rule: t("Aktivno · najprej varna pot do plovil", "Active · safe access to the boats first"),
-      event: t("PIER_01–PIER_04: luči na pomolih so vključene.", "PIER_01–PIER_04: pier lights switched on."),
+      log: [["command", t("PIER_01–PIER_04 · Luči na pomolih vklopljene", "PIER_01–PIER_04 · Pier lights switched on")]],
     },
     {
       at: "dusk+20",
@@ -153,7 +156,7 @@ export const marina = {
       lux: 21,
       states: [0, 1, 0, 1, 1, 1, 1],
       rule: t("Aktivno · samodejni vklop razsvetljave", "Active · automatic lighting control"),
-      event: t("RESTAURANT_01: razsvetljava terase je vključena.", "RESTAURANT_01: terrace lighting switched on."),
+      log: [["command", t("RESTAURANT_01 · Razsvetljava terase vklopljena", "RESTAURANT_01 · Terrace lighting switched on")]],
     },
     {
       at: "dusk+30",
@@ -161,7 +164,7 @@ export const marina = {
       lux: 21,
       states: [1, 1, 0, 1, 1, 1, 1],
       rule: t("Aktivno · samodejni vklop razsvetljave", "Active · automatic lighting control"),
-      event: t("HOTEL_01: razsvetljava je vključena.", "HOTEL_01: lighting switched on."),
+      log: [["command", t("HOTEL_01 · Razsvetljava vklopljena", "HOTEL_01 · Lighting switched on")]],
     },
     {
       at: "dusk+40",
@@ -169,7 +172,7 @@ export const marina = {
       lux: 21,
       states: [1, 1, 1, 1, 1, 1, 1],
       rule: t("Samodejna razsvetljava je aktivna", "Automatic lighting active"),
-      event: t("SANITARY_01: razsvetljava je vključena.", "SANITARY_01: lighting switched on."),
+      log: [["command", t("SANITARY_01 · Razsvetljava vklopljena", "SANITARY_01 · Lighting switched on")]],
     },
     {
       at: "dawn",
@@ -177,7 +180,11 @@ export const marina = {
       lux: 52,
       states: off(),
       rule: t("Pogoj ni več izpolnjen · luči izklopljene", "Condition no longer met · lights switched off"),
-      event: t("Senzor je izmeril 52 lx. Vse luči v marini so izklopljene.", "Sensor measured 52 lx. All marina lights are off."),
+      log: [
+        ["reading", t("LIGHT_02 · Svetloba okolice 52 lx", "LIGHT_02 · Ambient light 52 lx")],
+        ["decision", t("Pravilo svetloba < 25 lx ni več izpolnjeno → izklop razsvetljave", "Rule light < 25 lx no longer met → lighting off")],
+        ["command", t("Vse luči v marini izklopljene", "All marina lights switched off")],
+      ],
     },
   ],
   // The tripped pedestal stays open; the weak gateway signal to the far pier
@@ -207,6 +214,93 @@ function scenarios(t, n) {
   const sea = (v) => `+${n(v, 2)} m`;
   return [
     {
+      // One reading followed from the sensor to the command it leads to.
+      id: "how-it-works",
+      intro: true,
+      title: t("Kako deluje: od senzorja do odločitve", "How it works: sensor to decision"),
+      setup(api) {
+        api.showFlow(true);
+        ALL.forEach((id) => api.setLevel(id, 0));
+        api.setAlarms([]);
+        api.pin("lux");
+        api.narrate({ rule: t("Čaka na naslednjo meritev", "Waiting for next reading") });
+      },
+      steps: [
+        {
+          time: "19:52",
+          focus: { x: 380, y: 215, zoom: 1.7, radius: 0.22 },
+          title: t("Senzor meri", "A sensor measures"),
+          text: t(
+            "Senzor svetlobe LIGHT_02 na strehi hotela meri dnevno svetlobo. Ob mraku pade pod 25 lx. Senzor deluje na baterijo in meritev pošlje vsakih 5 minut.",
+            "Light sensor LIGHT_02 on the hotel roof measures daylight. At dusk it falls below 25 lx. The sensor runs on a battery and reports every 5 minutes.",
+          ),
+          run() {},
+        },
+        {
+          time: "19:52",
+          title: t("Radio jo ponese do prehoda", "Radio carries it to the gateway"),
+          text: t(
+            "Meritev po radiu LoRaWAN potuje do prehoda GW_02. En prehod pokrije celo marino, zato noben senzor ne potrebuje kabla.",
+            "The reading travels by LoRaWAN radio to gateway GW_02. One gateway covers the whole marina, so no sensor needs a cable.",
+          ),
+          run(api) {
+            api.send("lux");
+            api.log(t("LIGHT_02 · Svetloba okolice pod 25 lx", "LIGHT_02 · Ambient light below 25 lx"), "19:52", "reading");
+          },
+        },
+        {
+          time: "19:52",
+          title: t("Nexavia jo prejme", "Nexavia receives it"),
+          text: t(
+            "Prehod meritev prek interneta posreduje Nexavii, ki jo shrani skupaj s časom. Ploščica svetlobe okolice na nadzorni plošči se posodobi.",
+            "The gateway forwards the reading over the internet to Nexavia, which stores it with its time. The ambient light tile on the dashboard updates.",
+          ),
+          run(api) {
+            api.spotlight(api.$ui("lux")?.parentElement);
+            api.log(t("GW_02 → Nexavia · meritev shranjena", "GW_02 → Nexavia · reading stored"), "19:52", "system");
+          },
+        },
+        {
+          time: "19:53",
+          title: t("Pravilo odloči", "A rule decides"),
+          text: t(
+            "Nexavia vsako novo meritev preveri glede na pravila. Svetloba pod 25 lx izpolni pravilo razsvetljave, zato Nexavia odloči, da najprej prižge luči na pomolih.",
+            "Nexavia checks each new reading against its rules. Light below 25 lx meets the lighting rule, so Nexavia decides to light the piers first.",
+          ),
+          run(api) {
+            api.spotlight(".twin-rule");
+            api.narrate({ rule: t("Pogoj izpolnjen · svetloba < 25 lx", "Condition met · light < 25 lx") });
+            api.log(t("Pravilo svetloba < 25 lx izpolnjeno → vklop luči na pomolih", "Rule light < 25 lx met → pier lights on"), "19:53", "decision");
+          },
+        },
+        {
+          time: "19:53",
+          focus: VIEW.piers,
+          title: t("Ukaz gre nazaj", "A command goes back"),
+          text: t(
+            "Nexavia prek prehoda pošlje ukaz vsaki luči na pomolih – rumeni paketi. Luči potrdijo in nadzorna plošča jih prikaže kot vklopljene.",
+            "Nexavia sends a command back through the gateway to each pier light – the yellow packets. The lights confirm, and the dashboard shows them on.",
+          ),
+          run(api) {
+            PIERS.forEach((id) => api.setLevel(id, 1));
+            api.spotlight(api.$row("PIER_01"));
+            api.log(t("PIER_01–PIER_04 · Ukaz: vklop", "PIER_01–PIER_04 · Command: switch on"), "19:53", "command");
+          },
+        },
+        {
+          time: "19:54",
+          title: t("Vse je zabeleženo", "Everything is on record"),
+          text: t(
+            "Časovnica hrani celotno verigo: meritev, odločitev, ukaz. Zdaj poskusite sami – kliknite kateri koli senzor, da pošlje meritev, ali preklopite luč.",
+            "The timeline keeps the whole chain: reading, decision, command. Now try it yourself – click any sensor to send a reading, or switch a light.",
+          ),
+          run(api) {
+            api.spotlight(".twin-event");
+          },
+        },
+      ],
+    },
+    {
       id: "bora",
       title: t("Burja v marini", "Bora in the marina"),
       setup(api) {
@@ -234,7 +328,7 @@ function scenarios(t, n) {
           run(api, play) {
             play.count("wind", 9, 27, kn, t("Sunki 34 kn · SV", "Gusts 34 kn · NE"));
             api.setReading("wind-gust", "34 kn");
-            api.log(t("WIND_01 · Veter 27 kn · sunki 34 kn", "WIND_01 · Wind 27 kn · gusts 34 kn"), "19:05");
+            api.log(t("WIND_01 · Veter 27 kn · sunki 34 kn", "WIND_01 · Wind 27 kn · gusts 34 kn"), "19:05", "reading");
           },
         },
         {
@@ -246,7 +340,7 @@ function scenarios(t, n) {
             api.setReading("wind-gust", "41 kn");
             api.setAlarms([["WIND_01", t("Sunki 41 kn · meja 30 kn", "Gusts 41 kn · limit 30 kn")]]);
             api.spotlight(".twin-alerts");
-            api.log(t("WIND_01 · Alarm: močni sunki burje", "WIND_01 · Alarm: strong bora gusts"), "19:06");
+            api.log(t("WIND_01 · Alarm: močni sunki burje", "WIND_01 · Alarm: strong bora gusts"), "19:06", "alarm");
           },
         },
         {
@@ -258,7 +352,7 @@ function scenarios(t, n) {
             PIERS.forEach((id) => api.setLevel(id, 1));
             api.spotlight(".twin-lamp-group");
             play.toast(t("Opozorilo: burja", "Warning: bora"), t("Sunki 41 kn · preverite privezne vrvi", "Gusts 41 kn · check your mooring lines"), "19:07");
-            api.log(t(`PIER_01–PIER_04 · Varnostna razsvetljava · ${berths.occupied} SMS poslanih`, `PIER_01–PIER_04 · Safety lighting · ${berths.occupied} SMS sent`), "19:07");
+            api.log(t(`PIER_01–PIER_04 · Varnostna razsvetljava · ${berths.occupied} SMS poslanih`, `PIER_01–PIER_04 · Safety lighting · ${berths.occupied} SMS sent`), "19:07", "notify");
           },
         },
         {
@@ -271,7 +365,7 @@ function scenarios(t, n) {
             api.setReading("wind-gust", "16 kn");
             api.setAlarms([]);
             api.spotlight(api.$reading("wind"));
-            api.log(t("WIND_01 · Veter 11 kn · alarm zaprt", "WIND_01 · Wind 11 kn · alarm closed"), "23:30");
+            api.log(t("WIND_01 · Veter 11 kn · alarm zaprt", "WIND_01 · Wind 11 kn · alarm closed"), "23:30", "alarm");
           },
         },
       ],
@@ -303,7 +397,7 @@ function scenarios(t, n) {
           text: t("Z jugom in plimo se gladina dviga hitreje kot običajno.", "With the sirocco and the tide together, the level climbs faster than usual."),
           run(api, play) {
             play.count("sea-level", 0.42, 0.63, sea, t("Narašča", "Rising"));
-            api.log(t("SEA_LEVEL_01 · +0,63 m · narašča", "SEA_LEVEL_01 · +0.63 m · rising"), "09:20");
+            api.log(t("SEA_LEVEL_01 · +0,63 m · narašča", "SEA_LEVEL_01 · +0.63 m · rising"), "09:20", "reading");
           },
         },
         {
@@ -314,7 +408,7 @@ function scenarios(t, n) {
             play.count("sea-level", 0.63, 0.78, sea, t("Opozorilna gladina", "Warning level"));
             api.setAlarms([["SEA_LEVEL_01", t("+0,78 m · nevarnost poplavljanja obale", "+0.78 m · risk of quay flooding")]]);
             api.spotlight(".twin-alerts");
-            api.log(t("SEA_LEVEL_01 · Alarm: opozorilna gladina", "SEA_LEVEL_01 · Alarm: warning level"), "10:05");
+            api.log(t("SEA_LEVEL_01 · Alarm: opozorilna gladina", "SEA_LEVEL_01 · Alarm: warning level"), "10:05", "alarm");
           },
         },
         {
@@ -331,7 +425,7 @@ function scenarios(t, n) {
             api.signal("pedestals", true);
             api.spotlight(api.$reading("shore-power"));
             play.toast(t("Visoka plima", "High tide"), t("+0,78 m · izklopljenih 6 priključkov", "+0.78 m · 6 pedestals switched off"), "10:06");
-            api.log(t("SHORE_POWER_B · Varnostni odklop 6 priključkov", "SHORE_POWER_B · 6 pedestals cut off"), "10:06");
+            api.log(t("SHORE_POWER_B · Varnostni odklop 6 priključkov", "SHORE_POWER_B · 6 pedestals cut off"), "10:06", "command");
           },
         },
         {
@@ -345,7 +439,7 @@ function scenarios(t, n) {
             api.signal("pedestals", false);
             api.pin("sea-level");
             api.spotlight(api.$reading("sea-level"));
-            api.log(t("SEA_LEVEL_01 · +0,51 m · priključki ponovno vklopljeni", "SEA_LEVEL_01 · +0.51 m · pedestals back on"), "13:30");
+            api.log(t("SEA_LEVEL_01 · +0,51 m · priključki ponovno vklopljeni", "SEA_LEVEL_01 · +0.51 m · pedestals back on"), "13:30", "command");
           },
         },
       ],
@@ -377,7 +471,7 @@ function scenarios(t, n) {
           text: t("Vodomer SANITARY_WATER_01 zazna stalen pretok, čeprav v sanitarijah ni nikogar.", "Meter SANITARY_WATER_01 detects a steady flow although nobody is inside."),
           run(api, play) {
             play.count("sanitary-water", 0, 0.46, (v) => `${n(v, 2)} m³/h`);
-            api.log(t("SANITARY_WATER_01 · Nočni pretok 0,46 m³/h", "SANITARY_WATER_01 · Night flow 0.46 m³/h"), "01:42");
+            api.log(t("SANITARY_WATER_01 · Nočni pretok 0,46 m³/h", "SANITARY_WATER_01 · Night flow 0.46 m³/h"), "01:42", "reading");
           },
         },
         {
@@ -388,7 +482,7 @@ function scenarios(t, n) {
             api.setReading("sanitary-water", `${n(0.46, 2)} m³/h`);
             api.setAlarms([["SANITARY_WATER_01", t("Sum puščanja · 20 min", "Suspected leak · 20 min")]]);
             api.spotlight(".twin-alerts");
-            api.log(t("SANITARY_WATER_01 · Alarm: sum puščanja", "SANITARY_WATER_01 · Alarm: suspected leak"), "02:02");
+            api.log(t("SANITARY_WATER_01 · Alarm: sum puščanja", "SANITARY_WATER_01 · Alarm: suspected leak"), "02:02", "alarm");
           },
         },
         {
@@ -399,7 +493,7 @@ function scenarios(t, n) {
             api.setLevel("SANITARY_01", 1);
             api.spotlight(api.$row("SANITARY_01"));
             play.toast(t("Sum puščanja vode", "Suspected water leak"), t("Sanitarije · 0,46 m³/h že 20 min", "Sanitary block · 0.46 m³/h for 20 min"), "02:03");
-            api.log(t("SANITARY_01 · Razsvetljava vklopljena za čuvaja", "SANITARY_01 · Lights on for the night guard"), "02:03");
+            api.log(t("SANITARY_01 · Razsvetljava vklopljena za čuvaja", "SANITARY_01 · Lights on for the night guard"), "02:03", "command");
           },
         },
         {
@@ -411,7 +505,7 @@ function scenarios(t, n) {
             api.setAlarms([]);
             api.setLevel("SANITARY_01", 0);
             api.spotlight(api.$reading("sanitary-water"));
-            api.log(t("SANITARY_WATER_01 · Pretok ustavljen · alarm zaprt", "SANITARY_WATER_01 · Flow stopped · alarm closed"), "02:15");
+            api.log(t("SANITARY_WATER_01 · Pretok ustavljen · alarm zaprt", "SANITARY_WATER_01 · Flow stopped · alarm closed"), "02:15", "alarm");
           },
         },
       ],
@@ -435,7 +529,7 @@ function scenarios(t, n) {
           text: t("Gost prek aplikacije rezervira privez za eno noč. Nexavia mu dodeli prost privez B-11 na pomolu B.", "A guest books a berth for one night in the app. Nexavia assigns free berth B-11 on pier B."),
           run(api) {
             api.spotlight(api.$reading("berths"));
-            api.log(t("BERTH_B11 · Rezervirano · 1 noč", "BERTH_B11 · Booked · 1 night"), "16:10");
+            api.log(t("BERTH_B11 · Rezervirano · 1 noč", "BERTH_B11 · Booked · 1 night"), "16:10", "system");
           },
         },
         {
@@ -447,7 +541,7 @@ function scenarios(t, n) {
             api.setReading("parking", ...freeSpaces(-1));
             api.pin("parking");
             api.spotlight(api.$reading("parking"));
-            api.log(t(`PARKING_01 · Prostih mest: ${freeSpaces(-1)[2]}`, `PARKING_01 · Free spaces: ${freeSpaces(-1)[2]}`), "16:48");
+            api.log(t(`PARKING_01 · Prostih mest: ${freeSpaces(-1)[2]}`, `PARKING_01 · Free spaces: ${freeSpaces(-1)[2]}`), "16:48", "reading");
           },
         },
         {
@@ -459,7 +553,7 @@ function scenarios(t, n) {
             api.setReading("berths", ...occupied(1));
             api.pin("berths");
             api.spotlight(api.$reading("berths"));
-            api.log(t("BERTH_B11 · Privez zaseden", "BERTH_B11 · Berth occupied"), "17:05");
+            api.log(t("BERTH_B11 · Privez zaseden", "BERTH_B11 · Berth occupied"), "17:05", "reading");
           },
         },
         {
@@ -471,7 +565,7 @@ function scenarios(t, n) {
             play.count("shore-power", 46.8, 49.2, (v) => `${n(v, 1)} kWh`);
             api.pin("shore-power");
             api.spotlight(api.$reading("shore-power"));
-            api.log(t("PEDESTAL_B11 · Odklenjen · merjenje začeto", "PEDESTAL_B11 · Unlocked · metering started"), "17:12");
+            api.log(t("PEDESTAL_B11 · Odklenjen · merjenje začeto", "PEDESTAL_B11 · Unlocked · metering started"), "17:12", "command");
           },
         },
         {
@@ -484,7 +578,7 @@ function scenarios(t, n) {
             api.setReading("parking", ...freeSpaces());
             api.pin("berths");
             play.toast(t("Račun za privez B-11", "Invoice for berth B-11"), t("1 noč · 6,4 kWh · 0,3 m³ vode", "1 night · 6.4 kWh · 0.3 m³ water"), "09:30");
-            api.log(t("BERTH_B11 · Prost · račun poslan", "BERTH_B11 · Free · invoice sent"), "09:30");
+            api.log(t("BERTH_B11 · Prost · račun poslan", "BERTH_B11 · Free · invoice sent"), "09:30", "notify");
           },
         },
       ],

@@ -882,3 +882,69 @@
 .scenario-tools{display:flex;gap:6px}
 .scenario-share{position:relative;width:28px;height:28px}
 .scenario-share[data-status]:after{content:attr(data-status);position:absolute;right:0;bottom:calc(100% + 8px);padding:5px 8px;border-radius:6px;background:#f7fbfa;color:#17303a;font:600 .7rem/1 system-ui,sans-serif;white-space:nowrap;box-shadow:0 6px 16px #02080a4d}
+
+/* Simulated time next to the status pill. */
+.twin-status{display:flex;flex:none;flex-direction:column;align-items:flex-end;gap:5px}
+.twin-timescale{color:#8fb8b3;font-size:.72rem;white-space:nowrap;cursor:help}
+@media(max-width:640px){.twin-status{align-items:flex-start;margin-top:.6rem}.twin-status .twin-live{margin-top:0}}
+
+/* The light sensor behind the lighting rule. */
+.city-art [data-tone=light]{--tone:#fff0b0}
+
+/* Sensor card: how the device reaches Nexavia, and a reading on request. */
+.city-popover-meta{display:grid;gap:4px;margin:9px 0 0;padding-top:8px;border-top:1px solid #ffffff14}
+.city-popover-meta>div{display:grid;grid-template-columns:70px minmax(0,1fr);gap:6px;align-items:baseline}
+.city-popover-meta dt{color:#93a8a2;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase}
+.city-popover-meta dd{margin:0;color:#e3eeea;font-size:10px;line-height:1.3}
+.city-popover-meta dd small{display:block;color:#8fa6a0;font-size:8.5px}
+.city-popover-meta [data-card-age]{font-variant-numeric:tabular-nums}
+.city-popover-send{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:28px;margin-top:9px;padding:5px 8px;border:1px solid color-mix(in srgb,var(--tone) 55%,transparent);border-radius:8px;background:color-mix(in srgb,var(--tone) 14%,transparent);color:#f4f9f7;font:600 10.5px/1 system-ui,sans-serif;cursor:pointer;transition:background .2s ease}
+.city-popover-send:hover{background:color-mix(in srgb,var(--tone) 26%,transparent)}
+.city-popover-send:focus-visible{outline:2px solid var(--tone);outline-offset:2px}
+.city-popover-send i{width:6px;height:6px;flex:none;border-radius:50%;background:var(--tone);box-shadow:0 0 8px var(--tone)}
+
+/* A reading a visitor sent shows its own link while the data flow is off. */
+.city-flow.is-tracing{opacity:1;visibility:visible}
+.city-flow.is-tracing:not(.is-on) .flow-link:not(.is-active){opacity:0}
+.xdr-display .twin-kpis>div.is-received{animation:flow-received-tile 1.2s ease-out}
+@keyframes flow-received-tile{from{background-color:#d8f5f1}}
+
+/* Dashboard timeline: typed events, newest first. */
+.twin-event .twin-meter-heading{margin-bottom:5px}
+.twin-timeline{--kind:#3f8f5a;display:grid;gap:3px;margin:0 0 7px;padding:0;list-style:none}
+.twin-timeline li{margin:0}
+.twin-timeline [data-kind=reading]{--kind:#16809a}
+.twin-timeline [data-kind=decision]{--kind:#6450c8}
+.twin-timeline [data-kind=command]{--kind:#98600f}
+.twin-timeline [data-kind=alarm]{--kind:#c0392f}
+.twin-timeline [data-kind=notify]{--kind:#2a70bd}
+.twin-timeline [data-kind=manual]{--kind:#566d82}
+.twin-timeline [data-kind=system]{--kind:#3f8052}
+.twin-timeline .is-empty{padding:4px 0;color:#8b9aa7;font-size:8px}
+.twin-timeline-entry{display:grid;grid-template-columns:auto auto minmax(0,1fr);align-items:baseline;gap:6px;width:100%;margin:0;padding:4px 6px;border:1px solid #e3eaf0;border-left:2px solid var(--kind);border-radius:0 3px 3px 0;background:#fff;color:#405c73;font:inherit;font-size:8px;line-height:1.35;text-align:left}
+button.twin-timeline-entry{cursor:pointer}
+button.twin-timeline-entry:hover{background:#f1f7fc}
+button.twin-timeline-entry:focus-visible{outline:2px solid #2582d4;outline-offset:1px}
+.twin-timeline time{color:#7c8e9d;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums}
+.twin-timeline-kind{padding:1px 4px;border-radius:3px;background:color-mix(in srgb,var(--kind) 12%,#fff);color:var(--kind);font-size:7px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.twin-timeline-text{min-width:0;overflow-wrap:anywhere}
+.twin-timeline li:first-child .twin-timeline-entry{animation:timeline-in .45s ease-out}
+@keyframes timeline-in{from{opacity:0;translate:0 -4px;background:color-mix(in srgb,var(--kind) 10%,#fff)}}
+@media(prefers-reduced-motion:reduce){.twin-timeline li:first-child .twin-timeline-entry,.xdr-display .twin-kpis>div.is-received{animation:none}}
+
+/* The introduction scenario: the place to start. */
+.twin-scenario-chip.is-intro{padding-left:.3rem;border-color:#8fe3e0;background:#8fe3e0;color:#0c1a1f}
+.twin-scenario-chip.is-intro b{font-weight:700}
+.twin-scenario-chip.is-intro i{background:#0c1a1f;color:#8fe3e0}
+.twin-scenario-chip.is-intro i svg{width:11px;height:11px;fill:currentColor;stroke:none}
+.twin-scenario-chip.is-intro small{color:#1f5256}
+.twin-scenario-chip.is-intro:hover:not(:disabled){border-color:#bdf5ee;background:#bdf5ee}
+.twin-scenario-chip.is-intro[aria-pressed=true]{border-color:#fff;background:#fff;color:#0c1a1f}
+.twin-scenario-chip.is-intro:not(:disabled):not([aria-pressed=true]){animation:intro-call 2.4s ease-out 1s 3}
+@keyframes intro-call{0%{box-shadow:0 0 0 0 #8fe3e099}70%,100%{box-shadow:0 0 0 10px #8fe3e000}}
+.twin-scenario-start{padding:4px 7px;border-radius:999px;background:#0c1a1f;color:#8fe3e0;font:700 .58rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.twin-scenario-chip.is-intro+.twin-scenarios-label{margin-left:.6rem}
+@media(prefers-reduced-motion:reduce){.twin-scenario-chip.is-intro{animation:none!important}}
+
+/* Scenario clock: the simulated time skipped since the previous step. */
+.scenario-time small{display:block;margin-top:5px;color:#8fb8b3;font:600 .66rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.04em}
