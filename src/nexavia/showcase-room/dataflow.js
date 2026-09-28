@@ -1,0 +1,169 @@
+// Data flow on the maquette: every reading travels from its sensor over the
+// radio link to the gateway and up to Nexavia, where its dashboard row
+// lights up; every command comes down from Nexavia through the gateway to its
+// device. Links, packets and the gateway are drawn in scene pixels over the
+// model, while the visitor has "Data flow" switched on.
+
+const NS = "http://www.w3.org/2000/svg";
+const UPLINK_GAP = 1500;
+const TRIP = 820;
+const BEAM = 300;
+const COMMAND = "#ffd66b";
+const FAILED = "#ff6f5b";
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+const svg = (tag, attributes, parent) => {
+  const element = document.createElementNS(NS, tag);
+  for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, value);
+  parent?.appendChild(element);
+  return element;
+};
+const ease = (k) => (k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2);
+// Restarts a one-shot CSS animation.
+const replay = (element, name) => {
+  element.classList.remove(name);
+  void element.getBoundingClientRect();
+  element.classList.add(name);
+};
+
+// `gateway` is { id, at: [x, y] } in scene pixels.
+export function initDataFlow(root, { gateway }) {
+  const art = root.querySelector("[data-city-art]");
+  const toggle = root.querySelector("[data-flow-toggle]");
+  if (!art || !gateway) return null;
+  const [gx, gy] = gateway.at;
+  const host = svg("svg", { class: "city-flow", viewBox: "0 0 1536 1024", preserveAspectRatio: "xMidYMid slice", "aria-hidden": "true", focusable: "false" });
+  art.querySelector(".city-device-chip")?.before(host);
+  const links = svg("g", {}, host);
+  const beams = svg("g", {}, host);
+  const packets = svg("g", {}, host);
+  // The gateway: a mast sending rings out, with its id underneath.
+  const station = svg("g", { class: "flow-gateway", transform: `translate(${gx} ${gy})` }, host);
+  svg("circle", { class: "flow-ring", r: 12 }, station);
+  svg("circle", { class: "flow-ring flow-ring--late", r: 12 }, station);
+  svg("path", { class: "flow-mast", d: "M0 0V-13M-6 -17a8.5 8.5 0 0 1 12 0M-10.5 -21.5a15 15 0 0 1 21 0" }, station);
+  svg("circle", { class: "flow-core", r: 4.5 }, station);
+  const label = svg("g", { class: "flow-label", transform: "translate(0 10)" }, station);
+  svg("rect", { x: -31, y: 0, width: 62, height: 18, rx: 9 }, label);
+  svg("text", { x: 0, y: 12.6 }, label).textContent = gateway.id;
+
+  // Every sensor pin and device, each with its radio link: an arc rising
+  // from the device and dropping into the gateway.
+  const ends = new Map();
+  const addEnd = (name, [x, y], extra = {}) => {
+    const lift = Math.hypot(x - gx, y - gy) * 0.22;
+    const curve = [x, y, (x + gx) / 2, Math.min(y, gy) - lift, gx, gy];
+    const link = svg("path", { class: "flow-link", d: `M${x} ${y}Q${curve[2]} ${curve[3]} ${gx} ${gy}` }, links);
+    ends.set(name, { curve, link, busy: 0, ...extra });
+  };
+  root.querySelectorAll("[data-sensor-pin][data-at]").forEach((pin) => addEnd(`sensor:${pin.dataset.sensorPin}`, pin.dataset.at.split(" ").map(Number), { pin }));
+  root.querySelectorAll("[data-device][data-anchor]").forEach((device) => addEnd(`device:${device.dataset.device}`, device.dataset.anchor.split(" ").map(Number)));
+
+  let on = false;
+  let online = true;
+  const live = new Set();
+  let frame = 0;
+
+  function tick(now) {
+    for (const packet of live) {
+      const k = (now - packet.start) / packet.duration;
+      if (k < 0) continue;
+      packet.node.style.visibility = "visible";
+      const u = ease(Math.min(1, packet.fail ? Math.min(k, 0.55) : k));
+      const s = packet.reverse ? 1 - u : u;
+      const [x0, y0, cx, cy, x1, y1] = packet.end.curve;
+      const x = (1 - s) ** 2 * x0 + 2 * (1 - s) * s * cx + s * s * x1;
+      const y = (1 - s) ** 2 * y0 + 2 * (1 - s) * s * cy + s * s * y1;
+      packet.node.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+      // A command that cannot get through stops halfway, turns red and fades.
+      if (packet.fail && k > 0.55) {
+        packet.node.style.color = FAILED;
+        packet.node.style.opacity = String(Math.max(0, 1 - (k - 0.55) / 0.45));
+      }
+      if (k >= 1) finish(packet, true);
+    }
+    frame = live.size ? requestAnimationFrame(tick) : 0;
+  }
+
+  function finish(packet, arrived) {
+    live.delete(packet);
+    packet.node.remove();
+    if (--packet.end.busy <= 0) packet.end.link.classList.remove("is-active");
+    if (arrived && !packet.fail) packet.arrive?.();
+  }
+
+  // One packet along an end's link, from the device to the gateway (or back
+  // with `reverse`).
+  function send(end, { color, delay = 0, reverse = false, fail = false, arrive }) {
+    const node = svg("g", { class: "flow-packet", style: `color:${color};visibility:hidden` }, packets);
+    svg("circle", { class: "flow-packet-halo", r: 11 }, node);
+    svg("circle", { class: "flow-packet-core", r: 4.6 }, node);
+    svg("circle", { class: "flow-packet-spark", r: 1.8 }, node);
+    end.busy++;
+    end.link.classList.add("is-active");
+    live.add({ node, end, reverse, fail, arrive, start: performance.now() + delay, duration: TRIP });
+    if (!frame) frame = requestAnimationFrame(tick);
+  }
+
+  // A short beam between the gateway and Nexavia, above the model.
+  function beam(direction, color) {
+    const top = Math.max(6, gy - 150);
+    const path = svg("path", { class: `flow-beam flow-beam--${direction}`, style: `color:${color}`, d: direction === "up" ? `M${gx} ${gy - 24}V${top}` : `M${gx} ${top}V${gy - 24}` }, beams);
+    path.addEventListener("animationend", () => path.remove(), { once: true });
+  }
+
+  const lastUplink = new Map();
+  function uplink(key) {
+    if (!on || !online || reducedMotion.matches) return;
+    const end = ends.get(`sensor:${key}`);
+    if (!end) return;
+    const now = performance.now();
+    if (now - (lastUplink.get(key) ?? -Infinity) < UPLINK_GAP) return;
+    lastUplink.set(key, now);
+    const color = getComputedStyle(end.pin).getPropertyValue("--tone").trim() || "#8fe3e0";
+    // Readings that change together leave their sensors a moment apart.
+    send(end, {
+      color,
+      delay: Math.random() * 600,
+      arrive() {
+        replay(station, "is-hit");
+        beam("up", color);
+        const row = root.querySelector(`.twin-dashboard [data-reading="${key}"]`)?.parentElement;
+        if (row) replay(row, "is-received");
+      },
+    });
+  }
+
+  // A command for a device. Returns how long it takes to arrive, so the
+  // maquette can show the light switching as it does.
+  function downlink(id, deviceOnline = true) {
+    if (!on || reducedMotion.matches) return 0;
+    const end = ends.get(`device:${id}`);
+    if (!end) return 0;
+    beam("down", COMMAND);
+    const fail = !online || !deviceOnline;
+    setTimeout(() => {
+      replay(station, "is-hit");
+      send(end, { color: COMMAND, reverse: true, fail });
+    }, BEAM);
+    return fail ? 0 : BEAM + TRIP;
+  }
+
+  function set(value) {
+    on = value;
+    host.classList.toggle("is-on", on);
+    toggle?.setAttribute("aria-pressed", String(on));
+    if (!on) [...live].forEach((packet) => finish(packet, false));
+  }
+  toggle?.addEventListener("click", () => set(!on));
+
+  return {
+    uplink,
+    downlink,
+    // The gateway loses and regains its connection to Nexavia.
+    setOnline(value) {
+      online = value;
+      station.classList.toggle("is-offline", !online);
+    },
+  };
+}

@@ -229,7 +229,8 @@ function paintMask(
 
 // `patches` default to the city's river and fountain; the marina passes its
 // own. A patch with a `source` image redraws that image instead of the photo,
-// masked by the image's own alpha (e.g. the water surface rendered alone).
+// masked by the image's own alpha (e.g. the water surface rendered alone);
+// its `lift` (scene pixels) raises the water over the edges around it.
 export function initWater(root, patches = PATCHES) {
   const art = root.querySelector("[data-city-art]");
   const photo = art?.querySelector(".city-photo");
@@ -289,15 +290,8 @@ export function initWater(root, patches = PATCHES) {
         area.height * photoScale * ratio,
       );
       const scale = (layer.scale = canvas.width / area.width);
-      if (layer.image) {
-        // The source's alpha is the mask.
-        const context = mask.getContext("2d");
-        context.clearRect(0, 0, mask.width, mask.height);
-        if (layer.image.naturalWidth) {
-          const k = layer.image.naturalWidth / PHOTO.width;
-          context.drawImage(layer.image, area.x * k, area.y * k, area.width * k, area.height * k, 0, 0, mask.width, mask.height);
-        }
-      } else paintMask(mask, patch, scale, area);
+      if (layer.image) sourceMask(layer);
+      else paintMask(mask, patch, scale, area);
       if (patch.light) {
         layer.lightMask.width = layer.scratch.width = canvas.width;
         layer.lightMask.height = layer.scratch.height = canvas.height;
@@ -305,6 +299,18 @@ export function initWater(root, patches = PATCHES) {
       }
     }
     draw(performance.now());
+  }
+
+  // The source's alpha is the mask, raised with the water (`patch.lift`).
+  function sourceMask(layer) {
+    const { image, mask, patch } = layer;
+    const { area } = patch;
+    const context = mask.getContext("2d");
+    context.clearRect(0, 0, mask.width, mask.height);
+    layer.lift = patch.lift ?? 0;
+    if (!image.naturalWidth) return;
+    const k = image.naturalWidth / PHOTO.width;
+    context.drawImage(image, area.x * k, (area.y + layer.lift) * k, area.width * k, area.height * k, 0, 0, mask.width, mask.height);
   }
 
   function draw(time) {
@@ -318,10 +324,14 @@ export function initWater(root, patches = PATCHES) {
       // Patches are in scene pixels; the source may be rendered larger.
       const k = source.naturalWidth / PHOTO.width;
       const rows = canvas.height;
+      // Raised water is the same surface drawn higher, over its own edges.
+      const lift = patch.lift ?? 0;
+      if (layer.image && lift !== layer.lift) sourceMask(layer);
       context.globalCompositeOperation = "source-over";
       context.clearRect(0, 0, canvas.width, rows);
       for (let row = 0; row < rows; row += 2) {
         patch.row(patch.area.y + row / scale, t, patch.area);
+        sample.y += lift;
         context.drawImage(
           source,
           sample.x * k,
@@ -382,4 +392,6 @@ export function initWater(root, patches = PATCHES) {
   ).observe(art);
   document.addEventListener("visibilitychange", sync);
   motion.addEventListener("change", sync);
+  // Redraws a still frame, e.g. when the water rises while motion is reduced.
+  return { redraw: () => draw(performance.now()) };
 }

@@ -12,6 +12,8 @@ const off = () => Array(ALL.length).fill(0);
 
 export const city = {
   effects: [initTraffic, initWater, initSmoke],
+  // The radio gateway on the office roof.
+  gateway: { id: "GW_01", at: [1010, 112] },
   devices: (t) => [
     { id: "HOUSE_01", name: t("Hiša z vrtom", "Garden house"), watts: 28 },
     { id: "OFFICE_01", name: t("Poslovna stavba", "Office building"), watts: 120 },
@@ -26,6 +28,7 @@ export const city = {
   counters: ["cyclists"],
   steps: (t) => [
     {
+      at: "day",
       text: t("Senzor LIGHT_01: 46 lx · dovolj dnevne svetlobe", "Sensor LIGHT_01: 46 lx · enough daylight"),
       lux: 46,
       states: off(),
@@ -33,6 +36,7 @@ export const city = {
       event: t("Senzor svetlobe je izmeril 46 lx.", "Light sensor measured 46 lx."),
     },
     {
+      at: "dusk",
       text: t("Senzor LIGHT_01: 18 lx · padec svetlobe", "Sensor LIGHT_01: 18 lx · light level drops"),
       lux: 18,
       states: off(),
@@ -40,6 +44,7 @@ export const city = {
       event: t("Prehod GW_01 je posredoval meritev 18 lx.", "Gateway GW_01 relayed a reading of 18 lx."),
     },
     {
+      at: "dusk+10",
       text: t("V hiši z vrtom se prižgejo luči", "The garden house lights switch on"),
       lux: 18,
       states: [1, 0, 0, 0, 0, 0, 0],
@@ -47,6 +52,7 @@ export const city = {
       event: t("HOUSE_01: luči so vključene.", "HOUSE_01: lighting switched on."),
     },
     {
+      at: "dusk+20",
       text: t("V poslovni stavbi se prižgejo luči", "The office building lights switch on"),
       lux: 18,
       states: [1, 1, 0, 0, 0, 0, 0],
@@ -54,6 +60,7 @@ export const city = {
       event: t("OFFICE_01: razsvetljava je vključena.", "OFFICE_01: lighting switched on."),
     },
     {
+      at: "dusk+30",
       text: t("Tovarna vklopi razsvetljavo", "The factory lights come on"),
       lux: 18,
       states: [1, 1, 1, 0, 0, 0, 0],
@@ -61,6 +68,7 @@ export const city = {
       event: t("FACTORY_01: razsvetljava je vključena.", "FACTORY_01: lighting switched on."),
     },
     {
+      at: "dusk+40",
       text: t("Ulične svetilke zaznajo padec dnevne svetlobe", "Street lights respond to falling daylight"),
       lux: 18,
       states: [1, 1, 1, 1, 1, 1, 1],
@@ -68,6 +76,7 @@ export const city = {
       event: t("LAMP_01–LAMP_04: ulične svetilke so vključene.", "LAMP_01–LAMP_04: street lights switched on."),
     },
     {
+      at: "dawn",
       text: t("Svetloba se vrne · sistem ugasne luči", "Daylight returns · system switches lights off"),
       lux: 46,
       states: off(),

@@ -797,3 +797,88 @@
 .city-light-glint{transition:opacity .26s cubic-bezier(.3,0,.2,1);animation:city-glint 2.6s ease-in-out infinite alternate}
 @keyframes city-glint{from{filter:brightness(.75)}to{filter:brightness(1.2)}}
 @media(prefers-reduced-motion:reduce){.city-light-glint{animation:none}}
+
+/* Time of day (daylight.js). The layers blend with the model under them, so
+   the wrapper must not form its own stacking context: no z-index, opacity,
+   transform or filter on .city-sky itself. */
+.city-sky{position:absolute;pointer-events:none;visibility:hidden}
+.city-sky.is-ready{visibility:visible}
+.city-sky canvas{position:absolute;inset:0;z-index:2;width:100%;height:100%;opacity:0}
+.city-sky-day,.city-sky-dusk,.city-sky-night{mix-blend-mode:multiply}
+.city-sky-glow{mix-blend-mode:screen;filter:blur(clamp(2px,.35cqw,7px))}
+.city-sky.is-easing canvas{transition:opacity 1.4s cubic-bezier(.45,0,.2,1)}
+.twin-clock{position:absolute;left:16px;bottom:16px;z-index:9;display:flex;align-items:center;gap:10px;padding:7px 14px 7px 9px;border:1px solid #ffffff21;border-radius:999px;background:#0b181cd1;-webkit-backdrop-filter:blur(10px) saturate(1.2);backdrop-filter:blur(10px) saturate(1.2);box-shadow:0 8px 22px #0612154d,inset 0 1px #ffffff12;color:#e8f0ec;font:600 11px/1 system-ui,sans-serif;cursor:default;transition:opacity .3s ease,visibility .3s}
+.twin-scene-wrap.has-scenario .twin-clock,.twin-city-panel:has(.city-art:not(.is-ready)) .twin-clock{opacity:0;visibility:hidden}
+.twin-clock-icon{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#ffffff12;color:#ffd66b}
+.twin-clock[data-phase=night] .twin-clock-icon,.twin-clock[data-phase=dusk] .twin-clock-icon{color:#b9c8ff}
+.twin-clock-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.twin-clock[data-phase=night] .twin-clock-icon svg,.twin-clock[data-phase=dusk] .twin-clock-icon svg{fill:currentColor;fill-opacity:.25}
+.twin-clock-read{display:grid;gap:3px;min-width:46px}
+.twin-clock-read b{font:650 15px/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.twin-clock-read small{color:#9fb8b2;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.twin-clock-track{position:relative;display:flex;align-items:center;width:clamp(120px,15vw,220px);height:22px}
+.twin-clock-track:before{content:"";position:absolute;left:0;right:0;height:6px;border-radius:999px;background:var(--sky-track);box-shadow:inset 0 0 0 1px #ffffff1f}
+.twin-clock-mark{position:absolute;top:2px;width:3px;height:5px;border-radius:2px;background:#ffd66b;box-shadow:0 0 6px #ffd66b;translate:-50% 0;pointer-events:none}
+.twin-clock input{position:relative;width:100%;height:22px;margin:0;background:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+.twin-clock input:disabled{cursor:not-allowed}
+.twin-clock input::-webkit-slider-runnable-track{height:22px;background:none}
+.twin-clock input::-moz-range-track{height:22px;background:none}
+.twin-clock input::-webkit-slider-thumb{width:16px;height:16px;margin-top:3px;border:2px solid #0b181c;border-radius:50%;background:#fff;box-shadow:0 0 0 1.5px #ffffffb3,0 2px 6px #000a;-webkit-appearance:none;appearance:none;transition:scale .15s ease}
+.twin-clock input::-moz-range-thumb{width:12px;height:12px;border:2px solid #0b181c;border-radius:50%;background:#fff;box-shadow:0 0 0 1.5px #ffffffb3,0 2px 6px #000a}
+.twin-clock input:hover::-webkit-slider-thumb,.twin-clock input:active::-webkit-slider-thumb{scale:1.15}
+.twin-clock input:focus-visible{outline:none}
+.twin-clock input:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 2px #8fe3e0,0 0 0 5px #8fe3e055}
+.twin-clock input:focus-visible::-moz-range-thumb{box-shadow:0 0 0 2px #8fe3e0,0 0 0 5px #8fe3e055}
+.twin-workspace:fullscreen .twin-clock{top:14px;bottom:auto;left:14px}
+@media(max-width:700px){.twin-clock{top:8px;bottom:auto;left:8px;gap:7px;padding:5px 10px 5px 6px}.twin-clock-icon{width:22px;height:22px}.twin-clock-read b{font-size:13px}.twin-clock-track{width:96px}}
+@media(prefers-reduced-motion:reduce){.city-sky.is-easing canvas,.twin-clock{transition:none}}
+
+/* The toggles on the model: data flow and sensors. */
+.city-art-tools{position:absolute;right:12px;bottom:12px;z-index:6;display:flex;gap:6px}
+.city-art-tools .city-sensors-toggle{position:static}
+@container (max-width:560px){.city-art-tools{top:8px;right:8px;bottom:auto;gap:4px}}
+
+/* Data flow (dataflow.js): radio links, packets and the gateway. */
+.city-flow{position:absolute;inset:0;z-index:3;width:100%;height:100%;overflow:hidden;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s}
+.city-flow.is-on{opacity:1;visibility:visible}
+.flow-link{fill:none;stroke:#8fe3e0;stroke-width:1.2;stroke-dasharray:3 5;opacity:.4;vector-effect:non-scaling-stroke;transition:opacity .3s ease}
+.flow-link.is-active{stroke:#e4fbf8;opacity:.95;animation:flow-dash .7s linear infinite}
+@keyframes flow-dash{to{stroke-dashoffset:-16}}
+.flow-packet-halo{fill:currentColor;opacity:.3}
+.flow-packet-core{fill:currentColor;stroke:#ffffffd9;stroke-width:1.2}
+.flow-packet-spark{fill:#fff}
+.flow-ring{fill:none;stroke:#8fe3e0;stroke-width:1.6;opacity:0;transform-box:fill-box;transform-origin:center;animation:flow-ring 2.6s ease-out infinite}
+.flow-ring--late{animation-delay:1.3s}
+@keyframes flow-ring{0%{opacity:.85;scale:.4}100%{opacity:0;scale:2.8}}
+.flow-mast{fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;filter:drop-shadow(0 1px 2px #000c)}
+.flow-core{fill:#8fe3e0;stroke:#fff;stroke-width:1.8;transform-box:fill-box;transform-origin:center}
+.flow-gateway.is-hit .flow-core{animation:flow-hit .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes flow-hit{40%{scale:1.8;fill:#fff}}
+.flow-label rect{fill:#0b181ce0;stroke:#ffffff33}
+.flow-label text{fill:#e8f0ec;font:700 10px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.05em;text-anchor:middle}
+.flow-gateway.is-offline .flow-core{fill:#ff6f5b}
+.flow-gateway.is-offline .flow-ring{stroke:#ff6f5b}
+.flow-gateway.is-offline .flow-label text{fill:#ffb4a8}
+.flow-beam{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-dasharray:22 400;filter:drop-shadow(0 0 3px currentColor);animation:flow-beam .7s cubic-bezier(.4,0,.6,1) forwards}
+@keyframes flow-beam{from{stroke-dashoffset:22;opacity:1}to{stroke-dashoffset:-130;opacity:0}}
+.twin-meter-readings>div.is-received,.twin-sensor-readings>div.is-received{animation:flow-received 1.2s ease-out}
+@keyframes flow-received{0%{background:#d8f5f1;box-shadow:-6px 0 0 #d8f5f1,6px 0 0 #d8f5f1}100%{background:#d8f5f100;box-shadow:-6px 0 0 #d8f5f100,6px 0 0 #d8f5f100}}
+@media(prefers-reduced-motion:reduce){.flow-link.is-active,.flow-ring,.flow-gateway.is-hit .flow-core{animation:none}.flow-ring{opacity:.5}}
+
+/* High tide (tide.js): the service pedestals the safety cut-off switched off. */
+.city-tide{position:absolute;inset:0;z-index:3;width:100%;height:100%;overflow:hidden;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .5s ease,visibility .5s}
+.city-tide.is-cut{opacity:1;visibility:visible}
+.tide-pedestal{animation:tide-drop .45s cubic-bezier(.2,.8,.2,1) calc(var(--i) * 90ms) both}
+.city-tide:not(.is-cut) .tide-pedestal{animation:none}
+@keyframes tide-drop{from{opacity:0;translate:0 -8px}}
+.tide-pedestal-dot{fill:#e0483a;stroke:#fff;stroke-width:1.4}
+.tide-pedestal-bolt{fill:#fff}
+.tide-pedestal-ring{fill:none;stroke:#ff6f5b;stroke-width:1.5;transform-box:fill-box;transform-origin:center;animation:flow-ring 1.8s ease-out infinite}
+.tide-label rect{fill:#e0483a;stroke:#ffffff80}
+.tide-label text{fill:#fff;font:700 10.5px system-ui,sans-serif;letter-spacing:.02em;text-anchor:middle}
+@media(prefers-reduced-motion:reduce){.tide-pedestal,.tide-pedestal-ring{animation:none}}
+
+/* The scenario link, copied from the player. */
+.scenario-tools{display:flex;gap:6px}
+.scenario-share{position:relative;width:28px;height:28px}
+.scenario-share[data-status]:after{content:attr(data-status);position:absolute;right:0;bottom:calc(100% + 8px);padding:5px 8px;border-radius:6px;background:#f7fbfa;color:#17303a;font:600 .7rem/1 system-ui,sans-serif;white-space:nowrap;box-shadow:0 6px 16px #02080a4d}

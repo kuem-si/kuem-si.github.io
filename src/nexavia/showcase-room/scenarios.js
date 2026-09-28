@@ -9,7 +9,9 @@
 //
 // A step is replayable: jumping to step n replays the scenario's setup and
 // steps 0..n-1 instantly, then plays step n, so every step can be reached
-// with previous/next without drift.
+// with previous/next without drift. The maquette's clock follows each step's
+// time. `onChange(scenario, step)` reports the open scenario and step (null
+// when it closes), so the page can keep them in its address.
 
 const STEP_MS = 6800;
 
@@ -20,10 +22,12 @@ const icons = {
   play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>',
   replay: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5"/></svg>',
   close: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  link: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.2 1.2M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2"/></svg>',
+  done: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
   bell: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20h4"/></svg>',
 };
 
-export function initScenarios(root, api, scenarios) {
+export function initScenarios(root, api, scenarios, { onChange } = {}) {
   const panel = root.querySelector(".twin-city-panel");
   const wrap = root.querySelector(".twin-scene-wrap");
   if (!panel || !wrap) return null;
@@ -61,7 +65,7 @@ export function initScenarios(root, api, scenarios) {
   player.setAttribute("role", "region");
   player.setAttribute("aria-label", t("Vodeni scenarij", "Guided scenario"));
   player.innerHTML = `
-    <header><span class="scenario-kicker"></span><button type="button" class="scenario-close" aria-label="${t("Zapri scenarij", "Close scenario")}">${icons.close}</button></header>
+    <header><span class="scenario-kicker"></span><span class="scenario-tools"><button type="button" class="scenario-share" aria-label="${t("Kopiraj povezavo do tega koraka", "Copy a link to this step")}" title="${t("Kopiraj povezavo do tega koraka", "Copy a link to this step")}">${icons.link}</button><button type="button" class="scenario-close" aria-label="${t("Zapri scenarij", "Close scenario")}">${icons.close}</button></span></header>
     <div class="scenario-body" aria-live="polite"><p class="scenario-time"></p><div><h3 class="scenario-title"></h3><p class="scenario-text"></p></div></div>
     <div class="scenario-progress" aria-hidden="true"></div>
     <footer>
@@ -169,14 +173,17 @@ export function initScenarios(root, api, scenarios) {
     tweens = [];
     current = Math.max(0, Math.min(active.steps.length - 1, index));
     finished = false;
+    api.quiet(true);
     active.setup(api);
     let focus = null;
     active.steps.forEach((step, i) => {
       if (step.focus) focus = step.focus;
       if (i < current) step.run(api, effects(true));
     });
+    api.quiet(false);
     const step = active.steps[current];
     step.run(api, effects(false));
+    api.setClock(step.time);
     ui.time.textContent = step.time;
     ui.title.textContent = step.title;
     ui.text.textContent = step.text;
@@ -187,9 +194,10 @@ export function initScenarios(root, api, scenarios) {
     api.focus(focus);
     remaining = STEP_MS;
     schedule();
+    onChange?.(active.id, current);
   }
 
-  function start(scenario) {
+  function start(scenario, index = 0, autoplay = true) {
     if (active) api.exit();
     active = scenario;
     launcher.querySelectorAll("[data-scenario]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.scenario === scenario.id)));
@@ -197,8 +205,8 @@ export function initScenarios(root, api, scenarios) {
     player.hidden = false;
     wrap.classList.add("has-scenario");
     ui.kicker.textContent = `${t("Scenarij", "Scenario")} · ${scenario.title}`;
-    playing = true;
-    goTo(0);
+    playing = autoplay;
+    goTo(index);
     player.focus({ preventScroll: true });
   }
 
@@ -214,8 +222,31 @@ export function initScenarios(root, api, scenarios) {
     wrap.classList.remove("has-scenario");
     launcher.querySelectorAll("[data-scenario]").forEach((button) => button.setAttribute("aria-pressed", "false"));
     api.exit();
+    onChange?.(null);
     launcher.querySelector(`[data-scenario="${id}"]`)?.focus({ preventScroll: true });
   }
+
+  // Copies the page's address, which names this scenario and step.
+  const share = player.querySelector(".scenario-share");
+  let shareTimer = 0;
+  share.addEventListener("click", async () => {
+    let copied = true;
+    try {
+      await navigator.clipboard.writeText(location.href);
+    } catch {
+      copied = false;
+    }
+    const label = copied ? t("Povezava kopirana", "Link copied") : t("Kopiranje ni uspelo", "Could not copy the link");
+    share.innerHTML = copied ? icons.done : icons.link;
+    share.dataset.status = label;
+    share.setAttribute("aria-label", label);
+    clearTimeout(shareTimer);
+    shareTimer = setTimeout(() => {
+      share.innerHTML = icons.link;
+      delete share.dataset.status;
+      share.setAttribute("aria-label", t("Kopiraj povezavo do tega koraka", "Copy a link to this step"));
+    }, 2200);
+  });
 
   function togglePlay() {
     if (finished) {
@@ -255,6 +286,13 @@ export function initScenarios(root, api, scenarios) {
   return {
     enable() {
       launcher.querySelectorAll("[data-scenario]").forEach((button) => (button.disabled = false));
+    },
+    // Opens a scenario from a link: from the start, or held on one step.
+    open(id, step = 0, hold = false) {
+      const scenario = scenarios.find((item) => item.id === id);
+      if (!scenario) return false;
+      start(scenario, step, !hold);
+      return true;
     },
   };
 }

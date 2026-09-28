@@ -155,13 +155,16 @@ const kindLabel = (kind: "sensor" | "meter") => (kind === "meter" ? (en ? "LIVE 
   </div>
   <div class="city-sensors" role="group" aria-label={en ? "Sensors and meters on the model" : "Senzorji in merilniki na maketi"}>
     {scene.sensors.map((sensor, i) => (
-      <button class="city-sensor" type="button" data-sensor-pin={sensor.key} data-sensor-name={sensor.label} data-sensor-event={sensor.event} data-sensor-event-note={sensor.eventNote ? "" : undefined} data-tone={sensor.tone} aria-label={`${sensor.label}, ${sensor.id}`} aria-expanded="false" aria-controls={id(`popover-${sensor.key}`)} style={`${at(sensor.at)};--i:${i}`}>
+      <button class="city-sensor" type="button" data-sensor-pin={sensor.key} data-at={sensor.at.join(" ")} data-sensor-name={sensor.label} data-sensor-event={sensor.event} data-sensor-event-note={sensor.eventNote ? "" : undefined} data-tone={sensor.tone} aria-label={`${sensor.label}, ${sensor.id}`} aria-expanded="false" aria-controls={id(`popover-${sensor.key}`)} style={`${at(sensor.at)};--i:${i}`}>
         <span class="city-sensor-dot"></span>
         <span class="city-sensor-tag" aria-hidden="true"><b>{sensor.tag}</b><span data-sensor-tag></span></span>
       </button>
     ))}
   </div>
-  <button class="city-sensors-toggle" type="button" data-sensors-toggle aria-pressed="true"><i></i>{en ? "Sensors" : "Senzorji"}</button>
+  <div class="city-art-tools">
+    <button class="city-sensors-toggle" type="button" data-flow-toggle aria-pressed="false"><i></i>{en ? "Data flow" : "Tok podatkov"}</button>
+    <button class="city-sensors-toggle" type="button" data-sensors-toggle aria-pressed="true"><i></i>{en ? "Sensors" : "Senzorji"}</button>
+  </div>
 
   {scene.sensors.map((sensor) => (
     <div class="city-sensor-popover" id={id(`popover-${sensor.key}`)} role="group" aria-label={sensor.card.title} data-sensor-popover={sensor.key} data-side={sensor.side} data-align={sensor.align} data-tone={sensor.tone} data-alert={sensor.alert} style={at(sensor.at)}>

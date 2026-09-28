@@ -1,13 +1,19 @@
 import { initScenarios } from "./scenarios.js";
+import { initDaylight, luxAt, parseTime, sunTimes, wrap } from "./daylight.js";
+import { initDataFlow } from "./dataflow.js";
 
 // One showcase twin: a maquette and its Nexavia dashboard, driven by a
 // config (city.js, marina.js):
 //   devices(t)       switchable lighting [{ id, name, watts }]
 //   group            { ids, subject, name(t) } for the dashboard's group switch
-//   steps(t)         the automatic lighting program, one entry per event
+//   steps(t)         the automatic lighting program, one entry per event, each
+//                    at a time of day: `at` is "day", "dawn" (the morning
+//                    reading that ends the night), or "dusk" (the evening
+//                    reading that trips the rule) plus minutes, "dusk+10"
 //   alarms(index)    ids of the standing alarms shown at a program step
 //   tick(index, api) drifts the live readings for a program step
 //   scenarios(t, n)  guided scenarios (see scenarios.js)
+//   gateway          { id, at } the radio gateway on the model (dataflow.js)
 //   effects          [init(root)] animations on the maquette
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -383,6 +389,8 @@ export function initTwin(root, config) {
     mode: "auto",
     // False while the device cannot reach Nexavia (e.g. gateway outage).
     online: true,
+    // The level the maquette shows or has been sent (see showOnModel).
+    sent: undefined,
   }));
   const deviceById = new Map(devices.map((device) => [device.id, device]));
   const steps = config.steps(t);
@@ -395,12 +403,76 @@ export function initTwin(root, config) {
   let ready = false;
   // True while a guided scenario directs the scene; the rule is suspended.
   let directed = false;
+  // True while a scenario replays earlier steps: no packets, no delays.
+  let quiet = false;
   let timer;
+
+  // The lighting program runs on a day clock. The light sensor follows the
+  // sun (daylight.js); each step fires at its time of day, and the clock
+  // slows down around the steps so every event can be read.
+  const maxLux = Math.max(...steps.map((step) => step.lux));
+  const sun = sunTimes(maxLux, steps.find((step) => step.at === "dusk")?.lux ?? maxLux / 2, maxLux - 0.5);
+  const stepTimes = steps.map(({ at = "day" }) => {
+    const [, base, offset = 0] = /^(day|dawn|dusk)([+-]\d+)?$/.exec(at);
+    return wrap({ day: sun.dawn + 1, dawn: sun.dawn, dusk: sun.dusk }[base] + Number(offset) / 60);
+  });
+  const hoursApart = (a, b) => Math.min(wrap(a - b), wrap(b - a));
+  // The step in effect at an hour: the last one to have fired.
+  const stepAt = (hours) => stepTimes.reduce((best, time, i) => (wrap(hours - time) < wrap(hours - stepTimes[best]) ? i : best), 0);
+  // Simulated hours per second: an hour a second, three minutes a second
+  // around each step (a full day takes about 40 s).
+  const rate = (hours) => {
+    const near = Math.min(...stepTimes.map((time) => hoursApart(hours, time)));
+    const k = Math.min(1, Math.max(0, (near - 0.08) / 0.5));
+    return 0.05 + 0.95 * k * k * (3 - 2 * k);
+  };
+  // The page opens in the late afternoon, shortly before the evening program.
+  let clock = wrap(sun.dusk - 0.75);
+  let clockFrame = 0;
+  let lastFrame = 0;
+  const sky = initDaylight(root, {
+    t,
+    onScrub(hours) {
+      if (directed) return;
+      if (!paused) setPaused(true);
+      setClock(hours);
+    },
+  });
+  sky?.setMarks([
+    [stepTimes[steps.findIndex((step) => step.at === "dusk")], t("Pravilo prižge luči", "The rule switches the lights on")],
+    [stepTimes[steps.findIndex((step) => step.at === "dawn")], t("Pravilo ugasne luči", "The rule switches the lights off")],
+  ]);
+  const flow = initDataFlow(root, { gateway: config.gateway });
+
+  // Sets the time of day: the sky, the ambient light reading and, unless a
+  // scenario directs the scene, the program step for that hour.
+  const luxReading = ui("lux");
+  function setClock(hours, ease = false) {
+    clock = wrap(hours);
+    sky?.setTime(clock, ease);
+    const lux = `${luxAt(clock, maxLux)} lx`;
+    if (luxReading && luxReading.textContent !== lux) luxReading.textContent = lux;
+    if (directed) return;
+    const at = stepAt(clock);
+    if (at === index) return;
+    index = at;
+    render(steps[index]);
+  }
+  function runClock(now) {
+    const dt = Math.min(0.1, (now - lastFrame) / 1000);
+    lastFrame = now;
+    setClock(clock + rate(clock) * dt);
+    clockFrame = requestAnimationFrame(runClock);
+  }
+  // Between steps the meters and sensors keep reporting.
+  let reports = 0;
+  const report = () => config.tick(++reports, readingApi);
 
   // Readings: every element showing a reading carries data-reading="key" —
   // the dashboard row and the sensor's card on the maquette. `card` is the
   // card's own text where it differs from the dashboard's.
   function setReading(key, text, note, card = text) {
+    if (!quiet) flow?.uplink(key);
     root.querySelectorAll(`[data-reading="${key}"]`).forEach((element) => {
       const onCard = element.closest(".city-sensor-popover");
       const value = onCard ? card : text;
@@ -427,7 +499,6 @@ export function initTwin(root, config) {
     const standing = config.alarms(index);
     root.querySelectorAll("[data-alarm]").forEach((alarm) => (alarm.hidden = !standing.includes(alarm.dataset.alarm)));
     setDemoPill(standing.length);
-    ui("lux").textContent = `${step.lux} lx`;
     config.tick(index, readingApi);
     // A visitor's command stays the latest event for a moment before the
     // simulation's next entry replaces it.
@@ -455,6 +526,32 @@ export function initTwin(root, config) {
     ui("event").textContent = `${time} · ${text}`;
   }
 
+  // The maquette shows a device's light once its command arrives: at once,
+  // or after the packet's trip while the data flow is shown.
+  function showOnModel(device) {
+    if (device.sent === device.state) return;
+    device.sent = device.state;
+    const wait = quiet ? 0 : (flow?.downlink(device.id, device.online) ?? 0);
+    clearTimeout(device.paintTimer);
+    if (wait) device.paintTimer = setTimeout(() => paintModel(device), wait);
+    else paintModel(device);
+  }
+  function paintModel(device) {
+    const level = device.sent;
+    const on = level > 0;
+    const patch = root.querySelector(`[data-light-off="${device.id}"]`);
+    if (patch) {
+      patch.classList.toggle("is-off", !on);
+      // A dimmed light shows part of its unlit patch.
+      patch.style.opacity = on && level < 1 ? String((1 - level) * 0.85) : "";
+    }
+    // A pier light's reflection dims with it.
+    const glint = root.querySelector(`[data-light-glint="${device.id}"]`);
+    if (glint) glint.style.opacity = on ? String(level) : "0";
+    // At night its light falls through the dark.
+    sky?.setLevel(device.id, level);
+  }
+
   // Projects the device state onto everything that shows it: the maquette's
   // light patches and hotspots, the dashboard rows, and the KPI totals.
   function renderDevices(changed = []) {
@@ -466,15 +563,7 @@ export function initTwin(root, config) {
       const watts = Math.round(device.watts * device.state);
       power += watts;
       if (on) active++;
-      const patch = root.querySelector(`[data-light-off="${device.id}"]`);
-      if (patch) {
-        patch.classList.toggle("is-off", !on);
-        // A dimmed light shows part of its unlit patch.
-        patch.style.opacity = dimmed ? String((1 - device.state) * 0.85) : "";
-      }
-      // A pier light's reflection dims with it.
-      const glint = root.querySelector(`[data-light-glint="${device.id}"]`);
-      if (glint) glint.style.opacity = on ? String(device.state) : "0";
+      showOnModel(device);
       root.querySelector(`[data-device="${device.id}"]`)?.setAttribute("aria-pressed", String(on));
       const row = root.querySelector(`[data-row="${device.id}"]`);
       if (!row) return;
@@ -505,13 +594,23 @@ export function initTwin(root, config) {
     if (autoButton) autoButton.hidden = !devices.some((device) => device.mode === "manual");
   }
 
+  // Jumps the clock to the next step.
   function next() {
-    index = (index + 1) % steps.length;
-    render(steps[index]);
+    setClock(stepTimes[(index + 1) % steps.length]);
   }
   function schedule() {
     clearInterval(timer);
-    if (ready && !directed && !paused && visible && !reducedMotion.matches) timer = setInterval(next, 3200);
+    const running = ready && !directed && !paused && visible && !reducedMotion.matches;
+    if (running) {
+      timer = setInterval(report, 3200);
+      if (!clockFrame) {
+        lastFrame = performance.now();
+        clockFrame = requestAnimationFrame(runClock);
+      }
+    } else if (clockFrame) {
+      cancelAnimationFrame(clockFrame);
+      clockFrame = 0;
+    }
     root.classList.toggle("is-paused", paused || !visible || reducedMotion.matches);
   }
   // Pause state is shown in two places: the pause button and the status
@@ -773,11 +872,13 @@ export function initTwin(root, config) {
     enter() {
       saved = {
         paused,
+        clock,
         devices: devices.map(({ state, mode, online }) => ({ state, mode, online })),
         readings: [...root.querySelectorAll("[data-reading]")].map((element) => [element, element.innerHTML]),
       };
       directed = true;
       schedule();
+      sky?.setDisabled(true);
       controls.forEach((control) => control && (control.disabled = true));
       const status = $(".twin-live");
       status.classList.remove("is-stopped");
@@ -786,6 +887,7 @@ export function initTwin(root, config) {
     },
     exit() {
       if (!saved) return;
+      quiet = true;
       devices.forEach((device, i) => Object.assign(device, saved.devices[i]));
       // Readings and their notes go back to the values before the scenario.
       saved.readings.forEach(([element, html]) => element.innerHTML !== html && (element.innerHTML = html));
@@ -795,13 +897,30 @@ export function initTwin(root, config) {
       direction.pin(null);
       direction.spotlight(null);
       direction.focus(null);
+      direction.signal("reset");
       controls.forEach((control) => control && (control.disabled = false));
+      sky?.setDisabled(false);
       $(".twin-live").classList.remove("is-directed");
       directed = false;
       commandShownUntil = 0;
       render(steps[index]);
+      setClock(saved.clock, true);
+      quiet = false;
       setPaused(saved.paused);
       saved = null;
+    },
+    // While quiet, changes land at once and send no packets (a scenario
+    // replaying its earlier steps).
+    quiet(value) {
+      quiet = value;
+    },
+    // A scenario's time of day ("19:05"), glided to.
+    setClock(time) {
+      setClock(parseTime(time), true);
+    },
+    // Tells the maquette's effects about a scenario event (e.g. tide.js).
+    signal(name, value) {
+      root.dispatchEvent(new CustomEvent("twin:signal", { detail: { name, value } }));
     },
     setLevel(id, level) {
       deviceById.get(id).state = level;
@@ -830,6 +949,7 @@ export function initTwin(root, config) {
       setDemoPill(list.length);
     },
     setSync(ok) {
+      flow?.setOnline(ok);
       const sync = $(".twin-sync");
       if (!sync) return;
       sync.classList.toggle("is-lost", !ok);
@@ -897,7 +1017,12 @@ export function initTwin(root, config) {
       }
     },
   };
-  const scenarios = initScenarios(root, direction, config.scenarios(t, n));
+  // The page keeps the open scenario and step in its address (index.js).
+  const scenarios = initScenarios(root, direction, config.scenarios(t, n), {
+    onChange(scenario, step) {
+      root.dispatchEvent(new CustomEvent("twin:scenario", { bubbles: true, detail: { twin: root.dataset.twinTab, scenario, step } }));
+    },
+  });
   // The floating dashboard starts below the scenario launcher so every
   // scenario stays reachable, until the visitor places it themselves.
   const launcher = root.querySelector(".twin-scenarios");
@@ -912,11 +1037,15 @@ export function initTwin(root, config) {
   window.addEventListener("resize", () => requestAnimationFrame(clearLauncher), { passive: true });
   overlayToggle?.addEventListener("click", () => requestAnimationFrame(clearLauncher));
 
+  index = stepAt(clock);
   render(steps[index]);
+  setClock(clock);
   schedule();
-  loadMaquette(root, en).then(() => {
+  const loaded = loadMaquette(root, en).then(() => {
     ready = true;
     schedule();
     scenarios?.enable();
+    sky?.prepare();
   });
+  return { ready: loaded, scenarios };
 }

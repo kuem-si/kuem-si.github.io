@@ -2,6 +2,7 @@ import { initWater, sample, fountain } from "./water.js";
 import { initBeacons } from "./beacons.js";
 import { initFountain } from "./fountain.js";
 import { initTraffic } from "./traffic.js";
+import { initTide } from "./tide.js";
 import geometry from "../../components/nexavia/showcase/marina-geometry.json";
 
 // The smart-marina twin: hotel, restaurant, sanitary block and four pier
@@ -95,8 +96,21 @@ const TRAFFIC = {
   counts: { car: 5, cyclist: 2, pedestrian: 7, boat: 4 },
 };
 
+// High water: about 6 px up the quay walls at the warning level. The six
+// lowest pedestals sit along the seaward pier on the east side (pier B).
+const TIDE = { base: 0.45, perMetre: 18, max: 8, pedestals: [865, 893, 921, 949, 977, 1005].map((x) => [x, 531]) };
+
+function water(root) {
+  const surface = waves(root.querySelector("[data-city-art]")?.dataset.waterSrc);
+  const redraw = initWater(root, surface);
+  const en = document.documentElement.lang.startsWith("en");
+  initTide(root, { water: redraw, patch: surface[0], ...TIDE, label: en ? "6 pedestals switched off" : "6 priključkov izklopljenih" });
+}
+
 export const marina = {
-  effects: [(root) => initWater(root, waves(root.querySelector("[data-city-art]")?.dataset.waterSrc)), (root) => initBeacons(root, BEACONS), (root) => initFountain(root, FOUNTAIN), (root) => initTraffic(root, TRAFFIC)],
+  effects: [water, (root) => initBeacons(root, BEACONS), (root) => initFountain(root, FOUNTAIN), (root) => initTraffic(root, TRAFFIC)],
+  // The radio gateway on the hotel roof.
+  gateway: { id: "GW_02", at: [424, 214] },
   devices: (t) => [
     { id: "HOTEL_01", name: t("Hotel", "Hotel"), watts: 180 },
     { id: "RESTAURANT_01", name: t("Restavracija s teraso", "Restaurant and terrace"), watts: 140 },
@@ -110,6 +124,7 @@ export const marina = {
   counters: [],
   steps: (t) => [
     {
+      at: "day",
       text: t("Senzor LIGHT_02: 52 lx · dovolj dnevne svetlobe", "Sensor LIGHT_02: 52 lx · enough daylight"),
       lux: 52,
       states: off(),
@@ -117,6 +132,7 @@ export const marina = {
       event: t("Senzor svetlobe v marini je izmeril 52 lx.", "The marina light sensor measured 52 lx."),
     },
     {
+      at: "dusk",
       text: t("Senzor LIGHT_02: 21 lx · sonce zahaja", "Sensor LIGHT_02: 21 lx · the sun is setting"),
       lux: 21,
       states: off(),
@@ -124,6 +140,7 @@ export const marina = {
       event: t("Prehod GW_02 je posredoval meritev 21 lx.", "Gateway GW_02 relayed a reading of 21 lx."),
     },
     {
+      at: "dusk+10",
       text: t("Na pomolih se prižgejo luči", "The pier lights switch on"),
       lux: 21,
       states: [0, 0, 0, 1, 1, 1, 1],
@@ -131,6 +148,7 @@ export const marina = {
       event: t("PIER_01–PIER_04: luči na pomolih so vključene.", "PIER_01–PIER_04: pier lights switched on."),
     },
     {
+      at: "dusk+20",
       text: t("Restavracija prižge luči na terasi", "The restaurant lights up its terrace"),
       lux: 21,
       states: [0, 1, 0, 1, 1, 1, 1],
@@ -138,6 +156,7 @@ export const marina = {
       event: t("RESTAURANT_01: razsvetljava terase je vključena.", "RESTAURANT_01: terrace lighting switched on."),
     },
     {
+      at: "dusk+30",
       text: t("V hotelu se prižgejo luči", "The hotel lights switch on"),
       lux: 21,
       states: [1, 1, 0, 1, 1, 1, 1],
@@ -145,6 +164,7 @@ export const marina = {
       event: t("HOTEL_01: razsvetljava je vključena.", "HOTEL_01: lighting switched on."),
     },
     {
+      at: "dusk+40",
       text: t("Sanitarni blok vklopi razsvetljavo", "The sanitary block lights come on"),
       lux: 21,
       states: [1, 1, 1, 1, 1, 1, 1],
@@ -152,6 +172,7 @@ export const marina = {
       event: t("SANITARY_01: razsvetljava je vključena.", "SANITARY_01: lighting switched on."),
     },
     {
+      at: "dawn",
       text: t("Svetloba se vrne · sistem ugasne luči", "Daylight returns · system switches lights off"),
       lux: 52,
       states: off(),
@@ -262,6 +283,7 @@ function scenarios(t, n) {
         api.setReading("sea-level", sea(0.42), t("Normalno", "Normal"));
         api.setReading("shore-power", `${n(46.8, 1)} kWh`);
         api.setAlarms([]);
+        api.signal("pedestals", false);
         api.pin("sea-level");
         api.narrate({ rule: t("Pravilo: gladina morja > +0,70 m", "Rule: sea level > +0.70 m") });
       },
@@ -306,6 +328,7 @@ function scenarios(t, n) {
               ["SHORE_POWER_B", t("Varnostni odklop · 6 priključkov", "Safety cut-off · 6 pedestals")],
             ]);
             api.pin("shore-power");
+            api.signal("pedestals", true);
             api.spotlight(api.$reading("shore-power"));
             play.toast(t("Visoka plima", "High tide"), t("+0,78 m · izklopljenih 6 priključkov", "+0.78 m · 6 pedestals switched off"), "10:06");
             api.log(t("SHORE_POWER_B · Varnostni odklop 6 priključkov", "SHORE_POWER_B · 6 pedestals cut off"), "10:06");
@@ -319,6 +342,7 @@ function scenarios(t, n) {
           run(api, play) {
             play.count("sea-level", 0.78, 0.51, sea, t("Upada", "Falling"));
             api.setAlarms([]);
+            api.signal("pedestals", false);
             api.pin("sea-level");
             api.spotlight(api.$reading("sea-level"));
             api.log(t("SEA_LEVEL_01 · +0,51 m · priključki ponovno vklopljeni", "SEA_LEVEL_01 · +0.51 m · pedestals back on"), "13:30");
