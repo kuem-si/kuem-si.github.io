@@ -387,6 +387,101 @@ html:not(.js) .nx-role-panel[hidden] {
   color: #156b75;
   font-size: 1.5rem;
 }
+.nx-showroom {
+  background: #eaf5f9;
+}
+.nx-showroom-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 3rem;
+  align-items: center;
+}
+.nx-showroom-copy h2 {
+  max-width: 16ch;
+}
+.nx-showroom-copy p:not(.nx-eyebrow) {
+  color: #52687a;
+  margin: 0.4rem 0 1.8rem;
+  max-width: 46ch;
+}
+.nx-showroom-twins {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.nx-showroom-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #d5e4eb;
+  border-radius: 5px;
+  overflow: hidden;
+  background: white;
+  color: #172437;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(27, 62, 85, 0.03);
+  contain: content;
+  transition:
+    box-shadow 0.25s,
+    border-color 0.25s;
+}
+.nx-showroom-card:hover,
+.nx-showroom-card:focus-visible {
+  border-color: #156b75;
+  box-shadow: 0 10px 20px rgba(27, 62, 85, 0.09);
+}
+.nx-showroom-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  background: #dfe8ec;
+  transition: transform 0.4s;
+}
+.nx-showroom-card:hover img {
+  transform: scale(1.03);
+}
+.nx-showroom-card span {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem 1.1rem 1.2rem;
+  position: relative;
+  background: white;
+}
+.nx-showroom-card strong {
+  font-size: 1.15rem;
+}
+.nx-showroom-card small {
+  color: #52687a;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+.nx-showroom-card em {
+  color: #156b75;
+  font-style: normal;
+  font-weight: 700;
+  margin-top: 0.3rem;
+}
+@media (max-width: 980px) {
+  .nx-showroom-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+@media (max-width: 500px) {
+  .nx-showroom-twins {
+    grid-template-columns: 1fr;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nx-showroom-card img {
+    transition: none;
+  }
+  .nx-showroom-card:hover img {
+    transform: none;
+  }
+}
 .nx-kai,
 .nx-closing {
   background: #0c6170;

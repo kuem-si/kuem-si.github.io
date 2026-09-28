@@ -6,6 +6,8 @@ import { getImage, Image } from "astro:assets";
 import type { Locale } from "../../lib/i18n";
 import logo from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
 import dashboard from "../../assets/brand/nexavia/nexavia-noc-dashboard.png";
+import cityMaquette from "../../assets/nexavia/showcase/city-maquette.png";
+import marinaMaquette from "../../assets/nexavia/showcase/marina-maquette.webp";
 import { nexaviaSoftware } from "../../data/organization";
 import "../../styles/nexavia.css";
 
@@ -118,6 +120,17 @@ const copy = {
     kaiChartAria: "Demo trend porabe z oranžno označeno anomalijo",
     kaiRecommendation: "Priporočen naslednji korak",
     kaiRecommendationP: "Preverite lokacijo in primerjajte zadnjih 7 dni.",
+    showroomEyebrow: "RAZSTAVNI PROSTOR",
+    showroomH2: "Preizkusite Nexavio na maketi.",
+    showroomP:
+      "Dva digitalna dvojčka, povezana z nadzorno ploščo Nexavie. Prižgite luči, spremljajte meritve senzorjev in opazujte, kako pravila samodejno ukrepajo.",
+    showroomHref: "/nexavia/razstavni-prostor",
+    showroomCta: "Odprite razstavni prostor",
+    showroomTwins: [
+      ["city", "Pametno mesto", "Razsvetljava, števci porabe ter senzorji mostu, reke, zraka in kolesarjev."],
+      ["marina", "Pametna marina", "Luči na pomolih, števci elektrike, vode in goriva ter zasedenost privezov."],
+    ],
+    showroomOpen: "Odpri maketo",
     storiesEyebrow: "USPEŠNE ZGODBE",
     storiesH2: "Nexavia v realnem okolju.",
     stories: [
@@ -218,6 +231,17 @@ const copy = {
     kaiChartAria: "Demo consumption trend with an orange anomaly",
     kaiRecommendation: "Recommended next step",
     kaiRecommendationP: "Check the location and compare the last 7 days.",
+    showroomEyebrow: "SHOWCASE ROOM",
+    showroomH2: "Try Nexavia on a scale model.",
+    showroomP:
+      "Two digital twins connected to a Nexavia dashboard. Switch the lights, follow live sensor readings and watch the rules act on their own.",
+    showroomHref: "/en/nexavia/showcase-room",
+    showroomCta: "Open the showcase room",
+    showroomTwins: [
+      ["city", "Smart city", "Lighting, utility meters, and bridge, river, air and cyclist sensors."],
+      ["marina", "Smart marina", "Pier lights, electricity, water and fuel meters, and berth occupancy."],
+    ],
+    showroomOpen: "Open the model",
     storiesEyebrow: "SUCCESS STORIES",
     storiesH2: "Nexavia in real environments.",
     stories: [
@@ -488,6 +512,38 @@ const breadcrumb = {
                 <span aria-hidden="true">→</span>
               </>
             </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <section class="nx-section nx-showroom" aria-labelledby="nx-showroom-title">
+    <div class="container nx-showroom-grid">
+      <div class="nx-showroom-copy">
+        <p class="nx-eyebrow">{copy.showroomEyebrow}</p>
+        <h2 id="nx-showroom-title">{copy.showroomH2}</h2>
+        <p>{copy.showroomP}</p>
+        <a class="btn btn-primary" href={copy.showroomHref}>{copy.showroomCta} →</a>
+      </div>
+      <div class="nx-showroom-twins">
+        {
+          copy.showroomTwins.map(([id, title, twinCopy]) => (
+            <a class="nx-showroom-card" href={`${copy.showroomHref}#${id}`}>
+              <Image
+                src={id === "city" ? cityMaquette : marinaMaquette}
+                alt=""
+                widths={[360, 540, 720]}
+                sizes="(min-width: 1100px) 330px, (min-width: 760px) 40vw, 100vw"
+                format="webp"
+                quality={80}
+                loading="lazy"
+              />
+              <span>
+                <strong>{title}</strong>
+                <small>{twinCopy}</small>
+                <em>{copy.showroomOpen} →</em>
+              </span>
+            </a>
           ))
         }
       </div>
