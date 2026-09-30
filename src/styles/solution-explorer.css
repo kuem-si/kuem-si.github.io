@@ -386,7 +386,7 @@
 }
 .step-action-flow li:nth-child(2) b {
   background: #e95d2a;
-  color: white;
+  color: #161a1d;
 }
 .step-action-flow .hp-icon {
   margin: 0 auto 10px;
@@ -650,7 +650,7 @@
     border: 1px solid #d3e2e5;
   }
   .explorer-stories a,
-.explorer-stories .story-customer {
+  .explorer-stories .story-customer {
     padding: 8px 12px;
   }
   .explorer-copy h1 {

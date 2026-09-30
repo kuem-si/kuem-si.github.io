@@ -56,7 +56,7 @@
 .ab-contact .btn-primary {
   border-color: #e95d2a;
   background: #e95d2a;
-  color: #fff;
+  color: #161a1d;
 }
 .ab-actions .btn-secondary {
   border-color: #156b75;
@@ -83,7 +83,9 @@
   align-self: start;
   margin: 0;
   color: var(--kuem-concrete);
-  font: 600 12px / 1.5 "Source Sans 3", sans-serif;
+  font:
+    600 12px / 1.5 "Source Sans 3",
+    sans-serif;
   letter-spacing: 0.16em;
 }
 .ab-flow {
@@ -139,7 +141,9 @@
   min-height: 48px;
   margin: 0 0 16px;
   color: var(--kuem-white);
-  font: 600 15px / 1.5 "Space Grotesk", sans-serif;
+  font:
+    600 15px / 1.5 "Space Grotesk",
+    sans-serif;
   letter-spacing: 0;
 }
 .ab-flow h3 span {
@@ -151,7 +155,9 @@
 .ab-flow p {
   margin: 0;
   color: var(--kuem-concrete);
-  font: 400 16px / 1.5 "Source Sans 3", sans-serif;
+  font:
+    400 16px / 1.5 "Source Sans 3",
+    sans-serif;
 }
 @media (max-width: 600px) {
   .ab-hero-graphic {
@@ -469,7 +475,7 @@ body:has(.ab-page) .site-header .header-contact {
   border-color: #e95d2a !important;
   border-radius: 3px;
   background: #e95d2a !important;
-  color: #fff !important;
+  color: #161a1d !important;
 }
 @media (max-width: 980px) {
   .ab-hero-grid,

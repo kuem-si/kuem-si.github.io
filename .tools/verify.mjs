@@ -3,6 +3,7 @@
 // Usage: node .tools/verify.mjs
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { checkFonts } from "../scripts/check-fonts.mjs";
 import { checkRedirects } from "../scripts/check-redirects.mjs";
 
 let ok = true;
@@ -174,7 +175,10 @@ for (const file of htmlFiles) {
     if (hash) {
       const targetHtml = read(target);
       const escaped = hash.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      if (!new RegExp(`(?:id|name)="${escaped}"`).test(targetHtml))
+      // The showroom opens a tab named in the hash (#marina), see
+      // src/nexavia/showcase-room/index.js.
+      const anchor = `(?:id|name|data-twin-tab)="${escaped}"`;
+      if (!new RegExp(anchor).test(targetHtml))
         broken.push(`${file} -> ${raw} (missing #${hash})`);
     }
   }
@@ -191,6 +195,14 @@ check(
   "all internal links and fragments resolve",
   broken.length === 0 ||
     (console.log(`  ${broken.slice(0, 10).join("\n  ")}`), false),
+);
+
+// 11. the brand fonts can draw every character the pages use
+const fontProblems = checkFonts();
+check(
+  "brand fonts cover the text of every page",
+  fontProblems.length === 0 ||
+    (console.log(`  ${fontProblems.join("\n  ")}`), false),
 );
 
 console.log("");

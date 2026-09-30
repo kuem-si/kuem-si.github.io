@@ -64,7 +64,7 @@ abbr[title] {
 .nx-actions .btn-primary,
 .nx-closing .btn-primary {
   background: #ed6030;
-  color: white;
+  color: #161a1d;
 }
 .nx-actions .btn-secondary {
   border-color: #156b75;
@@ -854,7 +854,7 @@ html:not(.js) .nx-role-panel[hidden] {
   background: #f06432;
   border-color: #f06432;
   border-radius: 4px;
-  color: white;
+  color: #161a1d;
 }
 .site-header:has(+ main .nx-hero).is-scrolled {
   background: rgba(247, 251, 253, 0.98);
@@ -890,7 +890,7 @@ body:has(.nx-hero) .site-header .header-contact {
   background: #f06432 !important;
   border-color: #f06432 !important;
   border-radius: 4px;
-  color: #fff !important;
+  color: #161a1d !important;
 }
 @media (min-width: 1101px) {
   .nx-hero-grid {

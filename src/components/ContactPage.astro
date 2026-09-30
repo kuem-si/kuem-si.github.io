@@ -30,14 +30,14 @@ const sl = locale === "sl";
       </p>
     </div>
   </section><section class="section" id="demo-form">
-    <div class="container split">
+    <div class="container split contact-split">
       <LeadForm
         locale={locale}
         formId="contact-form"
         heading={sl ? "Pošljite povpraševanje" : "Send an inquiry"}
         submitLabel={sl ? "Pošlji povpraševanje" : "Send inquiry"}
         sourcePage={sl ? "kontakt" : "contact"}
-      /><aside>
+      /><aside class="contact-direct">
         <h2>{sl ? "Neposreden stik" : "Direct contact"}</h2><a
           href={`mailto:${COMPANY_EMAIL}`}>{COMPANY_EMAIL}</a
         >
