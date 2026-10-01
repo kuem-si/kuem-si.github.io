@@ -102,7 +102,9 @@ const count = String(steps.length).padStart(2, "0");
   const back = panel.querySelector("[data-panel-back]");
   const next = panel.querySelector("[data-panel-next]");
   const cta = panel.querySelector("[data-panel-cta]");
-  const shell = document.querySelector(".solutions-shell");
+  const shell = document.querySelectorAll(
+    "body > .skip-link, body > .site-header, body > main, body > .site-footer",
+  );
   const mobile = matchMedia("(max-width: 767px)");
   let current = -1,
     opener = null,
@@ -111,7 +113,7 @@ const count = String(steps.length).padStart(2, "0");
   const syncMode = () => {
     const modal = current >= 0 && mobile.matches;
     panel.setAttribute("aria-modal", String(modal));
-    shell.inert = modal;
+    shell.forEach((el) => (el.inert = modal));
     document.body.classList.toggle("solution-modal", modal);
   };
   const render = (index, focus = true) => {

@@ -4156,9 +4156,6 @@ textarea {
 }
 
 /* One consistent light navigation across every page. */
-.legacy-site-header {
-  display: none !important;
-}
 html body:has(main) .site-header.site-header,
 html body:has(main) .site-header.site-header.is-scrolled {
   background: rgba(255, 255, 255, 0.98) !important;

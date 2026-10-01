@@ -11,12 +11,6 @@
 .solutions-page button:not([disabled]) {
   cursor: pointer;
 }
-.solutions-page .hp-header a[aria-current="page"] {
-  color: var(--hp-petrol);
-  text-decoration: underline;
-  text-decoration-thickness: 3px;
-  text-underline-offset: 23px;
-}
 .solutions-page .explorer-hero {
   background: #f3f2f0;
   padding: 72px 0 64px;
@@ -565,7 +559,7 @@
   .solution-panel.is-open {
     transform: translateY(0);
   }
-  .solution-modal .solutions-shell:after {
+  body.solution-modal:after {
     content: "";
     position: fixed;
     inset: 0;

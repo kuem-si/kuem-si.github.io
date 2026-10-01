@@ -1,13 +1,9 @@
 ---
-import LanguageSelector from "../LanguageSelector.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
 import TrustedCompanies from "../TrustedCompanies.astro";
-import SeoHead from "../SeoHead.astro";
-import Header from "../Header.astro";
-import Footer from "../Footer.astro";
 import Icon from "./LineIcon.astro";
 import DataFlow from "./DataFlow.astro";
 import { Image } from "astro:assets";
-import wordmark from "../../assets/brand/kuem/KUEM_Official_Wordmark.svg";
 import nexavia from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
 import dashboard from "../../assets/brand/nexavia/nexavia-noc-dashboard.png";
 import { nexaviaSoftware, kaiSoftware } from "../../data/organization";
@@ -15,8 +11,6 @@ import { COMPANY_EMAIL } from "../../data/company";
 import type { Locale } from "../../lib/i18n";
 import { withBase } from "../../lib/paths";
 import {
-  homeNavigation,
-  homeNavigationEn,
   benefits,
   benefitsEn,
   steps,
@@ -42,15 +36,6 @@ const copy = {
     seoTitle: "KUEM | Od naprave do odločitve",
     seoDescription:
       "KUEM povezuje naprave, obstoječe sisteme in podatke v platformo Nexavia za učinkovitejše upravljanje infrastrukture.",
-    skip: "Preskoči na vsebino",
-    homeAria: "KUEM – domača stran",
-    menuOpen: "Odpri meni",
-    menuClose: "Zapri meni",
-    navAria: "Glavna navigacija",
-    altLangHref: "/en/",
-    altLangLabel: "EN",
-    altLangAria: "View site in English",
-    headerCta: "Dogovorite se za predstavitev",
     heroEyebrow: "Digitalizacija infrastrukture in procesov",
     heroH1: "Od naprave do odločitve.",
     heroIntro:
@@ -124,11 +109,6 @@ const copy = {
     demoCta: "Želim predstavitev Nexavie",
     subjectBooking: "Dogovor%20za%20uvodni%20sestanek",
     subjectDemo: "Predstavitev%20platforme%20Nexavia",
-    footerTopAria: "KUEM – na vrh",
-    addressCity: "Kranj, Slovenija",
-    footerNavAria: "Navigacija v nogi",
-    privacy: "Zasebnost",
-    copyright: "Vse pravice pridržane.",
     dialogCloseAria: "Zapri povečani prikaz",
     dialogClose: "Zapri ×",
     dialogImgAlt: "Povečan originalni Nexavia dashboard",
@@ -137,15 +117,6 @@ const copy = {
     seoTitle: "KUEM | From device to decision",
     seoDescription:
       "KUEM connects devices, existing systems and data in the Nexavia platform for more effective infrastructure management.",
-    skip: "Skip to content",
-    homeAria: "KUEM – home page",
-    menuOpen: "Open menu",
-    menuClose: "Close menu",
-    navAria: "Main navigation",
-    altLangHref: "/",
-    altLangLabel: "SL",
-    altLangAria: "View site in Slovenian",
-    headerCta: "Book a presentation",
     heroEyebrow: "Infrastructure and process digitalization",
     heroH1: "From device to decision.",
     heroIntro:
@@ -219,17 +190,11 @@ const copy = {
     demoCta: "I would like a Nexavia presentation",
     subjectBooking: "Introductory%20meeting%20booking",
     subjectDemo: "Nexavia%20platform%20presentation",
-    footerTopAria: "KUEM – back to top",
-    addressCity: "Kranj, Slovenia",
-    footerNavAria: "Footer navigation",
-    privacy: "Privacy",
-    copyright: "All rights reserved.",
     dialogCloseAria: "Close enlarged view",
     dialogClose: "Close ×",
     dialogImgAlt: "Enlarged original Nexavia dashboard",
   },
 }[locale];
-const nav = locale === "sl" ? homeNavigation : homeNavigationEn;
 const benefitList = locale === "sl" ? benefits : benefitsEn;
 const stepList = locale === "sl" ? steps : stepsEn;
 const industryList = locale === "sl" ? industries : industriesEn;
@@ -246,430 +211,392 @@ const stories = [
 }));
 ---
 
-<!doctype html>
-<html lang={locale}>
-  <head
-    ><SeoHead
-      title={copy.seoTitle}
-      description={copy.seoDescription}
-      jsonLd={[nexaviaSoftware, kaiSoftware]}
-    /></head
-  >
-  <body class="kuem-home">
-    <a class="skip-link" href="#main">{copy.skip}</a>
-    <Header locale={locale} pathname={locale === "sl" ? "/" : "/en/"} />
-    <header class="hp-header legacy-site-header">
-      <div class="hp-wrap hp-header-inner">
-        <a href="#main" aria-label={copy.homeAria}
-          ><img
-            class="hp-wordmark"
-            src={wordmark.src}
-            width="158"
-            height="48"
-            alt="KUEM"
-            fetchpriority="high"
-            decoding="sync"
-          /></a
-        >
-        <button
-          class="hp-menu"
-          type="button"
-          aria-expanded="false"
-          aria-controls="homepage-nav"
-          aria-label={copy.menuOpen}
-          ><span></span><span></span><span></span></button
-        >
-        <nav id="homepage-nav" aria-label={copy.navAria}>
-          {nav.map(([label, href]) => <a href={withBase(href)}>{label}</a>)}
-          <LanguageSelector {locale} />
-          <a class="hp-button" href="#kontakt"
-            >{copy.headerCta} <span aria-hidden="true">→</span></a
-          >
-        </nav>
+<MainLayout
+  title={copy.seoTitle}
+  description={copy.seoDescription}
+  jsonLd={[nexaviaSoftware, kaiSoftware]}
+  bodyClass="kuem-home"
+>
+  <section class="hp-hero">
+    <svg
+      class="hp-ambient"
+      viewBox="0 0 900 380"
+      fill="none"
+      aria-hidden="true"
+      ><path
+        d="M280 0 440 135Q470 162 520 148T670 155 900 60M470 0 370 80Q350 100 390 128T570 110 760 180 900 160"
+      ></path><rect x="373" y="87" width="8" height="8"></rect><rect
+        x="663"
+        y="150"
+        width="6"
+        height="6"></rect></svg
+    >
+    <div class="hp-wrap hp-hero-grid">
+      <div>
+        <p class="hp-eyebrow">{copy.heroEyebrow}</p>
+        <h1>{copy.heroH1}</h1>
+        <p class="hp-intro">
+          {copy.heroIntro}
+        </p>
+        <div class="hp-actions">
+          <a class="hp-button" href={withBase(copy.heroCtaHref)}
+            >{copy.heroCta} <span aria-hidden="true">→</span></a
+          ><a class="hp-button hp-outline" href="#kontakt">{copy.heroCtaOutline}</a>
+        </div>
       </div>
-    </header>
-    <main id="main">
-      <section class="hp-hero">
-        <svg
-          class="hp-ambient"
-          viewBox="0 0 900 380"
-          fill="none"
-          aria-hidden="true"
-          ><path
-            d="M280 0 440 135Q470 162 520 148T670 155 900 60M470 0 370 80Q350 100 390 128T570 110 760 180 900 160"
-          ></path><rect x="373" y="87" width="8" height="8"></rect><rect
-            x="663"
-            y="150"
-            width="6"
-            height="6"></rect></svg
-        >
-        <div class="hp-wrap hp-hero-grid">
-          <div>
-            <p class="hp-eyebrow">{copy.heroEyebrow}</p>
-            <h1>{copy.heroH1}</h1>
-            <p class="hp-intro">
-              {copy.heroIntro}
-            </p>
-            <div class="hp-actions">
-              <a class="hp-button" href={withBase(copy.heroCtaHref)}
-                >{copy.heroCta} <span aria-hidden="true">→</span></a
-              ><a class="hp-button hp-outline" href="#kontakt">{copy.heroCtaOutline}</a>
-            </div>
-          </div>
-          <div class="hp-hero-visual">
-            <p class="hp-flow-caption">
-              {copy.flowCaption[0]}{" "}<br />{copy.flowCaption[1]}
-            </p><DataFlow locale={locale} />
-          </div>
-        </div>
-      </section>
-      <section class="hp-trust" aria-label={copy.trustAria}>
-        <div class="hp-wrap">
-          <h2 class="hp-eyebrow">{copy.trustEyebrow}</h2
-          ><TrustedCompanies label={copy.trustLabel} />
-        </div>
-      </section>
+      <div class="hp-hero-visual">
+        <p class="hp-flow-caption">
+          {copy.flowCaption[0]}{" "}<br />{copy.flowCaption[1]}
+        </p><DataFlow locale={locale} />
+      </div>
+    </div>
+  </section>
+  <section class="hp-trust" aria-label={copy.trustAria}>
+    <div class="hp-wrap">
+      <h2 class="hp-eyebrow">{copy.trustEyebrow}</h2
+      ><TrustedCompanies label={copy.trustLabel} />
+    </div>
+  </section>
 
-      <section id="nexavia" class="hp-product hp-section">
-        <div class="hp-wrap hp-product-grid">
-          <div class="hp-product-copy">
-            <div class="hp-nexavia-mark hp-product-logo">
-              <img
-                class="nexavia-wordmark"
-                src={nexavia.src}
-                width="1200"
-                height="360"
-                alt="Nexavia"
-                loading="lazy"
-              />
-            </div>
-            <h2>{copy.productH2}</h2>
-            <p>
-              {copy.productP}
-            </p>
-            <a class="hp-button" href={withBase(copy.productCtaHref)}
-              >{copy.productCta} <span aria-hidden="true">→</span></a
-            >
-            <div class="hp-benefits">
-              {
-                benefitList.map((item) => (
-                  <article class="hp-card">
+  <section id="nexavia" class="hp-product hp-section">
+    <div class="hp-wrap hp-product-grid">
+      <div class="hp-product-copy">
+        <div class="hp-nexavia-mark hp-product-logo">
+          <img
+            class="nexavia-wordmark"
+            src={nexavia.src}
+            width="1200"
+            height="360"
+            alt="Nexavia"
+            loading="lazy"
+          />
+        </div>
+        <h2>{copy.productH2}</h2>
+        <p>
+          {copy.productP}
+        </p>
+        <a class="hp-button" href={withBase(copy.productCtaHref)}
+          >{copy.productCta} <span aria-hidden="true">→</span></a
+        >
+        <div class="hp-benefits">
+          {
+            benefitList.map((item) => (
+              <article class="hp-card">
+                <>
+                  <Icon name={item.icon} />
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+      <figure class="hp-browser">
+        <div class="hp-browser-bar" aria-hidden="true">
+          <i></i><i></i><i></i><span></span>
+        </div>
+        <a
+          href={dashboard.src}
+          data-dashboard-open
+          aria-haspopup="dialog"
+          aria-controls="dashboard-preview"
+          aria-label={copy.dashLinkAria}
+        >
+          <Image
+            src={dashboard}
+            width={dashboard.width}
+            height={dashboard.height}
+            alt={copy.dashImgAlt}
+            decoding="async"
+            loading="lazy"
+            format="avif"
+          />
+          <span class="hp-enlarge"
+            >{copy.enlarge} <span aria-hidden="true">↗</span></span
+          >
+        </a>
+      </figure>
+    </div>
+  </section>
+
+  <section id="resitve" class="hp-section hp-how">
+    <div class="hp-wrap">
+      <p class="hp-eyebrow">{copy.howEyebrow}</p><h2>
+        {copy.howH2}
+      </h2>
+      <div class="hp-process">
+        <ol class="hp-steps">
+          {
+            stepList.map((item, i) => (
+              <li
+                class="hp-card"
+                id={i === 2 ? "platforma-korak" : undefined}
+              >
+                <>
+                  <div class="hp-step-icon">
                     <>
+                      <span>0{i + 1}</span>
                       <Icon name={item.icon} />
+                    </>
+                  </div>
+                  <div>
+                    <>
                       <h3>{item.title}</h3>
                       <p>{item.text}</p>
                     </>
-                  </article>
-                ))
-              }
-            </div>
-          </div>
-          <figure class="hp-browser">
-            <div class="hp-browser-bar" aria-hidden="true">
-              <i></i><i></i><i></i><span></span>
-            </div>
-            <a
-              href={dashboard.src}
-              data-dashboard-open
-              aria-haspopup="dialog"
-              aria-controls="dashboard-preview"
-              aria-label={copy.dashLinkAria}
-            >
-              <Image
-                src={dashboard}
-                width={dashboard.width}
-                height={dashboard.height}
-                alt={copy.dashImgAlt}
-                decoding="async"
-                loading="lazy"
-                format="avif"
-              />
-              <span class="hp-enlarge"
-                >{copy.enlarge} <span aria-hidden="true">↗</span></span
-              >
-            </a>
-          </figure>
-        </div>
-      </section>
-
-      <section id="resitve" class="hp-section hp-how">
-        <div class="hp-wrap">
-          <p class="hp-eyebrow">{copy.howEyebrow}</p><h2>
-            {copy.howH2}
-          </h2>
-          <div class="hp-process">
-            <ol class="hp-steps">
-              {
-                stepList.map((item, i) => (
-                  <li
-                    class="hp-card"
-                    id={i === 2 ? "platforma-korak" : undefined}
-                  >
-                    <>
-                      <div class="hp-step-icon">
-                        <>
-                          <span>0{i + 1}</span>
-                          <Icon name={item.icon} />
-                        </>
-                      </div>
-                      <div>
-                        <>
-                          <h3>{item.title}</h3>
-                          <p>{item.text}</p>
-                        </>
-                      </div>
-                    </>
-                  </li>
-                ))
-              }
-            </ol>
-            <svg
-              class="hp-api-route"
-              aria-label={copy.apiRouteAria}
-              role="img"
-              ><defs
-                ><marker
-                  id="api-arrow"
-                  viewBox="0 0 8 8"
-                  refX="7"
-                  refY="4"
-                  markerWidth="8"
-                  markerHeight="8"
-                  orient="auto"><path d="M1 1 7 4 1 7"></path></marker
-                ></defs
-              ><path data-api-path marker-end="url(#api-arrow)"></path><g
-                data-api-label
-                ><rect x="-22" y="-13" width="44" height="26" rx="4"
-                ></rect><text text-anchor="middle" dominant-baseline="central"
-                  >API</text
-                ></g
-              ></svg
-            >
-            <div class="hp-sources">
-              <h3>{copy.sourcesH3}</h3><ul>
-                {
-                  copy.sources.map((name, i) => (
-                    <li>
-                      <>
-                        <Icon
-                          name={
-                            ["database", "screen", "network", "leaf", "api"][i]
-                          }
-                        />
-                        <span>{name}</span>
-                      </>
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="panoge" class="hp-section hp-industries">
-        <div class="hp-wrap">
-          <div class="hp-section-heading">
-            <h2>{copy.industriesH2}</h2><p
-              class="hp-eyebrow"
-            >
-              {copy.industriesEyebrow}
-            </p>
-          </div>
-          <div class="hp-industry-grid">
+                  </div>
+                </>
+              </li>
+            ))
+          }
+        </ol>
+        <svg
+          class="hp-api-route"
+          aria-label={copy.apiRouteAria}
+          role="img"
+          ><defs
+            ><marker
+              id="api-arrow"
+              viewBox="0 0 8 8"
+              refX="7"
+              refY="4"
+              markerWidth="8"
+              markerHeight="8"
+              orient="auto"><path d="M1 1 7 4 1 7"></path></marker
+            ></defs
+          ><path data-api-path marker-end="url(#api-arrow)"></path><g
+            data-api-label
+            ><rect x="-22" y="-13" width="44" height="26" rx="4"
+            ></rect><text text-anchor="middle" dominant-baseline="central"
+              >API</text
+            ></g
+          ></svg
+        >
+        <div class="hp-sources">
+          <h3>{copy.sourcesH3}</h3><ul>
             {
-              industryList.map((item) => (
-                <article class="hp-card hp-industry">
-                  <>
-                    <Icon name={item.icon} />
-                    <div>
-                      <>
-                        <h3>{item.title}</h3>
-                        <p>{item.text}</p>
-                        <span class="hp-reference">
-                          <small>{copy.reference}</small>
-                          {item.reference}
-                        </span>
-                      </>
-                    </div>
-                  </>
-                </article>
-              ))
-            }
-          </div>
-        </div>
-      </section>
-
-      <section id="kai" class="hp-section hp-kai">
-        <div class="hp-wrap hp-kai-grid">
-          <div>
-            <p class="hp-eyebrow">{copy.kaiEyebrow}</p><h2>
-              {copy.kaiH2}
-            </h2><p>
-              {copy.kaiP}
-            </p><p class="hp-kai-emphasis">
-              {copy.kaiEmphasis}
-            </p><a class="hp-button hp-outline" href={withBase(copy.kaiCtaHref)}
-              >{copy.kaiCta} <span aria-hidden="true">→</span></a
-            >
-          </div>
-          <div class="hp-kai-example">
-            <p class="hp-example-label">{copy.exampleLabel}</p><div
-              class="hp-kai-panels"
-            >
-              <article class="hp-alert">
-                <p class="hp-alert-title">
-                  <span aria-hidden="true">△</span> {copy.alertTitle}
-                </p><h3>{copy.alertH3}</h3><p>
-                  {copy.alertP}
-                </p><a class="hp-button" href={withBase(copy.alertCtaHref)}
-                  >{copy.alertCta} <span aria-hidden="true">→</span></a
-                >
-              </article>
-              <figure class="hp-chart">
-                <figcaption>{copy.chartCaption}</figcaption><div
-                  class="hp-chart-legend"
-                >
-                  <span>{copy.chartLegend[0]}</span
-                  ><span>{copy.chartLegend[1]}</span>
-                </div><svg
-                  viewBox="0 0 320 180"
-                  role="img"
-                  aria-label={copy.chartAria}
-                  ><path
-                    class="hp-gridlines"
-                    d="M15 30H310M15 70H310M15 110H310M15 150H310M50 20V150M120 20V150M190 20V150M260 20V150"
-                  ></path><path
-                    class="hp-chart-range"
-                    d="M15 105 45 120 70 115 100 108 125 112 150 100 180 105 215 119 245 109 275 112 310 100V128L275 137 245 133 215 140 180 130 150 124 125 135 100 131 70 140 45 142 15 130Z"
-                  ></path><path
-                    class="hp-chart-normal"
-                    d="m15 119 30 12 25-5 30-7 25 5 25-12 30 5 35 12 30-10 30 6 35-11"
-                  ></path><path
-                    class="hp-chart-actual"
-                    d="m15 120 30 12 25-9 30-45 25-46 25 55 30 29 35 13 30-10 30 6 35-11"
-                  ></path><circle cx="125" cy="32" r="5"></circle><text
-                    x="15"
-                    y="174">00:00</text
-                  ><text x="102" y="174">06:00</text><text x="193" y="174"
-                    >12:00</text
-                  ><text x="277" y="174">18:00</text></svg
-                >
-              </figure>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="hp-section hp-usecases">
-        <div class="hp-wrap">
-          <div class="hp-section-heading">
-            <h2>{copy.usecasesH2}</h2><p class="hp-eyebrow">
-              {copy.usecasesEyebrow}
-            </p>
-          </div><div class="hp-case-grid">
-            {
-              useCaseList.map((item) => (
-                <article class="hp-card">
-                  <>
-                    <Icon name={item.icon} />
-                    <div>
-                      <>
-                        <h3>{item.title}</h3>
-                        <p>{item.text}</p>
-                        <a class="hp-text-link" href={withBase(item.href)}>
-                          {copy.usecaseCta} <span aria-hidden="true">→</span>
-                        </a>
-                      </>
-                    </div>
-                  </>
-                </article>
-              ))
-            }
-          </div>
-          <div id="zgodbe" class="hp-stories">
-            <h2 class="hp-eyebrow">{copy.storiesEyebrow}</h2><div>
-              {
-                stories.map((item) =>
-                  item.detail ? (
-                    <details>
-                      <>
-                        <summary>
-                          {item.name}
-                          <span class="hp-story-toggle" aria-hidden="true" />
-                          <span class="sr-only">{copy.storiesSrOnly}</span>
-                        </summary>
-                        <p>{item.detail}</p>
-                        <a class="hp-text-link" href={withBase(copy.storiesAllHref)}>
-                          {copy.storiesAllText} →
-                        </a>
-                      </>
-                    </details>
-                  ) : (
-                    <span class="hp-story-name">{item.name}</span>
-                  ),
-                )
-              }
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="o-nas" class="hp-section hp-about">
-        <div class="hp-wrap">
-          <div class="hp-section-heading">
-            <h2>{copy.aboutH2}</h2><p
-              class="hp-eyebrow"
-            >
-              {copy.aboutEyebrow}
-            </p>
-          </div><p class="hp-about-intro">
-            {copy.aboutIntro}
-          </p><ol class="hp-partnership">
-            {
-              partnershipList.map((item) => (
+              copy.sources.map((name, i) => (
                 <li>
                   <>
-                    <Icon name={item.icon} />
-                    <div>
-                      <>
-                        <h3>{item.title}</h3>
-                        <p>{item.text}</p>
-                      </>
-                    </div>
+                    <Icon
+                      name={
+                        ["database", "screen", "network", "leaf", "api"][i]
+                      }
+                    />
+                    <span>{name}</span>
                   </>
                 </li>
               ))
             }
-          </ol><p class="hp-partner-line">
-            {copy.partnerLine}
-          </p>
+          </ul>
         </div>
-      </section>
-      <section id="kontakt" class="hp-closing">
-        <div class="hp-wrap">
-          <div>
-            <h2>{copy.closingH2}</h2><p>
-              {copy.closingP}
-            </p>
-          </div><div class="hp-contact-options">
-            <a
-              class="hp-button"
-              href={`mailto:${COMPANY_EMAIL}?subject=${copy.subjectBooking}`}
-              >{copy.closingCta} <span aria-hidden="true">→</span
-              ></a
-            ><a
-              id="nexavia-povprasevanje"
-              class="hp-demo-link"
-              href={`mailto:${COMPANY_EMAIL}?subject=${copy.subjectDemo}`}
-              >{copy.demoCta} <span aria-hidden="true">→</span></a
+      </div>
+    </div>
+  </section>
+
+  <section id="panoge" class="hp-section hp-industries">
+    <div class="hp-wrap">
+      <div class="hp-section-heading">
+        <h2>{copy.industriesH2}</h2><p
+          class="hp-eyebrow"
+        >
+          {copy.industriesEyebrow}
+        </p>
+      </div>
+      <div class="hp-industry-grid">
+        {
+          industryList.map((item) => (
+            <article class="hp-card hp-industry">
+              <>
+                <Icon name={item.icon} />
+                <div>
+                  <>
+                    <h3>{item.title}</h3>
+                    <p>{item.text}</p>
+                    <span class="hp-reference">
+                      <small>{copy.reference}</small>
+                      {item.reference}
+                    </span>
+                  </>
+                </div>
+              </>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="kai" class="hp-section hp-kai">
+    <div class="hp-wrap hp-kai-grid">
+      <div>
+        <p class="hp-eyebrow">{copy.kaiEyebrow}</p><h2>
+          {copy.kaiH2}
+        </h2><p>
+          {copy.kaiP}
+        </p><p class="hp-kai-emphasis">
+          {copy.kaiEmphasis}
+        </p><a class="hp-button hp-outline" href={withBase(copy.kaiCtaHref)}
+          >{copy.kaiCta} <span aria-hidden="true">→</span></a
+        >
+      </div>
+      <div class="hp-kai-example">
+        <p class="hp-example-label">{copy.exampleLabel}</p><div
+          class="hp-kai-panels"
+        >
+          <article class="hp-alert">
+            <p class="hp-alert-title">
+              <span aria-hidden="true">△</span> {copy.alertTitle}
+            </p><h3>{copy.alertH3}</h3><p>
+              {copy.alertP}
+            </p><a class="hp-button" href={withBase(copy.alertCtaHref)}
+              >{copy.alertCta} <span aria-hidden="true">→</span></a
             >
-          </div>
+          </article>
+          <figure class="hp-chart">
+            <figcaption>{copy.chartCaption}</figcaption><div
+              class="hp-chart-legend"
+            >
+              <span>{copy.chartLegend[0]}</span
+              ><span>{copy.chartLegend[1]}</span>
+            </div><svg
+              viewBox="0 0 320 180"
+              role="img"
+              aria-label={copy.chartAria}
+              ><path
+                class="hp-gridlines"
+                d="M15 30H310M15 70H310M15 110H310M15 150H310M50 20V150M120 20V150M190 20V150M260 20V150"
+              ></path><path
+                class="hp-chart-range"
+                d="M15 105 45 120 70 115 100 108 125 112 150 100 180 105 215 119 245 109 275 112 310 100V128L275 137 245 133 215 140 180 130 150 124 125 135 100 131 70 140 45 142 15 130Z"
+              ></path><path
+                class="hp-chart-normal"
+                d="m15 119 30 12 25-5 30-7 25 5 25-12 30 5 35 12 30-10 30 6 35-11"
+              ></path><path
+                class="hp-chart-actual"
+                d="m15 120 30 12 25-9 30-45 25-46 25 55 30 29 35 13 30-10 30 6 35-11"
+              ></path><circle cx="125" cy="32" r="5"></circle><text
+                x="15"
+                y="174">00:00</text
+              ><text x="102" y="174">06:00</text><text x="193" y="174"
+                >12:00</text
+              ><text x="277" y="174">18:00</text></svg
+            >
+          </figure>
         </div>
-      </section>
-    </main>
-    <Footer {locale} />
-    <!-- TODO: V projektu ni potrjene telefonske številke ali uličnega naslova; dodajte ju po prejemu pravilnih podatkov. -->
+      </div>
+    </div>
+  </section>
+
+  <section class="hp-section hp-usecases">
+    <div class="hp-wrap">
+      <div class="hp-section-heading">
+        <h2>{copy.usecasesH2}</h2><p class="hp-eyebrow">
+          {copy.usecasesEyebrow}
+        </p>
+      </div><div class="hp-case-grid">
+        {
+          useCaseList.map((item) => (
+            <article class="hp-card">
+              <>
+                <Icon name={item.icon} />
+                <div>
+                  <>
+                    <h3>{item.title}</h3>
+                    <p>{item.text}</p>
+                    <a class="hp-text-link" href={withBase(item.href)}>
+                      {copy.usecaseCta} <span aria-hidden="true">→</span>
+                    </a>
+                  </>
+                </div>
+              </>
+            </article>
+          ))
+        }
+      </div>
+      <div id="zgodbe" class="hp-stories">
+        <h2 class="hp-eyebrow">{copy.storiesEyebrow}</h2><div>
+          {
+            stories.map((item) =>
+              item.detail ? (
+                <details>
+                  <>
+                    <summary>
+                      {item.name}
+                      <span class="hp-story-toggle" aria-hidden="true" />
+                      <span class="sr-only">{copy.storiesSrOnly}</span>
+                    </summary>
+                    <p>{item.detail}</p>
+                    <a class="hp-text-link" href={withBase(copy.storiesAllHref)}>
+                      {copy.storiesAllText} →
+                    </a>
+                  </>
+                </details>
+              ) : (
+                <span class="hp-story-name">{item.name}</span>
+              ),
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="o-nas" class="hp-section hp-about">
+    <div class="hp-wrap">
+      <div class="hp-section-heading">
+        <h2>{copy.aboutH2}</h2><p
+          class="hp-eyebrow"
+        >
+          {copy.aboutEyebrow}
+        </p>
+      </div><p class="hp-about-intro">
+        {copy.aboutIntro}
+      </p><ol class="hp-partnership">
+        {
+          partnershipList.map((item) => (
+            <li>
+              <>
+                <Icon name={item.icon} />
+                <div>
+                  <>
+                    <h3>{item.title}</h3>
+                    <p>{item.text}</p>
+                  </>
+                </div>
+              </>
+            </li>
+          ))
+        }
+      </ol><p class="hp-partner-line">
+        {copy.partnerLine}
+      </p>
+    </div>
+  </section>
+  <section id="kontakt" class="hp-closing">
+    <div class="hp-wrap">
+      <div>
+        <h2>{copy.closingH2}</h2><p>
+          {copy.closingP}
+        </p>
+      </div><div class="hp-contact-options">
+        <a
+          class="hp-button"
+          href={`mailto:${COMPANY_EMAIL}?subject=${copy.subjectBooking}`}
+          >{copy.closingCta} <span aria-hidden="true">→</span
+          ></a
+        ><a
+          id="nexavia-povprasevanje"
+          class="hp-demo-link"
+          href={`mailto:${COMPANY_EMAIL}?subject=${copy.subjectDemo}`}
+          >{copy.demoCta} <span aria-hidden="true">→</span></a
+        >
+      </div>
+    </div>
+  </section>
+  <!-- TODO: V projektu ni potrjene telefonske številke ali uličnega naslova; dodajte ju po prejemu pravilnih podatkov. -->
+  <Fragment slot="after">
     <dialog id="dashboard-preview" class="hp-dialog">
       <button
         type="button"
@@ -685,49 +612,7 @@ const stories = [
         format="avif"
       />
     </dialog>
-    <script define:vars={{ menuOpen: copy.menuOpen, menuClose: copy.menuClose }}>
-      const menu = document.querySelector(".hp-menu");
-      const nav = document.querySelector("#homepage-nav");
-      const closeMenu = () => {
-        menu?.setAttribute("aria-expanded", "false");
-        menu?.setAttribute("aria-label", menuOpen);
-        nav?.classList.remove("is-open");
-      };
-      menu?.addEventListener("click", () => {
-        const open = menu.getAttribute("aria-expanded") !== "true";
-        menu.setAttribute("aria-expanded", String(open));
-        menu.setAttribute("aria-label", open ? menuClose : menuOpen);
-        nav?.classList.toggle("is-open", open);
-      });
-      nav
-        ?.querySelectorAll("a")
-        .forEach((link) => link.addEventListener("click", closeMenu));
-      document.addEventListener("keydown", (event) => {
-        if (
-          event.key === "Escape" &&
-          menu?.getAttribute("aria-expanded") === "true"
-        ) {
-          closeMenu();
-          menu.focus();
-        }
-      });
-      document.addEventListener("click", (event) => {
-        if (
-          event.target instanceof Node &&
-          !nav?.contains(event.target) &&
-          !menu?.contains(event.target)
-        )
-          closeMenu();
-      });
-      document.addEventListener("focusin", (event) => {
-        if (
-          event.target instanceof Node &&
-          !nav?.contains(event.target) &&
-          !menu?.contains(event.target)
-        )
-          closeMenu();
-      });
-      matchMedia("(min-width: 1201px)").addEventListener("change", closeMenu);
+    <script is:inline>
       const process = document.querySelector(".hp-process");
       const apiRoute = document.querySelector(".hp-api-route");
       const updateApiRoute = () => {
@@ -804,5 +689,5 @@ const stories = [
         });
       }
     </script>
-  </body>
-</html>
+  </Fragment>
+</MainLayout>
