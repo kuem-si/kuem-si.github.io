@@ -707,3 +707,13 @@
   font-size: var(--kuem-type-h3-size);
   line-height: var(--kuem-type-h3-line-height);
 }
+/* Token layer (phase 2, step 4): the closing contact band is Concrete. */
+.solutions-page section.hp-closing[data-scheme] {
+  background: var(--kuem-background);
+}
+.solutions-page section.hp-closing[data-scheme] h2 {
+  color: var(--kuem-text-primary);
+}
+.solutions-page section.hp-closing[data-scheme] p {
+  color: var(--kuem-text-secondary);
+}

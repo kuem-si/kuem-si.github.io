@@ -624,3 +624,18 @@ body:has(.ab-page) .site-header .header-contact {
   line-height: var(--kuem-type-h2-line-height);
   letter-spacing: var(--kuem-type-h2-tracking);
 }
+/* Token layer (phase 2, step 4): the region band is Concrete. */
+.ab-region[data-scheme] {
+  background: var(--kuem-background);
+  color: var(--kuem-text-primary);
+}
+.ab-region[data-scheme] .ab-eyebrow {
+  color: var(--kuem-data);
+}
+.ab-region[data-scheme] .ab-region-grid > div:first-child > p:not(.ab-eyebrow) {
+  color: var(--kuem-text-secondary);
+}
+.ab-region[data-scheme] a {
+  color: var(--kuem-text-primary);
+  border-bottom-color: var(--kuem-copper-deep);
+}

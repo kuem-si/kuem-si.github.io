@@ -4328,3 +4328,44 @@ img.nexavia-wordmark {
   transform: none !important;
   margin: 0;
 }
+
+/* Token layer (phase 2, step 4). The former Petrol call-to-action bands and
+   dark reading bands are Concrete reading surfaces (decision 1), so they take
+   their colours from the scheme tokens. Card titles sit below the H3 token so
+   three-column grids stay light. */
+.cta[data-scheme] {
+  background: var(--kuem-background);
+  color: var(--kuem-text-primary);
+}
+.cta[data-scheme] p,
+.section[data-scheme="concrete"] p {
+  color: var(--kuem-text-secondary);
+}
+.section[data-scheme="concrete"] {
+  background-image: none;
+}
+.section[data-scheme="concrete"] .card {
+  background: var(--kuem-surface-2);
+}
+.section[data-scheme="concrete"] .eyebrow {
+  color: var(--kuem-data);
+}
+.card h3 {
+  font-size: var(--kuem-type-lead-size);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+/* A pipeline that wraps to a second row draws its line on every item, so the
+   markers of the next row no longer sit on the labels above them. */
+.pipeline {
+  border-top: 0;
+  row-gap: 2rem;
+}
+.pipeline li {
+  border-top: 2px solid var(--kuem-petrol);
+}
+/* Two Concrete bands in a row keep a hairline between them. */
+[data-scheme="concrete"] + [data-scheme="concrete"] {
+  border-top: 1px solid var(--kuem-border);
+}
