@@ -1,8 +1,3 @@
-import { primaryNavigation } from "./navigation";
-
-export const homeNavigation = primaryNavigation.sl.map(
-  ({ label, href }) => [label, href] as const,
-);
 export const benefits = [
   {
     icon: "eye",
@@ -122,9 +117,6 @@ export const partnership = [
   },
 ];
 
-export const homeNavigationEn = primaryNavigation.en.map(
-  ({ label, href }) => [label, href] as const,
-);
 export const benefitsEn = [
   {
     icon: "eye",

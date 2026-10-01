@@ -9,6 +9,7 @@ const {
   pathname = Astro.url.pathname,
   noindex = false,
   jsonLd = [] as unknown[],
+  bodyClass,
 } = Astro.props;
 const locale = getLocaleFromPath(pathname);
 ---
@@ -16,9 +17,10 @@ const locale = getLocaleFromPath(pathname);
 <!doctype html>
 <html lang={locale === "sl" ? "sl-SI" : "en-GB"}>
   <head><SeoHead {title} {description} {pathname} {noindex} jsonLd={jsonLd} /><slot name="head" /></head><body
+    class={bodyClass}
     ><a class="skip-link" href="#main"
       >{locale === "sl" ? "Preskoči na vsebino" : "Skip to content"}</a
     ><Header {locale} pathname={pathname} /><main id="main">
       <slot />
-    </main><Footer {locale} /></body>
+    </main><Footer {locale} /><slot name="after" /></body>
 </html>
