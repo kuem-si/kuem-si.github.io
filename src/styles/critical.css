@@ -19,7 +19,7 @@ body {
   overflow-x: clip;
   background: var(--kuem-concrete);
   color: var(--ink);
-  font-family: "Source Sans 3", sans-serif;
+  font-family: var(--kuem-font-text);
   font-size: var(--kuem-type-body-size);
 }
 a {
@@ -36,7 +36,7 @@ address {
 h1,
 h2,
 h3 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--kuem-font-heading);
   line-height: 1.05;
   margin: 0 0 var(--kuem-space-16);
 }
@@ -141,28 +141,6 @@ nav {
 .nav-list a[aria-current] {
   color: var(--kuem-copper);
 }
-.dropdown {
-  position: relative;
-}
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  min-width: 235px;
-  padding: var(--kuem-space-8);
-  list-style: none;
-  background: #1e2428;
-  border: 1px solid #3b4247;
-}
-.dropdown:hover .dropdown-menu,
-.dropdown:focus-within .dropdown-menu {
-  display: block;
-}
-.dropdown-menu a {
-  display: block;
-  padding: var(--kuem-space-8);
-}
 .header-actions {
   display: flex;
   align-items: center;
@@ -232,13 +210,13 @@ nav {
   font-size: var(--kuem-type-label-size);
 }
 .lead {
-  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  font-size: var(--kuem-type-lead-size);
   max-width: 780px;
 }
 .hero p,
 .dark p,
 .site-footer p {
-  color: #c9c7c1;
+  color: var(--kuem-text-secondary);
 }
 .actions {
   display: flex;

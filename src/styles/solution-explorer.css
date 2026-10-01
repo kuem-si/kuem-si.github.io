@@ -12,7 +12,7 @@
   cursor: pointer;
 }
 .solutions-page .explorer-hero {
-  background: #f3f2f0;
+  background: var(--kuem-surface-1);
   padding: var(--kuem-space-64) 0 var(--kuem-space-64);
 }
 .explorer-hero-grid {
@@ -22,7 +22,7 @@
   align-items: center;
 }
 .explorer-copy h1 {
-  font-size: clamp(34px, 3.25vw, 56px);
+  font-size: var(--kuem-type-h1-size);
   line-height: 1.1;
   letter-spacing: -0.045em;
   margin: 0 0 var(--kuem-space-24);
@@ -72,12 +72,12 @@
 .explorer-trust li {
   font-size: clamp(20px, 2vw, 30px);
   font-weight: 600;
-  color: #596065;
+  color: var(--kuem-text-muted);
 }
 .explorer-benefits,
 .explorer-examples {
   padding: var(--kuem-space-48) 0;
-  background: #f3f2f0;
+  background: var(--kuem-surface-1);
 }
 .explorer-benefits {
   padding-bottom: var(--kuem-space-24);
@@ -135,7 +135,7 @@
 .example-drawing > svg {
   width: 60%;
   height: 80px;
-  color: #c9c7c1;
+  color: var(--kuem-border);
 }
 .explorer-stories {
   margin-top: var(--kuem-space-32);
@@ -158,7 +158,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--kuem-space-24);
-  color: #596065;
+  color: var(--kuem-text-muted);
   font-weight: 600;
   text-decoration: none;
 }
@@ -232,7 +232,7 @@
   color: var(--kuem-carbon);
 }
 .panel-close:hover {
-  background: #f3f2f0;
+  background: var(--kuem-surface-1);
 }
 .panel-close svg {
   width: 26px;
@@ -284,7 +284,7 @@
   place-items: center;
   border: 1px solid var(--kuem-concrete);
   border-radius: var(--kuem-radius-card);
-  background: #f3f2f0;
+  background: var(--kuem-surface-1);
 }
 .step-icon .hp-icon {
   width: 32px;
@@ -316,7 +316,7 @@
 }
 .step-tags li {
   padding: var(--kuem-space-4) var(--kuem-space-8);
-  background: #f3f2f0;
+  background: var(--kuem-surface-1);
   color: var(--kuem-petrol);
   border: 1px solid var(--kuem-concrete);
   border-radius: 30px;
@@ -324,7 +324,7 @@
 }
 .solution-panel .step-note {
   font-size: var(--kuem-type-small-size);
-  background: #f3f2f0;
+  background: var(--kuem-surface-1);
   border: 1px solid var(--kuem-concrete);
   border-radius: var(--kuem-radius-control);
   padding: var(--kuem-space-8) var(--kuem-space-16);
@@ -345,8 +345,8 @@
 .step-dashboard figcaption {
   font-size: var(--kuem-type-label-size);
   padding: var(--kuem-space-4) var(--kuem-space-8);
-  color: #596065;
-  background: #f3f2f0;
+  color: var(--kuem-text-muted);
+  background: var(--kuem-surface-1);
 }
 .step-action-flow {
   display: grid;
@@ -364,7 +364,7 @@
   padding: var(--kuem-space-24) var(--kuem-space-8) var(--kuem-space-8);
   font-size: var(--kuem-type-label-size);
   line-height: 1.4;
-  color: #596065;
+  color: var(--kuem-text-muted);
 }
 .step-action-flow b {
   position: absolute;
@@ -510,7 +510,7 @@
     gap: var(--kuem-space-24);
   }
   .explorer-open .explorer-copy h1 {
-    font-size: clamp(32px, 2.65vw, 44px);
+    font-size: var(--kuem-type-h1-size);
   }
   .explorer-open .explorer-copy > p:not(.hp-eyebrow) {
     font-size: var(--kuem-type-body-size);
@@ -651,7 +651,7 @@
     padding: var(--kuem-space-8) var(--kuem-space-8);
   }
   .explorer-copy h1 {
-    font-size: 38px;
+    font-size: var(--kuem-type-h1-size);
   }
   .explorer-copy .hp-actions {
     display: flex;
