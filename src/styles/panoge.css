@@ -52,7 +52,7 @@
 .pi-actions .btn-primary,
 .pi-closing .btn-primary {
   background: #ef6132;
-  color: #fff;
+  color: #161a1d;
   border-color: #ef6132;
 }
 .pi-actions .btn-secondary {
@@ -531,7 +531,7 @@ body:has(.pi-page) .site-header .nav-list > li > a[aria-current]:after {
 body:has(.pi-page) .site-header .header-contact {
   background: #f06432 !important;
   border-color: #f06432 !important;
-  color: white !important;
+  color: #161a1d !important;
   border-radius: 4px;
 }
 @media (max-width: 1100px) {

@@ -5,13 +5,20 @@ import ts from "typescript";
 
 function moduleUrl(file) {
   let { outputText } = ts.transpileModule(readFileSync(file, "utf8"), {
-    compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
+    compilerOptions: {
+      module: ts.ModuleKind.ESNext,
+      target: ts.ScriptTarget.ES2022,
+    },
   });
   outputText = outputText.replace(/from\s+["'](\.[^"']+)["']/g, (_, path) => {
-    const dependency = new URL(path.endsWith(".ts") ? path : `${path}.ts`, file);
+    const dependency = new URL(
+      path.endsWith(".ts") ? path : `${path}.ts`,
+      file,
+    );
     return `from "${moduleUrl(dependency)}"`;
   });
   return `data:text/javascript;base64,${Buffer.from(outputText).toString("base64")}`;
 }
 
-export const loadSiteData = (path) => import(moduleUrl(new URL(path, import.meta.url)));
+export const loadSiteData = (path) =>
+  import(moduleUrl(new URL(path, import.meta.url)));

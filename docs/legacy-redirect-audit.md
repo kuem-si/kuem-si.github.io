@@ -6,34 +6,34 @@ Final scope: GitHub #9 and #21. Existing page design, branding, content and vali
 
 Every file currently under `src/pages` is covered below. Both catch-all pages have finite `getStaticPaths()` results in a static build; they are not runtime handlers for arbitrary URLs.
 
-| Source under `src/pages/` | Class | Public route / decision |
-| --- | --- | --- |
-| `index.astro` | A — current | `/` |
-| `resitve.astro` | A — current | `/resitve/` |
-| `nexavia.astro` | A — current | `/nexavia/` |
-| `kai.astro` | A — current | `/kai/` |
-| `panoge.astro` | A — current | `/panoge/` |
-| `o-nas.astro` | A — current | `/o-nas/` |
-| `kontakt.astro` | A — current | `/kontakt/` |
-| `zasebnost.astro` | A — current | `/zasebnost/` |
-| `reference.astro` | A — current | `/reference/` |
-| `en/index.astro` | A — current | `/en/` |
-| `en/solutions.astro` | A — current | `/en/solutions/` |
-| `en/nexavia.astro` | A — current | `/en/nexavia/` |
-| `en/kai.astro` | A — current | `/en/kai/` |
-| `en/industries.astro` | A — current | `/en/industries/` |
-| `en/company.astro` | A — current | `/en/company/` |
-| `en/contact.astro` | A — current | `/en/contact/` |
-| `en/privacy.astro` | A — current | `/en/privacy/` |
-| `en/references.astro` | A — current | `/en/references/` |
-| `vpogledi.astro` | A — current secondary | `/vpogledi/`; modern shared page, retained |
-| `en/insights.astro` | A — current secondary | `/en/insights/`; modern shared page, retained |
-| `resitve/[slug].astro` | B — current details | 15 current SL service/use-case pages; all retained and in sitemap |
-| `en/solutions/[slug].astro` | B — current details | 15 corresponding EN pages; all retained and in sitemap |
-| `[...legacy].astro` | C — legacy compatibility | 44 explicitly evidenced SL aliases, listed below |
-| `en/[...legacy].astro` | C — legacy compatibility | 13 known EN aliases, listed below |
-| `404.astro` | A — current system page | Custom 404, `noindex`, no redirect |
-| `llms.txt.ts` | A — current system endpoint | `/llms.txt`, retained |
+| Source under `src/pages/`   | Class                       | Public route / decision                                           |
+| --------------------------- | --------------------------- | ----------------------------------------------------------------- |
+| `index.astro`               | A — current                 | `/`                                                               |
+| `resitve.astro`             | A — current                 | `/resitve/`                                                       |
+| `nexavia.astro`             | A — current                 | `/nexavia/`                                                       |
+| `kai.astro`                 | A — current                 | `/kai/`                                                           |
+| `panoge.astro`              | A — current                 | `/panoge/`                                                        |
+| `o-nas.astro`               | A — current                 | `/o-nas/`                                                         |
+| `kontakt.astro`             | A — current                 | `/kontakt/`                                                       |
+| `zasebnost.astro`           | A — current                 | `/zasebnost/`                                                     |
+| `reference.astro`           | A — current                 | `/reference/`                                                     |
+| `en/index.astro`            | A — current                 | `/en/`                                                            |
+| `en/solutions.astro`        | A — current                 | `/en/solutions/`                                                  |
+| `en/nexavia.astro`          | A — current                 | `/en/nexavia/`                                                    |
+| `en/kai.astro`              | A — current                 | `/en/kai/`                                                        |
+| `en/industries.astro`       | A — current                 | `/en/industries/`                                                 |
+| `en/company.astro`          | A — current                 | `/en/company/`                                                    |
+| `en/contact.astro`          | A — current                 | `/en/contact/`                                                    |
+| `en/privacy.astro`          | A — current                 | `/en/privacy/`                                                    |
+| `en/references.astro`       | A — current                 | `/en/references/`                                                 |
+| `vpogledi.astro`            | A — current secondary       | `/vpogledi/`; modern shared page, retained                        |
+| `en/insights.astro`         | A — current secondary       | `/en/insights/`; modern shared page, retained                     |
+| `resitve/[slug].astro`      | B — current details         | 15 current SL service/use-case pages; all retained and in sitemap |
+| `en/solutions/[slug].astro` | B — current details         | 15 corresponding EN pages; all retained and in sitemap            |
+| `[...legacy].astro`         | C — legacy compatibility    | 44 explicitly evidenced SL aliases, listed below                  |
+| `en/[...legacy].astro`      | C — legacy compatibility    | 13 known EN aliases, listed below                                 |
+| `404.astro`                 | A — current system page     | Custom 404, `noindex`, no redirect                                |
+| `llms.txt.ts`               | A — current system endpoint | `/llms.txt`, retained                                             |
 
 D — uncertain historical URLs: no root `/services/...` mapping was assumed. The historical route configuration uses `/storitve/...` for SL and `/en/services/...` for EN. No automatic `/sl/` alias was invented for newly introduced canonical pages. Removed historical demo/blog/legal URLs without a verified current equivalent were not repurposed or redirected to unrelated content. No uncertain current page was changed.
 
@@ -92,67 +92,67 @@ True HTTP 301 redirects are not available in the current GitHub Pages-only deplo
 
 ## Confirmed SL mappings
 
-| Legacy URL | Canonical destination |
-| --- | --- |
-| `/about/` | `/o-nas/` |
-| `/o-podjetju/` | `/o-nas/` |
-| `/contact/` | `/kontakt/` |
-| `/privacy/` | `/zasebnost/` |
-| `/references/` | `/reference/` |
-| `/case-studies/` | `/reference/` |
-| `/industrial-iot/` | `/panoge/` |
-| `/utilities/` | `/resitve/daljinsko-odcitavanje-stevcev/` |
-| `/partner-program/` | `/kontakt/` |
-| `/nexavia-platform/` | `/nexavia/` |
-| `/platforma/nexavia/` | `/nexavia/` |
-| `/software-design-development/` | `/resitve/` |
-| `/software-architecture-consulting/` | `/resitve/` |
-| `/devops-platform-engineering/` | `/resitve/` |
-| `/storitve/` | `/resitve/` |
-| `/storitve/razvoj-programske-opreme/` | `/resitve/` |
-| `/storitve/arhitektura-programske-opreme-in-svetovanje/` | `/resitve/` |
-| `/storitve/devops-in-platform-engineering/` | `/resitve/` |
-| `/resitve/nexavia/` | `/nexavia/` |
-| `/resitve/nexavia/nexavia-enterprise/` | `/nexavia/` |
-| `/sl/` | `/` |
-| `/sl/about/` | `/o-nas/` |
-| `/sl/contact/` | `/kontakt/` |
-| `/sl/privacy/` | `/zasebnost/` |
-| `/sl/case-studies/` | `/reference/` |
-| `/sl/industrial-iot/` | `/panoge/` |
-| `/sl/utilities/` | `/resitve/daljinsko-odcitavanje-stevcev/` |
-| `/sl/partner-program/` | `/kontakt/` |
-| `/sl/nexavia-platform/` | `/nexavia/` |
-| `/sl/platforma/nexavia/` | `/nexavia/` |
-| `/sl/o-nas/` | `/o-nas/` |
-| `/sl/kontakt/` | `/kontakt/` |
-| `/sl/reference/` | `/reference/` |
-| `/sl/resitve/` | `/resitve/` |
-| `/sl/resitve/daljinsko-odcitavanje-stevcev/` | `/resitve/daljinsko-odcitavanje-stevcev/` |
-| `/sl/resitve/data-centri/` | `/resitve/data-centri/` |
-| `/sl/resitve/digitalizacija-obcinske-infrastrukture/` | `/resitve/digitalizacija-obcinske-infrastrukture/` |
-| `/sl/resitve/haccp-temperaturni-monitoring/` | `/resitve/haccp-temperaturni-monitoring/` |
-| `/sl/resitve/javna-razsvetljava/` | `/resitve/javna-razsvetljava/` |
-| `/sl/resitve/odpadki/` | `/resitve/odpadki/` |
-| `/sl/resitve/okoljski-monitoring/` | `/resitve/okoljski-monitoring/` |
-| `/sl/resitve/promet-in-mobilnost/` | `/resitve/promet-in-mobilnost/` |
-| `/sl/resitve/sole-in-vrtci/` | `/resitve/sole-in-vrtci/` |
-| `/sl/resitve/turizem-kampi-marine/` | `/resitve/turizem-kampi-marine/` |
+| Legacy URL                                               | Canonical destination                              |
+| -------------------------------------------------------- | -------------------------------------------------- |
+| `/about/`                                                | `/o-nas/`                                          |
+| `/o-podjetju/`                                           | `/o-nas/`                                          |
+| `/contact/`                                              | `/kontakt/`                                        |
+| `/privacy/`                                              | `/zasebnost/`                                      |
+| `/references/`                                           | `/reference/`                                      |
+| `/case-studies/`                                         | `/reference/`                                      |
+| `/industrial-iot/`                                       | `/panoge/`                                         |
+| `/utilities/`                                            | `/resitve/daljinsko-odcitavanje-stevcev/`          |
+| `/partner-program/`                                      | `/kontakt/`                                        |
+| `/nexavia-platform/`                                     | `/nexavia/`                                        |
+| `/platforma/nexavia/`                                    | `/nexavia/`                                        |
+| `/software-design-development/`                          | `/resitve/`                                        |
+| `/software-architecture-consulting/`                     | `/resitve/`                                        |
+| `/devops-platform-engineering/`                          | `/resitve/`                                        |
+| `/storitve/`                                             | `/resitve/`                                        |
+| `/storitve/razvoj-programske-opreme/`                    | `/resitve/`                                        |
+| `/storitve/arhitektura-programske-opreme-in-svetovanje/` | `/resitve/`                                        |
+| `/storitve/devops-in-platform-engineering/`              | `/resitve/`                                        |
+| `/resitve/nexavia/`                                      | `/nexavia/`                                        |
+| `/resitve/nexavia/nexavia-enterprise/`                   | `/nexavia/`                                        |
+| `/sl/`                                                   | `/`                                                |
+| `/sl/about/`                                             | `/o-nas/`                                          |
+| `/sl/contact/`                                           | `/kontakt/`                                        |
+| `/sl/privacy/`                                           | `/zasebnost/`                                      |
+| `/sl/case-studies/`                                      | `/reference/`                                      |
+| `/sl/industrial-iot/`                                    | `/panoge/`                                         |
+| `/sl/utilities/`                                         | `/resitve/daljinsko-odcitavanje-stevcev/`          |
+| `/sl/partner-program/`                                   | `/kontakt/`                                        |
+| `/sl/nexavia-platform/`                                  | `/nexavia/`                                        |
+| `/sl/platforma/nexavia/`                                 | `/nexavia/`                                        |
+| `/sl/o-nas/`                                             | `/o-nas/`                                          |
+| `/sl/kontakt/`                                           | `/kontakt/`                                        |
+| `/sl/reference/`                                         | `/reference/`                                      |
+| `/sl/resitve/`                                           | `/resitve/`                                        |
+| `/sl/resitve/daljinsko-odcitavanje-stevcev/`             | `/resitve/daljinsko-odcitavanje-stevcev/`          |
+| `/sl/resitve/data-centri/`                               | `/resitve/data-centri/`                            |
+| `/sl/resitve/digitalizacija-obcinske-infrastrukture/`    | `/resitve/digitalizacija-obcinske-infrastrukture/` |
+| `/sl/resitve/haccp-temperaturni-monitoring/`             | `/resitve/haccp-temperaturni-monitoring/`          |
+| `/sl/resitve/javna-razsvetljava/`                        | `/resitve/javna-razsvetljava/`                     |
+| `/sl/resitve/odpadki/`                                   | `/resitve/odpadki/`                                |
+| `/sl/resitve/okoljski-monitoring/`                       | `/resitve/okoljski-monitoring/`                    |
+| `/sl/resitve/promet-in-mobilnost/`                       | `/resitve/promet-in-mobilnost/`                    |
+| `/sl/resitve/sole-in-vrtci/`                             | `/resitve/sole-in-vrtci/`                          |
+| `/sl/resitve/turizem-kampi-marine/`                      | `/resitve/turizem-kampi-marine/`                   |
 
 ## Confirmed EN mappings
 
-| Legacy URL | Canonical destination |
-| --- | --- |
-| `/en/about/` | `/en/company/` |
-| `/en/services/` | `/en/solutions/` |
-| `/en/services/software-development/` | `/en/solutions/` |
-| `/en/services/software-architecture-and-consulting/` | `/en/solutions/` |
-| `/en/services/devops-and-platform-engineering/` | `/en/solutions/` |
-| `/en/solutions/nexavia/` | `/en/nexavia/` |
-| `/en/solutions/nexavia/nexavia-enterprise/` | `/en/nexavia/` |
-| `/en/nexavia-platform/` | `/en/nexavia/` |
-| `/en/platform/nexavia/` | `/en/nexavia/` |
-| `/en/case-studies/` | `/en/references/` |
-| `/en/industrial-iot/` | `/en/industries/` |
-| `/en/utilities/` | `/en/solutions/remote-meter-reading/` |
-| `/en/partner-program/` | `/en/contact/` |
+| Legacy URL                                           | Canonical destination                 |
+| ---------------------------------------------------- | ------------------------------------- |
+| `/en/about/`                                         | `/en/company/`                        |
+| `/en/services/`                                      | `/en/solutions/`                      |
+| `/en/services/software-development/`                 | `/en/solutions/`                      |
+| `/en/services/software-architecture-and-consulting/` | `/en/solutions/`                      |
+| `/en/services/devops-and-platform-engineering/`      | `/en/solutions/`                      |
+| `/en/solutions/nexavia/`                             | `/en/nexavia/`                        |
+| `/en/solutions/nexavia/nexavia-enterprise/`          | `/en/nexavia/`                        |
+| `/en/nexavia-platform/`                              | `/en/nexavia/`                        |
+| `/en/platform/nexavia/`                              | `/en/nexavia/`                        |
+| `/en/case-studies/`                                  | `/en/references/`                     |
+| `/en/industrial-iot/`                                | `/en/industries/`                     |
+| `/en/utilities/`                                     | `/en/solutions/remote-meter-reading/` |
+| `/en/partner-program/`                               | `/en/contact/`                        |

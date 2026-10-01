@@ -1,21 +1,52 @@
 ---
 import { trustedCompanies } from "../data/trustedCompanies";
+import { getLocaleFromPath } from "../lib/i18n";
+const en = getLocaleFromPath(Astro.url.pathname) === "en";
 ---
 
-<div class="trusted-scroll" tabindex="0" role="region" aria-label={Astro.props.label ?? "Zaupajo nam"}>
-  <div class="trusted-track">
-    {[false, true].map((duplicate) => (
-      <div class="trusted-group" aria-hidden={duplicate ? "true" : undefined}>
-        {trustedCompanies.map((name) => <span>{name}</span>)}
-      </div>
-    ))}
+<div class="trusted">
+  <div class="trusted-scroll" tabindex="0" role="region" aria-label={Astro.props.label ?? "Zaupajo nam"}>
+    <div class="trusted-track">
+      {[false, true].map((duplicate) => (
+        <div class="trusted-group" aria-hidden={duplicate ? "true" : undefined}>
+          {trustedCompanies.map((name) => <span>{name}</span>)}
+        </div>
+      ))}
+    </div>
   </div>
+  {/* WCAG 2.2.2: anything that moves for more than five seconds can be paused. Shown by the script. */}
+  <button class="trusted-toggle" type="button" aria-pressed="false" aria-label={en ? "Pause the moving list" : "Ustavi premikanje seznama"} hidden>
+    <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+      <path class="trusted-pause" d="M4 3h3v10H4zM9 3h3v10H9z" />
+      <path class="trusted-play" d="M5 3l8 5-8 5z" />
+    </svg>
+  </button>
 </div>
 
+<script>
+  document.querySelectorAll<HTMLElement>(".trusted").forEach((list) => {
+    const toggle = list.querySelector<HTMLButtonElement>(".trusted-toggle");
+    if (!toggle) return;
+    toggle.hidden = false;
+    toggle.addEventListener("click", () => {
+      const paused = toggle.getAttribute("aria-pressed") !== "true";
+      toggle.setAttribute("aria-pressed", String(paused));
+      list.toggleAttribute("data-paused", paused);
+    });
+  });
+</script>
+
 <style>
-  .trusted-scroll {
+  .trusted {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     min-width: 0;
     width: 100%;
+  }
+  .trusted-scroll {
+    flex: 1 1 auto;
+    min-width: 0;
     overflow-x: auto;
     scrollbar-width: none;
   }
@@ -26,6 +57,11 @@ import { trustedCompanies } from "../data/trustedCompanies";
     display: flex;
     width: max-content;
     animation: trusted-drift 65s linear infinite;
+  }
+  .trusted[data-paused] .trusted-track,
+  .trusted-scroll:hover .trusted-track,
+  .trusted-scroll:focus-within .trusted-track {
+    animation-play-state: paused;
   }
   .trusted-group {
     display: flex;
@@ -40,11 +76,39 @@ import { trustedCompanies } from "../data/trustedCompanies";
     font-weight: 600;
     color: #52636a;
   }
+  .trusted-toggle {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid #c3cdd1;
+    border-radius: 4px;
+    background: transparent;
+    color: #52636a;
+    cursor: pointer;
+  }
+  .trusted-toggle:hover {
+    border-color: #156b75;
+    color: #156b75;
+  }
+  .trusted-toggle[hidden],
+  .trusted-toggle[aria-pressed="true"] .trusted-pause,
+  .trusted-toggle[aria-pressed="false"] .trusted-play {
+    display: none;
+  }
+  .trusted-toggle svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
   @keyframes trusted-drift {
     to { transform: translateX(-50%); }
   }
   @media (prefers-reduced-motion: reduce) {
     .trusted-track { animation: none; }
-    .trusted-group[aria-hidden="true"] { display: none; }
+    .trusted-group[aria-hidden="true"],
+    .trusted-toggle { display: none; }
   }
 </style>

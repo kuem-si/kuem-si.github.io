@@ -13,4 +13,7 @@ export const legacyEnglishRedirects: Record<string, string> = {
   "industrial-iot": "/en/industries/",
   utilities: "/en/solutions/remote-meter-reading/",
   "partner-program": "/en/contact/",
+  // Hidden until Insights has articles: remove this entry and restore
+  // src/pages/en/insights.astro from git history.
+  insights: "/en/solutions/",
 };

@@ -4,8 +4,10 @@ import { PUBLIC_CONTACT_ENDPOINT } from "astro:env/client";
 import { alternatePath, getLocaleFromPath } from "../lib/i18n";
 import { ensureTrailingSlash } from "../lib/paths";
 import { organization, website } from "../data/organization";
-import sourceSansVariable from "../assets/brand/fonts/SourceSans3-variable.woff2";
-import spaceGroteskVariable from "../assets/brand/fonts/SpaceGrotesk-variable.woff2";
+import sourceSansLatin from "../assets/brand/fonts/SourceSans3-latin-variable.woff2";
+import sourceSansLatinExt from "../assets/brand/fonts/SourceSans3-latin-ext-variable.woff2";
+import spaceGroteskLatin from "../assets/brand/fonts/SpaceGrotesk-latin-variable.woff2";
+import spaceGroteskLatinExt from "../assets/brand/fonts/SpaceGrotesk-latin-ext-variable.woff2";
 import globalCssUrl from "../styles/global.css?url";
 import criticalCss from "../styles/critical.css?raw";
 const {
@@ -23,9 +25,43 @@ const fullTitle = title.includes("KUEM") ? title : `${title} | KUEM`;
 const otherLocale = locale === "sl" ? "en" : "sl";
 const langTag = locale === "sl" ? "sl-SI" : "en-GB";
 const otherLangTag = otherLocale === "sl" ? "sl-SI" : "en-GB";
-const fontFaces = `
-@font-face{font-family:"Space Grotesk";src:url("${spaceGroteskVariable}") format("woff2");font-weight:300 700;font-display:swap}
-@font-face{font-family:"Source Sans 3";src:url("${sourceSansVariable}") format("woff2");font-weight:200 900;font-display:swap}`;
+// Each family ships as the two @fontsource-variable 5.3.0 subsets: Latin
+// (a–z, digits, punctuation) and Latin Extended (č, š, ž). The unicode-range
+// values are fontsource's, so a browser downloads a subset only for pages
+// that use its characters. scripts/check-fonts.mjs checks the coverage.
+const latinRange =
+  "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD";
+const latinExtRange =
+  "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF";
+const fonts = [
+  {
+    family: "Space Grotesk",
+    weight: "300 700",
+    latin: spaceGroteskLatin,
+    latinExt: spaceGroteskLatinExt,
+  },
+  {
+    family: "Source Sans 3",
+    weight: "200 900",
+    latin: sourceSansLatin,
+    latinExt: sourceSansLatinExt,
+  },
+];
+const fontFaces = fonts
+  .flatMap(({ family, weight, latin, latinExt }) =>
+    [
+      [latinExt, latinExtRange],
+      [latin, latinRange],
+    ].map(
+      ([src, range]) =>
+        `\n@font-face{font-family:"${family}";src:url("${src}") format("woff2");font-weight:${weight};font-display:swap;unicode-range:${range}}`,
+    ),
+  )
+  .join("");
+// Slovenian pages draw č, š and ž on first paint, so they preload both subsets.
+const preloadFonts = fonts.flatMap(({ latin, latinExt }) =>
+  locale === "sl" ? [latin, latinExt] : [latin],
+);
 const criticalStyle = fontFaces + criticalCss;
 const endpointOrigin = PUBLIC_CONTACT_ENDPOINT
   ? new URL(PUBLIC_CONTACT_ENDPOINT).origin
@@ -129,18 +165,15 @@ const structuredData = [
 /><noscript><link rel="stylesheet" href={globalCssUrl} /></noscript><link
   rel="icon"
   href="/favicon.svg"
-/><link
-  rel="preload"
-  href={sourceSansVariable}
-  as="font"
-  type="font/woff2"
-  crossorigin
-  fetchpriority="high"
-/><link
-  rel="preload"
-  href={spaceGroteskVariable}
-  as="font"
-  type="font/woff2"
-  crossorigin
-  fetchpriority="high"
-/><JsonLd data={structuredData} />
+/>{
+  preloadFonts.map((href) => (
+    <link
+      rel="preload"
+      href={href}
+      as="font"
+      type="font/woff2"
+      crossorigin
+      fetchpriority="high"
+    />
+  ))
+}<JsonLd data={structuredData} />

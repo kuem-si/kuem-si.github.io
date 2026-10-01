@@ -1,5 +1,12 @@
 import { initScenarios } from "./scenarios.js";
-import { formatTime, initDaylight, luxAt, parseTime, sunTimes, wrap } from "./daylight.js";
+import {
+  formatTime,
+  initDaylight,
+  luxAt,
+  parseTime,
+  sunTimes,
+  wrap,
+} from "./daylight.js";
 import { initDataFlow } from "./dataflow.js";
 
 // One showcase twin: a maquette and its Nexavia dashboard, driven by a
@@ -48,13 +55,20 @@ async function loadMaquette(root, en) {
   let last = start;
   // Stage text follows the shown progress, so it always matches the sweep.
   const stages = en
-    ? [[0.86, "Loading the lighting"], [0.95, "Starting the simulation"]]
-    : [[0.86, "Nalaganje razsvetljave"], [0.95, "Zagon simulacije"]];
+    ? [
+        [0.86, "Loading the lighting"],
+        [0.95, "Starting the simulation"],
+      ]
+    : [
+        [0.86, "Nalaganje razsvetljave"],
+        [0.95, "Zagon simulacije"],
+      ];
   const render = (value) => {
     art.style.setProperty("--load", value.toFixed(4));
     if (percent) percent.textContent = String(Math.round(value * 100));
     const label = stages.findLast(([from]) => value >= from)?.[1];
-    if (stage && label && stage.textContent !== label) stage.textContent = label;
+    if (stage && label && stage.textContent !== label)
+      stage.textContent = label;
   };
   const frame = (now) => {
     const dt = Math.min(0.1, (now - last) / 1000);
@@ -62,7 +76,8 @@ async function loadMaquette(root, en) {
     const elapsed = now - start;
     let goal = target;
     // Without a known file size, creep forward on a slowing curve.
-    if (indeterminate) goal = Math.max(goal, 0.86 * (1 - Math.exp(-elapsed / 4000)));
+    if (indeterminate)
+      goal = Math.max(goal, 0.86 * (1 - Math.exp(-elapsed / 4000)));
     goal = Math.min(goal, minDuration ? elapsed / minDuration : 1);
     shown = quick ? goal : shown + (goal - shown) * Math.min(1, dt * 5);
     if (loaded && goal >= 1 && shown > 0.996) {
@@ -118,7 +133,8 @@ export function initTwin(root, config) {
   config.effects?.forEach((init) => init(root));
   const en = document.documentElement.lang.startsWith("en");
   const t = (sl, english) => (en ? english : sl);
-  const n = (value, digits) => value.toFixed(digits).replace(".", en ? "." : ",");
+  const n = (value, digits) =>
+    value.toFixed(digits).replace(".", en ? "." : ",");
   const cityWrap = root.querySelector(".twin-scene-wrap");
   const workspace = root.querySelector(".twin-workspace");
   const fullscreenButton = root.querySelector("[data-city-fullscreen]");
@@ -137,21 +153,26 @@ export function initTwin(root, config) {
     // center slightly down so the visible marks align with the bezel midpoint.
     const center = screenRect.top - bezelRect.top + screenRect.height / 2 + 18;
     resizeEdges.forEach((edge) => {
-      if (edge.dataset.overlayResize === "left" || edge.dataset.overlayResize === "right") {
+      if (
+        edge.dataset.overlayResize === "left" ||
+        edge.dataset.overlayResize === "right"
+      ) {
         edge.style.top = `${center}px`;
         edge.style.transform = "translateY(-50%)";
       } else if (edge.dataset.overlayResize === "bottom") {
         const lowerBezelGap = bezelRect.bottom - screenRect.bottom;
         const handleHeight = edge.getBoundingClientRect().height;
         // Center the visible stroke inside the display's lower frame lip.
-        const handleCenter = bezelRect.height - Math.max(1, lowerBezelGap) / 2 - 2;
+        const handleCenter =
+          bezelRect.height - Math.max(1, lowerBezelGap) / 2 - 2;
         edge.style.bottom = "auto";
         edge.style.top = `${handleCenter - handleHeight / 2}px`;
       }
     });
   };
   if (screenViewport && screenBezel) {
-    if ("ResizeObserver" in window) new ResizeObserver(centerSideResizeEdges).observe(screenViewport);
+    if ("ResizeObserver" in window)
+      new ResizeObserver(centerSideResizeEdges).observe(screenViewport);
     window.addEventListener("resize", centerSideResizeEdges, { passive: true });
     requestAnimationFrame(centerSideResizeEdges);
   }
@@ -159,11 +180,14 @@ export function initTwin(root, config) {
     const updateFullscreenButton = () => {
       const active = document.fullscreenElement === workspace;
       fullscreenButton.setAttribute("aria-pressed", String(active));
-      fullscreenButton.textContent = active ? t("Zapri celozaslonski pogled", "Exit full screen") : t("Odpri celozaslonski pogled", "Open full screen");
+      fullscreenButton.textContent = active
+        ? t("Zapri celozaslonski pogled", "Exit full screen")
+        : t("Odpri celozaslonski pogled", "Open full screen");
     };
     fullscreenButton.addEventListener("click", async () => {
       try {
-        if (document.fullscreenElement === workspace) await document.exitFullscreen();
+        if (document.fullscreenElement === workspace)
+          await document.exitFullscreen();
         else await workspace.requestFullscreen();
       } catch (error) {
         console.error("Unable to change fullscreen mode", error);
@@ -180,8 +204,14 @@ export function initTwin(root, config) {
       if (!frame.width || !frame.height) return;
       const width = Math.min(overlay.width, Math.max(180, frame.width - 16));
       const height = Math.min(overlay.height, Math.max(160, frame.height - 16));
-      const left = Math.max(0, Math.min(frame.width - width - 8, overlay.left - frame.left));
-      const top = Math.max(0, Math.min(frame.height - height - 8, overlay.top - frame.top));
+      const left = Math.max(
+        0,
+        Math.min(frame.width - width - 8, overlay.left - frame.left),
+      );
+      const top = Math.max(
+        0,
+        Math.min(frame.height - height - 8, overlay.top - frame.top),
+      );
       if (width !== overlay.width) screenOverlay.style.width = `${width}px`;
       if (height !== overlay.height) screenOverlay.style.height = `${height}px`;
       screenOverlay.style.left = `${left}px`;
@@ -192,7 +222,9 @@ export function initTwin(root, config) {
       screenOverlay.classList.toggle("is-minimized", minimized);
       if (overlayToggle) {
         overlayToggle.setAttribute("aria-pressed", String(!minimized));
-        overlayToggle.textContent = minimized ? t("Prikaži nadzorno ploščo", "Show dashboard") : t("Skrij nadzorno ploščo", "Hide dashboard");
+        overlayToggle.textContent = minimized
+          ? t("Prikaži nadzorno ploščo", "Show dashboard")
+          : t("Skrij nadzorno ploščo", "Hide dashboard");
       }
       if (!minimized) requestAnimationFrame(keepOverlayVisible);
     };
@@ -202,7 +234,9 @@ export function initTwin(root, config) {
     });
     requestAnimationFrame(keepOverlayVisible);
     window.addEventListener("resize", keepOverlayVisible, { passive: true });
-    document.addEventListener("fullscreenchange", () => requestAnimationFrame(keepOverlayVisible));
+    document.addEventListener("fullscreenchange", () =>
+      requestAnimationFrame(keepOverlayVisible),
+    );
     let overlayDragStart = null;
     overlayDrag.addEventListener("pointerdown", (event) => {
       if (event.target.closest("input, button")) return;
@@ -220,12 +254,25 @@ export function initTwin(root, config) {
       event.preventDefault();
     });
     overlayDrag.addEventListener("pointermove", (event) => {
-      if (!overlayDragStart || event.pointerId !== overlayDragStart.pointerId) return;
+      if (!overlayDragStart || event.pointerId !== overlayDragStart.pointerId)
+        return;
       const frame = workspace.getBoundingClientRect();
       const maxLeft = Math.max(0, frame.width - screenOverlay.offsetWidth);
       const maxTop = Math.max(0, frame.height - screenOverlay.offsetHeight - 8);
-      const left = Math.max(0, Math.min(maxLeft, overlayDragStart.left + event.clientX - overlayDragStart.x));
-      const top = Math.max(0, Math.min(maxTop, overlayDragStart.top + event.clientY - overlayDragStart.y));
+      const left = Math.max(
+        0,
+        Math.min(
+          maxLeft,
+          overlayDragStart.left + event.clientX - overlayDragStart.x,
+        ),
+      );
+      const top = Math.max(
+        0,
+        Math.min(
+          maxTop,
+          overlayDragStart.top + event.clientY - overlayDragStart.y,
+        ),
+      );
       screenOverlay.style.left = `${left}px`;
       screenOverlay.style.top = `${top}px`;
       screenOverlay.style.right = "auto";
@@ -236,7 +283,10 @@ export function initTwin(root, config) {
     overlayDrag.addEventListener("pointerup", finishOverlayDrag);
     overlayDrag.addEventListener("pointercancel", finishOverlayDrag);
     overlayOpacity?.addEventListener("input", () => {
-      screenOverlay.style.setProperty("--overlay-opacity", String(Number(overlayOpacity.value) / 100));
+      screenOverlay.style.setProperty(
+        "--overlay-opacity",
+        String(Number(overlayOpacity.value) / 100),
+      );
     });
     resizeEdges.forEach((edge) =>
       edge.addEventListener("pointerdown", (event) => {
@@ -244,9 +294,19 @@ export function initTwin(root, config) {
         const frame = workspace.getBoundingClientRect();
         const overlay = screenOverlay.getBoundingClientRect();
         const direction = edge.dataset.overlayResize;
-        const resizeWidth = direction === "left" || direction === "right" || direction === "width" || direction.length === 2;
-        const resizeHeight = direction === "bottom" || direction === "height" || direction.length === 2;
-        const west = direction === "left" || direction === "width" || direction.includes("w");
+        const resizeWidth =
+          direction === "left" ||
+          direction === "right" ||
+          direction === "width" ||
+          direction.length === 2;
+        const resizeHeight =
+          direction === "bottom" ||
+          direction === "height" ||
+          direction.length === 2;
+        const west =
+          direction === "left" ||
+          direction === "width" ||
+          direction.includes("w");
         const north = direction.includes("n");
         const start = {
           x: event.clientX,
@@ -266,16 +326,38 @@ export function initTwin(root, config) {
           let top = start.top;
           if (resizeWidth) {
             const minWidth = Math.min(300, frame.width - 16);
-            const maxWidth = Math.max(minWidth, Math.min(frame.width - 16, west ? start.left + start.width - 8 : frame.width - start.left - 8));
+            const maxWidth = Math.max(
+              minWidth,
+              Math.min(
+                frame.width - 16,
+                west
+                  ? start.left + start.width - 8
+                  : frame.width - start.left - 8,
+              ),
+            );
             const deltaX = moveEvent.clientX - start.x;
-            width = Math.max(minWidth, Math.min(maxWidth, start.width + deltaX * (west ? -1 : 1)));
+            width = Math.max(
+              minWidth,
+              Math.min(maxWidth, start.width + deltaX * (west ? -1 : 1)),
+            );
             if (west) left = start.left + start.width - width;
           }
           if (resizeHeight) {
             const minHeight = Math.min(180, frame.height - 16);
-            const maxHeight = Math.max(minHeight, Math.min(frame.height - 16, north ? start.top + start.height - 8 : frame.height - start.top - 8));
+            const maxHeight = Math.max(
+              minHeight,
+              Math.min(
+                frame.height - 16,
+                north
+                  ? start.top + start.height - 8
+                  : frame.height - start.top - 8,
+              ),
+            );
             const deltaY = moveEvent.clientY - start.y;
-            height = Math.max(minHeight, Math.min(maxHeight, start.height + deltaY * (north ? -1 : 1)));
+            height = Math.max(
+              minHeight,
+              Math.min(maxHeight, start.height + deltaY * (north ? -1 : 1)),
+            );
             if (north) top = start.top + start.height - height;
           }
           screenOverlay.style.width = `${width}px`;
@@ -344,7 +426,10 @@ export function initTwin(root, config) {
       pointer.x = event.clientX;
       pointer.y = event.clientY;
       if (!pointer.dragging) {
-        const moved = Math.hypot(pointer.x - pointer.startX, pointer.y - pointer.startY);
+        const moved = Math.hypot(
+          pointer.x - pointer.startX,
+          pointer.y - pointer.startY,
+        );
         if (moved < (dragThreshold[event.pointerType] ?? 6)) return;
         pointer.dragging = true;
         dragged = true;
@@ -412,14 +497,26 @@ export function initTwin(root, config) {
   // sun (daylight.js); each step fires at its time of day, and the clock
   // slows down around the steps so every event can be read.
   const maxLux = Math.max(...steps.map((step) => step.lux));
-  const sun = sunTimes(maxLux, steps.find((step) => step.at === "dusk")?.lux ?? maxLux / 2, maxLux - 0.5);
+  const sun = sunTimes(
+    maxLux,
+    steps.find((step) => step.at === "dusk")?.lux ?? maxLux / 2,
+    maxLux - 0.5,
+  );
   const stepTimes = steps.map(({ at = "day" }) => {
     const [, base, offset = 0] = /^(day|dawn|dusk)([+-]\d+)?$/.exec(at);
-    return wrap({ day: sun.dawn + 1, dawn: sun.dawn, dusk: sun.dusk }[base] + Number(offset) / 60);
+    return wrap(
+      { day: sun.dawn + 1, dawn: sun.dawn, dusk: sun.dusk }[base] +
+        Number(offset) / 60,
+    );
   });
   const hoursApart = (a, b) => Math.min(wrap(a - b), wrap(b - a));
   // The step in effect at an hour: the last one to have fired.
-  const stepAt = (hours) => stepTimes.reduce((best, time, i) => (wrap(hours - time) < wrap(hours - stepTimes[best]) ? i : best), 0);
+  const stepAt = (hours) =>
+    stepTimes.reduce(
+      (best, time, i) =>
+        wrap(hours - time) < wrap(hours - stepTimes[best]) ? i : best,
+      0,
+    );
   // Simulated hours per second: an hour a second, three minutes a second
   // around each step (a full day takes about 40 s).
   const rate = (hours) => {
@@ -440,8 +537,14 @@ export function initTwin(root, config) {
     },
   });
   sky?.setMarks([
-    [stepTimes[steps.findIndex((step) => step.at === "dusk")], t("Pravilo prižge luči", "The rule switches the lights on")],
-    [stepTimes[steps.findIndex((step) => step.at === "dawn")], t("Pravilo ugasne luči", "The rule switches the lights off")],
+    [
+      stepTimes[steps.findIndex((step) => step.at === "dusk")],
+      t("Pravilo prižge luči", "The rule switches the lights on"),
+    ],
+    [
+      stepTimes[steps.findIndex((step) => step.at === "dawn")],
+      t("Pravilo ugasne luči", "The rule switches the lights off"),
+    ],
   ]);
   const flow = initDataFlow(root, { gateway: config.gateway });
 
@@ -453,7 +556,9 @@ export function initTwin(root, config) {
     clock = wrap(hours);
     sky?.setTime(clock, ease);
     const lux = `${luxAt(clock, maxLux)} lx`;
-    luxReadings.forEach((element) => element.textContent !== lux && (element.textContent = lux));
+    luxReadings.forEach(
+      (element) => element.textContent !== lux && (element.textContent = lux),
+    );
     if (directed) return;
     const at = stepAt(clock);
     if (at === index) return;
@@ -491,26 +596,37 @@ export function initTwin(root, config) {
       // Dashboard readings keep a <small> note after the value text.
       if (element.firstElementChild) {
         element.firstChild.textContent = value;
-        if (note !== undefined) element.querySelector("small").textContent = note;
+        if (note !== undefined)
+          element.querySelector("small").textContent = note;
       } else element.textContent = value;
     });
   }
   const readingText = (key) => {
     const element = $(`.twin-dashboard [data-reading="${key}"]`);
-    return element ? (element.firstElementChild ? element.firstChild.textContent : element.textContent) : "";
+    return element
+      ? element.firstElementChild
+        ? element.firstChild.textContent
+        : element.textContent
+      : "";
   };
-  const readingNote = (key) => $(`.twin-dashboard [data-reading="${key}"] small`)?.textContent ?? "";
+  const readingNote = (key) =>
+    $(`.twin-dashboard [data-reading="${key}"] small`)?.textContent ?? "";
   const readingApi = { setReading, en, t, n };
 
   function setDemoPill(count) {
     ui("alarm-count").textContent = String(count);
-    $(".twin-demo-pill").innerHTML = `<i></i> ${count} ${en ? "ALARMS" : "ALARMI"}`;
+    $(".twin-demo-pill").innerHTML =
+      `<i></i> ${count} ${en ? "ALARMS" : "ALARMI"}`;
   }
 
   // `log: false` re-applies a step without adding it to the timeline again.
   function render(step, { log = true } = {}) {
     const standing = config.alarms(index);
-    root.querySelectorAll("[data-alarm]").forEach((alarm) => (alarm.hidden = !standing.includes(alarm.dataset.alarm)));
+    root
+      .querySelectorAll("[data-alarm]")
+      .forEach(
+        (alarm) => (alarm.hidden = !standing.includes(alarm.dataset.alarm)),
+      );
     setDemoPill(standing.length);
     config.tick(index, readingApi);
     if (!quiet && log) {
@@ -552,11 +668,18 @@ export function initTwin(root, config) {
     system: "Nexavia",
   };
   const targets = new Map([
-    ...[...root.querySelectorAll("[data-sensor-pin][data-sensor-id]")].map((pin) => [pin.dataset.sensorId, `sensor:${pin.dataset.sensorPin}`]),
+    ...[...root.querySelectorAll("[data-sensor-pin][data-sensor-id]")].map(
+      (pin) => [pin.dataset.sensorId, `sensor:${pin.dataset.sensorPin}`],
+    ),
     ...devices.map(({ id }) => [id, `device:${id}`]),
   ]);
   // `time` is the model's clock unless given, e.g. a guided scenario's own.
-  function logEvent(text, time = formatTime(clock), kind = "system", target = targets.get(/^[A-Z][A-Z0-9_]*/.exec(text)?.[0])) {
+  function logEvent(
+    text,
+    time = formatTime(clock),
+    kind = "system",
+    target = targets.get(/^[A-Z][A-Z0-9_]*/.exec(text)?.[0]),
+  ) {
     if (!timeline) return;
     const item = document.createElement("li");
     item.dataset.kind = kinds[kind] ? kind : "system";
@@ -567,12 +690,21 @@ export function initTwin(root, config) {
       entry.dataset.target = target;
       entry.title = t("Pokaži na maketi", "Show on the model");
     }
-    const part = (tag, className, content) => Object.assign(document.createElement(tag), { className, textContent: content });
-    entry.append(part("time", "", time), part("span", "twin-timeline-kind", kinds[item.dataset.kind]), part("span", "twin-timeline-text", text));
+    const part = (tag, className, content) =>
+      Object.assign(document.createElement(tag), {
+        className,
+        textContent: content,
+      });
+    entry.append(
+      part("time", "", time),
+      part("span", "twin-timeline-kind", kinds[item.dataset.kind]),
+      part("span", "twin-timeline-text", text),
+    );
     item.append(entry);
     timeline.querySelector(".is-empty")?.remove();
     timeline.prepend(item);
-    while (timeline.children.length > TIMELINE_LENGTH) timeline.lastElementChild.remove();
+    while (timeline.children.length > TIMELINE_LENGTH)
+      timeline.lastElementChild.remove();
   }
 
   // The maquette shows a device's light once its command arrives: at once,
@@ -613,7 +745,9 @@ export function initTwin(root, config) {
       power += watts;
       if (on) active++;
       showOnModel(device);
-      root.querySelector(`[data-device="${device.id}"]`)?.setAttribute("aria-pressed", String(on));
+      root
+        .querySelector(`[data-device="${device.id}"]`)
+        ?.setAttribute("aria-pressed", String(on));
       const row = root.querySelector(`[data-row="${device.id}"]`);
       if (!row) return;
       const state = row.querySelector(".twin-state");
@@ -623,11 +757,17 @@ export function initTwin(root, config) {
         state.dataset.state = "offline";
       } else {
         const percent = Math.round(device.state * 100);
-        state.textContent = dimmed ? t(`Zatemnjeno ${percent} %`, `Dimmed ${percent}%`) : on ? t("Vklopljeno", "On") : t("Izklopljeno", "Off");
+        state.textContent = dimmed
+          ? t(`Zatemnjeno ${percent} %`, `Dimmed ${percent}%`)
+          : on
+            ? t("Vklopljeno", "On")
+            : t("Izklopljeno", "Off");
         state.dataset.state = on ? "on" : "off";
       }
       row.querySelector(".twin-watts").textContent = `${watts} W`;
-      row.querySelector("[data-device-switch]")?.setAttribute("aria-checked", String(on));
+      row
+        .querySelector("[data-device-switch]")
+        ?.setAttribute("aria-checked", String(on));
       const modeTag = row.querySelector("[data-mode-tag]");
       if (modeTag) modeTag.hidden = device.mode !== "manual";
       if (changed.includes(device.id)) {
@@ -640,7 +780,8 @@ export function initTwin(root, config) {
     ui("power").textContent = `${power} W`;
     updateChip();
     const autoButton = $("[data-devices-auto]");
-    if (autoButton) autoButton.hidden = !devices.some((device) => device.mode === "manual");
+    if (autoButton)
+      autoButton.hidden = !devices.some((device) => device.mode === "manual");
   }
 
   // Jumps the clock to the next step.
@@ -649,7 +790,8 @@ export function initTwin(root, config) {
   }
   function schedule() {
     clearInterval(timer);
-    const running = ready && !directed && !paused && visible && !reducedMotion.matches;
+    const running =
+      ready && !directed && !paused && visible && !reducedMotion.matches;
     if (running) {
       timer = setInterval(report, 3200);
       if (!clockFrame) {
@@ -660,29 +802,47 @@ export function initTwin(root, config) {
       cancelAnimationFrame(clockFrame);
       clockFrame = 0;
     }
-    root.classList.toggle("is-paused", paused || !visible || reducedMotion.matches);
+    root.classList.toggle(
+      "is-paused",
+      paused || !visible || reducedMotion.matches,
+    );
   }
   // Pause state is shown in two places: the pause button and the status
   // pill (green while running, orange while stopped).
   function setPaused(value) {
     paused = value;
-    ui("pause").textContent = paused ? t("Nadaljuj animacijo", "Resume animation") : t("Začasno ustavi", "Pause");
+    ui("pause").textContent = paused
+      ? t("Nadaljuj animacijo", "Resume animation")
+      : t("Začasno ustavi", "Pause");
     ui("pause").setAttribute("aria-pressed", String(paused));
     const status = $(".twin-live");
     status.classList.toggle("is-stopped", paused);
-    status.lastChild.textContent = paused ? t(" Simulacija ustavljena", " Simulation paused") : t(" Simulacija teče", " Simulation running");
+    status.lastChild.textContent = paused
+      ? t(" Simulacija ustavljena", " Simulation paused")
+      : t(" Simulacija teče", " Simulation running");
     schedule();
   }
   ui("pause").addEventListener("click", () => setPaused(!paused));
   ui("next").addEventListener("click", next);
   // Opens one reading card on the maquette (or none) and marks its pin.
   function pinCard(name) {
-    root.querySelectorAll(".city-sensor-popover[data-pinned='true']").forEach((item) => (item.dataset.pinned = "false"));
-    root.querySelectorAll("[data-sensor-pin]").forEach((pin) => pin.setAttribute("aria-expanded", String(pin.dataset.sensorPin === name)));
-    const popover = name && root.querySelector(`[data-sensor-popover="${name}"]`);
+    root
+      .querySelectorAll(".city-sensor-popover[data-pinned='true']")
+      .forEach((item) => (item.dataset.pinned = "false"));
+    root
+      .querySelectorAll("[data-sensor-pin]")
+      .forEach((pin) =>
+        pin.setAttribute(
+          "aria-expanded",
+          String(pin.dataset.sensorPin === name),
+        ),
+      );
+    const popover =
+      name && root.querySelector(`[data-sensor-popover="${name}"]`);
     if (popover) popover.dataset.pinned = "true";
   }
-  const openCard = () => root.querySelector("[data-sensor-pin][aria-expanded='true']");
+  const openCard = () =>
+    root.querySelector("[data-sensor-pin][aria-expanded='true']");
   // Sends a sensor's current reading to Nexavia on request: a packet travels
   // to the gateway (shown even while the data flow is off) and the timeline
   // logs the reading once it arrives, or its loss while the gateway is down.
@@ -694,10 +854,21 @@ export function initTwin(root, config) {
       received.set(key, performance.now());
       renderAge();
       if (!log) return;
-      const note = pin?.hasAttribute("data-sensor-event-note") && readingNote(key);
-      logEvent(`${id} · ${pin?.dataset.sensorEvent ?? key}: ${readingText(key)}${note ? `, ${note}` : ""}`, undefined, "reading");
+      const note =
+        pin?.hasAttribute("data-sensor-event-note") && readingNote(key);
+      logEvent(
+        `${id} · ${pin?.dataset.sensorEvent ?? key}: ${readingText(key)}${note ? `, ${note}` : ""}`,
+        undefined,
+        "reading",
+      );
     };
-    const lost = () => log && logEvent(`${id} · ${t("Meritev ni dostavljena – prehod brez povezave", "Reading not delivered – gateway offline")}`, undefined, "alarm");
+    const lost = () =>
+      log &&
+      logEvent(
+        `${id} · ${t("Meritev ni dostavljena – prehod brez povezave", "Reading not delivered – gateway offline")}`,
+        undefined,
+        "alarm",
+      );
     if (!flow?.uplink(key, { now: true, trace: true, arrive, lost })) arrive();
   }
   // A click on a pin opens its card and sends the sensor's reading.
@@ -714,21 +885,41 @@ export function initTwin(root, config) {
       sendReading(key);
       renderAge();
       ui("step").textContent = control.dataset.sensorName;
-      root.querySelectorAll("[data-device-hint]").forEach((hint) => hint.classList.add("is-quiet"));
+      root
+        .querySelectorAll("[data-device-hint]")
+        .forEach((hint) => hint.classList.add("is-quiet"));
     });
   });
-  root.querySelectorAll("[data-sensor-send]").forEach((control) => control.addEventListener("click", () => sendReading(control.dataset.sensorSend)));
+  root
+    .querySelectorAll("[data-sensor-send]")
+    .forEach((control) =>
+      control.addEventListener("click", () =>
+        sendReading(control.dataset.sensorSend),
+      ),
+    );
   // Each card names the gateway its readings travel through, and how long
   // ago the last one arrived.
-  root.querySelectorAll("[data-card-gateway]").forEach((element) => (element.textContent = config.gateway?.id ?? "–"));
+  root
+    .querySelectorAll("[data-card-gateway]")
+    .forEach((element) => (element.textContent = config.gateway?.id ?? "–"));
   function renderAge() {
     const card = root.querySelector(".city-sensor-popover[data-pinned='true']");
     const age = card?.querySelector("[data-card-age]");
     if (!age) return;
     const at = received.get(card.dataset.sensorPopover);
-    const seconds = at === undefined ? null : Math.round((performance.now() - at) / 1000);
+    const seconds =
+      at === undefined ? null : Math.round((performance.now() - at) / 1000);
     age.textContent =
-      seconds === null ? "–" : seconds < 2 ? t("pravkar", "just now") : seconds < 60 ? t(`pred ${seconds} s`, `${seconds} s ago`) : t(`pred ${Math.floor(seconds / 60)} min`, `${Math.floor(seconds / 60)} min ago`);
+      seconds === null
+        ? "–"
+        : seconds < 2
+          ? t("pravkar", "just now")
+          : seconds < 60
+            ? t(`pred ${seconds} s`, `${seconds} s ago`)
+            : t(
+                `pred ${Math.floor(seconds / 60)} min`,
+                `${Math.floor(seconds / 60)} min ago`,
+              );
   }
   setInterval(renderAge, 1000);
   // A timeline entry points at its sensor or device on the maquette.
@@ -748,7 +939,12 @@ export function initTwin(root, config) {
   // scenario keeps the card it opened.
   root.addEventListener("click", (event) => {
     if (directed || !openCard()) return;
-    if (event.target.closest("[data-sensor-pin], .city-sensor-popover, .twin-timeline [data-target]")) return;
+    if (
+      event.target.closest(
+        "[data-sensor-pin], .city-sensor-popover, .twin-timeline [data-target]",
+      )
+    )
+      return;
     pinCard(null);
   });
   root.addEventListener("keydown", (event) => {
@@ -761,7 +957,9 @@ export function initTwin(root, config) {
   sensorsToggle?.addEventListener("click", () => {
     const on = sensorsToggle.getAttribute("aria-pressed") !== "true";
     sensorsToggle.setAttribute("aria-pressed", String(on));
-    sensorsToggle.closest("[data-city-art]").dataset.overlays = on ? "on" : "off";
+    sensorsToggle.closest("[data-city-art]").dataset.overlays = on
+      ? "on"
+      : "off";
     if (!on) pinCard(null);
   });
   // Live readings. Each card keeps a short history for its sparkline; its pin
@@ -770,7 +968,9 @@ export function initTwin(root, config) {
   root.querySelectorAll("[data-sensor-popover]").forEach((card, i) => {
     const value = card.querySelector("[data-sensor-value]");
     if (!value) return;
-    const pin = root.querySelector(`[data-sensor-pin="${card.dataset.sensorPopover}"]`);
+    const pin = root.querySelector(
+      `[data-sensor-pin="${card.dataset.sensorPopover}"]`,
+    );
     const tag = pin?.querySelector("[data-sensor-tag]");
     const alert = Number(card.dataset.alert) || Infinity;
     const read = () => parseFloat(value.textContent.replace(",", "."));
@@ -779,7 +979,12 @@ export function initTwin(root, config) {
     const first = read() || 0;
     const counting = config.counters?.includes(card.dataset.sensorPopover);
     const history = Array.from({ length: 24 }, (_, j) =>
-      counting ? Math.max(0, first - Math.round((23 - j) * 1.6)) : first * (1 + 0.05 * Math.sin(j * 0.7 + i) + 0.025 * Math.sin(j * 1.9 + i * 2)),
+      counting
+        ? Math.max(0, first - Math.round((23 - j) * 1.6))
+        : first *
+          (1 +
+            0.05 * Math.sin(j * 0.7 + i) +
+            0.025 * Math.sin(j * 1.9 + i * 2)),
     );
     history[history.length - 1] = first;
     const ns = "http://www.w3.org/2000/svg";
@@ -794,7 +999,10 @@ export function initTwin(root, config) {
     const draw = () => {
       const low = Math.min(...history);
       const range = Math.max(...history) - low || Math.abs(low) * 0.1 || 1;
-      const points = history.map((v, j) => `${((j / (history.length - 1)) * 100).toFixed(2)} ${(25 - ((v - low) / range) * 21).toFixed(2)}`);
+      const points = history.map(
+        (v, j) =>
+          `${((j / (history.length - 1)) * 100).toFixed(2)} ${(25 - ((v - low) / range) * 21).toFixed(2)}`,
+      );
       line.setAttribute("d", `M${points.join("L")}`);
       area.setAttribute("d", `M${points.join("L")}L100 28L0 28Z`);
     };
@@ -818,8 +1026,14 @@ export function initTwin(root, config) {
       if (tag) tag.textContent = value.textContent;
       if (!pin.classList.contains("is-tick")) pin.classList.add("is-tick");
     };
-    pin?.addEventListener("animationend", () => pin.classList.remove("is-tick"));
-    new MutationObserver(update).observe(value, { childList: true, characterData: true, subtree: true });
+    pin?.addEventListener("animationend", () =>
+      pin.classList.remove("is-tick"),
+    );
+    new MutationObserver(update).observe(value, {
+      childList: true,
+      characterData: true,
+      subtree: true,
+    });
     draw();
     if (tag) tag.textContent = value.textContent;
   });
@@ -835,19 +1049,31 @@ export function initTwin(root, config) {
       device.mode = "manual";
     });
     renderDevices(ids);
-    logEvent(`${subject} · ${t("Ročni ukaz prek nadzorne plošče", "Command from the dashboard")}: ${on ? t("vklop", "on") : t("izklop", "off")}`, undefined, "manual");
+    logEvent(
+      `${subject} · ${t("Ročni ukaz prek nadzorne plošče", "Command from the dashboard")}: ${on ? t("vklop", "on") : t("izklop", "off")}`,
+      undefined,
+      "manual",
+    );
     const name = ids.length > 1 ? group.name : deviceById.get(ids[0]).name;
     const result = on ? t("vklopljeno", "on") : t("izklopljeno", "off");
-    ui("step").textContent = `${name}: ${result} · ${t("ročni ukaz", "manual command")}`;
-    ui("rule-status").textContent = t("Ročno upravljanje · samodejno pravilo teh naprav ne preglasi", "Manual override · the lighting rule leaves these devices as set");
+    ui("step").textContent =
+      `${name}: ${result} · ${t("ročni ukaz", "manual command")}`;
+    ui("rule-status").textContent = t(
+      "Ročno upravljanje · samodejno pravilo teh naprav ne preglasi",
+      "Manual override · the lighting rule leaves these devices as set",
+    );
     commandShownUntil = performance.now() + 6000;
-    root.querySelectorAll("[data-device-hint]").forEach((hint) => hint.classList.add("is-quiet"));
+    root
+      .querySelectorAll("[data-device-hint]")
+      .forEach((hint) => hint.classList.add("is-quiet"));
   }
   function updateChip() {
     const device = deviceById.get(chip?.dataset.id);
     if (!device) return;
     chip.querySelector("b").textContent = device.id;
-    chip.querySelector("span").textContent = device.state ? t("Vklopljeno", "On") : t("Izklopljeno", "Off");
+    chip.querySelector("span").textContent = device.state
+      ? t("Vklopljeno", "On")
+      : t("Izklopljeno", "Off");
     chip.dataset.state = device.state ? "on" : "off";
   }
   function showChip(hotspot, linger) {
@@ -859,7 +1085,10 @@ export function initTwin(root, config) {
     updateChip();
     // Near the top edge of the maquette the chip drops below its anchor.
     const art = chip.offsetParent;
-    chip.classList.toggle("is-below", (y / 1024) * (art?.clientHeight ?? 0) < chip.offsetHeight + 22);
+    chip.classList.toggle(
+      "is-below",
+      (y / 1024) * (art?.clientHeight ?? 0) < chip.offsetHeight + 22,
+    );
     chip.classList.toggle("is-focus", hotspot.matches(":focus-visible"));
     chip.classList.add("is-visible");
     clearTimeout(chipTimer);
@@ -876,7 +1105,9 @@ export function initTwin(root, config) {
     const toggle = () => {
       command([device.id], !device.state);
       // Hover and keyboard focus keep the chip up; after a tap it fades out.
-      const held = hotspot.matches(":focus-visible") || (lastPointerType === "mouse" && hotspot.matches(":hover"));
+      const held =
+        hotspot.matches(":focus-visible") ||
+        (lastPointerType === "mouse" && hotspot.matches(":hover"));
       showChip(hotspot, !held);
     };
     hotspots.set(hotspot, toggle);
@@ -901,13 +1132,22 @@ export function initTwin(root, config) {
   // goes to the nearest device within reach instead.
   cityWrap?.addEventListener("click", (event) => {
     if (lastPointerType === "mouse" || !event.detail) return;
-    if (event.target.closest("[data-device], button, a, .city-sensor-popover")) return;
+    if (event.target.closest("[data-device], button, a, .city-sensor-popover"))
+      return;
     let nearest;
     let reach = 24;
     for (const hotspot of hotspots.keys()) {
       const box = hotspot.getBoundingClientRect();
-      const dx = Math.max(box.left - event.clientX, 0, event.clientX - box.right);
-      const dy = Math.max(box.top - event.clientY, 0, event.clientY - box.bottom);
+      const dx = Math.max(
+        box.left - event.clientX,
+        0,
+        event.clientX - box.right,
+      );
+      const dy = Math.max(
+        box.top - event.clientY,
+        0,
+        event.clientY - box.bottom,
+      );
       const distance = Math.hypot(dx, dy);
       if (distance < reach) {
         reach = distance;
@@ -968,8 +1208,14 @@ export function initTwin(root, config) {
       saved = {
         paused,
         clock,
-        devices: devices.map(({ state, mode, online }) => ({ state, mode, online })),
-        readings: [...root.querySelectorAll("[data-reading]")].map((element) => [element, element.innerHTML]),
+        devices: devices.map(({ state, mode, online }) => ({
+          state,
+          mode,
+          online,
+        })),
+        readings: [...root.querySelectorAll("[data-reading]")].map(
+          (element) => [element, element.innerHTML],
+        ),
         timeline: timeline ? [...timeline.children] : [],
         flow: flow?.isOn() ?? false,
       };
@@ -987,7 +1233,10 @@ export function initTwin(root, config) {
       quiet = true;
       devices.forEach((device, i) => Object.assign(device, saved.devices[i]));
       // Readings and their notes go back to the values before the scenario.
-      saved.readings.forEach(([element, html]) => element.innerHTML !== html && (element.innerHTML = html));
+      saved.readings.forEach(
+        ([element, html]) =>
+          element.innerHTML !== html && (element.innerHTML = html),
+      );
       direction.setAlarms(null);
       direction.setSync(true);
       direction.setStale(false);
@@ -1020,7 +1269,9 @@ export function initTwin(root, config) {
     },
     // Tells the maquette's effects about a scenario event (e.g. tide.js).
     signal(name, value) {
-      root.dispatchEvent(new CustomEvent("twin:signal", { detail: { name, value } }));
+      root.dispatchEvent(
+        new CustomEvent("twin:signal", { detail: { name, value } }),
+      );
     },
     setLevel(id, level) {
       deviceById.get(id).state = level;
@@ -1052,11 +1303,16 @@ export function initTwin(root, config) {
       if (!box) return;
       box.querySelectorAll(".is-scenario").forEach((item) => item.remove());
       if (!list) return;
-      box.querySelectorAll("[data-alarm]").forEach((item) => (item.hidden = true));
+      box
+        .querySelectorAll("[data-alarm]")
+        .forEach((item) => (item.hidden = true));
       list.forEach(([id, text]) => {
         const item = document.createElement("p");
         item.className = "is-scenario";
-        item.append(Object.assign(document.createElement("strong"), { textContent: id }), Object.assign(document.createElement("span"), { textContent: text }));
+        item.append(
+          Object.assign(document.createElement("strong"), { textContent: id }),
+          Object.assign(document.createElement("span"), { textContent: text }),
+        );
         box.append(item);
       });
       setDemoPill(list.length);
@@ -1066,27 +1322,42 @@ export function initTwin(root, config) {
       const sync = $(".twin-sync");
       if (!sync) return;
       sync.classList.toggle("is-lost", !ok);
-      sync.lastChild.textContent = ok ? t(" Sinhronizirano", " Synchronised") : t(" Povezava prekinjena", " Connection lost");
+      sync.lastChild.textContent = ok
+        ? t(" Sinhronizirano", " Synchronised")
+        : t(" Povezava prekinjena", " Connection lost");
     },
     setStale(stale) {
-      root.querySelectorAll(".twin-meter-readings, .twin-sensor-readings").forEach((block) => block.classList.toggle("is-stale", stale));
+      root
+        .querySelectorAll(".twin-meter-readings, .twin-sensor-readings")
+        .forEach((block) => block.classList.toggle("is-stale", stale));
     },
     // Draws attention to one part of the dashboard and scrolls it into view
     // inside the dashboard's own viewport (never the page).
     spotlight(target) {
-      root.querySelectorAll(".is-spotlit").forEach((item) => item.classList.remove("is-spotlit"));
+      root
+        .querySelectorAll(".is-spotlit")
+        .forEach((item) => item.classList.remove("is-spotlit"));
       const element = typeof target === "string" ? $(target) : target;
       if (!element) return;
       element.classList.add("is-spotlit");
       const viewport = root.querySelector(".xdr-screen");
       if (!viewport || !viewport.clientHeight) return;
-      const offset = element.getBoundingClientRect().top - viewport.getBoundingClientRect().top;
-      if (offset < 0 || offset > viewport.clientHeight - element.offsetHeight - 16)
-        viewport.scrollTo({ top: viewport.scrollTop + offset - viewport.clientHeight / 3, behavior: reducedMotion.matches ? "auto" : "smooth" });
+      const offset =
+        element.getBoundingClientRect().top -
+        viewport.getBoundingClientRect().top;
+      if (
+        offset < 0 ||
+        offset > viewport.clientHeight - element.offsetHeight - 16
+      )
+        viewport.scrollTo({
+          top: viewport.scrollTop + offset - viewport.clientHeight / 3,
+          behavior: reducedMotion.matches ? "auto" : "smooth",
+        });
     },
     // Dashboard rows the scenarios point at.
     $row: (id) => $(`[data-row="${id}"]`),
-    $reading: (key) => $(`.twin-dashboard [data-reading="${key}"]`)?.parentElement,
+    $reading: (key) =>
+      $(`.twin-dashboard [data-reading="${key}"]`)?.parentElement,
     $ui: (name) => ui(name),
     // `kind` types the timeline entry: reading, decision, command, alarm,
     // notify, manual or system.
@@ -1111,10 +1382,20 @@ export function initTwin(root, config) {
       const screen = root.querySelector(".xdr-display:not(.is-minimized)");
       if (screen) {
         const box = screen.getBoundingClientRect();
-        if (box.width && box.left > wrap.left + wrap.width * 0.35 && box.top < wrap.bottom) right = Math.min(right, box.left - 12);
+        if (
+          box.width &&
+          box.left > wrap.left + wrap.width * 0.35 &&
+          box.top < wrap.bottom
+        )
+          right = Math.min(right, box.left - 12);
       }
       const player = root.querySelector("[data-scenario-player]");
-      if (player && !player.hidden && getComputedStyle(player).position === "absolute") bottom = Math.min(bottom, player.getBoundingClientRect().top - 8);
+      if (
+        player &&
+        !player.hidden &&
+        getComputedStyle(player).position === "absolute"
+      )
+        bottom = Math.min(bottom, player.getBoundingClientRect().top - 8);
       const artLeft = wrap.left + art.offsetLeft;
       const artTop = wrap.top + art.offsetTop;
       const centreX = ((wrap.left + right) / 2 - artLeft) / art.offsetWidth;
@@ -1125,9 +1406,18 @@ export function initTwin(root, config) {
       art.style.scale = String(zoom);
       art.style.translate = `${(tx * 100).toFixed(3)}% ${(ty * 100).toFixed(3)}%`;
       if (focusLayer) {
-        focusLayer.style.setProperty("--focus-x", `${((x / 1536) * 100).toFixed(2)}%`);
-        focusLayer.style.setProperty("--focus-y", `${((y / 1024) * 100).toFixed(2)}%`);
-        focusLayer.style.setProperty("--focus-r", `${(radius * 100).toFixed(1)}%`);
+        focusLayer.style.setProperty(
+          "--focus-x",
+          `${((x / 1536) * 100).toFixed(2)}%`,
+        );
+        focusLayer.style.setProperty(
+          "--focus-y",
+          `${((y / 1024) * 100).toFixed(2)}%`,
+        );
+        focusLayer.style.setProperty(
+          "--focus-r",
+          `${(radius * 100).toFixed(1)}%`,
+        );
         focusLayer.classList.toggle("is-active", spot);
       }
     },
@@ -1135,22 +1425,44 @@ export function initTwin(root, config) {
   // The page keeps the open scenario and step in its address (index.js).
   const scenarios = initScenarios(root, direction, config.scenarios(t, n), {
     onChange(scenario, step) {
-      root.dispatchEvent(new CustomEvent("twin:scenario", { bubbles: true, detail: { twin: root.dataset.twinTab, scenario, step } }));
+      root.dispatchEvent(
+        new CustomEvent("twin:scenario", {
+          bubbles: true,
+          detail: { twin: root.dataset.twinTab, scenario, step },
+        }),
+      );
     },
   });
   // The floating dashboard starts below the scenario launcher so every
   // scenario stays reachable, until the visitor places it themselves.
   const launcher = root.querySelector(".twin-scenarios");
   const clearLauncher = () => {
-    if (!screenOverlay || !launcher || !workspace || screenOverlay.dataset.placed) return;
-    if (screenOverlay.classList.contains("is-minimized") || document.fullscreenElement) return;
+    if (
+      !screenOverlay ||
+      !launcher ||
+      !workspace ||
+      screenOverlay.dataset.placed
+    )
+      return;
+    if (
+      screenOverlay.classList.contains("is-minimized") ||
+      document.fullscreenElement
+    )
+      return;
     const frame = workspace.getBoundingClientRect();
     const below = launcher.getBoundingClientRect().bottom - frame.top + 10;
-    if (screenOverlay.getBoundingClientRect().top - frame.top < below) screenOverlay.style.top = `${below}px`;
+    if (screenOverlay.getBoundingClientRect().top - frame.top < below)
+      screenOverlay.style.top = `${below}px`;
   };
   requestAnimationFrame(() => requestAnimationFrame(clearLauncher));
-  window.addEventListener("resize", () => requestAnimationFrame(clearLauncher), { passive: true });
-  overlayToggle?.addEventListener("click", () => requestAnimationFrame(clearLauncher));
+  window.addEventListener(
+    "resize",
+    () => requestAnimationFrame(clearLauncher),
+    { passive: true },
+  );
+  overlayToggle?.addEventListener("click", () =>
+    requestAnimationFrame(clearLauncher),
+  );
 
   index = stepAt(clock);
   render(steps[index]);

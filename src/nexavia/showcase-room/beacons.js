@@ -10,14 +10,16 @@ const GLINTS = 14;
 
 const svg = (tag, attributes, parent) => {
   const element = document.createElementNS(SVG_NS, tag);
-  for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, value);
+  for (const [name, value] of Object.entries(attributes))
+    element.setAttribute(name, value);
   parent?.appendChild(element);
   return element;
 };
 
 function gradient(defs, id, stops) {
   const fill = svg("radialGradient", { id }, defs);
-  for (const [offset, color, opacity] of stops) svg("stop", { offset, "stop-color": color, "stop-opacity": opacity }, fill);
+  for (const [offset, color, opacity] of stops)
+    svg("stop", { offset, "stop-color": color, "stop-opacity": opacity }, fill);
   return `url(#${id})`;
 }
 
@@ -33,7 +35,13 @@ export function initBeacons(root, beacons, water = "#0e3942") {
   const art = root.querySelector("[data-city-art]");
   const traffic = art?.querySelector(".city-traffic");
   if (!art || !traffic) return;
-  const host = svg("svg", { class: "city-beacons", viewBox: "0 0 1536 1024", preserveAspectRatio: "xMidYMid slice", "aria-hidden": "true", focusable: "false" });
+  const host = svg("svg", {
+    class: "city-beacons",
+    viewBox: "0 0 1536 1024",
+    preserveAspectRatio: "xMidYMid slice",
+    "aria-hidden": "true",
+    focusable: "false",
+  });
   traffic.before(host);
   const defs = svg("defs", {}, host);
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -44,24 +52,136 @@ export function initBeacons(root, beacons, water = "#0e3942") {
     const [x, y] = lamp;
     const [rx, ry] = reflection;
     // Dimming: the photo's own lamp and its glitter, when the light is out.
-    const waterCover = svg("ellipse", { cx: rx, cy: ry, rx: 26, ry: 34, fill: gradient(defs, `${id}-water`, [[0, water, 0.95], [0.6, water, 0.8], [1, water, 0]]) }, host);
-    const lampCover = svg("ellipse", { cx: x, cy: y + 8, rx: 11, ry: 17, fill: gradient(defs, `${id}-dark`, [[0, dark, 0.8], [0.6, dark, 0.55], [1, dark, 0]]) }, host);
+    const waterCover = svg(
+      "ellipse",
+      {
+        cx: rx,
+        cy: ry,
+        rx: 26,
+        ry: 34,
+        fill: gradient(defs, `${id}-water`, [
+          [0, water, 0.95],
+          [0.6, water, 0.8],
+          [1, water, 0],
+        ]),
+      },
+      host,
+    );
+    const lampCover = svg(
+      "ellipse",
+      {
+        cx: x,
+        cy: y + 8,
+        rx: 11,
+        ry: 17,
+        fill: gradient(defs, `${id}-dark`, [
+          [0, dark, 0.8],
+          [0.6, dark, 0.55],
+          [1, dark, 0],
+        ]),
+      },
+      host,
+    );
     const glow = svg("g", { style: "mix-blend-mode:screen" }, host);
     // Reflection: a soft column with glints dancing on the ripples.
-    const column = svg("ellipse", { cx: rx, cy: ry + 2, rx: 10, ry: 26, fill: gradient(defs, `${id}-column`, [[0, color, 0.55], [1, color, 0]]) }, glow);
+    const column = svg(
+      "ellipse",
+      {
+        cx: rx,
+        cy: ry + 2,
+        rx: 10,
+        ry: 26,
+        fill: gradient(defs, `${id}-column`, [
+          [0, color, 0.55],
+          [1, color, 0],
+        ]),
+      },
+      glow,
+    );
     const glints = Array.from({ length: GLINTS }, () => ({
-      node: svg("ellipse", { rx: (0.8 + Math.random() * 1.6).toFixed(2), ry: 0.5, fill: Math.random() < 0.3 ? beacon.glint : color }, glow),
+      node: svg(
+        "ellipse",
+        {
+          rx: (0.8 + Math.random() * 1.6).toFixed(2),
+          ry: 0.5,
+          fill: Math.random() < 0.3 ? beacon.glint : color,
+        },
+        glow,
+      ),
       x: rx + (Math.random() - 0.5) * 22,
       y: ry - 18 + Math.random() * 40,
       speed: 2 + Math.random() * 5,
       phase: Math.random() * 10,
     }));
     // The lamp: halo, light down the tower, hot core and a lens streak.
-    const halo = svg("circle", { cx: x, cy: y, r: 36, fill: gradient(defs, `${id}-halo`, [[0, color, 0.75], [0.25, color, 0.35], [1, color, 0]]) }, glow);
-    const tower = svg("ellipse", { cx: x, cy: y + 16, rx: 9, ry: 16, fill: gradient(defs, `${id}-tower`, [[0, color, 0.5], [1, color, 0]]) }, glow);
-    const core = svg("ellipse", { cx: x, cy: y, rx: 6, ry: 4, fill: gradient(defs, `${id}-core`, [[0, "#fff", 1], [0.45, beacon.glint, 0.9], [1, color, 0]]) }, glow);
-    const streak = svg("ellipse", { cx: x, cy: y, rx: 34, ry: 1.1, fill: gradient(defs, `${id}-streak`, [[0, beacon.glint, 0.9], [1, color, 0]]) }, glow);
-    return { beacon, waterCover, lampCover, column, glints, halo, tower, core, streak };
+    const halo = svg(
+      "circle",
+      {
+        cx: x,
+        cy: y,
+        r: 36,
+        fill: gradient(defs, `${id}-halo`, [
+          [0, color, 0.75],
+          [0.25, color, 0.35],
+          [1, color, 0],
+        ]),
+      },
+      glow,
+    );
+    const tower = svg(
+      "ellipse",
+      {
+        cx: x,
+        cy: y + 16,
+        rx: 9,
+        ry: 16,
+        fill: gradient(defs, `${id}-tower`, [
+          [0, color, 0.5],
+          [1, color, 0],
+        ]),
+      },
+      glow,
+    );
+    const core = svg(
+      "ellipse",
+      {
+        cx: x,
+        cy: y,
+        rx: 6,
+        ry: 4,
+        fill: gradient(defs, `${id}-core`, [
+          [0, "#fff", 1],
+          [0.45, beacon.glint, 0.9],
+          [1, color, 0],
+        ]),
+      },
+      glow,
+    );
+    const streak = svg(
+      "ellipse",
+      {
+        cx: x,
+        cy: y,
+        rx: 34,
+        ry: 1.1,
+        fill: gradient(defs, `${id}-streak`, [
+          [0, beacon.glint, 0.9],
+          [1, color, 0],
+        ]),
+      },
+      glow,
+    );
+    return {
+      beacon,
+      waterCover,
+      lampCover,
+      column,
+      glints,
+      halo,
+      tower,
+      core,
+      streak,
+    };
   });
 
   function draw(time) {
@@ -79,7 +199,10 @@ export function initBeacons(root, beacons, water = "#0e3942") {
       part.column.setAttribute("opacity", (0.6 * light).toFixed(3));
       for (const glint of part.glints) {
         const sparkle = Math.max(0, Math.sin(t * glint.speed + glint.phase));
-        glint.node.setAttribute("cx", (glint.x + 2.5 * Math.sin(t * 1.3 + glint.y * 0.4)).toFixed(2));
+        glint.node.setAttribute(
+          "cx",
+          (glint.x + 2.5 * Math.sin(t * 1.3 + glint.y * 0.4)).toFixed(2),
+        );
         glint.node.setAttribute("cy", glint.y.toFixed(2));
         glint.node.setAttribute("opacity", (light * sparkle ** 2).toFixed(3));
       }

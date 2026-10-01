@@ -1,15 +1,4 @@
-@font-face {
-  font-family: "Space Grotesk";
-  src: url("../assets/brand/fonts/SpaceGrotesk-variable.woff2") format("woff2");
-  font-weight: 300 700;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Source Sans 3";
-  src: url("../assets/brand/fonts/SourceSans3-variable.woff2") format("woff2");
-  font-weight: 200 900;
-  font-display: swap;
-}
+/* The brand @font-face rules are inlined in every page head (SeoHead.astro). */
 :root {
   --kuem-carbon: #161a1d;
   --kuem-concrete: #e8e6e1;
@@ -443,6 +432,39 @@ textarea {
 .hp {
   position: absolute;
   left: -9999px;
+}
+.contact-split {
+  align-items: start;
+}
+.lead-form h2,
+.contact-direct h2 {
+  font-size: 1.5rem;
+  letter-spacing: normal;
+}
+.lead-form button {
+  font: inherit;
+  font-weight: 600;
+}
+.consent-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-weight: 400;
+}
+.consent-check input {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0.15rem 0 0;
+  padding: 0;
+}
+.lead-form label:has(> :is(input, select, textarea):disabled) {
+  color: #596065;
+}
+.lead-form :is(input, select, textarea):disabled {
+  border-color: #c3c1bb;
+  background: transparent;
+  cursor: not-allowed;
 }
 .status {
   min-height: 1.5em;
@@ -4181,8 +4203,29 @@ html body:has(main) .site-header.site-header .nav-list > li > a[aria-current] {
 .site-header .nav-list > li > a[aria-current]:after {
   height: 2px;
 }
+/* The contact call to action: copper with Carbon text (CGP p9, p19). */
 .site-header .header-contact {
-  display: none !important;
+  padding: 0.5rem 0.95rem;
+  border: 1px solid var(--kuem-copper);
+  border-radius: 4px;
+  background: var(--kuem-copper);
+  color: var(--kuem-carbon);
+}
+.site-header .header-contact:hover,
+.site-header .header-contact:focus-visible {
+  border-color: #f47a4e;
+  background: #f47a4e;
+  color: var(--kuem-carbon);
+}
+html body:has(main) .site-header.site-header .nav-list > li > a.header-contact {
+  color: var(--kuem-carbon) !important;
+}
+.site-header .header-contact i {
+  width: auto;
+  height: auto;
+  border: 0;
+  background: none;
+  color: inherit;
 }
 .site-header .menu-toggle {
   border-color: #b8cbd4;

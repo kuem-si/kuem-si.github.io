@@ -12,22 +12,37 @@ export function cityTwin(en: boolean): Twin {
   });
   return {
     id: "city",
-    tab: { title: t("Pametno mesto", "Smart city"), meta: t("Maketa 60 × 60 cm · 7 naprav", "60 × 60 cm model · 7 devices") },
+    tab: {
+      title: t("Pametno mesto", "Smart city"),
+      meta: t("Maketa 60 × 60 cm · 7 naprav", "60 × 60 cm model · 7 devices"),
+    },
     intro: {
-      title: t("Mesto, ki pokaže, kaj se dogaja s podatki.", "A city that shows what is happening in its data."),
+      title: t(
+        "Mesto, ki pokaže, kaj se dogaja s podatki.",
+        "A city that shows what is happening in its data.",
+      ),
       lead: t(
         "Mesto povezuje upravljanje razsvetljave, števce porabe ter senzorje tresljajev mostu, gladine reke, kakovosti zraka in kolesarskega prometa. Meritve in dogodki se prikazujejo v Nexavii.",
         "The demonstration city combines controllable lighting, utility meters, and bridge, river, air-quality and cyclist sensors. Live readings and lighting events appear in Nexavia.",
       ),
     },
     panel: {
-      view: t("Pogled mesta · povlecite za raziskovanje", "City view · drag to explore"),
-      hint: t("Kliknite senzor, da pošlje meritev, ali svetilko oz. stavbo za vklop in izklop", "Click a sensor to send a reading, or a street light or building to switch it on or off"),
+      view: t(
+        "Pogled mesta · povlecite za raziskovanje",
+        "City view · drag to explore",
+      ),
+      hint: t(
+        "Kliknite senzor, da pošlje meritev, ali svetilko oz. stavbo za vklop in izklop",
+        "Click a sensor to send a reading, or a street light or building to switch it on or off",
+      ),
       hintPanel: t(
         "Tudi deli nadzorne plošče Nexavia so interaktivni – preklopite posamezno napravo ali vse ulične svetilke hkrati.",
         "Parts of the Nexavia dashboard are interactive too – switch a single device or all street lights at once.",
       ),
-      step: t("Senzor bere svetlobo okolice", "Sensor is reading ambient light"),
+      step: t(
+        "Senzor bere svetlobo okolice",
+        "Sensor is reading ambient light",
+      ),
     },
     scene: {
       photo: "/images/nexavia/showcase-room/maquette.png",
@@ -39,17 +54,38 @@ export function cityTwin(en: boolean): Twin {
       ),
       lightsDir: "/images/nexavia/showcase-room/lights",
       modules: [
-        { letter: "A", name: t("Stanovanjski", "Residential"), plan: [520, 236], label: [21, 27] },
-        { letter: "B", name: t("Javni prostor", "Public space"), plan: [1010, 236], label: [57, 28] },
-        { letter: "C", name: t("Industrija", "Industry"), plan: [480, 566], label: [25, 56] },
-        { letter: "D", name: t("Voda in infrastruktura", "Water & infrastructure"), plan: [1080, 566], label: [64, 56] },
+        {
+          letter: "A",
+          name: t("Stanovanjski", "Residential"),
+          plan: [520, 236],
+          label: [21, 27],
+        },
+        {
+          letter: "B",
+          name: t("Javni prostor", "Public space"),
+          plan: [1010, 236],
+          label: [57, 28],
+        },
+        {
+          letter: "C",
+          name: t("Industrija", "Industry"),
+          plan: [480, 566],
+          label: [25, 56],
+        },
+        {
+          letter: "D",
+          name: t("Voda in infrastruktura", "Water & infrastructure"),
+          plan: [1080, 566],
+          label: [64, 56],
+        },
       ],
       lighting: [
         {
           id: "HOUSE_01",
           label: t("Razsvetljava hiše z vrtom", "Garden house lighting"),
           off: [404, 104, 158, 124],
-          shape: "M406 144 442 124 507 100 545 141 540 150 557 168 553 195 540 207 480 221 415 213 410 160Z",
+          shape:
+            "M406 144 442 124 507 100 545 141 540 150 557 168 553 195 540 207 480 221 415 213 410 160Z",
           anchor: [476, 120],
         },
         {
@@ -66,10 +102,30 @@ export function cityTwin(en: boolean): Twin {
           shape: "M335 436 412 358 623 386 622 540 560 540 430 528 335 512Z",
           anchor: [604, 468],
         },
-        { id: "LAMP_01", label: t("Ulična svetilka 1", "Street light 1"), off: [612, 280, 72, 116], ...lamp(646.5, 294, 380) },
-        { id: "LAMP_02", label: t("Ulična svetilka 2", "Street light 2"), off: [986, 304, 70, 76], ...lamp(1018.5, 316, 364) },
-        { id: "LAMP_03", label: t("Ulična svetilka 3", "Street light 3"), off: [668, 392, 84, 98], ...lamp(703, 401, 465) },
-        { id: "LAMP_04", label: t("Ulična svetilka 4", "Street light 4"), off: [1172, 504, 74, 100], ...lamp(1207.5, 518, 585) },
+        {
+          id: "LAMP_01",
+          label: t("Ulična svetilka 1", "Street light 1"),
+          off: [612, 280, 72, 116],
+          ...lamp(646.5, 294, 380),
+        },
+        {
+          id: "LAMP_02",
+          label: t("Ulična svetilka 2", "Street light 2"),
+          off: [986, 304, 70, 76],
+          ...lamp(1018.5, 316, 364),
+        },
+        {
+          id: "LAMP_03",
+          label: t("Ulična svetilka 3", "Street light 3"),
+          off: [668, 392, 84, 98],
+          ...lamp(703, 401, 465),
+        },
+        {
+          id: "LAMP_04",
+          label: t("Ulična svetilka 4", "Street light 4"),
+          off: [1172, 504, 74, 100],
+          ...lamp(1207.5, 518, 585),
+        },
       ],
       sensors: [
         {
@@ -83,8 +139,16 @@ export function cityTwin(en: boolean): Twin {
           side: "below",
           align: "end",
           every: t("vsakih 5 min", "every 5 min"),
-          uses: t("Pravilo: svetloba < 25 lx → vklop razsvetljave", "Rule: light < 25 lx → lighting on"),
-          card: { kind: "sensor", title: t("Svetloba okolice", "Ambient light"), value: "46 lx", note: t("Streha poslovne stavbe", "Office building roof") },
+          uses: t(
+            "Pravilo: svetloba < 25 lx → vklop razsvetljave",
+            "Rule: light < 25 lx → lighting on",
+          ),
+          card: {
+            kind: "sensor",
+            title: t("Svetloba okolice", "Ambient light"),
+            value: "46 lx",
+            note: t("Streha poslovne stavbe", "Office building roof"),
+          },
         },
         {
           key: "house-water",
@@ -96,8 +160,16 @@ export function cityTwin(en: boolean): Twin {
           at: [452, 214],
           side: "below",
           every: t("vsakih 15 min", "every 15 min"),
-          uses: t("Pravilo: nočni pretok > 0,1 m³/h 30 min → alarm puščanja", "Rule: night flow > 0.1 m³/h for 30 min → leak alarm"),
-          card: { kind: "meter", title: t("Poraba vode · hiša", "Garden house water"), value: d("0.84 m³/d"), note: t("Dnevni pretok", "Daily flow") },
+          uses: t(
+            "Pravilo: nočni pretok > 0,1 m³/h 30 min → alarm puščanja",
+            "Rule: night flow > 0.1 m³/h for 30 min → leak alarm",
+          ),
+          card: {
+            kind: "meter",
+            title: t("Poraba vode · hiša", "Garden house water"),
+            value: d("0.84 m³/d"),
+            note: t("Dnevni pretok", "Daily flow"),
+          },
         },
         {
           key: "office-water",
@@ -109,7 +181,12 @@ export function cityTwin(en: boolean): Twin {
           at: [1128, 220],
           side: "below",
           every: t("vsakih 15 min", "every 15 min"),
-          card: { kind: "meter", title: t("Poraba vode · pisarna", "Office water"), value: d("12.6 m³/d"), note: t("Dnevni pretok", "Daily flow") },
+          card: {
+            kind: "meter",
+            title: t("Poraba vode · pisarna", "Office water"),
+            value: d("12.6 m³/d"),
+            note: t("Dnevni pretok", "Daily flow"),
+          },
         },
         {
           key: "air",
@@ -131,8 +208,16 @@ export function cityTwin(en: boolean): Twin {
             value: "18 µg/m³",
             grid: [
               { label: "PM10", key: "air", value: "18 µg/m³" },
-              { label: t("Temperatura", "Temperature"), key: "air-temp", value: d("18.7 °C") },
-              { label: t("Vlaga", "Humidity"), key: "air-humidity", value: t("56 %", "56%") },
+              {
+                label: t("Temperatura", "Temperature"),
+                key: "air-temp",
+                value: d("18.7 °C"),
+              },
+              {
+                label: t("Vlaga", "Humidity"),
+                key: "air-humidity",
+                value: t("56 %", "56%"),
+              },
             ],
           },
         },
@@ -145,7 +230,12 @@ export function cityTwin(en: boolean): Twin {
           event: t("Števec kolesarjev", "Cyclist counter"),
           at: [764, 300],
           side: "below",
-          card: { kind: "sensor", title: t("Števec kolesarjev", "Cyclist counter"), value: "124", note: t("Prehodov danes", "Passages today") },
+          card: {
+            kind: "sensor",
+            title: t("Števec kolesarjev", "Cyclist counter"),
+            value: "124",
+            note: t("Prehodov danes", "Passages today"),
+          },
         },
         {
           key: "factory-gas",
@@ -158,7 +248,12 @@ export function cityTwin(en: boolean): Twin {
           side: "above",
           align: "start",
           every: t("vsakih 15 min", "every 15 min"),
-          card: { kind: "meter", title: t("Poraba plina · tovarna", "Factory gas"), value: d("34.2 m³/h"), note: t("Trenutni pretok", "Current flow") },
+          card: {
+            kind: "meter",
+            title: t("Poraba plina · tovarna", "Factory gas"),
+            value: d("34.2 m³/h"),
+            note: t("Trenutni pretok", "Current flow"),
+          },
         },
         {
           key: "electricity",
@@ -170,7 +265,12 @@ export function cityTwin(en: boolean): Twin {
           at: [590, 520],
           side: "above",
           every: t("vsakih 15 min", "every 15 min"),
-          card: { kind: "meter", title: t("Poraba elektrike · tovarna", "Electricity use · factory"), value: d("18.6 kWh"), note: t("Danes", "Current day") },
+          card: {
+            kind: "meter",
+            title: t("Poraba elektrike · tovarna", "Electricity use · factory"),
+            value: d("18.6 kWh"),
+            note: t("Danes", "Current day"),
+          },
         },
         {
           key: "vibration",
@@ -184,7 +284,12 @@ export function cityTwin(en: boolean): Twin {
           alert: 0.8,
           every: t("vsakih 5 min", "every 5 min"),
           uses: t("Alarm: tresljaji ≥ 0,8 mm/s", "Alarm: vibration ≥ 0.8 mm/s"),
-          card: { kind: "sensor", title: t("Tresljaji mostu", "Bridge vibration"), value: d("0.42 mm/s"), note: t("Običajno območje", "Normal range") },
+          card: {
+            kind: "sensor",
+            title: t("Tresljaji mostu", "Bridge vibration"),
+            value: d("0.42 mm/s"),
+            note: t("Običajno območje", "Normal range"),
+          },
         },
         {
           key: "water",
@@ -197,8 +302,16 @@ export function cityTwin(en: boolean): Twin {
           side: "below",
           alert: 1.8,
           every: t("vsakih 5 min", "every 5 min"),
-          uses: t("Pravilo: gladina reke > 1,80 m → alarm", "Rule: river level > 1.80 m → alarm"),
-          card: { kind: "sensor", title: t("Gladina reke", "River level"), value: d("1.36 m"), note: t("Trenutna gladina", "Current level") },
+          uses: t(
+            "Pravilo: gladina reke > 1,80 m → alarm",
+            "Rule: river level > 1.80 m → alarm",
+          ),
+          card: {
+            kind: "sensor",
+            title: t("Gladina reke", "River level"),
+            value: d("1.36 m"),
+            note: t("Trenutna gladina", "Current level"),
+          },
         },
       ],
       // Asphalt copied from further down the lane, covering the figure baked
@@ -210,15 +323,39 @@ export function cityTwin(en: boolean): Twin {
         width: 21,
         height: 32,
       },
-      loader: { subject: t("Maketa 60 × 60 cm · 4 moduli", "Model 60 × 60 cm · 4 modules"), stage: t("Nalaganje modela mesta", "Loading the city model") },
+      loader: {
+        subject: t(
+          "Maketa 60 × 60 cm · 4 moduli",
+          "Model 60 × 60 cm · 4 modules",
+        ),
+        stage: t("Nalaganje modela mesta", "Loading the city model"),
+      },
     },
     dashboard: {
       title: t("Pregled naprav", "Device overview"),
-      subtitle: t("3 stavbe · 4 ulične svetilke · demonstracijski podatki", "3 buildings · 4 street lights · simulated data"),
+      subtitle: t(
+        "3 stavbe · 4 ulične svetilke · demonstracijski podatki",
+        "3 buildings · 4 street lights · simulated data",
+      ),
       kpis: [
-        { key: "active", label: t("Aktivne naprave", "Active devices"), value: "0 / 7", note: t("Po mestu", "Across the city") },
-        { key: "power", label: t("Skupna moč", "Total power"), value: "0 W", note: t("Trenutna simulacija", "Current simulation") },
-        { key: "lux", label: t("Svetloba okolice", "Ambient light"), value: "46 lx", note: t("Senzor LIGHT_01", "Sensor LIGHT_01") },
+        {
+          key: "active",
+          label: t("Aktivne naprave", "Active devices"),
+          value: "0 / 7",
+          note: t("Po mestu", "Across the city"),
+        },
+        {
+          key: "power",
+          label: t("Skupna moč", "Total power"),
+          value: "0 W",
+          note: t("Trenutna simulacija", "Current simulation"),
+        },
+        {
+          key: "lux",
+          label: t("Svetloba okolice", "Ambient light"),
+          value: "46 lx",
+          note: t("Senzor LIGHT_01", "Sensor LIGHT_01"),
+        },
       ],
       rule: t("Pravilo: svetloba < 25 lx", "Rule: light < 25 lx"),
       ruleStatus: t("Čaka na naslednjo meritev", "Waiting for next reading"),
@@ -233,25 +370,80 @@ export function cityTwin(en: boolean): Twin {
       ],
       group: t("Ulična razsvetljava", "Street lighting"),
       alarms: [
-        { id: "OFFICE_01", text: t("Senzor se ne odziva · 12 min", "Sensor not responding · 12 min") },
-        { id: "FACTORY_01", text: t("Šibek signal prehoda · 4 min", "Gateway signal weak · 4 min") },
+        {
+          id: "OFFICE_01",
+          text: t(
+            "Senzor se ne odziva · 12 min",
+            "Sensor not responding · 12 min",
+          ),
+        },
+        {
+          id: "FACTORY_01",
+          text: t(
+            "Šibek signal prehoda · 4 min",
+            "Gateway signal weak · 4 min",
+          ),
+        },
       ],
       meters: {
         title: t("Meritve števcev", "Meter readings"),
         rows: [
-          { label: t("Vodomer hiše z vrtom", "House water meter"), id: "HOUSE_WATER_01", key: "house-water", value: d("0.84 m³/d") },
-          { label: t("Vodomer poslovne stavbe", "Office water meter"), id: "OFFICE_WATER_01", key: "office-water", value: d("12.6 m³/d") },
-          { label: t("Plinomer tovarne", "Factory gas meter"), id: "FACTORY_GAS_01", key: "factory-gas", value: d("34.2 m³/h") },
-          { label: t("Elektrika tovarne", "Factory electricity"), id: "FACTORY_POWER_01", key: "electricity", value: d("18.6 kWh") },
+          {
+            label: t("Vodomer hiše z vrtom", "House water meter"),
+            id: "HOUSE_WATER_01",
+            key: "house-water",
+            value: d("0.84 m³/d"),
+          },
+          {
+            label: t("Vodomer poslovne stavbe", "Office water meter"),
+            id: "OFFICE_WATER_01",
+            key: "office-water",
+            value: d("12.6 m³/d"),
+          },
+          {
+            label: t("Plinomer tovarne", "Factory gas meter"),
+            id: "FACTORY_GAS_01",
+            key: "factory-gas",
+            value: d("34.2 m³/h"),
+          },
+          {
+            label: t("Elektrika tovarne", "Factory electricity"),
+            id: "FACTORY_POWER_01",
+            key: "electricity",
+            value: d("18.6 kWh"),
+          },
         ],
       },
       sensors: {
         title: t("Senzorji infrastrukture", "Infrastructure sensors"),
         rows: [
-          { label: t("Tresljaji mostu", "Bridge vibration"), id: "BRIDGE_VIB_01", key: "vibration", value: d("0.42 mm/s"), note: t("Običajno", "Normal") },
-          { label: t("Gladina reke", "River level"), id: "RIVER_LEVEL_01", key: "water", value: d("1.36 m"), note: t("Normalno območje", "Normal range") },
-          { label: t("Kakovost zraka", "Air quality"), id: "AIR_QUALITY_01 · PM10", key: "air", value: "18 µg/m³", note: t("18,7 °C · 56 % RH", "18.7 °C · 56% RH") },
-          { label: t("Števec kolesarjev", "Cyclist counter"), id: "CYCLE_COUNT_01", key: "cyclists", value: t("124 danes", "124 today") },
+          {
+            label: t("Tresljaji mostu", "Bridge vibration"),
+            id: "BRIDGE_VIB_01",
+            key: "vibration",
+            value: d("0.42 mm/s"),
+            note: t("Običajno", "Normal"),
+          },
+          {
+            label: t("Gladina reke", "River level"),
+            id: "RIVER_LEVEL_01",
+            key: "water",
+            value: d("1.36 m"),
+            note: t("Normalno območje", "Normal range"),
+          },
+          {
+            label: t("Kakovost zraka", "Air quality"),
+            id: "AIR_QUALITY_01 · PM10",
+            key: "air",
+            value: "18 µg/m³",
+            note: t("18,7 °C · 56 % RH", "18.7 °C · 56% RH"),
+          },
+          {
+            label: t("Števec kolesarjev", "Cyclist counter"),
+            id: "CYCLE_COUNT_01",
+            key: "cyclists",
+            value: t("124 danes", "124 today"),
+          },
         ],
       },
     },

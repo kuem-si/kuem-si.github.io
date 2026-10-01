@@ -22,11 +22,18 @@ export function initFountain(root, spec) {
   const { nozzle, height, water, spread, basin } = spec;
   const [nx, ny] = nozzle;
   const tilt = basin.ry / basin.rx;
-  const area = { x: nx - basin.rx - 8, y: ny - height - 10, width: 2 * (basin.rx + 8), height: height + 10 + basin.ry * 2 + 8 };
+  const area = {
+    x: nx - basin.rx - 8,
+    y: ny - height - 10,
+    width: 2 * (basin.rx + 8),
+    height: height + 10 + basin.ry * 2 + 8,
+  };
   const canvas = document.createElement("canvas");
   canvas.className = "city-water";
   canvas.setAttribute("aria-hidden", "true");
-  (art.querySelector(".city-beacons") ?? art.querySelector(".city-traffic"))?.before(canvas);
+  (
+    art.querySelector(".city-beacons") ?? art.querySelector(".city-traffic")
+  )?.before(canvas);
   const context = canvas.getContext("2d");
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
   let scale = 1;
@@ -43,7 +50,9 @@ export function initFountain(root, spec) {
     const surge = 1 + 0.05 * Math.sin(t * 2.2) + 0.025 * Math.sin(t * 5.9);
     const angle = Math.random() * Math.PI * 2;
     // The column is nearly upright; the crown opens like an umbrella.
-    const out = crown ? random(0.55, 1) * spread : random(0, 1) ** 2 * spread * 0.2;
+    const out = crown
+      ? random(0.55, 1) * spread
+      : random(0, 1) ** 2 * spread * 0.2;
     drops.push({
       x: 0,
       z: 0,
@@ -73,11 +82,23 @@ export function initFountain(root, spec) {
       // Into the basin: a few drops make rings, a few bounce up as spray.
       drops.splice(i, 1);
       if (drop.bounced) continue;
-      if (Math.random() < 0.12 && rings.length < 60) rings.push({ x: drop.x, z: drop.z, age: 0, size: random(2.5, 5) });
+      if (Math.random() < 0.12 && rings.length < 60)
+        rings.push({ x: drop.x, z: drop.z, age: 0, size: random(2.5, 5) });
       if (Math.random() < 0.2 && drops.length < MAX)
-        drops.push({ x: drop.x, z: drop.z, h: water, vx: random(-4, 4), vz: random(-4, 4), vh: random(6, 16), size: 0.25, glow: 0.5, bounced: true });
+        drops.push({
+          x: drop.x,
+          z: drop.z,
+          h: water,
+          vx: random(-4, 4),
+          vz: random(-4, 4),
+          vh: random(6, 16),
+          size: 0.25,
+          glow: 0.5,
+          bounced: true,
+        });
     }
-    for (let i = rings.length - 1; i >= 0; i--) if ((rings[i].age += dt) > 0.8) rings.splice(i, 1);
+    for (let i = rings.length - 1; i >= 0; i--)
+      if ((rings[i].age += dt) > 0.8) rings.splice(i, 1);
   }
 
   // Scene pixels of a point on or above the board around the nozzle.
@@ -92,8 +113,18 @@ export function initFountain(root, spec) {
     context.globalCompositeOperation = "lighter";
 
     // Mist hanging around the column.
-    const mist = context.createRadialGradient(sx(0), sy(0, height * 0.55), 0, sx(0), sy(0, height * 0.55), height * 0.9 * scale);
-    mist.addColorStop(0, `hsl(${hue} 60% 75% / ${0.16 + 0.04 * Math.sin(t * 1.7)})`);
+    const mist = context.createRadialGradient(
+      sx(0),
+      sy(0, height * 0.55),
+      0,
+      sx(0),
+      sy(0, height * 0.55),
+      height * 0.9 * scale,
+    );
+    mist.addColorStop(
+      0,
+      `hsl(${hue} 60% 75% / ${0.16 + 0.04 * Math.sin(t * 1.7)})`,
+    );
     mist.addColorStop(1, `hsl(${hue} 60% 70% / 0)`);
     context.fillStyle = mist;
     context.fillRect(0, 0, canvas.width, canvas.height);
@@ -105,7 +136,15 @@ export function initFountain(root, spec) {
       context.strokeStyle = `hsl(${hue} 50% 85% / ${0.45 * (1 - u)})`;
       context.beginPath();
       const r = ring.size * (0.2 + u);
-      context.ellipse(sx(ring.x), sy(ring.z, water), r * scale, r * tilt * scale, 0, 0, Math.PI * 2);
+      context.ellipse(
+        sx(ring.x),
+        sy(ring.z, water),
+        r * scale,
+        r * tilt * scale,
+        0,
+        0,
+        Math.PI * 2,
+      );
       context.stroke();
     }
 
@@ -125,7 +164,12 @@ export function initFountain(root, spec) {
     }
 
     // The hot core where the jet leaves the nozzle.
-    const core = context.createLinearGradient(0, sy(0, 0), 0, sy(0, height * 0.7));
+    const core = context.createLinearGradient(
+      0,
+      sy(0, 0),
+      0,
+      sy(0, height * 0.7),
+    );
     core.addColorStop(0, `hsl(${hue} 40% 95% / 0.45)`);
     core.addColorStop(1, `hsl(${hue} 60% 85% / 0)`);
     context.strokeStyle = core;
@@ -141,7 +185,8 @@ export function initFountain(root, spec) {
     const width = art.clientWidth;
     const heightPx = art.clientHeight;
     if (!width || !heightPx) return;
-    const fit = getComputedStyle(photo).objectFit === "cover" ? Math.max : Math.min;
+    const fit =
+      getComputedStyle(photo).objectFit === "cover" ? Math.max : Math.min;
     const photoScale = fit(width / PHOTO.width, heightPx / PHOTO.height);
     const left = (width - PHOTO.width * photoScale) / 2;
     const top = (heightPx - PHOTO.height * photoScale) / 2;

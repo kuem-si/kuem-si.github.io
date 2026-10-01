@@ -3,6 +3,9 @@
 // Evidence: historical src/pages (1222fc4^), and src/config/routes.ts (9c0639a^).
 // Keep this explicit: a new canonical route does not imply an old /sl/ alias existed.
 export const legacySlovenianRedirects: Record<string, string> = {
+  // Hidden until Vpogledi has articles: remove this entry and restore
+  // src/pages/vpogledi.astro from git history.
+  vpogledi: "/resitve/",
   about: "/o-nas/",
   "o-podjetju": "/o-nas/",
   contact: "/kontakt/",
@@ -37,10 +40,13 @@ export const legacySlovenianRedirects: Record<string, string> = {
   "sl/kontakt": "/kontakt/",
   "sl/reference": "/reference/",
   "sl/resitve": "/resitve/",
-  "sl/resitve/daljinsko-odcitavanje-stevcev": "/resitve/daljinsko-odcitavanje-stevcev/",
+  "sl/resitve/daljinsko-odcitavanje-stevcev":
+    "/resitve/daljinsko-odcitavanje-stevcev/",
   "sl/resitve/data-centri": "/resitve/data-centri/",
-  "sl/resitve/digitalizacija-obcinske-infrastrukture": "/resitve/digitalizacija-obcinske-infrastrukture/",
-  "sl/resitve/haccp-temperaturni-monitoring": "/resitve/haccp-temperaturni-monitoring/",
+  "sl/resitve/digitalizacija-obcinske-infrastrukture":
+    "/resitve/digitalizacija-obcinske-infrastrukture/",
+  "sl/resitve/haccp-temperaturni-monitoring":
+    "/resitve/haccp-temperaturni-monitoring/",
   "sl/resitve/javna-razsvetljava": "/resitve/javna-razsvetljava/",
   "sl/resitve/odpadki": "/resitve/odpadki/",
   "sl/resitve/okoljski-monitoring": "/resitve/okoljski-monitoring/",

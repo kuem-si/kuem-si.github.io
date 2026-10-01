@@ -4,18 +4,18 @@ Implemented locally. No commit, push, deployment, new dependency or GitHub issue
 
 ## Issues #2–#11
 
-| Issue | Result |
-| --- | --- |
-| #2 Privacy | Removed internal endpoint/legal-review notes and the generic diagram from EN. Retained existing public legal wording. |
-| #3 Industries | Removed mixed Slovenian/English copy, translated Mobility in both static and interactive UI, and localized displayed thousands separators across all six tabs. |
-| #4 Homepage | Corrected Sombor Gas, How it works, English metrics and email subjects. Koprivnica and Tropic remain separate entries, as in the source. |
-| #5 KAI | American English, six distinct descriptions based on existing capability titles, How KAI works heading. Fixed desktop pipeline overflow without changing SL. |
-| #6 Nexavia | Corrected metrics, decision-making/integration wording and Audit trail. Contact CTAs say Book a presentation. Removed Read the story links without final stories. |
-| #7 Success Stories | Minimal public interim page using existing layout and CTA; internal notes/placeholder diagram removed. No invented stories or results. Removed corresponding misleading story CTAs from Industries. |
-| #8 Duplicates | Remote Meter Reading and Traffic & Mobility each render What the solution covers once, preserving all coverage items and the platform content. SL unchanged. |
-| #9 Legacy URLs | Ten static redirects, target canonicals, noindex/follow and sitemap exclusion. See redirect limitations below. |
-| #10 Company | Requested wording changes plus an English copy of the existing SVG map, with unchanged geometry and styling. |
-| #11 Language/microcopy | Shared SL \| EN selector in headers/footers, corrected EN homepage footer destination, mobility wording and Near-real-time monitoring. |
+| Issue                  | Result                                                                                                                                                                                              |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| #2 Privacy             | Removed internal endpoint/legal-review notes and the generic diagram from EN. Retained existing public legal wording.                                                                               |
+| #3 Industries          | Removed mixed Slovenian/English copy, translated Mobility in both static and interactive UI, and localized displayed thousands separators across all six tabs.                                      |
+| #4 Homepage            | Corrected Sombor Gas, How it works, English metrics and email subjects. Koprivnica and Tropic remain separate entries, as in the source.                                                            |
+| #5 KAI                 | American English, six distinct descriptions based on existing capability titles, How KAI works heading. Fixed desktop pipeline overflow without changing SL.                                        |
+| #6 Nexavia             | Corrected metrics, decision-making/integration wording and Audit trail. Contact CTAs say Book a presentation. Removed Read the story links without final stories.                                   |
+| #7 Success Stories     | Minimal public interim page using existing layout and CTA; internal notes/placeholder diagram removed. No invented stories or results. Removed corresponding misleading story CTAs from Industries. |
+| #8 Duplicates          | Remote Meter Reading and Traffic & Mobility each render What the solution covers once, preserving all coverage items and the platform content. SL unchanged.                                        |
+| #9 Legacy URLs         | Ten static redirects, target canonicals, noindex/follow and sitemap exclusion. See redirect limitations below.                                                                                      |
+| #10 Company            | Requested wording changes plus an English copy of the existing SVG map, with unchanged geometry and styling.                                                                                        |
+| #11 Language/microcopy | Shared SL \| EN selector in headers/footers, corrected EN homepage footer destination, mobility wording and Near-real-time monitoring.                                                              |
 
 Additional QA fixes: build-time injection of the public contact endpoint into the inline form script; public-facing EN fallback message; contact anchor targets; valid language-switch destination on the 404 page; spacing in the EN homepage diagram caption.
 
@@ -41,18 +41,18 @@ SL changes are limited to the requested shared language selector, correction of 
 
 Redirect pages use immediate HTML meta refresh, an absolute target canonical, noindex/follow and a fallback link. They expose no obsolete page content and are excluded from the sitemap. **These are not HTTP 301 redirects.** True HTTP 301 requires a redirect-capable hosting/CDN layer.
 
-| Legacy EN path | Target |
-| --- | --- |
-| /en/about/ | /en/company/ |
-| /en/services/ | /en/solutions/ |
-| /en/services/software-development/ | /en/solutions/ |
-| /en/services/software-architecture-and-consulting/ | /en/solutions/ |
-| /en/services/devops-and-platform-engineering/ | /en/solutions/ |
-| /en/solutions/nexavia/ | /en/nexavia/ |
-| /en/solutions/nexavia/nexavia-enterprise/ | /en/nexavia/ |
-| /en/nexavia-platform/ | /en/nexavia/ |
-| /en/platform/nexavia/ | /en/nexavia/ |
-| /en/case-studies/ | /en/references/ |
+| Legacy EN path                                     | Target          |
+| -------------------------------------------------- | --------------- |
+| /en/about/                                         | /en/company/    |
+| /en/services/                                      | /en/solutions/  |
+| /en/services/software-development/                 | /en/solutions/  |
+| /en/services/software-architecture-and-consulting/ | /en/solutions/  |
+| /en/services/devops-and-platform-engineering/      | /en/solutions/  |
+| /en/solutions/nexavia/                             | /en/nexavia/    |
+| /en/solutions/nexavia/nexavia-enterprise/          | /en/nexavia/    |
+| /en/nexavia-platform/                              | /en/nexavia/    |
+| /en/platform/nexavia/                              | /en/nexavia/    |
+| /en/case-studies/                                  | /en/references/ |
 
 Additional service paths were checked against the repository's former route configuration in commit f9d33ae.
 

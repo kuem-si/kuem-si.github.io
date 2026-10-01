@@ -3,7 +3,8 @@
 // src/nexavia/showcase-room/ (city.js, marina.js). Maquette coordinates are
 // scene pixels (1536 × 1024), the geometry both maquettes share.
 
-export type Tone = "water" | "air" | "mobility" | "gas" | "power" | "structure" | "light";
+export type Tone =
+  "water" | "air" | "mobility" | "gas" | "power" | "structure" | "light";
 
 export interface LightingDevice {
   id: string;
@@ -54,11 +55,22 @@ export interface Scene {
   height: number;
   alt: string;
   lightsDir: string;
-  modules: { letter: string; name: string; plan: [number, number]; label: [number, number] }[];
+  modules: {
+    letter: string;
+    name: string;
+    plan: [number, number];
+    label: [number, number];
+  }[];
   lighting: LightingDevice[];
   sensors: Sensor[];
   // City only: asphalt covering a figure in the traffic lane.
-  lanePatch?: { href: string; x: number; y: number; width: number; height: number };
+  lanePatch?: {
+    href: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
   // Marina only: the water surface alone, for the moving water, and each pier
   // light's reflection on it [x, y, width, height].
   water?: string;

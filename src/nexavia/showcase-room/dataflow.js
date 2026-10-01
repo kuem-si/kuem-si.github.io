@@ -14,7 +14,8 @@ const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const svg = (tag, attributes, parent) => {
   const element = document.createElementNS(NS, tag);
-  for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, value);
+  for (const [name, value] of Object.entries(attributes))
+    element.setAttribute(name, value);
   parent?.appendChild(element);
   return element;
 };
@@ -32,18 +33,39 @@ export function initDataFlow(root, { gateway }) {
   const toggle = root.querySelector("[data-flow-toggle]");
   if (!art || !gateway) return null;
   const [gx, gy] = gateway.at;
-  const host = svg("svg", { class: "city-flow", viewBox: "0 0 1536 1024", preserveAspectRatio: "xMidYMid slice", "aria-hidden": "true", focusable: "false" });
+  const host = svg("svg", {
+    class: "city-flow",
+    viewBox: "0 0 1536 1024",
+    preserveAspectRatio: "xMidYMid slice",
+    "aria-hidden": "true",
+    focusable: "false",
+  });
   art.querySelector(".city-device-chip")?.before(host);
   const links = svg("g", {}, host);
   const beams = svg("g", {}, host);
   const packets = svg("g", {}, host);
   // The gateway: a mast sending rings out, with its id underneath.
-  const station = svg("g", { class: "flow-gateway", transform: `translate(${gx} ${gy})` }, host);
+  const station = svg(
+    "g",
+    { class: "flow-gateway", transform: `translate(${gx} ${gy})` },
+    host,
+  );
   svg("circle", { class: "flow-ring", r: 12 }, station);
   svg("circle", { class: "flow-ring flow-ring--late", r: 12 }, station);
-  svg("path", { class: "flow-mast", d: "M0 0V-13M-6 -17a8.5 8.5 0 0 1 12 0M-10.5 -21.5a15 15 0 0 1 21 0" }, station);
+  svg(
+    "path",
+    {
+      class: "flow-mast",
+      d: "M0 0V-13M-6 -17a8.5 8.5 0 0 1 12 0M-10.5 -21.5a15 15 0 0 1 21 0",
+    },
+    station,
+  );
   svg("circle", { class: "flow-core", r: 4.5 }, station);
-  const label = svg("g", { class: "flow-label", transform: "translate(0 10)" }, station);
+  const label = svg(
+    "g",
+    { class: "flow-label", transform: "translate(0 10)" },
+    station,
+  );
   svg("rect", { x: -31, y: 0, width: 62, height: 18, rx: 9 }, label);
   svg("text", { x: 0, y: 12.6 }, label).textContent = gateway.id;
 
@@ -53,11 +75,33 @@ export function initDataFlow(root, { gateway }) {
   const addEnd = (name, [x, y], extra = {}) => {
     const lift = Math.hypot(x - gx, y - gy) * 0.22;
     const curve = [x, y, (x + gx) / 2, Math.min(y, gy) - lift, gx, gy];
-    const link = svg("path", { class: "flow-link", d: `M${x} ${y}Q${curve[2]} ${curve[3]} ${gx} ${gy}` }, links);
+    const link = svg(
+      "path",
+      {
+        class: "flow-link",
+        d: `M${x} ${y}Q${curve[2]} ${curve[3]} ${gx} ${gy}`,
+      },
+      links,
+    );
     ends.set(name, { curve, link, busy: 0, ...extra });
   };
-  root.querySelectorAll("[data-sensor-pin][data-at]").forEach((pin) => addEnd(`sensor:${pin.dataset.sensorPin}`, pin.dataset.at.split(" ").map(Number), { pin }));
-  root.querySelectorAll("[data-device][data-anchor]").forEach((device) => addEnd(`device:${device.dataset.device}`, device.dataset.anchor.split(" ").map(Number)));
+  root
+    .querySelectorAll("[data-sensor-pin][data-at]")
+    .forEach((pin) =>
+      addEnd(
+        `sensor:${pin.dataset.sensorPin}`,
+        pin.dataset.at.split(" ").map(Number),
+        { pin },
+      ),
+    );
+  root
+    .querySelectorAll("[data-device][data-anchor]")
+    .forEach((device) =>
+      addEnd(
+        `device:${device.dataset.device}`,
+        device.dataset.anchor.split(" ").map(Number),
+      ),
+    );
 
   let on = false;
   let online = true;
@@ -77,7 +121,10 @@ export function initDataFlow(root, { gateway }) {
       const [x0, y0, cx, cy, x1, y1] = packet.end.curve;
       const x = (1 - s) ** 2 * x0 + 2 * (1 - s) * s * cx + s * s * x1;
       const y = (1 - s) ** 2 * y0 + 2 * (1 - s) * s * cy + s * s * y1;
-      packet.node.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+      packet.node.setAttribute(
+        "transform",
+        `translate(${x.toFixed(1)} ${y.toFixed(1)})`,
+      );
       // A command that cannot get through stops halfway, turns red and fades.
       if (packet.fail && k > 0.55) {
         packet.node.style.color = FAILED;
@@ -96,15 +143,33 @@ export function initDataFlow(root, { gateway }) {
     if (packet.trace && --tracing <= 0) {
       // Keep the traced link up while the beam to Nexavia plays out.
       clearTimeout(traceTimer);
-      traceTimer = setTimeout(() => tracing <= 0 && host.classList.remove("is-tracing"), BEAM + 500);
+      traceTimer = setTimeout(
+        () => tracing <= 0 && host.classList.remove("is-tracing"),
+        BEAM + 500,
+      );
     }
   }
 
   // One packet along an end's link, from the device to the gateway (or back
   // with `reverse`). A traced packet shows its own link while the data flow
   // is switched off.
-  function send(end, { color, delay = 0, reverse = false, fail = false, trace = false, arrive, lost }) {
-    const node = svg("g", { class: "flow-packet", style: `color:${color};visibility:hidden` }, packets);
+  function send(
+    end,
+    {
+      color,
+      delay = 0,
+      reverse = false,
+      fail = false,
+      trace = false,
+      arrive,
+      lost,
+    },
+  ) {
+    const node = svg(
+      "g",
+      { class: "flow-packet", style: `color:${color};visibility:hidden` },
+      packets,
+    );
     svg("circle", { class: "flow-packet-halo", r: 11 }, node);
     svg("circle", { class: "flow-packet-core", r: 4.6 }, node);
     svg("circle", { class: "flow-packet-spark", r: 1.8 }, node);
@@ -115,14 +180,35 @@ export function initDataFlow(root, { gateway }) {
       clearTimeout(traceTimer);
       host.classList.add("is-tracing");
     }
-    live.add({ node, end, reverse, fail, trace, arrive, lost, start: performance.now() + delay, duration: TRIP });
+    live.add({
+      node,
+      end,
+      reverse,
+      fail,
+      trace,
+      arrive,
+      lost,
+      start: performance.now() + delay,
+      duration: TRIP,
+    });
     if (!frame) frame = requestAnimationFrame(tick);
   }
 
   // A short beam between the gateway and Nexavia, above the model.
   function beam(direction, color) {
     const top = Math.max(6, gy - 150);
-    const path = svg("path", { class: `flow-beam flow-beam--${direction}`, style: `color:${color}`, d: direction === "up" ? `M${gx} ${gy - 24}V${top}` : `M${gx} ${top}V${gy - 24}` }, beams);
+    const path = svg(
+      "path",
+      {
+        class: `flow-beam flow-beam--${direction}`,
+        style: `color:${color}`,
+        d:
+          direction === "up"
+            ? `M${gx} ${gy - 24}V${top}`
+            : `M${gx} ${top}V${gy - 24}`,
+      },
+      beams,
+    );
     path.addEventListener("animationend", () => path.remove(), { once: true });
   }
 
@@ -138,9 +224,11 @@ export function initDataFlow(root, { gateway }) {
     const end = ends.get(`sensor:${key}`);
     if (!end) return false;
     const time = performance.now();
-    if (!now && time - (lastUplink.get(key) ?? -Infinity) < UPLINK_GAP) return false;
+    if (!now && time - (lastUplink.get(key) ?? -Infinity) < UPLINK_GAP)
+      return false;
     lastUplink.set(key, time);
-    const color = getComputedStyle(end.pin).getPropertyValue("--tone").trim() || "#8fe3e0";
+    const color =
+      getComputedStyle(end.pin).getPropertyValue("--tone").trim() || "#8fe3e0";
     // Readings that change together leave their sensors a moment apart.
     send(end, {
       color,
@@ -151,7 +239,9 @@ export function initDataFlow(root, { gateway }) {
       arrive() {
         replay(station, "is-hit");
         beam("up", color);
-        const row = root.querySelector(`.twin-dashboard [data-reading="${key}"]`)?.parentElement;
+        const row = root.querySelector(
+          `.twin-dashboard [data-reading="${key}"]`,
+        )?.parentElement;
         if (row) replay(row, "is-received");
         arrive?.();
       },

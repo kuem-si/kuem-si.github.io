@@ -29,10 +29,13 @@ const smooth = (from, to, x) => {
   return u * u * (3 - 2 * u);
 };
 export const wrap = (hours) => ((hours % 24) + 24) % 24;
-export const daylight = (hours) => smooth(RISE[0], RISE[1], hours) * (1 - smooth(SET[0], SET[1], hours));
+export const daylight = (hours) =>
+  smooth(RISE[0], RISE[1], hours) * (1 - smooth(SET[0], SET[1], hours));
 // Warm light around sunrise and sunset.
-const twilight = (hours) => Math.max(0, 1 - ((hours - 6.1) / 1.1) ** 2, 1 - ((hours - 19.9) / 1.1) ** 2);
-export const luxAt = (hours, max) => Math.round(FLOOR + (max - FLOOR) * daylight(wrap(hours)));
+const twilight = (hours) =>
+  Math.max(0, 1 - ((hours - 6.1) / 1.1) ** 2, 1 - ((hours - 19.9) / 1.1) ** 2);
+export const luxAt = (hours, max) =>
+  Math.round(FLOOR + (max - FLOOR) * daylight(wrap(hours)));
 export const parseTime = (text) => {
   const [hours, minutes] = text.split(":").map(Number);
   return hours + minutes / 60;
@@ -49,7 +52,7 @@ function cross([from, to], level) {
   let b = to;
   for (let i = 0; i < 30; i++) {
     const middle = (a + b) / 2;
-    if ((daylight(middle) < level) === rising) a = middle;
+    if (daylight(middle) < level === rising) a = middle;
     else b = middle;
   }
   return (a + b) / 2;
@@ -69,10 +72,14 @@ const icons = {
   moon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 14.6A7.8 7.8 0 0 1 9.4 4.5a7.8 7.8 0 1 0 10.1 10.1z"/></svg>',
 };
 
-const canvas = (width, height) => Object.assign(document.createElement("canvas"), { width, height });
-const luminance = (data, i) => 0.3 * data[i] + 0.59 * data[i + 1] + 0.11 * data[i + 2];
-const idle = () => new Promise((resolve) => (window.requestIdleCallback ?? setTimeout)(resolve));
-const rgb = (hex) => [0, 1, 2].map((i) => parseInt(hex.slice(1 + 2 * i, 3 + 2 * i), 16));
+const canvas = (width, height) =>
+  Object.assign(document.createElement("canvas"), { width, height });
+const luminance = (data, i) =>
+  0.3 * data[i] + 0.59 * data[i + 1] + 0.11 * data[i + 2];
+const idle = () =>
+  new Promise((resolve) => (window.requestIdleCallback ?? setTimeout)(resolve));
+const rgb = (hex) =>
+  [0, 1, 2].map((i) => parseInt(hex.slice(1 + 2 * i, 3 + 2 * i), 16));
 const mix = (a, b, k) => a.map((value, i) => value + (b[i] - value) * k);
 
 // `onScrub(hours)` runs when the visitor moves the clock.
@@ -102,7 +109,8 @@ export function initDaylight(root, { t, onScrub }) {
     const width = art.clientWidth;
     const height = art.clientHeight;
     if (!width || !height) return;
-    const fit = getComputedStyle(photo).objectFit === "cover" ? Math.max : Math.min;
+    const fit =
+      getComputedStyle(photo).objectFit === "cover" ? Math.max : Math.min;
     const scale = fit(width / W, height / H);
     Object.assign(sky.style, {
       left: `${(width - W * scale) / 2}px`,
@@ -123,7 +131,11 @@ export function initDaylight(root, { t, onScrub }) {
     <span class="twin-clock-track"><input type="range" min="0" max="1435" step="5" aria-label="${t("Ura na maketi", "Time of day on the model")}"></span>`;
   wrapper.append(clock);
   const input = clock.querySelector("input");
-  const read = { time: clock.querySelector("b"), phase: clock.querySelector("small"), icon: clock.querySelector(".twin-clock-icon") };
+  const read = {
+    time: clock.querySelector("b"),
+    phase: clock.querySelector("small"),
+    icon: clock.querySelector(".twin-clock-icon"),
+  };
   // A drag on the clock must not pan the maquette behind it, nor a tap
   // switch the nearest light.
   clock.addEventListener("pointerdown", (event) => event.stopPropagation());
@@ -132,12 +144,26 @@ export function initDaylight(root, { t, onScrub }) {
   // The track shows the sky over the day: night, a warm dawn, day, a warm dusk.
   const stops = Array.from({ length: 49 }, (_, i) => {
     const hours = i / 2;
-    const color = mix(mix(rgb("#1b2547"), rgb("#8ecbe6"), daylight(hours)), rgb("#f39a5b"), 0.8 * twilight(hours));
+    const color = mix(
+      mix(rgb("#1b2547"), rgb("#8ecbe6"), daylight(hours)),
+      rgb("#f39a5b"),
+      0.8 * twilight(hours),
+    );
     return `rgb(${color.map(Math.round).join(" ")}) ${((hours / 24) * 100).toFixed(2)}%`;
   });
-  clock.querySelector(".twin-clock-track").style.setProperty("--sky-track", `linear-gradient(90deg,${stops.join(",")})`);
+  clock
+    .querySelector(".twin-clock-track")
+    .style.setProperty(
+      "--sky-track",
+      `linear-gradient(90deg,${stops.join(",")})`,
+    );
 
-  const phases = { night: t("Noč", "Night"), dawn: t("Zora", "Dawn"), day: t("Dan", "Day"), dusk: t("Mrak", "Dusk") };
+  const phases = {
+    night: t("Noč", "Night"),
+    dawn: t("Zora", "Dawn"),
+    day: t("Dan", "Day"),
+    dusk: t("Mrak", "Dusk"),
+  };
   const phaseOf = (hours) => {
     const light = daylight(hours);
     if (light < 0.03) return "night";
@@ -153,8 +179,14 @@ export function initDaylight(root, { t, onScrub }) {
 
   function apply() {
     const light = daylight(hours);
-    const opacity = { day: STRENGTH.day * light, dusk: STRENGTH.dusk * twilight(hours), night: STRENGTH.night * (1 - light), glow: STRENGTH.glow * (1 - light) };
-    for (const [name, layer] of Object.entries(layers)) layer.style.opacity = opacity[name].toFixed(3);
+    const opacity = {
+      day: STRENGTH.day * light,
+      dusk: STRENGTH.dusk * twilight(hours),
+      night: STRENGTH.night * (1 - light),
+      glow: STRENGTH.glow * (1 - light),
+    };
+    for (const [name, layer] of Object.entries(layers))
+      layer.style.opacity = opacity[name].toFixed(3);
     const time = formatTime(hours);
     if (time === shown) return;
     shown = time;
@@ -163,9 +195,11 @@ export function initDaylight(root, { t, onScrub }) {
     read.phase.textContent = phases[phase];
     if (clock.dataset.phase !== phase) {
       clock.dataset.phase = phase;
-      read.icon.innerHTML = phase === "day" || phase === "dawn" ? icons.sun : icons.moon;
+      read.icon.innerHTML =
+        phase === "day" || phase === "dawn" ? icons.sun : icons.moon;
     }
-    if (document.activeElement !== input) input.value = String(Math.round((wrap(hours) * 60) / 5) * 5 % 1440);
+    if (document.activeElement !== input)
+      input.value = String((Math.round((wrap(hours) * 60) / 5) * 5) % 1440);
     input.setAttribute("aria-valuetext", `${time} · ${phases[phase]}`);
   }
 
@@ -195,7 +229,10 @@ export function initDaylight(root, { t, onScrub }) {
     const room = small.getImageData(0, 0, qw, qh);
     const q = room.data;
     const inRoom = new Uint8Array(qw * qh);
-    const pale = (i) => Math.max(q[i * 4], q[i * 4 + 1], q[i * 4 + 2]) - Math.min(q[i * 4], q[i * 4 + 1], q[i * 4 + 2]) < 24 && q[i * 4] + q[i * 4 + 1] + q[i * 4 + 2] > 420;
+    const pale = (i) =>
+      Math.max(q[i * 4], q[i * 4 + 1], q[i * 4 + 2]) -
+        Math.min(q[i * 4], q[i * 4 + 1], q[i * 4 + 2]) <
+        24 && q[i * 4] + q[i * 4 + 1] + q[i * 4 + 2] > 420;
     const stack = [];
     for (let x = 0; x < qw; x++) stack.push(x, (qh - 1) * qw + x);
     for (let y = 0; y < qh; y++) stack.push(y * qw, y * qw + qw - 1);
@@ -209,7 +246,8 @@ export function initDaylight(root, { t, onScrub }) {
       if (i >= qw) stack.push(i - qw);
       if (i < qw * (qh - 1)) stack.push(i + qw);
     }
-    for (let i = 0; i < inRoom.length; i++) q[i * 4 + 3] = inRoom[i] ? 255 * ROOM : 255;
+    for (let i = 0; i < inRoom.length; i++)
+      q[i * 4 + 3] = inRoom[i] ? 255 * ROOM : 255;
     small.putImageData(room, 0, 0);
     const board = canvas(W, H);
     const boardContext = board.getContext("2d");
@@ -222,12 +260,17 @@ export function initDaylight(root, { t, onScrub }) {
     const keyData = keyContext.createImageData(W, H);
     const k = keyData.data;
     for (let row = 0; row < H; row += 128) {
-      for (let i = row * W * 4, end = Math.min(H, row + 128) * W * 4; i < end; i += 4) {
+      for (
+        let i = row * W * 4, end = Math.min(H, row + 128) * W * 4;
+        i < end;
+        i += 4
+      ) {
         const warmth = Math.min(pixels[i], pixels[i + 1]) - pixels[i + 2];
         k[i] = 255;
         k[i + 1] = 207;
         k[i + 2] = 138;
-        k[i + 3] = 255 * smooth(28, 72, warmth) * smooth(150, 215, luminance(pixels, i));
+        k[i + 3] =
+          255 * smooth(28, 72, warmth) * smooth(150, 215, luminance(pixels, i));
       }
       await idle();
     }
@@ -237,7 +280,9 @@ export function initDaylight(root, { t, onScrub }) {
     // unlit patch (and a pier light's reflection on the water).
     const devices = [];
     const own = async (element, measure) => {
-      const [x, y, width, height] = ["x", "y", "width", "height"].map((name) => Number(element.getAttribute(name)));
+      const [x, y, width, height] = ["x", "y", "width", "height"].map((name) =>
+        Number(element.getAttribute(name)),
+      );
       const image = await load(element.getAttribute("href"));
       if (!image) return;
       const x0 = Math.max(0, Math.floor(x));
@@ -261,11 +306,15 @@ export function initDaylight(root, { t, onScrub }) {
       return { canvas: layer.canvas, x: x0, y: y0 };
     };
     for (const element of art.querySelectorAll("[data-light-off]")) {
-      const light = await own(element, (lit, off, i) => smooth(6, 48, luminance(lit, i) - luminance(off, i)));
+      const light = await own(element, (lit, off, i) =>
+        smooth(6, 48, luminance(lit, i) - luminance(off, i)),
+      );
       if (light) devices.push({ id: element.dataset.lightOff, ...light });
     }
     for (const element of art.querySelectorAll("[data-light-glint]")) {
-      const light = await own(element, (_, glint, i) => smooth(30, 140, luminance(glint, i)));
+      const light = await own(element, (_, glint, i) =>
+        smooth(30, 140, luminance(glint, i)),
+      );
       if (light) devices.push({ id: element.dataset.lightGlint, ...light });
     }
 
@@ -336,7 +385,9 @@ export function initDaylight(root, { t, onScrub }) {
     },
     setMarks(marks) {
       const track = clock.querySelector(".twin-clock-track");
-      track.querySelectorAll(".twin-clock-mark").forEach((mark) => mark.remove());
+      track
+        .querySelectorAll(".twin-clock-mark")
+        .forEach((mark) => mark.remove());
       for (const [at, label] of marks) {
         const mark = document.createElement("i");
         mark.className = "twin-clock-mark";

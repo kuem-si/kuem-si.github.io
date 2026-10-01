@@ -15,7 +15,8 @@ function wander(min, max, speed) {
   let value = min + Math.random() * (max - min);
   let target = value;
   return (dt) => {
-    if (Math.abs(target - value) < (max - min) * 0.02) target = min + Math.random() * (max - min);
+    if (Math.abs(target - value) < (max - min) * 0.02)
+      target = min + Math.random() * (max - min);
     value += (target - value) * Math.min(1, dt * speed);
     return value;
   };
@@ -37,7 +38,10 @@ function makeSprites(count, tone) {
       const radius = size * (0.14 + Math.random() * 0.16);
       const gradient = context.createRadialGradient(x, y, 0, x, y, radius);
       gradient.addColorStop(0, `rgba(${tone}, ${0.3 + Math.random() * 0.18})`);
-      gradient.addColorStop(0.55, `rgba(${tone}, ${0.12 + Math.random() * 0.06})`);
+      gradient.addColorStop(
+        0.55,
+        `rgba(${tone}, ${0.12 + Math.random() * 0.06})`,
+      );
       gradient.addColorStop(1, `rgba(${tone}, 0)`);
       context.fillStyle = gradient;
       context.fillRect(0, 0, size, size);
@@ -120,7 +124,9 @@ export function initSmoke(root) {
       }
       // Hot smoke leaves the stack fast and slows as it cools; the wind
       // takes over once it is clear of the chimney.
-      const turbulence = Math.sin(clock * 1.3 + puff.seed) * 3 + Math.sin(clock * 0.47 + puff.seed * 2) * 2;
+      const turbulence =
+        Math.sin(clock * 1.3 + puff.seed) * 3 +
+        Math.sin(clock * 0.47 + puff.seed * 2) * 2;
       puff.y -= puff.rise * buoyancy * (1 - t * 0.8) * dt;
       puff.x += (breeze * Math.min(1, t * 3) + turbulence) * dt;
       puff.radius += puff.growth * (1 - t * 0.5) * dt;
@@ -150,10 +156,18 @@ export function initSmoke(root) {
       const size = puff.radius * 2.6 * scale;
       const x = (puff.x - AREA.x) * scale;
       const y = (puff.y - AREA.y) * scale;
-      context.setTransform(Math.cos(puff.angle), Math.sin(puff.angle), -Math.sin(puff.angle), Math.cos(puff.angle), x, y);
+      context.setTransform(
+        Math.cos(puff.angle),
+        Math.sin(puff.angle),
+        -Math.sin(puff.angle),
+        Math.cos(puff.angle),
+        x,
+        y,
+      );
       const warmth = Math.max(0, 1 - t * 1.8);
       context.globalAlpha = alpha * warmth;
-      if (warmth > 0) context.drawImage(warm[puff.sprite], -size / 2, -size / 2, size, size);
+      if (warmth > 0)
+        context.drawImage(warm[puff.sprite], -size / 2, -size / 2, size, size);
       context.globalAlpha = alpha * (1 - warmth);
       context.drawImage(cool[puff.sprite], -size / 2, -size / 2, size, size);
     }
@@ -190,10 +204,13 @@ export function initSmoke(root) {
     layout();
     draw();
   }).observe(canvas);
-  new IntersectionObserver(([entry]) => {
-    inView = entry.isIntersecting;
-    sync();
-  }, { rootMargin: "200px" }).observe(art);
+  new IntersectionObserver(
+    ([entry]) => {
+      inView = entry.isIntersecting;
+      sync();
+    },
+    { rootMargin: "200px" },
+  ).observe(art);
   document.addEventListener("visibilitychange", sync);
   motion.addEventListener("change", sync);
 }

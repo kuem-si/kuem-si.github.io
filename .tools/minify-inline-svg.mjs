@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Post-build pass: minify inline <svg> blocks inside dist HTML with SVGO.
-// Keeps viewBox, ids (fragment/aria refs), titles and fills so the rendering,
-// accessibility tree and internal anchors stay intact.
+// Keeps viewBox, ids (fragment/aria refs), roles, titles and fills so the
+// rendering, accessibility tree and internal anchors stay intact.
 import {
   existsSync,
   readdirSync,
@@ -46,6 +46,9 @@ const svgoOptions = {
           // property overrides the attribute, dropping the placement).
           moveGroupAttrsToElems: false,
           collapseGroups: false,
+          // Keep role (img, button, group): without it, labelled diagrams
+          // and the showroom hotspots lose their meaning to screen readers.
+          removeUnknownsAndDefaults: { keepRoleAttr: true },
         },
       },
     },
