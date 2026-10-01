@@ -6,7 +6,7 @@
   --hp-line: var(--kuem-concrete);
   background: var(--kuem-white);
   color: var(--hp-ink);
-  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+  font-family: var(--kuem-font-text);
   font-size: var(--kuem-type-body-size);
   line-height: 1.5;
   overflow-x: clip;
@@ -18,10 +18,10 @@
 .kuem-home h2,
 .kuem-home h3 {
   color: var(--kuem-carbon);
-  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-family: var(--kuem-font-heading);
 }
 .kuem-home h2 {
-  font-size: clamp(25px, 2.6vw, 38px);
+  font-size: var(--kuem-type-h2-size);
   line-height: 1.15;
   letter-spacing: -0.045em;
   margin: 0 0 var(--kuem-space-16);
@@ -71,7 +71,7 @@
     sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #596065;
+  color: var(--kuem-text-muted);
   margin: 0 0 var(--kuem-space-16);
 }
 .hp-button {
@@ -107,7 +107,7 @@
   border-color: var(--hp-petrol);
 }
 .hp-outline:hover {
-  background: #f3f2f0;
+  background: var(--kuem-surface-1);
 }
 .hp-actions {
   display: flex;
@@ -118,7 +118,8 @@
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(ellipse at 78% 70%, #f3f2f0, transparent 70%), #f3f2f0;
+    radial-gradient(ellipse at 78% 70%, var(--kuem-surface-1), transparent 70%),
+    var(--kuem-surface-1);
   padding: var(--kuem-space-64) 0 var(--kuem-space-48);
 }
 .hp-hero-grid {
@@ -129,7 +130,7 @@
   align-items: center;
 }
 .kuem-home h1 {
-  font-size: clamp(44px, 5.3vw, 76px);
+  font-size: var(--kuem-type-display-size);
   line-height: 0.99;
   letter-spacing: -0.06em;
   margin: 0 0 var(--kuem-space-24);
@@ -209,7 +210,7 @@
 .hp-node small {
   font-size: var(--kuem-type-label-size);
   line-height: 1.3;
-  color: #596065;
+  color: var(--kuem-text-muted);
 }
 .hp-connector {
   flex: 0 0 22px;
@@ -303,11 +304,11 @@
   padding: 0;
 }
 .hp-trust li {
-  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-family: var(--kuem-font-heading);
   font-size: clamp(17px, 2vw, 26px);
   font-weight: 700;
   letter-spacing: -0.04em;
-  color: #596065;
+  color: var(--kuem-text-muted);
 }
 .hp-trust li:nth-child(3) {
   font-style: italic;
@@ -317,7 +318,7 @@
   font-weight: 400;
 }
 .hp-product {
-  background: #f3f2f0;
+  background: var(--kuem-surface-1);
   padding-block: var(--kuem-space-32);
 }
 .hp-product-grid {
@@ -354,7 +355,7 @@
     box-shadow 0.2s;
 }
 .hp-card:hover {
-  border-color: #c9c7c1;
+  border-color: var(--kuem-border);
   box-shadow: 0 6px 20px #161a1d08;
 }
 .hp-benefits .hp-card {
@@ -366,7 +367,7 @@
   height: 34px;
   padding: var(--kuem-space-4);
   box-sizing: content-box;
-  background: #f3f2f0;
+  background: var(--kuem-surface-1);
   border-radius: var(--kuem-radius-card);
 }
 .hp-benefits h3 {
@@ -410,7 +411,7 @@
   height: 20px;
   flex: 1;
   margin-left: var(--kuem-space-8);
-  background: #f3f2f0;
+  background: var(--kuem-surface-1);
   border-radius: var(--kuem-radius-control);
 }
 .hp-browser > a {
@@ -459,33 +460,8 @@
   width: 100%;
   height: auto;
 }
-.hp-api-link {
-  position: relative;
-  height: 47px;
-  width: calc(12.5% + 8px);
-  margin-left: 50%;
-  border-right: 1px solid var(--hp-petrol);
-  border-bottom: 1px solid var(--hp-petrol);
-  border-radius: 0 0 var(--kuem-radius-card) 0;
-}
-.hp-api-link span {
-  position: absolute;
-  bottom: -12px;
-  left: 0;
-  background: var(--kuem-white);
-  color: var(--hp-petrol);
-  padding: 0 var(--kuem-space-8);
-  font-weight: 600;
-}
-.hp-api-link i {
-  position: absolute;
-  right: -6px;
-  top: -8px;
-  color: var(--hp-petrol);
-  font-style: normal;
-}
 .hp-industries {
-  background: #f3f2f0;
+  background: var(--kuem-surface-1);
 }
 .hp-section-heading {
   display: flex;
@@ -560,7 +536,7 @@
 .hp-kai h2 {
   color: var(--kuem-white);
   max-width: 530px;
-  font-size: clamp(26px, 2.8vw, 38px);
+  font-size: var(--kuem-type-h2-size);
 }
 .hp-kai p {
   color: var(--kuem-concrete);
@@ -571,13 +547,13 @@
 }
 .hp-kai .hp-kai-emphasis {
   font-size: var(--kuem-type-small-size);
-  color: #c9c7c1;
+  color: var(--kuem-text-secondary);
   border-left: 2px solid var(--kuem-petrol-light);
   padding-left: var(--kuem-space-16);
 }
 .hp-kai .hp-outline {
   color: var(--kuem-white);
-  border-color: #c9c7c1;
+  border-color: var(--kuem-border);
 }
 .hp-kai .hp-outline:hover {
   background: #ffffff15;
@@ -595,7 +571,7 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: var(--kuem-space-8);
-  color: #c9c7c1;
+  color: var(--kuem-text-secondary);
 }
 .hp-alert,
 .hp-chart {
@@ -618,7 +594,7 @@
 }
 .hp-alert h3 {
   color: var(--kuem-white);
-  font-family: "Source Sans 3", sans-serif;
+  font-family: var(--kuem-font-text);
   font-size: var(--kuem-type-body-size);
 }
 .hp-alert p {
@@ -647,7 +623,7 @@
   display: inline-block;
   vertical-align: middle;
   width: 12px;
-  border-top: 2px dashed #c9c7c1;
+  border-top: 2px dashed var(--kuem-border);
   margin-right: var(--kuem-space-4);
 }
 .hp-chart-legend span + span:before {
@@ -730,9 +706,9 @@
 }
 .hp-stories summary,
 .hp-story-name {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--kuem-font-heading);
   font-size: var(--kuem-type-lead-size);
-  color: #596065;
+  color: var(--kuem-text-muted);
   min-height: 44px;
   padding: var(--kuem-space-4) 0;
 }
@@ -819,7 +795,7 @@
     padding: var(--kuem-space-48) 0 var(--kuem-space-32);
   }
   .kuem-home h1 {
-    font-size: clamp(42px, 5.5vw, 60px);
+    font-size: var(--kuem-type-display-size);
   }
   .hp-flow {
     min-height: 290px;
@@ -924,7 +900,7 @@
     max-width: 620px;
   }
   .kuem-home h1 {
-    font-size: 60px;
+    font-size: var(--kuem-type-display-size);
     max-width: 600px;
   }
   .kuem-home .hp-intro {
@@ -1078,7 +1054,7 @@
     padding: var(--kuem-space-32) 0 var(--kuem-space-24);
   }
   .kuem-home h1 {
-    font-size: clamp(43px, 12vw, 63px);
+    font-size: var(--kuem-type-display-size);
     max-width: 430px;
   }
   .kuem-home .hp-eyebrow {
@@ -1275,30 +1251,6 @@
     font-size: var(--kuem-type-label-size);
     padding-block: var(--kuem-space-8) var(--kuem-space-4);
   }
-  .hp-api-link {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    bottom: 110px;
-    width: 13px;
-    height: auto;
-    margin: 0;
-    border-radius: 0 0 var(--kuem-radius-card) 0;
-    border-top: 1px solid var(--hp-petrol);
-  }
-  .hp-api-link i {
-    top: -16px;
-    right: 6px;
-    transform: rotate(-90deg);
-  }
-  .hp-api-link span {
-    left: auto;
-    right: -7px;
-    bottom: 45%;
-    font-size: var(--kuem-type-label-size);
-    padding: var(--kuem-space-4) 0;
-    writing-mode: vertical-rl;
-  }
   .hp-section-heading {
     display: flex;
     flex-direction: column;
@@ -1421,11 +1373,11 @@
   padding-block: var(--hp-section-space);
 }
 .kuem-home h1 {
-  font-size: clamp(3.5rem, 5vw, 5.5rem);
+  font-size: var(--kuem-type-display-size);
   max-width: 640px;
 }
 .kuem-home h2 {
-  font-size: clamp(2rem, 3vw, 3.25rem);
+  font-size: var(--kuem-type-h2-size);
 }
 .kuem-home h3 {
   font-size: var(--kuem-type-body-size);
@@ -1433,7 +1385,7 @@
 .kuem-home .hp-eyebrow {
   font-size: var(--kuem-type-label-size);
   letter-spacing: 0.08em;
-  color: #596065;
+  color: var(--kuem-text-muted);
 }
 .kuem-home .hp-section-heading .hp-eyebrow {
   font-size: var(--kuem-type-label-size);
@@ -1524,7 +1476,7 @@
   padding-block: var(--kuem-space-32);
 }
 .hp-trust li {
-  color: #596065;
+  color: var(--kuem-text-muted);
   font-size: clamp(23px, 1.9vw, 30px);
 }
 .hp-trust li:last-child {
@@ -1600,7 +1552,7 @@
   font-size: var(--kuem-type-small-size);
 }
 .hp-kai h2 {
-  font-size: clamp(2rem, 3vw, 3.25rem);
+  font-size: var(--kuem-type-h2-size);
   max-width: 650px;
 }
 .hp-kai p {
@@ -1667,7 +1619,7 @@
 .hp-stories summary,
 .hp-story-name {
   font-size: var(--kuem-type-h3-size);
-  color: #596065;
+  color: var(--kuem-text-muted);
   list-style: none;
   min-height: 48px;
 }
@@ -1683,7 +1635,7 @@
 }
 .hp-stories summary:hover {
   color: var(--hp-petrol);
-  background: #f3f2f0;
+  background: var(--kuem-surface-1);
 }
 .hp-story-toggle:after {
   content: "+";
@@ -1705,7 +1657,7 @@
   padding-block: var(--kuem-space-48);
 }
 .hp-closing h2 {
-  font-size: clamp(28px, 2.5vw, 38px);
+  font-size: var(--kuem-type-h2-size);
 }
 .hp-closing p {
   font-size: var(--kuem-type-body-size);
@@ -1978,7 +1930,7 @@
     padding-block: var(--kuem-space-32);
   }
   .kuem-home h1 {
-    font-size: clamp(3rem, 12vw, 3.75rem);
+    font-size: var(--kuem-type-display-size);
   }
   .kuem-home h2 {
     font-size: var(--kuem-type-h3-size);

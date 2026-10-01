@@ -9,7 +9,7 @@
   letter-spacing: -0.04em;
 }
 .ab-page h2 {
-  font-size: clamp(2rem, 3.1vw, 3.2rem);
+  font-size: var(--kuem-type-h2-size);
   line-height: 1.12;
 }
 .ab-page p {
@@ -34,12 +34,12 @@
 .ab-hero h1 {
   max-width: 13ch;
   margin: 0 0 var(--kuem-space-16);
-  font-size: clamp(2.7rem, 4vw, 4.4rem);
+  font-size: var(--kuem-type-h1-size);
   line-height: 1.05;
 }
 .ab-hero-copy > p:not(.ab-eyebrow) {
   max-width: 43ch;
-  color: #596065;
+  color: var(--kuem-text-muted);
 }
 .ab-actions {
   display: flex;
@@ -148,7 +148,7 @@
 }
 .ab-flow h3 span {
   display: block;
-  font-family: "Source Sans 3", sans-serif;
+  font-family: var(--kuem-font-text);
   font-weight: 400;
   color: var(--kuem-concrete);
 }
@@ -240,7 +240,7 @@
 }
 .ab-fact-grid p {
   margin: var(--kuem-space-4) 0 0;
-  color: #596065;
+  color: var(--kuem-text-muted);
 }
 .ab-team {
   position: relative;
@@ -258,7 +258,7 @@
   align-items: start;
 }
 .ab-team-grid > div:first-child > p:not(.ab-eyebrow) {
-  color: #596065;
+  color: var(--kuem-text-muted);
   max-width: 48ch;
 }
 .ab-expertise {
@@ -295,7 +295,7 @@
 }
 .ab-expertise p {
   margin: 0;
-  color: #596065;
+  color: var(--kuem-text-muted);
   font-size: var(--kuem-type-small-size);
 }
 .ab-growth {
@@ -303,7 +303,7 @@
   background: var(--kuem-concrete);
 }
 .ab-growth > .container > p:not(.ab-eyebrow) {
-  color: #596065;
+  color: var(--kuem-text-muted);
 }
 .ab-timeline {
   display: grid;
@@ -358,7 +358,7 @@
 .ab-timeline p {
   max-width: 27ch;
   margin: 0;
-  color: #596065;
+  color: var(--kuem-text-muted);
   font-size: var(--kuem-type-small-size);
 }
 .ab-principles {
@@ -388,7 +388,7 @@
   font-size: var(--kuem-type-body-size);
 }
 .ab-principle-grid p {
-  color: #596065;
+  color: var(--kuem-text-muted);
   margin: var(--kuem-space-4) 0;
 }
 .ab-region {
@@ -410,7 +410,7 @@
 }
 .ab-region-grid > div:first-child > p:not(.ab-eyebrow) {
   max-width: 43ch;
-  color: #c9c7c1;
+  color: var(--kuem-text-secondary);
 }
 .ab-region a {
   display: inline-flex;
@@ -429,7 +429,7 @@
 }
 .ab-contact {
   padding: var(--kuem-space-64) 0;
-  background: #f3f2f0;
+  background: var(--kuem-surface-1);
   background-image: linear-gradient(
     155deg,
     transparent 62%,
@@ -441,12 +441,12 @@
   margin-bottom: var(--kuem-space-8);
 }
 .ab-contact p {
-  color: #596065;
+  color: var(--kuem-text-muted);
 }
 .ab-contact small {
   display: block;
   margin-top: var(--kuem-space-16);
-  color: #596065;
+  color: var(--kuem-text-muted);
 }
 .ab-contact .btn {
   margin-top: var(--kuem-space-16);
@@ -461,7 +461,7 @@ body:has(.ab-page) .site-header .brand img {
 }
 body:has(.ab-page) .site-header .nav-list > li > a,
 body:has(.ab-page) .site-header .lang {
-  color: #596065 !important;
+  color: var(--kuem-text-muted) !important;
 }
 body:has(.ab-page) .site-header .nav-list > li > a[aria-current] {
   color: var(--kuem-petrol) !important;
