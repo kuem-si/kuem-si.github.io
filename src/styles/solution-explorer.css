@@ -681,6 +681,9 @@
     linear-gradient(90deg, rgba(21, 107, 117, 0.13) 1px, transparent 1px);
   background-size: 48px 48px;
 }
+.solutions-page .explorer-hero .hp-eyebrow {
+  color: var(--hp-petrol);
+}
 .explorer-hero .explorer-copy > p:not(.hp-eyebrow) {
   color: var(--kuem-text-secondary);
 }
@@ -688,13 +691,15 @@
   padding: 24px;
   border-radius: var(--kuem-radius-card);
 }
-.explorer-copy h1 {
+/* Prefixed with .solutions-page so these win over homepage.css, which can
+   load after this file in the built page. */
+.solutions-page .explorer-copy h1 {
   color: var(--kuem-text-primary);
   font-size: var(--kuem-type-h1-size);
   line-height: var(--kuem-type-h1-line-height);
   letter-spacing: var(--kuem-type-h1-tracking);
 }
-.explorer-open .explorer-copy h1 {
+.solutions-page.explorer-open .explorer-copy h1 {
   font-size: var(--kuem-type-h2-size);
   line-height: var(--kuem-type-h2-line-height);
 }
