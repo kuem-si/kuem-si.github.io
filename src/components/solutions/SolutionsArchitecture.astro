@@ -162,13 +162,13 @@ const cards = copy.cards;
       <Icon name="noc" /><div>
         <strong>{copy.noc}</strong><span>{copy.nocSub}</span>
       </div><svg class="network" viewBox="0 0 260 40" aria-hidden="true"
-        ><path d="M12 20h236" stroke="#7DB7AB"></path><g fill="#7DB7AB"
+        ><path d="M12 20h236" stroke="#4FA3AD"></path><g fill="#4FA3AD"
           ><circle cx="12" cy="20" r="7"></circle><circle cx="90" cy="20" r="7"
           ></circle><circle cx="248" cy="20" r="7"></circle></g
-        ><g fill="#253238" stroke="#7DB7AB" stroke-width="2"
+        ><g fill="#161a1d" stroke="#4FA3AD" stroke-width="2"
           ><path d="m50 12 8 8-8 8-8-8zM130 12l8 8-8 8-8-8zM210 12l8 8-8 8-8-8z"
           ></path></g
-        ><circle cx="170" cy="20" r="9" fill="#E95D2A"></circle><text
+        ><circle cx="170" cy="20" r="9" fill="#F06432"></circle><text
           x="170"
           y="25"
           text-anchor="middle"
@@ -182,7 +182,7 @@ const cards = copy.cards;
 <style>
   .architecture {
     container-type: inline-size;
-    color: #253238;
+    color: #161a1d;
     position: relative;
     width: 100%;
   }
@@ -200,7 +200,7 @@ const cards = copy.cards;
     content: "";
     width: 28px;
     height: 1px;
-    background: #7db7ab;
+    background: #4fa3ad;
   }
   .architecture-grid {
     position: relative;
@@ -219,10 +219,10 @@ const cards = copy.cards;
     flex-direction: column;
     text-align: center;
     background: white;
-    border: 1px solid #a8c9ce;
+    border: 1px solid #c9c7c1;
     border-radius: 8px;
     padding: 18px 8px;
-    box-shadow: 0 4px 16px #25323804;
+    box-shadow: 0 4px 16px #161a1d04;
   }
   .node > :global(svg) {
     width: 66px;
@@ -240,7 +240,7 @@ const cards = copy.cards;
     font-size: 11px;
     line-height: 1.5;
     margin-top: 5px;
-    color: #486f7c;
+    color: #596065;
   }
   .devices {
     grid-area: 1/1;
@@ -308,7 +308,7 @@ const cards = copy.cards;
     display: flex;
     align-items: center;
     gap: 16px;
-    background: #253238;
+    background: #161a1d;
     color: white;
     padding: 20px;
     border-radius: 8px;
@@ -319,7 +319,7 @@ const cards = copy.cards;
     flex-shrink: 0;
   }
   .noc span {
-    color: #bdd4d9;
+    color: #c9c7c1;
   }
   .network {
     flex: 1;
@@ -329,7 +329,7 @@ const cards = copy.cards;
   .noc small {
     font-size: 10px;
     line-height: 1.6;
-    border-left: 1px solid #7db7ab;
+    border-left: 1px solid #4fa3ad;
     padding-left: 16px;
     margin-left: auto;
   }
@@ -485,7 +485,7 @@ const cards = copy.cards;
   .node:hover,
   .platform-open:hover {
     border-color: #156b75;
-    box-shadow: 0 4px 16px #2532380c;
+    box-shadow: 0 4px 16px #161a1d0c;
   }
   .architecture button:focus-visible {
     outline: 3px solid #156b75;
@@ -537,23 +537,23 @@ const cards = copy.cards;
   }
   .noc {
     position: relative;
-    border: 1px solid #253238;
+    border: 1px solid #161a1d;
     text-align: left;
   }
   .is-muted {
     opacity: 0.85;
   }
   .architecture .is-selected {
-    border-color: #e95d2a;
-    box-shadow: 0 0 0 1px #e95d2a;
-    background: #fff8f4;
+    border-color: #f06432;
+    box-shadow: 0 0 0 1px #f06432;
+    background: #ffffff;
   }
   .architecture .kai.is-selected {
     color: white;
     background: #156b75;
   }
   .architecture .noc.is-selected {
-    background: #253238;
+    background: #161a1d;
     color: white;
   }
   .architecture:lang(en) .is-selected:before {
@@ -564,8 +564,8 @@ const cards = copy.cards;
     position: absolute;
     right: 8px;
     top: -29px;
-    background: #e95d2a;
-    color: #17212e;
+    background: #f06432;
+    color: #161a1d;
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 11px;
@@ -574,7 +574,7 @@ const cards = copy.cards;
     z-index: 5;
   }
   .platform:has(.is-selected) {
-    border-color: #e95d2a;
+    border-color: #f06432;
   }
   .platform .kai.is-selected:before {
     display: none;
@@ -786,7 +786,7 @@ const cards = copy.cards;
             height: String(size),
             rx: "1",
             "data-route-steps": relevant,
-            fill: "#E95D2A",
+            fill: "#F06432",
           },
           packets,
         );

@@ -2,9 +2,9 @@
 .hp-node,
 .nx-flow-card {
   background: #ffffffdf;
-  border: 1px solid #d4e3e8;
+  border: 1px solid #e8e6e1;
   border-radius: 7px;
-  box-shadow: 0 3px 12px #32627303;
+  box-shadow: 0 3px 12px #156b7503;
 }
 .hp-connector,
 .nx-integration-connector {

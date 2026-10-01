@@ -1,9 +1,9 @@
 .kuem-home {
-  --hp-ink: #253238;
-  --hp-petrol: #156b75;
-  --hp-orange: #e95d2a;
-  --hp-muted: #596873;
-  --hp-line: #dce7e9;
+  --hp-ink: var(--kuem-carbon);
+  --hp-petrol: var(--kuem-petrol);
+  --hp-orange: var(--kuem-copper);
+  --hp-muted: var(--kuem-text-muted);
+  --hp-line: var(--kuem-concrete);
   background: #fff;
   color: var(--hp-ink);
   font-family: "Source Sans 3", "Segoe UI", sans-serif;
@@ -17,7 +17,7 @@
 .kuem-home h1,
 .kuem-home h2,
 .kuem-home h3 {
-  color: #17212e;
+  color: #161a1d;
   font-family: "Space Grotesk", "Segoe UI", sans-serif;
 }
 .kuem-home h2 {
@@ -71,7 +71,7 @@
     sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #526975;
+  color: #596065;
   margin: 0 0 15px;
 }
 .hp-button {
@@ -94,8 +94,8 @@
     box-shadow 0.2s;
 }
 .hp-button:hover {
-  background: #ce4718;
-  box-shadow: 0 4px 14px #25323814;
+  background: #d84e16;
+  box-shadow: 0 4px 14px #161a1d14;
 }
 .hp-button span {
   font-size: 21px;
@@ -107,7 +107,7 @@
   border-color: var(--hp-petrol);
 }
 .hp-outline:hover {
-  background: #e7f0ef;
+  background: #f3f2f0;
 }
 .hp-actions {
   display: flex;
@@ -119,7 +119,7 @@
   top: 0;
   z-index: 30;
   background: #fffffffa;
-  border-bottom: 1px solid #edf1f2;
+  border-bottom: 1px solid #f3f2f0;
   backdrop-filter: blur(12px);
 }
 .hp-header-inner {
@@ -164,7 +164,7 @@
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(ellipse at 78% 70%, #e9f3f5, transparent 70%), #f6f9f8;
+    radial-gradient(ellipse at 78% 70%, #f3f2f0, transparent 70%), #f3f2f0;
   padding: 60px 0 42px;
 }
 .hp-hero-grid {
@@ -195,7 +195,7 @@
   pointer-events: none;
 }
 .hp-ambient path {
-  stroke: #74afba;
+  stroke: #4fa3ad;
   stroke-width: 0.65;
   opacity: 0.4;
 }
@@ -255,7 +255,7 @@
 .hp-node small {
   font-size: 11px;
   line-height: 1.3;
-  color: #637380;
+  color: #596065;
 }
 .hp-connector {
   flex: 0 0 22px;
@@ -353,7 +353,7 @@
   font-size: clamp(17px, 2vw, 26px);
   font-weight: 700;
   letter-spacing: -0.04em;
-  color: #657079;
+  color: #596065;
 }
 .hp-trust li:nth-child(3) {
   font-style: italic;
@@ -363,7 +363,7 @@
   font-weight: 400;
 }
 .hp-product {
-  background: #f0f6f7;
+  background: #f3f2f0;
   padding-block: 32px;
 }
 .hp-product-grid {
@@ -400,8 +400,8 @@
     box-shadow 0.2s;
 }
 .hp-card:hover {
-  border-color: #8db9bd;
-  box-shadow: 0 6px 20px #25323808;
+  border-color: #c9c7c1;
+  box-shadow: 0 6px 20px #161a1d08;
 }
 .hp-benefits .hp-card {
   padding: 17px 10px 14px;
@@ -412,7 +412,7 @@
   height: 34px;
   padding: 4px;
   box-sizing: content-box;
-  background: #eff6f7;
+  background: #f3f2f0;
   border-radius: 10px;
 }
 .hp-benefits h3 {
@@ -429,10 +429,10 @@
   overflow: hidden;
   margin: 0;
   background: #fff;
-  border: 1px solid #d3e3e7;
+  border: 1px solid #e8e6e1;
   border-radius: 10px;
   padding: 12px;
-  box-shadow: 0 8px 30px #32627312;
+  box-shadow: 0 8px 30px #156b7512;
 }
 .hp-browser-bar {
   display: flex;
@@ -443,20 +443,20 @@
 .hp-browser-bar i {
   width: 8px;
   height: 8px;
-  background: #f06363;
+  background: #fe5c58;
   border-radius: 50%;
 }
 .hp-browser-bar i:nth-child(2) {
-  background: #edc754;
+  background: #ffb020;
 }
 .hp-browser-bar i:nth-child(3) {
-  background: #7db7ab;
+  background: #4fa3ad;
 }
 .hp-browser-bar > span {
   height: 20px;
   flex: 1;
   margin-left: 12px;
-  background: #edf2f4;
+  background: #f3f2f0;
   border-radius: 4px;
 }
 .hp-browser > a {
@@ -486,7 +486,7 @@
   background: white;
 }
 .hp-dialog::backdrop {
-  background: #17212ec9;
+  background: #161a1dc9;
 }
 .hp-dialog button {
   display: block;
@@ -522,7 +522,7 @@
 }
 .hp-step-icon > span {
   display: block;
-  background: #eff6f7;
+  background: #f3f2f0;
   color: var(--hp-petrol);
   font:
     400 28px/1.2 "Space Grotesk",
@@ -574,7 +574,7 @@
   font-style: normal;
 }
 .hp-sources {
-  background: #f0f6f7;
+  background: #f3f2f0;
   border-radius: 7px;
   padding: 17px;
   margin-top: 12px;
@@ -608,7 +608,7 @@
   height: 29px;
 }
 .hp-industries {
-  background: #f4f7f7;
+  background: #f3f2f0;
 }
 .hp-section-heading {
   display: flex;
@@ -669,7 +669,7 @@
   font-weight: 400;
 }
 .hp-kai {
-  background: #25383f;
+  background: #252c31;
   color: #fff;
   padding-block: 38px;
   position: relative;
@@ -686,27 +686,27 @@
   font-size: clamp(26px, 2.8vw, 38px);
 }
 .hp-kai p {
-  color: #d5e0e2;
+  color: #e8e6e1;
   font-size: 16px;
 }
 .hp-kai .hp-eyebrow {
-  color: #d5e0e2;
+  color: #e8e6e1;
 }
 .hp-kai .hp-kai-emphasis {
   font-size: 14px;
-  color: #c3d9d6;
-  border-left: 2px solid #7db7ab;
+  color: #c9c7c1;
+  border-left: 2px solid #4fa3ad;
   padding-left: 14px;
 }
 .hp-kai .hp-outline {
   color: #fff;
-  border-color: #a2b9c0;
+  border-color: #c9c7c1;
 }
 .hp-kai .hp-outline:hover {
   background: #ffffff15;
 }
 .hp-kai :focus-visible {
-  outline-color: #7db7ab;
+  outline-color: #4fa3ad;
 }
 .hp-kai-panels {
   display: grid;
@@ -718,7 +718,7 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 10px;
-  color: #bccdd1;
+  color: #c9c7c1;
 }
 .hp-alert,
 .hp-chart {
@@ -729,7 +729,7 @@
   background: #ffffff02;
 }
 .hp-kai .hp-alert-title {
-  color: #ff9369;
+  color: var(--kuem-copper);
   font-size: 14px;
   display: flex;
   align-items: center;
@@ -763,14 +763,14 @@
   flex-wrap: wrap;
   gap: 10px;
   font-size: 10px;
-  color: #d3dfe1;
+  color: #e8e6e1;
 }
 .hp-chart-legend span:before {
   content: "";
   display: inline-block;
   vertical-align: middle;
   width: 12px;
-  border-top: 2px dashed #9fbdc1;
+  border-top: 2px dashed #c9c7c1;
   margin-right: 5px;
 }
 .hp-chart-legend span + span:before {
@@ -788,24 +788,24 @@
   stroke-width: 1;
 }
 .hp-chart-range {
-  fill: #a3c0c11a;
+  fill: #c9c7c11a;
   stroke: none;
 }
 .hp-chart-normal {
-  stroke: #9fbdc1;
+  stroke: #c9c7c1;
   stroke-dasharray: 3 3;
   stroke-width: 1.5;
 }
 .hp-chart-actual {
-  stroke: #ff7c45;
+  stroke: #f47a4e;
   stroke-width: 2.5;
 }
 .hp-chart circle {
-  stroke: #ff7c45;
-  fill: #25383f;
+  stroke: #f47a4e;
+  fill: #252c31;
 }
 .hp-chart text {
-  fill: #c2d3d6;
+  fill: #c9c7c1;
   font-size: 10px;
   stroke: none;
 }
@@ -855,7 +855,7 @@
 .hp-story-name {
   font-family: "Space Grotesk", sans-serif;
   font-size: 20px;
-  color: #586975;
+  color: #596065;
   min-height: 44px;
   padding: 5px 0;
 }
@@ -870,8 +870,8 @@
   font-size: 12px;
 }
 .hp-about {
-  border-top: 1px solid #edf1f2;
-  background: #fafcfb;
+  border-top: 1px solid #f3f2f0;
+  background: #ffffff;
 }
 .hp-partnership {
   display: grid;
@@ -889,7 +889,7 @@
   right: 0;
   top: 0;
   height: 1px;
-  background: #7bb3b9;
+  background: #4fa3ad;
 }
 .hp-partnership:after {
   content: "";
@@ -915,7 +915,7 @@
   width: 9px;
   height: 9px;
   border: 2px solid #fff;
-  outline: 1px solid #a4cbd0;
+  outline: 1px solid #c9c7c1;
   background: var(--hp-petrol);
   border-radius: 50%;
 }
@@ -926,7 +926,7 @@
 .hp-partnership .hp-icon {
   width: 34px;
   height: 34px;
-  background: #edf5f5;
+  background: #f3f2f0;
   padding: 5px;
   box-sizing: content-box;
   border-radius: 9px;
@@ -940,7 +940,7 @@
 }
 .kuem-home .hp-partner-line {
   text-align: center;
-  color: #264e5c;
+  color: #156b75;
   font-size: 20px;
   margin: 26px 0 0;
 }
@@ -962,7 +962,7 @@
   margin-bottom: 10px;
 }
 .hp-closing p {
-  color: #e0eeee;
+  color: #e8e6e1;
   max-width: 660px;
   font-size: 17px;
   margin: 0;
@@ -1086,7 +1086,7 @@
     overflow: auto;
     padding: 18px 24px 25px;
     border-bottom: 1px solid var(--hp-line);
-    box-shadow: 0 10px 15px #25323810;
+    box-shadow: 0 10px 15px #161a1d10;
   }
   .hp-header nav.is-open {
     display: flex;
@@ -1899,7 +1899,7 @@
 .kuem-home .hp-eyebrow {
   font-size: 12px;
   letter-spacing: 0.08em;
-  color: #415e69;
+  color: #596065;
 }
 .kuem-home .hp-section-heading .hp-eyebrow {
   font-size: 12px;
@@ -2009,7 +2009,7 @@
   padding-block: 34px;
 }
 .hp-trust li {
-  color: #485962;
+  color: #596065;
   font-size: clamp(23px, 1.9vw, 30px);
 }
 .hp-trust li:last-child {
@@ -2053,7 +2053,7 @@
   padding: 7px;
 }
 .hp-browser a:hover .hp-enlarge {
-  color: #104e56;
+  color: #156b75;
   text-decoration: underline;
 }
 .hp-steps {
@@ -2157,7 +2157,7 @@
   font-size: 18px;
 }
 .hp-kai .hp-eyebrow {
-  color: #d5e0e2;
+  color: #e8e6e1;
 }
 .hp-kai .hp-kai-emphasis {
   font-size: 16px;
@@ -2172,7 +2172,7 @@
 }
 .hp-kai .hp-alert-title {
   font-size: 16px;
-  color: #ffa078;
+  color: #f47a4e;
 }
 .hp-alert h3 {
   font-size: 18px;
@@ -2217,7 +2217,7 @@
 .hp-stories summary,
 .hp-story-name {
   font-size: 24px;
-  color: #415762;
+  color: #596065;
   list-style: none;
   min-height: 48px;
 }
@@ -2233,7 +2233,7 @@
 }
 .hp-stories summary:hover {
   color: var(--hp-petrol);
-  background: #f1f6f6;
+  background: #f3f2f0;
 }
 .hp-story-toggle:after {
   content: "+";
@@ -2341,10 +2341,10 @@
 }
 /* Dark text keeps the brand orange at accessible contrast for normal button text. */
 .kuem-home .hp-button:not(.hp-outline) {
-  color: #17212e;
+  color: #161a1d;
 }
 .kuem-home .hp-button:not(.hp-outline):hover {
-  background: #f47748;
+  background: #f47a4e;
 }
 @keyframes hp-travel-polish {
   0% {
@@ -2418,7 +2418,7 @@
     background: currentColor;
   }
   .hp-menu:hover {
-    background: #edf5f5;
+    background: #f3f2f0;
   }
   .hp-header nav {
     display: none;
@@ -2431,7 +2431,7 @@
     overflow: auto;
     padding: 18px 32px 25px;
     border-bottom: 1px solid var(--hp-line);
-    box-shadow: 0 10px 15px #25323810;
+    box-shadow: 0 10px 15px #161a1d10;
   }
   .hp-header nav.is-open {
     display: flex;

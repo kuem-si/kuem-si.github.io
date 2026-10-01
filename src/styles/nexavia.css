@@ -28,8 +28,8 @@ abbr[title] {
   margin: 0 0 0.85rem !important;
 }
 .nx-hero {
-  background: #f5fbfe;
-  color: #172437;
+  background: #ffffff;
+  color: #1e2428;
   padding: 4rem 0 3.3rem;
   min-height: 0;
 }
@@ -47,7 +47,7 @@ abbr[title] {
 }
 .nx-lead {
   max-width: 43ch;
-  color: #52687a;
+  color: #596065;
   margin-bottom: 1.8rem;
 }
 .nx-actions {
@@ -63,7 +63,7 @@ abbr[title] {
 }
 .nx-actions .btn-primary,
 .nx-closing .btn-primary {
-  background: #ed6030;
+  background: #f06432;
   color: #161a1d;
 }
 .nx-actions .btn-secondary {
@@ -76,11 +76,11 @@ abbr[title] {
   list-style: none;
   padding: 0;
   margin: 4.5rem 0 0;
-  color: #465c70;
+  color: #596065;
   font-size: 0.9rem;
 }
 .nx-traits li + li {
-  border-left: 1px solid #c9dbe3;
+  border-left: 1px solid #e8e6e1;
   padding-left: 1rem;
 }
 .nx-traits li:before {
@@ -95,10 +95,10 @@ abbr[title] {
 }
 .nx-window {
   overflow: hidden;
-  border: 1px solid #d3e2ec;
+  border: 1px solid #e8e6e1;
   border-radius: 9px;
   background: #fff;
-  box-shadow: 0 16px 40px rgba(27, 62, 85, 0.09);
+  box-shadow: 0 16px 40px rgba(21, 107, 117, 0.09);
 }
 .nx-window-bar {
   display: flex;
@@ -106,7 +106,7 @@ abbr[title] {
   gap: 1.2rem;
   height: 44px;
   padding: 0 1rem;
-  border-bottom: 1px solid #dbe9ef;
+  border-bottom: 1px solid #e8e6e1;
   background: #fff;
 }
 .nx-window-bar img {
@@ -126,10 +126,10 @@ abbr[title] {
   background: #f06432;
 }
 .nx-dots i:nth-child(2) {
-  background: #f6c143;
+  background: #ffb020;
 }
 .nx-dots i:nth-child(3) {
-  background: #31a96a;
+  background: #00c896;
 }
 .nx-dashboard {
   display: block;
@@ -141,10 +141,10 @@ abbr[title] {
   bottom: -12px;
   right: -5px;
   background: #fff;
-  border: 1px solid #d3e2ec;
+  border: 1px solid #e8e6e1;
   border-radius: 5px;
   padding: 0.5rem 0.8rem;
-  box-shadow: 0 6px 15px rgba(27, 62, 85, 0.12);
+  box-shadow: 0 6px 15px rgba(21, 107, 117, 0.12);
   font-size: 0.8rem;
 }
 .nx-status i {
@@ -152,7 +152,7 @@ abbr[title] {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #24a969;
+  background: #00c896;
   margin-right: 0.5rem;
 }
 .nx-trust {
@@ -164,7 +164,7 @@ abbr[title] {
   justify-content: space-between;
   align-items: center;
   gap: 2rem;
-  color: #526475;
+  color: #596065;
   font-family: "Space Grotesk", sans-serif;
   font-size: clamp(1.1rem, 2vw, 1.8rem);
   font-weight: 700;
@@ -175,8 +175,8 @@ abbr[title] {
 }
 .nx-section {
   padding: 4.5rem 0;
-  background: #f5fbfe;
-  color: #172437;
+  background: #ffffff;
+  color: #1e2428;
 }
 .nx-section h2 {
   font-size: clamp(2.15rem, 3.3vw, 3.6rem);
@@ -185,11 +185,11 @@ abbr[title] {
 }
 .nx-section > .container > p:not(.nx-eyebrow),
 .nx-role-heading p:not(.nx-eyebrow) {
-  color: #52687a;
+  color: #596065;
   margin: 0.4rem 0 0;
 }
 .nx-roles {
-  background: #f1f8fc;
+  background: #f3f2f0;
   /* Anchor jumps (#vloge) clear the sticky header. */
   scroll-margin-top: 100px;
 }
@@ -202,7 +202,7 @@ abbr[title] {
 }
 .nx-tabs {
   display: flex;
-  border: 1px solid #d4e3ed;
+  border: 1px solid #e8e6e1;
   border-radius: 5px;
   overflow: hidden;
   background: #fff;
@@ -213,9 +213,9 @@ abbr[title] {
   min-width: 118px;
   padding: 0.6rem 1rem;
   border: 0;
-  border-right: 1px solid #d4e3ed;
+  border-right: 1px solid #e8e6e1;
   background: transparent;
-  color: #415970;
+  color: #596065;
   font:
     600 0.88rem "Source Sans 3",
     sans-serif;
@@ -286,20 +286,20 @@ html:not(.js) .nx-role-panel[hidden] {
   flex: none;
   width: 44px;
   height: 44px;
-  border: 1px solid #d3e3ed;
+  border: 1px solid #e8e6e1;
   border-radius: 5px;
   background: #fff;
   color: #156b75;
   font-size: 1.6rem;
 }
 .nx-text-link {
-  color: #df5d30;
+  color: #d84e16;
   text-decoration: underline;
   text-underline-offset: 5px;
 }
 .nx-demo {
   padding: 1.3rem;
-  background: #f5faff;
+  background: #ffffff;
   min-height: 350px;
 }
 .nx-demo h3 {
@@ -308,7 +308,7 @@ html:not(.js) .nx-role-panel[hidden] {
 .nx-demo-note {
   float: right;
   margin: 0 !important;
-  color: #71889a;
+  color: #596065;
   font-size: 0.72rem;
 }
 .nx-demo-cards {
@@ -319,13 +319,13 @@ html:not(.js) .nx-role-panel[hidden] {
 .nx-demo-cards > div,
 .nx-demo-chart {
   background: white;
-  border: 1px solid #d7e5ed;
+  border: 1px solid #e8e6e1;
   border-radius: 4px;
   padding: 0.7rem;
 }
 .nx-demo-cards small {
   display: block;
-  color: #60758a;
+  color: #596065;
   font-size: 0.75rem;
 }
 .nx-demo-cards strong {
@@ -353,11 +353,11 @@ html:not(.js) .nx-role-panel[hidden] {
 .nx-module-card {
   min-height: 210px;
   text-align: center;
-  border: 1px solid #d5e4eb;
+  border: 1px solid #e8e6e1;
   border-radius: 5px;
   padding: 1.4rem 0.8rem;
   background: white;
-  box-shadow: 0 4px 15px rgba(27, 62, 85, 0.03);
+  box-shadow: 0 4px 15px rgba(21, 107, 117, 0.03);
   /* Hover repaint (box-shadow/border) stays confined to this card. */
   contain: content;
   transition:
@@ -366,7 +366,7 @@ html:not(.js) .nx-role-panel[hidden] {
 }
 .nx-module-card:hover {
   border-color: #156b75;
-  box-shadow: 0 10px 20px rgba(27, 62, 85, 0.09);
+  box-shadow: 0 10px 20px rgba(21, 107, 117, 0.09);
 }
 .nx-module-icon {
   display: block;
@@ -380,7 +380,7 @@ html:not(.js) .nx-role-panel[hidden] {
   margin: 0.5rem 0;
 }
 .nx-module-card p {
-  color: #52687a;
+  color: #596065;
   margin: 0.4rem 0;
 }
 .nx-module-card > span:last-child {
@@ -388,7 +388,7 @@ html:not(.js) .nx-role-panel[hidden] {
   font-size: 1.5rem;
 }
 .nx-showroom {
-  background: #eaf5f9;
+  background: #f3f2f0;
 }
 .nx-showroom-grid {
   display: grid;
@@ -400,7 +400,7 @@ html:not(.js) .nx-role-panel[hidden] {
   max-width: 16ch;
 }
 .nx-showroom-copy p:not(.nx-eyebrow) {
-  color: #52687a;
+  color: #596065;
   margin: 0.4rem 0 1.8rem;
   max-width: 46ch;
 }
@@ -412,13 +412,13 @@ html:not(.js) .nx-role-panel[hidden] {
 .nx-showroom-card {
   display: flex;
   flex-direction: column;
-  border: 1px solid #d5e4eb;
+  border: 1px solid #e8e6e1;
   border-radius: 5px;
   overflow: hidden;
   background: white;
-  color: #172437;
+  color: #1e2428;
   text-decoration: none;
-  box-shadow: 0 4px 15px rgba(27, 62, 85, 0.03);
+  box-shadow: 0 4px 15px rgba(21, 107, 117, 0.03);
   contain: content;
   transition:
     box-shadow 0.25s,
@@ -427,7 +427,7 @@ html:not(.js) .nx-role-panel[hidden] {
 .nx-showroom-card:hover,
 .nx-showroom-card:focus-visible {
   border-color: #156b75;
-  box-shadow: 0 10px 20px rgba(27, 62, 85, 0.09);
+  box-shadow: 0 10px 20px rgba(21, 107, 117, 0.09);
 }
 .nx-showroom-card img {
   display: block;
@@ -435,7 +435,7 @@ html:not(.js) .nx-role-panel[hidden] {
   height: auto;
   aspect-ratio: 3 / 2;
   object-fit: cover;
-  background: #dfe8ec;
+  background: #e8e6e1;
   transition: transform 0.4s;
 }
 .nx-showroom-card:hover img {
@@ -453,7 +453,7 @@ html:not(.js) .nx-role-panel[hidden] {
   font-size: 1.15rem;
 }
 .nx-showroom-card small {
-  color: #52687a;
+  color: #596065;
   font-size: 0.92rem;
   line-height: 1.45;
 }
@@ -484,11 +484,11 @@ html:not(.js) .nx-role-panel[hidden] {
 }
 .nx-kai,
 .nx-closing {
-  background: #0c6170;
+  background: #156b75;
   color: white;
 }
 .nx-kai .nx-eyebrow {
-  color: #c8e7e9;
+  color: #e8e6e1;
 }
 .nx-kai-grid {
   display: grid;
@@ -509,17 +509,17 @@ html:not(.js) .nx-role-panel[hidden] {
 }
 .nx-kai-benefits li {
   max-width: 130px;
-  border-left: 1px solid #73a5ac;
+  border-left: 1px solid #4fa3ad;
   padding-left: 0.7rem;
 }
 .nx-human {
-  border-top: 1px solid #73a5ac;
+  border-top: 1px solid #4fa3ad;
   padding-top: 1rem;
   font-size: 0.9rem;
 }
 .nx-kai-panel {
   background: #fff;
-  color: #172437;
+  color: #1e2428;
   border-radius: 7px;
   padding: 1.2rem;
   box-shadow: 0 18px 30px rgba(0, 0, 0, 0.15);
@@ -528,13 +528,14 @@ html:not(.js) .nx-role-panel[hidden] {
   display: flex;
   justify-content: space-between;
   gap: 0.5rem;
-  border-bottom: 1px solid #dae6ed;
+  border-bottom: 1px solid #e8e6e1;
   padding-bottom: 0.8rem;
   font-size: 0.85rem;
 }
 .nx-kai-panel-head span {
-  color: #d65b35;
-  background: #fff1ec;
+  color: var(--kuem-text-primary);
+  background: #f3f2f0;
+  box-shadow: inset 3px 0 0 var(--kuem-copper-deep);
   padding: 0.2rem 0.5rem;
   border-radius: 3px;
 }
@@ -550,7 +551,7 @@ html:not(.js) .nx-role-panel[hidden] {
 }
 .nx-alert small {
   display: block;
-  color: #6b7e8b;
+  color: #596065;
 }
 .nx-kai-panel > p {
   font-size: 0.8rem;
@@ -561,15 +562,15 @@ html:not(.js) .nx-role-panel[hidden] {
 }
 .nx-recommendation {
   padding: 0.8rem;
-  border: 1px solid #d7e5ed;
+  border: 1px solid #e8e6e1;
   border-radius: 5px;
 }
 .nx-recommendation p {
   margin: 0.25rem 0;
-  color: #52687a;
+  color: #596065;
 }
 .nx-integrations {
-  background: #f7fbfd;
+  background: #ffffff;
 }
 .nx-flow {
   display: flex;
@@ -585,7 +586,7 @@ html:not(.js) .nx-role-panel[hidden] {
   max-width: 350px;
 }
 .nx-flow-items span {
-  border: 1px solid #d5e4ed;
+  border: 1px solid #e8e6e1;
   border-radius: 4px;
   background: #fff;
   padding: 0.75rem;
@@ -604,11 +605,11 @@ html:not(.js) .nx-role-panel[hidden] {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-  border-top: 1px solid #d4e3ed;
+  border-top: 1px solid #e8e6e1;
   padding-top: 1.4rem;
 }
 .nx-integrations-points > div + div {
-  border-left: 1px solid #d4e3ed;
+  border-left: 1px solid #e8e6e1;
   padding-left: 1.4rem;
 }
 .nx-integrations-points p {
@@ -627,7 +628,7 @@ html:not(.js) .nx-role-panel[hidden] {
 .nx-story-grid article {
   display: flex;
   gap: 1.2rem;
-  border: 1px solid #d5e4ed;
+  border: 1px solid #e8e6e1;
   border-radius: 5px;
   padding: 1.2rem;
   min-height: 150px;
@@ -641,7 +642,7 @@ html:not(.js) .nx-role-panel[hidden] {
   font-size: 1.05rem;
 }
 .nx-story-grid p {
-  color: #52687a;
+  color: #596065;
   margin: 0.4rem 0;
 }
 .nx-closing {
@@ -729,7 +730,7 @@ html:not(.js) .nx-role-panel[hidden] {
   }
   .nx-integrations-points > div + div {
     border-left: 0;
-    border-top: 1px solid #d4e3ed;
+    border-top: 1px solid #e8e6e1;
     padding: 1rem 0 0;
   }
   .nx-closing-inner {
@@ -831,16 +832,16 @@ html:not(.js) .nx-role-panel[hidden] {
   }
 }
 .site-header:has(+ main .nx-hero) {
-  background: rgba(247, 251, 253, 0.96);
-  color: #172437;
-  border-color: #d6e5ed;
+  background: rgba(255, 255, 255, 0.96);
+  color: #1e2428;
+  border-color: #e8e6e1;
 }
 .site-header:has(+ main .nx-hero) .brand img {
   filter: none;
 }
 .site-header:has(+ main .nx-hero) .nav-list > li > a,
 .site-header:has(+ main .nx-hero) .lang {
-  color: #455c6e;
+  color: #596065;
 }
 .site-header:has(+ main .nx-hero) .nav-list > li > a[aria-current] {
   color: #156b75;
@@ -857,16 +858,16 @@ html:not(.js) .nx-role-panel[hidden] {
   color: #161a1d;
 }
 .site-header:has(+ main .nx-hero).is-scrolled {
-  background: rgba(247, 251, 253, 0.98);
+  background: rgba(255, 255, 255, 0.98);
 }
 .site-header:has(+ main .nx-hero) .menu-toggle span:not(.sr-only) {
-  background: #172437;
+  background: #1e2428;
 }
 .site-header:has(~ main .nx-hero),
 body:has(.nx-hero) .site-header {
-  background: rgba(247, 251, 253, 0.98) !important;
-  color: #172437 !important;
-  border-color: #d6e5ed !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  color: #1e2428 !important;
+  border-color: #e8e6e1 !important;
 }
 .site-header:has(~ main .nx-hero) .brand img,
 body:has(.nx-hero) .site-header .brand img {
@@ -875,7 +876,7 @@ body:has(.nx-hero) .site-header .brand img {
 .site-header:has(~ main .nx-hero) .nav-list > li > a,
 body:has(.nx-hero) .site-header .nav-list > li > a,
 body:has(.nx-hero) .site-header .lang {
-  color: #455c6e !important;
+  color: #596065 !important;
 }
 .site-header:has(~ main .nx-hero) .nav-list > li > a[aria-current],
 body:has(.nx-hero) .site-header .nav-list > li > a[aria-current] {
@@ -930,7 +931,7 @@ body:has(.nx-hero) .site-header .header-contact {
   }
   body:has(.nx-hero) .site-header nav.open {
     background: #fff;
-    color: #172437;
+    color: #1e2428;
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
   }
   body:has(.nx-hero) .site-header .header-actions {
