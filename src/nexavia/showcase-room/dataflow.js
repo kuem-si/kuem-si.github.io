@@ -6,7 +6,8 @@
 
 const NS = "http://www.w3.org/2000/svg";
 const UPLINK_GAP = 1500;
-const TRIP = 820;
+// One packet trip takes one pass of the data marker (2.4 s).
+const TRIP = 2400;
 const BEAM = 300;
 const COMMAND = "#f06432";
 const FAILED = "#fe5c58";
