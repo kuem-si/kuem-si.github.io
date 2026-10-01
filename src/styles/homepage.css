@@ -2255,3 +2255,81 @@
   font-weight: 600;
   color: var(--kuem-text-primary);
 }
+/* Token layer (phase 2, step 4): KAI and the contact band are Concrete
+   reading surfaces; the same contact band closes the Rešitve page. */
+.kuem-home .hp-kai[data-scheme],
+section.hp-closing[data-scheme] {
+  background: var(--kuem-background);
+  color: var(--kuem-text-primary);
+}
+.kuem-home .hp-kai[data-scheme] h2,
+.kuem-home .hp-kai[data-scheme] .hp-alert h3,
+section.hp-closing[data-scheme] h2 {
+  color: var(--kuem-text-primary);
+}
+.kuem-home .hp-kai[data-scheme] p,
+section.hp-closing[data-scheme] p {
+  color: var(--kuem-text-secondary);
+}
+.kuem-home .hp-kai[data-scheme] .hp-eyebrow {
+  color: var(--kuem-data);
+}
+.kuem-home .hp-kai[data-scheme] .hp-kai-emphasis {
+  color: var(--kuem-text-secondary);
+  border-left-color: var(--kuem-data);
+}
+.kuem-home .hp-kai[data-scheme] .hp-outline {
+  color: var(--kuem-data);
+  border-color: var(--kuem-data);
+}
+.kuem-home .hp-kai[data-scheme] .hp-outline:hover,
+section.hp-closing[data-scheme] .hp-demo-link:hover {
+  background: var(--kuem-surface-1);
+}
+.kuem-home .hp-kai[data-scheme] :focus-visible,
+section.hp-closing[data-scheme] :focus-visible {
+  outline-color: var(--kuem-focus);
+}
+.kuem-home .hp-kai[data-scheme] .hp-example-label,
+.kuem-home .hp-kai[data-scheme] .hp-chart-legend {
+  color: var(--kuem-text-muted);
+}
+.kuem-home .hp-kai[data-scheme] .hp-alert,
+.kuem-home .hp-kai[data-scheme] .hp-chart {
+  background: var(--kuem-surface-2);
+  border-color: var(--kuem-border);
+}
+.kuem-home .hp-kai[data-scheme] .hp-alert-title {
+  color: var(--kuem-text-primary);
+}
+.kuem-home .hp-kai[data-scheme] .hp-alert-title > span {
+  color: var(--kuem-event);
+}
+.kuem-home .hp-kai[data-scheme] .hp-chart-legend span:before {
+  border-top-color: var(--kuem-border-strong);
+}
+.kuem-home .hp-kai[data-scheme] .hp-chart-legend span + span:before {
+  border-top-color: var(--kuem-event);
+}
+.kuem-home .hp-kai[data-scheme] .hp-gridlines {
+  stroke: var(--kuem-surface-1);
+}
+.kuem-home .hp-kai[data-scheme] .hp-chart-range {
+  fill: var(--kuem-surface-1);
+}
+.kuem-home .hp-kai[data-scheme] .hp-chart-normal {
+  stroke: var(--kuem-border-strong);
+}
+.kuem-home .hp-kai[data-scheme] .hp-chart-actual,
+.kuem-home .hp-kai[data-scheme] .hp-chart circle {
+  stroke: var(--kuem-event);
+}
+.kuem-home .hp-kai[data-scheme] .hp-chart circle {
+  fill: var(--kuem-surface-2);
+}
+.kuem-home .hp-kai[data-scheme] .hp-chart text {
+  fill: var(--kuem-text-muted);
+}
+section.hp-closing[data-scheme] .hp-demo-link {
+  color: var(--kuem-text-primary);
+}

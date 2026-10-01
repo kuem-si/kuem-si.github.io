@@ -988,3 +988,20 @@ body:has(.nx-hero) .site-header .header-contact {
   font-size: var(--kuem-type-h3-size);
   line-height: var(--kuem-type-h3-line-height);
 }
+/* Token layer (phase 2, step 4): KAI and the closing contact band are
+   Concrete; the KAI panel stays a white product surface. */
+.nx-kai[data-scheme],
+.nx-closing[data-scheme] {
+  background: var(--kuem-background);
+  color: var(--kuem-text-primary);
+}
+.nx-kai[data-scheme] .nx-eyebrow {
+  color: var(--kuem-data);
+}
+.nx-kai[data-scheme] .nx-kai-benefits li,
+.nx-kai[data-scheme] .nx-human {
+  border-color: var(--kuem-data);
+}
+.nx-closing[data-scheme] p {
+  color: var(--kuem-text-secondary);
+}
