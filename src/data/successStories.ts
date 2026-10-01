@@ -15,7 +15,9 @@ export type SuccessStory = {
 // Only these three reference details are already displayed on both homepages.
 // Do not publish other reference details merely because they exist in that file.
 function homepageDetail(name: string): LocalizedText {
-  const detail = references.find((reference) => reference.name === name)?.detail;
+  const detail = references.find(
+    (reference) => reference.name === name,
+  )?.detail;
   if (!detail) throw new Error(`Missing published reference: ${name}`);
   return detail;
 }
@@ -27,7 +29,11 @@ export const successStories: SuccessStory[] = [
     industry: { sl: "Merjenje plina", en: "Gas metering" },
     summary: homepageDetail("DOMPLAN, d.d."),
     published: true,
-    source: { file: "src/data/references.ts", entry: "DOMPLAN, d.d.", publicRoutes: ["/", "/en/"] },
+    source: {
+      file: "src/data/references.ts",
+      entry: "DOMPLAN, d.d.",
+      publicRoutes: ["/", "/en/"],
+    },
   },
   {
     slug: "jkp-brezovica",
@@ -38,7 +44,11 @@ export const successStories: SuccessStory[] = [
       en: "Overview of water meters and utility infrastructure.",
     },
     published: true,
-    source: { file: "src/components/pages/NexaviaPage.astro", entry: "Brezovica (name: src/data/references.ts, JKP Brezovica d.o.o.)", publicRoutes: ["/nexavia/", "/en/nexavia/"] },
+    source: {
+      file: "src/components/pages/NexaviaPage.astro",
+      entry: "Brezovica (name: src/data/references.ts, JKP Brezovica d.o.o.)",
+      publicRoutes: ["/nexavia/", "/en/nexavia/"],
+    },
   },
   {
     slug: "sombor-gas",
@@ -46,7 +56,11 @@ export const successStories: SuccessStory[] = [
     industry: { sl: "Merjenje plina", en: "Gas metering" },
     summary: homepageDetail("Sombor-gas d.o.o."),
     published: true,
-    source: { file: "src/data/references.ts", entry: "Sombor-gas d.o.o.", publicRoutes: ["/", "/en/"] },
+    source: {
+      file: "src/data/references.ts",
+      entry: "Sombor-gas d.o.o.",
+      publicRoutes: ["/", "/en/"],
+    },
   },
   {
     slug: "adria-mobil",
@@ -57,7 +71,11 @@ export const successStories: SuccessStory[] = [
       en: "Energy data from the production environment.",
     },
     published: true,
-    source: { file: "src/components/pages/NexaviaPage.astro", entry: "Adria Mobil", publicRoutes: ["/nexavia/", "/en/nexavia/"] },
+    source: {
+      file: "src/components/pages/NexaviaPage.astro",
+      entry: "Adria Mobil",
+      publicRoutes: ["/nexavia/", "/en/nexavia/"],
+    },
   },
   {
     slug: "gradiska",
@@ -68,7 +86,11 @@ export const successStories: SuccessStory[] = [
       en: "Air quality, noise, traffic and environmental conditions.",
     },
     published: true,
-    source: { file: "src/components/pages/IndustriesPage.astro", entry: "Gradiška", publicRoutes: ["/panoge/", "/en/industries/"] },
+    source: {
+      file: "src/components/pages/IndustriesPage.astro",
+      entry: "Gradiška",
+      publicRoutes: ["/panoge/", "/en/industries/"],
+    },
   },
   {
     slug: "tropic",
@@ -76,8 +98,14 @@ export const successStories: SuccessStory[] = [
     industry: { sl: "Spremljanje temperature", en: "Temperature monitoring" },
     summary: homepageDetail("Tropic Maloprodaja d.o.o."),
     published: true,
-    source: { file: "src/data/references.ts", entry: "Tropic Maloprodaja d.o.o.", publicRoutes: ["/", "/en/"] },
+    source: {
+      file: "src/data/references.ts",
+      entry: "Tropic Maloprodaja d.o.o.",
+      publicRoutes: ["/", "/en/"],
+    },
   },
 ];
 
-export const publishedSuccessStories = successStories.filter((story) => story.published === true);
+export const publishedSuccessStories = successStories.filter(
+  (story) => story.published === true,
+);

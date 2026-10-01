@@ -12,16 +12,33 @@ export const sample = { x: 0, y: 0, width: 0 };
 // A jet's outline from its tip down: [y, half width] rows, mirrored about x.
 const jetOutline = (x, rows) => [
   ...rows.map(([y, half]) => [x + half, y]),
-  ...rows.filter(([, half]) => half).reverse().map(([y, half]) => [x - half, y]),
+  ...rows
+    .filter(([, half]) => half)
+    .reverse()
+    .map(([y, half]) => [x - half, y]),
 ];
 
 // A lit fountain: the jet rising from `base` to `top` over a round basin
 // (centred at basinY). `jet` and `lightJet` trace the plume and its bright
 // core as [y, half width] rows below the tip.
-export function fountain({ x, top, base, basinY, basinRx, basinRy, jet, lightJet }) {
+export function fountain({
+  x,
+  top,
+  base,
+  basinY,
+  basinRx,
+  basinRy,
+  jet,
+  lightJet,
+}) {
   const reach = basinRx + 2;
   return {
-    area: { x: x - basinRx - 7, y: top - 4, width: 2 * (basinRx + 7), height: basinY + 22 - top },
+    area: {
+      x: x - basinRx - 7,
+      y: top - 4,
+      width: 2 * (basinRx + 7),
+      height: basinY + 22 - top,
+    },
     inset: 0,
     feather: 1.2,
     polygons: [jetOutline(x, [[top, 0], ...jet])],
@@ -310,7 +327,17 @@ export function initWater(root, patches = PATCHES) {
     layer.lift = patch.lift ?? 0;
     if (!image.naturalWidth) return;
     const k = image.naturalWidth / PHOTO.width;
-    context.drawImage(image, area.x * k, (area.y + layer.lift) * k, area.width * k, area.height * k, 0, 0, mask.width, mask.height);
+    context.drawImage(
+      image,
+      area.x * k,
+      (area.y + layer.lift) * k,
+      area.width * k,
+      area.height * k,
+      0,
+      0,
+      mask.width,
+      mask.height,
+    );
   }
 
   function draw(time) {

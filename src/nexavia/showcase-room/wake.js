@@ -44,10 +44,21 @@ function foamSprite() {
     const x = r + Math.cos(angle) * distance * stretch * 0.8;
     const y = r + Math.sin(angle) * distance;
     const fade = Math.max(0, 1 - distance / r);
-    bubble(x, y, 1.5 + Math.random() ** 2 * 5, (0.3 + Math.random() * 0.5) * Math.sqrt(fade));
+    bubble(
+      x,
+      y,
+      1.5 + Math.random() ** 2 * 5,
+      (0.3 + Math.random() * 0.5) * Math.sqrt(fade),
+    );
   }
   context.globalCompositeOperation = "destination-out";
-  for (let i = 0; i < 90; i++) bubble(random(6, size - 6), random(6, size - 6), random(1.5, 5), random(0.6, 1));
+  for (let i = 0; i < 90; i++)
+    bubble(
+      random(6, size - 6),
+      random(6, size - 6),
+      random(1.5, 5),
+      random(0.6, 1),
+    );
   return canvas;
 }
 
@@ -104,7 +115,14 @@ export function createWakes(host, board) {
     if (alpha < 0.004) return;
     const cos = Math.cos(angle) * s * unit;
     const sin = Math.sin(angle) * s * unit;
-    context.setTransform(cos, k * sin, -sin, k * cos, x * unit + left, y * unit + top);
+    context.setTransform(
+      cos,
+      k * sin,
+      -sin,
+      k * cos,
+      x * unit + left,
+      y * unit + top,
+    );
     context.globalAlpha = Math.min(1, alpha);
     context.drawImage(image, -size / 2, -size / 2, size, size);
   }
@@ -127,7 +145,16 @@ export function createWakes(host, board) {
       const age = clock - p.t;
       const life = 1 - age / LIFE;
       const [x, y] = place(p, -half, 0);
-      stamp(glow, x, y, p.s, p.k, p.heading, beam * (0.9 + 0.3 * age), 0.06 * p.strength * life * Math.exp(-age / 5));
+      stamp(
+        glow,
+        x,
+        y,
+        p.s,
+        p.k,
+        p.heading,
+        beam * (0.9 + 0.3 * age),
+        0.06 * p.strength * life * Math.exp(-age / 5),
+      );
     }
 
     // Kelvin arms: a dark trough outside a lit crest, broken along its length.
@@ -165,8 +192,21 @@ export function createWakes(host, board) {
         const p = samples[i];
         const age = clock - p.t;
         if (age > 3.5) break;
-        const [x, y] = place(p, half * 0.8, side * (beam * 0.45 + KELVIN * p.speed * age));
-        stamp(foam[(p.sprite + 3) % SPRITES], x, y, p.s, p.k, p.spin, 5 + 2.5 * age, 0.5 * p.strength * Math.exp(-age / 1.4));
+        const [x, y] = place(
+          p,
+          half * 0.8,
+          side * (beam * 0.45 + KELVIN * p.speed * age),
+        );
+        stamp(
+          foam[(p.sprite + 3) % SPRITES],
+          x,
+          y,
+          p.s,
+          p.k,
+          p.spin,
+          5 + 2.5 * age,
+          0.5 * p.strength * Math.exp(-age / 1.4),
+        );
       }
     }
 
@@ -177,7 +217,8 @@ export function createWakes(host, board) {
       context.globalAlpha = 1;
       context.setTransform(unit, 0, 0, unit, left, top);
       for (let n = 1; n <= 4; n++) {
-        const p = samples[samples.length - 1 - Math.round((n * wavelength) / STEP)];
+        const p =
+          samples[samples.length - 1 - Math.round((n * wavelength) / STEP)];
         if (!p) break;
         const age = clock - p.t;
         const spread = beam * 0.45 + KELVIN * p.speed * age;
@@ -198,12 +239,34 @@ export function createWakes(host, board) {
     // strands of it linger along the track long after.
     for (const p of samples) {
       const age = clock - p.t;
-      const [sx, sy] = place(p, -half - 1, (p.seed - 0.5) * beam * 0.3 * (1 + age * 0.4));
-      stamp(foam[(p.sprite + 1) % SPRITES], sx, sy, p.s, p.k * 0.7, p.heading, beam * (0.6 + 0.2 * age), 0.3 * p.strength * Math.exp(-age / 4) * (1 - age / LIFE));
+      const [sx, sy] = place(
+        p,
+        -half - 1,
+        (p.seed - 0.5) * beam * 0.3 * (1 + age * 0.4),
+      );
+      stamp(
+        foam[(p.sprite + 1) % SPRITES],
+        sx,
+        sy,
+        p.s,
+        p.k * 0.7,
+        p.heading,
+        beam * (0.6 + 0.2 * age),
+        0.3 * p.strength * Math.exp(-age / 4) * (1 - age / LIFE),
+      );
       if (age > 5) continue;
       const drift = (p.seed - 0.5) * beam * 0.4 * (1 + age * 0.4);
       const [x, y] = place(p, -half - 1, drift);
-      stamp(foam[p.sprite], x, y, p.s, p.k, p.spin + age * 0.15, beam * (0.5 + 0.18 * age), 0.85 * p.strength * Math.exp(-age / 1.6));
+      stamp(
+        foam[p.sprite],
+        x,
+        y,
+        p.s,
+        p.k,
+        p.spin + age * 0.15,
+        beam * (0.5 + 0.18 * age),
+        0.85 * p.strength * Math.exp(-age / 1.6),
+      );
     }
 
     // Live foam at the boat itself: the bow wave peeling off both sides and
@@ -217,14 +280,34 @@ export function createWakes(host, board) {
         // Broken foam along the same curve, flickering as it curls over.
         for (let i = 1; i <= 16; i++) {
           const u = i / 16;
-          const x = (1 - u) ** 2 * bow[0] + 2 * u * (1 - u) * bend[0] + u * u * end[0];
-          const y = (1 - u) ** 2 * bow[1] + 2 * u * (1 - u) * bend[1] + u * u * end[1];
-          stamp(foam[(wake.sprite + i) % SPRITES], x, y, live.s, live.k, clock * 2 + i * 1.7 + side, beam * (0.2 + 0.2 * u), 0.4 * strength * (1 - 0.5 * u));
+          const x =
+            (1 - u) ** 2 * bow[0] + 2 * u * (1 - u) * bend[0] + u * u * end[0];
+          const y =
+            (1 - u) ** 2 * bow[1] + 2 * u * (1 - u) * bend[1] + u * u * end[1];
+          stamp(
+            foam[(wake.sprite + i) % SPRITES],
+            x,
+            y,
+            live.s,
+            live.k,
+            clock * 2 + i * 1.7 + side,
+            beam * (0.2 + 0.2 * u),
+            0.4 * strength * (1 - 0.5 * u),
+          );
         }
       }
       const [x, y] = place(live, -half - 1.5, 0);
       // The first frame's clock can dip just below zero.
-      stamp(foam[Math.floor(Math.abs(clock) * 6) % SPRITES], x, y, live.s, live.k, live.heading + clock * 1.3, beam * 0.9, 0.7 * strength);
+      stamp(
+        foam[Math.floor(Math.abs(clock) * 6) % SPRITES],
+        x,
+        y,
+        live.s,
+        live.k,
+        live.heading + clock * 1.3,
+        beam * 0.9,
+        0.7 * strength,
+      );
     }
     context.restore();
   }
@@ -254,7 +337,16 @@ export function createWakes(host, board) {
     track(entity, x, y, s, k, clock) {
       const wake = current.get(entity);
       if (!wake) return;
-      const p = { x, y, s, k, cos: Math.cos(entity.heading), sin: Math.sin(entity.heading), heading: entity.heading, speed: entity.speed };
+      const p = {
+        x,
+        y,
+        s,
+        k,
+        cos: Math.cos(entity.heading),
+        sin: Math.sin(entity.heading),
+        heading: entity.heading,
+        speed: entity.speed,
+      };
       wake.live = p;
       if (entity.distance - wake.mark < STEP) return;
       wake.mark = entity.distance;
@@ -272,8 +364,13 @@ export function createWakes(host, board) {
       context.clearRect(0, 0, canvas.width, canvas.height);
       for (let i = wakes.length - 1; i >= 0; i--) {
         const wake = wakes[i];
-        while (wake.samples.length && clock - wake.samples[0].t > LIFE) wake.samples.shift();
-        if (!wake.samples.length && !wake.live && ![...current.values()].includes(wake)) {
+        while (wake.samples.length && clock - wake.samples[0].t > LIFE)
+          wake.samples.shift();
+        if (
+          !wake.samples.length &&
+          !wake.live &&
+          ![...current.values()].includes(wake)
+        ) {
           wakes.splice(i, 1);
           continue;
         }

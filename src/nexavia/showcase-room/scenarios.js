@@ -18,10 +18,13 @@ const STEP_MS = 6800;
 const icons = {
   prev: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>',
   next: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>',
-  pause: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>',
+  pause:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>',
   play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>',
-  replay: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5"/></svg>',
-  close: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  replay:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5"/></svg>',
+  close:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',
   link: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.2 1.2M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2"/></svg>',
   done: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
   bell: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20h4"/></svg>',
@@ -34,27 +37,36 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
   const { en } = api;
   const t = (sl, english) => (en ? english : sl);
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const format = (ms) => `${Math.floor(ms / 60000)}:${String(Math.round((ms % 60000) / 1000)).padStart(2, "0")}`;
+  const format = (ms) =>
+    `${Math.floor(ms / 60000)}:${String(Math.round((ms % 60000) / 1000)).padStart(2, "0")}`;
   // Time between two "hh:mm" clock times, across midnight: "30 min",
   // "5 h 20 min", or "" for none.
   const elapsed = (from, to) => {
-    const minutes = (text) => text.split(":").reduce((hours, part) => hours * 60 + Number(part), 0);
+    const minutes = (text) =>
+      text.split(":").reduce((hours, part) => hours * 60 + Number(part), 0);
     const gap = (((minutes(to) - minutes(from)) % 1440) + 1440) % 1440;
     if (!gap) return "";
     const hours = Math.floor(gap / 60);
     const rest = gap % 60;
-    return [hours && `${hours} h`, rest && `${rest} min`].filter(Boolean).join(" ");
+    return [hours && `${hours} h`, rest && `${rest} min`]
+      .filter(Boolean)
+      .join(" ");
   };
 
   // Launcher.
   const launcher = document.createElement("div");
   launcher.className = "twin-scenarios";
   launcher.setAttribute("role", "group");
-  launcher.setAttribute("aria-label", t("Vodeni scenariji", "Guided scenarios"));
+  launcher.setAttribute(
+    "aria-label",
+    t("Vodeni scenariji", "Guided scenarios"),
+  );
   // The introduction (`intro: true`) comes first, marked as the place to
   // start, ahead of the numbered scenarios.
   const label = `<span class="twin-scenarios-label">${t("Vodeni scenariji", "Guided scenarios")}</span>`;
-  launcher.innerHTML = scenarios.some((scenario) => scenario.intro) ? "" : label;
+  launcher.innerHTML = scenarios.some((scenario) => scenario.intro)
+    ? ""
+    : label;
   let number = 0;
   scenarios.forEach((scenario) => {
     const button = document.createElement("button");
@@ -63,13 +75,20 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
     button.dataset.scenario = scenario.id;
     button.disabled = true;
     button.setAttribute("aria-pressed", "false");
-    const mark = scenario.intro ? icons.play : String(++number).padStart(2, "0");
+    const mark = scenario.intro
+      ? icons.play
+      : String(++number).padStart(2, "0");
     button.innerHTML = `<i>${mark}</i><b></b><small>${format(scenario.steps.length * STEP_MS)}</small>`;
     button.querySelector("b").textContent = scenario.title;
-    button.addEventListener("click", () => (active === scenario ? stop() : start(scenario)));
+    button.addEventListener("click", () =>
+      active === scenario ? stop() : start(scenario),
+    );
     if (scenario.intro) {
       button.classList.add("is-intro");
-      button.insertAdjacentHTML("afterbegin", `<span class="twin-scenario-start">${t("Začnite tukaj", "Start here")}</span>`);
+      button.insertAdjacentHTML(
+        "afterbegin",
+        `<span class="twin-scenario-start">${t("Začnite tukaj", "Start here")}</span>`,
+      );
       launcher.prepend(button);
       button.insertAdjacentHTML("afterend", label);
     } else launcher.append(button);
@@ -124,7 +143,8 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
   function effects(instant) {
     return {
       count(key, from, to, fmt, note) {
-        if (instant || motion.matches) return api.setReading(key, fmt(to), note);
+        if (instant || motion.matches)
+          return api.setReading(key, fmt(to), note);
         const begin = performance.now();
         const duration = 1600;
         const tick = (now) => {
@@ -144,14 +164,21 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
         void toast.offsetWidth;
         toast.classList.add("is-visible");
         clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 4600);
+        toastTimer = setTimeout(
+          () => toast.classList.remove("is-visible"),
+          4600,
+        );
       },
     };
   }
 
   function setPlayButton() {
     const icon = finished ? icons.replay : playing ? icons.pause : icons.play;
-    const label = finished ? t("Ponovi scenarij", "Replay scenario") : playing ? t("Premor", "Pause") : t("Nadaljuj", "Play");
+    const label = finished
+      ? t("Ponovi scenarij", "Replay scenario")
+      : playing
+        ? t("Premor", "Pause")
+        : t("Nadaljuj", "Play");
     ui.play.innerHTML = icon;
     ui.play.setAttribute("aria-label", label);
     player.classList.toggle("is-paused", !playing);
@@ -161,7 +188,12 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
     ui.progress.replaceChildren(
       ...active.steps.map((_, i) => {
         const segment = document.createElement("i");
-        segment.className = i < current || finished ? "is-done" : i === current ? "is-current" : "";
+        segment.className =
+          i < current || finished
+            ? "is-done"
+            : i === current
+              ? "is-current"
+              : "";
         segment.append(document.createElement("b"));
         return segment;
       }),
@@ -209,11 +241,21 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
     // The scenario's clock is simulated: the time since the previous step
     // shows how much the story skipped.
     ui.time.textContent = step.time;
-    const gap = current ? elapsed(active.steps[current - 1].time, step.time) : "";
-    if (gap) ui.time.append(Object.assign(document.createElement("small"), { textContent: `+${gap}` }));
+    const gap = current
+      ? elapsed(active.steps[current - 1].time, step.time)
+      : "";
+    if (gap)
+      ui.time.append(
+        Object.assign(document.createElement("small"), {
+          textContent: `+${gap}`,
+        }),
+      );
     ui.title.textContent = step.title;
     ui.text.textContent = step.text;
-    ui.count.textContent = t(`Korak ${current + 1} / ${active.steps.length}`, `Step ${current + 1} of ${active.steps.length}`);
+    ui.count.textContent = t(
+      `Korak ${current + 1} / ${active.steps.length}`,
+      `Step ${current + 1} of ${active.steps.length}`,
+    );
     api.narrate({ text: `${active.title} · ${step.title}` });
     renderProgress();
     setPlayButton();
@@ -226,7 +268,14 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
   function start(scenario, index = 0, autoplay = true) {
     if (active) api.exit();
     active = scenario;
-    launcher.querySelectorAll("[data-scenario]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.scenario === scenario.id)));
+    launcher
+      .querySelectorAll("[data-scenario]")
+      .forEach((button) =>
+        button.setAttribute(
+          "aria-pressed",
+          String(button.dataset.scenario === scenario.id),
+        ),
+      );
     api.enter();
     player.hidden = false;
     wrap.classList.add("has-scenario");
@@ -246,10 +295,14 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
     active = null;
     player.hidden = true;
     wrap.classList.remove("has-scenario");
-    launcher.querySelectorAll("[data-scenario]").forEach((button) => button.setAttribute("aria-pressed", "false"));
+    launcher
+      .querySelectorAll("[data-scenario]")
+      .forEach((button) => button.setAttribute("aria-pressed", "false"));
     api.exit();
     onChange?.(null);
-    launcher.querySelector(`[data-scenario="${id}"]`)?.focus({ preventScroll: true });
+    launcher
+      .querySelector(`[data-scenario="${id}"]`)
+      ?.focus({ preventScroll: true });
   }
 
   // Copies the page's address, which names this scenario and step.
@@ -262,7 +315,9 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
     } catch {
       copied = false;
     }
-    const label = copied ? t("Povezava kopirana", "Link copied") : t("Kopiranje ni uspelo", "Could not copy the link");
+    const label = copied
+      ? t("Povezava kopirana", "Link copied")
+      : t("Kopiranje ni uspelo", "Could not copy the link");
     share.innerHTML = copied ? icons.done : icons.link;
     share.dataset.status = label;
     share.setAttribute("aria-label", label);
@@ -270,7 +325,10 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
     shareTimer = setTimeout(() => {
       share.innerHTML = icons.link;
       delete share.dataset.status;
-      share.setAttribute("aria-label", t("Kopiraj povezavo do tega koraka", "Copy a link to this step"));
+      share.setAttribute(
+        "aria-label",
+        t("Kopiraj povezavo do tega koraka", "Copy a link to this step"),
+      );
     }, 2200);
   });
 
@@ -291,27 +349,50 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
   }
 
   ui.play.addEventListener("click", togglePlay);
-  player.querySelector(".scenario-prev").addEventListener("click", () => goTo(current - 1));
-  player.querySelector(".scenario-next").addEventListener("click", () => (current < active.steps.length - 1 ? goTo(current + 1) : advance()));
+  player
+    .querySelector(".scenario-prev")
+    .addEventListener("click", () => goTo(current - 1));
+  player
+    .querySelector(".scenario-next")
+    .addEventListener("click", () =>
+      current < active.steps.length - 1 ? goTo(current + 1) : advance(),
+    );
   player.querySelector(".scenario-close").addEventListener("click", stop);
   player.addEventListener("keydown", (event) => {
-    if (event.target.closest("button") && (event.key === " " || event.key === "Enter")) return;
-    const actions = { Escape: stop, ArrowLeft: () => goTo(current - 1), ArrowRight: () => goTo(current + 1), " ": togglePlay };
+    if (
+      event.target.closest("button") &&
+      (event.key === " " || event.key === "Enter")
+    )
+      return;
+    const actions = {
+      Escape: stop,
+      ArrowLeft: () => goTo(current - 1),
+      ArrowRight: () => goTo(current + 1),
+      " ": togglePlay,
+    };
     if (!actions[event.key]) return;
     event.preventDefault();
     actions[event.key]();
   });
   // Keep the camera framed when the layout changes mid-scenario.
-  window.addEventListener("resize", () => {
-    if (!active) return;
-    let focus = null;
-    active.steps.forEach((step, i) => i <= current && step.focus && (focus = step.focus));
-    api.focus(focus);
-  }, { passive: true });
+  window.addEventListener(
+    "resize",
+    () => {
+      if (!active) return;
+      let focus = null;
+      active.steps.forEach(
+        (step, i) => i <= current && step.focus && (focus = step.focus),
+      );
+      api.focus(focus);
+    },
+    { passive: true },
+  );
 
   return {
     enable() {
-      launcher.querySelectorAll("[data-scenario]").forEach((button) => (button.disabled = false));
+      launcher
+        .querySelectorAll("[data-scenario]")
+        .forEach((button) => (button.disabled = false));
     },
     // Opens a scenario from a link: from the start, or held on one step.
     open(id, step = 0, hold = false) {

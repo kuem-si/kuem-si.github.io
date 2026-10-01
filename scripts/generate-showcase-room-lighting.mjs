@@ -25,61 +25,229 @@ const DEVICES = {
   HOUSE_01: {
     box: [404, 104, 158, 124],
     glass: [
-      [[496, 137], [504, 136], [504, 147], [496, 148]],
-      [[425, 152], [437, 155], [437, 169], [425, 166]],
-      [[453, 162], [466, 166], [466, 180], [453, 177]],
-      [[424, 181], [439, 185], [439, 205], [424, 202]],
-      [[454, 192], [468, 196], [468, 210], [454, 208]],
-      [[489, 167], [500, 164], [500, 178], [489, 181]],
-      [[516, 155], [528, 152], [528, 165], [516, 168]],
-      [[489, 195], [500, 192], [500, 206], [489, 209]],
-      [[506, 187], [518, 185], [518, 210], [506, 211]],
-      [[518, 184], [531, 181], [531, 195], [518, 198]],
-      [[538, 176], [552, 172], [552, 186], [538, 190]],
+      [
+        [496, 137],
+        [504, 136],
+        [504, 147],
+        [496, 148],
+      ],
+      [
+        [425, 152],
+        [437, 155],
+        [437, 169],
+        [425, 166],
+      ],
+      [
+        [453, 162],
+        [466, 166],
+        [466, 180],
+        [453, 177],
+      ],
+      [
+        [424, 181],
+        [439, 185],
+        [439, 205],
+        [424, 202],
+      ],
+      [
+        [454, 192],
+        [468, 196],
+        [468, 210],
+        [454, 208],
+      ],
+      [
+        [489, 167],
+        [500, 164],
+        [500, 178],
+        [489, 181],
+      ],
+      [
+        [516, 155],
+        [528, 152],
+        [528, 165],
+        [516, 168],
+      ],
+      [
+        [489, 195],
+        [500, 192],
+        [500, 206],
+        [489, 209],
+      ],
+      [
+        [506, 187],
+        [518, 185],
+        [518, 210],
+        [506, 211],
+      ],
+      [
+        [518, 184],
+        [531, 181],
+        [531, 195],
+        [518, 198],
+      ],
+      [
+        [538, 176],
+        [552, 172],
+        [552, 186],
+        [538, 190],
+      ],
     ],
-    sconces: [[444.5, 191, 2.5], [510, 190, 2.5]],
+    sconces: [
+      [444.5, 191, 2.5],
+      [510, 190, 2.5],
+    ],
     glints: [],
-    spill: [[[406, 140], [456, 112], [512, 124], [558, 150], [560, 226], [406, 226]]],
+    spill: [
+      [
+        [406, 140],
+        [456, 112],
+        [512, 124],
+        [558, 150],
+        [560, 226],
+        [406, 226],
+      ],
+    ],
     spillSigma: 6,
     spillStrength: 0.42,
   },
   OFFICE_01: {
     box: [972, 144, 190, 90],
     glass: [
-      [[980, 151], [1002, 151], [1002, 177], [980, 177]],
-      [[980, 186], [1000, 186], [1000, 212], [980, 212]],
-      [[1016, 155.5], [1119, 164.5], [1117.5, 188], [1015.5, 180]],
-      [[1014, 188.5], [1116.5, 197], [1115, 227], [1013, 217]],
-      [[1131, 202.5], [1154, 202.5], [1154, 228.5], [1131, 228.5]],
+      [
+        [980, 151],
+        [1002, 151],
+        [1002, 177],
+        [980, 177],
+      ],
+      [
+        [980, 186],
+        [1000, 186],
+        [1000, 212],
+        [980, 212],
+      ],
+      [
+        [1016, 155.5],
+        [1119, 164.5],
+        [1117.5, 188],
+        [1015.5, 180],
+      ],
+      [
+        [1014, 188.5],
+        [1116.5, 197],
+        [1115, 227],
+        [1013, 217],
+      ],
+      [
+        [1131, 202.5],
+        [1154, 202.5],
+        [1154, 228.5],
+        [1131, 228.5],
+      ],
     ],
     sconces: [],
     glints: [],
-    spill: [[[974, 146], [1162, 146], [1162, 232], [974, 232]]],
+    spill: [
+      [
+        [974, 146],
+        [1162, 146],
+        [1162, 232],
+        [974, 232],
+      ],
+    ],
     spillSigma: 7,
     spillStrength: 0.4,
   },
   FACTORY_01: {
     box: [340, 424, 290, 124],
     glass: [
-      [[368, 468], [412, 472], [412, 515], [368, 509.5]],
-      [[430.5, 477], [474, 481], [474, 491], [430.5, 487.5]],
-      [[492, 487], [537.5, 492.5], [537.5, 536], [492, 531]],
-      [[565, 495], [580.5, 479.5], [580.5, 501], [565, 513]],
-      [[598.5, 452.5], [611, 442], [611, 467.5], [598.5, 479]],
-      [[580, 522], [597.5, 522], [597.5, 535], [580, 535]],
+      [
+        [368, 468],
+        [412, 472],
+        [412, 515],
+        [368, 509.5],
+      ],
+      [
+        [430.5, 477],
+        [474, 481],
+        [474, 491],
+        [430.5, 487.5],
+      ],
+      [
+        [492, 487],
+        [537.5, 492.5],
+        [537.5, 536],
+        [492, 531],
+      ],
+      [
+        [565, 495],
+        [580.5, 479.5],
+        [580.5, 501],
+        [565, 513],
+      ],
+      [
+        [598.5, 452.5],
+        [611, 442],
+        [611, 467.5],
+        [598.5, 479],
+      ],
+      [
+        [580, 522],
+        [597.5, 522],
+        [597.5, 535],
+        [580, 535],
+      ],
     ],
-    sconces: [[353.75, 476.25, 3.6], [418.75, 483.5, 3], [481.5, 495.5, 3], [544, 504.5, 3], [567, 496, 2.5], [595, 465.5, 2.5], [598.5, 454.5, 2.5], [615.5, 439, 3]],
-    glints: [[[431, 500], [474, 504], [474, 513], [431, 509]]],
-    spill: [[[342, 440], [626, 426], [628, 546], [342, 546]]],
+    sconces: [
+      [353.75, 476.25, 3.6],
+      [418.75, 483.5, 3],
+      [481.5, 495.5, 3],
+      [544, 504.5, 3],
+      [567, 496, 2.5],
+      [595, 465.5, 2.5],
+      [598.5, 454.5, 2.5],
+      [615.5, 439, 3],
+    ],
+    glints: [
+      [
+        [431, 500],
+        [474, 504],
+        [474, 513],
+        [431, 509],
+      ],
+    ],
+    spill: [
+      [
+        [342, 440],
+        [626, 426],
+        [628, 546],
+        [342, 546],
+      ],
+    ],
     spillSigma: 8,
     spillStrength: 0.45,
   },
   // Lamps: lantern centre, lantern radius, and the pool of light on the
   // ground as a perspective ellipse [cx, cy, rx, ry, strength].
-  LAMP_01: { box: [612, 280, 72, 116], head: [646, 302, 6], pool: [648, 372, 30, 12, 0.26] },
-  LAMP_02: { box: [986, 304, 70, 76], head: [1019, 325, 6], pool: [1020, 360, 30, 12, 0.28] },
-  LAMP_03: { box: [668, 392, 84, 98], head: [703, 410, 6], pool: [712, 462, 34, 26, 0.32] },
-  LAMP_04: { box: [1172, 504, 74, 100], head: [1208, 527, 6], pool: [1206, 582, 32, 13, 0.28] },
+  LAMP_01: {
+    box: [612, 280, 72, 116],
+    head: [646, 302, 6],
+    pool: [648, 372, 30, 12, 0.26],
+  },
+  LAMP_02: {
+    box: [986, 304, 70, 76],
+    head: [1019, 325, 6],
+    pool: [1020, 360, 30, 12, 0.28],
+  },
+  LAMP_03: {
+    box: [668, 392, 84, 98],
+    head: [703, 410, 6],
+    pool: [712, 462, 34, 26, 0.32],
+  },
+  LAMP_04: {
+    box: [1172, 504, 74, 100],
+    head: [1208, 527, 6],
+    pool: [1206, 582, 32, 13, 0.28],
+  },
 };
 
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -102,7 +270,10 @@ function inPolygon(x, y, poly) {
 // Three box-blur passes approximate a Gaussian.
 function blur(src, w, h, sigma) {
   if (sigma <= 0) return Float32Array.from(src);
-  const r = Math.max(1, Math.round(Math.sqrt((12 * sigma * sigma) / 3 + 1) / 2));
+  const r = Math.max(
+    1,
+    Math.round(Math.sqrt((12 * sigma * sigma) / 3 + 1) / 2),
+  );
   let a = Float32Array.from(src);
   let b = new Float32Array(src.length);
   for (let pass = 0; pass < 3; pass++) {
@@ -176,7 +347,12 @@ function emission(r, g, b) {
 function inpaintSconces(px, w, h, device) {
   const [bx, by] = device.box;
   const src = Float32Array.from(px);
-  const at = (x, y, c) => src[(Math.min(h - 1, Math.max(0, y)) * w + Math.min(w - 1, Math.max(0, x))) * 3 + c];
+  const at = (x, y, c) =>
+    src[
+      (Math.min(h - 1, Math.max(0, y)) * w + Math.min(w - 1, Math.max(0, x))) *
+        3 +
+        c
+    ];
   for (const [sx, sy, sr] of device.sconces) {
     const cx = sx - bx;
     const cy = sy - by;
@@ -243,7 +419,11 @@ function building(data, width, device) {
   let castMax = 0;
   for (let i = 0; i < n; i++) castMax = Math.max(castMax, cast[i]);
   for (let i = 0; i < n; i++) {
-    const s = clamp((cast[i] / castMax) * 1.5) * device.spillStrength * spillRegion[i] * (1 - light[i]);
+    const s =
+      clamp((cast[i] / castMax) * 1.5) *
+      device.spillStrength *
+      spillRegion[i] *
+      (1 - light[i]);
     out[i * 3] *= 1 - s * 0.56;
     out[i * 3 + 1] *= 1 - s * 0.5;
     out[i * 3 + 2] *= 1 - s * 0.44;
@@ -267,14 +447,19 @@ function lamp(data, width, device) {
       // Lantern: bright glass becomes a dark, faintly reflective housing.
       // Lanterns are narrow and upright.
       const dh = Math.hypot((gx - hx) * 1.45, (gy - hy) * 1.05);
-      const lantern = (1 - smooth(dh, hr * 0.45, hr * 1.05)) * smooth(lum, 0.28, 0.55);
+      const lantern =
+        (1 - smooth(dh, hr * 0.45, hr * 1.05)) * smooth(lum, 0.28, 0.55);
       const housing = [44 + lum * 30, 47 + lum * 30, 49 + lum * 30];
       r += (housing[0] - r) * lantern;
       g += (housing[1] - g) * lantern;
       b += (housing[2] - b) * lantern;
       // Bloom around the lantern.
       const db = Math.hypot(gx - hx, gy - hy);
-      const bloom = Math.exp(-(db * db) / (2 * (hr * 1.1) ** 2)) * 0.3 * (1 - lantern) * smooth(lum, 0.35, 0.7);
+      const bloom =
+        Math.exp(-(db * db) / (2 * (hr * 1.1) ** 2)) *
+        0.3 *
+        (1 - lantern) *
+        smooth(lum, 0.35, 0.7);
       // Pool of light on the ground, strongest under the lamp.
       const dp = Math.hypot((gx - px) / prx, (gy - py) / pry);
       const pool = Math.exp(-(dp * dp) * 1.6) * strength;
@@ -290,14 +475,19 @@ function lamp(data, width, device) {
 async function main() {
   const previewIndex = process.argv.indexOf("--preview");
   const previewDir = previewIndex > 0 ? process.argv[previewIndex + 1] : null;
-  const { data, info } = await sharp(SOURCE).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  const { data, info } = await sharp(SOURCE)
+    .removeAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
   await mkdir(OUT_DIR, { recursive: true });
   if (previewDir) await mkdir(previewDir, { recursive: true });
   const composite = previewDir ? Buffer.from(data) : null;
 
   for (const [id, device] of Object.entries(DEVICES)) {
     const [bx, by, w, h] = device.box;
-    const target = device.head ? lamp(data, info.width, device) : building(data, info.width, device);
+    const target = device.head
+      ? lamp(data, info.width, device)
+      : building(data, info.width, device);
     // Alpha follows the size of the change and fades to zero at the patch
     // edge, so the patch disappears into the photo without a seam.
     const alpha = new Float32Array(w * h);
@@ -305,7 +495,9 @@ async function main() {
       for (let x = 0; x < w; x++) {
         const i = y * w + x;
         const o = ((by + y) * info.width + bx + x) * 3;
-        const diff = Math.max(...[0, 1, 2].map((c) => Math.abs(target[i * 3 + c] - data[o + c])));
+        const diff = Math.max(
+          ...[0, 1, 2].map((c) => Math.abs(target[i * 3 + c] - data[o + c])),
+        );
         const edge = Math.min(x, y, w - 1 - x, h - 1 - y);
         alpha[i] = clamp(diff / 5) * smooth(edge, 0, 4);
       }
@@ -319,18 +511,26 @@ async function main() {
       if (composite) {
         const o = ((by + Math.floor(i / w)) * info.width + bx + (i % w)) * 3;
         for (let c = 0; c < 3; c++)
-          composite[o + c] = Math.round(data[o + c] + (rgba[i * 4 + c] - data[o + c]) * soft[i]);
+          composite[o + c] = Math.round(
+            data[o + c] + (rgba[i * 4 + c] - data[o + c]) * soft[i],
+          );
       }
     }
     const file = path.join(OUT_DIR, `${id.toLowerCase()}-off.webp`);
-    const { size } = await sharp(rgba, { raw: { width: w, height: h, channels: 4 } })
+    const { size } = await sharp(rgba, {
+      raw: { width: w, height: h, channels: 4 },
+    })
       .webp({ quality: 92, alphaQuality: 100, smartSubsample: true })
       .toFile(file);
-    console.log(`${id}: ${file} ${w}×${h} at ${bx},${by} (${(size / 1024).toFixed(1)} kB)`);
+    console.log(
+      `${id}: ${file} ${w}×${h} at ${bx},${by} (${(size / 1024).toFixed(1)} kB)`,
+    );
   }
 
   if (previewDir) {
-    await sharp(composite, { raw: { width: info.width, height: info.height, channels: 3 } })
+    await sharp(composite, {
+      raw: { width: info.width, height: info.height, channels: 3 },
+    })
       .png()
       .toFile(path.join(previewDir, "all-off.png"));
   }

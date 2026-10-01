@@ -472,7 +472,13 @@ const CAR_VARIANTS = [
   { body: "suv", paint: "#6d7470", side: "#4d5350", roof: "#777e7a" },
   { body: "van", paint: "#c3c3bd", side: "#95958f", roof: "#cdcdc7" },
   { body: "sports", paint: "#b3261e" },
-  { body: "bus", paint: "#d6d5ce", side: "#b3b2ab", roof: "#dcdbd4", stripe: "#1f6f80" },
+  {
+    body: "bus",
+    paint: "#d6d5ce",
+    side: "#b3b2ab",
+    roof: "#dcdbd4",
+    stripe: "#1f6f80",
+  },
   { body: "truck", paint: "#2f5a78", box: "#d3d1ca" },
 ];
 const JERSEYS = [
@@ -551,8 +557,17 @@ const KINDS = {
   },
 };
 // Which lanes each kind uses.
-const MODE = { car: "road", cyclist: "road", pedestrian: "walk", boat: "water" };
-const LANE_KINDS = { road: ["car", "cyclist"], walk: ["pedestrian"], water: ["boat"] };
+const MODE = {
+  car: "road",
+  cyclist: "road",
+  pedestrian: "walk",
+  boat: "water",
+};
+const LANE_KINDS = {
+  road: ["car", "cyclist"],
+  walk: ["pedestrian"],
+  water: ["boat"],
+};
 const CAR_COUNT = 5;
 const CYCLIST_COUNT = 3;
 const CYCLIST_SIZE = 1.15;
@@ -824,7 +839,11 @@ function svg(tag, attributes, parent) {
 // the camera as the vehicle's sides. A car element is rebuilt for its body
 // type each time it enters the board.
 function createCar(layer) {
-  return { element: svg("g", { class: "city-traffic-car" }, layer), layers: [], tails: [] };
+  return {
+    element: svg("g", { class: "city-traffic-car" }, layer),
+    layers: [],
+    tails: [],
+  };
 }
 
 function styleCar(car, variant) {
@@ -832,7 +851,11 @@ function styleCar(car, variant) {
   car.element.dataset.body = variant.body;
   car.layers = [];
   car.tails = [];
-  const tones = { side: mix(variant.paint, "#0b1014", 0.3), roof: mix(variant.paint, "#ffffff", 0.05), ...variant };
+  const tones = {
+    side: mix(variant.paint, "#0b1014", 0.3),
+    roof: mix(variant.paint, "#ffffff", 0.05),
+    ...variant,
+  };
   return BODY_BUILDERS[variant.body](car, tones);
 }
 
@@ -846,13 +869,21 @@ const lerp = (a, b, t) => a + (b - a) * t;
 function mix(from, to, amount) {
   const channel = (hex, i) => parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16);
   return `#${[0, 1, 2]
-    .map((i) => Math.round(lerp(channel(from, i), channel(to, i), amount)).toString(16).padStart(2, "0"))
+    .map((i) =>
+      Math.round(lerp(channel(from, i), channel(to, i), amount))
+        .toString(16)
+        .padStart(2, "0"),
+    )
     .join("")}`;
 }
 
 // Plan outline seen from above: straight sides, ends that round off and
 // narrow by `taper`.
-function outline(length, width, { nose = 0.25, tail = 0.22, taper = 0.14, x = 0 } = {}) {
+function outline(
+  length,
+  width,
+  { nose = 0.25, tail = 0.22, taper = 0.14, x = 0 } = {},
+) {
   const hl = length / 2;
   const hw = width / 2;
   const end = hw * (1 - taper);
@@ -880,7 +911,8 @@ function bodyKit(car) {
   return {
     id,
     // A filled slice at `height`.
-    slab: (height, d, fill, extra = {}) => layer(height, svg("path", { d, fill, ...extra }, car.element)),
+    slab: (height, d, fill, extra = {}) =>
+      layer(height, svg("path", { d, fill, ...extra }, car.element)),
     group: (height, extra = {}) => layer(height, svg("g", extra, car.element)),
     // A clip path of the given outline, for slices that vary along the body.
     clip(d) {
@@ -890,19 +922,29 @@ function bodyKit(car) {
     },
     // Paint with a highlight down the middle, as on a curved panel.
     sheen(color, name) {
-      const gradient = svg("linearGradient", { id: `${id}-${name}`, x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+      const gradient = svg(
+        "linearGradient",
+        { id: `${id}-${name}`, x1: 0, y1: 0, x2: 0, y2: 1 },
+        defs,
+      );
       [
         [0, mix(color, "#0b1014", 0.3)],
         [0.26, color],
         [0.5, mix(color, "#ffffff", 0.2)],
         [0.74, color],
         [1, mix(color, "#0b1014", 0.3)],
-      ].forEach(([offset, stop]) => svg("stop", { offset, "stop-color": stop }, gradient));
+      ].forEach(([offset, stop]) =>
+        svg("stop", { offset, "stop-color": stop }, gradient),
+      );
       return `url(#${id}-${name})`;
     },
     // Glass darkening towards the front, catching the sky towards the rear.
     glass(name, light) {
-      const gradient = svg("linearGradient", { id: `${id}-${name}`, x1: 1, y1: 0, x2: 0, y2: 0 }, defs);
+      const gradient = svg(
+        "linearGradient",
+        { id: `${id}-${name}`, x1: 1, y1: 0, x2: 0, y2: 0 },
+        defs,
+      );
       svg("stop", { offset: 0, "stop-color": "#141d23" }, gradient);
       svg("stop", { offset: 1, "stop-color": light }, gradient);
       return `url(#${id}-${name})`;
@@ -913,8 +955,24 @@ function bodyKit(car) {
 
 function shadowSlices(kit, length, width, shape) {
   const shadow = kit.group(0);
-  svg("path", { d: outline(length + 3, width + 3, shape), fill: "#0b1014", "fill-opacity": 0.13 }, shadow);
-  svg("path", { d: outline(length + 0.6, width + 0.6, shape), fill: "#0b1014", "fill-opacity": 0.24 }, shadow);
+  svg(
+    "path",
+    {
+      d: outline(length + 3, width + 3, shape),
+      fill: "#0b1014",
+      "fill-opacity": 0.13,
+    },
+    shadow,
+  );
+  svg(
+    "path",
+    {
+      d: outline(length + 0.6, width + 0.6, shape),
+      fill: "#0b1014",
+      "fill-opacity": 0.24,
+    },
+    shadow,
+  );
 }
 
 // Tyres as dark slices at each wheel, flush with the body sides.
@@ -924,18 +982,50 @@ function wheelSlices(kit, height, axles, width, tyre, radius) {
     for (const side of [-1, 1])
       svg(
         "rect",
-        { x: f2(x - radius), y: f2(side > 0 ? width / 2 - tyre : -width / 2), width: f2(radius * 2), height: f2(tyre), rx: f2(radius * 0.45) },
+        {
+          x: f2(x - radius),
+          y: f2(side > 0 ? width / 2 - tyre : -width / 2),
+          width: f2(radius * 2),
+          height: f2(tyre),
+          rx: f2(radius * 0.45),
+        },
         group,
       );
 }
 
-function lampSlices(kit, car, { length, width, headHeight, tailHeight, inset = 3.2, size = 2.1 }) {
+function lampSlices(
+  kit,
+  car,
+  { length, width, headHeight, tailHeight, inset = 3.2, size = 2.1 },
+) {
   const heads = kit.group(headHeight, { fill: "#f3e7cd" });
   const tails = kit.group(tailHeight, { fill: "#b5332b", "fill-opacity": 0.6 });
   for (const side of [-1, 1]) {
     const y = side > 0 ? width / 2 - inset : -width / 2 + inset - size;
-    svg("rect", { x: f2(length / 2 - 1.7), y: f2(y), width: 1.5, height: f2(size), rx: 0.6 }, heads);
-    car.tails.push(svg("rect", { x: f2(-length / 2 + 0.2), y: f2(y), width: 1.4, height: f2(size), rx: 0.6 }, tails));
+    svg(
+      "rect",
+      {
+        x: f2(length / 2 - 1.7),
+        y: f2(y),
+        width: 1.5,
+        height: f2(size),
+        rx: 0.6,
+      },
+      heads,
+    );
+    car.tails.push(
+      svg(
+        "rect",
+        {
+          x: f2(-length / 2 + 0.2),
+          y: f2(y),
+          width: 1.4,
+          height: f2(size),
+          rx: 0.6,
+        },
+        tails,
+      ),
+    );
   }
 }
 
@@ -943,11 +1033,65 @@ function lampSlices(kit, car, { length, width, headHeight, tailHeight, inset = 3
 // wheel radius, sill/belt/roof heights, and where the glasshouse starts and
 // ends at the belt and at the roof (rake of windscreen and rear window).
 const PASSENGER_CARS = {
-  sedan: { L: 33, W: 13.5, shape: { nose: 0.15, tail: 0.12, taper: 0.13 }, axles: [-9.8, 9.8], wheel: 2.3, sill: 2, belt: 6, roof: 10.2, cabin: { belt: [-10.2, 6.2], roof: [-8.2, 2.3] } },
-  hatch: { L: 28.5, W: 12.8, shape: { nose: 0.16, tail: 0.08, taper: 0.12 }, axles: [-8.8, 8.6], wheel: 2.2, sill: 2, belt: 6, roof: 10.4, cabin: { belt: [-12.9, 4.4], roof: [-12.3, 1.2] } },
-  estate: { L: 33, W: 13.4, shape: { nose: 0.15, tail: 0.08, taper: 0.12 }, axles: [-9.6, 9.9], wheel: 2.3, sill: 2, belt: 6, roof: 10.4, cabin: { belt: [-15.6, 6.2], roof: [-15.2, 2.2] }, rails: true },
-  suv: { L: 32, W: 14, shape: { nose: 0.14, tail: 0.08, taper: 0.1 }, axles: [-9.8, 9.6], wheel: 2.6, sill: 2.6, belt: 7.2, roof: 12.2, cabin: { belt: [-14.6, 5.4], roof: [-14.2, 1.9] }, rails: true },
-  sports: { L: 31, W: 13.6, shape: { nose: 0.2, tail: 0.14, taper: 0.16 }, axles: [-8.8, 9.5], wheel: 2.4, sill: 1.6, belt: 4.4, roof: 7.6, cabin: { belt: [-11.2, 3.8], roof: [-7.4, -0.6] }, glassInset: [1.8, 3.4], spoiler: true },
+  sedan: {
+    L: 33,
+    W: 13.5,
+    shape: { nose: 0.15, tail: 0.12, taper: 0.13 },
+    axles: [-9.8, 9.8],
+    wheel: 2.3,
+    sill: 2,
+    belt: 6,
+    roof: 10.2,
+    cabin: { belt: [-10.2, 6.2], roof: [-8.2, 2.3] },
+  },
+  hatch: {
+    L: 28.5,
+    W: 12.8,
+    shape: { nose: 0.16, tail: 0.08, taper: 0.12 },
+    axles: [-8.8, 8.6],
+    wheel: 2.2,
+    sill: 2,
+    belt: 6,
+    roof: 10.4,
+    cabin: { belt: [-12.9, 4.4], roof: [-12.3, 1.2] },
+  },
+  estate: {
+    L: 33,
+    W: 13.4,
+    shape: { nose: 0.15, tail: 0.08, taper: 0.12 },
+    axles: [-9.6, 9.9],
+    wheel: 2.3,
+    sill: 2,
+    belt: 6,
+    roof: 10.4,
+    cabin: { belt: [-15.6, 6.2], roof: [-15.2, 2.2] },
+    rails: true,
+  },
+  suv: {
+    L: 32,
+    W: 14,
+    shape: { nose: 0.14, tail: 0.08, taper: 0.1 },
+    axles: [-9.8, 9.6],
+    wheel: 2.6,
+    sill: 2.6,
+    belt: 7.2,
+    roof: 12.2,
+    cabin: { belt: [-14.6, 5.4], roof: [-14.2, 1.9] },
+    rails: true,
+  },
+  sports: {
+    L: 31,
+    W: 13.6,
+    shape: { nose: 0.2, tail: 0.14, taper: 0.16 },
+    axles: [-8.8, 9.5],
+    wheel: 2.4,
+    sill: 1.6,
+    belt: 4.4,
+    roof: 7.6,
+    cabin: { belt: [-11.2, 3.8], roof: [-7.4, -0.6] },
+    glassInset: [1.8, 3.4],
+    spoiler: true,
+  },
 };
 
 function passengerBody(car, variant) {
@@ -964,29 +1108,65 @@ function passengerBody(car, variant) {
   for (let height = sill + 1; height < belt - 1.4; height += 1)
     kit.slab(height, body(height === sill + 1 ? 0.6 : 0.1), variant.side);
   kit.slab(belt - 1, body(0), mix(variant.side, variant.paint, 0.55));
-  lampSlices(kit, car, { length: L, width: W, headHeight: belt - 1.4, tailHeight: belt - 0.9 });
+  lampSlices(kit, car, {
+    length: L,
+    width: W,
+    headHeight: belt - 1.4,
+    tailHeight: belt - 0.9,
+  });
   // Bonnet and boot, with a highlight down the middle.
-  kit.slab(belt, body(0.3), kit.sheen(variant.paint, "paint"), { stroke: "#0b1014", "stroke-opacity": 0.22, "stroke-width": 0.3 });
+  kit.slab(belt, body(0.3), kit.sheen(variant.paint, "paint"), {
+    stroke: "#0b1014",
+    "stroke-opacity": 0.22,
+    "stroke-width": 0.3,
+  });
   if (spec.spoiler)
-    kit.slab(belt + 0.8, `M${f2(-L / 2 + 0.6)} ${f2(-W / 2 + 1.2)}h1.8v${f2(W - 2.4)}h-1.8z`, "#1d2124");
+    kit.slab(
+      belt + 0.8,
+      `M${f2(-L / 2 + 0.6)} ${f2(-W / 2 + 1.2)}h1.8v${f2(W - 2.4)}h-1.8z`,
+      "#1d2124",
+    );
   // Glasshouse: raked windscreen and rear window, narrowing towards the roof.
   const [insetLow, insetHigh] = spec.glassInset ?? [1.4, 2.8];
   const cabin = (t, extra = 0) => {
     const front = lerp(spec.cabin.belt[1], spec.cabin.roof[1], t);
     const rear = lerp(spec.cabin.belt[0], spec.cabin.roof[0], t);
-    return outline(front - rear, lerp(W - insetLow, W - insetHigh, t) + extra, { nose: 0.16, tail: 0.14, taper: 0.08, x: (front + rear) / 2 });
+    return outline(front - rear, lerp(W - insetLow, W - insetHigh, t) + extra, {
+      nose: 0.16,
+      tail: 0.14,
+      taper: 0.08,
+      x: (front + rear) / 2,
+    });
   };
   const step = (roof - belt - 1.3) / 3;
   kit.slab(belt + 0.9, cabin(0), kit.glass("glass-low", "#3a4b55"));
   kit.slab(belt + 0.9 + step, cabin(0.34), kit.glass("glass-mid", "#4a5d68"));
-  kit.slab(belt + 0.9 + step * 2, cabin(0.68), kit.glass("glass-high", "#5b6e78"));
-  kit.slab(roof, cabin(1), kit.sheen(variant.roof, "roof"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 });
+  kit.slab(
+    belt + 0.9 + step * 2,
+    cabin(0.68),
+    kit.glass("glass-high", "#5b6e78"),
+  );
+  kit.slab(roof, cabin(1), kit.sheen(variant.roof, "roof"), {
+    stroke: "#0b1014",
+    "stroke-opacity": 0.2,
+    "stroke-width": 0.3,
+  });
   if (spec.rails) {
     const rails = kit.group(roof + 0.5, { fill: "#2a2f33" });
     const [rear, front] = spec.cabin.roof;
     const half = (W - insetHigh) / 2 - 0.7;
     for (const y of [-half - 0.3, half - 0.3])
-      svg("rect", { x: f2(rear + 1), y: f2(y), width: f2(front - rear - 2), height: 0.6, rx: 0.3 }, rails);
+      svg(
+        "rect",
+        {
+          x: f2(rear + 1),
+          y: f2(y),
+          width: f2(front - rear - 2),
+          height: 0.6,
+          rx: 0.3,
+        },
+        rails,
+      );
   }
   return L / 2;
 }
@@ -997,7 +1177,11 @@ function bandSlice(kit, height, d, base, caps) {
   const group = kit.group(height, { "clip-path": `url(#${kit.clip(d)})` });
   svg("path", { d, fill: base }, group);
   for (const [x0, x1, fill] of caps)
-    svg("rect", { x: f2(x0), y: -20, width: f2(x1 - x0), height: 40, fill }, group);
+    svg(
+      "rect",
+      { x: f2(x0), y: -20, width: f2(x1 - x0), height: 40, fill },
+      group,
+    );
 }
 
 // Panel van: bonnet and a raked windscreen up front, tall painted body
@@ -1014,7 +1198,8 @@ function vanBody(car, variant) {
   wheelSlices(kit, 1.5, axles, W, 2.2, 2.4);
   kit.slab(2.2, body(1.6), mix(variant.side, "#0b1014", 0.35));
   wheelSlices(kit, 2.6, axles, W, 2.1, 2.3);
-  for (let height = 3.2; height < 6.4; height += 1) kit.slab(height, body(0.1), variant.side);
+  for (let height = 3.2; height < 6.4; height += 1)
+    kit.slab(height, body(0.1), variant.side);
   lampSlices(kit, car, { length: L, width: W, headHeight: 5, tailHeight: 6 });
   const glass = "#2c3a43";
   for (let height = 7; height < 14; height += 1) {
@@ -1022,11 +1207,20 @@ function vanBody(car, variant) {
     const rake = (height - 7) * 0.55;
     bandSlice(kit, height, body(0), variant.side, [
       [L / 2 - 3.2 - rake, L / 2 + 1, height > 7.6 ? glass : variant.side],
-      [L / 2 - 9.5, L / 2 - 4.2 - rake, height > 8.4 && height < 12.8 ? glass : variant.side],
+      [
+        L / 2 - 9.5,
+        L / 2 - 4.2 - rake,
+        height > 8.4 && height < 12.8 ? glass : variant.side,
+      ],
     ]);
   }
   // Roof from the tail to the top of the windscreen.
-  kit.slab(14.5, outline(29.5, W - 0.5, { nose: 0.08, tail: 0.05, taper: 0.06, x: -3.25 }), kit.sheen(variant.roof, "roof"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 });
+  kit.slab(
+    14.5,
+    outline(29.5, W - 0.5, { nose: 0.08, tail: 0.05, taper: 0.06, x: -3.25 }),
+    kit.sheen(variant.roof, "roof"),
+    { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 },
+  );
   return L / 2;
 }
 
@@ -1038,8 +1232,20 @@ function truckBody(car, variant) {
   const W = 16.2;
   const box = variant.box;
   const shape = { nose: 0.02, tail: 0.02, taper: 0.03 };
-  const cab = (inset) => outline(13 - inset, W - inset, { nose: 0.12, tail: 0.04, taper: 0.06, x: 23.5 });
-  const cargo = (inset) => outline(46 - inset, 17 - inset, { nose: 0.02, tail: 0.02, taper: 0.01, x: -7 });
+  const cab = (inset) =>
+    outline(13 - inset, W - inset, {
+      nose: 0.12,
+      tail: 0.04,
+      taper: 0.06,
+      x: 23.5,
+    });
+  const cargo = (inset) =>
+    outline(46 - inset, 17 - inset, {
+      nose: 0.02,
+      tail: 0.02,
+      taper: 0.01,
+      x: -7,
+    });
   shadowSlices(kit, L, 17, shape);
   const axles = [22, -14];
   const slices = [
@@ -1049,18 +1255,63 @@ function truckBody(car, variant) {
     [3.4, () => wheelSlices(kit, 3.4, axles, W, 3, 3)],
   ];
   for (let height = 3.2; height <= 16.4; height += 1.1)
-    slices.push([height, () => bandSlice(kit, height, cab(height < 4 ? 1 : 0), variant.side, [[28.8 - Math.max(0, height - 9) * 0.1, 31, height > 9.5 ? "#26343c" : variant.side], [23.5, 27.2, height > 10 && height < 15.5 ? "#26343c" : variant.side]])]);
-  slices.push([17.2, () => kit.slab(17.2, cab(0.2), kit.sheen(variant.paint, "cab"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 })]);
-  for (let height = 4.6; height <= 21.4; height += 1.2) slices.push([height, () => kit.slab(height, cargo(0), mix(box, "#0b1014", 0.1))]);
-  slices.push([22.4, () => kit.slab(22.4, cargo(0), kit.sheen(box, "box"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.35 })]);
-  slices.push([4.4, () => {
-    const heads = kit.group(4.4, { fill: "#f3e7cd" });
-    for (const y of [-W / 2 + 1.4, W / 2 - 3.6]) svg("rect", { x: f2(L / 2 - 1.6), y: f2(y), width: 1.4, height: 2.2, rx: 0.6 }, heads);
-  }]);
-  slices.push([5.2, () => {
-    const tails = kit.group(5.2, { fill: "#b5332b", "fill-opacity": 0.6 });
-    for (const y of [-8.1, 5.9]) car.tails.push(svg("rect", { x: -30.2, y, width: 1.4, height: 2.2, rx: 0.6 }, tails));
-  }]);
+    slices.push([
+      height,
+      () =>
+        bandSlice(kit, height, cab(height < 4 ? 1 : 0), variant.side, [
+          [
+            28.8 - Math.max(0, height - 9) * 0.1,
+            31,
+            height > 9.5 ? "#26343c" : variant.side,
+          ],
+          [23.5, 27.2, height > 10 && height < 15.5 ? "#26343c" : variant.side],
+        ]),
+    ]);
+  slices.push([
+    17.2,
+    () =>
+      kit.slab(17.2, cab(0.2), kit.sheen(variant.paint, "cab"), {
+        stroke: "#0b1014",
+        "stroke-opacity": 0.2,
+        "stroke-width": 0.3,
+      }),
+  ]);
+  for (let height = 4.6; height <= 21.4; height += 1.2)
+    slices.push([
+      height,
+      () => kit.slab(height, cargo(0), mix(box, "#0b1014", 0.1)),
+    ]);
+  slices.push([
+    22.4,
+    () =>
+      kit.slab(22.4, cargo(0), kit.sheen(box, "box"), {
+        stroke: "#0b1014",
+        "stroke-opacity": 0.2,
+        "stroke-width": 0.35,
+      }),
+  ]);
+  slices.push([
+    4.4,
+    () => {
+      const heads = kit.group(4.4, { fill: "#f3e7cd" });
+      for (const y of [-W / 2 + 1.4, W / 2 - 3.6])
+        svg(
+          "rect",
+          { x: f2(L / 2 - 1.6), y: f2(y), width: 1.4, height: 2.2, rx: 0.6 },
+          heads,
+        );
+    },
+  ]);
+  slices.push([
+    5.2,
+    () => {
+      const tails = kit.group(5.2, { fill: "#b5332b", "fill-opacity": 0.6 });
+      for (const y of [-8.1, 5.9])
+        car.tails.push(
+          svg("rect", { x: -30.2, y, width: 1.4, height: 2.2, rx: 0.6 }, tails),
+        );
+    },
+  ]);
   slices.sort((a, b) => a[0] - b[0]).forEach(([, make]) => make());
   return L / 2;
 }
@@ -1078,10 +1329,25 @@ function busBody(car, variant) {
   kit.slab(2, body(1.4), mix(variant.side, "#0b1014", 0.45));
   wheelSlices(kit, 3.4, axles, W, 2.4, 3.2);
   // Windows with pillars, repeating along the body.
-  const windows = svg("pattern", { id: `${kit.id}-windows`, patternUnits: "userSpaceOnUse", width: 10, height: 40, x: 0.5, y: -20 }, kit.defs);
+  const windows = svg(
+    "pattern",
+    {
+      id: `${kit.id}-windows`,
+      patternUnits: "userSpaceOnUse",
+      width: 10,
+      height: 40,
+      x: 0.5,
+      y: -20,
+    },
+    kit.defs,
+  );
   // Pillars in a tone between paint and glass, so they stay continuous lines
   // when the side is seen at an angle.
-  svg("rect", { width: 10, height: 40, fill: mix(variant.side, "#1b262d", 0.55) }, windows);
+  svg(
+    "rect",
+    { width: 10, height: 40, fill: mix(variant.side, "#1b262d", 0.55) },
+    windows,
+  );
   svg("rect", { x: 1.3, width: 8.7, height: 40, fill: "#1b262d" }, windows);
   // Window-band slices keep a solid windscreen at the front and a solid
   // panel at the rear, clipped to the body's rounded outline.
@@ -1090,8 +1356,28 @@ function busBody(car, variant) {
   const band = (height) => {
     const group = kit.group(height, { "clip-path": `url(#${kit.id}-body)` });
     svg("path", { d: body(0), fill: `url(#${kit.id}-windows)` }, group);
-    svg("rect", { x: f2(L / 2 - 3.2), y: f2(-W / 2), width: 4, height: f2(W), fill: "#1b262d" }, group);
-    svg("rect", { x: f2(-L / 2 - 1), y: f2(-W / 2), width: 3.4, height: f2(W), fill: variant.side }, group);
+    svg(
+      "rect",
+      {
+        x: f2(L / 2 - 3.2),
+        y: f2(-W / 2),
+        width: 4,
+        height: f2(W),
+        fill: "#1b262d",
+      },
+      group,
+    );
+    svg(
+      "rect",
+      {
+        x: f2(-L / 2 - 1),
+        y: f2(-W / 2),
+        width: 3.4,
+        height: f2(W),
+        fill: variant.side,
+      },
+      group,
+    );
   };
   const heights = [];
   for (let height = 3; height < 9; height += 1.5) heights.push(height);
@@ -1099,17 +1385,42 @@ function busBody(car, variant) {
   heights.push(18, 19.5);
   for (const height of heights) {
     if (height >= 9 && height < 18) band(height);
-    else kit.slab(height, body(0), height < 7.5 || height >= 18 ? variant.side : variant.stripe);
+    else
+      kit.slab(
+        height,
+        body(0),
+        height < 7.5 || height >= 18 ? variant.side : variant.stripe,
+      );
   }
-  lampSlices(kit, car, { length: L, width: W, headHeight: 3.6, tailHeight: 5.6, inset: 3.4, size: 2.4 });
+  lampSlices(kit, car, {
+    length: L,
+    width: W,
+    headHeight: 3.6,
+    tailHeight: 5.6,
+    inset: 3.4,
+    size: 2.4,
+  });
   // Lit destination display above the windscreen.
   kit.slab(18.8, `M${f2(L / 2 - 1.3)} -5.2h1.2v10.4h-1.2z`, "#f2a33a");
-  kit.slab(21, body(0), kit.sheen(variant.roof, "roof"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.35 });
+  kit.slab(21, body(0), kit.sheen(variant.roof, "roof"), {
+    stroke: "#0b1014",
+    "stroke-opacity": 0.2,
+    "stroke-width": 0.35,
+  });
   // Roof hatches and the air-conditioning unit.
   const hatches = kit.group(21.1, { fill: "#2b3236", "fill-opacity": 0.55 });
-  for (const x of [-18, -29]) svg("rect", { x, y: -2.6, width: 5.4, height: 5.2, rx: 0.6 }, hatches);
-  kit.slab(22, outline(18, 11.6, { nose: 0.2, tail: 0.2, taper: 0.1, x: 9 }), mix(variant.roof, "#0b1014", 0.18));
-  kit.slab(23.2, outline(17.4, 11, { nose: 0.2, tail: 0.2, taper: 0.1, x: 9 }), kit.sheen(mix(variant.roof, "#0b1014", 0.06), "unit"));
+  for (const x of [-18, -29])
+    svg("rect", { x, y: -2.6, width: 5.4, height: 5.2, rx: 0.6 }, hatches);
+  kit.slab(
+    22,
+    outline(18, 11.6, { nose: 0.2, tail: 0.2, taper: 0.1, x: 9 }),
+    mix(variant.roof, "#0b1014", 0.18),
+  );
+  kit.slab(
+    23.2,
+    outline(17.4, 11, { nose: 0.2, tail: 0.2, taper: 0.1, x: 9 }),
+    kit.sheen(mix(variant.roof, "#0b1014", 0.06), "unit"),
+  );
   return L / 2;
 }
 
@@ -1133,16 +1444,41 @@ const BODY_BUILDERS = {
 // left in the water by wake.js. Units are ground units
 // (about 1.8 per board millimetre).
 function createBoat(layer) {
-  return { element: svg("g", { class: "city-traffic-boat" }, layer), layers: [], tails: [], profiles: [], beam: 0 };
+  return {
+    element: svg("g", { class: "city-traffic-boat" }, layer),
+    layers: [],
+    tails: [],
+    profiles: [],
+    beam: 0,
+  };
 }
 
 // Hull outline seen from above: a fine bow and a square transom.
-const hullOutline = (length, width, x = 0) => outline(length, width, { nose: 0.42, tail: 0.04, taper: 0.9, x });
+const hullOutline = (length, width, x = 0) =>
+  outline(length, width, { nose: 0.42, tail: 0.04, taper: 0.9, x });
 
 const BOAT_VARIANTS = [
-  { type: "sail", hull: "#f2f0ea", stripe: "#1d3450", canvas: "#1e3a5a", sails: true },
-  { type: "sail", hull: "#1f3550", stripe: "#f2f0ea", canvas: "#c9bfa6", sails: true },
-  { type: "sail", hull: "#f2f0ea", stripe: "#7a1f1f", canvas: "#2f4f6f", sails: true },
+  {
+    type: "sail",
+    hull: "#f2f0ea",
+    stripe: "#1d3450",
+    canvas: "#1e3a5a",
+    sails: true,
+  },
+  {
+    type: "sail",
+    hull: "#1f3550",
+    stripe: "#f2f0ea",
+    canvas: "#c9bfa6",
+    sails: true,
+  },
+  {
+    type: "sail",
+    hull: "#f2f0ea",
+    stripe: "#7a1f1f",
+    canvas: "#2f4f6f",
+    sails: true,
+  },
   { type: "motor", hull: "#f4f3ef", stripe: "#23313f", canvas: "#2f4f6f" },
   { type: "motor", hull: "#e9e6de", stripe: "#0f1a24", canvas: "#6b6f72" },
   { type: "fishing", hull: "#2c5f8a", stripe: "#f1efe9", canvas: "#b0452f" },
@@ -1156,7 +1492,12 @@ const BOAT_VARIANTS = [
 function pickBoat(lane, used) {
   const tour = lane.name.startsWith("harbourTour");
   const sea = lane.name.startsWith("sea");
-  const fits = BOAT_VARIANTS.filter((variant) => (tour ? variant.type === "tour" || variant.type === "motor" : variant.type !== "tour" && (sea || variant.type !== "sail" || Math.random() < 0.5)));
+  const fits = BOAT_VARIANTS.filter((variant) =>
+    tour
+      ? variant.type === "tour" || variant.type === "motor"
+      : variant.type !== "tour" &&
+        (sea || variant.type !== "sail" || Math.random() < 0.5),
+  );
   const fresh = fits.filter((variant) => !used.includes(variant));
   return pick(fresh.length ? fresh : fits);
 }
@@ -1168,19 +1509,55 @@ function navLights(kit, length, width, height) {
     [-1, "#ff5a44"],
     [1, "#4cff86"],
   ]) {
-    svg("circle", { cx: f2(length * 0.22), cy: f2(side * width * 0.36), r: 2.2, fill: color, "fill-opacity": 0.25 }, lights);
-    svg("circle", { cx: f2(length * 0.22), cy: f2(side * width * 0.36), r: 0.8, fill: color }, lights);
+    svg(
+      "circle",
+      {
+        cx: f2(length * 0.22),
+        cy: f2(side * width * 0.36),
+        r: 2.2,
+        fill: color,
+        "fill-opacity": 0.25,
+      },
+      lights,
+    );
+    svg(
+      "circle",
+      {
+        cx: f2(length * 0.22),
+        cy: f2(side * width * 0.36),
+        r: 0.8,
+        fill: color,
+      },
+      lights,
+    );
   }
-  svg("circle", { cx: f2(-length / 2 + 1.2), cy: 0, r: 0.8, fill: "#fff8e6" }, lights);
+  svg(
+    "circle",
+    { cx: f2(-length / 2 + 1.2), cy: 0, r: 0.8, fill: "#fff8e6" },
+    lights,
+  );
 }
 
 function boatHull(kit, variant, length, width, freeboard) {
   const hull = (inset) => hullOutline(length - inset, width - inset);
   const shadow = kit.group(0);
-  svg("path", { d: hullOutline(length + 3, width + 3), fill: "#021014", "fill-opacity": 0.28 }, shadow);
+  svg(
+    "path",
+    {
+      d: hullOutline(length + 3, width + 3),
+      fill: "#021014",
+      "fill-opacity": 0.28,
+    },
+    shadow,
+  );
   kit.slab(0.4, hull(1.2), mix(variant.hull, "#0b1014", 0.35));
   kit.slab(1.2, hull(0.5), variant.stripe);
-  for (let height = 2.2; height < freeboard - 0.4; height += 1) kit.slab(height, hull(0), mix(variant.hull, "#0b1014", 0.12 - height * 0.01));
+  for (let height = 2.2; height < freeboard - 0.4; height += 1)
+    kit.slab(
+      height,
+      hull(0),
+      mix(variant.hull, "#0b1014", 0.12 - height * 0.01),
+    );
 }
 
 function boatProfile(boat, extra = {}) {
@@ -1201,23 +1578,80 @@ function styleBoat(boat, variant, lane) {
     const W = 19;
     boat.beam = W;
     boatHull(kit, variant, L, W, 6);
-    kit.slab(6, hullOutline(L - 0.6, W - 0.6), kit.sheen("#f1efe9", "deck"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 });
-    kit.slab(6.2, `M${f2(-L / 2 + 2)} ${f2(-W * 0.28)}h14v${f2(W * 0.56)}h-14z`, "#a8805a");
-    kit.slab(8, outline(L * 0.34, W * 0.56, { nose: 0.3, tail: 0.1, taper: 0.3, x: -2 }), "#e8e6df");
-    kit.slab(8.6, outline(L * 0.32, W * 0.5, { nose: 0.3, tail: 0.1, taper: 0.3, x: -2 }), "#2c3a43");
-    kit.slab(9.4, outline(L * 0.3, W * 0.46, { nose: 0.3, tail: 0.1, taper: 0.3, x: -2 }), kit.sheen("#f4f2ec", "roof"));
+    kit.slab(6, hullOutline(L - 0.6, W - 0.6), kit.sheen("#f1efe9", "deck"), {
+      stroke: "#0b1014",
+      "stroke-opacity": 0.2,
+      "stroke-width": 0.3,
+    });
+    kit.slab(
+      6.2,
+      `M${f2(-L / 2 + 2)} ${f2(-W * 0.28)}h14v${f2(W * 0.56)}h-14z`,
+      "#a8805a",
+    );
+    kit.slab(
+      8,
+      outline(L * 0.34, W * 0.56, { nose: 0.3, tail: 0.1, taper: 0.3, x: -2 }),
+      "#e8e6df",
+    );
+    kit.slab(
+      8.6,
+      outline(L * 0.32, W * 0.5, { nose: 0.3, tail: 0.1, taper: 0.3, x: -2 }),
+      "#2c3a43",
+    );
+    kit.slab(
+      9.4,
+      outline(L * 0.3, W * 0.46, { nose: 0.3, tail: 0.1, taper: 0.3, x: -2 }),
+      kit.sheen("#f4f2ec", "roof"),
+    );
     navLights(kit, L, W, 6.4);
     const mast = 8;
     const profile = boatProfile(boat);
     if (sails) {
       // Mainsail and jib, full of wind.
-      svg("path", { d: `M${mast - 1} -10L${mast - 1} -104Q${mast - 16} -60 ${mast - 30} -12Z`, fill: "#f7f5ee", "fill-opacity": 0.96, stroke: "#c9c6bd", "stroke-width": 0.5 }, profile);
-      svg("path", { d: `M${mast + 1} -96L${L / 2 - 2} -8Q${mast + 14} -30 ${mast + 2} -12Z`, fill: "#eceae2", "fill-opacity": 0.94, stroke: "#c9c6bd", "stroke-width": 0.5 }, profile);
+      svg(
+        "path",
+        {
+          d: `M${mast - 1} -10L${mast - 1} -104Q${mast - 16} -60 ${mast - 30} -12Z`,
+          fill: "#f7f5ee",
+          "fill-opacity": 0.96,
+          stroke: "#c9c6bd",
+          "stroke-width": 0.5,
+        },
+        profile,
+      );
+      svg(
+        "path",
+        {
+          d: `M${mast + 1} -96L${L / 2 - 2} -8Q${mast + 14} -30 ${mast + 2} -12Z`,
+          fill: "#eceae2",
+          "fill-opacity": 0.94,
+          stroke: "#c9c6bd",
+          "stroke-width": 0.5,
+        },
+        profile,
+      );
     } else {
-      svg("path", { d: `M${mast - 30} -12.5h29v-3h-29z`, fill: variant.canvas }, profile);
+      svg(
+        "path",
+        { d: `M${mast - 30} -12.5h29v-3h-29z`, fill: variant.canvas },
+        profile,
+      );
     }
-    svg("path", { d: `M${mast} -6V-108`, stroke: "#c9cdcf", "stroke-width": 1.1 }, profile);
-    svg("path", { d: `M${mast} -108L${L / 2 - 1} -7M${mast} -108L${-L / 2 + 1} -7`, stroke: "#3a4045", "stroke-width": 0.3, "stroke-opacity": 0.8 }, profile);
+    svg(
+      "path",
+      { d: `M${mast} -6V-108`, stroke: "#c9cdcf", "stroke-width": 1.1 },
+      profile,
+    );
+    svg(
+      "path",
+      {
+        d: `M${mast} -108L${L / 2 - 1} -7M${mast} -108L${-L / 2 + 1} -7`,
+        stroke: "#3a4045",
+        "stroke-width": 0.3,
+        "stroke-opacity": 0.8,
+      },
+      profile,
+    );
     svg("circle", { cx: mast, cy: -108, r: 1.1, fill: "#fff8e6" }, profile);
     return L / 2;
   }
@@ -1226,19 +1660,60 @@ function styleBoat(boat, variant, lane) {
     const W = 22;
     boat.beam = W;
     boatHull(kit, variant, L, W, 7);
-    kit.slab(7, hullOutline(L - 0.6, W - 0.6), kit.sheen("#f3f1ec", "deck"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 });
-    kit.slab(7.2, `M${f2(-L / 2 + 1.5)} ${f2(-W * 0.36)}h11v${f2(W * 0.72)}h-11z`, "#a8805a");
-    const cabin = (inset, x = -3) => outline(L * 0.5 - inset, W * 0.78 - inset, { nose: 0.35, tail: 0.08, taper: 0.4, x });
-    for (let height = 8; height < 13; height += 1) kit.slab(height, cabin(0), height > 9.4 && height < 12 ? "#26343e" : "#eeede8");
-    kit.slab(13, cabin(0.6), kit.sheen("#f6f5f1", "roof"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 });
-    kit.slab(14.2, outline(L * 0.26, W * 0.6, { nose: 0.2, tail: 0.1, taper: 0.2, x: -9 }), "#f0efea");
-    kit.slab(17.5, outline(L * 0.2, W * 0.62, { nose: 0.1, tail: 0.1, taper: 0.1, x: -11 }), variant.canvas);
+    kit.slab(7, hullOutline(L - 0.6, W - 0.6), kit.sheen("#f3f1ec", "deck"), {
+      stroke: "#0b1014",
+      "stroke-opacity": 0.2,
+      "stroke-width": 0.3,
+    });
+    kit.slab(
+      7.2,
+      `M${f2(-L / 2 + 1.5)} ${f2(-W * 0.36)}h11v${f2(W * 0.72)}h-11z`,
+      "#a8805a",
+    );
+    const cabin = (inset, x = -3) =>
+      outline(L * 0.5 - inset, W * 0.78 - inset, {
+        nose: 0.35,
+        tail: 0.08,
+        taper: 0.4,
+        x,
+      });
+    for (let height = 8; height < 13; height += 1)
+      kit.slab(
+        height,
+        cabin(0),
+        height > 9.4 && height < 12 ? "#26343e" : "#eeede8",
+      );
+    kit.slab(13, cabin(0.6), kit.sheen("#f6f5f1", "roof"), {
+      stroke: "#0b1014",
+      "stroke-opacity": 0.2,
+      "stroke-width": 0.3,
+    });
+    kit.slab(
+      14.2,
+      outline(L * 0.26, W * 0.6, { nose: 0.2, tail: 0.1, taper: 0.2, x: -9 }),
+      "#f0efea",
+    );
+    kit.slab(
+      17.5,
+      outline(L * 0.2, W * 0.62, { nose: 0.1, tail: 0.1, taper: 0.1, x: -11 }),
+      variant.canvas,
+    );
     // Cabin lights at dusk.
     const glow = kit.group(10.6, { fill: "#ffd99a", "fill-opacity": 0.85 });
-    for (const x of [-12, -4, 4]) for (const side of [-1, 1]) svg("rect", { x, y: f2(side * W * 0.39 - 0.6), width: 5, height: 1.2, rx: 0.5 }, glow);
+    for (const x of [-12, -4, 4])
+      for (const side of [-1, 1])
+        svg(
+          "rect",
+          { x, y: f2(side * W * 0.39 - 0.6), width: 5, height: 1.2, rx: 0.5 },
+          glow,
+        );
     navLights(kit, L, W, 7.4);
     const profile = boatProfile(boat);
-    svg("path", { d: "M-6 -17V-25M-6 -25h-4", stroke: "#dfe2e3", "stroke-width": 0.9 }, profile);
+    svg(
+      "path",
+      { d: "M-6 -17V-25M-6 -25h-4", stroke: "#dfe2e3", "stroke-width": 0.9 },
+      profile,
+    );
     return L / 2;
   }
   if (variant.type === "fishing") {
@@ -1248,12 +1723,27 @@ function styleBoat(boat, variant, lane) {
     boatHull(kit, variant, L, W, 6);
     kit.slab(6, hullOutline(L - 0.8, W - 0.8), "#cfd2cf");
     kit.slab(6.4, `M${f2(-L / 2 + 3)} -5.5h13v11h-13z`, variant.canvas);
-    const house = (inset) => outline(L * 0.26 - inset, W * 0.66 - inset, { nose: 0.1, tail: 0.1, taper: 0.1, x: 5 });
-    for (let height = 7; height < 14; height += 1) kit.slab(height, house(0), height > 9.4 && height < 12.2 ? "#27343d" : "#f1efe9");
+    const house = (inset) =>
+      outline(L * 0.26 - inset, W * 0.66 - inset, {
+        nose: 0.1,
+        tail: 0.1,
+        taper: 0.1,
+        x: 5,
+      });
+    for (let height = 7; height < 14; height += 1)
+      kit.slab(
+        height,
+        house(0),
+        height > 9.4 && height < 12.2 ? "#27343d" : "#f1efe9",
+      );
     kit.slab(14, house(0.5), kit.sheen("#e9e7e0", "roof"));
     navLights(kit, L, W, 6.4);
     const profile = boatProfile(boat);
-    svg("path", { d: "M5 -14V-34M5 -30L-18 -8", stroke: "#3a4045", "stroke-width": 0.8 }, profile);
+    svg(
+      "path",
+      { d: "M5 -14V-34M5 -30L-18 -8", stroke: "#3a4045", "stroke-width": 0.8 },
+      profile,
+    );
     svg("circle", { cx: 5, cy: -34, r: 1.1, fill: "#fff8e6" }, profile);
     return L / 2;
   }
@@ -1262,8 +1752,17 @@ function styleBoat(boat, variant, lane) {
     const W = 14;
     boat.beam = W;
     const shadow = kit.group(0);
-    svg("path", { d: hullOutline(L + 3, W + 3), fill: "#021014", "fill-opacity": 0.28 }, shadow);
-    for (let height = 0.6; height < 3.6; height += 1) kit.slab(height, hullOutline(L, W), height < 1.4 ? variant.stripe : mix(variant.hull, "#0b1014", 0.1));
+    svg(
+      "path",
+      { d: hullOutline(L + 3, W + 3), fill: "#021014", "fill-opacity": 0.28 },
+      shadow,
+    );
+    for (let height = 0.6; height < 3.6; height += 1)
+      kit.slab(
+        height,
+        hullOutline(L, W),
+        height < 1.4 ? variant.stripe : mix(variant.hull, "#0b1014", 0.1),
+      );
     kit.slab(3.6, hullOutline(L - 4, W - 5), "#2a2e31");
     kit.slab(5.5, `M-2 -2.8h6v5.6h-6z`, "#e9e7e0");
     kit.slab(7.5, `M-6 -2.2h4v4.4h-4z`, "#34495e");
@@ -1276,17 +1775,56 @@ function styleBoat(boat, variant, lane) {
   const W = 30;
   boat.beam = W;
   boatHull(kit, variant, L, W, 8);
-  kit.slab(8, hullOutline(L - 0.6, W - 0.6), kit.sheen("#f1f0ec", "deck"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 });
-  const cabin = (inset) => outline(L * 0.72 - inset, W * 0.84 - inset, { nose: 0.12, tail: 0.06, taper: 0.2, x: -4 });
-  for (let height = 9; height < 18; height += 1) kit.slab(height, cabin(0), height > 10.4 && height < 15.6 ? "#ffd99a" : "#f2f1ec");
-  kit.slab(18, cabin(0.4), kit.sheen("#f4f3ef", "roof"), { stroke: "#0b1014", "stroke-opacity": 0.2, "stroke-width": 0.3 });
+  kit.slab(8, hullOutline(L - 0.6, W - 0.6), kit.sheen("#f1f0ec", "deck"), {
+    stroke: "#0b1014",
+    "stroke-opacity": 0.2,
+    "stroke-width": 0.3,
+  });
+  const cabin = (inset) =>
+    outline(L * 0.72 - inset, W * 0.84 - inset, {
+      nose: 0.12,
+      tail: 0.06,
+      taper: 0.2,
+      x: -4,
+    });
+  for (let height = 9; height < 18; height += 1)
+    kit.slab(
+      height,
+      cabin(0),
+      height > 10.4 && height < 15.6 ? "#ffd99a" : "#f2f1ec",
+    );
+  kit.slab(18, cabin(0.4), kit.sheen("#f4f3ef", "roof"), {
+    stroke: "#0b1014",
+    "stroke-opacity": 0.2,
+    "stroke-width": 0.3,
+  });
   // Window mullions on the lit band.
   const mullions = kit.group(15.2, { fill: "#f2f1ec" });
-  for (let x = -40; x < 32; x += 6) for (const side of [-1, 1]) svg("rect", { x, y: f2(side * W * 0.42 - 0.8), width: 1, height: 1.6 }, mullions);
-  const rail = kit.group(21, { fill: "none", stroke: "#dfe2e3", "stroke-width": 0.6 });
+  for (let x = -40; x < 32; x += 6)
+    for (const side of [-1, 1])
+      svg(
+        "rect",
+        { x, y: f2(side * W * 0.42 - 0.8), width: 1, height: 1.6 },
+        mullions,
+      );
+  const rail = kit.group(21, {
+    fill: "none",
+    stroke: "#dfe2e3",
+    "stroke-width": 0.6,
+  });
   svg("path", { d: cabin(1.2) }, rail);
   const people = kit.group(20.5);
-  for (let i = 0; i < 9; i++) svg("circle", { cx: f2(-34 + i * 7.5 + random(-1.5, 1.5)), cy: f2(random(-8, 8)), r: 1.5, fill: pick(OUTFIT.tops) }, people);
+  for (let i = 0; i < 9; i++)
+    svg(
+      "circle",
+      {
+        cx: f2(-34 + i * 7.5 + random(-1.5, 1.5)),
+        cy: f2(random(-8, 8)),
+        r: 1.5,
+        fill: pick(OUTFIT.tops),
+      },
+      people,
+    );
   navLights(kit, L, W, 8.4);
   return L / 2;
 }
@@ -1674,7 +2212,11 @@ const CITY = {
   walks: WALKS,
   occluders: OCCLUDERS,
   actors: ACTORS,
-  counts: { car: CAR_COUNT, cyclist: CYCLIST_COUNT, pedestrian: PEDESTRIAN_COUNT },
+  counts: {
+    car: CAR_COUNT,
+    cyclist: CYCLIST_COUNT,
+    pedestrian: PEDESTRIAN_COUNT,
+  },
   counter: COUNTER,
 };
 
@@ -1706,7 +2248,9 @@ async function startTraffic(root, layer, map) {
   // Walks run both ways; walks may also sit among the routes (mode "walk").
   const walks = {
     ...(map.walks ?? {}),
-    ...Object.fromEntries(Object.entries(map.routes).filter(([, route]) => route.mode === "walk")),
+    ...Object.fromEntries(
+      Object.entries(map.routes).filter(([, route]) => route.mode === "walk"),
+    ),
   };
   const specs = [
     ...Object.entries(map.routes).filter(([, route]) => route.mode !== "walk"),
@@ -1726,7 +2270,9 @@ async function startTraffic(root, layer, map) {
   // One lane per idle slice keeps every set-up task short.
   const lanes = [];
   for (const [name, spec] of specs) {
-    lanes.push(buildRoute(name, spec, { prefix: map.id, counter: map.counter }));
+    lanes.push(
+      buildRoute(name, spec, { prefix: map.id, counter: map.counter }),
+    );
     await idle();
   }
   const defs = svg("defs", {}, null);
@@ -1734,9 +2280,21 @@ async function startTraffic(root, layer, map) {
   for (const lane of lanes) {
     if (map.masks) {
       // A mask, so overlapping outlines of scenery still hide what is behind.
-      const mask = svg("mask", { id: lane.clipId, maskUnits: "userSpaceOnUse", x: 0, y: 0, width: 1536, height: 1024 }, defs);
+      const mask = svg(
+        "mask",
+        {
+          id: lane.clipId,
+          maskUnits: "userSpaceOnUse",
+          x: 0,
+          y: 0,
+          width: 1536,
+          height: 1024,
+        },
+        defs,
+      );
       svg("path", { d: board, fill: "#fff" }, mask);
-      for (const key of lane.occluders) svg("path", { d: `M${map.occluders[key]}Z`, fill: "#000" }, mask);
+      for (const key of lane.occluders)
+        svg("path", { d: `M${map.occluders[key]}Z`, fill: "#000" }, mask);
       lane.clipAttribute = ["mask", `url(#${lane.clipId})`];
       continue;
     }
@@ -1745,7 +2303,9 @@ async function startTraffic(root, layer, map) {
       { id: lane.clipId, clipPathUnits: "userSpaceOnUse" },
       defs,
     );
-    const holes = lane.occluders.map((key) => `M${map.occluders[key]}Z`).join("");
+    const holes = lane.occluders
+      .map((key) => `M${map.occluders[key]}Z`)
+      .join("");
     svg("path", { d: board + holes, "clip-rule": "evenodd" }, clip);
     lane.clipAttribute = ["clip-path", `url(#${lane.clipId})`];
   }
@@ -1759,7 +2319,9 @@ async function startTraffic(root, layer, map) {
     pedestrian: createPedestrian,
     boat: createBoat,
   };
-  const kinds = Object.entries(map.counts).flatMap(([kind, count]) => Array(count).fill(kind));
+  const kinds = Object.entries(map.counts).flatMap(([kind, count]) =>
+    Array(count).fill(kind),
+  );
   for (const kind of kinds) {
     const art = create[kind](layer);
     art.element.style.display = "none";
@@ -1871,7 +2433,11 @@ async function startTraffic(root, layer, map) {
   const hasGame = kids.length >= 2;
   const ball = {
     art: {
-      element: svg("g", { "clip-path": `url(#${map.id}-traffic-actor-6)` }, layer),
+      element: svg(
+        "g",
+        { "clip-path": `url(#${map.id}-traffic-actor-6)` },
+        layer,
+      ),
     },
     depth: -1,
   };
@@ -1903,8 +2469,12 @@ async function startTraffic(root, layer, map) {
   const paintOrder = [...traffic, ...actors, ...(hasGame ? [ball] : [])];
   const queue = [];
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const counterPanel = root.querySelector(".twin-dashboard [data-reading=cyclists]");
-  const counterPopover = root.querySelector(".city-sensor-popover [data-reading=cyclists]");
+  const counterPanel = root.querySelector(
+    ".twin-dashboard [data-reading=cyclists]",
+  );
+  const counterPopover = root.querySelector(
+    ".city-sensor-popover [data-reading=cyclists]",
+  );
   const en = document.documentElement.lang.startsWith("en");
   let cyclistCount = 124;
   let counterPulse = 0;
@@ -1984,14 +2554,22 @@ async function startTraffic(root, layer, map) {
     entity.next = lane.cells.findIndex((item) => item.in > distance);
     if (entity.next < 0) entity.next = lane.cells.length;
     entity.until = entity.next;
-    entity.stop = lane.stops ? lane.stops.findIndex((item) => item.at > distance) : -1;
+    entity.stop = lane.stops
+      ? lane.stops.findIndex((item) => item.at > distance)
+      : -1;
     if (entity.stop < 0) entity.stop = lane.stops?.length ?? 0;
     entity.dwell = -1;
     if (entity.kind === "boat") {
-      const used = traffic.filter((other) => other.lane && other.kind === "boat").map((other) => other.variant);
+      const used = traffic
+        .filter((other) => other.lane && other.kind === "boat")
+        .map((other) => other.variant);
       entity.variant = pickBoat(lane, used);
       entity.half = styleBoat(art, entity.variant, lane);
-      wakes?.start(entity, lane.occluders.map((key) => map.occluders[key]), art.beam);
+      wakes?.start(
+        entity,
+        lane.occluders.map((key) => map.occluders[key]),
+        art.beam,
+      );
     } else if (entity.kind === "car") {
       const used = traffic
         .filter((other) => other.lane && other.kind === "car")
@@ -2492,12 +3070,20 @@ async function startTraffic(root, layer, map) {
       } else if (entity.kind === "boat") {
         // Riding the swell, leaving a wake in the water.
         wakes?.track(entity, x, y, s, k, clock);
-        const bob = 0.5 * Math.sin(clock * 1.7 + entity.phase) + 0.25 * Math.sin(clock * 2.9 + entity.phase * 2);
+        const bob =
+          0.5 * Math.sin(clock * 1.7 + entity.phase) +
+          0.25 * Math.sin(clock * 2.9 + entity.phase * 2);
         for (const item of art.layers)
-          item.node.setAttribute("transform", ground(item.height + (item.height > 0 ? bob : 0)));
+          item.node.setAttribute(
+            "transform",
+            ground(item.height + (item.height > 0 ? bob : 0)),
+          );
         const lift = f2(y - bob * RISE * size);
         for (const item of art.profiles)
-          item.node.setAttribute("transform", `matrix(${a} ${b} 0 ${f3(RISE * size)} ${f2(x)} ${lift})`);
+          item.node.setAttribute(
+            "transform",
+            `matrix(${a} ${b} 0 ${f3(RISE * size)} ${f2(x)} ${lift})`,
+          );
       } else if (entity.kind === "pedestrian") {
         drawPedestrian(entity, x, y, size, k, cos, sin, ground);
       } else {
