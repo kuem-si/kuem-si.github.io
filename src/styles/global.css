@@ -4374,3 +4374,8 @@ img.nexavia-wordmark {
 [data-scheme="concrete"] + [data-scheme="concrete"] {
   border-top: 1px solid var(--kuem-border);
 }
+/* Header controls share the Small size with the navigation links. */
+html body:has(main) .site-header.site-header .header-contact,
+html body:has(main) .site-header.site-header .language-selector {
+  font-size: var(--kuem-type-small-size);
+}
