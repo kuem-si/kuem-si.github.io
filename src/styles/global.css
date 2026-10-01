@@ -628,16 +628,6 @@ textarea {
     0 24px 64px rgba(0, 0, 0, 0.38),
     0 0 28px rgba(21, 107, 117, 0.13);
 }
-
-.flow-node:focus-visible,
-    .scenario-card:hover,
-    .scenario-card:focus-visible,
-    .action-card:hover,
-    .action-card:focus-visible
-  )
-  * {
-  animation-play-state: paused !important;
-}
 .flow-node {
   display: flex;
   align-items: center;
@@ -761,7 +751,10 @@ textarea {
     margin 0.25s ease,
     opacity 0.25s ease;
 }
-:is(.flow-node, .scenario-card, .action-card):is(:hover, :focus-visible)
+:is(.flow-node, .nexavia-core, .scenario-card, .action-card):is(
+    :hover,
+    :focus-visible
+  )
   .flow-detail {
   max-height: 42px;
   margin-top: var(--kuem-space-8);
