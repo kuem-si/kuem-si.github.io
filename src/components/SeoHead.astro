@@ -9,6 +9,7 @@ import sourceSansLatinExt from "../assets/brand/fonts/SourceSans3-latin-ext-vari
 import spaceGroteskLatin from "../assets/brand/fonts/SpaceGrotesk-latin-variable.woff2";
 import spaceGroteskLatinExt from "../assets/brand/fonts/SpaceGrotesk-latin-ext-variable.woff2";
 import globalCssUrl from "../styles/global.css?url";
+import tokensCss from "../styles/kuem-tokens.css?raw";
 import criticalCss from "../styles/critical.css?raw";
 const {
   title,
@@ -62,7 +63,10 @@ const fontFaces = fonts
 const preloadFonts = fonts.flatMap(({ latin, latinExt }) =>
   locale === "sl" ? [latin, latinExt] : [latin],
 );
-const criticalStyle = fontFaces + criticalCss;
+// The token layer goes first so critical.css can use its variables. Its
+// comments are stripped, since the file is mostly comments.
+const tokens = tokensCss.replace(/\/\*[\s\S]*?\*\//g, "");
+const criticalStyle = fontFaces + tokens + criticalCss;
 const endpointOrigin = PUBLIC_CONTACT_ENDPOINT
   ? new URL(PUBLIC_CONTACT_ENDPOINT).origin
   : null;
@@ -164,7 +168,11 @@ const structuredData = [
   onload="this.media='all'"
 /><noscript><link rel="stylesheet" href={globalCssUrl} /></noscript><link
   rel="icon"
-  href="/favicon.svg"
+  href="/favicon.ico"
+  sizes="32x32"
+/><link rel="icon" href="/favicon.svg" type="image/svg+xml" /><link
+  rel="apple-touch-icon"
+  href="/apple-touch-icon.png"
 />{
   preloadFonts.map((href) => (
     <link

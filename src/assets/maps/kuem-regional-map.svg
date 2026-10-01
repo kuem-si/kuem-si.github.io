@@ -2,11 +2,11 @@
   <title id="map-title">Regionalna prisotnost KUEM</title>
   <desc id="map-desc">Geografsko pravilen zemljevid Slovenije, Hrvaške, Bosne in Hercegovine, Srbije, Črne gore, Kosova, Albanije in Severne Makedonije. Kranj je označen z oranžnim kvadratom, povezave pa vodijo do središča vsake države.</desc>
   <style>
-    .country { fill: #7DB7AB; fill-opacity: 0.035; stroke: #54A3AC; stroke-width: 2.4; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-    .connection { fill: none; stroke: #7DB7AB; stroke-width: 1.8; stroke-linecap: round; opacity: 0.68; vector-effect: non-scaling-stroke; }
-    .endpoint { fill: #7DB7AB; }
-    .origin { fill: #E95D2A; }
-    .country-label { fill: #D9E6E5; font-family: "Space Grotesk", Arial, sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0.025em; text-anchor: middle; }
+    .country { fill: #4FA3AD; fill-opacity: 0.035; stroke: #4FA3AD; stroke-width: 2.4; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+    .connection { fill: none; stroke: #4FA3AD; stroke-width: 1.8; stroke-linecap: round; opacity: 0.68; vector-effect: non-scaling-stroke; }
+    .endpoint { fill: #4FA3AD; }
+    .origin { fill: #F06432; }
+    .country-label { fill: #E8E6E1; font-family: "Space Grotesk", Arial, sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0.025em; text-anchor: middle; }
     .country-label.compact { font-size: 12.5px; letter-spacing: 0.015em; }
     .city-label { fill: #FFFFFF; font-family: "Space Grotesk", Arial, sans-serif; font-size: 18px; font-weight: 600; text-anchor: start; }
   </style>

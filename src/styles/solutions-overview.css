@@ -21,7 +21,7 @@
 }
 .sol-tint,
 .sol-hero {
-  background: #f1f6f7;
+  background: #f3f2f0;
 }
 .sol-page h2 {
   font-size: clamp(30px, 2.8vw, 46px);
@@ -80,7 +80,7 @@
   right: 0;
   top: -20px;
   font-size: 12px;
-  color: #486f7c;
+  color: #596065;
   line-height: 1.5;
   text-align: right;
   text-transform: uppercase;
@@ -92,13 +92,13 @@
   width: calc(100% + 60px);
   height: calc(100% + 50px);
   fill: none;
-  stroke: #c9dce1;
+  stroke: #e8e6e1;
   stroke-width: 1;
   opacity: 0.7;
   pointer-events: none;
 }
 .sol-ambient rect {
-  fill: #aac2c9;
+  fill: #c9c7c1;
   stroke: none;
 }
 .sol-flow {
@@ -231,7 +231,7 @@
   background: #fff;
   display: block;
   padding: 8px 0;
-  border-block: 1px solid #e6edef;
+  border-block: 1px solid #e8e6e1;
   margin: 0;
 }
 .sol-section-nav > .hp-wrap {
@@ -310,7 +310,7 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   line-height: 1.5;
-  color: #486f7c;
+  color: #596065;
 }
 .sol-device-lines {
   stroke: #156b75;
@@ -319,25 +319,25 @@
   animation: sol-line-flow 24s linear infinite;
 }
 .sol-device-drawing {
-  stroke: #365663;
+  stroke: #596065;
   stroke-width: 2;
 }
 .sol-device-drawing rect {
-  fill: #edf3f3;
+  fill: #f3f2f0;
 }
 .sol-device-labels {
   font:
     14px "Source Sans 3",
     sans-serif;
-  fill: #496772;
+  fill: #596065;
 }
 .sol-hub {
-  stroke: #365663;
+  stroke: #596065;
   stroke-width: 2;
   fill: none;
 }
 .sol-hub rect {
-  fill: #365f69;
+  fill: #596065;
 }
 .sol-hub text {
   fill: #fff;
@@ -366,7 +366,7 @@
   width: 100%;
   height: 95%;
   inset: 0;
-  stroke: #6d9ca8;
+  stroke: #4fa3ad;
   stroke-width: 1.2;
   stroke-dasharray: 5 5;
 }
@@ -374,7 +374,7 @@
   position: absolute;
   width: 24%;
   aspect-ratio: 1;
-  border: 1px solid #d5e2e7;
+  border: 1px solid #e8e6e1;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
@@ -417,11 +417,11 @@
 .sol-gateway svg {
   width: 100%;
   height: 100%;
-  stroke: #45606a;
+  stroke: #596065;
   stroke-width: 1.5;
 }
 .sol-gateway rect {
-  fill: #546d75;
+  fill: #596065;
 }
 .sol-gateway span {
   position: absolute;
@@ -439,7 +439,7 @@
   font-size: 12px;
   line-height: 1.5;
   letter-spacing: 0.05em;
-  color: #486f7c;
+  color: #596065;
   text-transform: uppercase;
 }
 .sol-integration {
@@ -515,7 +515,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 5px 16px #36566305;
+  box-shadow: 0 5px 16px #59606505;
 }
 .sol-platform .hp-product-logo {
   width: min(260px, 100%);
@@ -530,7 +530,7 @@
 }
 .sol-integration-benefits {
   padding-left: 20px !important;
-  border-left: 1px solid #c7dce2;
+  border-left: 1px solid #e8e6e1;
 }
 .sol-integration-benefits li {
   border-color: transparent;
@@ -569,7 +569,7 @@
   gap: 40px;
   margin-top: 26px;
   padding: 22px 26px;
-  background: #253238;
+  background: #161a1d;
   border-radius: 6px;
   color: white;
 }
@@ -578,19 +578,19 @@
     700 48px/1 "Space Grotesk",
     sans-serif;
   letter-spacing: 0.06em;
-  border-right: 1px solid #779198;
+  border-right: 1px solid #8b959b;
   padding-right: 40px;
 }
 .sol-kai-panel > p {
   font-size: 17px;
-  color: #e0e8ea;
+  color: #e8e6e1;
   margin: 0;
 }
 .sol-alert {
   display: flex;
   gap: 18px;
   align-items: center;
-  border: 1px solid #d2e3e7;
+  border: 1px solid #e8e6e1;
   border-radius: 6px;
   padding: 15px 20px;
   background: #fff;
@@ -600,14 +600,14 @@
   flex: none;
   width: 34px;
   height: 34px;
-  stroke: #cf4614;
+  stroke: #d84e16;
   stroke-width: 1.5;
 }
 .sol-alert h3 {
   font:
     600 16px/1.3 "Source Sans 3",
     sans-serif;
-  color: #a53b12;
+  color: #d84e16;
   margin: 3px 0 4px;
 }
 .sol-alert p {
@@ -618,33 +618,33 @@
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #64717b;
+  color: #596065;
 }
 .sol-noc {
-  background: #253238;
+  background: #161a1d;
   color: white;
 }
 .sol-noc h2 {
   color: white;
 }
 .sol-noc p {
-  color: #dde6e8;
+  color: #e8e6e1;
 }
 .sol-noc .hp-eyebrow {
-  color: #d6e4e6;
+  color: #e8e6e1;
 }
 .sol-noc .hp-card {
-  border-color: #647c83;
+  border-color: #596065;
   background: transparent;
 }
 .sol-noc .hp-card:hover {
-  border-color: #a4ccca;
+  border-color: #c9c7c1;
 }
 .sol-noc .hp-card h3 {
   color: #fff;
 }
 .sol-noc .hp-icon {
-  color: #a7d5d1;
+  color: #c9c7c1;
 }
 .sol-noc-figure {
   margin: 0;
@@ -664,26 +664,26 @@
   align-items: center;
   gap: 10px;
   font-size: 13px;
-  color: #d4e1e3;
+  color: #e8e6e1;
 }
 .sol-noc-legend i {
   display: block;
   width: 9px;
   height: 9px;
-  background: #89b5b7;
+  background: #8b959b;
   border-radius: 50%;
 }
 .sol-noc-legend .sol-legend-gateway {
   border-radius: 0;
   background: none;
-  border: 1px solid #b6d4d7;
+  border: 1px solid #c9c7c1;
   transform: rotate(45deg);
 }
 .sol-noc-legend .sol-legend-ok {
-  background: #7db7ab;
+  background: #4fa3ad;
 }
 .sol-noc-legend .sol-legend-warning {
-  background: #e95d2a;
+  background: #f06432;
 }
 .sol-noc-figure > svg {
   width: 100%;
@@ -691,7 +691,7 @@
   display: block;
 }
 .sol-noc-edges {
-  stroke: #6e8a93;
+  stroke: #596065;
   stroke-width: 1;
   fill: none;
   opacity: 0.42;
@@ -701,23 +701,23 @@
 }
 .sol-noc-node {
   fill: var(--node-color);
-  stroke: #c8e8e066;
+  stroke: #e8e6e166;
   stroke-width: 1;
 }
 .sol-status-ok {
-  --node-color: #7db7ab;
+  --node-color: #4fa3ad;
 }
 .sol-status-warning {
-  --node-color: #e95d2a;
+  --node-color: #f06432;
 }
 .sol-status-unreachable {
-  --node-color: #d85d61;
+  --node-color: #fe5c58;
 }
 .sol-status-unknown {
-  --node-color: #71868e;
+  --node-color: #596065;
 }
 .sol-status-maintenance {
-  --node-color: #5597c5;
+  --node-color: #4fa3ad;
 }
 .sol-noc-node .sol-node-halo {
   fill: var(--node-color);
@@ -733,7 +733,7 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 20px;
-  color: #cbdce0;
+  color: #e8e6e1;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.07em;
