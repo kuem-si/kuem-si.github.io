@@ -291,7 +291,7 @@ const breadcrumb = {
   <script is:inline slot="head">
     document.documentElement.classList.add("js");
   </script>
-  <section class="nx-hero" aria-labelledby="nx-title">
+  <section class="nx-hero" data-scheme="carbon" aria-labelledby="nx-title">
     <div class="container nx-hero-grid">
       <div class="nx-hero-copy">
         <p class="nx-eyebrow">{copy.eyebrow}</p><h1 id="nx-title">
@@ -308,7 +308,7 @@ const breadcrumb = {
           {copy.traits.map((trait) => <li>{trait}</li>)}
         </ul>
       </div>
-      <figure class="nx-hero-visual">
+      <figure class="nx-hero-visual" data-scheme="white">
         <div class="nx-window">
           <div class="nx-window-bar">
             <span class="nx-dots" aria-hidden="true"><i></i><i></i><i></i></span

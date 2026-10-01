@@ -6,7 +6,7 @@ const { locale } = Astro.props as { locale: Locale };
 const content = solutionsHero[locale];
 ---
 
-<section class="hero solutions-hero" aria-labelledby="solutions-hero-title">
+<section class="hero solutions-hero" data-scheme="carbon" aria-labelledby="solutions-hero-title">
   <div class="container solutions-hero__layout">
     <div class="solutions-hero__copy">
       <p class="eyebrow">{content.eyebrow}</p>

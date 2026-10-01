@@ -672,3 +672,33 @@
     transition: none !important;
   }
 }
+/* Token layer (phase 2, step 2c): a Carbon hero with the architecture on a
+   white panel, and token heading sizes. Comes last on purpose. */
+.solutions-page .explorer-hero {
+  background-color: var(--kuem-background);
+  background-image:
+    linear-gradient(rgba(21, 107, 117, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 107, 117, 0.13) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.explorer-hero .explorer-copy > p:not(.hp-eyebrow) {
+  color: var(--kuem-text-secondary);
+}
+.explorer-hero .architecture {
+  padding: 24px;
+  border-radius: var(--kuem-radius-card);
+}
+.explorer-copy h1 {
+  color: var(--kuem-text-primary);
+  font-size: var(--kuem-type-h1-size);
+  line-height: var(--kuem-type-h1-line-height);
+  letter-spacing: var(--kuem-type-h1-tracking);
+}
+.explorer-open .explorer-copy h1 {
+  font-size: var(--kuem-type-h2-size);
+  line-height: var(--kuem-type-h2-line-height);
+}
+.solution-panel .panel-header h2 {
+  font-size: var(--kuem-type-h3-size);
+  line-height: var(--kuem-type-h3-line-height);
+}

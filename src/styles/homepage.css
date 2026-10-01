@@ -2696,3 +2696,52 @@
     width: 100%;
   }
 }
+/* Token layer (phase 2, step 2c). It comes last so it wins over the older
+   size and colour rules above: the hero is a Carbon surface, and the
+   headings follow the token type scale. */
+.kuem-home .hp-hero h1 {
+  color: var(--kuem-text-primary);
+  font-size: var(--kuem-type-display-size);
+  line-height: var(--kuem-type-display-line-height);
+  letter-spacing: var(--kuem-type-display-tracking);
+}
+.kuem-home h2,
+.hp-product-copy > h2,
+.hp-kai h2 {
+  font-size: var(--kuem-type-h2-size);
+  line-height: var(--kuem-type-h2-line-height);
+  letter-spacing: var(--kuem-type-h2-tracking);
+}
+.kuem-home .hp-trust h2 {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+.kuem-home [data-scheme] {
+  --hp-petrol: var(--kuem-data);
+  --hp-muted: var(--kuem-text-muted);
+}
+.hp-hero {
+  background-color: var(--kuem-background);
+  background-image:
+    linear-gradient(rgba(21, 107, 117, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 107, 117, 0.13) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.hp-hero .hp-eyebrow,
+.hp-hero .hp-node small {
+  color: var(--kuem-text-muted);
+}
+.kuem-home .hp-hero .hp-intro {
+  color: var(--kuem-text-secondary);
+}
+.hp-hero .hp-node {
+  background: var(--kuem-surface-1);
+  border-color: var(--kuem-border);
+  box-shadow: none;
+}
+.hp-hero .hp-node strong {
+  color: var(--kuem-text-primary);
+}
+.hp-hero .hp-outline:hover {
+  background: var(--kuem-surface-1);
+}
