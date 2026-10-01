@@ -5003,17 +5003,17 @@
 }
 @property --focus-x {
   syntax: "<percentage>";
-  inherits: false;
+  inherits: true;
   initial-value: 50%;
 }
 @property --focus-y {
   syntax: "<percentage>";
-  inherits: false;
+  inherits: true;
   initial-value: 50%;
 }
 @property --focus-r {
   syntax: "<percentage>";
-  inherits: false;
+  inherits: true;
   initial-value: 60%;
 }
 .city-art {
@@ -5037,19 +5037,26 @@
   position: absolute;
   inset: 0;
   z-index: 3;
+  overflow: hidden;
   pointer-events: none;
   opacity: 0;
-  background: radial-gradient(
-    ellipse var(--focus-r) calc(var(--focus-r) * 1.1) at var(--focus-x)
-      var(--focus-y),
-    transparent 0 45%,
-    color-mix(in srgb, var(--kuem-background) 55%, transparent) 100%
-  );
   transition:
-    opacity var(--kuem-duration-slow) var(--kuem-ease-standard),
-    --focus-x var(--kuem-duration-slow) var(--kuem-ease-standard),
-    --focus-y var(--kuem-duration-slow) var(--kuem-ease-standard),
-    --focus-r var(--kuem-duration-slow) var(--kuem-ease-standard);
+    opacity var(--twin-scene-fade) var(--kuem-ease-standard),
+    --focus-x var(--twin-scene-move) var(--kuem-ease-standard),
+    --focus-y var(--twin-scene-move) var(--kuem-ease-standard),
+    --focus-r var(--twin-scene-move) var(--kuem-ease-standard);
+}
+/* A flat Carbon dim over the model with a square window on the focused area. */
+.city-focus::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--focus-x) - var(--focus-r) * 0.55);
+  top: calc(var(--focus-y) - var(--focus-r) * 0.6);
+  width: calc(var(--focus-r) * 1.1);
+  height: calc(var(--focus-r) * 1.2);
+  border: 1px solid color-mix(in srgb, var(--kuem-data) 60%, transparent);
+  box-shadow: 0 0 0 300vmax
+    color-mix(in srgb, var(--kuem-carbon) 60%, transparent);
 }
 .city-focus.is-active {
   opacity: 1;
@@ -5780,7 +5787,7 @@
 }
 .flow-link {
   fill: none;
-  stroke: #8fe3e0;
+  stroke: var(--kuem-data);
   stroke-width: 1.2;
   stroke-dasharray: 3 5;
   opacity: 0.4;
@@ -5788,7 +5795,7 @@
   transition: opacity var(--kuem-duration-slow) var(--kuem-ease-standard);
 }
 .flow-link.is-active {
-  stroke: #e4fbf8;
+  stroke: var(--kuem-text-primary);
   opacity: 0.95;
   animation: flow-dash 0.7s linear infinite;
 }
@@ -6338,4 +6345,68 @@ button.twin-timeline-entry:focus-visible {
 .is-paused *::before,
 .is-paused *::after {
   animation-play-state: paused !important;
+}
+
+/* Scene pace: the model moves slower and calmer than the interface. Fades,
+   camera moves and ambient loops are multiples of the data marker's pass, and
+   the pause button and reduced motion still stop all of them. */
+.twin-workspace {
+  --twin-scene-fade: calc(var(--kuem-duration-marker) / 2);
+  --twin-scene-move: calc(var(--kuem-duration-marker) * 0.75);
+  --twin-scene-loop: calc(var(--kuem-duration-marker) * 2);
+}
+.twin-workspace .city-art {
+  transition:
+    scale var(--twin-scene-move) var(--kuem-ease-standard),
+    translate var(--twin-scene-move) var(--kuem-ease-standard);
+}
+.twin-workspace .twin-window,
+.twin-workspace .city-light-overlay,
+.twin-workspace .city-tide,
+.twin-workspace
+  .twin-scene-wrap.has-scenario
+  .city-sensor:not([aria-expanded="true"]),
+.twin-workspace .twin-scene-wrap.has-scenario .city-module-guides {
+  transition-duration: var(--twin-scene-fade);
+}
+.twin-workspace .city-sky.is-easing canvas {
+  transition-duration: var(--twin-scene-move);
+}
+.twin-workspace .city-sensor[data-state="alert"] .city-sensor-dot:before {
+  animation-duration: var(--kuem-duration-marker);
+  animation-timing-function: var(--kuem-ease-standard);
+}
+.twin-workspace .city-sensor-wave,
+.twin-workspace .city-sensor-glow,
+.twin-workspace .city-light-glint,
+.twin-workspace .flow-ring,
+.twin-workspace .tide-pedestal-ring {
+  animation-duration: var(--twin-scene-loop);
+  animation-timing-function: var(--kuem-ease-standard);
+}
+.twin-workspace .city-sensor-wave-delayed {
+  animation-delay: calc(var(--twin-scene-loop) / 2);
+}
+.twin-workspace .flow-link.is-active {
+  animation-duration: var(--twin-scene-fade);
+}
+.twin-workspace .flow-beam {
+  animation-duration: var(--twin-scene-fade);
+}
+@media (prefers-reduced-motion: reduce) {
+  .twin-workspace .city-art,
+  .twin-workspace .city-focus,
+  .twin-workspace .city-sky.is-easing canvas {
+    transition: none;
+  }
+  .twin-workspace .city-sensor[data-state="alert"] .city-sensor-dot:before,
+  .twin-workspace .city-sensor-wave,
+  .twin-workspace .city-sensor-glow,
+  .twin-workspace .city-light-glint,
+  .twin-workspace .flow-ring,
+  .twin-workspace .tide-pedestal-ring,
+  .twin-workspace .flow-link.is-active,
+  .twin-workspace .flow-beam {
+    animation: none;
+  }
 }
