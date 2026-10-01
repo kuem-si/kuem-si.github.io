@@ -554,17 +554,6 @@ html:not(.js) .nx-role-panel[hidden] {
 .nx-integrations {
   background: var(--kuem-white);
 }
-.nx-flow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--kuem-space-16);
-  margin: var(--kuem-space-32) 0;
-}
-.nx-flow > img {
-  width: 180px;
-  height: auto;
-}
 .nx-stories {
   background: var(--kuem-white);
 }
@@ -622,9 +611,6 @@ html:not(.js) .nx-role-panel[hidden] {
   .nx-module-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-  .nx-flow {
-    flex-wrap: wrap;
-  }
   .nx-role-heading {
     align-items: start;
     flex-direction: column;
@@ -654,10 +640,6 @@ html:not(.js) .nx-role-panel[hidden] {
   .nx-module-grid,
   .nx-story-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-  .nx-flow {
-    flex-direction: column;
-    text-align: center;
   }
   .nx-closing-inner {
     align-items: start;
@@ -871,17 +853,6 @@ body:has(.nx-hero) .site-header .header-contact {
    The dashboard window keeps the white scheme. Comes last on purpose. */
 .nx-hero {
   background-color: var(--kuem-background);
-  background-image:
-    linear-gradient(
-      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 48px 48px;
   color: var(--kuem-text-primary);
   padding-block: var(--kuem-space-64);
 }

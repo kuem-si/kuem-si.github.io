@@ -242,17 +242,6 @@
   position: relative;
   padding: var(--kuem-space-64) 0;
   background: var(--kuem-white);
-  background-image:
-    linear-gradient(
-      color-mix(in srgb, var(--kuem-petrol) 4%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--kuem-petrol) 4%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 42px 42px;
 }
 .ab-team-grid {
   display: grid;
@@ -592,17 +581,6 @@ body:has(.ab-page) .site-header .header-contact {
    Comes last on purpose. */
 .ab-hero {
   background-color: var(--kuem-background);
-  background-image:
-    linear-gradient(
-      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 48px 48px;
   padding-block: var(--kuem-space-64);
 }
 .ab-hero .ab-actions .btn-secondary {

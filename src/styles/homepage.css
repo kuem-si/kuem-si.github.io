@@ -114,9 +114,7 @@
 .hp-hero {
   position: relative;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse at 78% 70%, var(--kuem-surface-1), transparent 70%),
-    var(--kuem-surface-1);
+  background: var(--kuem-surface-1);
   padding: var(--kuem-space-64) 0 var(--kuem-space-48);
 }
 .hp-hero-grid {
@@ -2158,17 +2156,6 @@
 }
 .hp-hero {
   background-color: var(--kuem-background);
-  background-image:
-    linear-gradient(
-      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 48px 48px;
 }
 .hp-hero .hp-node small {
   color: var(--kuem-text-muted);
