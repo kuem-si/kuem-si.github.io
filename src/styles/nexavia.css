@@ -944,3 +944,47 @@ body:has(.nx-hero) .site-header .header-contact {
   height: 52px;
   margin: auto;
 }
+/* Token layer (phase 2, step 2c): a Carbon hero and token heading sizes.
+   The dashboard window keeps the white scheme. Comes last on purpose. */
+.nx-hero {
+  background-color: var(--kuem-background);
+  background-image:
+    linear-gradient(rgba(21, 107, 117, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 107, 117, 0.13) 1px, transparent 1px);
+  background-size: 48px 48px;
+  color: var(--kuem-text-primary);
+  padding-block: 4.5rem;
+}
+.nx-hero-visual[data-scheme] {
+  background-color: transparent;
+}
+.nx-hero .nx-eyebrow,
+.nx-hero .nx-actions .btn-secondary,
+.nx-hero .nx-traits li:before {
+  color: var(--kuem-data);
+  border-color: var(--kuem-data);
+}
+.nx-hero .nx-lead {
+  color: var(--kuem-text-secondary);
+}
+.nx-hero .nx-traits {
+  color: var(--kuem-text-muted);
+}
+.nx-hero .nx-traits li + li {
+  border-left-color: var(--kuem-border);
+}
+.nx-hero h1 {
+  font-size: var(--kuem-type-h1-size);
+  line-height: var(--kuem-type-h1-line-height);
+  letter-spacing: var(--kuem-type-h1-tracking);
+}
+.nx-section h2,
+.nx-closing h2 {
+  font-size: var(--kuem-type-h2-size);
+  line-height: var(--kuem-type-h2-line-height);
+  letter-spacing: var(--kuem-type-h2-tracking);
+}
+.nx-role-copy h3 {
+  font-size: var(--kuem-type-h3-size);
+  line-height: var(--kuem-type-h3-line-height);
+}

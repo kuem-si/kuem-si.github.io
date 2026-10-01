@@ -38,16 +38,28 @@ h3 {
   line-height: 1.05;
   margin: 0 0 1rem;
 }
+/* Token type scale (CGP p11). Page titles are H1; only the homepage hero
+   uses Display. */
 h1 {
-  font-size: clamp(3rem, 7vw, 6.8rem);
-  letter-spacing: -0.055em;
+  font-size: var(--kuem-type-h1-size);
+  line-height: var(--kuem-type-h1-line-height);
+  letter-spacing: var(--kuem-type-h1-tracking);
 }
 h2 {
-  font-size: clamp(2rem, 4vw, 3.7rem);
-  letter-spacing: -0.035em;
+  font-size: var(--kuem-type-h2-size);
+  line-height: var(--kuem-type-h2-line-height);
+  letter-spacing: var(--kuem-type-h2-tracking);
 }
 h3 {
-  font-size: 1.35rem;
+  font-size: var(--kuem-type-h3-size);
+  line-height: var(--kuem-type-h3-line-height);
+  letter-spacing: var(--kuem-type-h3-tracking);
+}
+/* Surface schemes: a section with data-scheme="white", "concrete" or
+   "carbon" takes that scheme's background and text colours. */
+[data-scheme] {
+  background-color: var(--kuem-background);
+  color: var(--kuem-text-primary);
 }
 p {
   line-height: 1.65;
@@ -564,7 +576,6 @@ textarea {
     font-size: 16px;
   }
   h1 {
-    font-size: 2rem;
     overflow-wrap: anywhere;
   }
   .hero-grid,

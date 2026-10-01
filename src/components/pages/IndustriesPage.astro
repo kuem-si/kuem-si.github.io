@@ -190,7 +190,7 @@ const scriptData = explorer.map(({ icon: _icon, ...rest }) => rest);
 
 <MainLayout title={copy.title} description={copy.description}>
   <div class="pi-page">
-    <section class="pi-hero" aria-labelledby="pi-title">
+    <section class="pi-hero" data-scheme="carbon" aria-labelledby="pi-title">
       <div class="container pi-hero-grid">
         <div class="pi-hero-copy">
           <p class="pi-eyebrow">{copy.eyebrow}</p><h1 id="pi-title">
@@ -205,7 +205,7 @@ const scriptData = explorer.map(({ icon: _icon, ...rest }) => rest);
             >
           </div>
         </div>
-        <div class="pi-hero-board">
+        <div class="pi-hero-board" data-scheme="white">
           <div class="pi-board-heading">
             <span>{copy.board1}</span><span>{copy.board2}</span>
           </div><div class="pi-hero-cards">
