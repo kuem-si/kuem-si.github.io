@@ -2,8 +2,8 @@
 .hp-node,
 .nx-flow-card {
   background: #ffffffdf;
-  border: 1px solid #e8e6e1;
-  border-radius: 7px;
+  border: 1px solid var(--kuem-concrete);
+  border-radius: var(--kuem-radius-card);
   box-shadow: 0 3px 12px #156b7503;
 }
 .hp-connector,

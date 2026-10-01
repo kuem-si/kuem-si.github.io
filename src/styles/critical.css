@@ -20,7 +20,7 @@ body {
   background: var(--kuem-concrete);
   color: var(--ink);
   font-family: "Source Sans 3", sans-serif;
-  font-size: 18px;
+  font-size: var(--kuem-type-body-size);
 }
 a {
   color: inherit;
@@ -38,7 +38,7 @@ h2,
 h3 {
   font-family: "Space Grotesk", sans-serif;
   line-height: 1.05;
-  margin: 0 0 1rem;
+  margin: 0 0 var(--kuem-space-16);
 }
 /* Token type scale (CGP p11). Page titles are H1; only the homepage hero
    uses Display. */
@@ -76,8 +76,8 @@ p {
   left: 1rem;
   z-index: 100;
   background: var(--kuem-copper);
-  padding: 0.8rem;
-  color: #161a1d;
+  padding: var(--kuem-space-16);
+  color: var(--kuem-carbon);
 }
 .skip-link:focus {
   top: 1rem;
@@ -102,7 +102,7 @@ p {
   top: 0;
   z-index: 30;
   background: rgba(22, 26, 29, 0.78);
-  color: #fff;
+  color: var(--kuem-white);
   border-bottom: 1px solid #3b4247;
   backdrop-filter: blur(12px);
 }
@@ -114,7 +114,7 @@ p {
   min-height: 76px;
   display: flex;
   align-items: center;
-  gap: 1.4rem;
+  gap: var(--kuem-space-24);
 }
 .brand img,
 .site-footer img {
@@ -134,8 +134,8 @@ nav {
 .nav-list > li > a,
 .lang {
   display: block;
-  padding: 0.75rem 0.58rem;
-  font-size: 0.88rem;
+  padding: var(--kuem-space-8) var(--kuem-space-8);
+  font-size: var(--kuem-type-small-size);
 }
 .nav-list a:hover,
 .nav-list a[aria-current] {
@@ -150,7 +150,7 @@ nav {
   top: 100%;
   left: 0;
   min-width: 235px;
-  padding: 0.45rem;
+  padding: var(--kuem-space-8);
   list-style: none;
   background: #1e2428;
   border: 1px solid #3b4247;
@@ -161,12 +161,12 @@ nav {
 }
 .dropdown-menu a {
   display: block;
-  padding: 0.65rem;
+  padding: var(--kuem-space-8);
 }
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: var(--kuem-space-8);
 }
 .menu-toggle {
   display: none;
@@ -179,14 +179,14 @@ nav {
   justify-content: center;
   align-items: center;
   min-height: 46px;
-  padding: 0.72rem 1.1rem;
+  padding: var(--kuem-space-8) var(--kuem-space-16);
   border: 1px solid currentColor;
   font-weight: 600;
 }
 .btn-primary {
   background: var(--kuem-copper);
   border-color: var(--kuem-copper);
-  color: #161a1d;
+  color: var(--kuem-carbon);
 }
 .btn-secondary {
   background: transparent;
@@ -198,7 +198,7 @@ nav {
 .hero,
 .dark {
   background-color: var(--kuem-carbon);
-  color: #fff;
+  color: var(--kuem-white);
   background-image:
     linear-gradient(rgba(21, 107, 117, 0.13) 1px, transparent 1px),
     linear-gradient(90deg, rgba(21, 107, 117, 0.13) 1px, transparent 1px);
@@ -208,7 +208,7 @@ nav {
   min-height: 680px;
   display: grid;
   align-items: center;
-  padding: 7rem 0;
+  padding: var(--kuem-space-96) 0;
 }
 .contact-hero {
   min-height: 520px;
@@ -217,7 +217,7 @@ nav {
 .split {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
-  gap: 4rem;
+  gap: var(--kuem-space-64);
   align-items: center;
 }
 .hero-grid > *,
@@ -229,7 +229,7 @@ nav {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.13em;
-  font-size: 0.8rem;
+  font-size: var(--kuem-type-label-size);
 }
 .lead {
   font-size: clamp(1.15rem, 2vw, 1.45rem);
@@ -242,9 +242,9 @@ nav {
 }
 .actions {
   display: flex;
-  gap: 0.8rem;
+  gap: var(--kuem-space-16);
   flex-wrap: wrap;
-  margin-top: 2rem;
+  margin-top: var(--kuem-space-32);
 }
 .data-visual {
   position: relative;
@@ -261,10 +261,10 @@ nav {
 }
 .node-label {
   position: absolute;
-  padding: 0.55rem 0.7rem;
+  padding: var(--kuem-space-8) var(--kuem-space-8);
   border-left: 3px solid var(--kuem-copper);
   background: #252c31;
-  font-size: 0.84rem;
+  font-size: var(--kuem-type-label-size);
 }
 .node-label:nth-of-type(1) {
   top: 12%;
