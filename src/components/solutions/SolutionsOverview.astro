@@ -2,6 +2,7 @@
 import TrustedCompanies from "../TrustedCompanies.astro";
 import SeoHead from "../SeoHead.astro";
 import Chrome from "./SiteChrome.astro";
+import Footer from "../Footer.astro";
 import Architecture from "./SolutionsArchitecture.astro";
 import Panel from "./SolutionExplorerPanel.astro";
 import Icon from "./ServiceIcon.astro";
@@ -228,7 +229,7 @@ const stories = ["Domplan", "Brezovica", "Adria Mobil", "Gradiška", "Novo mesto
           </div>
         </section>
       </main>
-      <Chrome footer locale={locale} />
+      <Footer {locale} />
     </div>
     <Panel locale={locale} />
   </body>

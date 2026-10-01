@@ -3,6 +3,7 @@ import LanguageSelector from "../LanguageSelector.astro";
 import TrustedCompanies from "../TrustedCompanies.astro";
 import SeoHead from "../SeoHead.astro";
 import Header from "../Header.astro";
+import Footer from "../Footer.astro";
 import Icon from "./LineIcon.astro";
 import DataFlow from "./DataFlow.astro";
 import { Image } from "astro:assets";
@@ -27,7 +28,6 @@ import {
   partnership,
   partnershipEn,
 } from "../../data/homepage";
-import { footerContent } from "../../data/site";
 import { references } from "../../data/references";
 import "../../styles/flow-primitives.css";
 import "../../styles/homepage.css";
@@ -235,7 +235,6 @@ const stepList = locale === "sl" ? steps : stepsEn;
 const industryList = locale === "sl" ? industries : industriesEn;
 const useCaseList = locale === "sl" ? useCases : useCasesEn;
 const partnershipList = locale === "sl" ? partnership : partnershipEn;
-const site = footerContent[locale];
 const stories = [
   { name: "Domplan", source: "DOMPLAN, d.d." },
   { name: "Sombor", source: "Sombor-gas d.o.o." },
@@ -669,32 +668,7 @@ const stories = [
         </div>
       </section>
     </main>
-    <footer class="hp-footer">
-      <div class="hp-wrap">
-        <div class="hp-footer-main">
-          <a href="#main" aria-label={copy.footerTopAria}
-            ><img
-              class="hp-wordmark"
-              src={wordmark.src}
-              alt="KUEM"
-              width="140"
-              height="42"
-              loading="lazy"
-            /></a
-          ><address>
-            <span>{copy.addressCity}</span><span aria-hidden="true">|</span>
-            <a href={`mailto:${site.email}`}>{site.email}</a>
-          </address><nav aria-label={copy.footerNavAria}>
-            {nav.map(([label, href]) => <a href={href}>{label}</a>)}
-            <LanguageSelector {locale} />
-          </nav>
-        </div><div class="hp-footer-legal">
-          <a href={withBase(site.privacyHref)}>{copy.privacy}</a><p>
-            © {new Date().getFullYear()} KUEM. {copy.copyright}
-          </p>
-        </div>
-      </div>
-    </footer>
+    <Footer {locale} />
     <!-- TODO: V projektu ni potrjene telefonske številke ali uličnega naslova; dodajte ju po prejemu pravilnih podatkov. -->
     <dialog id="dashboard-preview" class="hp-dialog">
       <button

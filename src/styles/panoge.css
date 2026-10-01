@@ -482,8 +482,8 @@
   margin: 0.8rem 0 0.35rem;
 }
 .pi-story-grid a {
-  color: #d84e16;
-  text-decoration: underline;
+  color: var(--kuem-text-primary);
+  text-decoration: underline var(--kuem-copper-deep);
   text-underline-offset: 4px;
 }
 .pi-closing {

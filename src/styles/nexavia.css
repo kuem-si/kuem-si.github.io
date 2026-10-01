@@ -293,8 +293,8 @@ html:not(.js) .nx-role-panel[hidden] {
   font-size: 1.6rem;
 }
 .nx-text-link {
-  color: #d84e16;
-  text-decoration: underline;
+  color: var(--kuem-text-primary);
+  text-decoration: underline var(--kuem-copper-deep);
   text-underline-offset: 5px;
 }
 .nx-demo {
