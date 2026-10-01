@@ -13,14 +13,10 @@ import { withBase } from "../../lib/paths";
 import {
   benefits,
   benefitsEn,
-  steps,
-  stepsEn,
   industries,
   industriesEn,
   useCases,
   useCasesEn,
-  partnership,
-  partnershipEn,
 } from "../../data/homepage";
 import { references } from "../../data/references";
 import "../../styles/flow-primitives.css";
@@ -47,7 +43,6 @@ const copy = {
     trustAria: "Zaupajo nam",
     trustEyebrow: "Zaupajo nam",
     trustLabel: "Zaupajo nam",
-    productH2: "Vsi ključni podatki na enem mestu.",
     productP:
       "Nexavia združuje podatke iz terenskih naprav, meritev in obstoječih informacijskih sistemov. Omogoča enoten pregled nad stanjem infrastrukture, hitrejše zaznavanje odstopanj in učinkovitejše ukrepanje.",
     productCtaHref: "/nexavia",
@@ -58,8 +53,6 @@ const copy = {
     enlarge: "Povečaj prikaz",
     howEyebrow: "Kako deluje",
     howH2: "Obstoječe infrastrukture ne zamenjamo. Povežemo jo.",
-    apiRouteAria:
-      "Obstoječi sistemi in zunanji viri prek API neposredno v Nexavio",
     sourcesH3: "Obstoječi sistemi in zunanji viri",
     sources: [
       "ERP",
@@ -97,11 +90,6 @@ const copy = {
     storiesSrOnly: " – podrobnosti reference",
     storiesAllHref: "/reference/",
     storiesAllText: "Vse uspešne zgodbe",
-    aboutH2: "Tehnologija je uporabna šele, ko deluje kot celota.",
-    aboutEyebrow: "Zato izberete KUEM",
-    aboutIntro:
-      "KUEM je tehnološki partner za digitalizacijo infrastrukture v občinah, komunalnih podjetjih in industriji. Povezujemo naprave, komunikacijska omrežja, obstoječe sisteme in podatke v rešitve, ki delujejo kot celota.",
-    partnerLine: "En partner od zajema podatka do ukrepa.",
     closingH2: "Začnimo z enim konkretnim izzivom.",
     closingP:
       "Ni treba digitalizirati vsega naenkrat. Izberemo primer uporabe, povežemo razpoložljive podatke in rešitev najprej preverimo v omejenem obsegu.",
@@ -128,7 +116,6 @@ const copy = {
     trustAria: "Trusted by",
     trustEyebrow: "Trusted by",
     trustLabel: "Trusted by",
-    productH2: "All key data in one place.",
     productP:
       "Nexavia combines data from field devices, measurements and existing information systems. It provides a unified view of infrastructure, faster deviation detection and more effective action.",
     productCtaHref: "/en/nexavia",
@@ -139,8 +126,6 @@ const copy = {
     enlarge: "Enlarge view",
     howEyebrow: "How it works",
     howH2: "We connect your existing infrastructure.",
-    apiRouteAria:
-      "Existing systems and external sources connect directly to Nexavia through APIs",
     sourcesH3: "Existing systems and external sources",
     sources: [
       "ERP",
@@ -178,11 +163,6 @@ const copy = {
     storiesSrOnly: " – project details",
     storiesAllHref: "/en/references/",
     storiesAllText: "Success Stories",
-    aboutH2: "Technology is useful when it works as a whole.",
-    aboutEyebrow: "Why choose KUEM",
-    aboutIntro:
-      "KUEM is a technology partner for infrastructure digitalization in municipalities, utilities and industry. We connect devices, communication networks, existing systems and data into solutions that work as a whole.",
-    partnerLine: "One partner from data acquisition to action.",
     closingH2: "Let’s start with one concrete challenge.",
     closingP:
       "There is no need to digitalize everything at once. We select a use case, connect the available data and first validate the solution on a limited scale.",
@@ -196,10 +176,8 @@ const copy = {
   },
 }[locale];
 const benefitList = locale === "sl" ? benefits : benefitsEn;
-const stepList = locale === "sl" ? steps : stepsEn;
 const industryList = locale === "sl" ? industries : industriesEn;
 const useCaseList = locale === "sl" ? useCases : useCasesEn;
-const partnershipList = locale === "sl" ? partnership : partnershipEn;
 const stories = [
   { name: "Domplan", source: "DOMPLAN, d.d." },
   { name: "Sombor", source: "Sombor-gas d.o.o." },
@@ -251,14 +229,7 @@ const stories = [
       </div>
     </div>
   </section>
-  <section class="hp-trust" aria-label={copy.trustAria}>
-    <div class="hp-wrap">
-      <h2 class="hp-eyebrow">{copy.trustEyebrow}</h2
-      ><TrustedCompanies label={copy.trustLabel} />
-    </div>
-  </section>
-
-  <section id="nexavia" class="hp-product hp-section">
+  <section id="nexavia" class="hp-product hp-section" data-scheme="white">
     <div class="hp-wrap hp-product-grid">
       <div class="hp-product-copy">
         <div class="hp-nexavia-mark hp-product-logo">
@@ -271,9 +242,13 @@ const stories = [
             loading="lazy"
           />
         </div>
-        <h2>{copy.productH2}</h2>
+        <p class="hp-eyebrow">{copy.howEyebrow}</p><h2>{copy.howH2}</h2>
         <p>
           {copy.productP}
+        </p>
+        <p class="hp-source-line">
+          <span>{copy.sourcesH3}:</span>
+          {copy.sources.join(" · ")}
         </p>
         <a class="hp-button" href={withBase(copy.productCtaHref)}
           >{copy.productCta} <span aria-hidden="true">→</span></a
@@ -320,82 +295,68 @@ const stories = [
     </div>
   </section>
 
-  <section id="resitve" class="hp-section hp-how">
+  <section class="hp-trust" data-scheme="concrete" aria-label={copy.trustAria}>
     <div class="hp-wrap">
-      <p class="hp-eyebrow">{copy.howEyebrow}</p><h2>
-        {copy.howH2}
-      </h2>
-      <div class="hp-process">
-        <ol class="hp-steps">
-          {
-            stepList.map((item, i) => (
-              <li
-                class="hp-card"
-                id={i === 2 ? "platforma-korak" : undefined}
-              >
-                <>
-                  <div class="hp-step-icon">
-                    <>
-                      <span>0{i + 1}</span>
-                      <Icon name={item.icon} />
-                    </>
-                  </div>
-                  <div>
-                    <>
-                      <h3>{item.title}</h3>
-                      <p>{item.text}</p>
-                    </>
-                  </div>
-                </>
-              </li>
-            ))
-          }
-        </ol>
-        <svg
-          class="hp-api-route"
-          aria-label={copy.apiRouteAria}
-          role="img"
-          ><defs
-            ><marker
-              id="api-arrow"
-              viewBox="0 0 8 8"
-              refX="7"
-              refY="4"
-              markerWidth="8"
-              markerHeight="8"
-              orient="auto"><path d="M1 1 7 4 1 7"></path></marker
-            ></defs
-          ><path data-api-path marker-end="url(#api-arrow)"></path><g
-            data-api-label
-            ><rect x="-22" y="-13" width="44" height="26" rx="4"
-            ></rect><text text-anchor="middle" dominant-baseline="central"
-              >API</text
-            ></g
-          ></svg
-        >
-        <div class="hp-sources">
-          <h3>{copy.sourcesH3}</h3><ul>
-            {
-              copy.sources.map((name, i) => (
-                <li>
+      <h2 class="hp-eyebrow">{copy.trustEyebrow}</h2
+      ><TrustedCompanies label={copy.trustLabel} />
+    </div>
+  </section>
+
+  <section id="reference" class="hp-section hp-usecases" data-scheme="concrete">
+    <div class="hp-wrap">
+      <div class="hp-section-heading">
+        <h2>{copy.usecasesH2}</h2><p class="hp-eyebrow">
+          {copy.usecasesEyebrow}
+        </p>
+      </div><div class="hp-case-grid">
+        {
+          useCaseList.map((item) => (
+            <article class="hp-card">
+              <>
+                <Icon name={item.icon} />
+                <div>
                   <>
-                    <Icon
-                      name={
-                        ["database", "screen", "network", "leaf", "api"][i]
-                      }
-                    />
-                    <span>{name}</span>
+                    <h3>{item.title}</h3>
+                    <p>{item.text}</p>
+                    <a class="hp-text-link" href={withBase(item.href)}>
+                      {copy.usecaseCta} <span aria-hidden="true">→</span>
+                    </a>
                   </>
-                </li>
-              ))
-            }
-          </ul>
+                </div>
+              </>
+            </article>
+          ))
+        }
+      </div>
+      <div id="zgodbe" class="hp-stories">
+        <h2 class="hp-eyebrow">{copy.storiesEyebrow}</h2><div>
+          {
+            stories.map((item) =>
+              item.detail ? (
+                <details>
+                  <>
+                    <summary>
+                      {item.name}
+                      <span class="hp-story-toggle" aria-hidden="true" />
+                      <span class="sr-only">{copy.storiesSrOnly}</span>
+                    </summary>
+                    <p>{item.detail}</p>
+                    <a class="hp-text-link" href={withBase(copy.storiesAllHref)}>
+                      {copy.storiesAllText} →
+                    </a>
+                  </>
+                </details>
+              ) : (
+                <span class="hp-story-name">{item.name}</span>
+              ),
+            )
+          }
         </div>
       </div>
     </div>
   </section>
 
-  <section id="panoge" class="hp-section hp-industries">
+  <section id="panoge" class="hp-section hp-industries" data-scheme="white">
     <div class="hp-wrap">
       <div class="hp-section-heading">
         <h2>{copy.industriesH2}</h2><p
@@ -428,7 +389,7 @@ const stories = [
     </div>
   </section>
 
-  <section id="kai" class="hp-section hp-kai">
+  <section id="kai" class="hp-section hp-kai" data-scheme="carbon">
     <div class="hp-wrap hp-kai-grid">
       <div>
         <p class="hp-eyebrow">{copy.kaiEyebrow}</p><h2>
@@ -488,92 +449,6 @@ const stories = [
       </div>
     </div>
   </section>
-
-  <section class="hp-section hp-usecases">
-    <div class="hp-wrap">
-      <div class="hp-section-heading">
-        <h2>{copy.usecasesH2}</h2><p class="hp-eyebrow">
-          {copy.usecasesEyebrow}
-        </p>
-      </div><div class="hp-case-grid">
-        {
-          useCaseList.map((item) => (
-            <article class="hp-card">
-              <>
-                <Icon name={item.icon} />
-                <div>
-                  <>
-                    <h3>{item.title}</h3>
-                    <p>{item.text}</p>
-                    <a class="hp-text-link" href={withBase(item.href)}>
-                      {copy.usecaseCta} <span aria-hidden="true">→</span>
-                    </a>
-                  </>
-                </div>
-              </>
-            </article>
-          ))
-        }
-      </div>
-      <div id="zgodbe" class="hp-stories">
-        <h2 class="hp-eyebrow">{copy.storiesEyebrow}</h2><div>
-          {
-            stories.map((item) =>
-              item.detail ? (
-                <details>
-                  <>
-                    <summary>
-                      {item.name}
-                      <span class="hp-story-toggle" aria-hidden="true" />
-                      <span class="sr-only">{copy.storiesSrOnly}</span>
-                    </summary>
-                    <p>{item.detail}</p>
-                    <a class="hp-text-link" href={withBase(copy.storiesAllHref)}>
-                      {copy.storiesAllText} →
-                    </a>
-                  </>
-                </details>
-              ) : (
-                <span class="hp-story-name">{item.name}</span>
-              ),
-            )
-          }
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="o-nas" class="hp-section hp-about">
-    <div class="hp-wrap">
-      <div class="hp-section-heading">
-        <h2>{copy.aboutH2}</h2><p
-          class="hp-eyebrow"
-        >
-          {copy.aboutEyebrow}
-        </p>
-      </div><p class="hp-about-intro">
-        {copy.aboutIntro}
-      </p><ol class="hp-partnership">
-        {
-          partnershipList.map((item) => (
-            <li>
-              <>
-                <Icon name={item.icon} />
-                <div>
-                  <>
-                    <h3>{item.title}</h3>
-                    <p>{item.text}</p>
-                  </>
-                </div>
-              </>
-            </li>
-          ))
-        }
-      </ol><p class="hp-partner-line">
-        {copy.partnerLine}
-      </p>
-    </div>
-  </section>
   <section id="kontakt" class="hp-closing">
     <div class="hp-wrap">
       <div>
@@ -613,46 +488,6 @@ const stories = [
       />
     </dialog>
     <script is:inline>
-      const process = document.querySelector(".hp-process");
-      const apiRoute = document.querySelector(".hp-api-route");
-      const updateApiRoute = () => {
-        const target = document
-          .querySelector("#platforma-korak")
-          ?.getBoundingClientRect();
-        const source = document
-          .querySelector(".hp-sources")
-          ?.getBoundingClientRect();
-        if (!process || !apiRoute || !target || !source) return;
-        const bounds = process.getBoundingClientRect();
-        const mobile = matchMedia("(max-width: 580px)").matches;
-        apiRoute.setAttribute(
-          "viewBox",
-          `0 0 ${bounds.width} ${bounds.height}`,
-        );
-        let path, labelX, labelY;
-        if (mobile) {
-          const x = bounds.width - 14;
-          const startY = source.top - bounds.top + 28;
-          const endY = target.top - bounds.top + target.height / 2;
-          path = `M${source.right - bounds.left} ${startY} H${x} V${endY} H${target.right - bounds.left + 2}`;
-          labelX = x;
-          labelY = (startY + endY) / 2;
-        } else {
-          const startX = bounds.width / 2;
-          const startY = source.top - bounds.top;
-          const endX = target.left - bounds.left + target.width / 2;
-          const endY = target.bottom - bounds.top + 2;
-          path = `M${startX} ${startY} V${startY - 24} H${endX} V${endY}`;
-          labelX = startX;
-          labelY = startY - 24;
-        }
-        apiRoute.querySelector("[data-api-path]")?.setAttribute("d", path);
-        apiRoute
-          .querySelector("[data-api-label]")
-          ?.setAttribute("transform", `translate(${labelX} ${labelY})`);
-      };
-      if (process) new ResizeObserver(updateApiRoute).observe(process);
-      document.fonts.ready.then(updateApiRoute);
       const dialog = document.querySelector("#dashboard-preview");
       document
         .querySelector("[data-dashboard-open]")
