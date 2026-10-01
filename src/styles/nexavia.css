@@ -10,26 +10,22 @@ figure {
 abbr[title] {
   text-decoration: none;
 }
-.nx-hero h1,
-.nx-section h2,
-.nx-closing h2 {
-  letter-spacing: -0.04em;
-}
 .nx-hero p,
 .nx-section p,
 .nx-closing p {
   line-height: 1.5;
 }
 .nx-eyebrow {
-  color: var(--kuem-petrol);
+  color: var(--kuem-text-muted);
   font-size: var(--kuem-type-label-size);
-  font-weight: 700;
-  letter-spacing: 0.09em;
+  font-weight: var(--kuem-type-label-weight);
+  letter-spacing: var(--kuem-type-label-tracking);
   margin: 0 0 0.85rem !important;
+  text-transform: uppercase;
 }
 .nx-hero {
   background: var(--kuem-white);
-  color: #1e2428;
+  color: var(--kuem-text-primary);
   padding: var(--kuem-space-64) 0 var(--kuem-space-48);
   min-height: 0;
 }
@@ -98,7 +94,7 @@ abbr[title] {
   border: 1px solid var(--kuem-concrete);
   border-radius: var(--kuem-radius-card);
   background: var(--kuem-white);
-  box-shadow: 0 16px 40px rgba(21, 107, 117, 0.09);
+  box-shadow: none;
 }
 .nx-window-bar {
   display: flex;
@@ -126,10 +122,10 @@ abbr[title] {
   background: var(--kuem-copper);
 }
 .nx-dots i:nth-child(2) {
-  background: #ffb020;
+  background: var(--kuem-border);
 }
 .nx-dots i:nth-child(3) {
-  background: #00c896;
+  background: var(--kuem-border);
 }
 .nx-dashboard {
   display: block;
@@ -144,7 +140,7 @@ abbr[title] {
   border: 1px solid var(--kuem-concrete);
   border-radius: var(--kuem-radius-control);
   padding: var(--kuem-space-8) var(--kuem-space-16);
-  box-shadow: 0 6px 15px rgba(21, 107, 117, 0.12);
+  box-shadow: none;
   font-size: var(--kuem-type-label-size);
 }
 .nx-status i {
@@ -152,7 +148,7 @@ abbr[title] {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #00c896;
+  background: var(--kuem-status-ok);
   margin-right: var(--kuem-space-8);
 }
 .nx-trust {
@@ -162,7 +158,7 @@ abbr[title] {
 .nx-section {
   padding: var(--kuem-space-64) 0;
   background: var(--kuem-white);
-  color: #1e2428;
+  color: var(--kuem-text-primary);
 }
 .nx-section h2 {
   font-size: var(--kuem-type-h2-size);
@@ -212,7 +208,7 @@ abbr[title] {
 }
 .nx-tabs button[aria-selected="true"] {
   background: var(--kuem-petrol);
-  color: white;
+  color: var(--kuem-white);
 }
 .nx-role-panel {
   display: grid;
@@ -220,8 +216,8 @@ abbr[title] {
   gap: var(--kuem-space-32);
   align-items: center;
   transition:
-    opacity 0.18s ease,
-    translate 0.18s ease;
+    opacity var(--kuem-duration-base) var(--kuem-ease-standard),
+    translate var(--kuem-duration-base) var(--kuem-ease-standard);
 }
 .nx-role-panel[hidden] {
   display: none;
@@ -304,7 +300,7 @@ html:not(.js) .nx-role-panel[hidden] {
 }
 .nx-demo-cards > div,
 .nx-demo-chart {
-  background: white;
+  background: var(--kuem-white);
   border: 1px solid var(--kuem-concrete);
   border-radius: var(--kuem-radius-control);
   padding: var(--kuem-space-8);
@@ -342,17 +338,17 @@ html:not(.js) .nx-role-panel[hidden] {
   border: 1px solid var(--kuem-concrete);
   border-radius: var(--kuem-radius-control);
   padding: var(--kuem-space-24) var(--kuem-space-16);
-  background: white;
-  box-shadow: 0 4px 15px rgba(21, 107, 117, 0.03);
+  background: var(--kuem-white);
+  box-shadow: none;
   /* Hover repaint (box-shadow/border) stays confined to this card. */
   contain: content;
   transition:
-    box-shadow 0.25s,
-    border-color 0.25s;
+    box-shadow var(--kuem-duration-fast),
+    border-color var(--kuem-duration-fast);
 }
 .nx-module-card:hover {
   border-color: var(--kuem-petrol);
-  box-shadow: 0 10px 20px rgba(21, 107, 117, 0.09);
+  box-shadow: none;
 }
 .nx-module-icon {
   display: block;
@@ -401,19 +397,19 @@ html:not(.js) .nx-role-panel[hidden] {
   border: 1px solid var(--kuem-concrete);
   border-radius: var(--kuem-radius-control);
   overflow: hidden;
-  background: white;
-  color: #1e2428;
+  background: var(--kuem-white);
+  color: var(--kuem-text-primary);
   text-decoration: none;
-  box-shadow: 0 4px 15px rgba(21, 107, 117, 0.03);
+  box-shadow: none;
   contain: content;
   transition:
-    box-shadow 0.25s,
-    border-color 0.25s;
+    box-shadow var(--kuem-duration-fast),
+    border-color var(--kuem-duration-fast);
 }
 .nx-showroom-card:hover,
 .nx-showroom-card:focus-visible {
   border-color: var(--kuem-petrol);
-  box-shadow: 0 10px 20px rgba(21, 107, 117, 0.09);
+  box-shadow: none;
 }
 .nx-showroom-card img {
   display: block;
@@ -422,7 +418,7 @@ html:not(.js) .nx-role-panel[hidden] {
   aspect-ratio: 3 / 2;
   object-fit: cover;
   background: var(--kuem-concrete);
-  transition: transform 0.4s;
+  transition: transform var(--kuem-duration-slow);
 }
 .nx-showroom-card:hover img {
   transform: scale(1.03);
@@ -433,7 +429,7 @@ html:not(.js) .nx-role-panel[hidden] {
   gap: var(--kuem-space-4);
   padding: var(--kuem-space-16) var(--kuem-space-16) var(--kuem-space-16);
   position: relative;
-  background: white;
+  background: var(--kuem-white);
 }
 .nx-showroom-card strong {
   font-size: var(--kuem-type-body-size);
@@ -471,10 +467,10 @@ html:not(.js) .nx-role-panel[hidden] {
 .nx-kai,
 .nx-closing {
   background: var(--kuem-petrol);
-  color: white;
+  color: var(--kuem-white);
 }
 .nx-kai .nx-eyebrow {
-  color: var(--kuem-concrete);
+  color: var(--kuem-text-muted);
 }
 .nx-kai-grid {
   display: grid;
@@ -505,7 +501,7 @@ html:not(.js) .nx-role-panel[hidden] {
 }
 .nx-kai-panel {
   background: var(--kuem-white);
-  color: #1e2428;
+  color: var(--kuem-text-primary);
   border-radius: var(--kuem-radius-card);
   padding: var(--kuem-space-16);
   box-shadow: 0 18px 30px rgba(0, 0, 0, 0.15);
@@ -759,8 +755,8 @@ html:not(.js) .nx-role-panel[hidden] {
   }
 }
 .site-header:has(+ main .nx-hero) {
-  background: rgba(255, 255, 255, 0.96);
-  color: #1e2428;
+  background: color-mix(in srgb, var(--kuem-white) 96%, transparent);
+  color: var(--kuem-text-primary);
   border-color: var(--kuem-concrete);
 }
 .site-header:has(+ main .nx-hero) .brand img {
@@ -785,15 +781,15 @@ html:not(.js) .nx-role-panel[hidden] {
   color: var(--kuem-carbon);
 }
 .site-header:has(+ main .nx-hero).is-scrolled {
-  background: rgba(255, 255, 255, 0.98);
+  background: color-mix(in srgb, var(--kuem-white) 98%, transparent);
 }
 .site-header:has(+ main .nx-hero) .menu-toggle span:not(.sr-only) {
-  background: #1e2428;
+  background: var(--kuem-text-primary);
 }
 .site-header:has(~ main .nx-hero),
 body:has(.nx-hero) .site-header {
-  background: rgba(255, 255, 255, 0.98) !important;
-  color: #1e2428 !important;
+  background: color-mix(in srgb, var(--kuem-white) 98%, transparent) !important;
+  color: var(--kuem-text-primary) !important;
   border-color: var(--kuem-concrete) !important;
 }
 .site-header:has(~ main .nx-hero) .brand img,
@@ -858,7 +854,7 @@ body:has(.nx-hero) .site-header .header-contact {
   }
   body:has(.nx-hero) .site-header nav.open {
     background: var(--kuem-white);
-    color: #1e2428;
+    color: var(--kuem-text-primary);
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
   }
   body:has(.nx-hero) .site-header .header-actions {
@@ -876,8 +872,15 @@ body:has(.nx-hero) .site-header .header-contact {
 .nx-hero {
   background-color: var(--kuem-background);
   background-image:
-    linear-gradient(rgba(21, 107, 117, 0.13) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(21, 107, 117, 0.13) 1px, transparent 1px);
+    linear-gradient(
+      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 48px 48px;
   color: var(--kuem-text-primary);
   padding-block: var(--kuem-space-64);
@@ -885,10 +888,13 @@ body:has(.nx-hero) .site-header .header-contact {
 .nx-hero-visual[data-scheme] {
   background-color: transparent;
 }
-.nx-hero .nx-eyebrow,
 .nx-hero .nx-actions .btn-secondary,
 .nx-hero .nx-traits li:before {
   color: var(--kuem-data);
+  border-color: var(--kuem-data);
+}
+.nx-hero .nx-eyebrow {
+  color: var(--kuem-text-muted);
   border-color: var(--kuem-data);
 }
 .nx-hero .nx-lead {
@@ -923,7 +929,7 @@ body:has(.nx-hero) .site-header .header-contact {
   color: var(--kuem-text-primary);
 }
 .nx-kai[data-scheme] .nx-eyebrow {
-  color: var(--kuem-data);
+  color: var(--kuem-text-muted);
 }
 .nx-kai[data-scheme] .nx-kai-benefits li,
 .nx-kai[data-scheme] .nx-human {

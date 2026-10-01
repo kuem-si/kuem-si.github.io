@@ -141,9 +141,9 @@ const currentYear = new Date().getFullYear();
 
   .footer-slogan {
     margin: 1.45rem 0 0;
-    color: #f3f2f0;
+    color: var(--kuem-text-secondary);
     font-family: var(--kuem-font-heading);
-    font-size: 1rem;
+    font-size: var(--kuem-type-body-size);
     font-weight: 600;
     line-height: 1.45;
   }
@@ -151,19 +151,20 @@ const currentYear = new Date().getFullYear();
   .footer-description {
     max-width: 31ch;
     margin: 0.7rem 0 0;
-    color: #c9c7c1;
-    font-size: 0.9375rem;
+    color: var(--kuem-text-secondary);
+    font-size: var(--kuem-type-body-size);
     line-height: 1.55;
   }
 
   .footer-column h2 {
     margin: 0 0 1.25rem;
-    color: var(--kuem-copper);
-    font-family: var(--kuem-font-heading);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    letter-spacing: 0.11em;
+    color: var(--kuem-text-muted);
+    font-family: var(--kuem-type-label-family);
+    font-size: var(--kuem-type-label-size);
+    font-weight: var(--kuem-type-label-weight);
+    letter-spacing: 0;
     line-height: 1.35;
+    text-transform: uppercase;
   }
 
   .footer-column ul {
@@ -181,16 +182,16 @@ const currentYear = new Date().getFullYear();
   .footer-column a,
   .footer-legal a {
     width: fit-content;
-    color: #f3f2f0;
-    font-size: 0.9375rem;
+    color: var(--kuem-text-secondary);
+    font-size: var(--kuem-type-small-size);
     line-height: 1.4;
     text-decoration-line: underline;
     text-decoration-color: transparent;
     text-decoration-thickness: 1px;
     text-underline-offset: 5px;
     transition:
-      color 180ms ease,
-      text-decoration-color 180ms ease;
+      color var(--kuem-duration-fast) var(--kuem-ease-standard),
+      text-decoration-color var(--kuem-duration-fast) var(--kuem-ease-standard);
   }
 
   .footer-column a:hover,
@@ -202,8 +203,8 @@ const currentYear = new Date().getFullYear();
   .footer-column a:focus-visible,
   .footer-legal a:focus-visible,
   .footer-logo:focus-visible {
-    outline: 2px solid var(--kuem-copper);
-    outline-offset: 5px;
+    outline: var(--kuem-focus-width) solid var(--kuem-focus);
+    outline-offset: var(--kuem-focus-offset);
     text-decoration-color: var(--kuem-petrol);
   }
 
@@ -222,8 +223,8 @@ const currentYear = new Date().getFullYear();
 
   .footer-product small {
     max-width: 19ch;
-    color: #8b959b;
-    font-size: 0.8125rem;
+    color: var(--kuem-text-muted);
+    font-size: var(--kuem-type-small-size);
     font-weight: 400;
     line-height: 1.35;
   }
@@ -231,7 +232,7 @@ const currentYear = new Date().getFullYear();
   .footer-email {
     display: inline-flex !important;
     color: var(--kuem-white) !important;
-    font-size: 1rem !important;
+    font-size: var(--kuem-type-body-size) !important;
     font-weight: 600;
   }
 
@@ -250,7 +251,7 @@ const currentYear = new Date().getFullYear();
 
   .footer-contact-link span {
     color: var(--kuem-copper);
-    transition: transform 180ms ease;
+    transition: transform var(--kuem-duration-base) var(--kuem-ease-standard);
   }
 
   .footer-contact-link:hover span,
@@ -264,13 +265,13 @@ const currentYear = new Date().getFullYear();
     align-items: center;
     justify-content: space-between;
     padding-top: 1.75rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    border-top: 1px solid color-mix(in srgb, var(--kuem-white) 14%, transparent);
   }
 
   .footer-legal p {
     margin: 0;
-    color: #8b959b;
-    font-size: 0.875rem;
+    color: var(--kuem-text-muted);
+    font-size: var(--kuem-type-small-size);
     line-height: 1.45;
   }
 
@@ -293,13 +294,13 @@ const currentYear = new Date().getFullYear();
   }
 
   .footer-languages i {
-    color: #596065;
+    color: var(--kuem-text-muted);
     font-style: normal;
   }
 
   .footer-languages span[aria-current] {
     color: var(--kuem-white);
-    font-size: 0.9375rem;
+    font-size: var(--kuem-type-small-size);
     font-weight: 600;
   }
 

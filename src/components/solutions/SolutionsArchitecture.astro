@@ -13,16 +13,16 @@ const copy = {
     srOnly:
       "Naprave in senzorji prek povezljivosti v Nexavio. Ločena pot: obstoječi sistemi prek API-integracij v Nexavio. KAI je analitični sloj Nexavie. Iz Nexavie do odločitve in ukrepa. NOC spremlja vse sloje in ni postaja podatkovnega toka.",
     cards: [
-      { id: "devices", icon: "devices", title: "NAPRAVE IN SENZORJI", sub: "Števci · senzorji · telemetrija" },
-      { id: "radio", icon: "radio", title: "POVEZLJIVOST", sub: "LoRaWAN · NB-IoT · wM-Bus · LAN" },
-      { id: "systems", icon: "systems", title: "OBSTOJEČI SISTEMI", sub: "ERP · SCADA · GIS · zunanji viri" },
-      { id: "api", icon: "api", title: "API-INTEGRACIJE", sub: "Standardni vmesniki" },
+      { id: "devices", icon: "devices", title: "Naprave in senzorji", sub: "Števci · senzorji · telemetrija" },
+      { id: "radio", icon: "radio", title: "Povezljivost", sub: "LoRaWAN · NB-IoT · wM-Bus · LAN" },
+      { id: "systems", icon: "systems", title: "Obstoječi sistemi", sub: "ERP · SCADA · GIS · zunanji viri" },
+      { id: "api", icon: "api", title: "API-integracije", sub: "Standardni vmesniki" },
     ],
     platformSub: "Zajem · obdelava · prikaz",
     kaiSub: "Analitika · opozorila · priporočila",
-    action: "ODLOČITEV IN UKREP",
+    action: "Odločitev in ukrep",
     actionSub: "Človek ali avtomatizacija",
-    noc: "NOC IN UPRAVLJANE STORITVE",
+    noc: "NOC in upravljane storitve",
     nocSub: "Nadzor naprav · povezljivosti · alarmov · podpora",
     nocSmall: "STALEN NADZOR<br />CELOTNE REŠITVE",
   },
@@ -34,16 +34,16 @@ const copy = {
     srOnly:
       "Devices and sensors connect to Nexavia. Existing systems connect through API integrations. KAI is Nexavia’s analytics layer. Nexavia supports decisions and action, while NOC monitors every layer.",
     cards: [
-      { id: "devices", icon: "devices", title: "DEVICES AND SENSORS", sub: "Meters · sensors · telemetry" },
-      { id: "radio", icon: "radio", title: "CONNECTIVITY", sub: "LoRaWAN · NB-IoT · wM-Bus · LAN" },
-      { id: "systems", icon: "systems", title: "EXISTING SYSTEMS", sub: "ERP · SCADA · GIS · external sources" },
-      { id: "api", icon: "api", title: "API INTEGRATIONS", sub: "Standard interfaces" },
+      { id: "devices", icon: "devices", title: "Devices and sensors", sub: "Meters · sensors · telemetry" },
+      { id: "radio", icon: "radio", title: "Connectivity", sub: "LoRaWAN · NB-IoT · wM-Bus · LAN" },
+      { id: "systems", icon: "systems", title: "Existing systems", sub: "ERP · SCADA · GIS · external sources" },
+      { id: "api", icon: "api", title: "API integrations", sub: "Standard interfaces" },
     ],
     platformSub: "Acquisition · processing · visualization",
     kaiSub: "Analytics · alerts · recommendations",
-    action: "DECISION AND ACTION",
+    action: "Decision and action",
     actionSub: "Person or automation",
-    noc: "NOC AND MANAGED SERVICES",
+    noc: "NOC and managed services",
     nocSub: "Device · connectivity · alarm monitoring · support",
     nocSmall: "CONTINUOUS MONITORING<br />OF THE ENTIRE SOLUTION",
   },
@@ -76,7 +76,7 @@ const cards = copy.cards;
           ><path
             d="m2 1 4 4-4 4"
             fill="none"
-            stroke="#156B75"
+            style="stroke: var(--kuem-data)"
             stroke-width="1.5"></path></marker
         ></defs
       ><g class="monitor-links"></g><g class="data-links"></g><g class="packets"
@@ -153,6 +153,7 @@ const cards = copy.cards;
     <button
       type="button"
       class="noc"
+      data-scheme="carbon"
       data-node="noc"
       data-solution-step="5"
       aria-controls="solution-panel"
@@ -162,18 +163,19 @@ const cards = copy.cards;
       <Icon name="noc" /><div>
         <strong>{copy.noc}</strong><span>{copy.nocSub}</span>
       </div><svg class="network" viewBox="0 0 260 40" aria-hidden="true"
-        ><path d="M12 20h236" stroke="#4FA3AD"></path><g fill="#4FA3AD"
-          ><circle cx="12" cy="20" r="7"></circle><circle cx="90" cy="20" r="7"
-          ></circle><circle cx="248" cy="20" r="7"></circle></g
-        ><g fill="#161a1d" stroke="#4FA3AD" stroke-width="2"
+        ><path class="network-line" d="M12 20h236"></path><g class="network-node"
+          ><rect x="9" y="17" width="6" height="6"></rect><rect
+            x="87"
+            y="17"
+            width="6"
+            height="6"></rect><rect x="245" y="17" width="6" height="6"
+          ></rect></g
+        ><g class="network-gateway"
           ><path d="m50 12 8 8-8 8-8-8zM130 12l8 8-8 8-8-8zM210 12l8 8-8 8-8-8z"
           ></path></g
-        ><circle cx="170" cy="20" r="9" fill="#F06432"></circle><text
-          x="170"
-          y="25"
-          text-anchor="middle"
-          fill="white"
-          font-size="14">!</text
+        ><rect class="network-event" x="161" y="11" width="18" height="18"
+        ></rect><text class="network-event-mark" x="170" y="25" text-anchor="middle"
+          >!</text
         ></svg
       ><small set:html={copy.nocSmall}></small>
     </button>
@@ -191,16 +193,18 @@ const cards = copy.cards;
     justify-content: flex-end;
     align-items: center;
     gap: 12px;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    color: var(--kuem-petrol);
+    font-size: var(--kuem-type-label-size);
+    letter-spacing: 0;
+    color: var(--kuem-text-muted);
+    font-weight: var(--kuem-type-label-weight);
+    text-transform: uppercase;
     margin-bottom: 24px;
   }
   .micro:before {
     content: "";
     width: 28px;
     height: 1px;
-    background: var(--kuem-petrol-light);
+    background: var(--kuem-border-strong);
   }
   .architecture-grid {
     position: relative;
@@ -218,9 +222,9 @@ const cards = copy.cards;
     justify-content: center;
     flex-direction: column;
     text-align: center;
-    background: white;
-    border: 1px solid #c9c7c1;
-    border-radius: 8px;
+    background: var(--kuem-white);
+    border: 1px solid var(--kuem-border);
+    border-radius: var(--kuem-radius-card);
     padding: 18px 8px;
     box-shadow: 0 4px 16px #161a1d04;
   }
@@ -232,15 +236,15 @@ const cards = copy.cards;
   }
   .architecture strong {
     display: block;
-    font-size: 12px;
+    font-size: var(--kuem-type-small-size);
     line-height: 1.35;
   }
   .architecture span {
     display: block;
-    font-size: 11px;
+    font-size: var(--kuem-type-small-size);
     line-height: 1.5;
     margin-top: 5px;
-    color: #596065;
+    color: var(--kuem-text-muted);
   }
   .devices {
     grid-area: 1/1;
@@ -278,7 +282,7 @@ const cards = copy.cards;
     top: -8%;
   }
   .platform > strong {
-    font-size: 18px;
+    font-size: var(--kuem-type-lead-size);
   }
   .kai {
     display: flex;
@@ -286,21 +290,21 @@ const cards = copy.cards;
     gap: 12px;
     background: var(--kuem-petrol);
     width: 100%;
-    border-radius: 6px;
+    border-radius: var(--kuem-radius-card);
     padding: 18px 10px;
     margin-top: 20px;
     text-align: left;
-    color: white;
+    color: var(--kuem-white);
   }
   .kai :global(svg) {
     width: 40px;
     flex-shrink: 0;
   }
   .kai strong {
-    font-size: 20px;
+    font-size: var(--kuem-type-lead-size);
   }
   .kai span {
-    color: white;
+    color: var(--kuem-white);
   }
   .noc {
     grid-area: 3/1/4/5;
@@ -308,10 +312,10 @@ const cards = copy.cards;
     display: flex;
     align-items: center;
     gap: 16px;
-    background: var(--kuem-carbon);
-    color: white;
+    background: var(--kuem-background);
+    color: var(--kuem-text-primary);
     padding: 20px;
-    border-radius: 8px;
+    border-radius: var(--kuem-radius-card);
     min-width: 0;
   }
   .noc > :global(svg:first-child) {
@@ -319,7 +323,27 @@ const cards = copy.cards;
     flex-shrink: 0;
   }
   .noc span {
-    color: #c9c7c1;
+    color: var(--kuem-text-secondary);
+  }
+  .network-line {
+    stroke: var(--kuem-data);
+    stroke-width: 2;
+  }
+  .network-node {
+    fill: var(--kuem-data);
+  }
+  .network-gateway {
+    fill: var(--kuem-background);
+    stroke: var(--kuem-data);
+    stroke-width: 2;
+  }
+  .network-event {
+    fill: var(--kuem-event);
+  }
+  .network-event-mark {
+    fill: var(--kuem-on-action);
+    font-size: 14px;
+    font-weight: 700;
   }
   .network {
     flex: 1;
@@ -327,9 +351,11 @@ const cards = copy.cards;
     max-width: 300px;
   }
   .noc small {
-    font-size: 10px;
+    font-size: var(--kuem-type-label-size);
+    font-weight: var(--kuem-type-label-weight);
     line-height: 1.6;
-    border-left: 1px solid var(--kuem-petrol-light);
+    color: var(--kuem-text-muted);
+    border-left: 1px solid var(--kuem-data);
     padding-left: 16px;
     margin-left: auto;
   }
@@ -349,10 +375,10 @@ const cards = copy.cards;
       padding: 25px 12px;
     }
     .architecture strong {
-      font-size: 16px;
+      font-size: var(--kuem-type-body-size);
     }
     .architecture span {
-      font-size: 14px;
+      font-size: var(--kuem-type-small-size);
     }
     .node > :global(svg) {
       width: 90px;
@@ -362,13 +388,13 @@ const cards = copy.cards;
       height: 100px;
     }
     .platform > strong {
-      font-size: 22px;
+      font-size: var(--kuem-type-lead-size);
     }
     .kai {
       padding: 22px 16px;
     }
     .noc small {
-      font-size: 12px;
+      font-size: var(--kuem-type-label-size);
     }
   }
   @container (max-width:480px) {
@@ -419,16 +445,16 @@ const cards = copy.cards;
     }
     .noc small {
       grid-column: 1 / -1;
-      font-size: 9px;
+      font-size: var(--kuem-type-label-size);
     }
     .node {
       padding: 16px 7px;
     }
     .architecture strong {
-      font-size: 12px;
+      font-size: var(--kuem-type-small-size);
     }
     .architecture span {
-      font-size: 12px;
+      font-size: var(--kuem-type-small-size);
     }
     .logo {
       width: 230px;
@@ -438,10 +464,10 @@ const cards = copy.cards;
       justify-content: center;
     }
     .micro {
-      font-size: 10px;
+      font-size: var(--kuem-type-label-size);
     }
     .platform > strong {
-      font-size: 20px;
+      font-size: var(--kuem-type-lead-size);
     }
   }
 
@@ -453,16 +479,18 @@ const cards = copy.cards;
     margin-bottom: 32px;
   }
   .architecture-intro > div > strong {
-    font-size: 12px;
-    color: var(--kuem-petrol);
-    letter-spacing: 0.04em;
+    font-size: var(--kuem-type-label-size);
+    color: var(--kuem-text-muted);
+    font-weight: var(--kuem-type-label-weight);
+    text-transform: uppercase;
+    letter-spacing: 0;
   }
   .architecture-intro p {
-    font-size: 13px !important;
+    font-size: var(--kuem-type-small-size) !important;
     margin: 6px 0 0 !important;
   }
   .architecture-intro .micro {
-    font-size: 10px;
+    font-size: var(--kuem-type-label-size);
     margin: 0;
     white-space: nowrap;
   }
@@ -477,10 +505,10 @@ const cards = copy.cards;
   .platform-open,
   .kai {
     transition:
-      background-color 0.2s,
-      border-color 0.2s,
-      box-shadow 0.2s,
-      opacity 0.2s;
+      background-color var(--kuem-duration-base),
+      border-color var(--kuem-duration-base),
+      box-shadow var(--kuem-duration-base),
+      opacity var(--kuem-duration-base);
   }
   .node:hover,
   .platform-open:hover {
@@ -488,8 +516,8 @@ const cards = copy.cards;
     box-shadow: 0 4px 16px #161a1d0c;
   }
   .architecture button:focus-visible {
-    outline: 3px solid var(--kuem-petrol);
-    outline-offset: 4px;
+    outline: var(--kuem-focus-width) solid var(--kuem-focus);
+    outline-offset: var(--kuem-focus-offset);
   }
   .node-open {
     position: absolute;
@@ -510,8 +538,8 @@ const cards = copy.cards;
     position: relative;
     width: 100%;
     border: 1px solid transparent;
-    border-radius: 6px;
-    background: white;
+    border-radius: var(--kuem-radius-card);
+    background: var(--kuem-white);
     padding: 8px 4px 22px;
   }
   .platform-open .logo {
@@ -520,7 +548,7 @@ const cards = copy.cards;
     height: 70px;
   }
   .platform-open > strong {
-    font-size: 17px;
+    font-size: var(--kuem-type-lead-size);
   }
   .kai {
     position: relative;
@@ -529,11 +557,11 @@ const cards = copy.cards;
     padding-bottom: 22px;
   }
   .kai .node-open {
-    color: white;
+    color: var(--kuem-white);
   }
   .kai > span {
     margin: 0;
-    color: white;
+    color: var(--kuem-white);
   }
   .noc {
     position: relative;
@@ -544,17 +572,17 @@ const cards = copy.cards;
     opacity: 0.85;
   }
   .architecture .is-selected {
-    border-color: var(--kuem-copper);
-    box-shadow: 0 0 0 1px var(--kuem-copper);
+    border-color: var(--kuem-event);
+    box-shadow: 0 0 0 1px var(--kuem-event);
     background: var(--kuem-white);
   }
   .architecture .kai.is-selected {
-    color: white;
+    color: var(--kuem-white);
     background: var(--kuem-petrol);
   }
   .architecture .noc.is-selected {
     background: var(--kuem-carbon);
-    color: white;
+    color: var(--kuem-white);
   }
   .architecture:lang(en) .is-selected:before {
     content: "Selected step";
@@ -567,14 +595,14 @@ const cards = copy.cards;
     background: var(--kuem-copper);
     color: var(--kuem-carbon);
     padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 11px;
+    border-radius: var(--kuem-radius-control);
+    font-size: var(--kuem-type-label-size);
     font-weight: 600;
     line-height: 20px;
     z-index: 5;
   }
   .platform:has(.is-selected) {
-    border-color: var(--kuem-copper);
+    border-color: var(--kuem-event);
   }
   .platform .kai.is-selected:before {
     display: none;
@@ -588,17 +616,17 @@ const cards = copy.cards;
       gap: 32px 18px;
     }
     .architecture strong {
-      font-size: 11px;
+      font-size: var(--kuem-type-small-size);
     }
     .architecture span {
-      font-size: 11px;
+      font-size: var(--kuem-type-small-size);
     }
     .node > :global(svg) {
       width: 56px;
       height: 48px;
     }
     .platform-open > strong {
-      font-size: 16px;
+      font-size: var(--kuem-type-body-size);
     }
     .platform-open .logo {
       height: 48px;
@@ -611,14 +639,14 @@ const cards = copy.cards;
       width: 28px;
     }
     .kai strong {
-      font-size: 16px;
+      font-size: var(--kuem-type-body-size);
     }
     .noc {
       gap: 10px;
       padding: 16px 12px;
     }
     .noc small {
-      font-size: 9px;
+      font-size: var(--kuem-type-label-size);
     }
     .architecture-intro {
       flex-wrap: wrap;
@@ -633,10 +661,10 @@ const cards = copy.cards;
       gap: 36px 24px;
     }
     .architecture strong {
-      font-size: 12px;
+      font-size: var(--kuem-type-small-size);
     }
     .architecture span {
-      font-size: 12px;
+      font-size: var(--kuem-type-small-size);
     }
     .platform-open .logo {
       height: 78px;
@@ -644,14 +672,14 @@ const cards = copy.cards;
       max-width: 100%;
     }
     .platform-open > strong {
-      font-size: 20px;
+      font-size: var(--kuem-type-lead-size);
     }
     .kai {
       padding: 18px 14px 24px;
       gap: 12px;
     }
     .kai strong {
-      font-size: 20px;
+      font-size: var(--kuem-type-lead-size);
     }
     .kai :global(svg) {
       width: 40px;
@@ -660,7 +688,7 @@ const cards = copy.cards;
       padding: 18px 12px;
     }
     .noc small {
-      font-size: 10px;
+      font-size: var(--kuem-type-label-size);
     }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -731,13 +759,16 @@ const cards = copy.cards;
       monitors.replaceChildren();
       const routes = [
         ["devices", "radio", 0],
-        ["radio", "platform", 2.6],
-        ["systems", "api", 1.2],
-        ["api", "platform", 3.8],
-        ["platform", "action", 5.2],
-        ["platform", "action", 6.4],
+        ["radio", "platform", 0.8],
+        ["systems", "api", 0],
+        ["api", "platform", 0.8],
+        ["platform", "action", 1.6],
       ] as const;
-      routes.forEach(([from, to, delay], i) => {
+      // One pass of the data marker takes 2.4 s (duration.marker); it runs
+      // twice and stops, inside the 5 s autoplay limit.
+      const markerPass = 2.4;
+      const segment = markerPass / 3;
+      routes.forEach(([from, to, delay]) => {
         const a = box(from),
           b = box(to);
         let d: string;
@@ -763,20 +794,19 @@ const cards = copy.cards;
             : from === "platform"
               ? "3 4"
               : "0 1 3";
-        if (i !== 5)
-          make(
-            "path",
-            {
-              d,
-              fill: "none",
-              stroke: "#156B75",
-              "stroke-width": "1.7",
-              "marker-end": "url(#architecture-arrow)",
-              "data-route-steps": relevant,
-            },
-            links,
-          );
-        const size = mobile ? 6 : 8;
+        make(
+          "path",
+          {
+            d,
+            fill: "none",
+            style: "stroke: var(--kuem-data)",
+            "stroke-width": "2",
+            "marker-end": "url(#architecture-arrow)",
+            "data-route-steps": relevant,
+          },
+          links,
+        );
+        const size = 6;
         const rect = make(
           "rect",
           {
@@ -784,17 +814,12 @@ const cards = copy.cards;
             y: String(-size / 2),
             width: String(size),
             height: String(size),
-            rx: "1",
             "data-route-steps": relevant,
-            fill: "#F06432",
+            style: "fill: var(--kuem-event)",
           },
           packets,
         );
         if (motion.matches) {
-          if (i === 5) {
-            rect.remove();
-            return;
-          }
           const p = make(
             "path",
             { d },
@@ -808,11 +833,8 @@ const cards = copy.cards;
             "animateMotion",
             {
               path: d,
-              dur: "10s",
-              begin: `${delay}s`,
-              repeatCount: "indefinite",
-              keyPoints: "0;1;1",
-              keyTimes: "0;0.25;1",
+              dur: `${segment}s`,
+              begin: `${delay}s;${delay + markerPass}s`,
               calcMode: "linear",
             },
             rect,
@@ -821,11 +843,10 @@ const cards = copy.cards;
             "animate",
             {
               attributeName: "opacity",
-              values: "0;1;1;0;0",
-              keyTimes: "0;0.02;0.23;0.25;1",
-              dur: "10s",
-              begin: `${delay}s`,
-              repeatCount: "indefinite",
+              values: "0;1;1;0",
+              keyTimes: "0;0.1;0.9;1",
+              dur: `${segment}s`,
+              begin: `${delay}s;${delay + markerPass}s`,
             },
             rect,
           );
@@ -848,10 +869,9 @@ const cards = copy.cards;
           {
             d,
             fill: "none",
-            stroke: "#156B75",
+            style: "stroke: var(--kuem-border-strong)",
             "stroke-width": "1",
             "stroke-dasharray": "2 4",
-            opacity: "0.45",
           },
           monitors,
         );

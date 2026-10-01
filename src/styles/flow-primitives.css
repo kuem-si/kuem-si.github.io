@@ -1,10 +1,10 @@
 /* Unchanged homepage flow surfaces and geometry. Layout and motion stay local. */
 .hp-node,
 .nx-flow-card {
-  background: #ffffffdf;
+  background: color-mix(in srgb, var(--kuem-white) 87.5%, transparent);
   border: 1px solid var(--kuem-concrete);
   border-radius: var(--kuem-radius-card);
-  box-shadow: 0 3px 12px #156b7503;
+  box-shadow: none;
 }
 .hp-connector,
 .nx-integration-connector {

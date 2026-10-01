@@ -3,11 +3,6 @@
   color: var(--kuem-carbon);
   font-size: var(--kuem-type-body-size);
 }
-.ab-page h1,
-.ab-page h2,
-.ab-page h3 {
-  letter-spacing: -0.04em;
-}
 .ab-page h2 {
   font-size: var(--kuem-type-h2-size);
   line-height: 1.12;
@@ -17,10 +12,11 @@
 }
 .ab-eyebrow {
   margin: 0 0 0.8rem !important;
-  color: var(--kuem-petrol);
+  color: var(--kuem-text-muted);
   font-size: var(--kuem-type-label-size);
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: var(--kuem-type-label-weight);
+  letter-spacing: var(--kuem-type-label-tracking);
+  text-transform: uppercase;
 }
 .ab-hero {
   padding: var(--kuem-space-64) 0 var(--kuem-space-48);
@@ -86,7 +82,7 @@
   font:
     600 12px / 1.5 "Source Sans 3",
     sans-serif;
-  letter-spacing: 0.16em;
+  letter-spacing: 0;
 }
 .ab-flow {
   grid-area: 1 / 1;
@@ -144,7 +140,7 @@
   font:
     600 15px / 1.5 "Space Grotesk",
     sans-serif;
-  letter-spacing: 0;
+  letter-spacing: var(--kuem-type-h3-tracking);
 }
 .ab-flow h3 span {
   display: block;
@@ -236,7 +232,7 @@
   margin: 0;
   color: var(--kuem-petrol);
   font-size: var(--kuem-type-label-size);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--kuem-type-label-tracking);
 }
 .ab-fact-grid p {
   margin: var(--kuem-space-4) 0 0;
@@ -247,8 +243,15 @@
   padding: var(--kuem-space-64) 0;
   background: var(--kuem-white);
   background-image:
-    linear-gradient(rgba(21, 107, 117, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(21, 107, 117, 0.04) 1px, transparent 1px);
+    linear-gradient(
+      color-mix(in srgb, var(--kuem-petrol) 4%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--kuem-petrol) 4%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 42px 42px;
 }
 .ab-team-grid {
@@ -403,7 +406,7 @@
   align-items: center;
 }
 .ab-region .ab-eyebrow {
-  color: var(--kuem-petrol-light);
+  color: var(--kuem-text-muted);
 }
 .ab-region h2 {
   max-width: 17ch;
@@ -430,11 +433,6 @@
 .ab-contact {
   padding: var(--kuem-space-64) 0;
   background: var(--kuem-surface-1);
-  background-image: linear-gradient(
-    155deg,
-    transparent 62%,
-    rgba(21, 107, 117, 0.06) 62%
-  );
 }
 .ab-contact h2 {
   max-width: 18ch;
@@ -452,7 +450,7 @@
   margin-top: var(--kuem-space-16);
 }
 body:has(.ab-page) .site-header {
-  background: rgba(255, 255, 255, 0.97) !important;
+  background: color-mix(in srgb, var(--kuem-white) 97%, transparent) !important;
   color: var(--kuem-carbon) !important;
   border-color: var(--kuem-concrete) !important;
 }
@@ -595,14 +593,24 @@ body:has(.ab-page) .site-header .header-contact {
 .ab-hero {
   background-color: var(--kuem-background);
   background-image:
-    linear-gradient(rgba(21, 107, 117, 0.13) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(21, 107, 117, 0.13) 1px, transparent 1px);
+    linear-gradient(
+      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 48px 48px;
   padding-block: var(--kuem-space-64);
 }
-.ab-hero .ab-eyebrow,
 .ab-hero .ab-actions .btn-secondary {
   color: var(--kuem-data);
+  border-color: var(--kuem-data);
+}
+.ab-hero .ab-eyebrow {
+  color: var(--kuem-text-muted);
   border-color: var(--kuem-data);
 }
 .ab-hero-copy > p:not(.ab-eyebrow) {
@@ -630,7 +638,7 @@ body:has(.ab-page) .site-header .header-contact {
   color: var(--kuem-text-primary);
 }
 .ab-region[data-scheme] .ab-eyebrow {
-  color: var(--kuem-data);
+  color: var(--kuem-text-muted);
 }
 .ab-region[data-scheme] .ab-region-grid > div:first-child > p:not(.ab-eyebrow) {
   color: var(--kuem-text-secondary);
