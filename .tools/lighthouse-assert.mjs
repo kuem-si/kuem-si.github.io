@@ -30,6 +30,26 @@ for (const file of files) {
       `${ok ? "PASS" : "FAIL"} ${category.padEnd(14)} ${percent} (min ${minimum})`,
     );
   }
+  // The metrics behind the performance score, so a failing run shows why.
+  const metrics = [
+    "first-contentful-paint",
+    "largest-contentful-paint",
+    "total-blocking-time",
+    "cumulative-layout-shift",
+    "speed-index",
+  ];
+  console.log(
+    metrics
+      .map((id) => {
+        const audit = report.audits[id];
+        return audit ? `  ${id}: ${audit.displayValue}` : `  ${id}: n/a`;
+      })
+      .join("\n"),
+  );
+  const lcpNode =
+    report.audits["largest-contentful-paint-element"]?.details?.items?.[0]
+      ?.items?.[0]?.node;
+  if (lcpNode) console.log(`  LCP element: ${lcpNode.snippet}`);
 }
 
 if (failed) {

@@ -15,28 +15,6 @@ export const benefits = [
     text: "Analitika pomaga pri upravljanju infrastrukture in načrtovanju ukrepov.",
   },
 ];
-export const steps = [
-  {
-    icon: "device",
-    title: "Zajem",
-    text: "Senzorji, števci, naprave in terenska oprema.",
-  },
-  {
-    icon: "network",
-    title: "Prenos",
-    text: "Povezljivost, prilagojena lokaciji in namenu uporabe.",
-  },
-  {
-    icon: "screen",
-    title: "Nexavia",
-    text: "Enotna platforma za sprejem, obdelavo, prikaz in upravljanje podatkov.",
-  },
-  {
-    icon: "chart",
-    title: "Odločitev",
-    text: "KAI, opozorila, priporočila in podpora konkretnim ukrepom.",
-  },
-];
 export const industries = [
   {
     icon: "water",
@@ -89,34 +67,6 @@ export const useCases = [
     href: "/resitve/promet-in-mobilnost",
   },
 ];
-export const partnership = [
-  {
-    icon: "device",
-    title: "Različne naprave",
-    text: "Senzorji, števci in terenska oprema.",
-  },
-  {
-    icon: "network",
-    title: "Različne povezave",
-    text: "LoRaWAN, NB-IoT, mobilna in lokalna omrežja.",
-  },
-  {
-    icon: "database",
-    title: "Integracije z obstoječimi sistemi",
-    text: "ERP, SCADA, GIS in standardni vmesniki.",
-  },
-  {
-    icon: "chart",
-    title: "Nexavia in KAI",
-    text: "Podatki, analitika, opozorila in priporočila.",
-  },
-  {
-    icon: "people",
-    title: "NOC in upravljane storitve",
-    text: "Stalni nadzor, odzivanje, vzdrževanje in strokovna podpora.",
-  },
-];
-
 export const benefitsEn = [
   {
     icon: "eye",
@@ -132,28 +82,6 @@ export const benefitsEn = [
     icon: "chart",
     title: "Data for better decisions",
     text: "Analytics supports infrastructure management and action planning.",
-  },
-];
-export const stepsEn = [
-  {
-    icon: "device",
-    title: "Acquisition",
-    text: "Sensors, meters, devices and field equipment.",
-  },
-  {
-    icon: "network",
-    title: "Transfer",
-    text: "Connectivity adapted to the location and use case.",
-  },
-  {
-    icon: "screen",
-    title: "Nexavia",
-    text: "One platform for receiving, processing, presenting and managing data.",
-  },
-  {
-    icon: "chart",
-    title: "Decision",
-    text: "KAI, alerts, recommendations and support for concrete action.",
   },
 ];
 export const industriesEn = [
@@ -206,32 +134,5 @@ export const useCasesEn = [
     title: "Planning cycling connections",
     text: "Data from several sources is displayed on a usage map and supports infrastructure planning.",
     href: "/en/solutions/traffic-and-mobility",
-  },
-];
-export const partnershipEn = [
-  {
-    icon: "device",
-    title: "Different devices",
-    text: "Sensors, meters and field equipment.",
-  },
-  {
-    icon: "network",
-    title: "Different connections",
-    text: "LoRaWAN, NB-IoT, mobile and local networks.",
-  },
-  {
-    icon: "database",
-    title: "Existing-system integrations",
-    text: "ERP, SCADA, GIS and standard interfaces.",
-  },
-  {
-    icon: "chart",
-    title: "Nexavia and KAI",
-    text: "Data, analytics, alerts and recommendations.",
-  },
-  {
-    icon: "people",
-    title: "NOC and managed services",
-    text: "Continuous monitoring, response, maintenance and expert support.",
   },
 ];
