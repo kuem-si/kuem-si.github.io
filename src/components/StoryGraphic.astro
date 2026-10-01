@@ -72,11 +72,11 @@ const { variant } = Astro.props as {
     min-height: 100%;
     overflow: hidden;
     background:
-      linear-gradient(rgba(21, 107, 117, 0.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(21, 107, 117, 0.07) 1px, transparent 1px),
+      linear-gradient(color-mix(in srgb, var(--kuem-petrol) 7%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--kuem-petrol) 7%, transparent) 1px, transparent 1px),
       radial-gradient(
         circle at 70% 34%,
-        rgba(21, 107, 117, 0.2),
+        color-mix(in srgb, var(--kuem-petrol) 20%, transparent),
         transparent 46%
       ),
       #1e2428;
@@ -94,7 +94,7 @@ const { variant } = Astro.props as {
     background: linear-gradient(
       135deg,
       transparent 45%,
-      rgba(255, 255, 255, 0.025)
+      color-mix(in srgb, var(--kuem-white) 2.5%, transparent)
     );
   }
 

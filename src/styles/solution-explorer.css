@@ -24,7 +24,7 @@
 .explorer-copy h1 {
   font-size: var(--kuem-type-h1-size);
   line-height: 1.1;
-  letter-spacing: -0.045em;
+  letter-spacing: var(--kuem-type-h1-tracking);
   margin: 0 0 var(--kuem-space-24);
 }
 .explorer-copy > p:not(.hp-eyebrow) {
@@ -49,10 +49,10 @@
   flex-shrink: 0;
 }
 .solutions-page .hp-eyebrow {
-  color: var(--hp-petrol);
+  color: var(--kuem-text-muted);
   font-size: var(--kuem-type-label-size);
-  letter-spacing: 0.065em;
-  font-weight: 600;
+  letter-spacing: var(--kuem-type-label-tracking);
+  font-weight: var(--kuem-type-label-weight);
 }
 .explorer-trust {
   padding: var(--kuem-space-32) 0;
@@ -179,7 +179,7 @@
 }
 .solutions-page .hp-closing h2,
 .solutions-page .hp-closing p {
-  color: white;
+  color: var(--kuem-white);
 }
 .solution-panel {
   position: fixed;
@@ -187,13 +187,13 @@
   z-index: 200;
   width: var(--panel-width);
   height: 100dvh;
-  background: white;
+  background: var(--kuem-white);
   box-shadow: -12px 0 40px #161a1d12;
   border-left: 1px solid var(--kuem-concrete);
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   transform: translateX(100%);
-  transition: transform 0.3s ease;
+  transition: transform var(--kuem-duration-slow) var(--kuem-ease-standard);
   overscroll-behavior: contain;
 }
 .solution-panel.is-open {
@@ -204,7 +204,7 @@
   padding: var(--kuem-space-32) var(--kuem-space-64) var(--kuem-space-16)
     var(--kuem-space-32);
   border-bottom: 1px solid var(--kuem-concrete);
-  background: white;
+  background: var(--kuem-white);
 }
 .panel-header .hp-eyebrow {
   margin: 0 0 var(--kuem-space-8);
@@ -212,7 +212,7 @@
 .solution-panel .panel-header h2 {
   font-size: var(--kuem-type-h3-size);
   line-height: 1.15;
-  letter-spacing: -0.03em;
+  letter-spacing: var(--kuem-type-h3-tracking);
   margin: 0;
 }
 .panel-header h2:focus {
@@ -228,7 +228,7 @@
   place-items: center;
   border: 0;
   border-radius: var(--kuem-radius-control);
-  background: white;
+  background: var(--kuem-white);
   color: var(--kuem-carbon);
 }
 .panel-close:hover {
@@ -247,7 +247,7 @@
 .solution-panel .step-headline {
   font-size: var(--kuem-type-h3-size);
   line-height: 1.15;
-  letter-spacing: -0.035em;
+  letter-spacing: var(--kuem-type-h3-tracking);
   margin: 0 0 var(--kuem-space-16);
 }
 .solution-panel .step-description {
@@ -263,7 +263,7 @@
 .solution-panel .step-tags h3 {
   font-size: var(--kuem-type-body-size);
   margin: 0 0 var(--kuem-space-16);
-  letter-spacing: -0.02em;
+  letter-spacing: var(--kuem-type-body-tracking);
 }
 .step-details ul {
   list-style: none;
@@ -319,7 +319,7 @@
   background: var(--kuem-surface-1);
   color: var(--kuem-petrol);
   border: 1px solid var(--kuem-concrete);
-  border-radius: 30px;
+  border-radius: var(--kuem-radius-control);
   font-size: var(--kuem-type-small-size);
 }
 .solution-panel .step-note {
@@ -424,7 +424,7 @@
 .panel-footer {
   padding: var(--kuem-space-16) var(--kuem-space-24) var(--kuem-space-24);
   border-top: 1px solid var(--kuem-concrete);
-  background: white;
+  background: var(--kuem-white);
 }
 .panel-progress {
   display: flex;
@@ -461,7 +461,7 @@
   height: 20px;
   border: 1px solid var(--kuem-petrol-light);
   border-radius: 50%;
-  background: white;
+  background: var(--kuem-white);
   font-size: var(--kuem-type-label-size);
   display: grid;
   place-items: center;
@@ -489,15 +489,15 @@
   justify-content: center;
 }
 .solution-panel :focus-visible {
-  outline: 3px solid var(--kuem-petrol);
-  outline-offset: 3px;
+  outline: var(--kuem-focus-width) solid var(--kuem-focus);
+  outline-offset: var(--kuem-focus-offset);
 }
 .solution-modal {
   overflow: hidden;
 }
 @media (min-width: 1400px) {
   .solutions-page main {
-    transition: margin-right 0.3s ease;
+    transition: margin-right var(--kuem-duration-slow) var(--kuem-ease-standard);
   }
   .explorer-open main {
     margin-right: var(--panel-width);
@@ -564,7 +564,7 @@
     content: "";
     position: fixed;
     inset: 0;
-    background: #161a1d22;
+    background: color-mix(in srgb, var(--kuem-carbon) 13.3%, transparent);
     z-index: 150;
   }
   .panel-header {
@@ -680,12 +680,19 @@
 .solutions-page .explorer-hero {
   background-color: var(--kuem-background);
   background-image:
-    linear-gradient(rgba(21, 107, 117, 0.13) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(21, 107, 117, 0.13) 1px, transparent 1px);
+    linear-gradient(
+      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 48px 48px;
 }
 .solutions-page .explorer-hero .hp-eyebrow {
-  color: var(--hp-petrol);
+  color: var(--kuem-text-muted);
 }
 .explorer-hero .explorer-copy > p:not(.hp-eyebrow) {
   color: var(--kuem-text-secondary);

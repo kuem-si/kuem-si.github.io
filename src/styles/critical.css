@@ -101,13 +101,13 @@ p {
   position: sticky;
   top: 0;
   z-index: 30;
-  background: rgba(22, 26, 29, 0.78);
+  background: color-mix(in srgb, var(--kuem-carbon) 78%, transparent);
   color: var(--kuem-white);
-  border-bottom: 1px solid #3b4247;
+  border-bottom: 1px solid var(--kuem-border);
   backdrop-filter: blur(12px);
 }
 .site-header.is-scrolled {
-  background: rgba(22, 26, 29, 0.96);
+  background: color-mix(in srgb, var(--kuem-carbon) 96%, transparent);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
 }
 .header-inner {
@@ -156,7 +156,7 @@ nav {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  min-height: 46px;
+  min-height: 48px;
   padding: var(--kuem-space-8) var(--kuem-space-16);
   border: 1px solid currentColor;
   font-weight: 600;
@@ -178,8 +178,15 @@ nav {
   background-color: var(--kuem-carbon);
   color: var(--kuem-white);
   background-image:
-    linear-gradient(rgba(21, 107, 117, 0.13) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(21, 107, 117, 0.13) 1px, transparent 1px);
+    linear-gradient(
+      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 48px 48px;
 }
 .hero {
@@ -203,10 +210,10 @@ nav {
   min-width: 0;
 }
 .eyebrow {
-  color: var(--kuem-copper);
-  font-weight: 600;
+  color: var(--kuem-text-muted);
+  font-weight: var(--kuem-type-label-weight);
   text-transform: uppercase;
-  letter-spacing: 0.13em;
+  letter-spacing: var(--kuem-type-label-tracking);
   font-size: var(--kuem-type-label-size);
 }
 .lead {
@@ -227,8 +234,8 @@ nav {
 .data-visual {
   position: relative;
   min-height: 420px;
-  border: 1px solid #3b4247;
-  background: rgba(22, 26, 29, 0.72);
+  border: 1px solid var(--kuem-border);
+  background: color-mix(in srgb, var(--kuem-carbon) 72%, transparent);
   overflow: hidden;
 }
 .data-visual svg {
@@ -240,8 +247,8 @@ nav {
 .node-label {
   position: absolute;
   padding: var(--kuem-space-8) var(--kuem-space-8);
-  border-left: 3px solid var(--kuem-copper);
-  background: #252c31;
+  border-left: 2px solid var(--kuem-copper);
+  background: var(--kuem-surface-2);
   font-size: var(--kuem-type-label-size);
 }
 .node-label:nth-of-type(1) {

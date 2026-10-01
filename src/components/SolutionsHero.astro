@@ -117,8 +117,8 @@ const content = solutionsHero[locale];
   .solutions-hero::before {
     inset: 0;
     background-image:
-      linear-gradient(rgba(21, 107, 117, 0.055) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(21, 107, 117, 0.055) 1px, transparent 1px);
+      linear-gradient(color-mix(in srgb, var(--kuem-petrol) 5.5%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--kuem-petrol) 5.5%, transparent) 1px, transparent 1px);
     background-size: 48px 48px;
     mask-image: linear-gradient(90deg, transparent 0 34%, #000 57% 100%);
   }
@@ -130,7 +130,7 @@ const content = solutionsHero[locale];
     aspect-ratio: 1;
     background: radial-gradient(
       circle,
-      rgba(21, 107, 117, 0.16),
+      color-mix(in srgb, var(--kuem-petrol) 16%, transparent),
       transparent 68%
     );
   }
@@ -161,7 +161,7 @@ const content = solutionsHero[locale];
     margin-bottom: 0;
     font-size: clamp(3.5rem, 6.5vw, 6rem);
     line-height: 0.94;
-    letter-spacing: -0.045em;
+    letter-spacing: var(--kuem-type-h1-tracking);
   }
 
   .solutions-hero__description {
@@ -181,14 +181,14 @@ const content = solutionsHero[locale];
   }
 
   .solutions-hero__actions .btn-secondary {
-    border-color: rgba(255, 255, 255, 0.48);
+    border-color: color-mix(in srgb, var(--kuem-white) 48%, transparent);
     color: #f3f2f0;
   }
 
   .solutions-hero__actions .btn-secondary:hover,
   .solutions-hero__actions .btn-secondary:focus-visible {
     border-color: var(--kuem-petrol-light);
-    background: rgba(21, 107, 117, 0.13);
+    background: color-mix(in srgb, var(--kuem-petrol) 13%, transparent);
   }
 
   .solutions-hero__proof {
@@ -283,7 +283,7 @@ const content = solutionsHero[locale];
     font-size: 0.75rem;
     font-weight: 600;
     line-height: 1.3;
-    letter-spacing: 0.13em;
+    letter-spacing: 0;
   }
 
   .architecture-layer:nth-of-type(2) {
@@ -309,16 +309,16 @@ const content = solutionsHero[locale];
     padding: 1.2rem 1.05rem 1rem;
     border: 1px solid rgba(139, 149, 155, 0.42);
     border-left: 2px solid var(--kuem-petrol);
-    background: rgba(22, 26, 29, 0.9);
+    background: color-mix(in srgb, var(--kuem-carbon) 90%, transparent);
     box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18);
     opacity: 0;
     transform: translateY(8px);
     animation: reveal-module 520ms ease var(--module-delay) forwards;
     transition:
-      border-color 180ms ease,
-      background-color 180ms ease,
-      transform 180ms ease,
-      box-shadow 180ms ease;
+      border-color var(--kuem-duration-base) var(--kuem-ease-standard),
+      background-color var(--kuem-duration-base) var(--kuem-ease-standard),
+      transform var(--kuem-duration-base) var(--kuem-ease-standard),
+      box-shadow var(--kuem-duration-base) var(--kuem-ease-standard);
   }
 
   .architecture-module::after {
@@ -328,11 +328,11 @@ const content = solutionsHero[locale];
     background: linear-gradient(
       115deg,
       transparent 30%,
-      rgba(79, 163, 173, 0.08),
+      color-mix(in srgb, var(--kuem-petrol-light) 8%, transparent),
       transparent 70%
     );
     opacity: 0;
-    transition: opacity 180ms ease;
+    transition: opacity var(--kuem-duration-base) var(--kuem-ease-standard);
     pointer-events: none;
   }
 
@@ -346,8 +346,8 @@ const content = solutionsHero[locale];
   }
 
   .architecture-module:focus-visible {
-    outline: 2px solid var(--kuem-copper);
-    outline-offset: 4px;
+    outline: var(--kuem-focus-width) solid var(--kuem-focus);
+    outline-offset: var(--kuem-focus-offset);
   }
 
   .architecture-module:hover::after,
@@ -388,8 +388,8 @@ const content = solutionsHero[locale];
     color: var(--kuem-petrol-light);
     font-size: 1rem;
     transition:
-      color 180ms ease,
-      transform 180ms ease;
+      color var(--kuem-duration-base) var(--kuem-ease-standard),
+      transform var(--kuem-duration-base) var(--kuem-ease-standard);
   }
 
   .architecture-module:hover .architecture-module__arrow,
@@ -403,7 +403,7 @@ const content = solutionsHero[locale];
     background: linear-gradient(
       135deg,
       rgba(37, 44, 49, 0.98),
-      rgba(22, 26, 29, 0.94)
+      color-mix(in srgb, var(--kuem-carbon) 94%, transparent)
     );
   }
 

@@ -1,22 +1,18 @@
 .pi-page {
   background: var(--kuem-white);
-  color: #252c31;
+  color: var(--kuem-text-primary);
   font-size: var(--kuem-type-body-size);
 }
 .pi-page p {
   line-height: 1.5;
 }
-.pi-page h1,
-.pi-page h2,
-.pi-page h3 {
-  letter-spacing: -0.035em;
-}
 .pi-eyebrow {
   font-size: var(--kuem-type-label-size);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--kuem-petrol);
+  font-weight: var(--kuem-type-label-weight);
+  letter-spacing: var(--kuem-type-label-tracking);
+  color: var(--kuem-text-muted);
   margin: 0 0 0.8rem !important;
+  text-transform: uppercase;
 }
 .pi-hero {
   padding: var(--kuem-space-48) 0 var(--kuem-space-48);
@@ -64,7 +60,7 @@
   border: 1px solid var(--kuem-concrete);
   border-radius: var(--kuem-radius-card);
   background: var(--kuem-white);
-  box-shadow: 0 9px 22px rgba(21, 107, 117, 0.04);
+  box-shadow: none;
 }
 .pi-board-heading {
   display: flex;
@@ -73,7 +69,7 @@
   color: var(--kuem-petrol);
   font-size: var(--kuem-type-label-size);
   font-weight: 700;
-  letter-spacing: 0.07em;
+  letter-spacing: var(--kuem-type-label-tracking);
   margin: 0 0 var(--kuem-space-16);
 }
 .pi-hero-cards {
@@ -92,17 +88,17 @@
   border: 1px solid var(--kuem-concrete);
   border-radius: var(--kuem-radius-control);
   background: var(--kuem-white);
-  color: #252c31;
+  color: var(--kuem-text-primary);
   text-align: left;
   font:
     600 0.85rem "Source Sans 3",
     sans-serif;
   cursor: pointer;
   transition:
-    border-color 0.22s,
-    background 0.22s,
-    box-shadow 0.22s,
-    transform 0.22s;
+    border-color var(--kuem-duration-base),
+    background var(--kuem-duration-base),
+    box-shadow var(--kuem-duration-base),
+    transform var(--kuem-duration-base);
 }
 .pi-hero-card:hover {
   border-color: var(--kuem-petrol);
@@ -186,15 +182,15 @@
   border: 1px solid var(--kuem-concrete);
   border-radius: var(--kuem-radius-control);
   background: var(--kuem-white);
-  color: #252c31;
+  color: var(--kuem-text-primary);
   text-align: left;
   font:
     600 0.84rem "Source Sans 3",
     sans-serif;
   cursor: pointer;
   transition:
-    border-color 0.22s,
-    background 0.22s;
+    border-color var(--kuem-duration-fast),
+    background var(--kuem-duration-fast);
 }
 .pi-tabs button:hover {
   border-color: var(--kuem-petrol);
@@ -202,7 +198,7 @@
 .pi-tabs button[aria-selected="true"] {
   border-color: var(--kuem-copper);
   background: var(--kuem-white);
-  color: #252c31;
+  color: var(--kuem-text-primary);
 }
 .pi-tabs img {
   display: block;
@@ -223,10 +219,10 @@
   background: var(--kuem-white);
   border: 1px solid var(--kuem-concrete);
   border-radius: var(--kuem-radius-card);
-  box-shadow: 0 8px 20px rgba(21, 107, 117, 0.05);
+  box-shadow: none;
   padding: var(--kuem-space-16);
   opacity: 1;
-  transition: opacity 0.25s;
+  transition: opacity var(--kuem-duration-base);
 }
 .pi-panel.pi-changing {
   opacity: 0.55;
@@ -488,7 +484,7 @@
 }
 .pi-closing {
   background: var(--kuem-petrol);
-  color: white;
+  color: var(--kuem-white);
   padding: var(--kuem-space-48) 0;
 }
 .pi-closing > .container {
@@ -510,8 +506,8 @@
   border-radius: var(--kuem-radius-control);
 }
 body:has(.pi-page) .site-header {
-  background: rgba(255, 255, 255, 0.98) !important;
-  color: #252c31 !important;
+  background: color-mix(in srgb, var(--kuem-white) 98%, transparent) !important;
+  color: var(--kuem-text-primary) !important;
   border-color: var(--kuem-concrete) !important;
 }
 body:has(.pi-page) .site-header .brand img {
@@ -671,7 +667,7 @@ body:has(.pi-page) .site-header .header-contact {
   }
   body:has(.pi-page) .site-header nav.open {
     background: var(--kuem-white);
-    color: #252c31;
+    color: var(--kuem-text-primary);
   }
   body:has(.pi-page) .site-header .header-actions {
     display: none !important;
@@ -721,14 +717,24 @@ body:has(.pi-page) .site-header .header-contact {
 .pi-hero {
   background-color: var(--kuem-background);
   background-image:
-    linear-gradient(rgba(21, 107, 117, 0.13) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(21, 107, 117, 0.13) 1px, transparent 1px);
+    linear-gradient(
+      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 48px 48px;
   padding-block: var(--kuem-space-64);
 }
-.pi-hero .pi-eyebrow,
 .pi-hero .pi-actions .btn-secondary {
   color: var(--kuem-data);
+  border-color: var(--kuem-data);
+}
+.pi-hero .pi-eyebrow {
+  color: var(--kuem-text-muted);
   border-color: var(--kuem-data);
 }
 .pi-hero-copy > p:not(.pi-eyebrow) {
