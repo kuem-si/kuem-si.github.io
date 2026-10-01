@@ -679,17 +679,6 @@
    white panel, and token heading sizes. Comes last on purpose. */
 .solutions-page .explorer-hero {
   background-color: var(--kuem-background);
-  background-image:
-    linear-gradient(
-      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 48px 48px;
 }
 .solutions-page .explorer-hero .hp-eyebrow {
   color: var(--kuem-text-muted);

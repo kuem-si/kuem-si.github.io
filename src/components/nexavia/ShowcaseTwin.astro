@@ -19,7 +19,7 @@ const { dashboard } = twin;
 ---
 
 <div class="twin-tab-panel" role="tabpanel" id={`twin-panel-${twin.id}`} aria-labelledby={`twin-tab-${twin.id}`} data-twin-tab={twin.id} hidden={!selected}>
-  <section class="twin-workspace" aria-label={t("Razstavni prostor in nadzorna plošča", "Showcase room and dashboard")}>
+  <section class="twin-workspace" data-scheme="carbon" aria-label={t("Razstavni prostor in nadzorna plošča", "Showcase room and dashboard")}>
     <div class="twin-city-panel">
       <div class="twin-panel-head">
         <div>
@@ -52,7 +52,7 @@ const { dashboard } = twin;
         <label class="xdr-opacity-control" title={t("Prosojnost nadzorne plošče", "Dashboard opacity")}><svg class="xdr-sun-low" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 1v2m0 18v2M1 12h2m18 0h2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42m0-15.56-1.42 1.42M5.64 18.36l-1.42 1.42" /></svg><input type="range" min="35" max="100" value="100" data-overlay-opacity aria-label={t("Prosojnost nadzorne plošče", "Dashboard opacity")} /><svg class="xdr-sun-high" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" /><path d="M12 1v2m0 18v2M1 12h2m18 0h2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42m0-15.56-1.42 1.42M5.64 18.36l-1.42 1.42" /></svg></label>
       </div>
       <div class="xdr-bezel" aria-label={t("Nadzorna plošča Nexavia, simulacija", "Nexavia dashboard, simulation")}>
-        <div class="xdr-screen">
+        <div class="xdr-screen" data-scheme="white">
           <aside class="twin-dashboard" aria-label={t("Nexavia nadzorna plošča, simulacija", "Nexavia dashboard simulation")}>
             <div class="twin-dashboard-top">
               <div class="twin-brand"><img src={nexaviaLogo.src} alt="Nexavia" /><span>{t("Nadzorna plošča", "Dashboard")}</span></div>

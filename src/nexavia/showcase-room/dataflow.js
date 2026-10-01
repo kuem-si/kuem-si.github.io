@@ -8,8 +8,26 @@ const NS = "http://www.w3.org/2000/svg";
 const UPLINK_GAP = 1500;
 const TRIP = 820;
 const BEAM = 300;
-const COMMAND = "#ffd66b";
-const FAILED = "#ff6f5b";
+const COMMAND = "#f06432";
+const FAILED = "#fe5c58";
+
+// The point a fraction s of the way along a polyline.
+function along(points, s) {
+  const lengths = points
+    .slice(1)
+    .map(([x, y], i) => Math.hypot(x - points[i][0], y - points[i][1]));
+  let left = s * lengths.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < lengths.length; i++) {
+    if (left <= lengths[i] || i === lengths.length - 1) {
+      const k = lengths[i] ? Math.min(1, left / lengths[i]) : 1;
+      const [x0, y0] = points[i];
+      const [x1, y1] = points[i + 1];
+      return [x0 + (x1 - x0) * k, y0 + (y1 - y0) * k];
+    }
+    left -= lengths[i];
+  }
+  return points[points.length - 1];
+}
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const svg = (tag, attributes, parent) => {
@@ -66,24 +84,29 @@ export function initDataFlow(root, { gateway }) {
     { class: "flow-label", transform: "translate(0 10)" },
     station,
   );
-  svg("rect", { x: -31, y: 0, width: 62, height: 18, rx: 9 }, label);
+  svg("rect", { x: -31, y: 0, width: 62, height: 18, rx: 4 }, label);
   svg("text", { x: 0, y: 12.6 }, label).textContent = gateway.id;
 
-  // Every sensor pin and device, each with its radio link: an arc rising
-  // from the device and dropping into the gateway.
+  // Every sensor pin and device, each with its radio link: a square route
+  // that rises from the device, runs level and drops into the gateway.
   const ends = new Map();
   const addEnd = (name, [x, y], extra = {}) => {
-    const lift = Math.hypot(x - gx, y - gy) * 0.22;
-    const curve = [x, y, (x + gx) / 2, Math.min(y, gy) - lift, gx, gy];
+    const top = Math.min(y, gy) - Math.hypot(x - gx, y - gy) * 0.22;
+    const route = [
+      [x, y],
+      [x, top],
+      [gx, top],
+      [gx, gy],
+    ];
     const link = svg(
       "path",
       {
         class: "flow-link",
-        d: `M${x} ${y}Q${curve[2]} ${curve[3]} ${gx} ${gy}`,
+        d: `M${x} ${y}V${top}H${gx}V${gy}`,
       },
       links,
     );
-    ends.set(name, { curve, link, busy: 0, ...extra });
+    ends.set(name, { route, link, busy: 0, ...extra });
   };
   root
     .querySelectorAll("[data-sensor-pin][data-at]")
@@ -118,9 +141,7 @@ export function initDataFlow(root, { gateway }) {
       packet.node.style.visibility = "visible";
       const u = ease(Math.min(1, packet.fail ? Math.min(k, 0.55) : k));
       const s = packet.reverse ? 1 - u : u;
-      const [x0, y0, cx, cy, x1, y1] = packet.end.curve;
-      const x = (1 - s) ** 2 * x0 + 2 * (1 - s) * s * cx + s * s * x1;
-      const y = (1 - s) ** 2 * y0 + 2 * (1 - s) * s * cy + s * s * y1;
+      const [x, y] = along(packet.end.route, s);
       packet.node.setAttribute(
         "transform",
         `translate(${x.toFixed(1)} ${y.toFixed(1)})`,
@@ -228,7 +249,7 @@ export function initDataFlow(root, { gateway }) {
       return false;
     lastUplink.set(key, time);
     const color =
-      getComputedStyle(end.pin).getPropertyValue("--tone").trim() || "#8fe3e0";
+      getComputedStyle(end.pin).getPropertyValue("--tone").trim() || "#4fa3ad";
     // Readings that change together leave their sensors a moment apart.
     send(end, {
       color,

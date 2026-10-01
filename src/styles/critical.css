@@ -177,17 +177,6 @@ nav {
 .dark {
   background-color: var(--kuem-carbon);
   color: var(--kuem-white);
-  background-image:
-    linear-gradient(
-      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--kuem-petrol) 13%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 48px 48px;
 }
 .hero {
   min-height: 680px;
