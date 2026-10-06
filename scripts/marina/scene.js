@@ -230,21 +230,22 @@ function makeMaterials() {
   m.quay = new THREE.MeshStandardMaterial({ ...quay, userData: { scale: 60 } });
 
   const asphalt = canvas(512, (g, s) => {
-    g.fillStyle = "#4b4f52";
+    // Worn mid-grey, as the roads on the city model.
+    g.fillStyle = "#6a6d6f";
     g.fillRect(0, 0, s, s);
-    mottle(g, s, ["#3d4144", "#5a5e61", "#44484a"], 50);
+    mottle(g, s, ["#5b5e61", "#787b7d", "#636669"], 50);
     speckle(
       g,
       s,
       16000,
-      ["#2c2f31", "#6d7174", "#585c5e", "#8a8d8e"],
+      ["#484b4d", "#8a8d8f", "#75787a", "#a3a5a6"],
       0.6,
       1.4,
     );
   });
   m.asphalt = new THREE.MeshStandardMaterial({
     map: texture(asphalt),
-    roughness: 0.86,
+    roughness: 0.74,
     userData: { scale: 45 },
   });
 
@@ -724,9 +725,10 @@ export function buildScene() {
     roughness: 0.78,
     metalness: 0,
   });
-  // The rim's top catches the key light; darker, so it reads as in the photo.
+  // The rim's top catches the key light and reads a shade lighter than the
+  // front, as in the photo.
   const rimTopMaterial = new THREE.MeshStandardMaterial({
-    color: "#2c2c2e",
+    color: "#47484b",
     roughness: 0.78,
     metalness: 0,
   });
@@ -811,47 +813,52 @@ export function buildScene() {
       ),
     );
   }
-  // Jigsaw joint between the modules on the plinth front: a hairline groove
-  // with the tab of the right module reaching into the left one.
+  // The modules' joints, as on the city model: a groove down the plinth front
+  // with the right module's jigsaw tab reaching into the left one, carried on
+  // across the rim and the board where the four modules meet.
+  const SEAM = { x: 300, y: 308 };
+  const seamMaterial = new THREE.MeshStandardMaterial({
+    color: "#050506",
+    roughness: 0.9,
+    side: THREE.DoubleSide,
+  });
   {
-    const seam = 300;
-    const topZ = PLINTH.top - 1.5;
-    const tab = { z: -44, neck: 9, head: 17, reach: 15 };
-    const points = [];
-    const line = (x0, z0, x1, z1, steps = 1) => {
-      for (let s = points.length ? 1 : 0; s <= steps; s++)
-        points.push([
-          x0 + ((x1 - x0) * s) / steps,
-          z0 + ((z1 - z0) * s) / steps,
-        ]);
-    };
-    const arc = (cx, cz, r, from, to, steps = 10) => {
-      for (let s = 1; s <= steps; s++) {
-        const a = from + ((to - from) * s) / steps;
-        points.push([cx + Math.cos(a) * r, cz + Math.sin(a) * r]);
-      }
-    };
-    line(seam, topZ, seam, tab.z + tab.neck / 2);
-    // Neck, then a rounded head to the left, and back.
-    line(
-      seam,
+    const tab = { z: -41, neck: 22, head: 29, reach: 10, radius: 3.5 };
+    const top = tab.z + tab.head / 2;
+    const bottom = tab.z - tab.head / 2;
+    const tip = SEAM.x - tab.reach;
+    const path = new THREE.Path();
+    path.moveTo(SEAM.x, PLINTH.top);
+    path.lineTo(SEAM.x, tab.z + tab.neck / 2 + 1.4);
+    // In at the neck, round the tab's four corners, and back out.
+    path.quadraticCurveTo(
+      SEAM.x,
       tab.z + tab.neck / 2,
-      seam - tab.reach + tab.head / 2,
+      SEAM.x - 1.6,
       tab.z + tab.neck / 2,
-      4,
     );
-    arc(
-      seam - tab.reach + tab.head / 2,
-      tab.z,
-      tab.head / 2 + 0.01,
-      Math.PI / 2 - 0.2,
-      Math.PI * 1.5 + 0.2,
-      16,
+    path.quadraticCurveTo(SEAM.x - 2.6, top, SEAM.x - 4.6, top);
+    path.lineTo(tip + tab.radius, top);
+    path.quadraticCurveTo(tip, top, tip, top - tab.radius);
+    path.lineTo(tip, bottom + tab.radius);
+    path.quadraticCurveTo(tip, bottom, tip + tab.radius, bottom);
+    path.lineTo(SEAM.x - 4.6, bottom);
+    path.quadraticCurveTo(
+      SEAM.x - 2.6,
+      bottom,
+      SEAM.x - 1.6,
+      tab.z - tab.neck / 2,
     );
-    line(points.at(-1)[0], points.at(-1)[1], seam, tab.z - tab.neck / 2, 4);
-    line(seam, tab.z - tab.neck / 2, seam, FOOT.z0 + 1.2);
+    path.quadraticCurveTo(
+      SEAM.x,
+      tab.z - tab.neck / 2,
+      SEAM.x,
+      tab.z - tab.neck / 2 - 1.4,
+    );
+    path.lineTo(SEAM.x, FOOT.z0 + 1.2);
+    const points = path.getPoints(8).map((point) => [point.x, point.y]);
     // Ribbon along the path, just proud of the front face.
-    const half = 0.38;
+    const half = 0.5;
     const vertices = [];
     const index = [];
     points.forEach(([x, z], i) => {
@@ -877,17 +884,55 @@ export function buildScene() {
       new THREE.Float32BufferAttribute(vertices, 3),
     );
     geometry.setIndex(index);
-    add(
-      mesh(
-        warp(geometry),
-        new THREE.MeshStandardMaterial({
-          color: "#050506",
-          roughness: 0.9,
-          side: THREE.DoubleSide,
-        }),
-        { cast: false },
-      ),
-    );
+    add(mesh(warp(geometry), seamMaterial, { cast: false }));
+    // Across the rim on all four sides.
+    const flat = { cast: false, receive: false };
+    const z = PLINTH.top + 0.04;
+    for (const [y0, y1] of [
+      [PLINTH.y0, 0.5],
+      [599.5, PLINTH.y1 + 0.05],
+    ])
+      add(
+        box(
+          SEAM.x - half,
+          y0,
+          SEAM.x + half,
+          y1,
+          z - 0.3,
+          z,
+          seamMaterial,
+          flat,
+        ),
+      );
+    for (const [x0, x1] of [
+      [PLINTH.x0, 0.5],
+      [599.5, PLINTH.x1],
+    ])
+      add(
+        box(
+          x0,
+          SEAM.y - half,
+          x1,
+          SEAM.y + half,
+          z - 0.3,
+          z,
+          seamMaterial,
+          flat,
+        ),
+      );
+  }
+  // The modules' trays show as a pale edge between the board and the rim.
+  {
+    const tray = new THREE.MeshStandardMaterial({
+      color: "#8d8c88",
+      roughness: 0.9,
+    });
+    const z1 = PLINTH.top + 0.35;
+    const options = { cast: false };
+    add(box(0, 599.5, 600, 600.9, LAYOUT.waterZ, z1, tray, options));
+    add(box(0, -0.9, 600, 0.5, 0, z1, tray, options));
+    add(box(-0.9, 0, 0.5, 600, LAYOUT.waterZ, z1, tray, options));
+    add(box(599.5, 0, 600.9, 600, LAYOUT.waterZ, z1, tray, options));
   }
 
   // --- Water ----------------------------------------------------------------
@@ -972,37 +1017,108 @@ export function buildScene() {
       cast: false,
     }),
   );
+  // Pale stone kerbs, as along the city model's roads.
+  const kerb = new THREE.MeshStandardMaterial({
+    color: "#d2cec4",
+    map: M.stuccoMap,
+    roughness: 0.9,
+    userData: { scale: 40 },
+  });
   add(
-    box(0, LAYOUT.road[0] - 0.8, 600, LAYOUT.road[0], 0, 1.05, M.concrete, {
+    box(0, LAYOUT.road[0] - 1.5, 600, LAYOUT.road[0], 0, 1.25, kerb, {
       cast: false,
     }),
   );
   add(
-    box(0, LAYOUT.road[1], 600, LAYOUT.road[1] + 0.8, 0, 1.05, M.concrete, {
+    box(0, LAYOUT.road[1], 600, LAYOUT.road[1] + 1.5, 0, 1.25, kerb, {
       cast: false,
     }),
   );
-  // Road markings.
+  // Road markings: short centre dashes, crossings with stop lines, and the
+  // lighter tracks the wheels wear into each lane.
   const markings = new THREE.MeshStandardMaterial({
-    color: "#c9c6bd",
+    color: "#dedbd2",
     roughness: 0.8,
   });
-  for (let x = 4; x < 600; x += 20)
-    add(box(x, 179.4, x + 10, 180.6, 0, 0.12, markings, { cast: false }));
-  for (const cx of [150, 452])
+  const wear = new THREE.MeshStandardMaterial({
+    color: "#a9abac",
+    roughness: 0.6,
+    transparent: true,
+    opacity: 0.16,
+    depthWrite: false,
+  });
+  const crossings = [150, 452];
+  const centre = (LAYOUT.road[0] + LAYOUT.road[1]) / 2;
+  for (const y of [centre - 12.5, centre - 5.5, centre + 5.5, centre + 12.5])
+    add(
+      box(0, y - 1.6, 600, y + 1.6, 0, 0.06, wear, {
+        cast: false,
+        receive: false,
+      }),
+    );
+  for (let x = 3; x < 600; x += 15) {
+    if (crossings.some((cx) => Math.abs(x + 3.5 - cx) < 24)) continue;
+    add(
+      box(x, centre - 0.45, x + 7, centre + 0.45, 0, 0.12, markings, {
+        cast: false,
+      }),
+    );
+  }
+  for (const cx of crossings) {
     for (let i = 0; i < 7; i++)
       add(
         box(
           cx - 13 + i * 4,
-          LAYOUT.road[0] + 1,
+          LAYOUT.road[0] + 3,
           cx - 11 + i * 4,
-          LAYOUT.road[1] - 1,
+          LAYOUT.road[1] - 3,
           0,
           0.12,
           markings,
           { cast: false },
         ),
       );
+    // Stop lines, each across its own lane.
+    add(
+      box(cx - 19.6, centre, cx - 18.4, LAYOUT.road[1] - 2, 0, 0.12, markings, {
+        cast: false,
+      }),
+    );
+    add(
+      box(cx + 18.4, LAYOUT.road[0] + 2, cx + 19.6, centre, 0, 0.12, markings, {
+        cast: false,
+      }),
+    );
+  }
+  // The modules' joints across the land (the resin water is poured over them).
+  {
+    const flat = { cast: false, receive: false };
+    add(
+      box(
+        SEAM.x - 0.3,
+        0.5,
+        SEAM.x + 0.3,
+        LAYOUT.promenade[1],
+        0,
+        1.12,
+        seamMaterial,
+        flat,
+      ),
+    );
+    for (const [x0, x1] of [LAYOUT.westQuay, LAYOUT.eastQuay])
+      add(
+        box(
+          Math.max(0.5, x0),
+          SEAM.y - 0.3,
+          Math.min(599.5, x1),
+          SEAM.y + 0.3,
+          0,
+          1.12,
+          seamMaterial,
+          flat,
+        ),
+      );
+  }
   // Quays (west and east) down to the water, with stone walls.
   const quays = [
     [0, LAYOUT.promenade[1], LAYOUT.westQuay[1], LAYOUT.quayFront],
@@ -2160,112 +2276,156 @@ export function buildScene() {
   planter(236, 230, 12);
   planter(364, 230, 12);
 
-  // Hotel: five floors, balconies with glass rails, rooftop, pool.
+  // Hotel, in the style of the town's houses and the city model: cream stucco
+  // under a hipped slate roof, framed warm windows, an entrance bay with a
+  // canopy, balconies with dark railings, and a pool.
   {
     const x0 = 24;
     const x1 = 150;
     const y0 = 246;
     const y1 = 300;
-    const h = 70;
-    const group = new THREE.Group();
-    group.add(box(x0, y0, x1, y1, 0, h, M.stucco("#f2f0ea")));
-    const floors = 5;
-    const floorH = (h - 8) / floors;
-    const glassRail = new THREE.MeshPhysicalMaterial({
-      color: "#bcd3dc",
-      roughness: 0.05,
-      transmission: 0.6,
-      transparent: true,
-      opacity: 0.45,
+    const h = 54;
+    const floors = 4;
+    // The earlier flat-roofed hotel drew its windows from the board's random
+    // sequence; the same draws keep everything built after it unchanged.
+    for (let f = 0; f < 5; f++) {
+      for (let c = 0; c < 12; c++)
+        if (random() < 0.78) {
+          pick([0]);
+          rand(0, 1);
+        }
+      for (let c = 0; c < 4; c++) if (random() < 0.7) rand(0, 1);
+    }
+    const boardRandom = random;
+    random = rngOf(20260929);
+    const style = {
+      wall: "#eadfc8",
+      roofMaterial: M.slate("#5d636b"),
+      roofType: "hip",
+      floors,
+      device: "HOTEL_01",
+      lit: 1,
+      shutters: false,
+      chimney: false,
+      windowW: 4.6,
+      windowSpacing: 10.5,
+      windowRatio: 0.6,
+      glassColor: "#ffd08a",
+    };
+    house({ ...style, x0, y0, x1, y1, h, roofH: 16 });
+    // Entrance bay, one step forward under its own roof.
+    const bay = { x0: 68, x1: 106, y1: y1 + 7 };
+    house({
+      ...style,
+      x0: bay.x0,
+      y0: y1 - 6,
+      x1: bay.x1,
+      y1: bay.y1,
+      h: h + 3,
+      roofH: 9,
+      windowSpacing: 12,
     });
-    // Ground floor lobby glazing.
+    const group = new THREE.Group();
+    // Lobby doors, canopy and sign.
     group.add(
       box(
-        x0 + 6,
-        y1,
-        x1 - 6,
-        y1 + 0.3,
-        0.5,
-        7,
+        bay.x0 + 5,
+        bay.y1,
+        bay.x1 - 5,
+        bay.y1 + 0.5,
+        1.6,
+        10.4,
         litGlass("#ffd89a", 1.8, "HOTEL_01"),
+        { cast: false },
       ),
     );
-    for (let f = 0; f < floors; f++) {
-      const z = 8 + f * floorH;
-      // Balcony slab and rail along the front and the east side.
-      group.add(box(x0 - 0.5, y1, x1 + 0.5, y1 + 4.5, z, z + 0.8, M.white));
+    for (const x of [bay.x0 + 5, 87, bay.x1 - 5])
       group.add(
-        box(x0 - 0.5, y1 + 4.2, x1 + 0.5, y1 + 4.5, z + 0.8, z + 4, glassRail, {
+        box(x - 0.3, bay.y1, x + 0.3, bay.y1 + 0.6, 1.6, 10.4, M.frameDark, {
           cast: false,
         }),
       );
-      group.add(box(x1, y0 + 4, x1 + 4.5, y1, z, z + 0.8, M.white));
-      group.add(
-        box(x1 + 4.2, y0 + 4, x1 + 4.5, y1, z + 0.8, z + 4, glassRail, {
-          cast: false,
-        }),
-      );
-      // Room windows (sliding doors), lit or dark.
-      for (let c = 0; c < 12; c++) {
-        const cx = x0 + 5 + c * ((x1 - x0 - 10) / 11.5);
-        const on = random() < 0.78;
-        const material = on
-          ? litGlass(
-              pick(["#ffd48a", "#ffe2b0", "#ffcf7a"]),
-              rand(1.3, 2.4),
-              "HOTEL_01",
-            )
-          : M.glassDark;
-        group.add(
-          box(
-            cx - 3.6,
-            y1 - 0.1,
-            cx + 3.6,
-            y1 + 0.15,
-            z + 1,
-            z + floorH - 1.2,
-            material,
-            { cast: false },
-          ),
-        );
-      }
-      for (let c = 0; c < 4; c++) {
-        const cy = y0 + 8 + c * 12;
-        const on = random() < 0.7;
-        const material = on
-          ? litGlass("#ffd48a", rand(1.3, 2.2), "HOTEL_01")
-          : M.glassDark;
-        group.add(
-          box(
-            x1 - 0.15,
-            cy - 3.6,
-            x1 + 0.1,
-            cy + 3.6,
-            z + 1,
-            z + floorH - 1.2,
-            material,
-            { cast: false },
-          ),
-        );
-      }
-    }
-    // Rooftop: parapet, plant room, sign.
-    group.add(box(x0 - 0.6, y0 - 0.6, x1 + 0.6, y1 + 0.6, h, h + 2.2, M.white));
-    group.add(box(x0 + 1, y0 + 1, x1 - 1, y1 - 1, h, h + 1.4, M.concrete));
-    group.add(box(40, 256, 74, 280, h, h + 9, M.stucco("#dcd8d0")));
-    group.add(box(96, 262, 116, 284, h, h + 5, M.metal));
-    const sign = box(
-      x0 + 30,
-      y1 + 0.2,
-      x1 - 30,
-      y1 + 0.8,
-      h - 5.5,
-      h - 1.5,
-      litGlass("#eaf3ff", 2.4, "HOTEL_01"),
+    group.add(
+      box(bay.x0 + 2, bay.y1, bay.x1 - 2, bay.y1 + 7, 10.6, 11.4, M.frameDark),
     );
-    group.add(sign);
-    // Entrance canopy.
-    group.add(box(70, y1, 104, y1 + 9, 7.2, 8, M.frameDark));
+    for (const x of [bay.x0 + 3, bay.x1 - 3])
+      group.add(
+        box(x - 0.4, bay.y1 + 6, x + 0.4, bay.y1 + 6.8, 1, 10.6, M.frameDark),
+      );
+    group.add(
+      box(
+        bay.x0 + 9,
+        bay.y1 + 7,
+        bay.x1 - 9,
+        bay.y1 + 7.4,
+        11.4,
+        14.2,
+        litGlass("#fff1d6", 2.2, "HOTEL_01"),
+        { cast: false },
+      ),
+    );
+    // Balconies on the upper floors, either side of the bay and on the east.
+    const floorH = (h - 2) / floors;
+    for (let f = 1; f < floors; f++) {
+      const z = 2.2 + f * floorH + floorH * 0.18 - 1.3;
+      for (const [a, b] of [
+        [x0 + 2, bay.x0 - 2],
+        [bay.x1 + 2, x1 - 2],
+      ]) {
+        group.add(box(a, y1, b, y1 + 3.2, z, z + 0.7, M.concrete));
+        group.add(
+          box(a, y1 + 2.9, b, y1 + 3.2, z + 3.3, z + 3.7, M.darkMetal, {
+            cast: false,
+          }),
+        );
+        for (let x = a; x <= b + 0.01; x += (b - a) / 12)
+          group.add(
+            box(
+              x - 0.15,
+              y1 + 2.9,
+              x + 0.15,
+              y1 + 3.2,
+              z + 0.7,
+              z + 3.3,
+              M.darkMetal,
+              {
+                cast: false,
+              },
+            ),
+          );
+      }
+      group.add(box(x1, y0 + 4, x1 + 3.2, y1 - 2, z, z + 0.7, M.concrete));
+      group.add(
+        box(x1 + 2.9, y0 + 4, x1 + 3.2, y1 - 2, z + 3.3, z + 3.7, M.darkMetal, {
+          cast: false,
+        }),
+      );
+      for (let y = y0 + 4; y <= y1 - 1.99; y += (y1 - y0 - 6) / 10)
+        group.add(
+          box(
+            x1 + 2.9,
+            y - 0.15,
+            x1 + 3.2,
+            y + 0.15,
+            z + 0.7,
+            z + 3.3,
+            M.darkMetal,
+            {
+              cast: false,
+            },
+          ),
+        );
+    }
+    // Chimneys on the ridge.
+    for (const x of [58, 116]) {
+      group.add(
+        box(x - 2, 270, x + 2, 276, h + 8, h + 20, M.stucco(style.wall)),
+      );
+      group.add(
+        box(x - 2.5, 269.5, x + 2.5, 276.5, h + 20, h + 20.8, M.concrete),
+      );
+    }
+    random = boardRandom;
     add(group);
     occluder(group, "building");
     world.devices.HOTEL_01.meshes.push(group);
