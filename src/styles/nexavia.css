@@ -386,8 +386,13 @@ html:not(.js) .nx-role-panel[hidden] {
 }
 .nx-showroom-twins {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--kuem-space-16);
+}
+@media (max-width: 1100px) {
+  .nx-showroom-twins {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 .nx-showroom-card {
   display: flex;

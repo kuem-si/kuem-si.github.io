@@ -5,16 +5,17 @@ import ShowcaseTwin from "../../../components/nexavia/ShowcaseTwin.astro";
 import { cityTwin } from "../../../components/nexavia/showcase/city";
 import { marinaTwin } from "../../../components/nexavia/showcase/marina";
 import { industryTwin } from "../../../components/nexavia/showcase/industry";
+import { datacenterTwin } from "../../../components/nexavia/showcase/datacenter";
 
 // Each tab is one maquette. The first tab starts on page load (or the tab
 // named in the URL hash, e.g. #marina); the others start the first time they
 // are opened (see src/nexavia/showcase-room/index.js).
-const twins = [cityTwin(true), marinaTwin(true), industryTwin(true)];
+const twins = [cityTwin(true), marinaTwin(true), industryTwin(true), datacenterTwin(true)];
 ---
 
 <MainLayout
   title="Nexavia showcase room | KUEM"
-  description="The Nexavia showcase room: interactive digital twins of a mini city, a smart marina with a camp and an industrial site, connected to a Nexavia dashboard."
+  description="The Nexavia showcase room: interactive digital twins of a mini city, a smart marina with a camp, an industrial site and a datacenter, connected to a Nexavia dashboard."
   noindex
 >
   <div class="twin-page" data-twin-root>

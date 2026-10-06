@@ -1,7 +1,7 @@
 // One showcase twin: a maquette on the left, its Nexavia dashboard on the
 // right. Rendered by ShowcaseTwin.astro and driven by the matching config in
-// src/nexavia/showcase-room/ (city.js, marina.js). Maquette coordinates are
-// scene pixels (1536 × 1024), the geometry both maquettes share.
+// src/nexavia/showcase-room/ (city.js, marina.js, …). Maquette coordinates are
+// scene pixels (1536 × 1024), the geometry all maquettes share.
 
 export type Tone =
   "water" | "air" | "mobility" | "gas" | "power" | "structure" | "light";

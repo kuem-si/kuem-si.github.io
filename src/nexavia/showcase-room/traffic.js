@@ -2444,7 +2444,8 @@ async function startTraffic(root, layer, map) {
       hop: 0,
       pos: spec.at && [...spec.at],
       face: 0,
-      size: spec.kid ? CHILD_SIZE : 1,
+      // `size` draws a person to a larger model's scale (the datacenter).
+      size: (spec.kid ? CHILD_SIZE : 1) * (spec.size ?? 1),
       depth: -1,
       x: 0,
       y: 0,

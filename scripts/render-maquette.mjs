@@ -1,6 +1,7 @@
 // Renders a maquette for the Nexavia showcase room: the smart marina
-// (generate-marina-maquette.mjs) or the industry model
-// (generate-industry-maquette.mjs).
+// (generate-marina-maquette.mjs), the industry model
+// (generate-industry-maquette.mjs) or the datacenter
+// (generate-datacenter-maquette.mjs).
 //
 // The model (scripts/<name>/scene.js) is rendered with three.js in headless
 // Microsoft Edge through Playwright, then composited with sharp into the city
@@ -45,7 +46,8 @@ const RENDER = { width: 3072, height: 2048 };
 const OUTPUT = { width: 2304, height: 1536 };
 
 // `routes` is the model's traffic map (scripts/<name>/routes.mjs) and `actors`
-// its scripted people: [{ z, path: [[x, y]], stops }], in board millimetres.
+// its scripted people: [{ z, path: [[x, y]], stops, size? }], in board
+// millimetres.
 export async function renderMaquette({
   name,
   routes: ROUTES,
@@ -530,10 +532,10 @@ export async function renderMaquette({
       ...(route.oneWay ? { oneWay: true } : {}),
     };
   }
-  const actors = ACTORS.map(({ stops }, index) => {
+  const actors = ACTORS.map(({ stops, size }, index) => {
     const { points, occluders } = routes[`actor${index}`];
     delete routes[`actor${index}`];
-    return { path: points, stops, occluders };
+    return { path: points, stops, occluders, ...(size ? { size } : {}) };
   });
 
   // --- Devices: unlit patches from the difference to the lit image -------------
