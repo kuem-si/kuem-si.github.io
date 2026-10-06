@@ -11,6 +11,7 @@ import marinaMaquette from "../../assets/nexavia/showcase/marina-maquette.webp";
 import industryMaquette from "../../assets/nexavia/showcase/industry-maquette.webp";
 import datacenterMaquette from "../../assets/nexavia/showcase/datacenter-maquette.webp";
 import { nexaviaSoftware } from "../../data/organization";
+import { kaiContent } from "../../data/kai";
 import "../../styles/nexavia.css";
 
 // Card image per showcase twin (the tab id in the showcase room's address).
@@ -119,9 +120,9 @@ const copy = {
     kaiEyebrow: "KAI V NEXAVII",
     kaiH2: "Ko pregled ni dovolj, KAI izpostavi, kaj zahteva pozornost.",
     kaiP:
-      "KAI analizira podatke znotraj Nexavie, zazna odstopanja in odgovorni osebi poda razumljivo opozorilo ter kontekst za naslednji korak.",
+      "KAI je zasnovan tako, da podatke Nexavie najprej analizira na vaših strežnikih. Z dovolj zmogljivo strojno opremo lahko tudi zahtevne analize ostanejo lokalne. Združljivi grafični procesorji (GPU) lahko podprte analize občutno pospešijo. KAI odstopanja poveže z razumljivimi opozorili in kontekstom za naslednji korak.",
     kaiBenefits: ["Zaznavanje odstopanj", "Razumljiva opozorila", "Podpora odločitvam"],
-    kaiHuman: "Človek ohrani nadzor nad odločitvijo.",
+    kaiHuman: "Zunanje storitve jezikovnih modelov pridejo v poštev le za najzahtevnejše naloge, ki presegajo lokalne zmogljivosti. Človek ohrani nadzor nad odločitvijo.",
     kaiPanelHead: "KAI — zaznano odstopanje",
     kaiPriority: "Visoka prioriteta",
     kaiAlert: "Nepričakovana sprememba porabe",
@@ -232,9 +233,9 @@ const copy = {
     kaiEyebrow: "KAI IN NEXAVIA",
     kaiH2: "When an overview is not enough, KAI highlights what requires attention.",
     kaiP:
-      "KAI analyzes data within Nexavia, detects deviations and gives the responsible person a clear alert and context for the next step.",
+      "KAI is designed to analyze Nexavia data first on your own servers. With sufficiently capable hardware, even demanding analysis can stay local. Compatible GPUs can substantially speed up supported analysis. KAI links deviations to clear alerts and context for the next step.",
     kaiBenefits: ["Deviation detection", "Clear alerts", "Decision support"],
-    kaiHuman: "People remain in control of decision-making.",
+    kaiHuman: "External language model services are an option only for the most demanding tasks that exceed local capacity. People remain in control of decisions.",
     kaiPanelHead: "KAI — deviation detected",
     kaiPriority: "High priority",
     kaiAlert: "Unexpected consumption change",
@@ -570,7 +571,7 @@ const breadcrumb = {
           {copy.kaiH2}
         </h2><p>
           {copy.kaiP}
-        </p><ul class="nx-kai-benefits">
+        </p><p>{kaiContent[locale].configurationSummary}</p><ul class="nx-kai-benefits">
           {copy.kaiBenefits.map((benefit) => <li>{benefit}</li>)}
         </ul><p class="nx-human">{copy.kaiHuman}</p>
       </div><div class="nx-kai-panel">

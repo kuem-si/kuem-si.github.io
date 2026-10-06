@@ -6,24 +6,24 @@ import type { Locale } from "../lib/i18n";
 import nexavia from "../assets/brand/nexavia/official/NEXAVIA-web-White.svg";
 import kai from "../assets/brand/kai/KAI_by_KUEM_Dark.svg";
 import { nexaviaSoftware, kaiSoftware } from "../data/organization";
+import { kaiContent } from "../data/kai";
 const { locale, product } = Astro.props as {
   locale: Locale;
   product: "nexavia" | "kai";
 };
 const sl = locale === "sl";
 const isKai = product === "kai";
-const title = isKai ? "Ask. Understand. Act." : "Nexavia";
+const kaiCopy = kaiContent[locale];
+const title = isKai ? kaiCopy.title : "Nexavia";
 const lead = isKai
-  ? sl
-    ? "KAI je operativni pomočnik, ki razume kontekst infrastrukture, pojasni dogodke, primerja podatke in pripravi naslednji korak."
-    : "KAI is an operational assistant that understands infrastructure context, explains events, compares data and prepares the next step."
+  ? kaiCopy.description
   : sl
     ? "Nexavia je operativna podatkovna platforma, ki poveže teren, sisteme in uporabnike v enoten pregled."
     : "Nexavia is an operational data platform connecting the field, systems and users into one unified view.";
 const features = isKai
   ? sl
     ? [
-        "Analizira razpoložljivi kontekst",
+        "Primerja podatke infrastrukture",
         "Loči opažanje od sklepa",
         "Pokaže podporne vire",
         "Priporoči naslednji korak",
@@ -31,7 +31,7 @@ const features = isKai
         "Deluje z Nexavio",
       ]
     : [
-        "Analyzes available context",
+        "Compares infrastructure data",
         "Separates observation from inference",
         "Shows supporting sources",
         "Recommends a next step",
@@ -138,14 +138,17 @@ const kaiDescriptions = sl ? [
     <div class="container split">
       <div>
         <h2>
-          {isKai ? (sl ? "Kako KAI deluje" : "How KAI works") : (sl ? "Razumljiva arhitektura" : "Understandable architecture")}
+          {isKai ? kaiCopy.processingTitle : (sl ? "Razumljiva arhitektura" : "Understandable architecture")}
         </h2><p>
           {
-            sl
-              ? "Viri in naprave se prek komunikacijske plasti povežejo z operativnim okoljem, integracijami in uporabniki. Postavitev se prilagodi obstoječi infrastrukturi."
-              : "Sources and devices connect through a communication layer to the operational environment, integrations and users. Deployment adapts to existing infrastructure."
+            isKai
+              ? kaiCopy.localProcessing
+              : sl
+                ? "Viri in naprave se prek komunikacijske plasti povežejo z operativnim okoljem, integracijami in uporabniki. Postavitev se prilagodi obstoječi infrastrukturi."
+                : "Sources and devices connect through a communication layer to the operational environment, integrations and users. Deployment adapts to existing infrastructure."
           }
         </p>
+        {isKai && <p>{kaiCopy.externalProcessing}</p>}
       </div><ol class:list={["pipeline", { "kai-pipeline": isKai }]}>
         {
           (isKai
@@ -163,7 +166,7 @@ const kaiDescriptions = sl ? [
                   "Context",
                   "Comparison",
                   "Evidence",
-                  "Recommendation",
+                  "Next step",
                   "Confirmation",
                 ]
             : sl
@@ -187,7 +190,21 @@ const kaiDescriptions = sl ? [
         }
       </ol>
     </div>
-  </section><CTA
+  </section>
+  {
+    isKai && (
+      <section class="section kai-configuration" aria-labelledby="kai-configuration-title">
+        <div class="container split">
+          <h2 id="kai-configuration-title">{kaiCopy.configurationTitle}</h2>
+          <div>
+            <p>{kaiCopy.configurationPerformance}</p>
+            <p>{kaiCopy.configurationRollout}</p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+  <CTA
     {locale}
     title={isKai
       ? sl

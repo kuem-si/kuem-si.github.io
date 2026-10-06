@@ -1,13 +1,9 @@
 import type { APIRoute } from "astro";
 import { positioning, nexaviaPositioning, solutions } from "../data/solutions";
 import { COMPANY_EMAIL } from "../data/company";
+import { kaiContent } from "../data/kai";
 
 const SITE = "https://www.kuem.si";
-
-const kai = {
-  en: "KAI is an operational assistant that understands infrastructure context, explains events, compares data and prepares the next step.",
-  sl: "KAI je operativni pomočnik, ki razume kontekst infrastrukture, pojasni dogodke, primerja podatke in pripravi naslednji korak.",
-};
 
 export const GET: APIRoute = () => {
   const lines = [
@@ -19,9 +15,9 @@ export const GET: APIRoute = () => {
     "",
     "## Products",
     `- [Nexavia](${SITE}/en/nexavia/): ${nexaviaPositioning.en}`,
-    `- [KAI](${SITE}/en/kai/): ${kai.en}`,
+    `- [KAI](${SITE}/en/kai/): ${kaiContent.en.description} ${kaiContent.en.localProcessing} ${kaiContent.en.externalProcessing} ${kaiContent.en.configurationSummary}`,
     `- [Nexavia (slovensko)](${SITE}/nexavia/): ${nexaviaPositioning.sl}`,
-    `- [KAI (slovensko)](${SITE}/kai/): ${kai.sl}`,
+    `- [KAI (slovensko)](${SITE}/kai/): ${kaiContent.sl.description} ${kaiContent.sl.localProcessing} ${kaiContent.sl.externalProcessing} ${kaiContent.sl.configurationSummary}`,
     "",
     "## Solutions (English)",
     ...solutions.en.map(({ title, href }) => `- [${title}](${SITE}${href}/)`),

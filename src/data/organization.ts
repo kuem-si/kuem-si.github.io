@@ -4,6 +4,7 @@
  */
 
 import { COMPANY_EMAIL } from "./company";
+import { kaiContent } from "./kai";
 
 const SITE = "https://www.kuem.si";
 const ORG_ID = `${SITE}/#organization`;
@@ -87,14 +88,19 @@ export const kaiSoftware = {
   name: "KAI",
   url: `${SITE}/en/kai`,
   applicationCategory: "BusinessApplication",
-  applicationSubCategory: "Operational AI assistant",
+  applicationSubCategory: "Operational data analysis assistant",
   operatingSystem: "Web",
   inLanguage: ["sl-SI", "en-GB"],
-  description:
-    "KAI is an operational assistant that understands infrastructure context, explains events, compares data and prepares the next step.",
+  description: kaiContent.en.description,
   keywords:
     "anomaly detection, operational assistant, alarms, data analysis, recommendations",
   featureList: [
+    "Designed to prioritize processing on the customer's own servers",
+    "Local analysis and language models according to server hardware and task requirements",
+    "Compatible hardware accelerators, such as GPUs, can speed up supported local workloads",
+    "Response speed and quality depend on internal configuration",
+    "Most configuration work during initial rollout, followed by smaller ongoing adjustments",
+    "Potential use of external language model services for the most demanding tasks",
     "Detection of deviations in infrastructure data",
     "Understandable alerts with context",
     "Decision support and recommended next steps",

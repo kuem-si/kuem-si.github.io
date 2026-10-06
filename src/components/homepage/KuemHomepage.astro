@@ -7,6 +7,7 @@ import { Image } from "astro:assets";
 import nexavia from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
 import dashboard from "../../assets/brand/nexavia/nexavia-noc-dashboard.png";
 import { nexaviaSoftware, kaiSoftware } from "../../data/organization";
+import { kaiContent } from "../../data/kai";
 import { COMPANY_EMAIL } from "../../data/company";
 import type { Locale } from "../../lib/i18n";
 import { withBase } from "../../lib/paths";
@@ -67,9 +68,9 @@ const copy = {
     kaiEyebrow: "KAI · Analitični sloj Nexavie",
     kaiH2: "Podatki, ki opozorijo, preden problem postane večji.",
     kaiP:
-      "KAI spremlja podatke, prepoznava odstopanja in izpostavi dogodke, ki zahtevajo pozornost. Odgovorni osebi pomaga razumeti stanje in izbrati naslednji korak.",
+      "KAI je zasnovan tako, da daje prednost obdelavi na vaših strežnikih. Z dovolj procesorske moči in pomnilnika lahko tudi zahtevne analize ostanejo lokalne. Združljivi grafični procesorji (GPU) lahko obdelavo podprtih nalog občutno pospešijo. KAI pomaga zaznati odstopanja, pojasniti dogodke in pripraviti naslednji korak.",
     kaiEmphasis:
-      "KAI ne odloča namesto človeka. Iz velike količine podatkov izpostavi tisto, kar zahteva njegovo pozornost.",
+      "Zunanje storitve jezikovnih modelov pridejo v poštev le za najzahtevnejše naloge, ki presegajo lokalne zmogljivosti. Človek ohrani nadzor nad odločitvami.",
     kaiCtaHref: "/kai",
     kaiCta: "Več o KAI",
     exampleLabel: "Ponazoritev zaznave odstopanja",
@@ -140,9 +141,9 @@ const copy = {
     kaiEyebrow: "KAI · Nexavia analytics layer",
     kaiH2: "Data that alerts you before a problem grows.",
     kaiP:
-      "KAI monitors data, detects deviations and highlights events that require attention. It helps the responsible person understand the situation and choose the next step.",
+      "KAI is designed to prioritize processing on your own servers. With enough processing power and memory, even demanding analysis can stay local. Compatible GPUs can substantially speed up supported tasks. KAI helps detect deviations, explain events and prepare the next step.",
     kaiEmphasis:
-      "KAI does not decide for people. It highlights what requires their attention within large volumes of data.",
+      "External language model services are an option only for the most demanding tasks that exceed local capacity. People remain in control of decisions.",
     kaiCtaHref: "/en/kai",
     kaiCta: "More about KAI",
     exampleLabel: "Deviation-detection example",
@@ -383,7 +384,7 @@ const stories = [
           {copy.kaiH2}
         </h2><p>
           {copy.kaiP}
-        </p><p class="hp-kai-emphasis">
+        </p><p>{kaiContent[locale].configurationSummary}</p><p class="hp-kai-emphasis">
           {copy.kaiEmphasis}
         </p><a class="hp-button hp-outline" href={withBase(copy.kaiCtaHref)}
           >{copy.kaiCta} <span aria-hidden="true">→</span></a
