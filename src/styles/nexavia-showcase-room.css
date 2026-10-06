@@ -1999,37 +1999,6 @@
   background: var(--kuem-petrol-light);
   display: inline-block;
 }
-.nx-demo-nav {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 5px;
-  padding: 8px 10px;
-  background: var(--kuem-surface-1);
-  border-bottom: 1px solid var(--kuem-border);
-}
-.nx-demo-nav span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  min-height: 25px;
-  padding: 4px 2px;
-  border: 1px solid var(--kuem-border);
-  border-radius: var(--kuem-radius-control);
-  background: var(--kuem-background);
-  color: var(--kuem-text-muted);
-  font-size: var(--kuem-type-label-size);
-  white-space: nowrap;
-}
-.nx-demo-nav b {
-  font-size: var(--kuem-type-label-size);
-  color: var(--kuem-data);
-}
-.nx-demo-nav .is-current {
-  border-color: var(--kuem-border);
-  background: var(--kuem-surface-1);
-  color: var(--kuem-data);
-}
 .xdr-display .twin-dashboard-body {
   padding: 13px 14px 15px;
 }
@@ -2205,14 +2174,6 @@
     padding-left: 7px;
     font-size: var(--kuem-type-label-size);
   }
-  .nx-demo-nav {
-    padding: 6px 5px;
-    gap: 3px;
-  }
-  .nx-demo-nav span {
-    gap: 3px;
-    font-size: var(--kuem-type-label-size);
-  }
   .xdr-display .twin-dashboard-body {
     padding: 10px 8px;
   }
@@ -2353,7 +2314,7 @@
   top: 7%;
   right: 3%;
   left: auto;
-  width: clamp(380px, 42vw, 840px);
+  width: clamp(260px, 21vw, 420px);
   max-width: 94vw;
   max-height: 86dvh;
   overflow: auto;
@@ -2404,7 +2365,7 @@
   .twin-workspace:fullscreen .xdr-display {
     top: 64px;
     right: 10px;
-    width: min(78vw, 560px);
+    width: min(78vw, 280px);
     max-height: 70dvh;
   }
   .twin-workspace:fullscreen .twin-workspace:fullscreen .xdr-screen {
@@ -2441,7 +2402,7 @@
   top: 5%;
   right: 2%;
   left: auto;
-  width: clamp(360px, 39vw, 720px);
+  width: clamp(260px, 19.5vw, 360px);
   max-width: 90%;
   max-height: 78vh;
   overflow: auto;
@@ -2492,7 +2453,7 @@
   .twin-workspace:not(:fullscreen) .xdr-display {
     top: 5%;
     right: 3%;
-    width: min(76vw, 520px);
+    width: min(76vw, 260px);
     max-height: 62vh;
   }
   .twin-workspace:not(:fullscreen) .xdr-screen {
@@ -2637,9 +2598,6 @@
   }
 }
 @container noc-screen (max-height:390px) {
-  .xdr-display .nx-demo-nav {
-    display: none;
-  }
   .xdr-display .twin-dashboard-top {
     min-height: 34px;
     padding: 4px 9px;
@@ -6232,7 +6190,7 @@ button.twin-timeline-entry:focus-visible {
   from {
     opacity: 0;
     translate: 0 -4px;
-    background: color-mix(in srgb, var(--kind) 10%, var(--kuem-white));
+    background: color-mix(in srgb, var(--kind) 10%, var(--kuem-background));
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -6408,5 +6366,382 @@ button.twin-timeline-entry:focus-visible {
   .twin-workspace .flow-link.is-active,
   .twin-workspace .flow-beam {
     animation: none;
+  }
+}
+
+/* The Nexavia app on the display is a responsive web app laid out from the
+   screen's own width: a phone layout with a bottom tab bar, tabs under the
+   header from 560px, and a sidebar from 960px. The header and navigation stay
+   in place while the section scrolls. */
+.twin-workspace .xdr-display .xdr-screen .twin-dashboard {
+  --twin-bar: 46px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  border: 0;
+  border-radius: 0;
+}
+.twin-workspace .xdr-display .xdr-screen .twin-dashboard-top {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  box-sizing: border-box;
+  flex: none;
+  gap: 8px;
+  height: var(--twin-bar);
+  min-height: 0;
+  padding: 0 12px;
+}
+.xdr-display .twin-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.xdr-display .twin-theme-toggle,
+.xdr-display .twin-demo-pill {
+  box-sizing: border-box;
+  height: 28px;
+  border: 1px solid var(--kuem-border);
+  border-radius: var(--kuem-radius-control);
+  background: var(--kuem-surface-1);
+  color: var(--kuem-text-muted);
+  font: var(--kuem-weight-bold) var(--kuem-type-label-size) / 1
+    var(--kuem-font-text);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.xdr-display .twin-theme-toggle {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  padding: 0;
+}
+.xdr-display .twin-theme-toggle:hover,
+.xdr-display .twin-demo-pill:hover {
+  border-color: var(--kuem-border-strong);
+  color: var(--kuem-text-primary);
+}
+.xdr-display .twin-theme-toggle svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  transition: rotate var(--kuem-duration-base) var(--kuem-ease-standard);
+}
+.xdr-display .twin-theme-toggle path {
+  fill: currentColor;
+  stroke: none;
+}
+.xdr-display .twin-theme-toggle[aria-pressed="true"] svg {
+  rotate: 180deg;
+}
+.xdr-display .twin-nav {
+  position: sticky;
+  inset: auto auto 0;
+  z-index: 3;
+  display: block;
+  margin: 0;
+  padding: 0;
+  flex: none;
+  order: 3;
+  border-top: 1px solid var(--kuem-border);
+  background: var(--kuem-background);
+}
+.xdr-display .twin-nav-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.xdr-display .twin-nav button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+  padding: 7px 2px 6px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--kuem-text-muted);
+  font: var(--kuem-weight-semibold) var(--kuem-type-label-size) / 1.2
+    var(--kuem-font-text);
+  cursor: pointer;
+}
+.xdr-display .twin-nav button:hover {
+  color: var(--kuem-text-primary);
+}
+.xdr-display .twin-nav button[aria-current="page"] {
+  color: var(--kuem-data);
+}
+.xdr-display .twin-nav button[aria-current="page"]:before {
+  position: absolute;
+  top: -1px;
+  right: 22%;
+  left: 22%;
+  height: 2px;
+  background: var(--kuem-data);
+  content: "";
+}
+.xdr-display .twin-nav svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.xdr-display .twin-nav b {
+  position: absolute;
+  top: 3px;
+  left: calc(50% + 3px);
+  box-sizing: border-box;
+  min-width: 16px;
+  padding: 1px 4px;
+  border-radius: var(--kuem-radius-card);
+  background: var(--kuem-status-critical);
+  color: var(--kuem-white);
+  font-size: var(--kuem-type-label-size);
+  line-height: 1.1;
+  text-align: center;
+}
+.xdr-display .twin-nav b[hidden] {
+  display: none;
+}
+.xdr-display .twin-theme-toggle:focus-visible,
+.xdr-display .twin-demo-pill:focus-visible,
+.xdr-display .twin-nav button:focus-visible {
+  outline: var(--kuem-focus-width) solid var(--kuem-focus);
+  outline-offset: calc(0px - var(--kuem-focus-width));
+}
+.twin-workspace .xdr-display .xdr-screen .twin-dashboard-body {
+  flex: 1 0 auto;
+  padding: 12px 10px;
+}
+.xdr-display .twin-dashboard-heading {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.xdr-display .twin-dashboard-heading > div {
+  flex: 1 1 100%;
+}
+/* Sections: a view hides the panels that do not name it. */
+.twin-dashboard[data-view="overview"] [data-in]:not([data-in~="overview"]),
+.twin-dashboard[data-view="devices"] [data-in]:not([data-in~="devices"]),
+.twin-dashboard[data-view="gateways"] [data-in]:not([data-in~="gateways"]),
+.twin-dashboard[data-view="alarms"] [data-in]:not([data-in~="alarms"]) {
+  display: none;
+}
+/* Panels fill as many columns as the screen has room for. */
+.xdr-display .twin-panels {
+  columns: 300px;
+  column-gap: 10px;
+  margin-top: 10px;
+}
+.xdr-display .twin-panels > * {
+  margin: 0 0 10px;
+  break-inside: avoid;
+}
+.xdr-display .twin-devices > .twin-table-heading {
+  margin-top: 0;
+}
+.xdr-display .twin-panels > .twin-event {
+  padding: 8px 9px;
+  border: 1px solid var(--kuem-white);
+  border-radius: var(--kuem-radius-control);
+  background: var(--kuem-background);
+}
+.xdr-display .twin-gateway [data-ui="gateway-state"] {
+  color: var(--kuem-status-ok);
+  text-decoration: none;
+}
+.xdr-display .twin-gateway [data-ui="gateway-state"][data-state="offline"] {
+  color: var(--kuem-status-critical);
+}
+.xdr-display .twin-gateway.is-stale strong:not([data-ui]) {
+  color: var(--kuem-text-secondary);
+  text-decoration: none;
+}
+@container noc-screen (max-width:400px) {
+  .xdr-display .twin-brand span,
+  .xdr-display .twin-kpis > div:after,
+  .xdr-display .twin-kpis small {
+    display: none;
+  }
+  .xdr-display .twin-kpis > div {
+    min-height: 0;
+    padding: 7px;
+  }
+}
+@container noc-screen (min-width:560px) {
+  .xdr-display .twin-nav {
+    top: var(--twin-bar);
+    bottom: auto;
+    order: 0;
+    padding: 0 8px;
+    border-top: 0;
+    border-bottom: 1px solid var(--kuem-border);
+  }
+  .xdr-display .twin-nav-list {
+    display: flex;
+    gap: 2px;
+  }
+  .xdr-display .twin-nav button {
+    flex-direction: row;
+    gap: 7px;
+    padding: 10px;
+  }
+  .xdr-display .twin-nav button[aria-current="page"]:before {
+    top: auto;
+    right: 8px;
+    bottom: -1px;
+    left: 8px;
+  }
+  .xdr-display .twin-nav b {
+    position: static;
+  }
+  .twin-workspace .xdr-display .xdr-screen .twin-dashboard-body {
+    padding: 16px;
+  }
+  .xdr-display .twin-dashboard-heading {
+    flex-wrap: nowrap;
+  }
+  .xdr-display .twin-dashboard-heading > div {
+    flex: 1 1 auto;
+  }
+  .xdr-display .twin-kpis,
+  .xdr-display .twin-panels {
+    gap: 12px;
+    column-gap: 12px;
+  }
+  .xdr-display .twin-panels {
+    margin-top: 12px;
+  }
+  .xdr-display .twin-panels > * {
+    margin-bottom: 12px;
+  }
+}
+@container noc-screen (min-width:960px) {
+  .twin-workspace .xdr-display .xdr-screen .twin-dashboard {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-columns: 200px minmax(0, 1fr);
+  }
+  .twin-workspace .xdr-display .xdr-screen .twin-dashboard-top {
+    grid-column: 1 / -1;
+    padding: 0 16px;
+  }
+  .xdr-display .twin-nav {
+    position: static;
+    padding: 0;
+    border-right: 1px solid var(--kuem-border);
+    border-bottom: 0;
+  }
+  .xdr-display .twin-nav-list {
+    position: sticky;
+    top: var(--twin-bar);
+    flex-direction: column;
+    padding: 12px 8px;
+  }
+  .xdr-display .twin-nav button {
+    border-radius: var(--kuem-radius-control);
+  }
+  .xdr-display .twin-nav button[aria-current="page"] {
+    background: var(--kuem-surface-1);
+  }
+  .xdr-display .twin-nav button[aria-current="page"]:before {
+    top: 8px;
+    right: auto;
+    bottom: 8px;
+    left: 0;
+    width: 2px;
+    height: auto;
+  }
+  .xdr-display .twin-nav b {
+    margin-left: auto;
+  }
+  .twin-workspace .xdr-display .xdr-screen .twin-dashboard-body {
+    padding: 20px 24px;
+  }
+}
+
+/* The app's dark theme puts the screen on the carbon scheme, with its two
+   surfaces swapped: panels sit on the lighter one, raised from a darker
+   canvas. */
+.xdr-display .twin-brand .twin-logo-dark,
+.xdr-screen[data-scheme="carbon"] .twin-brand .twin-logo-light {
+  display: none;
+}
+.xdr-screen[data-scheme="carbon"] .twin-brand .twin-logo-dark {
+  display: block;
+}
+.twin-workspace .xdr-screen[data-scheme="carbon"] {
+  --twin-canvas: var(--kuem-background);
+  --twin-panel: var(--kuem-surface-1);
+  background: var(--twin-canvas);
+}
+.xdr-screen[data-scheme="carbon"] .twin-dashboard {
+  --kuem-background: var(--twin-panel);
+  --kuem-surface-1: var(--twin-canvas);
+}
+/* Panel edges are white on the light theme, where they disappear into the
+   panel; on the dark theme they take the scheme's border. */
+.xdr-screen[data-scheme="carbon"] .twin-sync,
+.xdr-screen[data-scheme="carbon"] .twin-kpis > div,
+.xdr-screen[data-scheme="carbon"] .twin-rule,
+.xdr-screen[data-scheme="carbon"] .twin-table,
+.xdr-screen[data-scheme="carbon"] .twin-tr,
+.xdr-screen[data-scheme="carbon"] .twin-panels > .twin-event,
+.xdr-screen[data-scheme="carbon"] .twin-meter-readings,
+.xdr-screen[data-scheme="carbon"] .twin-sensor-readings,
+.xdr-screen[data-scheme="carbon"] .twin-meter-readings > div,
+.xdr-screen[data-scheme="carbon"] .twin-sensor-readings > div {
+  border-color: var(--kuem-border);
+}
+.xdr-screen[data-scheme="carbon"] .twin-timeline-entry {
+  border-top-color: var(--kuem-border);
+  border-right-color: var(--kuem-border);
+  border-bottom-color: var(--kuem-border);
+}
+.xdr-screen[data-scheme="carbon"] .twin-rule-icon,
+.xdr-screen[data-scheme="carbon"] .twin-alerts h3 > span,
+.xdr-screen[data-scheme="carbon"] .twin-nav b {
+  color: var(--kuem-carbon);
+}
+.xdr-screen[data-scheme="carbon"] .twin-switch > span {
+  background: var(--kuem-text-secondary);
+}
+.xdr-screen[data-scheme="carbon"] .twin-switch:not([aria-checked="true"]) {
+  background: var(--kuem-border);
+}
+.xdr-screen[data-scheme="carbon"] .twin-tr.is-updated {
+  animation-name: twin-row-flash-dark;
+}
+@keyframes twin-row-flash-dark {
+  from {
+    background: var(--kuem-surface-2);
+  }
+  to {
+    background: transparent;
+  }
+}
+.xdr-screen[data-scheme="carbon"] .twin-kpis > div.is-received {
+  animation-name: flow-received-tile-dark;
+}
+@keyframes flow-received-tile-dark {
+  from {
+    background-color: color-mix(
+      in srgb,
+      var(--kuem-data) 30%,
+      var(--kuem-background)
+    );
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .xdr-display .twin-theme-toggle svg {
+    transition: none;
   }
 }

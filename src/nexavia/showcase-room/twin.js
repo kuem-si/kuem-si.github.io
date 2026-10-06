@@ -325,7 +325,7 @@ export function initTwin(root, config) {
           let left = start.left;
           let top = start.top;
           if (resizeWidth) {
-            const minWidth = Math.min(300, frame.width - 16);
+            const minWidth = Math.min(240, frame.width - 16);
             const maxWidth = Math.max(
               minWidth,
               Math.min(
@@ -380,6 +380,18 @@ export function initTwin(root, config) {
       }),
     );
   }
+  // The dashboard's light or dark theme, shared by every twin on the page.
+  const themeToggle = root.querySelector("[data-screen-theme]");
+  themeToggle?.addEventListener("click", () => {
+    const dark = themeToggle.getAttribute("aria-pressed") !== "true";
+    const page = root.closest("[data-twin-root]") ?? root;
+    page
+      .querySelectorAll("[data-screen-theme]")
+      .forEach((toggle) => toggle.setAttribute("aria-pressed", String(dark)));
+    page
+      .querySelectorAll(".xdr-screen")
+      .forEach((screen) => (screen.dataset.scheme = dark ? "carbon" : "white"));
+  });
   // A press only becomes a drag once it moves past this many CSS pixels, so a
   // tap on a lamp or building stays a click and a drag never switches lights.
   const dragThreshold = { mouse: 5, pen: 8, touch: 10 };
@@ -482,6 +494,37 @@ export function initTwin(root, config) {
   const steps = config.steps(t);
   const $ = (selector) => root.querySelector(selector);
   const ui = (name) => root.querySelector(`[data-ui="${name}"]`);
+  // The app's sections: Overview shows every panel, the other views the
+  // panels that name them (data-in). The heading takes the section's name.
+  const dashboard = $(".twin-dashboard");
+  const viewTabs = [...root.querySelectorAll("[data-view-tab]")];
+  const viewTitle = ui("view-title");
+  const overviewTitle = viewTitle?.textContent;
+  function setView(view) {
+    if (!dashboard || dashboard.dataset.view === view) return;
+    dashboard.dataset.view = view;
+    viewTabs.forEach((tab) => {
+      const current = tab.dataset.viewTab === view;
+      if (current) tab.setAttribute("aria-current", "page");
+      else tab.removeAttribute("aria-current");
+      if (current && viewTitle)
+        viewTitle.textContent =
+          view === "overview"
+            ? overviewTitle
+            : tab.querySelector("span").textContent;
+    });
+    if (screenViewport) screenViewport.scrollTop = 0;
+  }
+  viewTabs.forEach((tab) =>
+    tab.addEventListener("click", () => setView(tab.dataset.viewTab)),
+  );
+  root
+    .querySelectorAll("[data-view-jump]")
+    .forEach((control) =>
+      control.addEventListener("click", () =>
+        setView(control.dataset.viewJump),
+      ),
+    );
   let index = 0;
   let paused = false;
   let visible = true;
@@ -617,6 +660,11 @@ export function initTwin(root, config) {
     ui("alarm-count").textContent = String(count);
     $(".twin-demo-pill").innerHTML =
       `<i></i> ${count} ${en ? "ALARMS" : "ALARMI"}`;
+    const badge = $("[data-alarm-badge]");
+    if (badge) {
+      badge.textContent = String(count);
+      badge.hidden = !count;
+    }
   }
 
   // `log: false` re-applies a step without adding it to the timeline again.
@@ -1319,6 +1367,13 @@ export function initTwin(root, config) {
     },
     setSync(ok) {
       flow?.setOnline(ok);
+      const gateway = ui("gateway-state");
+      if (gateway) {
+        gateway.dataset.state = ok ? "on" : "offline";
+        gateway.textContent = ok
+          ? t("Povezan", "Online")
+          : t("Brez povezave", "Offline");
+      }
       const sync = $(".twin-sync");
       if (!sync) return;
       sync.classList.toggle("is-lost", !ok);
@@ -1339,15 +1394,19 @@ export function initTwin(root, config) {
         .forEach((item) => item.classList.remove("is-spotlit"));
       const element = typeof target === "string" ? $(target) : target;
       if (!element) return;
+      // A panel the open section leaves out is shown on the overview.
+      if (element.closest("[data-in]")?.offsetParent === null)
+        setView("overview");
       element.classList.add("is-spotlit");
       const viewport = root.querySelector(".xdr-screen");
       if (!viewport || !viewport.clientHeight) return;
       const offset =
         element.getBoundingClientRect().top -
         viewport.getBoundingClientRect().top;
+      // The app's bars cover the top and bottom of the viewport.
       if (
-        offset < 0 ||
-        offset > viewport.clientHeight - element.offsetHeight - 16
+        offset < 56 ||
+        offset > viewport.clientHeight - element.offsetHeight - 72
       )
         viewport.scrollTo({
           top: viewport.scrollTop + offset - viewport.clientHeight / 3,
