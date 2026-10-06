@@ -93,7 +93,7 @@ export const SENSORS = {
 };
 
 // ---------------------------------------------------------------------------
-const rngOf = (seed) => () => {
+export const rngOf = (seed) => () => {
   seed |= 0;
   seed = (seed + 0x6d2b79f5) | 0;
   let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
@@ -181,7 +181,7 @@ function normalMap(height, strength = 2) {
 
 // Surfaces use world-space UVs (see worldUV), so `scale` is millimetres per
 // texture repeat.
-function makeMaterials() {
+export function makeMaterials() {
   const m = {};
   const pavers = (base, joint, tile, size = 512) => {
     const height = canvas(size, (g) => {
@@ -620,7 +620,7 @@ function makeMaterials() {
 }
 
 // World-space (triplanar) UVs so every surface keeps the same texel size.
-function worldUV(geometry, scale, object) {
+export function worldUV(geometry, scale, object) {
   object.updateMatrixWorld(true);
   const position = geometry.attributes.position;
   const normal = geometry.attributes.normal;
@@ -646,73 +646,10 @@ function worldUV(geometry, scale, object) {
   geometry.setAttribute("uv", new THREE.BufferAttribute(uv, 2));
 }
 
-// ---------------------------------------------------------------------------
-export function buildScene() {
-  random = rngOf(20260927);
-  const scene = new THREE.Scene();
-  const M = makeMaterials();
-  // Registry of what the renderer needs to know about.
-  const world = {
-    devices: Object.fromEntries(
-      DEVICES.map((id) => [id, { lights: [], emissive: [], meshes: [] }]),
-    ),
-    occluders: [],
-    water: null,
-    staticLights: [],
-  };
-  const add = (object, parent = scene) => {
-    parent.add(object);
-    return object;
-  };
-  const mesh = (geometry, material, { cast = true, receive = true } = {}) => {
-    const item = new THREE.Mesh(geometry, material);
-    item.castShadow = cast;
-    item.receiveShadow = receive;
-    return item;
-  };
-  // Box by world extents.
-  const box = (x0, y0, x1, y1, z0, z1, material, options) => {
-    const item = mesh(
-      new THREE.BoxGeometry(x1 - x0, z1 - z0, y1 - y0),
-      material,
-      options,
-    );
-    item.position.set((x0 + x1) / 2, (z0 + z1) / 2, (y0 + y1) / 2);
-    return item;
-  };
-  // Flat polygon at height z (world points).
-  const slab = (points, z0, z1, material, options) => {
-    const shape = new THREE.Shape(
-      points.map(([x, y]) => new THREE.Vector2(x, -y)),
-    );
-    const geometry = new THREE.ExtrudeGeometry(shape, {
-      depth: z1 - z0,
-      bevelEnabled: false,
-    });
-    geometry.rotateX(-Math.PI / 2);
-    geometry.translate(0, z0, 0);
-    return mesh(geometry, material, options);
-  };
-  const rect = (x0, y0, x1, y1) => [
-    [x0, y0],
-    [x1, y0],
-    [x1, y1],
-    [x0, y1],
-  ];
-  // Emissive glass that follows a device (or is always lit).
-  const litGlass = (color, intensity, device) => {
-    const material = new THREE.MeshStandardMaterial({
-      color: "#2a2620",
-      emissive: color,
-      emissiveIntensity: intensity,
-      roughness: 0.25,
-    });
-    material.userData.on = { intensity };
-    if (device) world.devices[device].emissive.push(material);
-    return material;
-  };
-  const occluder = (object, kind) => world.occluders.push({ object, kind });
-
+// The board's base, shared by the maquettes built on it (the industry model,
+// scripts/industry/scene.js, stands on the same one). `add`, `mesh` and `box`
+// are the scene's builders.
+export function buildBase(add, mesh, box) {
   // --- Board base: plinth, rim and floor -----------------------------------
   // Matte charcoal, as on the city model: one body with a flat rim around the
   // board, rounded corners, and a jigsaw joint between the modules. Its front
@@ -934,6 +871,77 @@ export function buildScene() {
     add(box(-0.9, 0, 0.5, 600, LAYOUT.waterZ, z1, tray, options));
     add(box(599.5, 0, 600.9, 600, LAYOUT.waterZ, z1, tray, options));
   }
+  return { SEAM, seamMaterial };
+}
+
+// ---------------------------------------------------------------------------
+export function buildScene() {
+  random = rngOf(20260927);
+  const scene = new THREE.Scene();
+  const M = makeMaterials();
+  // Registry of what the renderer needs to know about.
+  const world = {
+    devices: Object.fromEntries(
+      DEVICES.map((id) => [id, { lights: [], emissive: [], meshes: [] }]),
+    ),
+    occluders: [],
+    water: null,
+    staticLights: [],
+  };
+  const add = (object, parent = scene) => {
+    parent.add(object);
+    return object;
+  };
+  const mesh = (geometry, material, { cast = true, receive = true } = {}) => {
+    const item = new THREE.Mesh(geometry, material);
+    item.castShadow = cast;
+    item.receiveShadow = receive;
+    return item;
+  };
+  // Box by world extents.
+  const box = (x0, y0, x1, y1, z0, z1, material, options) => {
+    const item = mesh(
+      new THREE.BoxGeometry(x1 - x0, z1 - z0, y1 - y0),
+      material,
+      options,
+    );
+    item.position.set((x0 + x1) / 2, (z0 + z1) / 2, (y0 + y1) / 2);
+    return item;
+  };
+  // Flat polygon at height z (world points).
+  const slab = (points, z0, z1, material, options) => {
+    const shape = new THREE.Shape(
+      points.map(([x, y]) => new THREE.Vector2(x, -y)),
+    );
+    const geometry = new THREE.ExtrudeGeometry(shape, {
+      depth: z1 - z0,
+      bevelEnabled: false,
+    });
+    geometry.rotateX(-Math.PI / 2);
+    geometry.translate(0, z0, 0);
+    return mesh(geometry, material, options);
+  };
+  const rect = (x0, y0, x1, y1) => [
+    [x0, y0],
+    [x1, y0],
+    [x1, y1],
+    [x0, y1],
+  ];
+  // Emissive glass that follows a device (or is always lit).
+  const litGlass = (color, intensity, device) => {
+    const material = new THREE.MeshStandardMaterial({
+      color: "#2a2620",
+      emissive: color,
+      emissiveIntensity: intensity,
+      roughness: 0.25,
+    });
+    material.userData.on = { intensity };
+    if (device) world.devices[device].emissive.push(material);
+    return material;
+  };
+  const occluder = (object, kind) => world.occluders.push({ object, kind });
+
+  const { SEAM, seamMaterial } = buildBase(add, mesh, box);
 
   // --- Water ----------------------------------------------------------------
   const waterNormals = (() => {

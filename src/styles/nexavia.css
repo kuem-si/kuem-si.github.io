@@ -374,9 +374,7 @@ html:not(.js) .nx-role-panel[hidden] {
 }
 .nx-showroom-grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: var(--kuem-space-48);
-  align-items: center;
+  gap: var(--kuem-space-32);
 }
 .nx-showroom-copy h2 {
   max-width: 16ch;
@@ -388,7 +386,7 @@ html:not(.js) .nx-role-panel[hidden] {
 }
 .nx-showroom-twins {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--kuem-space-16);
 }
 .nx-showroom-card {
@@ -445,13 +443,7 @@ html:not(.js) .nx-role-panel[hidden] {
   font-weight: 700;
   margin-top: var(--kuem-space-4);
 }
-@media (max-width: 980px) {
-  .nx-showroom-grid {
-    grid-template-columns: 1fr;
-    gap: var(--kuem-space-32);
-  }
-}
-@media (max-width: 500px) {
+@media (max-width: 760px) {
   .nx-showroom-twins {
     grid-template-columns: 1fr;
   }

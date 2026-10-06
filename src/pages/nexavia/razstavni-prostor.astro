@@ -4,16 +4,17 @@ import "../../styles/nexavia-showcase-room.css";
 import ShowcaseTwin from "../../components/nexavia/ShowcaseTwin.astro";
 import { cityTwin } from "../../components/nexavia/showcase/city";
 import { marinaTwin } from "../../components/nexavia/showcase/marina";
+import { industryTwin } from "../../components/nexavia/showcase/industry";
 
 // Each tab is one maquette. The first tab starts on page load (or the tab
 // named in the URL hash, e.g. #marina); the others start the first time they
 // are opened (see src/nexavia/showcase-room/index.js).
-const twins = [cityTwin(false), marinaTwin(false)];
+const twins = [cityTwin(false), marinaTwin(false), industryTwin(false)];
 ---
 
 <MainLayout
   title="Razstavni prostor Nexavia | KUEM"
-  description="Razstavni prostor Nexavia: interaktivna digitalna dvojčka mini mesta in pametne marine z nadzorno ploščo Nexavia."
+  description="Razstavni prostor Nexavia: interaktivni digitalni dvojčki mini mesta, pametne marine s kampom in industrije z nadzorno ploščo Nexavia."
   noindex
 >
   <div class="twin-page" data-twin-root>

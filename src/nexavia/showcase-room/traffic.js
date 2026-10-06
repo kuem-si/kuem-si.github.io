@@ -800,8 +800,10 @@ function buildRoute(name, route, { prefix = "city", counter = null } = {}) {
       );
   }
   // Timed stops (e.g. a landing): the lane position nearest each waypoint.
+  // A walker's stop may also name a pose, a heading to turn to ("face") and
+  // whether they leave it carrying a box ("carry").
   if (route.stops)
-    lane.stops = route.stops.map(({ point, time }) => {
+    lane.stops = route.stops.map(({ point, ...stop }) => {
       const [px, py] = route.points[point];
       let at = 0;
       let best = Infinity;
@@ -809,7 +811,7 @@ function buildRoute(name, route, { prefix = "city", counter = null } = {}) {
         const d = (lane.x[i] - px) ** 2 + (lane.y[i] - py) ** 2;
         if (d < best) [best, at] = [d, i];
       }
-      return { at, time };
+      return { ...stop, at };
     });
   for (let i = 0; i < count && counter; i++) {
     const x = lane.x[i];
@@ -2245,7 +2247,8 @@ export function initTraffic(root, map = CITY) {
 async function startTraffic(root, layer, map) {
   const host = layer.ownerSVGElement;
   const board = map.board ?? BOARD;
-  // Walks run both ways; walks may also sit among the routes (mode "walk").
+  // Walks run both ways, unless marked "oneWay"; walks may also sit among the
+  // routes (mode "walk").
   const walks = {
     ...(map.walks ?? {}),
     ...Object.fromEntries(
@@ -2256,15 +2259,19 @@ async function startTraffic(root, layer, map) {
     ...Object.entries(map.routes).filter(([, route]) => route.mode !== "walk"),
     ...Object.entries(walks).flatMap(([name, walk]) => [
       [name, { ...walk, walk: true }],
-      [
-        `${name}Back`,
-        {
-          ...walk,
-          walk: true,
-          points: [...walk.points].reverse(),
-          fade: walk.fade && [walk.fade[1], walk.fade[0]],
-        },
-      ],
+      ...(walk.oneWay
+        ? []
+        : [
+            [
+              `${name}Back`,
+              {
+                ...walk,
+                walk: true,
+                points: [...walk.points].reverse(),
+                fade: walk.fade && [walk.fade[1], walk.fade[0]],
+              },
+            ],
+          ]),
     ]),
   ];
   // One lane per idle slice keeps every set-up task short.
@@ -2352,6 +2359,11 @@ async function startTraffic(root, layer, map) {
       x: 0,
       y: 0,
       opacity: 1,
+      // A walker's pose at a stop, and the box they may carry away from it.
+      pose: null,
+      poseWeight: 0,
+      poseTime: 0,
+      carrying: false,
     });
   }
 
@@ -2378,6 +2390,25 @@ async function startTraffic(root, layer, map) {
     }
     svg("path", { d, "clip-rule": "evenodd" }, clip);
     art.element.setAttribute("clip-path", `url(#${clipId})`);
+    if (spec.occluders?.length) {
+      // Scenery in front of the stroll hides the person, as on the lanes.
+      const mask = svg(
+        "mask",
+        {
+          id: `${clipId}-mask`,
+          maskUnits: "userSpaceOnUse",
+          x: 0,
+          y: 0,
+          width: 1536,
+          height: 1024,
+        },
+        defs,
+      );
+      svg("path", { d: board, fill: "#fff" }, mask);
+      for (const key of spec.occluders)
+        svg("path", { d: `M${map.occluders[key]}Z`, fill: "#000" }, mask);
+      art.element.setAttribute("mask", `url(#${clipId}-mask)`);
+    }
     const lanes = spec.path && [
       buildRoute(`actor${index}`, {
         points: spec.path.map(([x, y]) => [x, y, 0]),
@@ -2559,6 +2590,8 @@ async function startTraffic(root, layer, map) {
       : -1;
     if (entity.stop < 0) entity.stop = lane.stops?.length ?? 0;
     entity.dwell = -1;
+    entity.carrying = false;
+    entity.poseWeight = 0;
     if (entity.kind === "boat") {
       const used = traffic
         .filter((other) => other.lane && other.kind === "boat")
@@ -2995,9 +3028,21 @@ async function startTraffic(root, layer, map) {
         entity.dwell -= delta;
         entity.speed = 0;
         if (entity.dwell <= 0) {
+          if (timed.carry !== undefined) entity.carrying = timed.carry;
           entity.stop++;
           entity.dwell = -1;
         }
+      }
+      if (entity.kind === "pedestrian") {
+        // Busy at a stop (reaching for a shelf, paying), or carrying a box.
+        const pose =
+          (entity.dwell >= 0 && timed?.pose) ||
+          (entity.carrying ? "carry" : null);
+        entity.pose = pose ?? entity.pose;
+        entity.poseTime += delta;
+        entity.poseWeight = pose
+          ? Math.min(1, entity.poseWeight + delta * 3)
+          : Math.max(0, entity.poseWeight - delta * 3);
       }
       const step = Math.min(entity.speed * delta, Math.max(0, clearance));
       entity.distance += step;
@@ -3027,12 +3072,16 @@ async function startTraffic(root, layer, map) {
       const t = entity.distance - index;
       let x = lane.x[index] + (lane.x[index + 1] - lane.x[index]) * t;
       let y = lane.y[index] + (lane.y[index + 1] - lane.y[index]) * t;
+      // At a stop a walker turns to what they came for.
+      const facing = entity.dwell >= 0 && lane.stops?.[entity.stop]?.face;
       const target =
-        lane.heading[index] +
-        angleDelta(lane.heading[index], lane.heading[index + 1]) * t;
+        typeof facing === "number"
+          ? facing
+          : lane.heading[index] +
+            angleDelta(lane.heading[index], lane.heading[index + 1]) * t;
       entity.heading +=
         angleDelta(entity.heading, target) *
-        (delta ? 1 - Math.exp(-delta * 18) : 1);
+        (delta ? 1 - Math.exp(-delta * (entity.dwell >= 0 ? 4 : 18)) : 1);
       const s = depthScale(y);
       const k = foreshortening(y);
       const cos = Math.cos(entity.heading);

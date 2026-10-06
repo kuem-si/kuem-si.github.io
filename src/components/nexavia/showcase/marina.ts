@@ -26,7 +26,7 @@ export function marinaTwin(en: boolean): Twin {
   return {
     id: "marina",
     tab: {
-      title: t("Pametna marina", "Smart marina"),
+      title: t("Pametna marina in kamp", "Smart marina and camp"),
       meta: t("Maketa 60 × 60 cm · 7 naprav", "60 × 60 cm model · 7 devices"),
     },
     intro: {

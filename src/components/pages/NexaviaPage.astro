@@ -8,8 +8,16 @@ import logo from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
 import dashboard from "../../assets/brand/nexavia/nexavia-noc-dashboard.png";
 import cityMaquette from "../../assets/nexavia/showcase/city-maquette.png";
 import marinaMaquette from "../../assets/nexavia/showcase/marina-maquette.webp";
+import industryMaquette from "../../assets/nexavia/showcase/industry-maquette.webp";
 import { nexaviaSoftware } from "../../data/organization";
 import "../../styles/nexavia.css";
+
+// Card image per showcase twin (the tab id in the showcase room's address).
+const showroomImages: Record<string, ImageMetadata> = {
+  city: cityMaquette,
+  marina: marinaMaquette,
+  industry: industryMaquette,
+};
 
 interface Props {
   locale: Locale;
@@ -123,12 +131,13 @@ const copy = {
     showroomEyebrow: "RAZSTAVNI PROSTOR",
     showroomH2: "Preizkusite Nexavio na maketi.",
     showroomP:
-      "Dva digitalna dvojčka, povezana z nadzorno ploščo Nexavie. Prižgite luči, spremljajte meritve senzorjev in opazujte, kako pravila samodejno ukrepajo.",
+      "Trije digitalni dvojčki, povezani z nadzorno ploščo Nexavie. Prižgite luči, spremljajte meritve senzorjev in opazujte, kako pravila samodejno ukrepajo.",
     showroomHref: "/nexavia/razstavni-prostor",
     showroomCta: "Odprite razstavni prostor",
     showroomTwins: [
       ["city", "Pametno mesto", "Razsvetljava, števci porabe ter senzorji mostu, reke, zraka in kolesarjev."],
-      ["marina", "Pametna marina", "Luči na pomolih, števci elektrike, vode in goriva ter zasedenost privezov."],
+      ["marina", "Pametna marina in kamp", "Luči na pomolih, števci elektrike, vode in goriva ter zasedenost privezov."],
+      ["industry", "Industrija", "Temperatura in vlaga v proizvodnji ter alarmi hladilnikov in zamrzovalnikov v supermarketu."],
     ],
     showroomOpen: "Odpri maketo",
     storiesEyebrow: "USPEŠNE ZGODBE",
@@ -234,12 +243,13 @@ const copy = {
     showroomEyebrow: "SHOWCASE ROOM",
     showroomH2: "Try Nexavia on a scale model.",
     showroomP:
-      "Two digital twins connected to a Nexavia dashboard. Switch the lights, follow live sensor readings and watch the rules act on their own.",
+      "Three digital twins connected to a Nexavia dashboard. Switch the lights, follow live sensor readings and watch the rules act on their own.",
     showroomHref: "/en/nexavia/showcase-room",
     showroomCta: "Open the showcase room",
     showroomTwins: [
       ["city", "Smart city", "Lighting, utility meters, and bridge, river, air and cyclist sensors."],
-      ["marina", "Smart marina", "Pier lights, electricity, water and fuel meters, and berth occupancy."],
+      ["marina", "Smart marina and camp", "Pier lights, electricity, water and fuel meters, and berth occupancy."],
+      ["industry", "Industry", "Temperature and humidity in a manufacturing plant, and fridge and freezer alarms in a supermarket."],
     ],
     showroomOpen: "Open the model",
     storiesEyebrow: "SUCCESS STORIES",
@@ -530,10 +540,10 @@ const breadcrumb = {
           copy.showroomTwins.map(([id, title, twinCopy]) => (
             <a class="nx-showroom-card" href={`${copy.showroomHref}#${id}`}>
               <Image
-                src={id === "city" ? cityMaquette : marinaMaquette}
+                src={showroomImages[id]}
                 alt=""
                 widths={[360, 540, 720]}
-                sizes="(min-width: 1100px) 330px, (min-width: 760px) 40vw, 100vw"
+                sizes="(min-width: 1240px) 380px, (min-width: 760px) 32vw, 100vw"
                 format="webp"
                 quality={80}
                 loading="lazy"

@@ -1,9 +1,10 @@
 import { initTwin } from "./twin.js";
 import { city } from "./city.js";
 import { marina } from "./marina.js";
+import { industry } from "./industry.js";
 
 // One twin config per tab, keyed by the panel's data-twin-tab.
-const twins = { city, marina };
+const twins = { city, marina, industry };
 
 // The address names a tab, and optionally one of its scenarios and a step:
 // #marina opens the marina, #marina/high-tide plays that scenario from the
