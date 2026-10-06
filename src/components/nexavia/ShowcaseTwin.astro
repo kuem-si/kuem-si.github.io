@@ -59,6 +59,7 @@ const views = [
       <div class="xdr-overlay-tools" data-overlay-drag>
         <span class="xdr-drag-icon" role="img" aria-label={t("Premakni nadzorno ploščo", "Move dashboard")} title={t("Premakni nadzorno ploščo", "Move dashboard")}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M2 12h20M12 2l-3 3m3-3 3 3M12 22l-3-3m3 3 3-3M2 12l3-3m-3 3 3 3m16-3-3-3m3 3-3 3" /></svg></span>
         <label class="xdr-opacity-control" title={t("Prosojnost nadzorne plošče", "Dashboard opacity")}><svg class="xdr-sun-low" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 1v2m0 18v2M1 12h2m18 0h2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42m0-15.56-1.42 1.42M5.64 18.36l-1.42 1.42" /></svg><input type="range" min="35" max="100" value="100" data-overlay-opacity aria-label={t("Prosojnost nadzorne plošče", "Dashboard opacity")} /><svg class="xdr-sun-high" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" /><path d="M12 1v2m0 18v2M1 12h2m18 0h2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42m0-15.56-1.42 1.42M5.64 18.36l-1.42 1.42" /></svg></label>
+        <button type="button" data-overlay-close aria-label={t("Zapri nadzorno ploščo", "Close dashboard")} title={t("Zapri nadzorno ploščo", "Close dashboard")}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button>
       </div>
       <div class="xdr-bezel" aria-label={t("Nadzorna plošča Nexavia, simulacija", "Nexavia dashboard, simulation")}>
         <div class="xdr-screen" data-scheme="white">

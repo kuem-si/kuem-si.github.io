@@ -2297,7 +2297,7 @@
   position: absolute;
   left: 14px;
   bottom: 14px;
-  z-index: 8;
+  z-index: 11;
   padding: 8px;
   border: 1px solid color-mix(in srgb, var(--kuem-data) 33%, transparent);
   border-radius: var(--kuem-radius-card);
@@ -2310,7 +2310,7 @@
 .twin-workspace:fullscreen .xdr-display {
   --overlay-opacity: 1;
   position: absolute;
-  z-index: 6;
+  z-index: 10;
   top: 7%;
   right: 3%;
   left: auto;
@@ -2398,7 +2398,7 @@
 .twin-workspace:not(:fullscreen) .xdr-display {
   --overlay-opacity: 1;
   position: absolute;
-  z-index: 6;
+  z-index: 10;
   top: 5%;
   right: 2%;
   left: auto;
@@ -3330,7 +3330,9 @@
 .twin-workspace .xdr-display.is-minimized {
   display: none;
 }
-.twin-workspace .xdr-overlay-tools [data-overlay-minimize] {
+.twin-workspace .xdr-overlay-tools [data-overlay-close] {
+  display: grid;
+  place-items: center;
   flex: none;
   width: 24px;
   height: 24px;
@@ -3343,7 +3345,15 @@
     var(--kuem-font-text);
   cursor: pointer;
 }
-.twin-workspace .xdr-overlay-tools [data-overlay-minimize]:hover {
+.twin-workspace .xdr-overlay-tools [data-overlay-close] svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+.twin-workspace .xdr-overlay-tools [data-overlay-close]:hover {
   background: color-mix(in srgb, var(--kuem-white) 13%, transparent);
 }
 .twin-workspace .xdr-restore {
@@ -3367,7 +3377,7 @@
   background: var(--kuem-border);
 }
 .twin-workspace .xdr-restore:focus-visible,
-.twin-workspace .xdr-overlay-tools [data-overlay-minimize]:focus-visible {
+.twin-workspace .xdr-overlay-tools [data-overlay-close]:focus-visible {
   outline: var(--kuem-focus-width) solid var(--kuem-focus);
   outline-offset: var(--kuem-focus-offset);
 }
@@ -3393,7 +3403,7 @@
 /* Keep the dashboard visibility control above the floating dashboard overlay. */
 .twin-workspace .twin-controls {
   position: relative;
-  z-index: 8;
+  z-index: 11;
 }
 .twin-workspace .twin-controls [data-overlay-toggle] {
   position: relative;
@@ -3962,7 +3972,8 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  margin-left: auto;
+  margin: 0;
+  justify-self: center;
   padding: 0;
   border: 0;
   background: transparent;
@@ -4016,7 +4027,7 @@
     padding: 6px 9px !important;
   }
   .twin-workspace .xdr-overlay-tools label.xdr-opacity-control {
-    margin-left: auto !important;
+    margin-left: 0 !important;
   }
   .twin-workspace .xdr-opacity-control input {
     width: 72px !important;
@@ -4024,6 +4035,9 @@
 }
 .twin-workspace .xdr-overlay-tools {
   width: min(250px, calc(100% - 24px));
+  display: grid !important;
+  grid-template-columns: 24px minmax(0, 1fr) 24px;
+  gap: 8px !important;
   margin: 0 auto;
   border-radius: var(--kuem-radius-card) var(--kuem-radius-card)
     var(--kuem-radius-card) var(--kuem-radius-card);

@@ -142,6 +142,7 @@ export function initTwin(root, config) {
   const overlayDrag = root.querySelector("[data-overlay-drag]");
   const overlayOpacity = root.querySelector("[data-overlay-opacity]");
   const overlayToggle = root.querySelector("[data-overlay-toggle]");
+  const overlayClose = root.querySelector("[data-overlay-close]");
   const resizeEdges = root.querySelectorAll("[data-overlay-resize]");
   const screenViewport = root.querySelector(".xdr-screen");
   const screenBezel = root.querySelector(".xdr-bezel");
@@ -231,6 +232,10 @@ export function initTwin(root, config) {
     setOverlayMinimized(window.matchMedia("(max-width: 980px)").matches);
     overlayToggle?.addEventListener("click", () => {
       setOverlayMinimized(!screenOverlay.classList.contains("is-minimized"));
+    });
+    overlayClose?.addEventListener("click", () => {
+      setOverlayMinimized(true);
+      overlayToggle?.focus({ preventScroll: true });
     });
     requestAnimationFrame(keepOverlayVisible);
     window.addEventListener("resize", keepOverlayVisible, { passive: true });
