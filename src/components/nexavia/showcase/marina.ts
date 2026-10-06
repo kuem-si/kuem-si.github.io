@@ -2,7 +2,7 @@ import type { Twin } from "./types";
 import geometry from "./marina-geometry.json";
 
 // The smart-marina maquette, rendered by scripts/generate-marina-maquette.mjs:
-// the marina in the middle of the board, the town behind it. Hotspots, unlit
+// the marina in the middle of the board, the camp behind it. Hotspots, unlit
 // patches and sensor pins come from the generated geometry.
 export function marinaTwin(en: boolean): Twin {
   const t = (sl: string, english: string) => (en ? english : sl);
@@ -35,8 +35,8 @@ export function marinaTwin(en: boolean): Twin {
         "A marina that knows what is happening on every pier.",
       ),
       lead: t(
-        "Marina sredi makete povezuje razsvetljavo pomolov, hotela, restavracije in sanitarij, števce elektrike, vode in goriva ter senzorje gladine morja, vetra, zasedenosti privezov in parkirišč. Mesto v ozadju je kulisa – vsi senzorji so v marini.",
-        "The marina at the centre of the model connects lighting for the piers, hotel, restaurant and sanitary block, electricity, water and fuel meters, and sensors for sea level, wind, berth and parking occupancy. The town behind it is scenery – every sensor sits in the marina.",
+        "Marina sredi makete povezuje razsvetljavo pomolov, hotela, restavracije in sanitarij, števce elektrike, vode in goriva ter senzorje gladine morja, vetra, zasedenosti privezov in parkirišč. Kamp v ozadju je kulisa – vsi senzorji so v marini.",
+        "The marina at the centre of the model connects lighting for the piers, hotel, restaurant and sanitary block, electricity, water and fuel meters, and sensors for sea level, wind, berth and parking occupancy. The camp behind it is scenery – every sensor sits in the marina.",
       ),
     },
     panel: {
@@ -62,8 +62,8 @@ export function marinaTwin(en: boolean): Twin {
       width: geometry.photo.width,
       height: geometry.photo.height,
       alt: t(
-        "Maketa marine velikosti 60 × 60 cm iz štirih modulov velikosti 30 × 30 cm: v sredini bazen s pomoli in privezanimi plovili, ob njem hotel, restavracija, sanitarni blok, parkirišči in točilnica goriva, v ozadju obalno mesto z zvonikom",
-        "60 by 60 centimetre marina maquette of four 30 by 30 centimetre modules: a basin with piers and moored boats in the middle, a hotel, restaurant, sanitary block, two car parks and a fuel dock around it, and a coastal town with a bell tower behind",
+        "Maketa marine velikosti 60 × 60 cm iz štirih modulov velikosti 30 × 30 cm: v sredini bazen s pomoli in privezanimi plovili, ob njem hotel, restavracija, sanitarni blok, parkirišči in točilnica goriva, v ozadju kamp z recepcijo, mobilnima hišicama in počitniškimi prikolicami",
+        "60 by 60 centimetre marina maquette of four 30 by 30 centimetre modules: a basin with piers and moored boats in the middle, a hotel, restaurant, sanitary block, two car parks and a fuel dock around it, and a camp with a reception, two mobile homes and holiday trailers behind",
       ),
       lightsDir: "/images/nexavia/showcase-room/marina/lights",
       water: "/images/nexavia/showcase-room/marina/water.webp",

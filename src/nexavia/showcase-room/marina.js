@@ -1,13 +1,12 @@
-import { initWater, sample, fountain } from "./water.js";
+import { initWater, sample } from "./water.js";
 import { initBeacons } from "./beacons.js";
-import { initFountain } from "./fountain.js";
 import { initTraffic } from "./traffic.js";
 import { initTide } from "./tide.js";
 import geometry from "../../components/nexavia/showcase/marina-geometry.json";
 
 // The smart-marina twin: hotel, restaurant, sanitary block and four pier
 // lights under one lighting rule, with meters and sensors across the marina
-// (the town behind it has none). Driven by twin.js; the maquette and its
+// (the camp behind it has none). Driven by twin.js; the maquette and its
 // geometry come from scripts/generate-marina-maquette.mjs.
 
 const PIERS = ["PIER_01", "PIER_02", "PIER_03", "PIER_04"];
@@ -38,7 +37,7 @@ const freeSpaces = (change = 0) => {
 
 // The whole water surface moves: the water rendered alone is redrawn in
 // wavering strips (its alpha keeps boats, piers and quays still). Waves are
-// larger and longer nearer the viewer. Same motion as the town's river: a
+// larger and longer nearer the viewer. Same motion as the city's river: a
 // sideways sway plus a slow vertical swell that stretches the reflections.
 const WATER = { x: 88, y: 284, width: 1364, height: 492 };
 const waves = (source) => [
@@ -56,39 +55,7 @@ const waves = (source) => [
       sample.width = area.width;
     },
   },
-  // The square's fountain, played and lit like the town's.
-  fountain({
-    x: 774,
-    top: 155,
-    base: 176,
-    basinY: 179,
-    basinRx: 23,
-    basinRy: 10,
-    jet: [
-      [160, 1.8],
-      [165, 3.2],
-      [170, 4.6],
-      [176, 6.5],
-    ],
-    lightJet: [
-      [157, 0],
-      [162, 1.3],
-      [168, 2.6],
-      [176, 4.2],
-    ],
-  }),
 ];
-
-// Water playing from the fountain on the square: a jet about 18 px high,
-// falling into the basin 3 px below the nozzle.
-const FOUNTAIN = {
-  nozzle: [774, 173],
-  height: 18,
-  water: -3,
-  spread: 16,
-  rate: 520,
-  basin: { rx: 23, ry: 10 },
-};
 
 // The red and green lights at the harbour entrance flash out of step.
 const BEACONS = [
@@ -152,7 +119,6 @@ export const marina = {
   effects: [
     water,
     (root) => initBeacons(root, BEACONS),
-    (root) => initFountain(root, FOUNTAIN),
     (root) => initTraffic(root, TRAFFIC),
   ],
   // The radio gateway on the hotel roof.

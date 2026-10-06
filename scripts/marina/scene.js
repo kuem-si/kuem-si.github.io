@@ -27,7 +27,7 @@ export const CAMERA = [
 ];
 
 // ---------------------------------------------------------------------------
-// Layout (mm). The town fills the back of the board, the coast road and
+// Layout (mm). The camp fills the back of the board, the coast road and
 // promenade run across it, and the marina sits in the middle between the west
 // quay (hotel, car park, harbour office) and the east quay (restaurant,
 // sanitary block, car park, fuel kiosk). The sea runs across the front.
@@ -1001,7 +1001,7 @@ export function buildScene() {
   const Z = LAYOUT.waterZ;
   const land = (points, material) =>
     add(slab(points, -12, 0, material, { cast: false }));
-  // Town block and road corridor (back half, all land).
+  // Camp block and road corridor (back half, all land).
   land(rect(0, 0, 600, LAYOUT.road[0] - 6), M.townPaving);
   land(rect(0, LAYOUT.road[0] - 6, 600, LAYOUT.road[0]), M.promenade);
   land(rect(0, LAYOUT.road[0], 600, LAYOUT.road[1]), M.asphalt);
@@ -1246,15 +1246,17 @@ export function buildScene() {
   bays(452, 588, 460, 484);
 
   // --- Trees and planting ----------------------------------------------------
+  // Scenery trees as on the city model: a bare trunk forking into limbs, each
+  // carrying a mass of fine, dark olive flock.
   const leafColors = {
-    broad: ["#4d6536", "#5d7640", "#3f5530", "#6c8248", "#56703a"],
-    olive: ["#7c8a63", "#8e9a74", "#6d7a57", "#99a37e"],
-    pine: ["#3d5230", "#4a6138", "#35482a", "#556b3e"],
-    cypress: ["#2f4428", "#3a5231", "#283a22"],
+    broad: ["#46542a", "#535f2e", "#3b4824", "#616b36", "#4c592b"],
+    olive: ["#5f6a38", "#6d743f", "#545f33", "#787c46"],
+    conifer: ["#2f4028", "#394a2d", "#283820", "#42522f"],
   };
   // Lumpy sphere. The icosahedron's faces do not share vertices, so the
   // displacement is a hash of the position: shared corners move together.
-  const blob = (radius, detail = 1) => {
+  // Rocks are faceted; flock keeps the sphere's smooth normals.
+  const blob = (radius, detail = 1, faceted = true) => {
     const geometry = new THREE.IcosahedronGeometry(radius, detail);
     const p = geometry.attributes.position;
     const seed = rand(0, 1000);
@@ -1276,9 +1278,10 @@ export function buildScene() {
           0.44;
       p.setXYZ(i, p.getX(i) * k, p.getY(i) * k, p.getZ(i) * k);
     }
-    geometry.computeVertexNormals();
+    if (faceted) geometry.computeVertexNormals();
     return geometry;
   };
+  const flock = (radius) => blob(radius, 1, false);
   const colorize = (geometry, color, lift = 0) => {
     const c = new THREE.Color(color);
     const count = geometry.attributes.position.count;
@@ -1299,161 +1302,187 @@ export function buildScene() {
     return geometry;
   };
   const treeParts = [];
+  // Planting draws from its own sequence, seeded by where it stands. `draws`
+  // is what the earlier, simpler planting took from the board's sequence, so
+  // everything built after it stays as it was.
+  const planting = (x, y, draws, build) => {
+    for (let i = 0; i < draws; i++) random();
+    const board = random;
+    random = rngOf(Math.round(x * 7919 + y * 104729) + 17);
+    build();
+    random = board;
+  };
+  // Tapered branch between two points (three.js coordinates).
+  const limb = (from, to, r0, r1) => {
+    const d = new THREE.Vector3().subVectors(to, from);
+    const length = d.length();
+    const geometry = new THREE.CylinderGeometry(r1, r0, length, 6);
+    geometry.translate(0, length / 2, 0);
+    geometry.applyQuaternion(
+      new THREE.Quaternion().setFromUnitVectors(
+        new THREE.Vector3(0, 1, 0),
+        d.normalize(),
+      ),
+    );
+    geometry.translate(from.x, from.y, from.z);
+    return geometry;
+  };
   function foliageTree(
     x,
     y,
-    { height = 34, spread = 13, kind = "broad", clumps = 26 } = {},
+    {
+      height = 34,
+      spread = 13,
+      kind = "broad",
+      clumps = 26,
+      draws = clumps * 726,
+    } = {},
   ) {
-    const parts = [];
-    const colors = leafColors[kind];
-    const trunkTop = height * (kind === "pine" ? 0.72 : 0.42);
-    // Trunk with two limbs.
-    const trunk = new THREE.CylinderGeometry(0.55, 1.1, trunkTop, 7);
-    trunk.translate(0, trunkTop / 2, 0);
-    treeParts.push({ geometry: trunk, material: M.bark, x, y });
-    for (let i = 0; i < clumps; i++) {
-      let px;
-      let py;
-      let pz;
-      if (kind === "pine") {
-        // Umbrella pine: a flat, wide crown.
-        const a = rand(0, Math.PI * 2);
-        const r = spread * Math.sqrt(random());
-        px = Math.cos(a) * r;
-        pz = Math.sin(a) * r * 0.9;
-        py =
-          trunkTop + rand(0, height - trunkTop) * (1 - (r / spread) ** 2 * 0.6);
+    planting(x, y, draws, () => {
+      const colors = leafColors[kind];
+      const conifer = kind === "conifer";
+      const girth = 0.45 + height * 0.022;
+      const trunkTop = height * (conifer ? 0.14 : rand(0.3, 0.38));
+      const crown = height - trunkTop;
+      const wood = [];
+      const leaves = [];
+      const clump = (px, py, pz, size) => {
+        const geometry = colorize(
+          flock(size),
+          pick(colors),
+          ((py - trunkTop) / height) * 0.45 - 0.08,
+        );
+        geometry.translate(px, py, pz);
+        leaves.push(geometry);
+      };
+      if (conifer) {
+        // A spire: tiers of flock narrowing to the tip.
+        wood.push(
+          limb(
+            new THREE.Vector3(),
+            new THREE.Vector3(0, height * 0.8, 0),
+            girth * 0.8,
+            0.2,
+          ),
+        );
+        const reach = spread * 0.62;
+        for (let i = 0; i < clumps * 2.2; i++) {
+          const t = random() ** 1.4;
+          const a = rand(0, Math.PI * 2);
+          const r = reach * (1 - t) * Math.sqrt(rand(0.15, 1));
+          clump(
+            Math.cos(a) * r,
+            trunkTop + t * crown * 0.94,
+            Math.sin(a) * r,
+            reach * rand(0.22, 0.32) * (1 - t * 0.55),
+          );
+        }
       } else {
-        const a = rand(0, Math.PI * 2);
-        const e = Math.acos(rand(-0.6, 1));
-        const r = spread * Math.cbrt(rand(0.2, 1));
-        px = Math.cos(a) * Math.sin(e) * r;
-        pz = Math.sin(a) * Math.sin(e) * r;
-        py = trunkTop + (height - trunkTop) * 0.5 + Math.cos(e) * r * 0.75;
+        const fork = new THREE.Vector3(
+          rand(-0.6, 0.6),
+          trunkTop,
+          rand(-0.6, 0.6),
+        );
+        wood.push(limb(new THREE.Vector3(), fork, girth, girth * 0.7));
+        // A leader and a ring of side limbs, each ending in a lobe of flock.
+        const limbs = 4 + Math.floor(rand(0, 3));
+        const turn = rand(0, Math.PI * 2);
+        for (let l = 0; l < limbs; l++) {
+          const leader = l === 0;
+          const a = turn + (l / (limbs - 1)) * Math.PI * 2 + rand(-0.4, 0.4);
+          const out = leader
+            ? rand(0, 0.12) * spread
+            : spread * rand(0.42, 0.62);
+          const centre = new THREE.Vector3(
+            Math.cos(a) * out,
+            trunkTop + crown * (leader ? rand(0.6, 0.68) : rand(0.26, 0.5)),
+            Math.sin(a) * out,
+          );
+          wood.push(limb(fork, centre, girth * 0.5, girth * 0.2));
+          const rx = spread * (leader ? rand(0.5, 0.62) : rand(0.4, 0.55));
+          const ry = crown * (leader ? 0.3 : rand(0.22, 0.3));
+          const count = Math.round((clumps * (leader ? 3.2 : 1.8)) / limbs + 3);
+          for (let i = 0; i < count; i++) {
+            const a2 = rand(0, Math.PI * 2);
+            const e = Math.acos(rand(-1, 1));
+            const r = Math.cbrt(rand(0.25, 1));
+            clump(
+              centre.x + Math.cos(a2) * Math.sin(e) * r * rx,
+              centre.y + Math.cos(e) * r * ry,
+              centre.z + Math.sin(a2) * Math.sin(e) * r * rx,
+              spread * rand(0.17, 0.3),
+            );
+          }
+        }
       }
-      const size = rand(0.28, 0.46) * spread * (kind === "pine" ? 0.7 : 1);
-      const geometry = colorize(
-        blob(size, 1),
-        pick(colors),
-        ((py - trunkTop) / height) * 0.3,
-      );
-      geometry.translate(px, py, pz);
-      parts.push(geometry);
-    }
-    const crown = mergeGeometries(parts);
-    treeParts.push({ geometry: crown, material: M.foliage, x, y, crown: true });
-  }
-  function cypress(x, y, height = 44) {
-    const parts = [];
-    for (let i = 0; i < 16; i++) {
-      const t = i / 15;
-      const r =
-        4.2 *
-          Math.sin(Math.PI * Math.min(1, 0.15 + t * 0.95)) *
-          (1 - t * 0.55) +
-        0.6;
-      const geometry = colorize(
-        blob(r * rand(0.8, 1.1), 1),
-        pick(leafColors.cypress),
-        t * 0.25,
-      );
-      geometry.scale(1, 1.4, 1);
-      geometry.translate(
-        rand(-0.6, 0.6),
-        3 + t * (height - 6),
-        rand(-0.6, 0.6),
-      );
-      parts.push(geometry);
-    }
-    treeParts.push({
-      geometry: mergeGeometries(parts),
-      material: M.foliage,
-      x,
-      y,
-      crown: true,
+      treeParts.push({
+        geometry: mergeGeometries(wood),
+        material: M.bark,
+        x,
+        y,
+      });
+      treeParts.push({
+        geometry: mergeGeometries(leaves),
+        material: M.foliage,
+        x,
+        y,
+        crown: true,
+      });
     });
   }
-  function palm(x, y, height = 42) {
-    const lean = rand(-0.12, 0.12);
-    const trunk = new THREE.CylinderGeometry(0.7, 1.3, height, 8, 8);
-    const p = trunk.attributes.position;
-    for (let i = 0; i < p.count; i++)
-      p.setX(i, p.getX(i) + (p.getY(i) / height + 0.5) ** 2 * lean * height);
-    trunk.translate(0, height / 2, 0);
-    trunk.computeVertexNormals();
-    treeParts.push({ geometry: trunk, material: M.bark, x, y });
-    const fronds = [];
-    for (let i = 0; i < 11; i++) {
-      const frond = new THREE.PlaneGeometry(2.8, 17, 1, 6);
-      const q = frond.attributes.position;
-      for (let j = 0; j < q.count; j++) {
-        const t = (q.getY(j) + 8.5) / 17;
-        q.setZ(j, -t * t * 7);
-        q.setX(j, q.getX(j) * Math.sin(Math.PI * Math.min(1, t * 1.1 + 0.05)));
-      }
-      frond.translate(0, 8.5, 0);
-      frond.rotateX(Math.PI / 2 - 0.35);
-      frond.rotateY((i / 11) * Math.PI * 2 + rand(-0.2, 0.2));
-      frond.translate(lean * height, height, 0);
-      frond.computeVertexNormals();
-      fronds.push(colorize(frond, pick(leafColors.broad), 0.1));
-    }
-    treeParts.push({
-      geometry: mergeGeometries(fronds),
-      material: M.foliage,
-      x,
-      y,
-      crown: true,
-      doubleSide: true,
-    });
-  }
-  function shrubRow(x0, y0, x1, y1, height = 4, color = "#4c6334") {
+  function shrubRow(x0, y0, x1, y1, height = 4, color = "#465a2c") {
     const length = Math.hypot(x1 - x0, y1 - y0);
-    const parts = [];
-    for (let d = 0; d < length; d += 2.2) {
-      const t = d / length;
-      const geometry = colorize(blob(rand(1.6, 2.6), 1), color, 0.1);
-      geometry.translate(0, height * rand(0.5, 0.9), 0);
-      geometry.translate(
-        x0 + (x1 - x0) * t + rand(-0.6, 0.6),
-        0,
-        y0 + (y1 - y0) * t + rand(-0.6, 0.6),
-      );
-      parts.push(geometry);
-    }
-    treeParts.push({
-      geometry: mergeGeometries(parts),
-      material: M.foliage,
-      x: 0,
-      y: 0,
-      crown: true,
-      absolute: true,
+    let earlier = 0;
+    for (let d = 0; d < length; d += 2.2) earlier++;
+    planting(x0 + x1, y0 + y1, earlier * 725, () => {
+      const parts = [];
+      for (let d = 0; d < length; d += 1.7) {
+        const t = d / length;
+        const geometry = colorize(flock(rand(1.5, 2.4)), color, 0.05);
+        geometry.translate(0, height * rand(0.45, 0.9), 0);
+        geometry.translate(
+          x0 + (x1 - x0) * t + rand(-0.7, 0.7),
+          0,
+          y0 + (y1 - y0) * t + rand(-0.7, 0.7),
+        );
+        parts.push(geometry);
+      }
+      treeParts.push({
+        geometry: mergeGeometries(parts),
+        material: M.foliage,
+        x: 0,
+        y: 0,
+        crown: true,
+        absolute: true,
+      });
     });
   }
   // Flower planter: stone trough with blooms.
   function planter(x, y, width = 14) {
     add(box(x - width / 2, y - 3, x + width / 2, y + 3, 1, 3.6, M.concrete));
-    const parts = [];
-    for (let i = 0; i < width * 1.4; i++) {
-      const geometry = colorize(
-        blob(rand(0.9, 1.5), 0),
-        pick(["#4f6a36", "#c24a5a", "#e7c14a", "#d86f8a", "#5c7a3c"]),
-        0.1,
-      );
-      geometry.translate(
-        x + rand(-width / 2 + 1, width / 2 - 1),
-        4.4,
-        y + rand(-2, 2),
-      );
-      parts.push(geometry);
-    }
-    treeParts.push({
-      geometry: mergeGeometries(parts),
-      material: M.foliage,
-      x: 0,
-      y: 0,
-      crown: true,
-      absolute: true,
+    planting(x, y, Math.ceil(width * 1.4) * 185, () => {
+      const parts = [];
+      for (let i = 0; i < width * 1.4; i++) {
+        const geometry = colorize(
+          blob(rand(0.9, 1.5), 0),
+          pick(["#4f6a36", "#c24a5a", "#e7c14a", "#d86f8a", "#5c7a3c"]),
+          0.1,
+        );
+        geometry.translate(
+          x + rand(-width / 2 + 1, width / 2 - 1),
+          4.4,
+          y + rand(-2, 2),
+        );
+        parts.push(geometry);
+      }
+      treeParts.push({
+        geometry: mergeGeometries(parts),
+        material: M.foliage,
+        x: 0,
+        y: 0,
+        crown: true,
+        absolute: true,
+      });
     });
   }
 
@@ -1730,7 +1759,7 @@ export function buildScene() {
     return group;
   }
 
-  // Promenade lamps (also used in the town's gardens and square).
+  // Promenade lamps (also used along the camp lane).
   const lantern = (
     x,
     y,
@@ -1782,469 +1811,453 @@ export function buildScene() {
     return group;
   };
 
-  // Town, in the style of the smart-city maquette: detached family houses in
-  // gardens (steep slate or clay roofs, big warm windows, hedges and trees)
-  // either side of a square with a modern civic building and a fountain. It
-  // draws from its own random sequence, so the rest of the board is unchanged.
+  // Camp behind the coast road: a reception by the entrance, two mobile homes,
+  // and pitches with holiday trailers under the trees either side of a gravel
+  // lane. It draws from its own random sequence, so the rest of the board is
+  // unchanged.
+  const campCars = [];
   const outerRandom = random;
   random = rngOf(20260928);
   {
-    const townLawn = (x0, y0, x1, y1) =>
-      add(slab(rect(x0, y0, x1, y1), 0, 0.7, M.grass, { cast: false }));
-    const path = (x0, y0, x1, y1) =>
-      add(slab(rect(x0, y0, x1, y1), 0, 0.85, M.promenade, { cast: false }));
-    townLawn(4, 4, 234, 146);
-    townLawn(366, 4, 596, 146);
-    // Lane between the back and front gardens.
-    path(4, 64, 234, 72);
-    path(366, 64, 596, 72);
+    const ground = (x0, y0, x1, y1, material, z = 0.85) =>
+      add(slab(rect(x0, y0, x1, y1), 0, z, material, { cast: false }));
+    const gravel = new THREE.MeshStandardMaterial({
+      color: "#b3a78f",
+      map: M.stuccoMap,
+      normalMap: M.stuccoNormal,
+      roughness: 1,
+      userData: { scale: 14 },
+    });
+    const LANE = [92, 104];
+    const DRIVE = [288, 312];
+    ground(4, 4, 596, 150, M.grass, 0.7);
+    ground(14, LANE[0], 586, LANE[1], gravel);
+    // Entrance drive from the coast road, across the pavement.
+    ground(DRIVE[0], LANE[1], DRIVE[1], 156, M.asphalt, 0.9);
+    ground(DRIVE[0], 150, DRIVE[1], LAYOUT.road[0] + 0.2, M.asphalt, 1.3);
 
-    const houseWalls = ["#f1ece2", "#e9e1d2", "#f4f1ea", "#e6dccb", "#efe6d6"];
-    const slateTones = ["#4a4f56", "#565b62", "#3f444a"];
-    const clayTones = ["#a3503a", "#9a4a36", "#b05a40"];
-    // One family house: a main block plus an optional lower wing, a front
-    // door with a canopy and a garden path out to the lane or pavement.
-    const villa = ({
-      x0,
-      y0,
-      x1,
-      y1,
-      h = 20,
-      slate = true,
-      wing = null,
-      roofType = "gable",
-      pitch = 0.95,
-    }) => {
-      const roofMaterial = slate
-        ? M.slate(pick(slateTones))
-        : M.roof(pick(clayTones));
-      const wall = pick(houseWalls);
-      const common = {
-        wall,
-        roofMaterial,
-        roofType,
-        floors: 2,
-        lit: 0.62,
-        shutters: false,
-        windowW: 4.6,
-        windowSpacing: 11,
-        windowRatio: 0.62,
-        glassColor: pick(["#ffd08a", "#ffc878", "#ffd9a0"]),
+    const campLamp = (x, y) =>
+      lantern(x, y, { h: 11, power: 260, reach: 45, color: "#ffe6b8" });
+    // Hook-up pedestal on a pitch: power and water.
+    const pedestalTop = new THREE.MeshStandardMaterial({
+      color: "#2f86b8",
+      roughness: 0.4,
+    });
+    const hookup = (x, y) => {
+      add(box(x - 0.7, y - 0.7, x + 0.7, y + 0.7, 0.7, 4.6, M.white));
+      add(box(x - 0.8, y - 0.8, x + 0.8, y + 0.8, 4.6, 5.1, pedestalTop));
+    };
+
+    // Holiday trailer. `heading` is where its drawbar points; the awning is
+    // on its right-hand side (towards the viewer at heading 0).
+    const stripes = ["#2f6f8f", "#b8412f", "#3d6b4f", "#c98a2b", "#5d6a73"];
+    const awnings = ["#c9bfa6", "#2f4f6f", "#8a2d2a", "#3d6b4f", "#d8d2c2"];
+    const caravan = (x, y, heading, { awning = true, lit = false } = {}) => {
+      const group = new THREE.Group();
+      const L = rand(21, 25);
+      const W = 9.6;
+      const H = 8.6;
+      const floor = 2.2;
+      const part = (geometry, material, px, py, pz, options) => {
+        const item = mesh(geometry, material, options);
+        item.position.set(px, py, pz);
+        group.add(item);
+        return item;
       };
+      part(
+        new RoundedBoxGeometry(L, H, W, 3, 1.8),
+        M.gelcoat(pick(["#f4f3ef", "#efeee8", "#e9e6de"])),
+        0,
+        floor + H / 2,
+        0,
+      );
+      part(
+        new THREE.BoxGeometry(L - 3.4, 0.9, W + 0.12),
+        M.canvas(pick(stripes)),
+        0,
+        floor + H * 0.36,
+        0,
+        { cast: false },
+      );
+      const glass = lit ? litGlass("#ffd08a", 1.8) : M.glassDark;
+      // Side windows, and the big windows at both ends.
+      part(
+        new THREE.BoxGeometry(L * 0.3, 2.6, W + 0.16),
+        glass,
+        -L * 0.16,
+        floor + H * 0.66,
+        0,
+        { cast: false },
+      );
+      part(
+        new THREE.BoxGeometry(L + 0.14, 2.4, W * 0.62),
+        glass,
+        0,
+        floor + H * 0.66,
+        0,
+        { cast: false },
+      );
+      // Door on the awning side.
+      part(
+        new THREE.BoxGeometry(3, 6.2, 0.2),
+        M.frame,
+        L * 0.2,
+        floor + 3.4,
+        W / 2 + 0.02,
+        { cast: false },
+      );
+      part(new THREE.BoxGeometry(3, 0.6, 3), M.white, -L * 0.1, floor + H, 0);
+      const wheel = new THREE.CylinderGeometry(1.5, 1.5, 1.1, 12);
+      wheel.rotateX(Math.PI / 2);
+      for (const side of [-1, 1])
+        part(wheel, M.tyre, -1, 1.5, side * (W / 2 - 0.4));
+      // Drawbar and jockey wheel.
+      part(
+        new THREE.BoxGeometry(6, 0.5, 0.7),
+        M.darkMetal,
+        L / 2 + 2.6,
+        floor - 0.2,
+        0,
+      );
+      part(
+        new THREE.CylinderGeometry(0.35, 0.35, 2, 6),
+        M.darkMetal,
+        L / 2 + 5,
+        1,
+        0,
+      );
+      if (awning) {
+        const depth = 8.5;
+        const width = L * 0.72;
+        const cloth = M.canvas(pick(awnings));
+        cloth.side = THREE.DoubleSide;
+        const roof = part(
+          new THREE.BoxGeometry(width, 0.25, depth),
+          cloth,
+          -L * 0.04,
+          floor + H - 2,
+          W / 2 + depth / 2,
+        );
+        roof.rotation.x = 0.17;
+        for (const side of [-1, 1])
+          part(
+            new THREE.CylinderGeometry(0.16, 0.16, floor + H - 2.8, 5),
+            M.metal,
+            -L * 0.04 + side * (width / 2 - 0.4),
+            (floor + H - 2.8) / 2,
+            W / 2 + depth - 0.4,
+            { cast: false },
+          );
+        // Groundsheet with a table and two chairs.
+        part(
+          new THREE.BoxGeometry(width, 0.12, depth),
+          M.canvas("#7d8a6a"),
+          -L * 0.04,
+          0.06,
+          W / 2 + depth / 2,
+          { cast: false },
+        );
+        part(
+          new THREE.CylinderGeometry(1.5, 1.5, 0.3, 12),
+          M.white,
+          -L * 0.1,
+          2.6,
+          W / 2 + 4.6,
+        );
+        part(
+          new THREE.CylinderGeometry(0.2, 0.2, 2.5, 5),
+          M.darkMetal,
+          -L * 0.1,
+          1.25,
+          W / 2 + 4.6,
+        );
+        for (const side of [-1, 1])
+          part(
+            new THREE.BoxGeometry(1.4, 1.8, 1.4),
+            M.teak,
+            -L * 0.1 + side * 2.8,
+            0.9,
+            W / 2 + 4.6,
+          );
+      }
+      add(place(group, x, y, 0.85, heading));
+      occluder(group, "building");
+      if (lit) {
+        const glow = new THREE.PointLight("#ffcf8f", 140, 32, 2);
+        add(
+          place(glow, x - Math.sin(heading) * 9, y + Math.cos(heading) * 9, 6),
+        );
+        world.staticLights.push(glow);
+      }
+    };
+    // A pitch: gravel pad, hook-up, and usually a trailer with its car.
+    const pitch = (cx, y0, y1, { trailer = true, car = true } = {}) => {
+      ground(cx - 22, y0, cx + 22, y1, gravel);
+      hookup(cx - 24, y0 + 4);
+      if (!trailer) return;
+      const lit = random() < 0.55;
+      if (random() < 0.3) {
+        // End-on, the awning to one side.
+        const side = random() < 0.5 ? 1 : -1;
+        caravan(
+          cx - side * 7,
+          y0 + 17,
+          (side * Math.PI) / 2 + rand(-0.05, 0.05),
+          {
+            lit,
+          },
+        );
+        if (car) campCars.push([cx + side * 15, y0 + 18, -Math.PI / 2]);
+      } else {
+        caravan(cx + rand(-4, 2), y0 + 9, rand(-0.06, 0.06), {
+          lit,
+          awning: random() < 0.85,
+        });
+        if (car)
+          campCars.push([
+            cx + rand(-6, 6),
+            y1 - 7,
+            random() < 0.5 ? 0 : Math.PI,
+          ]);
+      }
+    };
+
+    // Back row: nine pitches between hedges.
+    const backPitches = [44, 108, 172, 236, 300, 364, 428, 492, 556];
+    backPitches.forEach((cx, i) =>
+      pitch(cx, 40, LANE[0], {
+        trailer: i !== 3 && i !== 6,
+        car: i !== 1 && i !== 7,
+      }),
+    );
+    for (let x = 76; x < 560; x += 64) shrubRow(x, 26, x, 88, 3, "#3f5a2e");
+    shrubRow(8, 20, 592, 20, 3.4, "#3f5a2e");
+    // Front row: two pitches at the west end, three east of the reception.
+    for (const cx of [42, 102, 428, 490, 552])
+      pitch(cx, 112, 144, { car: false });
+    for (const x of [72, 458, 520]) shrubRow(x, 110, x, 144, 3, "#3f5a2e");
+
+    // Mobile homes: clad cabins under shallow metal roofs, each with a deck.
+    const mobileHome = (x0, x1, wall) => {
+      const y0 = 114;
+      const y1 = 131;
       house({
-        ...common,
         x0,
         y0,
         x1,
         y1,
-        h,
-        roofH: (Math.min(x1 - x0, y1 - y0) / 2) * pitch,
+        h: 10.5,
+        wall,
+        roofMaterial: M.slate("#666c72"),
+        roofType: "gable",
+        roofH: 3.2,
+        floors: 1,
+        lit: 1,
+        shutters: false,
+        chimney: false,
+        windowW: 5,
+        windowSpacing: 12,
+        windowRatio: 0.52,
+        glassColor: "#ffd08a",
       });
-      if (wing)
-        house({
-          ...common,
-          ...wing,
-          h: wing.h ?? h * 0.62,
-          floors: 1,
-          chimney: false,
-          roofH: (Math.min(wing.x1 - wing.x0, wing.y1 - wing.y0) / 2) * pitch,
-        });
-      const cx = (x0 + x1) / 2 + rand(-4, 4);
+      // Deck with a railing, a table and chairs, and steps down to the path.
+      const d0 = x0 + 3;
+      const d1 = x1 - 12;
+      const dy = y1 + 9;
+      add(slab(rect(d0, y1, d1, dy), 0.7, 2.4, M.deck));
+      for (let x = d0; x <= d1 + 0.01; x += (d1 - d0) / 6)
+        add(box(x - 0.3, dy - 0.6, x + 0.3, dy, 2.4, 5.6, M.teak));
+      add(box(d0, dy - 0.6, d1, dy, 5.4, 6, M.teak));
+      for (const x of [d0, d1])
+        add(box(x - 0.3, y1 + 0.4, x + 0.3, dy, 5.4, 6, M.teak));
+      const tx = (d0 + d1) / 2 - 5;
       add(
-        box(cx - 2, y1, cx + 2, y1 + 0.35, 1.6, 8.5, M.frameDark, {
-          cast: false,
-        }),
-      );
-      add(box(cx - 3.2, y1, cx + 3.2, y1 + 3, 9.2, 9.8, M.white));
-      add(
-        box(
-          cx - 3,
-          y1 + 0.35,
-          cx + 3,
-          y1 + 0.5,
-          8.6,
-          9.2,
-          litGlass("#ffe1a8", 2.2),
-          { cast: false },
+        place(
+          mesh(new THREE.CylinderGeometry(2, 2, 0.3, 12), M.white),
+          tx,
+          y1 + 4.4,
+          5,
         ),
       );
-      path(cx - 2.5, y1, cx + 2.5, y1 < 64 ? 64 : 146);
-      return cx;
+      add(box(tx - 0.2, y1 + 4.2, tx + 0.2, y1 + 4.6, 2.4, 5, M.darkMetal));
+      for (const dx of [-3.6, 3.6])
+        add(
+          box(
+            tx + dx - 0.8,
+            y1 + 3.6,
+            tx + dx + 0.8,
+            y1 + 5.2,
+            2.4,
+            4.4,
+            M.teak,
+          ),
+        );
+      add(box(d1, y1 + 2, d1 + 3, y1 + 6, 0.7, 1.6, M.deck));
+      ground(d1 + 3, y1 + 2, x1 + 2, y1 + 6, gravel);
+      const porch = new THREE.PointLight("#ffcf8f", 220, 36, 2);
+      add(place(porch, (d0 + d1) / 2, y1 + 5, 8));
+      world.staticLights.push(porch);
     };
-    const gardenLamp = (x, y) =>
-      lantern(x, y, { h: 11, power: 260, reach: 45, color: "#ffe6b8" });
-    // Hedge along a plot front, open where the garden paths cross it.
-    const hedge = (x0, x1, y, gaps) => {
-      let start = x0;
-      for (const g of [...gaps].sort((a, b) => a - b)) {
-        if (g - 4 > start) shrubRow(start, y, g - 4, y, 3.4, "#3f5a2e");
-        start = g + 4;
-      }
-      if (x1 > start) shrubRow(start, y, x1, y, 3.4, "#3f5a2e");
-    };
+    mobileHome(146, 194, "#e3e6dc");
+    mobileHome(214, 262, "#ead9c0");
+    ground(140, 139.5, DRIVE[0], 143.5, gravel);
+    shrubRow(204, 112, 204, 138, 3, "#3f5a2e");
 
-    // West quarter.
-    const westBack = [
-      villa({
-        x0: 14,
-        y0: 18,
-        x1: 58,
-        y1: 46,
-        slate: true,
-        wing: { x0: 58, y0: 24, x1: 74, y1: 46 },
-      }),
-      villa({ x0: 98, y0: 14, x1: 128, y1: 48, h: 22, slate: false }),
-      villa({ x0: 164, y0: 20, x1: 208, y1: 48, slate: true, roofType: "hip" }),
-    ];
-    const westFront = [
-      villa({
-        x0: 20,
-        y0: 92,
-        x1: 52,
-        y1: 124,
-        h: 22,
-        slate: false,
-        wing: { x0: 52, y0: 104, x1: 70, y1: 124 },
-      }),
-      villa({ x0: 96, y0: 94, x1: 142, y1: 122, slate: true }),
-      villa({
-        x0: 178,
-        y0: 90,
-        x1: 212,
-        y1: 122,
-        h: 21,
-        slate: false,
-        roofType: "hip",
-      }),
-    ];
-    // East quarter.
-    const eastBack = [
-      villa({
-        x0: 390,
-        y0: 18,
-        x1: 430,
-        y1: 46,
-        slate: false,
-        roofType: "hip",
-      }),
-      villa({ x0: 468, y0: 14, x1: 500, y1: 48, h: 22, slate: true }),
-      villa({
-        x0: 534,
-        y0: 20,
-        x1: 580,
-        y1: 48,
-        slate: false,
-        wing: { x0: 518, y0: 28, x1: 534, y1: 48 },
-      }),
-    ];
-    const eastFront = [
-      villa({
-        x0: 386,
-        y0: 92,
-        x1: 422,
-        y1: 124,
-        h: 21,
-        slate: true,
-        wing: { x0: 422, y0: 104, x1: 438, y1: 124 },
-      }),
-      villa({ x0: 464, y0: 90, x1: 508, y1: 122, slate: false }),
-      villa({
-        x0: 546,
-        y0: 94,
-        x1: 580,
-        y1: 124,
-        h: 22,
-        slate: true,
-        roofType: "hip",
-      }),
-    ];
-    hedge(4, 234, 144, westFront);
-    hedge(366, 596, 144, eastFront);
-    hedge(4, 234, 62, westBack);
-    hedge(366, 596, 62, eastBack);
-    for (const x of [...westFront, ...eastFront]) gardenLamp(x + 6, 140);
-    for (const x of [...westBack, ...eastBack]) gardenLamp(x + 6, 58);
-    // Hedges between the plots.
-    for (const x of [84, 150, 452, 520]) {
-      shrubRow(x, 8, x, 60, 3);
-      shrubRow(x, 76, x, 142, 3);
-    }
-
-    // Trees: a tall tree line along the back edge, and a few in every garden.
-    for (let x = 10; x < 596; x += rand(24, 34)) {
-      if (x > 240 && x < 360) continue;
-      foliageTree(x, rand(4, 9), {
-        height: rand(38, 48),
-        spread: rand(11, 14),
-        kind: pick(["broad", "broad", "olive"]),
-        clumps: 26,
-      });
-    }
-    for (const [x, y] of [
-      [80, 34],
-      [146, 30],
-      [80, 84],
-      [158, 106],
-      [12, 136],
-      [226, 78],
-      [226, 136],
-      [374, 80],
-      [446, 34],
-      [512, 84],
-      [592, 80],
-      [590, 136],
-      [444, 136],
-      [376, 136],
-    ])
-      foliageTree(x + rand(-3, 3), y + rand(-3, 3), {
-        height: rand(26, 36),
-        spread: rand(8, 11),
-        kind: pick(["broad", "broad", "olive"]),
-        clumps: 22,
-      });
-
-    // Civic building: pale stone, a glazed ground floor, a window band above,
-    // a flat roof with a plant room and solar panels.
+    // Reception: stucco under a clay roof, a canopy over the door, a forecourt
+    // with flags, an information sign and the entrance barrier.
     {
-      const x0 = 250;
-      const x1 = 350;
-      const y0 = 16;
-      const y1 = 62;
-      const h = 36;
+      const x0 = 326;
+      const x1 = 384;
+      const y0 = 110;
+      const y1 = 134;
+      add(slab(rect(314, y1, 394, 150), 0, 0.85, M.promenade, { cast: false }));
+      house({
+        x0,
+        y0,
+        x1,
+        y1,
+        h: 15,
+        wall: "#efe6d6",
+        roofMaterial: M.roof("#a3503a"),
+        roofType: "hip",
+        roofH: 6.5,
+        floors: 1,
+        lit: 1,
+        shutters: false,
+        chimney: false,
+        windowW: 5.2,
+        windowSpacing: 11.5,
+        windowRatio: 0.5,
+        glassColor: "#ffd392",
+      });
       const group = new THREE.Group();
-      group.add(box(x0, y0, x1, y1, 0, h, M.stucco("#e4ddcf")));
-      // Ground floor: full-height glazing behind slim mullions.
+      const door = (x0 + x1) / 2;
       group.add(
         box(
-          x0 + 4,
-          y1 - 0.1,
-          x1 - 4,
-          y1 + 0.25,
-          1,
-          15,
-          litGlass("#ffd392", 2.2),
+          door - 4.5,
+          y1,
+          door + 4.5,
+          y1 + 0.5,
+          1.6,
+          10.6,
+          litGlass("#ffe1a8", 2.2),
+          {
+            cast: false,
+          },
         ),
       );
-      for (let x = x0 + 4; x <= x1 - 4 + 0.01; x += 11.5)
+      for (const x of [door - 4.5, door, door + 4.5])
         group.add(
-          box(x - 0.45, y1, x + 0.45, y1 + 0.6, 1, 15, M.frameDark, {
+          box(x - 0.3, y1, x + 0.3, y1 + 0.6, 1.6, 10.6, M.frameDark, {
             cast: false,
           }),
         );
-      group.add(
-        box(x0 + 4, y1, x1 - 4, y1 + 0.6, 14.4, 15.4, M.frameDark, {
-          cast: false,
+      group.add(box(door - 12, y1, door + 12, y1 + 8, 11.2, 12.2, M.frameDark));
+      for (const x of [door - 11, door + 11])
+        group.add(
+          box(x - 0.4, y1 + 7, x + 0.4, y1 + 7.8, 0.85, 11.2, M.frameDark),
+        );
+      // Information sign by the drive.
+      const sign = texture(
+        canvas(64, (g, s) => {
+          g.fillStyle = "#1f5f9f";
+          g.fillRect(0, 0, s, s);
+          g.fillStyle = "#ffffff";
+          g.font = "bold 52px Georgia, serif";
+          g.textAlign = "center";
+          g.textBaseline = "middle";
+          g.fillText("i", s / 2, s / 2 + 3);
         }),
       );
-      // Upper floor: a band of windows.
-      for (let x = x0 + 8; x < x1 - 4; x += 12) {
-        const on = random() < 0.8;
+      const signMaterial = new THREE.MeshStandardMaterial({
+        map: sign,
+        emissive: "#ffffff",
+        emissiveMap: sign,
+        emissiveIntensity: 0.9,
+        roughness: 0.5,
+      });
+      group.add(box(318.6, 146.6, 319.4, 147.4, 0.85, 9, M.darkMetal));
+      group.add(box(315.5, 147.2, 322.5, 147.9, 9, 16, signMaterial));
+      // Barrier across the drive.
+      const red = new THREE.MeshStandardMaterial({
+        color: "#c63b32",
+        roughness: 0.5,
+      });
+      group.add(box(313, 141, 315.4, 143.4, 0.85, 6, M.white));
+      group.add(box(DRIVE[0] + 1, 141.8, 313, 142.6, 4.6, 5.4, M.white));
+      for (let x = DRIVE[0] + 3; x < 311; x += 6)
+        group.add(box(x, 141.75, x + 3, 142.65, 4.55, 5.45, red));
+      // Flags.
+      for (const [i, color] of ["#1d4f8f", "#f3f2ee", "#2f8f55"].entries()) {
+        const x = 378 + i * 6;
         group.add(
-          box(
-            x - 4.5,
-            y1 - 0.1,
-            x + 4.5,
-            y1 + 0.2,
-            19,
-            30,
-            on ? litGlass("#ffd392", rand(1.4, 2.2)) : M.glassDark,
-            { cast: false },
+          place(
+            mesh(new THREE.CylinderGeometry(0.22, 0.3, 30, 6), M.metal),
+            x,
+            147,
+            15.8,
           ),
         );
-      }
-      // Side walls: tall windows on both floors.
-      for (const x of [x0, x1])
-        for (let y = y0 + 8; y < y1 - 4; y += 12) {
-          group.add(
-            box(
-              x - 0.25,
-              y - 3.5,
-              x + 0.25,
-              y + 3.5,
-              3,
-              13,
-              litGlass("#ffd392", 1.8),
-              { cast: false },
-            ),
-          );
-          group.add(
-            box(
-              x - 0.25,
-              y - 3.5,
-              x + 0.25,
-              y + 3.5,
-              19,
-              30,
-              random() < 0.7 ? litGlass("#ffd392", 1.6) : M.glassDark,
-              { cast: false },
-            ),
-          );
-        }
-      // Entrance canopy.
-      group.add(box(284, y1, 316, y1 + 8, 15.4, 16.4, M.frameDark));
-      // Parapet, roof, plant room and solar panels.
-      group.add(
-        box(
-          x0 - 0.8,
-          y0 - 0.8,
-          x1 + 0.8,
-          y1 + 0.8,
-          h,
-          h + 2,
-          M.stucco("#d6cfc1"),
-        ),
-      );
-      group.add(
-        box(
-          x0 + 1,
-          y0 + 1,
-          x1 - 1,
-          y1 - 1,
-          h,
-          h + 1,
+        const flag = mesh(
+          new THREE.PlaneGeometry(4.6, 6.5),
           new THREE.MeshStandardMaterial({
-            color: "#8f8b84",
-            map: M.stuccoMap,
-            roughness: 0.95,
-            userData: { scale: 40 },
+            color,
+            side: THREE.DoubleSide,
+            roughness: 0.8,
           }),
-        ),
-      );
-      group.add(box(262, 24, 282, 40, h + 1, h + 7, M.stucco("#cfc8ba")));
-      const panel = new THREE.MeshStandardMaterial({
-        color: "#1d2b4a",
-        roughness: 0.25,
-        metalness: 0.5,
-      });
-      for (let i = 0; i < 4; i++) {
-        const holder = new THREE.Group();
-        holder.add(box(-6, -4, 6, 4, -0.3, 0.3, panel));
-        holder.rotation.x = -0.35;
-        holder.position.set(298 + i * 13, h + 3, 36);
-        group.add(holder);
+        );
+        group.add(place(flag, x + 2.5, 147, 26.8));
       }
       add(group);
       occluder(group, "building");
-      const light = new THREE.PointLight("#ffcf8f", 900, 80, 2);
-      add(place(light, 300, 74, 10));
+      const light = new THREE.PointLight("#ffcf8f", 700, 70, 2);
+      add(place(light, door, y1 + 9, 9));
       world.staticLights.push(light);
+      for (const x of [door - 16, door + 16]) planter(x, y1 + 3.6, 8);
     }
 
-    // Square: a round fountain, benches, trees, planters and lamps.
-    {
-      const cx = 300;
-      const cy = 108;
-      const rim = new THREE.MeshStandardMaterial({
-        color: "#d9d2c4",
-        map: M.stuccoMap,
-        roughness: 0.7,
-        userData: { scale: 20 },
+    // Hedge along the pavement, open at the drive and the forecourt.
+    shrubRow(4, 148, DRIVE[0] - 3, 148, 3.4, "#3f5a2e");
+    shrubRow(396, 148, 596, 148, 3.4, "#3f5a2e");
+    for (const x of [30, 94, 158, 222, 276, 324, 388, 452, 516, 574])
+      campLamp(x, LANE[1] + 2);
+
+    // Trees: a tall line along the back edge, one at the head of every hedge,
+    // and a few between the front pitches.
+    for (let x = 10; x < 596; x += rand(26, 36))
+      foliageTree(x, rand(5, 11), {
+        height: rand(38, 48),
+        spread: rand(11, 14),
+        kind: pick(["broad", "broad", "olive", "conifer"]),
       });
-      add(
-        place(
-          mesh(new THREE.CylinderGeometry(22, 22.5, 0.6, 48), rim),
-          cx,
-          cy,
-          0.3,
-        ),
-      );
-      add(
-        place(
-          mesh(new THREE.CylinderGeometry(15, 15.4, 3, 48), rim),
-          cx,
-          cy,
-          1.5,
-        ),
-      );
-      const pool = new THREE.MeshPhysicalMaterial({
-        color: "#3c8f9e",
-        roughness: 0.08,
-        emissive: "#2a9fb3",
-        emissiveIntensity: 0.55,
+    for (let x = 76; x < 560; x += 64)
+      foliageTree(x + rand(-2, 2), rand(28, 36), {
+        height: rand(28, 36),
+        spread: rand(8.5, 11),
+        kind: pick(["broad", "broad", "olive"]),
+        clumps: 22,
       });
-      add(
-        place(
-          mesh(new THREE.CylinderGeometry(13.6, 13.6, 0.4, 48), pool, {
-            cast: false,
-          }),
-          cx,
-          cy,
-          2.8,
-        ),
-      );
-      add(
-        place(mesh(new THREE.CylinderGeometry(3.2, 4, 3, 24), rim), cx, cy, 4),
-      );
-      // The jet: a glowing column with a falling crown of water.
-      const spray = new THREE.MeshStandardMaterial({
-        color: "#eaf6fa",
-        emissive: "#fff1d6",
-        emissiveIntensity: 1.6,
-        transparent: true,
-        opacity: 0.8,
-        roughness: 0.2,
+    for (const [x, y] of [
+      [12, 86],
+      [588, 86],
+      [10, 142],
+      [130, 124],
+      [274, 122],
+      [404, 118],
+      [590, 140],
+      [72, 146],
+      [520, 146],
+    ])
+      foliageTree(x + rand(-2, 2), y + rand(-2, 2), {
+        height: rand(26, 34),
+        spread: rand(8, 10.5),
+        kind: pick(["broad", "broad", "olive"]),
+        clumps: 22,
       });
-      add(
-        place(
-          mesh(new THREE.CylinderGeometry(0.5, 1.2, 14, 12), spray, {
-            cast: false,
-          }),
-          cx,
-          cy,
-          11,
-        ),
-      );
-      add(
-        place(
-          mesh(new THREE.ConeGeometry(4.5, 7, 20, 1, true), spray, {
-            cast: false,
-          }),
-          cx,
-          cy,
-          10,
-        ),
-      );
-      const glow = new THREE.PointLight("#ffe2b0", 500, 60, 2);
-      add(place(glow, cx, cy, 6));
-      world.staticLights.push(glow);
-      // Benches facing the fountain.
-      for (const a of [0.5, 2.64, 3.64, 5.78]) {
-        const bench = new THREE.Group();
-        bench.add(box(-5, -1.3, 5, 1.3, 2.6, 3.2, M.teak));
-        bench.add(box(-5, 1, 5, 1.6, 3.2, 5.6, M.teak));
-        for (const dx of [-4, 4])
-          bench.add(box(dx - 0.4, -1.1, dx + 0.4, 1.1, 0, 2.6, M.darkMetal));
-        add(
-          place(
-            bench,
-            cx + Math.cos(a) * 31,
-            cy + Math.sin(a) * 31,
-            1,
-            -a - Math.PI / 2,
-          ),
-        );
-      }
-      for (const [x, y] of [
-        [248, 86],
-        [352, 86],
-        [246, 138],
-        [354, 138],
-      ])
-        foliageTree(x, y, { height: 32, spread: 9, kind: "broad", clumps: 22 });
-      planter(270, 142, 14);
-      planter(330, 142, 14);
-      for (const [x, y] of [
-        [262, 74],
-        [338, 74],
-        [262, 132],
-        [338, 132],
-      ])
-        lantern(x, y, { h: 16, power: 500, reach: 60 });
-    }
   }
   random = outerRandom;
 
-  // Street furniture on the town pavement.
+  // Street furniture on the pavement along the camp.
   for (const x of [40, 120, 200, 400, 480, 560]) {
     add(
       place(
@@ -2264,9 +2277,15 @@ export function buildScene() {
     world.staticLights.push(light);
   }
 
-  // Promenade lamps, palms, benches and planters.
+  // Promenade lamps, trees, benches and planters.
   for (let x = 30; x < 600; x += 68) lantern(x, 204);
-  for (const x of [66, 202, 398, 534]) palm(x, 228, rand(38, 46));
+  for (const x of [66, 202, 398, 534])
+    foliageTree(x, 228, {
+      height: rand(38, 46) * 0.72,
+      spread: 7.5,
+      clumps: 18,
+      draws: 485,
+    });
   for (const x of [100, 168, 434, 500]) {
     add(box(x - 5, 226, x + 5, 228.5, 3, 3.6, M.teak));
     add(box(x - 5, 228, x + 5, 228.6, 3.6, 6.2, M.teak));
@@ -2276,7 +2295,7 @@ export function buildScene() {
   planter(236, 230, 12);
   planter(364, 230, 12);
 
-  // Hotel, in the style of the town's houses and the city model: cream stucco
+  // Hotel, in the style of the city model: cream stucco
   // under a hipped slate roof, framed warm windows, an entrance bay with a
   // canopy, balconies with dark railings, and a pool.
   {
@@ -2446,7 +2465,7 @@ export function buildScene() {
     [12, 290],
     [158, 316],
   ])
-    cypress(x, y, 36);
+    foliageTree(x, y, { height: 36, spread: 9, kind: "conifer", draws: 11600 });
 
   // Harbour master's office with a weather mast.
   house({
@@ -2777,41 +2796,361 @@ export function buildScene() {
     });
   shrubRow(560, 376, 594, 376, 3.5);
 
-  // Parked cars.
-  const carColors = [
-    "#d8d6d0",
-    "#c9cccf",
-    "#2a2e33",
-    "#3a4e66",
-    "#8d2f2c",
+  // Parked cars, in the body styles and paints of the city model's traffic
+  // (src/nexavia/showcase-room/traffic.js) plus an off-roader and a pickup.
+  // Units as there, about 6.9 per metre, front towards +x: length, width,
+  // plan shape, axles, wheel radius, sill/belt/roof heights, and where the
+  // glasshouse starts and ends at the belt and at the roof.
+  const CAR_SCALE = 0.58;
+  const CARS = {
+    sedan: {
+      L: 33,
+      W: 13.5,
+      shape: { nose: 0.15, tail: 0.12, taper: 0.13 },
+      axles: [-9.8, 9.8],
+      wheel: 2.3,
+      sill: 2,
+      belt: 6,
+      roof: 10.2,
+      cabin: { belt: [-10.2, 6.2], roof: [-8.2, 2.3] },
+    },
+    hatch: {
+      L: 28.5,
+      W: 12.8,
+      shape: { nose: 0.16, tail: 0.08, taper: 0.12 },
+      axles: [-8.8, 8.6],
+      wheel: 2.2,
+      sill: 2,
+      belt: 6,
+      roof: 10.4,
+      cabin: { belt: [-12.9, 4.4], roof: [-12.3, 1.2] },
+    },
+    estate: {
+      L: 33,
+      W: 13.4,
+      shape: { nose: 0.15, tail: 0.08, taper: 0.12 },
+      axles: [-9.6, 9.9],
+      wheel: 2.3,
+      sill: 2,
+      belt: 6,
+      roof: 10.4,
+      cabin: { belt: [-15.6, 6.2], roof: [-15.2, 2.2] },
+      rails: true,
+    },
+    suv: {
+      L: 32,
+      W: 14,
+      shape: { nose: 0.14, tail: 0.08, taper: 0.1 },
+      axles: [-9.8, 9.6],
+      wheel: 2.6,
+      sill: 2.6,
+      belt: 7.2,
+      roof: 12.2,
+      cabin: { belt: [-14.6, 5.4], roof: [-14.2, 1.9] },
+      rails: true,
+    },
+    sports: {
+      L: 31,
+      W: 13.6,
+      shape: { nose: 0.2, tail: 0.14, taper: 0.16 },
+      axles: [-8.8, 9.5],
+      wheel: 2.4,
+      sill: 1.6,
+      belt: 4.4,
+      roof: 7.6,
+      cabin: { belt: [-11.2, 3.8], roof: [-7.4, -0.6] },
+      spoiler: true,
+    },
+    // Boxy off-roader: upright glass, big wheels, a spare on the tailgate.
+    jeep: {
+      L: 29,
+      W: 14,
+      shape: { nose: 0.06, tail: 0.04, taper: 0.05 },
+      axles: [-9.2, 9.4],
+      wheel: 3.1,
+      sill: 3.4,
+      belt: 8,
+      roof: 13.4,
+      cabin: { belt: [-13.6, 4.4], roof: [-13.3, 3.2] },
+      upright: true,
+      spare: true,
+    },
+    van: {
+      L: 34,
+      W: 14.2,
+      shape: { nose: 0.1, tail: 0.04, taper: 0.08 },
+      axles: [-10.5, 10.5],
+      wheel: 2.4,
+      sill: 2.2,
+      belt: 7,
+      roof: 14.6,
+      cabin: { belt: [-16.6, 10], roof: [-16.4, 5.6] },
+      upright: true,
+      panel: true,
+    },
+    pickup: {
+      L: 35,
+      W: 14,
+      shape: { nose: 0.1, tail: 0.04, taper: 0.07 },
+      axles: [-10.5, 10.6],
+      wheel: 2.8,
+      sill: 3,
+      belt: 7.6,
+      roof: 12.4,
+      cabin: { belt: [-3.6, 6.6], roof: [-3.2, 3.2] },
+      upright: true,
+      bed: true,
+    },
+  };
+  const carBodies = [
+    ...["sedan", "sedan", "sedan", "hatch", "hatch", "hatch"],
+    ...["estate", "estate", "suv", "suv", "suv", "jeep", "jeep"],
+    ...["sports", "sports", "van", "pickup"],
+  ];
+  const carPaints = [
+    "#d9d4c9",
+    "#35465e",
+    "#8f4038",
+    "#9a9fa3",
+    "#8d9295",
+    "#2b2f33",
+    "#2a2d30",
+    "#6d7470",
+    "#c3c3bd",
     "#f2f1ed",
-    "#6f7a82",
-    "#1f2326",
-    "#a7a9aa",
     "#4b5a3f",
   ];
-  function parkedCar(x, y, heading) {
-    const group = new THREE.Group();
-    const paint = M.paint(pick(carColors));
-    const body = mesh(new RoundedBoxGeometry(18, 4.2, 8.2, 2, 1.4), paint);
-    body.position.y = 2.9;
-    group.add(body);
-    const cabin = mesh(
-      new RoundedBoxGeometry(9.5, 3.2, 7.2, 2, 1.2),
-      M.glassDark,
+  const sportsPaints = ["#b3261e", "#b3261e", "#d0a21c", "#2f5a78", "#f2f1ed"];
+  const carParts = {
+    hub: new THREE.MeshStandardMaterial({
+      color: "#b4b7b9",
+      roughness: 0.35,
+      metalness: 0.8,
+    }),
+    head: new THREE.MeshStandardMaterial({ color: "#f1ecdc", roughness: 0.2 }),
+    tail: new THREE.MeshStandardMaterial({ color: "#8f1d1a", roughness: 0.3 }),
+    trim: new THREE.MeshStandardMaterial({ color: "#1b1d1f", roughness: 0.6 }),
+  };
+  // Plan outline with a rounded, tapering nose and tail.
+  const carOutline = (L, W, { nose, tail, taper }) => {
+    const hl = L / 2;
+    const hw = W / 2;
+    const end = hw * (1 - taper);
+    const n = L * nose;
+    const t = L * tail;
+    const shape = new THREE.Shape();
+    shape.moveTo(-hl + t, -hw);
+    shape.lineTo(hl - n, -hw);
+    shape.bezierCurveTo(hl - n * 0.35, -hw, hl, -end, hl, 0);
+    shape.bezierCurveTo(hl, end, hl - n * 0.35, hw, hl - n, hw);
+    shape.lineTo(-hl + t, hw);
+    shape.bezierCurveTo(-hl + t * 0.35, hw, -hl, end, -hl, 0);
+    shape.bezierCurveTo(-hl, -end, -hl + t * 0.35, -hw, -hl + t, -hw);
+    return shape;
+  };
+  // Glasshouse: a box that narrows from [rear, front, half width] at the
+  // bottom to the same at the top.
+  const frustum = (b, t, y0, y1) => {
+    const v = [
+      [b[0], y0, -b[2]],
+      [b[1], y0, -b[2]],
+      [b[1], y0, b[2]],
+      [b[0], y0, b[2]],
+      [t[0], y1, -t[2]],
+      [t[1], y1, -t[2]],
+      [t[1], y1, t[2]],
+      [t[0], y1, t[2]],
+    ];
+    const position = [];
+    for (const [a, c, d, e] of [
+      [0, 4, 5, 1],
+      [1, 5, 6, 2],
+      [3, 2, 6, 7],
+      [0, 3, 7, 4],
+      [4, 7, 6, 5],
+    ])
+      for (const i of [a, c, d, a, d, e]) position.push(...v[i]);
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(position, 3),
     );
-    cabin.position.set(-0.8, 5.8, 0);
-    group.add(cabin);
-    const roof = mesh(new RoundedBoxGeometry(8.2, 0.7, 7, 2, 0.3), paint);
-    roof.position.set(-1, 7.4, 0);
-    group.add(roof);
-    const wheel = new THREE.CylinderGeometry(1.6, 1.6, 1.2, 12);
-    wheel.rotateX(Math.PI / 2);
-    for (const dx of [-5.8, 5.8])
-      for (const dz of [-3.6, 3.6])
-        group.add(place(mesh(wheel, M.tyre), dx, dz, 1.6));
-    add(place(group, x, y, 1.1, heading));
-    occluder(group, "car");
+    geometry.computeVertexNormals();
+    return geometry;
+  };
+  function parkedCar(x, y, heading) {
+    // Own sequence; the earlier, simpler cars took one draw from the board's.
+    planting(x, y, 1, () => {
+      const type = pick(carBodies);
+      const spec = CARS[type];
+      const { L, W, axles, wheel, sill, belt, roof, cabin } = spec;
+      const paint = M.paint(pick(type === "sports" ? sportsPaints : carPaints));
+      const group = new THREE.Group();
+      const part = (geometry, material, px = 0, py = 0, pz = 0) => {
+        const item = mesh(geometry, material);
+        item.position.set(px, py, pz);
+        group.add(item);
+        return item;
+      };
+      // Wheels with bright hubs.
+      const tyre = new THREE.CylinderGeometry(wheel, wheel, 2.2, 14);
+      tyre.rotateX(Math.PI / 2);
+      const hub = new THREE.CylinderGeometry(
+        wheel * 0.55,
+        wheel * 0.55,
+        2.3,
+        10,
+      );
+      hub.rotateX(Math.PI / 2);
+      for (const ax of axles)
+        for (const side of [-1, 1]) {
+          part(tyre, M.tyre, ax, wheel, side * (W / 2 - 1.1));
+          part(hub, carParts.hub, ax, wheel, side * (W / 2 - 1.08));
+        }
+      // Body from sill to belt, with softened edges.
+      const bevel = 0.7;
+      const body = new THREE.ExtrudeGeometry(carOutline(L, W, spec.shape), {
+        depth: belt - sill - bevel * 2,
+        bevelEnabled: true,
+        bevelThickness: bevel,
+        bevelSize: bevel,
+        bevelOffset: -bevel,
+        bevelSegments: 2,
+        curveSegments: 6,
+      });
+      body.rotateX(-Math.PI / 2);
+      part(body, paint, 0, sill + bevel, 0);
+      // Lamps.
+      const lampZ = (W / 2) * (1 - spec.shape.taper) * 0.72;
+      for (const side of [-1, 1]) {
+        part(
+          new THREE.BoxGeometry(0.8, 1, 2.4),
+          carParts.head,
+          L / 2 - L * spec.shape.nose * 0.3,
+          belt - 1.5,
+          side * lampZ,
+        );
+        part(
+          new THREE.BoxGeometry(0.8, 1, 2.4),
+          carParts.tail,
+          -L / 2 + L * spec.shape.tail * 0.3,
+          belt - 1.4,
+          side * lampZ,
+        );
+      }
+      // Glasshouse and roof.
+      const inset = spec.upright ? 1.1 : 1.9;
+      const low = [cabin.belt[0], cabin.belt[1], W / 2 - 0.5];
+      const high = [cabin.roof[0], cabin.roof[1], W / 2 - inset];
+      part(
+        frustum(low, high, belt - 0.2, roof - 0.5),
+        spec.panel ? paint : M.glassDark,
+      );
+      if (spec.panel) {
+        // Panel van: glass only around the driver.
+        const k = (roof - 1.6 - belt) / (roof - belt);
+        part(
+          frustum(
+            [cabin.belt[1] - 7.5, cabin.belt[1] + 0.1, W / 2 - 0.42],
+            [
+              cabin.belt[1] - 7.5,
+              cabin.belt[1] + (cabin.roof[1] - cabin.belt[1]) * k + 0.1,
+              W / 2 - 0.5 - (inset - 0.5) * k + 0.08,
+            ],
+            belt + 0.8,
+            roof - 1.6,
+          ),
+          M.glassDark,
+        );
+      }
+      part(
+        new RoundedBoxGeometry(
+          high[1] - high[0] + 0.5,
+          0.8,
+          high[2] * 2 + 0.4,
+          2,
+          0.35,
+        ),
+        paint,
+        (high[0] + high[1]) / 2,
+        roof - 0.4,
+        0,
+      );
+      if (spec.rails)
+        for (const side of [-1, 1])
+          part(
+            new THREE.BoxGeometry((high[1] - high[0]) * 0.8, 0.5, 0.5),
+            carParts.trim,
+            (high[0] + high[1]) / 2,
+            roof + 0.3,
+            side * (high[2] - 0.9),
+          );
+      if (spec.spoiler) {
+        part(
+          new THREE.BoxGeometry(1.6, 0.4, W - 2.4),
+          paint,
+          -L / 2 + 2.2,
+          belt + 1.3,
+          0,
+        );
+        for (const side of [-1, 1])
+          part(
+            new THREE.BoxGeometry(0.6, 1.2, 0.5),
+            carParts.trim,
+            -L / 2 + 2.2,
+            belt + 0.6,
+            side * (W / 2 - 2.6),
+          );
+      }
+      if (spec.spare) {
+        const spare = new THREE.CylinderGeometry(
+          wheel * 0.9,
+          wheel * 0.9,
+          1.6,
+          14,
+        );
+        spare.rotateZ(Math.PI / 2);
+        part(spare, M.tyre, -L / 2 - 0.5, belt - 0.6, 0);
+        // Bull bar.
+        part(
+          new THREE.BoxGeometry(0.7, 1.4, W - 3),
+          carParts.trim,
+          L / 2 + 0.2,
+          sill + 1.2,
+          0,
+        );
+      }
+      if (spec.bed) {
+        // Open load bed behind the cab.
+        const x0 = -L / 2 + 1.4;
+        const x1 = cabin.belt[0] - 0.6;
+        part(
+          new THREE.BoxGeometry(x1 - x0, 0.2, W - 2.6),
+          carParts.trim,
+          (x0 + x1) / 2,
+          belt + 0.06,
+          0,
+        );
+        for (const side of [-1, 1])
+          part(
+            new THREE.BoxGeometry(x1 - x0 + 1, 1.5, 0.8),
+            paint,
+            (x0 + x1) / 2,
+            belt + 0.6,
+            side * (W / 2 - 0.9),
+          );
+        part(
+          new THREE.BoxGeometry(0.8, 1.5, W - 1.8),
+          paint,
+          x0 - 0.2,
+          belt + 0.6,
+          0,
+        );
+      }
+      group.scale.setScalar(CAR_SCALE);
+      add(place(group, x, y, 1.1, heading));
+      occluder(group, "car");
+    });
   }
   const parking = { total: 0, parked: 0 };
   const park = (x0, x1, y, heading, empty = []) => {
@@ -2829,6 +3168,14 @@ export function buildScene() {
   park(452, 588, 392, Math.PI / 2, [2, 6]);
   park(452, 588, 472, -Math.PI / 2, [1, 4]);
   world.parking = parking;
+  // The campers' cars, from the camp's own sequence.
+  {
+    const board = random;
+    random = rngOf(20260930);
+    for (const [x, y, heading] of campCars)
+      parkedCar(x, y, heading + rand(-0.05, 0.05));
+    random = board;
+  }
 
   // --- Piers, boats, breakwaters --------------------------------------------
   const deckZ = 0.6;
