@@ -156,6 +156,14 @@ const views = [
                     <div><span>{row.label}<small>{row.id}</small></span><strong data-reading={row.key}>{row.value}{row.note && <small>{row.note}</small>}</strong></div>
                   ))}
                 </div>
+                {dashboard.panels?.map((panel) => (
+                  <div class="twin-meter-readings" data-in={panel.in ?? "overview devices"}>
+                    <div class="twin-meter-heading"><h3>{panel.title}</h3><span>{panel.tag}</span></div>
+                    {panel.rows.map((row) => (
+                      <div><span>{row.label}<small>{row.id}</small></span><strong data-reading={row.key}>{row.value}{row.note && <small>{row.note}</small>}</strong></div>
+                    ))}
+                  </div>
+                ))}
                 {/* The gateway's id is filled by twin.js; its state follows the connection. */}
                 <div class="twin-meter-readings twin-gateway" data-in="gateways">
                   <div class="twin-meter-heading"><h3>{t("Prehod", "Gateway")}</h3><span>LoRaWAN</span></div>

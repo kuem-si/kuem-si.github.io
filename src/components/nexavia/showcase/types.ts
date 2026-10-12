@@ -103,5 +103,8 @@ export interface Twin {
     alarms: { id: string; text: string }[];
     meters: { title: string; rows: ReadingRow[] };
     sensors: { title: string; rows: ReadingRow[] };
+    // Further blocks of readings, each with a tag beside its title and the
+    // sections that show it (data-in; "overview devices" unless given).
+    panels?: { title: string; tag: string; in?: string; rows: ReadingRow[] }[];
   };
 }

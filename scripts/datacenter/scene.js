@@ -73,16 +73,36 @@ const YARD_LAMPS = {
 };
 
 // Sensor pins, the light sensor and the gateway (world points): a temperature
-// and humidity sensor on every rack (r101 is level 1, rack 01) and a leak
-// detector in every level's floor void.
+// and humidity sensor on every rack (r101 is level 1, rack 01), and on every
+// level a leak detector in the floor void, the row's power panel, a smoke
+// detector, the gas suppression and the door to the room beside the hall.
+// The rest follow the power from the yard to the racks and the cooling water
+// out to the towers.
 export const SENSORS = {
   lux: [404, 196, 127],
   gateway: [446, 180, 134],
   cooling: [455, 400, 35],
-  power: [410, 338, 74],
+  pump: [389, 446, 18.5],
+  ups: [402, 338, 73],
+  battery: [469, 361, 70],
+  power: [412, 558, 23],
+  pq: [472, 559, 17],
+  gen: [482, 526, 23],
+  fuel: [550, 512, 25.5],
+  tower: [552, 271.5, 31],
+  water: [588, 400, 8.5],
 };
 LEVELS.forEach(({ z, open, front }, level) => {
   const top = z + LAYOUT.raised + RACKS.height;
+  const floor = z + LAYOUT.raised;
+  SENSORS[`rpp-${level + 1}`] = [
+    rackX(RACKS.count) + 13,
+    open + RACKS.y[1],
+    floor + 20.5,
+  ];
+  SENSORS[`smoke-${level + 1}`] = [70, open + 66, floor + 30.6];
+  SENSORS[`gas-${level + 1}`] = [69.6, open + 30, floor + 22];
+  SENSORS[`door-${level + 1}`] = [LAYOUT.partition, open + 53.3, floor + 19.8];
   for (let index = 0; index < RACKS.count; index++)
     SENSORS[`r${level + 1}${String(index + 1).padStart(2, "0")}`] = [
       rackX(index) + RACKS.width / 2,
@@ -561,6 +581,8 @@ export function buildScene() {
     );
   };
 
+  const panelFront = cabinetFront("#3b4044", "#2b3035");
+
   // --- Levels ------------------------------------------------------------------
   LEVELS.forEach(({ z, open, front }, level) => {
     const device = DEVICES[level];
@@ -704,14 +726,31 @@ export function buildScene() {
         ),
       );
     }
+    const panelX = rackX(RACKS.count) + 7;
+    add(
+      box(rowX0, ry0 - 4, panelX + 8, ry0 - 1.6, top + 1, top + 2.2, X.cable),
+    );
+    // The row's remote power panel, fed from the trough: it meters every
+    // branch to the racks' PDUs.
     add(
       box(
-        rowX0,
+        panelX,
+        ry0,
+        panelX + 12,
+        ry1,
+        floor,
+        floor + 20,
+        faces({ front: panelFront, rest: X.machineDark }),
+      ),
+    );
+    add(
+      box(
+        panelX + 4,
         ry0 - 4,
-        rackX(RACKS.count),
-        ry0 - 1.6,
+        panelX + 8,
+        ry0 + 2,
+        floor + 20,
         top + 1,
-        top + 2.2,
         X.cable,
       ),
     );
@@ -730,6 +769,44 @@ export function buildScene() {
           60 + i * 6.4,
           open + 30,
           floor + 18,
+        ),
+      );
+    }
+    // Their manifold, with the pressure switch that reports the system armed.
+    add(
+      box(
+        59,
+        open + 29.4,
+        80.2,
+        open + 30.6,
+        floor + 19,
+        floor + 19.8,
+        X.machineDark,
+      ),
+    );
+    {
+      const [gx, gy] = SENSORS[`gas-${level + 1}`];
+      add(
+        box(
+          gx - 1.5,
+          gy - 1.2,
+          gx + 1.5,
+          gy + 1.2,
+          floor + 19.8,
+          floor + 21.8,
+          X.chilled,
+        ),
+      );
+      add(
+        box(
+          gx - 0.5,
+          gy + 1.2,
+          gx + 0.5,
+          gy + 1.35,
+          floor + 20.4,
+          floor + 21.2,
+          sensorLamp,
+          flat,
         ),
       );
     }
@@ -781,8 +858,55 @@ export function buildScene() {
       world.devices[device].lights.push(lamp);
     }
 
+    // Smoke detector on the beam.
+    {
+      const [sx, sy] = SENSORS[`smoke-${level + 1}`];
+      add(
+        place(
+          mesh(new THREE.CylinderGeometry(2.1, 2.7, 1.5, 18), X.chilled),
+          sx,
+          sy,
+          floor + 29.75,
+        ),
+      );
+      add(
+        place(
+          mesh(new THREE.CylinderGeometry(0.6, 0.6, 0.3, 10), sensorLamp, flat),
+          sx,
+          sy,
+          floor + 30.6,
+        ),
+      );
+    }
+
     // Glazed partition to the room beside the hall, with a doorway on the
-    // aisle.
+    // aisle and a contact on its frame.
+    {
+      const [dx, dy] = SENSORS[`door-${level + 1}`];
+      add(
+        box(
+          dx - 1.1,
+          dy - 0.9,
+          dx + 1.1,
+          dy + 0.7,
+          floor + 17.8,
+          floor + 19.6,
+          X.chilled,
+        ),
+      );
+      add(
+        box(
+          dx - 0.4,
+          dy + 0.7,
+          dx + 0.4,
+          dy + 0.85,
+          floor + 18.4,
+          floor + 19.1,
+          sensorLamp,
+          flat,
+        ),
+      );
+    }
     {
       const group = new THREE.Group();
       const px = LAYOUT.partition;
@@ -861,6 +985,11 @@ export function buildScene() {
       part(group, rx0 + 8, y - 3, rx0 + 26, y + 3, 0, 1.4, X.machineDark);
       group.add(place(tube(3, 8, X.accent), rx0 + 13, y, 4.6));
       group.add(place(tube(2.2, 7, X.machineDark), rx0 + 21, y, 4.6));
+      // Flow and pressure meter on the supply.
+      if (material === X.supply) {
+        group.add(place(tube(2.7, 5, X.chilled), rx0 + 42, y, 4.6));
+        part(group, rx0 + 40, y - 1.6, rx0 + 44, y + 1.6, 7, 9.4, X.chilled);
+      }
       // The pipe on through the wall to the cooling towers.
       group.add(
         place(
@@ -921,6 +1050,28 @@ export function buildScene() {
           west: new THREE.MeshStandardMaterial({ map: cells, roughness: 0.6 }),
           rest: X.machineDark,
         }),
+      );
+      // The battery monitor: voltage, resistance and temperature per cell.
+      part(
+        group,
+        rx1 - 7.5,
+        open + 68,
+        rx1 - 2,
+        open + 74,
+        17,
+        19.2,
+        X.chilled,
+      );
+      part(
+        group,
+        rx1 - 7.65,
+        open + 70,
+        rx1 - 7.5,
+        open + 72,
+        17.6,
+        18.6,
+        sensorLamp,
+        flat,
       );
       fixture(group, 1);
     }
@@ -1047,6 +1198,20 @@ export function buildScene() {
     add(place(tube(1.7, 12, X.supply), 516, y + 20, 15.6));
     add(place(tube(1.7, 18, X.return), 513, y + 36, 15.6));
   }
+  // The first tower's controller, and the make-up water with its meter.
+  add(box(546, 270, 558, 271.4, 21, 30, X.machineDark));
+  add(box(549, 271.4, 555, 271.6, 24, 28, sensorLamp, flat));
+  {
+    const mains = plain("#3aa39b", 0.4, 0.2);
+    const [wx, wy] = SENSORS.water;
+    add(place(tube(1.3, 206, mains, "y"), wx, 345, 3));
+    for (const y of [242, 340]) add(place(tube(1.3, 7, mains), 585, y, 3));
+    add(place(tube(2.9, 8, X.chilled, "y"), wx, wy, 3.4));
+    add(box(wx - 1.8, wy - 1.8, wx + 1.8, wy + 1.8, 6, 8.2, X.chilled));
+    add(
+      box(wx - 0.6, wy + 1.8, wx + 0.6, wy + 1.95, 6.6, 7.6, sensorLamp, flat),
+    );
+  }
   // From the plant on level 1 out to the towers.
   {
     const floor = LEVELS[0].z + RAISED + 4.6;
@@ -1082,6 +1247,7 @@ export function buildScene() {
     for (let x = 412; x < 470; x += 9)
       part(group, x, 526, x + 6, 526.2, 6, 19, X.machineDark, flat);
     part(group, 474, 526, 490, 526.2, 3, 21, X.machineDark, flat);
+    part(group, 478, 526.2, 486, 526.4, 14, 18.5, sensorLamp, flat);
     group.add(place(tube(2.2, 14, M.metal, "z"), 482, 506, 31));
     add(group);
     occluder(group, "fixture");
@@ -1092,6 +1258,9 @@ export function buildScene() {
     for (const x of [534, 566])
       part(group, x - 1.5, 503, x + 1.5, 521, 1.1, 8, X.machineDark);
     part(group, 524, 498, 576, 526, 1.1, 2, X.concrete);
+    // Level sensor on the tank.
+    part(group, 548, 510, 552, 514, 21.5, 24.6, X.chilled);
+    part(group, 549.4, 514, 550.6, 514.15, 22.6, 23.8, sensorLamp, flat);
     add(group);
     occluder(group, "fixture");
   }
@@ -1104,8 +1273,32 @@ export function buildScene() {
       group.add(place(tube(1.3, 6, X.desk, "z"), x, 556, 22));
       group.add(place(tube(0.5, 2, M.metal, "z"), x, 556, 26));
     }
+    // Power-quality analyser on the transformer's low-voltage side.
+    part(group, 470, 554, 474, 564, 6, 16, X.chilled);
+    part(group, 474, 557, 474.15, 561, 11, 14, sensorLamp, flat);
     add(group);
     occluder(group, "fixture");
+  }
+  // Main low-voltage board with the datacenter's meter, and the cable ducts
+  // from the transformer, to the generator and on into the building.
+  {
+    const group = new THREE.Group();
+    part(group, 399, 549, 425, 567, 1.1, 2, X.concrete);
+    part(
+      group,
+      400,
+      550,
+      424,
+      566,
+      2,
+      21.5,
+      faces({ front: cabinetFront("#dfe2e3", "#cdd2d4"), rest: X.machine }),
+    );
+    add(group);
+    occluder(group, "fixture");
+    add(box(424, 556, 430, 560, 1.1, 3.2, X.cable));
+    add(box(410, 526, 414, 550, 1.1, 2.4, X.cable));
+    add(box(446, FRONT, 450, 498, 1.1, 2.4, X.cable));
   }
 
   // --- Forecourt ----------------------------------------------------------------

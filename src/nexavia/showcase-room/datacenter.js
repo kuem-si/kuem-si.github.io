@@ -1,7 +1,9 @@
 import { initTraffic } from "./traffic.js";
 import {
   LEVELS,
+  PANEL_KW,
   RACKS,
+  levelPower,
   rackAt,
   rackKey,
   rackNumber,
@@ -9,9 +11,10 @@ import {
 } from "./datacenter-racks.js";
 import geometry from "../../components/nexavia/showcase/datacenter-geometry.json";
 
-// The datacenter twin: a building of three levels shown in a stepped section,
-// with a temperature and humidity sensor on every rack, a leak detector under
-// every level's raised floor and its lighting under one rule. Driven by
+// The datacenter twin: a building of three levels shown in a stepped section.
+// Its sensors follow the power from the transformer to each rack's PDU and
+// the cooling water from the racks to the towers, and watch every level for
+// water, smoke and open doors; the lighting runs under one rule. Driven by
 // twin.js; the maquette and its geometry come from
 // scripts/generate-datacenter-maquette.mjs.
 
@@ -25,6 +28,8 @@ const VIEW = {
   level2: { x: 610, y: 310, zoom: 1.5, radius: 0.32 },
   level3: { x: 620, y: 160, zoom: 1.5, radius: 0.32 },
   plant: { x: 1040, y: 440, zoom: 1.5, radius: 0.3 },
+  ups: { x: 1010, y: 300, zoom: 1.6, radius: 0.26 },
+  yard: { x: 1090, y: 620, zoom: 1.5, radius: 0.3 },
   outdoors: { x: 700, y: 600, zoom: 1.2, radius: 0.45 },
 };
 
@@ -39,8 +44,102 @@ const TRAFFIC = {
   counts: {},
 };
 
+// The thermal map: a wash of colour over each rack, from its inlet air
+// reading, behind its own toggle beside the sensors'. Scenarios switch it on
+// with the "heatmap" signal.
+function initHeatmap(root) {
+  const art = root.querySelector("[data-city-art]");
+  const tools = art?.querySelector(".city-art-tools");
+  if (!art || !tools) return;
+  const en = document.documentElement.lang.startsWith("en");
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = (name, attributes, parent) => {
+    const element = document.createElementNS(ns, name);
+    for (const [key, value] of Object.entries(attributes))
+      element.setAttribute(key, value);
+    return parent.appendChild(element);
+  };
+  const map = svg(
+    "svg",
+    {
+      class: "city-heatmap",
+      viewBox: "0 0 1536 1024",
+      preserveAspectRatio: "xMidYMid slice",
+      "aria-hidden": "true",
+      focusable: "false",
+    },
+    art,
+  );
+  art.insertBefore(map, art.querySelector(".city-focus"));
+  const blur = svg("filter", { id: "datacenter-heat-blur" }, map);
+  svg("feGaussianBlur", { stdDeviation: "5" }, blur);
+  const cells = svg("g", { filter: "url(#datacenter-heat-blur)" }, map);
+  // Cool blue through yellow to red at the alarm limit.
+  const stops = [
+    [22, [42, 120, 214]],
+    [25.5, [245, 196, 0]],
+    [30, [224, 32, 32]],
+  ];
+  const colour = (temp) => {
+    const v = Math.min(30, Math.max(22, temp));
+    const i = v < stops[1][0] ? 0 : 1;
+    const [a, from] = stops[i];
+    const [b, to] = stops[i + 1];
+    const k = (v - a) / (b - a);
+    return `rgb(${from.map((c, j) => Math.round(c + (to[j] - c) * k)).join(" ")})`;
+  };
+  for (const level of LEVELS)
+    for (let rack = 1; rack <= RACKS; rack++) {
+      const key = rackKey(level, rack);
+      const [x, y] = geometry.points[key];
+      const cell = svg(
+        "rect",
+        { x: x - 11, y: y - 8, width: 22, height: 46, rx: 6 },
+        cells,
+      );
+      const reading = root.querySelector(
+        `.city-sensor-popover [data-reading="${key}"]`,
+      );
+      const paint = () =>
+        cell.setAttribute(
+          "fill",
+          colour(parseFloat(reading.textContent.replace(",", "."))),
+        );
+      if (!reading) continue;
+      new MutationObserver(paint).observe(reading, {
+        childList: true,
+        characterData: true,
+        subtree: true,
+      });
+      paint();
+    }
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "city-sensors-toggle";
+  toggle.append(
+    document.createElement("i"),
+    en ? "Thermal map" : "Toplotna karta",
+  );
+  tools.prepend(toggle);
+  let chosen = false;
+  const show = (on) => {
+    art.dataset.heatmap = on ? "on" : "off";
+    toggle.setAttribute("aria-pressed", String(on));
+  };
+  toggle.addEventListener("click", () => {
+    chosen = art.dataset.heatmap !== "on";
+    show(chosen);
+  });
+  root.addEventListener("twin:signal", ({ detail }) => {
+    if (detail.name === "heatmap") show(detail.value);
+    // After a scenario the map goes back to the visitor's choice.
+    if (detail.name === "reset") show(chosen);
+  });
+  show(false);
+}
+
 export const datacenter = {
-  effects: [(root) => initTraffic(root, TRAFFIC)],
+  effects: [(root) => initTraffic(root, TRAFFIC), initHeatmap],
   // The radio gateway on the roof.
   gateway: { id: "GW_04", at: geometry.points.gateway },
   devices: (t) => [
@@ -217,11 +316,23 @@ export const datacenter = {
       // send at the same moment.
       for (let rack = 1; rack <= RACKS; rack++) {
         if ((rack + level + index) % 3) continue;
-        const { temp, rh } = rackAt(level, rack, step);
+        const { temp, rh, kw, out } = rackAt(level, rack, step);
         const key = rackKey(level, rack);
         setReading(key, `${n(temp, 1)} °C`);
         setReading(`${key}-rh`, t(`${rh} %`, `${rh}%`));
+        setReading(`${key}-out`, `${n(out, 1)} °C`);
+        setReading(`${key}-kw`, `${n(kw, 1)} kW`);
+        setReading(`${key}-dt`, `${n(out - temp, 1)} K`);
       }
+      // The level's power panel meters what its racks draw.
+      const load = levelPower(level, step);
+      const share = Math.round((load / PANEL_KW) * 100);
+      setReading(
+        `rpp-${level}`,
+        `${n(load, 1)} kW`,
+        t(`${share} % od ${PANEL_KW} kW`, `${share}% of ${PANEL_KW} kW`),
+      );
+      setReading(`rpp-${level}-load`, t(`${share} %`, `${share}%`));
       const { rack, temp } = warmest(level, step);
       const number = rackNumber(level, rack);
       setReading(
@@ -240,9 +351,28 @@ export const datacenter = {
     );
     setReading("cooling-return", back);
     setReading(
-      "power",
-      `${n(412.6 + [0, 2.4, 5.8, 7.1, 3.2, -1.6, -3.4][i], 1)} kW`,
-      `PUE ${n(1.18 + [0, 0, 0.01, 0.01, 0, 0, -0.01][i], 2)}`,
+      "pump",
+      `${n(49.3 + [0, 0.2, 0.6, 0.8, 0.3, -0.2, -0.4][i], 1)} m³/h`,
+    );
+    const fan = 62 + [0, 1, 3, 4, 2, 0, -1][i];
+    setReading("tower", t(`${fan} %`, `${fan}%`));
+    // The facility's load at the main board against the racks' share of it.
+    const facility = 412.6 + [0, 2.4, 5.8, 7.1, 3.2, -1.6, -3.4][i];
+    const it = LEVELS.reduce((sum, level) => sum + levelPower(level, step), 0);
+    setReading("power", `${n(facility, 1)} kW`);
+    setReading("pq-a", `${Math.round((facility * 1000) / (3 * 231 * 0.97))} A`);
+    setReading("ups-kw", `${n(it, 1)} kW`);
+    setReading("kpi-pue", n(facility / it, 2));
+    setReading(
+      "kpi-it",
+      `${n(it, 1)} kW`,
+      t(`od ${n(facility, 1)} kW objekta`, `of ${n(facility, 1)} kW facility`),
+    );
+    const used = Math.round((facility / 600) * 100);
+    setReading(
+      "kpi-pcap",
+      t(`${used} %`, `${used}%`),
+      t(`${n(facility, 1)} od 600 kW`, `${n(facility, 1)} of 600 kW`),
     );
   },
   scenarios,
@@ -255,6 +385,14 @@ function scenarios(t, n) {
   const percent = (v) => t(`${Math.round(v)} %`, `${Math.round(v)}%`);
   const depth = (v) => `${Math.round(v)} mm`;
   const dry = t("Suho", "Dry");
+  const volts = (v) => `${Math.round(v)} V`;
+  const kw = (v) => `${Math.round(v)} kW`;
+  const milliohm = (v) => `${n(v, 1)} mΩ`;
+  const runtime = (minutes) =>
+    t(`avtonomija ${minutes} min`, `runtime ${minutes} min`);
+  const autonomy = (hours) => t(`avtonomija ${hours} h`, `${hours} h autonomy`);
+  const quality = t("THD 3,1 % · cos φ 0,97", "THD 3.1% · cos φ 0.97");
+  const noIncident = t("odprtih incidentov", "open incidents");
   return [
     {
       // One reading followed from the sensor to the command it leads to.
@@ -392,6 +530,7 @@ function scenarios(t, n) {
         api.setReading("r206-rh", percent(45));
         api.setLevel("FLOOR_02", 1);
         api.setAlarms([]);
+        api.signal("heatmap", true);
         api.pin("r206");
         api.narrate({
           rule: t(
@@ -422,10 +561,23 @@ function scenarios(t, n) {
           ),
           run(api, play) {
             play.count("r206", 24.4, 28.6, celsius);
+            api.setReading(
+              "kai-thermal",
+              t("Omara 2.06", "Rack 2.06"),
+              t("narašča, sosede mirujejo", "rising, neighbours flat"),
+            );
             api.log(
               t("RACK_206 · 28,6 °C · narašča", "RACK_206 · 28.6 °C · rising"),
               "14:20",
               "reading",
+            );
+            api.log(
+              t(
+                "KAI · Termalna anomalija: omara 2.06 odstopa od sosed",
+                "KAI · Thermal anomaly: rack 2.06 departs from its neighbours",
+              ),
+              "14:20",
+              "decision",
             );
           },
         },
@@ -491,6 +643,11 @@ function scenarios(t, n) {
           ),
           run(api, play) {
             play.count("r206", 29.2, 24.6, celsius);
+            api.setReading(
+              "kai-thermal",
+              t("Brez", "None"),
+              t("ni vročih točk", "no hot spots"),
+            );
             api.setAlarms([]);
             api.spotlight(api.$reading("level-2"));
             api.log(
@@ -510,6 +667,7 @@ function scenarios(t, n) {
       title: t("Voda pod dvignjenim podom", "Water under the raised floor"),
       setup(api) {
         api.setReading("leak-1", depth(0), dry);
+        api.setReading("leak-1-at", "–");
         api.setLevel("FLOOR_01", 0);
         LAMPS.forEach((id) => api.setLevel(id, 1));
         api.setAlarms([]);
@@ -527,8 +685,8 @@ function scenarios(t, n) {
           focus: VIEW.level1,
           title: t("Cevi tečejo pod podom", "The pipes run under the floor"),
           text: t(
-            "Strežniki so hlajeni z vodo: dovod in povratek tečeta pod dvignjenim podom vsakega nadstropja. Senzor izliva LEAK_01 s tipalnim kablom nadzira dno praznine. Ponoči v dvorani ni nikogar.",
-            "The servers are water-cooled: supply and return run under each level's raised floor. Leak detector LEAK_01 watches the bottom of the void with its sensing cable. At night nobody is in the hall.",
+            "Strežniki so hlajeni z vodo: dovod in povratek tečeta pod dvignjenim podom vsakega nadstropja. Senzor izliva LEAK_01 s tipalnim kablom nadzira dno praznine po vsej dolžini cevi in pove, kje na kablu je voda. Ponoči v dvorani ni nikogar.",
+            "The servers are water-cooled: supply and return run under each level's raised floor. Leak detector LEAK_01 watches the bottom of the void with its sensing cable along the whole pipe run, and tells where on the cable the water is. At night nobody is in the hall.",
           ),
           run(api) {
             api.spotlight(api.$reading("leak-1"));
@@ -543,6 +701,10 @@ function scenarios(t, n) {
           ),
           run(api, play) {
             play.count("leak-1", 0, 2, depth, t("Voda zaznana", "Water found"));
+            api.setReading(
+              "leak-1-at",
+              t("14 m · omara 1.07", "14 m · rack 1.07"),
+            );
             api.setAlarms([
               [
                 "LEAK_01",
@@ -620,6 +782,7 @@ function scenarios(t, n) {
           ),
           run(api, play) {
             play.count("leak-1", 3, 0, depth, dry);
+            api.setReading("leak-1-at", "–");
             api.setAlarms([]);
             api.setLevel("FLOOR_01", 0);
             api.spotlight(api.$reading("leak-1"));
@@ -729,6 +892,323 @@ function scenarios(t, n) {
               ),
               "18:05",
               "alarm",
+            );
+          },
+        },
+      ],
+    },
+    {
+      // The power chain under a mains failure: four alarms, one incident.
+      id: "mains-failure",
+      title: t("Izpad omrežja", "Mains failure"),
+      setup(api) {
+        api.setReading("pq", volts(231), quality);
+        api.setReading("pq-events", "0");
+        api.setReading("ups-mode", t("Omrežje", "Mains"));
+        api.setReading("ups-in", volts(231));
+        api.setReading("battery", percent(100), runtime(14));
+        api.setReading("battery-runtime", "14 min");
+        api.setReading("gen", kw(0), t("pripravljen", "standby"));
+        api.setReading("gen-state", t("Pripravljen", "Standby"));
+        api.setReading("gen-v", volts(0));
+        api.setReading("gen-hz", `${n(0, 1)} Hz`);
+        api.setReading("fuel", percent(86), autonomy(41));
+        api.setReading("noc-incidents", "0", noIncident);
+        LAMPS.forEach((id) => api.setLevel(id, 1));
+        api.setAlarms([]);
+        api.pin("pq");
+        api.narrate({
+          rule: t(
+            "Pravilo: izpad omrežja → UPS, agregat in en incident",
+            "Rule: mains failure → UPS, generator and one incident",
+          ),
+        });
+      },
+      steps: [
+        {
+          time: "02:13",
+          focus: VIEW.yard,
+          title: t(
+            "Elektrika je merjena na vsaki stopnji",
+            "Power is metered at every stage",
+          ),
+          text: t(
+            "Analizator PQ_01 na transformatorju meri napetost, harmonike in frekvenco dovoda, števec POWER_01 na glavnem razdelilniku pa moč celega objekta. Od tu gre elektrika prek UPS-a do razdelilnika vsake vrste in do PDU-ja vsake omare.",
+            "Analyser PQ_01 on the transformer measures the feed's voltage, harmonics and frequency, and meter POWER_01 on the main switchboard the whole site's load. From here the power goes through the UPS to each row's power panel and each rack's PDU.",
+          ),
+          run(api) {
+            api.spotlight(api.$reading("pq"));
+          },
+        },
+        {
+          time: "02:14",
+          title: t("Napetost na dovodu pade", "The feed's voltage collapses"),
+          text: t(
+            "Okvara v omrežju: napetost dovoda A v nekaj periodah pade s 231 V na nič. Analizator dogodek zabeleži s časovnim žigom na milisekundo.",
+            "A fault on the grid: the voltage of feed A falls from 231 V to nothing within a few cycles. The analyser records the event with a timestamp to the millisecond.",
+          ),
+          run(api, play) {
+            play.count("pq", 231, 0, volts, t("izpad dovoda A", "feed A lost"));
+            api.setReading("pq-events", "1");
+            api.setReading("ups-in", volts(0));
+            api.setAlarms([
+              ["PQ_01", t("Izpad omrežja · dovod A", "Mains failure · feed A")],
+            ]);
+            api.spotlight(".twin-alerts");
+            api.log(
+              t(
+                "PQ_01 · Alarm: izpad napetosti na dovodu A",
+                "PQ_01 · Alarm: voltage lost on feed A",
+              ),
+              "02:14:07",
+              "alarm",
+            );
+          },
+        },
+        {
+          time: "02:14",
+          focus: VIEW.ups,
+          title: t("UPS prevzame breme", "The UPS takes the load"),
+          text: t(
+            "UPS brez prekinitve preklopi na baterije. Strežniki ne opazijo ničesar, baterije pa se praznijo: Nexavia iz napolnjenosti in bremena sproti računa, koliko minut je še na voljo.",
+            "The UPS switches to its batteries without a break. The servers notice nothing, but the batteries are draining: from their charge and the load Nexavia keeps working out how many minutes are left.",
+          ),
+          run(api, play) {
+            api.pin("ups");
+            api.setReading("ups-mode", t("Baterije", "Batteries"));
+            play.count("battery", 100, 96, percent, runtime(13));
+            api.setReading("battery-runtime", "13 min");
+            api.setAlarms([
+              ["PQ_01", t("Izpad omrežja · dovod A", "Mains failure · feed A")],
+              ["UPS_01", t("Deluje na baterijah", "Running on batteries")],
+            ]);
+            api.log(
+              t(
+                "UPS_01 · Alarm: delovanje na baterijah · 13 min",
+                "UPS_01 · Alarm: on batteries · 13 min",
+              ),
+              "02:14:08",
+              "alarm",
+            );
+          },
+        },
+        {
+          time: "02:14",
+          focus: VIEW.yard,
+          title: t("Agregat se zažene", "The generator starts"),
+          text: t(
+            "Nexavia agregatu pošlje ukaz za zagon in spremlja, kako prevzame breme: napetost, frekvenco in moč. Nivo goriva pove, koliko ur lahko podatkovni center teče brez omrežja.",
+            "Nexavia commands the generator to start and watches it take the load: voltage, frequency and output. The fuel level tells how many hours the datacenter can run without the grid.",
+          ),
+          run(api, play) {
+            api.pin("gen");
+            api.setReading("gen-state", t("Teče", "Running"));
+            play.count(
+              "gen",
+              0,
+              413,
+              kw,
+              t("teče · 50,0 Hz", "running · 50.0 Hz"),
+            );
+            api.setReading("gen-v", volts(231));
+            api.setReading("gen-hz", `${n(50, 1)} Hz`);
+            api.setReading("ups-mode", t("Agregat", "Generator"));
+            api.setReading("ups-in", volts(231));
+            api.setReading("fuel", percent(86), autonomy(41));
+            api.log(
+              t("GEN_01 · Ukaz: zagon agregata", "GEN_01 · Command: start"),
+              "02:14:09",
+              "command",
+            );
+            api.log(
+              t(
+                "GEN_01 · Teče · 413 kW · 50,0 Hz",
+                "GEN_01 · Running · 413 kW · 50.0 Hz",
+              ),
+              "02:14:21",
+              "reading",
+            );
+          },
+        },
+        {
+          time: "02:15",
+          title: t("Štirje alarmi, en incident", "Four alarms, one incident"),
+          text: t(
+            "Izpad dovoda, UPS na baterijah, zagon agregata in ponovni zagon hladilnika so se zgodili v 14 sekundah. KAI jih po času in po napajalni verigi poveže v en incident z enim vzrokom, dežurni pa dobi eno obvestilo in en delovni nalog namesto štirih.",
+            "The lost feed, the UPS on batteries, the generator start and a cooler's restart all happened within 14 seconds. KAI ties them together by time and by the power chain into one incident with one cause, and the person on call gets one notification and one ticket instead of four.",
+          ),
+          run(api, play) {
+            api.setReading(
+              "noc-incidents",
+              "1",
+              t("vzrok: izpad dovoda A", "cause: feed A lost"),
+            );
+            api.spotlight(api.$reading("noc-incidents"));
+            play.toast(
+              t("Incident: izpad omrežja", "Incident: mains failure"),
+              t(
+                "4 alarmi · agregat teče · gorivo za 41 h",
+                "4 alarms · generator running · fuel for 41 h",
+              ),
+              "02:15",
+            );
+            api.log(
+              t(
+                "KAI · 4 alarmi združeni v incident · vzrok: izpad dovoda A",
+                "KAI · 4 alarms merged into one incident · cause: feed A lost",
+              ),
+              "02:15",
+              "decision",
+            );
+            api.log(
+              t(
+                "Delovni nalog odprt v servisnem sistemu",
+                "Ticket opened in the service desk",
+              ),
+              "02:15",
+              "notify",
+            );
+          },
+        },
+        {
+          time: "02:48",
+          title: t("Omrežje se vrne", "The grid returns"),
+          text: t(
+            "Napetost na dovodu je spet stabilna. UPS preklopi nazaj na omrežje, agregat se ohladi in ustavi, baterije se polnijo. Incident se zapre z zapisom celotnega poteka – za poročilo in za SLA.",
+            "The feed's voltage is stable again. The UPS switches back to the mains, the generator cools down and stops, and the batteries recharge. The incident closes with a record of the whole sequence – for the report and for the SLA.",
+          ),
+          run(api, play) {
+            api.pin("pq");
+            play.count("pq", 0, 231, volts, quality);
+            api.setReading("ups-mode", t("Omrežje", "Mains"));
+            play.count("gen", 413, 0, kw, t("ohlajanje", "cooling down"));
+            api.setReading("gen-state", t("Ohlajanje", "Cooling down"));
+            api.setReading("gen-v", volts(0));
+            api.setReading("gen-hz", `${n(0, 1)} Hz`);
+            play.count("battery", 96, 100, percent, runtime(14));
+            api.setReading("battery-runtime", "14 min");
+            api.setReading("fuel", percent(84), autonomy(40));
+            api.setReading("noc-incidents", "0", noIncident);
+            api.setAlarms([]);
+            api.log(
+              t(
+                "PQ_01 · Dovod A 231 V · incident zaprt",
+                "PQ_01 · Feed A 231 V · incident closed",
+              ),
+              "02:48",
+              "alarm",
+            );
+          },
+        },
+      ],
+    },
+    {
+      // Predictive maintenance: KAI on the battery monitor's readings.
+      id: "battery-forecast",
+      title: t("KAI napove okvaro baterije", "KAI predicts a battery failure"),
+      setup(api) {
+        api.setReading("battery-r", milliohm(3.2));
+        api.setReading("battery-soh", percent(94));
+        api.setReading("battery-temp", celsius(24.1));
+        api.setReading(
+          "kai-battery",
+          t("SoH 94 %", "SoH 94%"),
+          t("zamenjava čez ~26 mes.", "replace in ~26 months"),
+        );
+        api.setLevel("FLOOR_02", 1);
+        api.setAlarms([]);
+        api.pin("battery");
+        api.narrate({
+          rule: t(
+            "KAI: napoved okvare baterije UPS",
+            "KAI: UPS battery failure forecast",
+          ),
+        });
+      },
+      steps: [
+        {
+          time: "09:00",
+          focus: VIEW.ups,
+          title: t("Vsaka celica je merjena", "Every cell is measured"),
+          text: t(
+            "Nadzor BATT_01 meri napetost, notranjo upornost in temperaturo vsake celice v baterijskih nizih UPS-a. Baterija, ki odpove, tega ne pokaže prej kot ob izpadu – razen če jo kdo meri.",
+            "Monitor BATT_01 measures the voltage, internal resistance and temperature of every cell in the UPS battery strings. A battery about to fail shows nothing until the outage – unless someone measures it.",
+          ),
+          run(api) {
+            api.spotlight(api.$reading("battery"));
+          },
+        },
+        {
+          time: "09:05",
+          title: t("Upornost ene celice raste", "One cell's resistance climbs"),
+          text: t(
+            "Notranja upornost celice 14 v nizu 2 se je v treh tednih povečala s 3,2 na 4,6 mΩ, celica pa je toplejša od sosed. Nobena meja še ni presežena, zato običajen alarm molči.",
+            "The internal resistance of cell 14 in string 2 has risen from 3.2 to 4.6 mΩ in three weeks, and the cell runs warmer than its neighbours. No limit is crossed yet, so an ordinary alarm stays silent.",
+          ),
+          run(api, play) {
+            play.count("battery-r", 3.2, 4.6, milliohm);
+            play.count("battery-temp", 24.1, 26.8, celsius);
+            api.log(
+              t(
+                "BATT_01 · Celica 2/14 · upornost 4,6 mΩ · narašča",
+                "BATT_01 · Cell 2/14 · resistance 4.6 mΩ · rising",
+              ),
+              "09:05",
+              "reading",
+            );
+          },
+        },
+        {
+          time: "09:05",
+          title: t(
+            "KAI oceni, koliko časa je še",
+            "KAI estimates the time left",
+          ),
+          text: t(
+            "KAI trend primerja z vzorci staranja in oceni stanje niza (SoH) na 81 %. Napove, da bo niz pod mejo zanesljivosti čez približno pet mesecev, in to zapiše kot ugotovitev – ne kot alarm.",
+            "KAI compares the trend with ageing patterns and puts the string's state of health (SoH) at 81%. It forecasts that the string will fall below its reliability limit in about five months, and records that as a finding – not as an alarm.",
+          ),
+          run(api, play) {
+            play.count("battery-soh", 94, 81, percent);
+            api.setReading(
+              "kai-battery",
+              t("SoH 81 %", "SoH 81%"),
+              t("zamenjava čez ~5 mes.", "replace in ~5 months"),
+            );
+            api.spotlight(api.$reading("kai-battery"));
+            api.log(
+              t(
+                "KAI · Napoved: niz 2 pod mejo čez ~5 mesecev (SoH 81 %)",
+                "KAI · Forecast: string 2 below its limit in ~5 months (SoH 81%)",
+              ),
+              "09:05",
+              "decision",
+            );
+          },
+        },
+        {
+          time: "09:06",
+          title: t("Zamenjava se načrtuje", "The replacement is planned"),
+          text: t(
+            "Nexavia odpre delovni nalog v servisnem sistemu in zamenjavo uvrsti v naslednje redno vzdrževalno okno. Baterije so zamenjane po načrtu, ne ob izpadu.",
+            "Nexavia opens a ticket in the service desk and puts the replacement into the next planned maintenance window. The batteries are replaced on schedule, not during an outage.",
+          ),
+          run(api, play) {
+            play.toast(
+              t("KAI: baterija UPS", "KAI: UPS battery"),
+              t(
+                "Niz 2 · zamenjava v 5 mesecih · nalog odprt",
+                "String 2 · replace within 5 months · ticket opened",
+              ),
+              "09:06",
+            );
+            api.log(
+              t(
+                "Delovni nalog: zamenjava baterijskega niza 2",
+                "Ticket: replace battery string 2",
+              ),
+              "09:06",
+              "notify",
             );
           },
         },

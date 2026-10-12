@@ -4888,6 +4888,7 @@
 /* Guided scenarios: launcher strip, camera focus, lower-third player, notification toast. */
 .twin-scenarios {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 6px;
   padding: 0 1.5rem 0.9rem;
@@ -5306,7 +5307,9 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--kuem-data) 16%, transparent);
 }
 @media (max-width: 700px) {
+  /* On a phone the strip stays one row and scrolls sideways. */
   .twin-scenarios {
+    flex-wrap: nowrap;
     padding: 0 1rem 0.8rem;
   }
   .scenario-player {
@@ -6756,6 +6759,27 @@ button.twin-timeline-entry:focus-visible {
 }
 @media (prefers-reduced-motion: reduce) {
   .xdr-display .twin-theme-toggle svg {
+    transition: none;
+  }
+}
+
+/* Datacenter: the thermal map over the rack rows (datacenter.js). */
+.city-heatmap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  mix-blend-mode: hard-light;
+  transition: opacity var(--kuem-duration-slow) var(--kuem-ease-standard);
+}
+.city-art[data-heatmap="on"] .city-heatmap {
+  opacity: 0.8;
+}
+@media (prefers-reduced-motion: reduce) {
+  .city-heatmap {
     transition: none;
   }
 }
