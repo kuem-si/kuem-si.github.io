@@ -3,21 +3,35 @@ import type { Locale } from "../lib/i18n";
 import { withBase } from "../lib/paths";
 
 const { locale = "en" } = Astro.props as { locale?: Locale };
+const copy = {
+  sl: {
+    text: "Uporabljamo nujne piškotke in anonimizirano analitiko za izboljšanje spletnega mesta. Z nadaljevanjem soglasate s to uporabo. Preberite ",
+    href: "/zasebnost",
+    link: "politiko zasebnosti",
+    accept: "Sprejmi",
+  },
+  en: {
+    text: "We use essential cookies and anonymized analytics to improve this website. By continuing, you consent to this use. See our ",
+    href: "/en/privacy",
+    link: "privacy policy",
+    accept: "Accept",
+  },
+  de: {
+    text: "Wir verwenden notwendige Cookies und anonymisierte Analysen, um diese Website zu verbessern. Wenn Sie fortfahren, stimmen Sie dieser Nutzung zu. Lesen Sie unsere ",
+    href: "/de/datenschutz",
+    link: "Datenschutzerklärung",
+    accept: "Akzeptieren",
+  },
+}[locale];
 ---
 
 <div class="cookie-banner" id="cookie-banner" hidden>
   <p>
-    {
-      locale === "sl"
-        ? "Uporabljamo nujne piškotke in anonimizirano analitiko za izboljšanje spletnega mesta. Z nadaljevanjem soglasate s to uporabo. Preberite "
-        : "We use essential cookies and anonymized analytics to improve this website. By continuing, you consent to this use. See our "
-    }
-    <a href={withBase(locale === "sl" ? "/zasebnost" : "/en/privacy")}
-      >{locale === "sl" ? "politiko zasebnosti" : "privacy policy"}</a
-    >.
+    {copy.text}
+    <a href={withBase(copy.href)}>{copy.link}</a>.
   </p>
   <button class="btn btn-secondary" id="cookie-accept" type="button"
-    >{locale === "sl" ? "Sprejmi" : "Accept"}</button
+    >{copy.accept}</button
   >
 </div>
 

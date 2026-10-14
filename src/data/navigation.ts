@@ -18,6 +18,12 @@ export const primaryNavigation: Record<Locale, NavigationItem[]> = {
     { label: "Industries", href: "/en/industries" },
     { label: "About", href: "/en/company" },
   ],
+  de: [
+    { label: "Lösungen", href: "/de/loesungen" },
+    { label: "Nexavia", href: "/de/nexavia" },
+    { label: "Branchen", href: "/de/branchen" },
+    { label: "Über uns", href: "/de/unternehmen" },
+  ],
 };
 
 export const contactNavigation: Record<
@@ -33,6 +39,11 @@ export const contactNavigation: Record<
     label: "Book a presentation",
     shortLabel: "Contact",
     href: "/en/contact",
+  },
+  de: {
+    label: "Präsentation vereinbaren",
+    shortLabel: "Kontakt",
+    href: "/de/kontakt",
   },
 };
 

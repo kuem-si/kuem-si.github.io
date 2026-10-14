@@ -1,6 +1,6 @@
 import { defineConfig, envField } from "astro/config";
 import sitemap from "@astrojs/sitemap";
-import { alternatePath, getLocaleFromPath } from "./src/lib/i18n";
+import { localeAlternates, localeTags } from "./src/lib/i18n";
 
 export default defineConfig({
   site: "https://www.kuem.si",
@@ -10,13 +10,13 @@ export default defineConfig({
   // GitHub Pages issues native HTTP 301 redirects for these directories.
   build: { format: "directory" },
   // Native i18n declaration: Slovenian is the default locale and lives at the
-  // root (no prefix); English lives under /en/. Routing is manual because the
+  // root (no prefix); English lives under /en/ and German under /de/. Routing is manual because the
   // site uses custom localized slugs (e.g. /resitve vs /en/solutions), which
   // are handled by src/lib/i18n.ts. This declaration enables the astro:i18n
   // helpers and type-safe locale handling across the project.
   i18n: {
     defaultLocale: "sl",
-    locales: ["sl", "en"],
+    locales: ["sl", "en", "de"],
     routing: "manual",
   },
   env: {
@@ -104,22 +104,15 @@ export default defineConfig({
   integrations: [
     sitemap({
       // Every included URL is canonical; emit
-      // hreflang alternates for both locales.
+      // hreflang alternates for every locale.
       serialize: (item) => {
         const url = new URL(item.url);
-        const pathname = url.pathname.replace(/\/$/, "") || "/";
-        const locale = getLocaleFromPath(pathname);
-        const alternate = alternatePath(pathname);
-        const alternateUrl = new URL(alternate, url);
-        const links = [
-          { lang: locale === "sl" ? "sl-SI" : "en-GB", url: item.url },
-        ];
-        if (alternateUrl.pathname.replace(/\/$/, "") !== pathname) {
-          links.push({
-            lang: locale === "sl" ? "en-GB" : "sl-SI",
-            url: alternateUrl.href,
-          });
-        }
+        const links = Object.entries(localeAlternates(url.pathname)).map(
+          ([locale, path]) => ({
+            lang: localeTags[locale],
+            url: new URL(path, url).href,
+          }),
+        );
         return { ...item, links };
       },
     }),

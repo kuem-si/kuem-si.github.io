@@ -1,3 +1,4 @@
+import type { Locale } from "../../../lib/i18n";
 import type { ReadingRow, Sensor, Tone, Twin } from "./types";
 import geometry from "./marina-geometry.json";
 
@@ -8,10 +9,13 @@ import geometry from "./marina-geometry.json";
 // the restaurant, the car parks and the greenery serve both. Pins are grouped
 // into layers (one network at a time) and two sites. Hotspots, unlit patches
 // and sensor pins come from the generated geometry.
-export function marinaTwin(en: boolean): Twin {
-  const t = (sl: string, english: string) => (en ? english : sl);
-  const d = (value: string) => (en ? value : value.replace(".", ","));
-  const pct = (value: number | string) => t(`${value} %`, `${value}%`);
+export function marinaTwin(locale: Locale): Twin {
+  const t = (sl: string, en: string, de: string) => ({ sl, en, de })[locale];
+  // Slovenian and German use a decimal comma.
+  const d = (value: string) =>
+    locale === "en" ? value : value.replace(".", ",");
+  const pct = (value: number | string) =>
+    t(`${value} %`, `${value}%`, `${value} %`);
   const at = (key: string) =>
     (geometry.points as Record<string, number[]>)[key] as [number, number];
   const device = (
@@ -26,11 +30,11 @@ export function marinaTwin(en: boolean): Twin {
       : {};
     return { id, label, off, shape, anchor, ...target };
   };
-  const every1 = t("vsako minuto", "every minute");
-  const every5 = t("vsakih 5 min", "every 5 min");
-  const every15 = t("vsakih 15 min", "every 15 min");
-  const closed = t("Zaprta", "Closed");
-  const socketOff = t("IZKLOP", "OFF");
+  const every1 = t("vsako minuto", "every minute", "jede Minute");
+  const every5 = t("vsakih 5 min", "every 5 min", "alle 5 min");
+  const every15 = t("vsakih 15 min", "every 15 min", "alle 15 min");
+  const closed = t("Zaprta", "Closed", "Geschlossen");
+  const socketOff = t("IZKLOP", "OFF", "AUS");
 
   // A pin whose card shows one or more readings side by side. The first one
   // is the tracked value and carries the pin's key; the others carry their
@@ -88,43 +92,55 @@ export function marinaTwin(en: boolean): Twin {
 
   const { berths, parking } = geometry;
   const free = parking.total - parking.parked;
-  const socket = (kw: string) => t(`VKLOP · ${d(kw)} kW`, `ON · ${kw} kW`);
+  const socket = (kw: string) =>
+    t(`VKLOP · ${d(kw)} kW`, `ON · ${kw} kW`, `EIN · ${d(kw)} kW`);
 
   return {
     id: "marina",
     tab: {
-      title: t("Pametna marina in kamp", "Smart marina and camp"),
+      title: t(
+        "Pametna marina in kamp",
+        "Smart marina and camp",
+        "Smarte Marina und Campingplatz",
+      ),
       meta: t(
         "Maketa 60 × 60 cm · 10 naprav · 30 senzorjev",
         "60 × 60 cm model · 10 devices · 30 sensors",
+        "Modell 60 × 60 cm · 10 Geräte · 30 Sensoren",
       ),
     },
     intro: {
       title: t(
         "Marina in kamp, ki vesta, kaj se dogaja na vsakem privezu in parceli.",
         "A marina and a camp that know what is happening on every berth and pitch.",
+        "Eine Marina und ein Campingplatz, die wissen, was an jedem Liegeplatz und Stellplatz passiert.",
       ),
       lead: t(
         "Vsaka priključna omarica na pomolu meri elektriko in vodo po privezu, prepozna gosta po kartici NFC in ve, ali je plovilo na privezu – vse gre samodejno na račun ob odhodu. V kampu recepcija ob prijavi gosta vklopi parcelo ali mobilno hišico, ki se predhodno ohladi, ob odjavi pa končna poraba odide v obračun. Hotelski bazen, restavracija, parkirišča, polnilnice in zelenice služijo obema, senzorji morja, vremena in varnosti pa varujejo ljudi, plovila in elektriko na pomolih.",
         "Every service pedestal on the piers meters power and water per berth, recognises the guest by their NFC card and knows whether the boat is on its berth – and all of it goes on the bill at departure without a manual reading. In the camp, the reception switches a pitch or a mobile home on at check-in, pre-cooling it, and sends the final reading to billing at check-out. The hotel pool, the restaurant, the car parks, the EV chargers and the greenery serve both, while sea, weather and safety sensors protect people, boats and the electricity on the piers.",
+        "Jede Versorgungssäule am Steg misst Strom und Wasser pro Liegeplatz, erkennt den Gast an seiner NFC-Karte und weiß, ob das Boot am Liegeplatz liegt – und alles landet bei der Abreise ohne manuelle Ablesung auf der Rechnung. Auf dem Campingplatz schaltet die Rezeption beim Check-in einen Stellplatz oder ein Mobilheim ein, das vorgekühlt wird, und schickt beim Check-out den Endstand an die Abrechnung. Hotelpool, Restaurant, Parkplätze, Ladestationen und Grünflächen dienen beiden, während Sensoren für Meer, Wetter und Sicherheit Menschen, Boote und die Stromversorgung an den Stegen schützen.",
       ),
     },
     panel: {
       view: t(
         "Pogled marine in kampa · povlecite za raziskovanje",
         "Marina and camp view · drag to explore",
+        "Ansicht von Marina und Campingplatz · ziehen zum Erkunden",
       ),
       hint: t(
         "Izberite lokacijo ali plast senzorjev, kliknite senzor, da pošlje meritev, ali luč, hotel, restavracijo, sanitarije oz. mobilno hišico za vklop in izklop",
         "Pick a site or a sensor layer, click a sensor to send a reading, or a light, the hotel, restaurant, a sanitary block or a mobile home to switch it on or off",
+        "Wählen Sie einen Standort oder eine Sensorebene, klicken Sie auf einen Sensor, um einen Messwert zu senden, oder auf eine Leuchte, das Hotel, das Restaurant, einen Sanitärblock oder ein Mobilheim, um es ein- oder auszuschalten",
       ),
       hintPanel: t(
         "Kartica priključne omarice izklopi vtičnico na daljavo in pokaže svojo vrstico na nadzorni plošči.",
         "A pedestal's card switches its socket remotely and points at its row on the dashboard.",
+        "Die Karte einer Versorgungssäule schaltet ihre Steckdose aus der Ferne und zeigt ihre Zeile im Dashboard.",
       ),
       step: t(
         "Senzor bere svetlobo okolice",
         "Sensor is reading ambient light",
+        "Sensor misst das Umgebungslicht",
       ),
     },
     scene: {
@@ -134,6 +150,7 @@ export function marinaTwin(en: boolean): Twin {
       alt: t(
         "Maketa marine in kampa velikosti 60 × 60 cm iz štirih modulov velikosti 30 × 30 cm: v sredini bazen s pomoli, priključnimi omaricami in privezanimi plovili, boja za kakovost vode in svetilnika ob vhodu, ob njem hotel z bazenom, restavracija, sanitarni blok, parkirišči z zabojnikoma za odpadke in polnilnicama za električna vozila, točilnica goriva s postajo za praznjenje fekalnih tankov in kapitanija z vremensko postajo, v ozadju kamp z recepcijo in zapornico, razdelilno omarico, dvema mobilnima hišicama, sanitarnim blokom s sončnimi kolektorji in parcelami s počitniškimi prikolicami",
         "60 by 60 centimetre marina and camp maquette of four 30 by 30 centimetre modules: a basin with piers, service pedestals and moored boats in the middle, a water-quality buoy and harbour lights at the entrance, around it a hotel with a pool, a restaurant, a sanitary block, two car parks with waste containers and electric vehicle chargers, a fuel dock with a pump-out station and the harbour office with a weather station, and behind it a camp with a reception and barrier, a feeder cabinet, two mobile homes, a sanitary block with solar collectors and pitches with holiday trailers",
+        "Modell einer Marina mit Campingplatz im Format 60 × 60 cm aus vier Modulen à 30 × 30 cm: in der Mitte ein Hafenbecken mit Stegen, Versorgungssäulen und festgemachten Booten, eine Wasserqualitätsboje und Hafenfeuer an der Einfahrt, daneben ein Hotel mit Pool, ein Restaurant, ein Sanitärblock, zwei Parkplätze mit Abfallbehältern und Ladestationen für Elektrofahrzeuge, eine Tankstelle mit Absauganlage und das Hafenbüro mit Wetterstation, dahinter ein Campingplatz mit Rezeption und Schranke, Verteilerschrank, zwei Mobilheimen, einem Sanitärblock mit Solarkollektoren und Stellplätzen mit Wohnwagen",
       ),
       lightsDir: "/images/nexavia/showcase-room/marina/lights",
       water: "/images/nexavia/showcase-room/marina/water.webp",
@@ -143,78 +160,120 @@ export function marinaTwin(en: boolean): Twin {
       modules: [
         {
           letter: "A",
-          name: t("Kamp · hotel", "Camp · hotel"),
+          name: t("Kamp · hotel", "Camp · hotel", "Campingplatz · Hotel"),
           plan: [520, 236],
           label: [22, 18],
         },
         {
           letter: "B",
-          name: t("Kamp · restavracija", "Camp · restaurant"),
+          name: t(
+            "Kamp · restavracija",
+            "Camp · restaurant",
+            "Campingplatz · Restaurant",
+          ),
           plan: [1010, 236],
           label: [66, 18],
         },
         {
           letter: "C",
-          name: t("Pomoli · parkirišče", "Piers · parking"),
+          name: t(
+            "Pomoli · parkirišče",
+            "Piers · parking",
+            "Stege · Parkplatz",
+          ),
           plan: [480, 566],
           label: [16, 57],
         },
         {
           letter: "D",
-          name: t("Pomoli · storitve", "Piers · services"),
+          name: t("Pomoli · storitve", "Piers · services", "Stege · Services"),
           plan: [1080, 566],
           label: [72, 57],
         },
       ],
       sites: [
-        { id: "all", label: t("Marina + kamp", "Marina + camp") },
+        {
+          id: "all",
+          label: t("Marina + kamp", "Marina + camp", "Marina + Campingplatz"),
+        },
         {
           id: "marina",
-          label: t("Marina", "Marina"),
+          label: t("Marina", "Marina", "Marina"),
           focus: { x: 768, y: 470, zoom: 1.2 },
         },
         {
           id: "camp",
-          label: t("Kamp", "Camp"),
+          label: t("Kamp", "Camp", "Campingplatz"),
           focus: { x: 760, y: 175, zoom: 1.7 },
         },
       ],
       layers: [
-        { id: "power", label: t("Elektrika", "Electricity") },
-        { id: "water", label: t("Voda", "Water") },
-        { id: "guests", label: t("Gostje", "Guests") },
-        { id: "environment", label: t("Morje in vreme", "Sea and weather") },
-        { id: "safety", label: t("Varnost", "Safety") },
-        { id: "services", label: t("Storitve", "Services") },
+        { id: "power", label: t("Elektrika", "Electricity", "Strom") },
+        { id: "water", label: t("Voda", "Water", "Wasser") },
+        { id: "guests", label: t("Gostje", "Guests", "Gäste") },
+        {
+          id: "environment",
+          label: t("Morje in vreme", "Sea and weather", "Meer und Wetter"),
+        },
+        { id: "safety", label: t("Varnost", "Safety", "Sicherheit") },
+        { id: "services", label: t("Storitve", "Services", "Services") },
       ],
       lighting: [
-        device("HOTEL_01", t("Razsvetljava hotela", "Hotel lighting")),
+        device(
+          "HOTEL_01",
+          t("Razsvetljava hotela", "Hotel lighting", "Beleuchtung Hotel"),
+        ),
         device(
           "RESTAURANT_01",
           t(
             "Razsvetljava restavracije in terase",
             "Restaurant and terrace lighting",
+            "Beleuchtung Restaurant und Terrasse",
           ),
         ),
         device(
           "SANITARY_01",
-          t("Razsvetljava sanitarij", "Sanitary block lighting"),
+          t(
+            "Razsvetljava sanitarij",
+            "Sanitary block lighting",
+            "Beleuchtung Sanitärblock",
+          ),
         ),
-        device("PIER_01", t("Luč pomola A1", "Pier light A1"), true),
-        device("PIER_02", t("Luč pomola A2", "Pier light A2"), true),
-        device("PIER_03", t("Luč pomola B1", "Pier light B1"), true),
-        device("PIER_04", t("Luč pomola B2", "Pier light B2"), true),
+        device(
+          "PIER_01",
+          t("Luč pomola A1", "Pier light A1", "Stegleuchte A1"),
+          true,
+        ),
+        device(
+          "PIER_02",
+          t("Luč pomola A2", "Pier light A2", "Stegleuchte A2"),
+          true,
+        ),
+        device(
+          "PIER_03",
+          t("Luč pomola B1", "Pier light B1", "Stegleuchte B1"),
+          true,
+        ),
+        device(
+          "PIER_04",
+          t("Luč pomola B2", "Pier light B2", "Stegleuchte B2"),
+          true,
+        ),
         device(
           "MOBILE_HOME_01",
-          t("Mobilna hišica MH-01", "Mobile home MH-01"),
+          t("Mobilna hišica MH-01", "Mobile home MH-01", "Mobilheim MH-01"),
         ),
         device(
           "MOBILE_HOME_02",
-          t("Mobilna hišica MH-02", "Mobile home MH-02"),
+          t("Mobilna hišica MH-02", "Mobile home MH-02", "Mobilheim MH-02"),
         ),
         device(
           "CAMP_SANITARY_01",
-          t("Razsvetljava sanitarij v kampu", "Camp sanitary block lighting"),
+          t(
+            "Razsvetljava sanitarij v kampu",
+            "Camp sanitary block lighting",
+            "Beleuchtung Sanitärblock Campingplatz",
+          ),
         ),
       ],
       sensors: [
@@ -226,17 +285,36 @@ export function marinaTwin(en: boolean): Twin {
           "power",
           "marina",
           "kW",
-          t("Priključna omarica priveza A-05", "Berth A-05 service pedestal"),
-          t("Privez A-05 · jahta Mirta", "Berth A-05 · yacht Mirta"),
+          t(
+            "Priključna omarica priveza A-05",
+            "Berth A-05 service pedestal",
+            "Versorgungssäule Liegeplatz A-05",
+          ),
+          t(
+            "Privez A-05 · jahta Mirta",
+            "Berth A-05 · yacht Mirta",
+            "Liegeplatz A-05 · Yacht Mirta",
+          ),
           [
-            [t("Vtičnica 16 A", "Socket 16 A"), socket("2.3")],
             [
-              t("Napetost · tok", "Voltage · current"),
+              t("Vtičnica 16 A", "Socket 16 A", "Steckdose 16 A"),
+              socket("2.3"),
+            ],
+            [
+              t("Napetost · tok", "Voltage · current", "Spannung · Strom"),
               "231 V · 10 A",
               "pedestal-a-v",
             ],
-            [t("Ta postanek", "This stay"), d("31.7 kWh"), "pedestal-a-kwh"],
-            [t("Gost · NFC", "Guest · NFC"), "I. Kos ✓", "pedestal-a-guest"],
+            [
+              t("Ta postanek", "This stay", "Dieser Aufenthalt"),
+              d("31.7 kWh"),
+              "pedestal-a-kwh",
+            ],
+            [
+              t("Gost · NFC", "Guest · NFC", "Gast · NFC"),
+              "I. Kos ✓",
+              "pedestal-a-guest",
+            ],
           ],
           {
             card: meter,
@@ -249,6 +327,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Vtičnica se vklopi le s kartico gosta · kWh na račun priveza · preobremenitev → alarm",
               "Socket switches on only with the guest's card · kWh billed to the berth · overload → alarm",
+              "Steckdose schaltet nur mit der Karte des Gastes ein · kWh auf den Liegeplatz abgerechnet · Überlast → Alarm",
             ),
           },
         ),
@@ -259,13 +338,36 @@ export function marinaTwin(en: boolean): Twin {
           "power",
           "marina",
           "kW",
-          t("Priključna omarica priveza B-06", "Berth B-06 service pedestal"),
-          t("Privez B-06 · Galeb, 11,4 m", "Berth B-06 · Galeb, 11.4 m"),
+          t(
+            "Priključna omarica priveza B-06",
+            "Berth B-06 service pedestal",
+            "Versorgungssäule Liegeplatz B-06",
+          ),
+          t(
+            "Privez B-06 · Galeb, 11,4 m",
+            "Berth B-06 · Galeb, 11.4 m",
+            "Liegeplatz B-06 · Galeb, 11,4 m",
+          ),
           [
-            [t("Vtičnica 16 A", "Socket 16 A"), socket("1.6")],
-            [t("Faktor moči", "Power factor"), d("0.96"), "pedestal-b-pf"],
-            [t("Ta postanek", "This stay"), d("18.2 kWh"), "pedestal-b-kwh"],
-            [t("Gost · NFC", "Guest · NFC"), "K. Horvat ✓", "pedestal-b-guest"],
+            [
+              t("Vtičnica 16 A", "Socket 16 A", "Steckdose 16 A"),
+              socket("1.6"),
+            ],
+            [
+              t("Faktor moči", "Power factor", "Leistungsfaktor"),
+              d("0.96"),
+              "pedestal-b-pf",
+            ],
+            [
+              t("Ta postanek", "This stay", "Dieser Aufenthalt"),
+              d("18.2 kWh"),
+              "pedestal-b-kwh",
+            ],
+            [
+              t("Gost · NFC", "Guest · NFC", "Gast · NFC"),
+              "K. Horvat ✓",
+              "pedestal-b-guest",
+            ],
           ],
           {
             card: meter,
@@ -279,6 +381,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Kartica NFC vklopi le gostovo vtičnico · poraba na račun",
               "The guest's NFC card switches on only their socket · use billed",
+              "Die NFC-Karte des Gastes schaltet nur seine Steckdose ein · Verbrauch wird abgerechnet",
             ),
           },
         ),
@@ -289,14 +392,26 @@ export function marinaTwin(en: boolean): Twin {
           "water",
           "marina",
           "m³",
-          t("Vodomer priveza A-09", "Berth A-09 water meter"),
-          t("Voda na privezu A-09", "Water at berth A-09"),
+          t(
+            "Vodomer priveza A-09",
+            "Berth A-09 water meter",
+            "Wasserzähler Liegeplatz A-09",
+          ),
+          t(
+            "Voda na privezu A-09",
+            "Water at berth A-09",
+            "Wasser am Liegeplatz A-09",
+          ),
           [
-            [t("Pretok", "Flow"), d("0.00 m³/h")],
-            [t("Ta postanek", "This stay"), d("0.46 m³"), "berth-water-stay"],
+            [t("Pretok", "Flow", "Durchfluss"), d("0.00 m³/h")],
             [
-              t("Stalni pretok", "Continuous flow"),
-              t("Ne", "No"),
+              t("Ta postanek", "This stay", "Dieser Aufenthalt"),
+              d("0.46 m³"),
+              "berth-water-stay",
+            ],
+            [
+              t("Stalni pretok", "Continuous flow", "Dauerdurchfluss"),
+              t("Ne", "No", "Nein"),
               "berth-water-cont",
             ],
           ],
@@ -307,6 +422,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Pravilo: stalni pretok > 30 min → alarm in zapiranje ventila · KAI: poraba glede na plovilo",
               "Rule: continuous flow > 30 min → alarm and valve closed · KAI: use against the boat's history",
+              "Regel: Dauerdurchfluss > 30 min → Alarm und Ventil geschlossen · KAI: Verbrauch im Vergleich zur Historie des Boots",
             ),
           },
         ),
@@ -316,19 +432,36 @@ export function marinaTwin(en: boolean): Twin {
           "mobility",
           "guests",
           "marina",
-          t("Privezi", "Berths"),
-          t("Senzorji zasedenosti privezov", "Berth occupancy sensors"),
-          t("Zasedenost privezov", "Berth occupancy"),
+          t("Privezi", "Berths", "Liegeplätze"),
+          t(
+            "Senzorji zasedenosti privezov",
+            "Berth occupancy sensors",
+            "Belegungssensoren Liegeplätze",
+          ),
+          t(
+            "Zasedenost privezov",
+            "Berth occupancy",
+            "Belegung der Liegeplätze",
+          ),
           [
-            [t("Zasedeni", "Occupied"), String(berths.occupied)],
-            [t("Prihodi danes", "Arrivals today"), "3", "berths-in"],
-            [t("Brez rezervacije", "No booking"), "1", "berths-unauth"],
+            [t("Zasedeni", "Occupied", "Belegt"), String(berths.occupied)],
+            [
+              t("Prihodi danes", "Arrivals today", "Ankünfte heute"),
+              "3",
+              "berths-in",
+            ],
+            [
+              t("Brez rezervacije", "No booking", "Keine Buchung"),
+              "1",
+              "berths-unauth",
+            ],
           ],
           {
             every: undefined,
             uses: t(
               "Pravilo: plovilo na privezu brez rezervacije → izklop vtičnice in obvestilo kapitaniji",
               "Rule: boat on a berth without a booking → socket off and harbour office notified",
+              "Regel: Boot am Liegeplatz ohne Buchung → Steckdose aus und Hafenbüro benachrichtigt",
             ),
           },
         ),
@@ -339,12 +472,20 @@ export function marinaTwin(en: boolean): Twin {
           "power",
           "marina",
           "kWh",
-          t("Razdelilna omara pomola B", "Pier B feeder cabinet"),
-          t("Elektrika na pomolu B", "Pier B shore power"),
+          t(
+            "Razdelilna omara pomola B",
+            "Pier B feeder cabinet",
+            "Verteilerschrank Steg B",
+          ),
+          t("Elektrika na pomolu B", "Pier B shore power", "Landstrom Steg B"),
           [
-            [t("Danes", "Today"), d("46.8 kWh")],
-            [t("Zdaj", "Now"), d("18.4 kW"), "shore-kw"],
-            [t("Konica danes", "Peak today"), "31 kW", "shore-peak"],
+            [t("Danes", "Today", "Heute"), d("46.8 kWh")],
+            [t("Zdaj", "Now", "Jetzt"), d("18.4 kW"), "shore-kw"],
+            [
+              t("Konica danes", "Peak today", "Spitze heute"),
+              "31 kW",
+              "shore-peak",
+            ],
           ],
           {
             card: meter,
@@ -352,6 +493,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Konica po pomolu in coni · KAI napove večerno konico, ko vse jahte vklopijo klimo",
               "Peak per pier and zone · KAI forecasts the evening peak when every yacht turns on its AC",
+              "Spitze pro Steg und Zone · KAI prognostiziert die Abendspitze, wenn alle Yachten ihre Klimaanlage einschalten",
             ),
           },
         ),
@@ -361,25 +503,34 @@ export function marinaTwin(en: boolean): Twin {
           "gas",
           "services",
           "marina",
-          t("Gorivo", "Fuel"),
-          t("Senzor rezervoarja točilnice", "Fuel dock tank sensor"),
-          t("Točilnica goriva", "Fuel dock"),
+          t("Gorivo", "Fuel", "Kraftstoff"),
+          t(
+            "Senzor rezervoarja točilnice",
+            "Fuel dock tank sensor",
+            "Tanksensor Bootstankstelle",
+          ),
+          t("Točilnica goriva", "Fuel dock", "Bootstankstelle"),
           [
-            [t("Rezervoar", "Tank"), pct(72)],
-            [t("Natočeno danes", "Dispensed today"), "184 L", "fuel-day"],
+            [t("Rezervoar", "Tank", "Tank"), pct(72)],
             [
-              t("Zadnje", "Last"),
-              t("Galeb · 46 L", "Galeb · 46 L"),
+              t("Natočeno danes", "Dispensed today", "Heute getankt"),
+              "184 L",
+              "fuel-day",
+            ],
+            [
+              t("Zadnje", "Last", "Zuletzt"),
+              t("Galeb · 46 L", "Galeb · 46 L", "Galeb · 46 L"),
               "fuel-last",
             ],
           ],
           {
             side: "above",
             align: "end",
-            every: t("vsako uro", "every hour"),
+            every: t("vsako uro", "every hour", "jede Stunde"),
             uses: t(
               "Litri po plovilu na račun gosta · zaloga < 25 % → naročilo dobavitelju",
               "Litres per boat on the guest's bill · stock < 25% → order from the supplier",
+              "Liter pro Boot auf der Rechnung des Gastes · Bestand < 25 % → Bestellung beim Lieferanten",
             ),
           },
         ),
@@ -389,13 +540,29 @@ export function marinaTwin(en: boolean): Twin {
           "water",
           "services",
           "marina",
-          t("Fekalije", "Pump-out"),
-          t("Postaja za praznjenje fekalnih tankov", "Pump-out station"),
-          t("Praznjenje fekalnih tankov", "Pump-out station"),
+          t("Fekalije", "Pump-out", "Absaugung"),
+          t(
+            "Postaja za praznjenje fekalnih tankov",
+            "Pump-out station",
+            "Fäkalien-Absauganlage",
+          ),
+          t(
+            "Praznjenje fekalnih tankov",
+            "Pump-out station",
+            "Fäkalien-Absauganlage",
+          ),
           [
-            [t("Zbirni rezervoar", "Holding tank"), pct(38)],
-            [t("Črpalka", "Pump"), t("Pripravljena", "Ready"), "pumpout-pump"],
-            [t("Danes", "Today"), t("3 plovila", "3 boats"), "pumpout-day"],
+            [t("Zbirni rezervoar", "Holding tank", "Sammeltank"), pct(38)],
+            [
+              t("Črpalka", "Pump", "Pumpe"),
+              t("Pripravljena", "Ready", "Bereit"),
+              "pumpout-pump",
+            ],
+            [
+              t("Danes", "Today", "Heute"),
+              t("3 plovila", "3 boats", "3 Boote"),
+              "pumpout-day",
+            ],
           ],
           {
             side: "above",
@@ -404,6 +571,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Rezervoar > 80 % → naročilo odvoza · napaka črpalke → alarm",
               "Tank > 80% → collection ordered · pump fault → alarm",
+              "Tank > 80 % → Abholung bestellt · Pumpenstörung → Alarm",
             ),
           },
         ),
@@ -417,13 +585,22 @@ export function marinaTwin(en: boolean): Twin {
           t(
             "Kapitanija · rezervacijski sistem",
             "Harbour office · booking system",
+            "Hafenbüro · Buchungssystem",
           ),
-          t("Rezervacije privezov", "Berth bookings"),
+          t("Rezervacije privezov", "Berth bookings", "Liegeplatzbuchungen"),
           [
-            [t("Prihodi danes", "Arrivals today"), "3"],
-            [t("Odhodi danes", "Departures today"), "2", "pms-marina-out"],
+            [t("Prihodi danes", "Arrivals today", "Ankünfte heute"), "3"],
             [
-              t("Samodejni obračun", "Billed automatically"),
+              t("Odhodi danes", "Departures today", "Abreisen heute"),
+              "2",
+              "pms-marina-out",
+            ],
+            [
+              t(
+                "Samodejni obračun",
+                "Billed automatically",
+                "Automatisch abgerechnet",
+              ),
               pct(100),
               "pms-marina-bill",
             ],
@@ -435,6 +612,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Rezervacija vklopi storitve priveza · ob odhodu gre poraba v obračun",
               "A booking switches the berth's services on · at departure the use goes to billing",
+              "Eine Buchung schaltet die Services des Liegeplatzes ein · bei der Abreise geht der Verbrauch in die Abrechnung",
             ),
           },
         ),
@@ -445,8 +623,8 @@ export function marinaTwin(en: boolean): Twin {
           tone: "light",
           layer: "environment",
           tag: "lx",
-          label: t("Senzor svetlobe", "Light sensor"),
-          event: t("Svetloba okolice", "Ambient light"),
+          label: t("Senzor svetlobe", "Light sensor", "Lichtsensor"),
+          event: t("Svetloba okolice", "Ambient light", "Umgebungslicht"),
           at: [330, 212],
           side: "below",
           align: "start",
@@ -454,12 +632,13 @@ export function marinaTwin(en: boolean): Twin {
           uses: t(
             "Pravilo: svetloba < 25 lx → vklop razsvetljave",
             "Rule: light < 25 lx → lighting on",
+            "Regel: Licht < 25 lx → Beleuchtung ein",
           ),
           card: {
             kind: "sensor",
-            title: t("Svetloba okolice", "Ambient light"),
+            title: t("Svetloba okolice", "Ambient light", "Umgebungslicht"),
             value: "52 lx",
-            note: t("Streha hotela", "Hotel roof"),
+            note: t("Streha hotela", "Hotel roof", "Dach des Hotels"),
           },
         },
         pin(
@@ -468,13 +647,21 @@ export function marinaTwin(en: boolean): Twin {
           "water",
           "environment",
           "marina",
-          t("Morje", "Sea"),
-          t("Senzor gladine morja in valov", "Sea level and wave sensor"),
-          t("Gladina morja", "Sea level"),
+          t("Morje", "Sea", "Meer"),
+          t(
+            "Senzor gladine morja in valov",
+            "Sea level and wave sensor",
+            "Sensor für Meeresspiegel und Wellen",
+          ),
+          t("Gladina morja", "Sea level", "Meeresspiegel"),
           [
-            [t("Gladina", "Level"), d("+0.42 m")],
+            [t("Gladina", "Level", "Pegel"), d("+0.42 m")],
             [
-              t("Valovi na vhodu", "Waves at the entrance"),
+              t(
+                "Valovi na vhodu",
+                "Waves at the entrance",
+                "Wellen an der Einfahrt",
+              ),
               d("0.3 m"),
               "sea-waves",
             ],
@@ -484,6 +671,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Pravilo: gladina > +0,70 m → izklop priključkov",
               "Rule: sea level > +0.70 m → pedestals cut off",
+              "Regel: Meeresspiegel > +0,70 m → Versorgungssäulen abgeschaltet",
             ),
           },
         ),
@@ -493,15 +681,19 @@ export function marinaTwin(en: boolean): Twin {
           "water",
           "environment",
           "marina",
-          t("Boja", "Buoy"),
-          t("Boja za kakovost morja", "Water-quality buoy"),
-          t("Kakovost morja", "Sea water quality"),
+          t("Boja", "Buoy", "Boje"),
+          t(
+            "Boja za kakovost morja",
+            "Water-quality buoy",
+            "Wasserqualitätsboje",
+          ),
+          t("Kakovost morja", "Sea water quality", "Meerwasserqualität"),
           [
-            [t("Temperatura", "Temperature"), d("19.4 °C")],
-            [t("Slanost", "Salinity"), d("37.8 PSU"), "buoy-sal"],
+            [t("Temperatura", "Temperature", "Temperatur"), d("19.4 °C")],
+            [t("Slanost", "Salinity", "Salzgehalt"), d("37.8 PSU"), "buoy-sal"],
             ["pH", d("8.1"), "buoy-ph"],
-            [t("Motnost", "Turbidity"), d("2.1 NTU"), "buoy-ntu"],
-            [t("Kisik", "Oxygen"), d("7.6 mg/l"), "buoy-o2"],
+            [t("Motnost", "Turbidity", "Trübung"), d("2.1 NTU"), "buoy-ntu"],
+            [t("Kisik", "Oxygen", "Sauerstoff"), d("7.6 mg/l"), "buoy-o2"],
           ],
           {
             side: "above",
@@ -509,6 +701,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Okoljski monitoring za modro zastavo · nenadna motnost → sum razlitja",
               "Environmental record for the Blue Flag · sudden turbidity → suspected spill",
+              "Umweltnachweis für die Blaue Flagge · plötzliche Trübung → Verdacht auf Ölaustritt",
             ),
           },
         ),
@@ -519,15 +712,15 @@ export function marinaTwin(en: boolean): Twin {
           "environment",
           undefined,
           "kn",
-          t("Vremenska postaja", "Weather station"),
-          t("Veter in vreme", "Wind and weather"),
+          t("Vremenska postaja", "Weather station", "Wetterstation"),
+          t("Veter in vreme", "Wind and weather", "Wind und Wetter"),
           [
-            [t("Veter", "Wind"), "9 kn"],
-            [t("Sunki", "Gusts"), "13 kn", "wind-gust"],
-            [t("Temp.", "Temp."), d("17.9 °C"), "wind-temp"],
-            [t("Tlak", "Pressure"), "1016 hPa", "wind-hpa"],
-            [t("Vlaga", "Humidity"), pct(64), "wind-rh"],
-            [t("Dež", "Rain"), "0 mm", "wind-rain"],
+            [t("Veter", "Wind", "Wind"), "9 kn"],
+            [t("Sunki", "Gusts", "Böen"), "13 kn", "wind-gust"],
+            [t("Temp.", "Temp.", "Temp."), d("17.9 °C"), "wind-temp"],
+            [t("Tlak", "Pressure", "Luftdruck"), "1016 hPa", "wind-hpa"],
+            [t("Vlaga", "Humidity", "Luftfeuchtigkeit"), pct(64), "wind-rh"],
+            [t("Dež", "Rain", "Regen"), "0 mm", "wind-rain"],
           ],
           {
             eventNote: true,
@@ -538,6 +731,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Sunki > 30 kn → opozorilo lastnikom · padec tlaka → opozorilo na burjo",
               "Gusts > 30 kn → owners warned · falling pressure → bora warning",
+              "Böen > 30 kn → Eigner gewarnt · fallender Luftdruck → Bora-Warnung",
             ),
           },
         ),
@@ -549,19 +743,32 @@ export function marinaTwin(en: boolean): Twin {
           "safety",
           "marina",
           "!",
-          t("Zaščita omarice pomola B1", "Pier B1 cabinet protection"),
-          t("Omarica pomola B1", "Pier B1 cabinet"),
+          t(
+            "Zaščita omarice pomola B1",
+            "Pier B1 cabinet protection",
+            "Schutz Schrank Steg B1",
+          ),
+          t("Omarica pomola B1", "Pier B1 cabinet", "Schrank Steg B1"),
           [
-            [t("Vrata", "Door"), closed],
-            [t("Temperatura", "Temperature"), "31 °C", "cabinet-temp"],
-            [t("Voda", "Water"), t("Suho", "Dry"), "cabinet-flood"],
-            [t("Nagib", "Tilt"), "0°", "cabinet-tilt"],
+            [t("Vrata", "Door", "Tür"), closed],
+            [
+              t("Temperatura", "Temperature", "Temperatur"),
+              "31 °C",
+              "cabinet-temp",
+            ],
+            [
+              t("Voda", "Water", "Wasser"),
+              t("Suho", "Dry", "Trocken"),
+              "cabinet-flood",
+            ],
+            [t("Nagib", "Tilt", "Neigung"), "0°", "cabinet-tilt"],
           ],
           {
             every: undefined,
             uses: t(
               "Odprta vrata, pregrevanje, voda ali udarec plovila → alarm in izklop omarice",
               "Door opened, overheating, water or a boat strike → alarm and the cabinet switched off",
+              "Tür geöffnet, Überhitzung, Wasser oder Bootsanprall → Alarm und Schrank abgeschaltet",
             ),
           },
         ),
@@ -571,13 +778,25 @@ export function marinaTwin(en: boolean): Twin {
           "light",
           "safety",
           "marina",
-          t("Svetilnik", "Beacons"),
-          t("Svetilnika ob vhodu v marino", "Harbour entrance lights"),
-          t("Svetilnika ob vhodu", "Harbour entrance lights"),
+          t("Svetilnik", "Beacons", "Leuchtfeuer"),
+          t(
+            "Svetilnika ob vhodu v marino",
+            "Harbour entrance lights",
+            "Hafenfeuer an der Einfahrt",
+          ),
+          t(
+            "Svetilnika ob vhodu",
+            "Harbour entrance lights",
+            "Hafenfeuer an der Einfahrt",
+          ),
           [
-            [t("Rdeča", "Red"), t("Deluje", "Working")],
-            [t("Zelena", "Green"), t("Deluje", "Working"), "nav-green"],
-            [t("Poraba", "Power"), "6 W", "nav-w"],
+            [t("Rdeča", "Red", "Rot"), t("Deluje", "Working", "In Betrieb")],
+            [
+              t("Zelena", "Green", "Grün"),
+              t("Deluje", "Working", "In Betrieb"),
+              "nav-green",
+            ],
+            [t("Poraba", "Power", "Leistung"), "6 W", "nav-w"],
           ],
           {
             side: "above",
@@ -585,6 +804,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Ugasnjen svetilnik → takojšen alarm kapitaniji, ne le servisni nalog",
               "A dark beacon → instant alarm to the harbour office, not just a maintenance ticket",
+              "Ein dunkles Leuchtfeuer → sofortiger Alarm an das Hafenbüro, nicht nur ein Wartungsauftrag",
             ),
           },
         ),
@@ -598,11 +818,16 @@ export function marinaTwin(en: boolean): Twin {
           t(
             "Javljalnik dima · kuhinja restavracije",
             "Smoke detector · restaurant kitchen",
+            "Rauchmelder · Restaurantküche",
           ),
-          t("Dim · kuhinja", "Smoke · kitchen"),
+          t("Dim · kuhinja", "Smoke · kitchen", "Rauch · Küche"),
           [
-            [t("Dim", "Smoke"), d("0.02 %/m")],
-            [t("Stanje", "Status"), t("Ni dima", "Clear"), "smoke-state"],
+            [t("Dim", "Smoke", "Rauch"), d("0.02 %/m")],
+            [
+              t("Stanje", "Status", "Status"),
+              t("Ni dima", "Clear", "Kein Rauch"),
+              "smoke-state",
+            ],
           ],
           {
             align: "end",
@@ -610,6 +835,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Dim → alarm dežurnemu in izklop plina v kuhinji",
               "Smoke → alarm to the person on call and the kitchen gas shut off",
+              "Rauch → Alarm an die Bereitschaft und Gaszufuhr der Küche abgesperrt",
             ),
           },
         ),
@@ -621,11 +847,19 @@ export function marinaTwin(en: boolean): Twin {
           "power",
           undefined,
           "kW",
-          t("Električni števec hotela", "Hotel electricity meter"),
-          t("Poraba elektrike · hotel", "Electricity use · hotel"),
+          t(
+            "Električni števec hotela",
+            "Hotel electricity meter",
+            "Stromzähler Hotel",
+          ),
+          t(
+            "Poraba elektrike · hotel",
+            "Electricity use · hotel",
+            "Stromverbrauch · Hotel",
+          ),
           [
-            [t("Trenutna moč", "Current load"), d("38.5 kW")],
-            [t("Danes", "Today"), "412 kWh", "hotel-kwh"],
+            [t("Trenutna moč", "Current load", "Aktuelle Last"), d("38.5 kW")],
+            [t("Danes", "Today", "Heute"), "412 kWh", "hotel-kwh"],
           ],
           { card: meter, every: every15 },
         ),
@@ -635,21 +869,26 @@ export function marinaTwin(en: boolean): Twin {
           "water",
           "services",
           undefined,
-          t("Bazen", "Pool"),
-          t("Merilnik kakovosti vode v bazenu", "Pool water analyser"),
-          t("Hotelski bazen", "Hotel pool"),
+          t("Bazen", "Pool", "Pool"),
+          t(
+            "Merilnik kakovosti vode v bazenu",
+            "Pool water analyser",
+            "Poolwasser-Analysator",
+          ),
+          t("Hotelski bazen", "Hotel pool", "Hotelpool"),
           [
-            [t("Temperatura", "Temperature"), d("26.4 °C")],
+            [t("Temperatura", "Temperature", "Temperatur"), d("26.4 °C")],
             ["pH", d("7.3"), "pool-ph"],
-            [t("Klor", "Chlorine"), d("0.6 mg/l"), "pool-cl"],
+            [t("Klor", "Chlorine", "Chlor"), d("0.6 mg/l"), "pool-cl"],
             ["ORP", "720 mV", "pool-orp"],
-            [t("Črpalka", "Pump"), d("1.1 kW"), "pool-pump"],
+            [t("Črpalka", "Pump", "Pumpe"), d("1.1 kW"), "pool-pump"],
           ],
           {
             align: "start",
             uses: t(
               "Klor < 0,3 mg/l ali pH zunaj 7,0–7,6 → bazen zaprt, dozirna črpalka popravi, zapis za inšpekcijo",
               "Chlorine < 0.3 mg/l or pH outside 7.0–7.6 → pool closed, the dosing pump corrects, record kept for inspection",
+              "Chlor < 0,3 mg/l oder pH außerhalb 7,0–7,6 → Pool gesperrt, Dosierpumpe korrigiert, Nachweis für die Behörde gespeichert",
             ),
           },
         ),
@@ -660,12 +899,24 @@ export function marinaTwin(en: boolean): Twin {
           "services",
           undefined,
           "HACCP",
-          t("Senzorji HACCP · restavracija", "HACCP sensors · restaurant"),
-          t("HACCP · restavracija", "HACCP · restaurant"),
+          t(
+            "Senzorji HACCP · restavracija",
+            "HACCP sensors · restaurant",
+            "HACCP-Sensoren · Restaurant",
+          ),
+          t("HACCP · restavracija", "HACCP · restaurant", "HACCP · Restaurant"),
           [
-            [t("Hladilnik", "Fridge"), d("3.6 °C")],
-            [t("Zamrzovalnik", "Freezer"), d("-19.2 °C"), "haccp-freezer"],
-            [t("Topla vitrina", "Hot counter"), "68 °C", "haccp-hot"],
+            [t("Hladilnik", "Fridge", "Kühlschrank"), d("3.6 °C")],
+            [
+              t("Zamrzovalnik", "Freezer", "Tiefkühler"),
+              d("-19.2 °C"),
+              "haccp-freezer",
+            ],
+            [
+              t("Topla vitrina", "Hot counter", "Warmtheke"),
+              "68 °C",
+              "haccp-hot",
+            ],
           ],
           {
             align: "end",
@@ -673,6 +924,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Samodejni zapis HACCP · hladilnik > 8 °C 15 min → alarm kuharju",
               "Automatic HACCP record · fridge > 8 °C for 15 min → alarm to the chef",
+              "Automatischer HACCP-Nachweis · Kühlschrank > 8 °C über 15 min → Alarm an den Küchenchef",
             ),
           },
         ),
@@ -683,12 +935,28 @@ export function marinaTwin(en: boolean): Twin {
           "water",
           "marina",
           "H₂O",
-          t("Vodomer sanitarij", "Sanitary block water meter"),
-          t("Sanitarije marine", "Marina sanitary block"),
+          t(
+            "Vodomer sanitarij",
+            "Sanitary block water meter",
+            "Wasserzähler Sanitärblock",
+          ),
+          t(
+            "Sanitarije marine",
+            "Marina sanitary block",
+            "Sanitärblock Marina",
+          ),
           [
-            [t("Pretok", "Flow"), d("0.84 m³/h")],
-            [t("Topla voda", "Hot water"), "52 °C", "sanitary-hot"],
-            [t("Obiski danes", "Visits today"), "214", "sanitary-visits"],
+            [t("Pretok", "Flow", "Durchfluss"), d("0.84 m³/h")],
+            [
+              t("Topla voda", "Hot water", "Warmwasser"),
+              "52 °C",
+              "sanitary-hot",
+            ],
+            [
+              t("Obiski danes", "Visits today", "Besuche heute"),
+              "214",
+              "sanitary-visits",
+            ],
           ],
           {
             card: meter,
@@ -697,6 +965,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Pravilo: nočni pretok > 0,2 m³/h 20 min → alarm puščanja · čiščenje po dejanski uporabi",
               "Rule: night flow > 0.2 m³/h for 20 min → leak alarm · cleaning by real use",
+              "Regel: Nachtdurchfluss > 0,2 m³/h über 20 min → Leckagealarm · Reinigung nach tatsächlicher Nutzung",
             ),
           },
         ),
@@ -707,12 +976,20 @@ export function marinaTwin(en: boolean): Twin {
           "guests",
           undefined,
           "P",
-          t("Senzorji parkirišča", "Car park sensors"),
-          t("Parkirišče marine", "Marina car park"),
+          t("Senzorji parkirišča", "Car park sensors", "Parkplatzsensoren"),
+          t("Parkirišče marine", "Marina car park", "Parkplatz Marina"),
           [
-            [t("Prosta mesta", "Free spaces"), String(free)],
-            [t("Uvozi danes", "In today"), "58", "parking-in"],
-            [t("Izvozi danes", "Out today"), "51", "parking-out"],
+            [t("Prosta mesta", "Free spaces", "Freie Plätze"), String(free)],
+            [
+              t("Uvozi danes", "In today", "Einfahrten heute"),
+              "58",
+              "parking-in",
+            ],
+            [
+              t("Izvozi danes", "Out today", "Ausfahrten heute"),
+              "51",
+              "parking-out",
+            ],
           ],
           { align: "start", every: undefined },
         ),
@@ -722,19 +999,28 @@ export function marinaTwin(en: boolean): Twin {
           "structure",
           "services",
           undefined,
-          t("Odpadki", "Waste"),
-          t("Senzorja v zabojnikih za odpadke", "Waste container sensors"),
-          t("Zabojnika za odpadke", "Waste containers"),
+          t("Odpadki", "Waste", "Abfall"),
+          t(
+            "Senzorja v zabojnikih za odpadke",
+            "Waste container sensors",
+            "Sensoren in den Abfallbehältern",
+          ),
+          t("Zabojnika za odpadke", "Waste containers", "Abfallbehälter"),
           [
-            [t("Napolnjenost", "Fill level"), pct(64)],
-            [t("Temperatura", "Temperature"), "21 °C", "waste-temp"],
+            [t("Napolnjenost", "Fill level", "Füllstand"), pct(64)],
+            [
+              t("Temperatura", "Temperature", "Temperatur"),
+              "21 °C",
+              "waste-temp",
+            ],
           ],
           {
             align: "end",
-            every: t("vsako uro", "every hour"),
+            every: t("vsako uro", "every hour", "jede Stunde"),
             uses: t(
               "Odvoz le, ko je zabojnik poln · skok temperature → zgodnji alarm požara",
               "Collected only when full · temperature jump → early fire alarm",
+              "Abholung nur bei vollem Behälter · Temperatursprung → frühzeitiger Brandalarm",
             ),
           },
         ),
@@ -745,14 +1031,22 @@ export function marinaTwin(en: boolean): Twin {
           "power",
           undefined,
           "EV",
-          t("Polnilnici za električna vozila", "EV chargers"),
-          t("Polnilnici EV", "EV chargers"),
+          t(
+            "Polnilnici za električna vozila",
+            "EV chargers",
+            "Ladestationen für E-Fahrzeuge",
+          ),
+          t("Polnilnici EV", "EV chargers", "Ladestationen für E-Fahrzeuge"),
           [
-            [t("Moč", "Power"), d("11.0 kW")],
-            [t("Prosti", "Free"), "1 / 2", "ev-free"],
+            [t("Moč", "Power", "Leistung"), d("11.0 kW")],
+            [t("Prosti", "Free", "Frei"), "1 / 2", "ev-free"],
             [
-              t("Danes", "Today"),
-              t("38 kWh · 4 seje", "38 kWh · 4 sessions"),
+              t("Danes", "Today", "Heute"),
+              t(
+                "38 kWh · 4 seje",
+                "38 kWh · 4 sessions",
+                "38 kWh · 4 Ladevorgänge",
+              ),
               "ev-day",
             ],
           ],
@@ -763,6 +1057,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "kWh na sejo na račun gosta · polnjenje se umakne večerni konici",
               "kWh per session billed to the guest · charging yields to the evening peak",
+              "kWh pro Ladevorgang auf der Rechnung des Gastes · Laden weicht der Abendspitze aus",
             ),
           },
         ),
@@ -772,24 +1067,34 @@ export function marinaTwin(en: boolean): Twin {
           "water",
           "services",
           undefined,
-          t("Zalivanje", "Irrigation"),
+          t("Zalivanje", "Irrigation", "Bewässerung"),
           t(
             "Senzor vlage tal in ventil zalivanja",
             "Soil moisture sensor and irrigation valve",
+            "Bodenfeuchtesensor und Bewässerungsventil",
           ),
-          t("Pametno zalivanje", "Smart irrigation"),
+          t(
+            "Pametno zalivanje",
+            "Smart irrigation",
+            "Intelligente Bewässerung",
+          ),
           [
-            [t("Vlaga tal", "Soil moisture"), pct(31)],
-            [t("Ventil", "Valve"), closed, "irrigation-valve"],
-            [t("Pretok", "Flow"), d("0.0 m³/h"), "irrigation-flow"],
+            [t("Vlaga tal", "Soil moisture", "Bodenfeuchte"), pct(31)],
+            [t("Ventil", "Valve", "Ventil"), closed, "irrigation-valve"],
+            [
+              t("Pretok", "Flow", "Durchfluss"),
+              d("0.0 m³/h"),
+              "irrigation-flow",
+            ],
           ],
           {
             side: "above",
             align: "end",
-            every: t("vsakih 30 min", "every 30 min"),
+            every: t("vsakih 30 min", "every 30 min", "alle 30 min"),
             uses: t(
               "Vlaga < 25 % in brez dežja → zalivanje ob 5:00 · pretok pri zaprtem ventilu → puščanje",
               "Moisture < 25% and no rain → watering at 05:00 · flow with the valve closed → leak",
+              "Feuchte < 25 % und kein Regen → Bewässerung um 05:00 · Durchfluss bei geschlossenem Ventil → Leckage",
             ),
           },
         ),
@@ -804,13 +1109,25 @@ export function marinaTwin(en: boolean): Twin {
           t(
             "Recepcija · rezervacije in zapornica",
             "Reception · bookings and barrier",
+            "Rezeption · Buchungen und Schranke",
           ),
-          t("Recepcija kampa", "Camp reception"),
+          t("Recepcija kampa", "Camp reception", "Rezeption Campingplatz"),
           [
-            [t("Enote v uporabi", "Units in use"), "21 / 24"],
-            [t("Prijave danes", "Check-ins today"), "4", "pms-camp-in"],
             [
-              t("Zapornica noter · ven", "Barrier in · out"),
+              t("Enote v uporabi", "Units in use", "Belegte Einheiten"),
+              "21 / 24",
+            ],
+            [
+              t("Prijave danes", "Check-ins today", "Check-ins heute"),
+              "4",
+              "pms-camp-in",
+            ],
+            [
+              t(
+                "Zapornica noter · ven",
+                "Barrier in · out",
+                "Schranke ein · aus",
+              ),
               "38 · 31",
               "pms-camp-gate",
             ],
@@ -820,6 +1137,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Prijava vklopi parcelo ali hišico · odjava pošlje končno porabo v obračun",
               "Check-in switches the pitch or mobile home on · check-out sends the final reading to billing",
+              "Check-in schaltet Stellplatz oder Mobilheim ein · Check-out sendet den Endstand an die Abrechnung",
             ),
           },
         ),
@@ -830,14 +1148,22 @@ export function marinaTwin(en: boolean): Twin {
           "power",
           "camp",
           "kW",
-          t("Priključek parcele 07", "Pitch 07 hook-up"),
-          t("Parcela 07 · Novak", "Pitch 07 · Novak"),
+          t(
+            "Priključek parcele 07",
+            "Pitch 07 hook-up",
+            "Anschluss Stellplatz 07",
+          ),
+          t("Parcela 07 · Novak", "Pitch 07 · Novak", "Stellplatz 07 · Novak"),
           [
-            [t("Vtičnica", "Socket"), socket("1.4")],
-            [t("Danes", "Today"), d("6.2 kWh"), "camp-pedestal-kwh"],
+            [t("Vtičnica", "Socket", "Steckdose"), socket("1.4")],
+            [t("Danes", "Today", "Heute"), d("6.2 kWh"), "camp-pedestal-kwh"],
             [
-              t("Rezervacija", "Booking"),
-              t("6 noči · do sobote", "6 nights · to Saturday"),
+              t("Rezervacija", "Booking", "Buchung"),
+              t(
+                "6 noči · do sobote",
+                "6 nights · to Saturday",
+                "6 Nächte · bis Samstag",
+              ),
               "camp-pedestal-guest",
             ],
           ],
@@ -853,6 +1179,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Elektrika le med rezervacijo · preobremenitev → alarm · kWh na račun parcele",
               "Power only while booked · overload → alarm · kWh billed to the pitch",
+              "Strom nur während der Buchung · Überlast → Alarm · kWh auf den Stellplatz abgerechnet",
             ),
           },
         ),
@@ -863,13 +1190,21 @@ export function marinaTwin(en: boolean): Twin {
           "water",
           "camp",
           "m³",
-          t("Vodomer parcele 14", "Pitch 14 water meter"),
-          t("Voda na parceli 14", "Water at pitch 14"),
+          t(
+            "Vodomer parcele 14",
+            "Pitch 14 water meter",
+            "Wasserzähler Stellplatz 14",
+          ),
+          t(
+            "Voda na parceli 14",
+            "Water at pitch 14",
+            "Wasser am Stellplatz 14",
+          ),
           [
-            [t("Pretok", "Flow"), d("0.00 m³/h")],
-            [t("Danes", "Today"), d("0.21 m³"), "camp-water-day"],
+            [t("Pretok", "Flow", "Durchfluss"), d("0.00 m³/h")],
+            [t("Danes", "Today", "Heute"), d("0.21 m³"), "camp-water-day"],
             [
-              t("Nočni pretok", "Night flow"),
+              t("Nočni pretok", "Night flow", "Nachtdurchfluss"),
               d("0.0 m³/h"),
               "camp-water-night",
             ],
@@ -881,6 +1216,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Pravilo: neprekinjen nočni pretok → odprta cev, alarm recepciji",
               "Rule: continuous night flow → a hose left open, alarm to the reception",
+              "Regel: dauerhafter Nachtdurchfluss → offener Schlauch, Alarm an die Rezeption",
             ),
           },
         ),
@@ -894,19 +1230,21 @@ export function marinaTwin(en: boolean): Twin {
           t(
             "Senzorji udobja · mobilna hišica MH-01",
             "Comfort sensors · mobile home MH-01",
+            "Komfortsensoren · Mobilheim MH-01",
           ),
-          t("Mobilna hišica MH-01", "Mobile home MH-01"),
+          t("Mobilna hišica MH-01", "Mobile home MH-01", "Mobilheim MH-01"),
           [
-            [t("Temperatura", "Temperature"), d("24.1 °C")],
-            [t("Vlaga", "Humidity"), pct(52), "mh-rh"],
+            [t("Temperatura", "Temperature", "Temperatur"), d("24.1 °C")],
+            [t("Vlaga", "Humidity", "Luftfeuchtigkeit"), pct(52), "mh-rh"],
             ["CO₂", "610 ppm", "mh-co2"],
-            [t("Okno", "Window"), closed, "mh-window"],
-            [t("Klima", "AC"), d("0.9 kW"), "mh-ac"],
+            [t("Okno", "Window", "Fenster"), closed, "mh-window"],
+            [t("Klima", "AC", "Klima"), d("0.9 kW"), "mh-ac"],
           ],
           {
             uses: t(
               "Odprto okno → klima se ustavi · predhlajenje uro pred prihodom gosta",
               "Window open → AC pauses · pre-cooling an hour before the guest arrives",
+              "Fenster offen → Klimaanlage pausiert · Vorkühlung eine Stunde vor Ankunft des Gastes",
             ),
           },
         ),
@@ -920,18 +1258,20 @@ export function marinaTwin(en: boolean): Twin {
           t(
             "Dim, CO in plin · mobilna hišica MH-02",
             "Smoke, CO and gas · mobile home MH-02",
+            "Rauch, CO und Gas · Mobilheim MH-02",
           ),
-          t("Varnost · MH-02", "Safety · MH-02"),
+          t("Varnost · MH-02", "Safety · MH-02", "Sicherheit · MH-02"),
           [
-            [t("Dim", "Smoke"), d("0.01 %/m")],
+            [t("Dim", "Smoke", "Rauch"), d("0.01 %/m")],
             ["CO", "0 ppm", "mh-co"],
-            [t("Plin UNP", "LPG"), "0 % LEL", "mh-lpg"],
+            [t("Plin UNP", "LPG", "Flüssiggas"), "0 % LEL", "mh-lpg"],
           ],
           {
             every: undefined,
             uses: t(
               "Dim, CO ali uhajanje plina → alarm na telefon gosta in recepciji",
               "Smoke, CO or a gas leak → alarm to the guest's phone and the reception",
+              "Rauch, CO oder Gasaustritt → Alarm auf das Telefon des Gastes und an die Rezeption",
             ),
           },
         ),
@@ -942,15 +1282,27 @@ export function marinaTwin(en: boolean): Twin {
           "services",
           "camp",
           "WC",
-          t("Senzorji sanitarij v kampu", "Camp sanitary block sensors"),
-          t("Sanitarije v kampu", "Camp sanitary block"),
+          t(
+            "Senzorji sanitarij v kampu",
+            "Camp sanitary block sensors",
+            "Sensoren Sanitärblock Campingplatz",
+          ),
+          t(
+            "Sanitarije v kampu",
+            "Camp sanitary block",
+            "Sanitärblock Campingplatz",
+          ),
           [
-            [t("Pretok", "Flow"), d("0.42 m³/h")],
-            [t("Bojler", "Boiler"), "58 °C", "camp-hot"],
-            [t("Obiski danes", "Visits today"), "168", "camp-visits"],
+            [t("Pretok", "Flow", "Durchfluss"), d("0.42 m³/h")],
+            [t("Bojler", "Boiler", "Boiler"), "58 °C", "camp-hot"],
             [
-              t("Milo · papir", "Soap · paper"),
-              t("72 % · 64 %", "72% · 64%"),
+              t("Obiski danes", "Visits today", "Besuche heute"),
+              "168",
+              "camp-visits",
+            ],
+            [
+              t("Milo · papir", "Soap · paper", "Seife · Papier"),
+              t("72 % · 64 %", "72% · 64%", "72 % · 64 %"),
               "camp-soap",
             ],
           ],
@@ -960,6 +1312,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "Čiščenje po obiskih, ne po uri · bojler < 45 °C → alarm · sončni kolektorji najprej",
               "Cleaning by visits, not by the clock · boiler < 45 °C → alarm · solar collectors first",
+              "Reinigung nach Besuchen, nicht nach Uhrzeit · Boiler < 45 °C → Alarm · Solarkollektoren zuerst",
             ),
           },
         ),
@@ -970,13 +1323,25 @@ export function marinaTwin(en: boolean): Twin {
           "power",
           "camp",
           "kW",
-          t("Razdelilna omara kampa", "Camp feeder cabinet"),
-          t("Elektrika kampa", "Camp electricity"),
+          t(
+            "Razdelilna omara kampa",
+            "Camp feeder cabinet",
+            "Verteilerschrank Campingplatz",
+          ),
+          t("Elektrika kampa", "Camp electricity", "Strom Campingplatz"),
           [
-            [t("Zdaj", "Now"), "68 kW"],
-            [t("Konica danes", "Peak today"), "96 kW", "camp-feeder-peak"],
+            [t("Zdaj", "Now", "Jetzt"), "68 kW"],
             [
-              t("Delež pogodbene moči", "Share of contract"),
+              t("Konica danes", "Peak today", "Spitze heute"),
+              "96 kW",
+              "camp-feeder-peak",
+            ],
+            [
+              t(
+                "Delež pogodbene moči",
+                "Share of contract",
+                "Anteil der Vertragsleistung",
+              ),
               pct(27),
               "camp-feeder-share",
             ],
@@ -987,6 +1352,7 @@ export function marinaTwin(en: boolean): Twin {
             uses: t(
               "KAI premakne klime in bojlerje, da kamp in marina ostaneta pod 250 kW",
               "KAI shifts ACs and boilers so the camp and marina stay under 250 kW",
+              "KAI verschiebt Klimaanlagen und Boiler, damit Campingplatz und Marina unter 250 kW bleiben",
             ),
           },
         ),
@@ -995,118 +1361,182 @@ export function marinaTwin(en: boolean): Twin {
         subject: t(
           "Maketa 60 × 60 cm · 4 moduli",
           "Model 60 × 60 cm · 4 modules",
+          "Modell 60 × 60 cm · 4 Module",
         ),
-        stage: t("Nalaganje modela marine", "Loading the marina model"),
+        stage: t(
+          "Nalaganje modela marine",
+          "Loading the marina model",
+          "Marinamodell wird geladen",
+        ),
       },
     },
     dashboard: {
-      title: t("Marina in kamp", "Marina and camp"),
+      title: t("Marina in kamp", "Marina and camp", "Marina und Campingplatz"),
       subtitle: t(
         `${berths.total} privezov · 24 enot v kampu · demonstracijski podatki`,
         `${berths.total} berths · 24 camp units · simulated data`,
+        `${berths.total} Liegeplätze · 24 Einheiten auf dem Campingplatz · Demodaten`,
       ),
       kpis: [
         {
           key: "active",
-          label: t("Aktivne luči", "Active lights"),
+          label: t("Aktivne luči", "Active lights", "Aktive Leuchten"),
           value: "0 / 10",
-          note: t("Marina in kamp", "Marina and camp"),
+          note: t(
+            "Marina in kamp",
+            "Marina and camp",
+            "Marina und Campingplatz",
+          ),
         },
         {
           key: "power",
-          label: t("Moč razsvetljave", "Lighting power"),
+          label: t(
+            "Moč razsvetljave",
+            "Lighting power",
+            "Beleuchtungsleistung",
+          ),
           value: "0 W",
-          note: t("Trenutna simulacija", "Current simulation"),
+          note: t(
+            "Trenutna simulacija",
+            "Current simulation",
+            "Aktuelle Simulation",
+          ),
         },
         {
           key: "lux",
-          label: t("Svetloba okolice", "Ambient light"),
+          label: t("Svetloba okolice", "Ambient light", "Umgebungslicht"),
           value: "52 lx",
-          note: t("Senzor LIGHT_02", "Sensor LIGHT_02"),
+          note: t("Senzor LIGHT_02", "Sensor LIGHT_02", "Sensor LIGHT_02"),
         },
         {
           key: "kpi-berths",
           reading: "kpi-berths",
           site: "marina",
-          label: t("Zasedeni privezi", "Berths occupied"),
+          label: t(
+            "Zasedeni privezi",
+            "Berths occupied",
+            "Belegte Liegeplätze",
+          ),
           value: `${berths.occupied} / ${berths.total}`,
-          note: t("1 brez rezervacije", "1 without a booking"),
+          note: t(
+            "1 brez rezervacije",
+            "1 without a booking",
+            "1 ohne Buchung",
+          ),
         },
         {
           key: "kpi-camp",
           reading: "kpi-camp",
           site: "camp",
-          label: t("Enote v kampu", "Camp units in use"),
+          label: t(
+            "Enote v kampu",
+            "Camp units in use",
+            "Belegte Einheiten Campingplatz",
+          ),
           value: "21 / 24",
-          note: t("vklopil PMS", "switched on by the PMS"),
+          note: t(
+            "vklopil PMS",
+            "switched on by the PMS",
+            "vom PMS eingeschaltet",
+          ),
         },
         {
           key: "kpi-peak",
           reading: "kpi-peak",
-          label: t("Konica / pogodba", "Peak / contract"),
+          label: t("Konica / pogodba", "Peak / contract", "Spitze / Vertrag"),
           value: "196 kW",
           note: t(
             "od 250 kW · napoved 232 kW ob 19:00",
             "of 250 kW · forecast 232 kW at 19:00",
+            "von 250 kW · Prognose 232 kW um 19:00",
           ),
         },
       ],
-      rule: t("Pravilo: svetloba < 25 lx", "Rule: light < 25 lx"),
-      ruleStatus: t("Čaka na naslednjo meritev", "Waiting for next reading"),
+      rule: t(
+        "Pravilo: svetloba < 25 lx",
+        "Rule: light < 25 lx",
+        "Regel: Licht < 25 lx",
+      ),
+      ruleStatus: t(
+        "Čaka na naslednjo meritev",
+        "Waiting for next reading",
+        "Wartet auf nächsten Messwert",
+      ),
       devices: [
-        { id: "HOTEL_01", name: t("Hotel", "Hotel") },
+        { id: "HOTEL_01", name: t("Hotel", "Hotel", "Hotel") },
         {
           id: "RESTAURANT_01",
-          name: t("Restavracija s teraso", "Restaurant and terrace"),
+          name: t(
+            "Restavracija s teraso",
+            "Restaurant and terrace",
+            "Restaurant und Terrasse",
+          ),
         },
         {
           id: "SANITARY_01",
-          name: t("Sanitarni blok marine", "Marina sanitary block"),
+          name: t(
+            "Sanitarni blok marine",
+            "Marina sanitary block",
+            "Sanitärblock Marina",
+          ),
           site: "marina",
         },
         {
           id: "PIER_01",
-          name: t("Luč pomola A1", "Pier light A1"),
+          name: t("Luč pomola A1", "Pier light A1", "Stegleuchte A1"),
           site: "marina",
         },
         {
           id: "PIER_02",
-          name: t("Luč pomola A2", "Pier light A2"),
+          name: t("Luč pomola A2", "Pier light A2", "Stegleuchte A2"),
           site: "marina",
         },
         {
           id: "PIER_03",
-          name: t("Luč pomola B1", "Pier light B1"),
+          name: t("Luč pomola B1", "Pier light B1", "Stegleuchte B1"),
           site: "marina",
         },
         {
           id: "PIER_04",
-          name: t("Luč pomola B2", "Pier light B2"),
+          name: t("Luč pomola B2", "Pier light B2", "Stegleuchte B2"),
           site: "marina",
         },
         {
           id: "MOBILE_HOME_01",
-          name: t("Mobilna hišica MH-01", "Mobile home MH-01"),
+          name: t(
+            "Mobilna hišica MH-01",
+            "Mobile home MH-01",
+            "Mobilheim MH-01",
+          ),
           site: "camp",
         },
         {
           id: "MOBILE_HOME_02",
-          name: t("Mobilna hišica MH-02", "Mobile home MH-02"),
+          name: t(
+            "Mobilna hišica MH-02",
+            "Mobile home MH-02",
+            "Mobilheim MH-02",
+          ),
           site: "camp",
         },
         {
           id: "CAMP_SANITARY_01",
-          name: t("Sanitarije v kampu", "Camp sanitary block"),
+          name: t(
+            "Sanitarije v kampu",
+            "Camp sanitary block",
+            "Sanitärblock Campingplatz",
+          ),
           site: "camp",
         },
       ],
-      group: t("Razsvetljava pomolov", "Pier lighting"),
+      group: t("Razsvetljava pomolov", "Pier lighting", "Stegbeleuchtung"),
       alarms: [
         {
           id: "PEDESTAL_B07",
           text: t(
             "Priključek B-07 · sprožena zaščita · 9 min",
             "Pedestal B-07 · breaker tripped · 9 min",
+            "Säule B-07 · Schutzschalter ausgelöst · 9 min",
           ),
         },
         {
@@ -1114,6 +1544,7 @@ export function marinaTwin(en: boolean): Twin {
           text: t(
             "Šibek signal prehoda · 3 min",
             "Gateway signal weak · 3 min",
+            "Schwaches Gateway-Signal · 3 min",
           ),
         },
       ],
@@ -1121,50 +1552,83 @@ export function marinaTwin(en: boolean): Twin {
         title: t(
           "Marina · privezi in priključki",
           "Marina · berths and pedestals",
+          "Marina · Liegeplätze und Säulen",
         ),
         site: "marina",
         rows: [
           row(
-            t("Privez A-05 · Mirta", "Berth A-05 · Mirta"),
+            t(
+              "Privez A-05 · Mirta",
+              "Berth A-05 · Mirta",
+              "Liegeplatz A-05 · Mirta",
+            ),
             "PEDESTAL_A05",
             "pedestal-a",
             socket("2.3"),
-            t("31,7 kWh ta postanek", "31.7 kWh this stay"),
+            t(
+              "31,7 kWh ta postanek",
+              "31.7 kWh this stay",
+              "31,7 kWh dieser Aufenthalt",
+            ),
           ),
           row(
-            t("Privez B-06 · Galeb", "Berth B-06 · Galeb"),
+            t(
+              "Privez B-06 · Galeb",
+              "Berth B-06 · Galeb",
+              "Liegeplatz B-06 · Galeb",
+            ),
             "PEDESTAL_B06",
             "pedestal-b",
             socket("1.6"),
-            t("18,2 kWh ta postanek", "18.2 kWh this stay"),
+            t(
+              "18,2 kWh ta postanek",
+              "18.2 kWh this stay",
+              "18,2 kWh dieser Aufenthalt",
+            ),
           ),
           row(
-            t("Elektrika na pomolu B", "Pier B shore power"),
+            t(
+              "Elektrika na pomolu B",
+              "Pier B shore power",
+              "Landstrom Steg B",
+            ),
             "SHORE_POWER_B",
             "shore-power",
             d("46.8 kWh"),
-            t("konica danes 31 kW", "peak today 31 kW"),
+            t("konica danes 31 kW", "peak today 31 kW", "Spitze heute 31 kW"),
           ),
           row(
-            t("Voda na privezu A-09", "Water at berth A-09"),
+            t(
+              "Voda na privezu A-09",
+              "Water at berth A-09",
+              "Wasser am Liegeplatz A-09",
+            ),
             "WATER_A09",
             "berth-water",
             d("0.00 m³/h"),
-            t("0,46 m³ ta postanek", "0.46 m³ this stay"),
+            t(
+              "0,46 m³ ta postanek",
+              "0.46 m³ this stay",
+              "0,46 m³ dieser Aufenthalt",
+            ),
           ),
           row(
-            t("Rezervoar točilnice", "Fuel dock tank"),
+            t("Rezervoar točilnice", "Fuel dock tank", "Tank Bootstankstelle"),
             "FUEL_TANK_01",
             "fuel",
             pct(72),
-            t("danes 184 L", "184 L today"),
+            t("danes 184 L", "184 L today", "heute 184 L"),
           ),
           row(
-            t("Praznjenje fekalij", "Pump-out station"),
+            t(
+              "Praznjenje fekalij",
+              "Pump-out station",
+              "Fäkalien-Absauganlage",
+            ),
             "PUMPOUT_01",
             "pumpout",
             pct(38),
-            t("danes 3 plovila", "3 boats today"),
+            t("danes 3 plovila", "3 boats today", "heute 3 Boote"),
           ),
         ],
       },
@@ -1172,225 +1636,354 @@ export function marinaTwin(en: boolean): Twin {
         title: t(
           "Marina · morje, vreme in gostje",
           "Marina · sea, weather and guests",
+          "Marina · Meer, Wetter und Gäste",
         ),
         site: "marina",
         rows: [
           row(
-            t("Zasedenost privezov", "Berth occupancy"),
+            t(
+              "Zasedenost privezov",
+              "Berth occupancy",
+              "Belegung der Liegeplätze",
+            ),
             "BERTH_OCC_A",
             "berths",
             `${berths.occupied} / ${berths.total}`,
-            t("1 brez rezervacije", "1 without a booking"),
+            t("1 brez rezervacije", "1 without a booking", "1 ohne Buchung"),
           ),
           row(
-            t("Rezervacije privezov", "Berth bookings"),
+            t("Rezervacije privezov", "Berth bookings", "Liegeplatzbuchungen"),
             "PMS_MARINA",
             "pms-marina",
             "3",
-            t("prihodi danes · 2 odhoda", "arrivals today · 2 departures"),
+            t(
+              "prihodi danes · 2 odhoda",
+              "arrivals today · 2 departures",
+              "Ankünfte heute · 2 Abreisen",
+            ),
           ),
           row(
-            t("Gladina morja", "Sea level"),
+            t("Gladina morja", "Sea level", "Meeresspiegel"),
             "SEA_LEVEL_01",
             "sea-level",
             d("+0.42 m"),
-            t("Normalno · valovi 0,3 m", "Normal · waves 0.3 m"),
+            t(
+              "Normalno · valovi 0,3 m",
+              "Normal · waves 0.3 m",
+              "Normal · Wellen 0,3 m",
+            ),
           ),
           row(
-            t("Veter", "Wind"),
+            t("Veter", "Wind", "Wind"),
             "WIND_01",
             "wind",
             "9 kn",
-            t("Sunki 13 kn · SV", "Gusts 13 kn · NE"),
+            t("Sunki 13 kn · SV", "Gusts 13 kn · NE", "Böen 13 kn · NO"),
           ),
           row(
-            t("Kakovost morja", "Sea water quality"),
+            t("Kakovost morja", "Sea water quality", "Meerwasserqualität"),
             "BUOY_01",
             "buoy",
             d("19.4 °C"),
-            t("pH 8,1 · kisik 7,6 mg/l", "pH 8.1 · oxygen 7.6 mg/l"),
+            t(
+              "pH 8,1 · kisik 7,6 mg/l",
+              "pH 8.1 · oxygen 7.6 mg/l",
+              "pH 8,1 · Sauerstoff 7,6 mg/l",
+            ),
           ),
         ],
       },
       panels: [
         {
-          title: t("Kamp", "Camp"),
+          title: t("Kamp", "Camp", "Campingplatz"),
           tag: "CAMP · PMS",
           site: "camp",
           rows: [
             row(
-              t("Enote v uporabi", "Units in use"),
+              t("Enote v uporabi", "Units in use", "Belegte Einheiten"),
               "PMS_CAMP",
               "pms-camp",
               "21 / 24",
-              t("4 prijave danes", "4 check-ins today"),
+              t("4 prijave danes", "4 check-ins today", "4 Check-ins heute"),
             ),
             row(
-              t("Parcela 07 · Novak", "Pitch 07 · Novak"),
+              t(
+                "Parcela 07 · Novak",
+                "Pitch 07 · Novak",
+                "Stellplatz 07 · Novak",
+              ),
               "PITCH_07",
               "camp-pedestal",
               socket("1.4"),
-              t("danes 6,2 kWh", "6.2 kWh today"),
+              t("danes 6,2 kWh", "6.2 kWh today", "heute 6,2 kWh"),
             ),
             row(
-              t("Voda na parceli 14", "Water at pitch 14"),
+              t(
+                "Voda na parceli 14",
+                "Water at pitch 14",
+                "Wasser am Stellplatz 14",
+              ),
               "PITCH_14_WATER",
               "camp-water",
               d("0.00 m³/h"),
-              t("nočni pretok 0", "night flow 0"),
+              t("nočni pretok 0", "night flow 0", "Nachtdurchfluss 0"),
             ),
             row(
-              t("Mobilna hišica MH-01", "Mobile home MH-01"),
+              t("Mobilna hišica MH-01", "Mobile home MH-01", "Mobilheim MH-01"),
               "MH_01",
               "mobile-home",
               d("24.1 °C"),
-              t("okno zaprto · klima 0,9 kW", "window closed · AC 0.9 kW"),
+              t(
+                "okno zaprto · klima 0,9 kW",
+                "window closed · AC 0.9 kW",
+                "Fenster zu · Klima 0,9 kW",
+              ),
             ),
             row(
-              t("Sanitarije v kampu", "Camp sanitary block"),
+              t(
+                "Sanitarije v kampu",
+                "Camp sanitary block",
+                "Sanitärblock Campingplatz",
+              ),
               "CAMP_SAN_WATER",
               "camp-sanitary",
               d("0.42 m³/h"),
-              t("168 obiskov · 58 °C", "168 visits · 58 °C"),
+              t(
+                "168 obiskov · 58 °C",
+                "168 visits · 58 °C",
+                "168 Besuche · 58 °C",
+              ),
             ),
             row(
-              t("Elektrika kampa", "Camp electricity"),
+              t("Elektrika kampa", "Camp electricity", "Strom Campingplatz"),
               "CAMP_FEEDER",
               "camp-feeder",
               "68 kW",
-              t("konica danes 96 kW", "peak today 96 kW"),
+              t("konica danes 96 kW", "peak today 96 kW", "Spitze heute 96 kW"),
             ),
           ],
         },
         {
-          title: t("Skupne storitve", "Shared services"),
-          tag: t("STORITVE", "SERVICES"),
+          title: t("Skupne storitve", "Shared services", "Gemeinsame Services"),
+          tag: t("STORITVE", "SERVICES", "SERVICES"),
           rows: [
             row(
-              t("Elektrika hotela", "Hotel electricity"),
+              t("Elektrika hotela", "Hotel electricity", "Strom Hotel"),
               "HOTEL_POWER_01",
               "hotel-power",
               d("38.5 kW"),
-              t("danes 412 kWh", "412 kWh today"),
+              t("danes 412 kWh", "412 kWh today", "heute 412 kWh"),
             ),
             row(
-              t("Hotelski bazen", "Hotel pool"),
+              t("Hotelski bazen", "Hotel pool", "Hotelpool"),
               "POOL_01",
               "pool",
               d("26.4 °C"),
-              t("pH 7,3 · klor 0,6 mg/l", "pH 7.3 · chlorine 0.6 mg/l"),
+              t(
+                "pH 7,3 · klor 0,6 mg/l",
+                "pH 7.3 · chlorine 0.6 mg/l",
+                "pH 7,3 · Chlor 0,6 mg/l",
+              ),
             ),
             row(
-              t("HACCP · restavracija", "HACCP · restaurant"),
+              t(
+                "HACCP · restavracija",
+                "HACCP · restaurant",
+                "HACCP · Restaurant",
+              ),
               "HACCP_01",
               "haccp",
               d("3.6 °C"),
-              t("zamrzovalnik −19,2 °C", "freezer −19.2 °C"),
+              t(
+                "zamrzovalnik −19,2 °C",
+                "freezer −19.2 °C",
+                "Tiefkühler −19,2 °C",
+              ),
             ),
             row(
-              t("Sanitarije marine", "Marina sanitary block"),
+              t(
+                "Sanitarije marine",
+                "Marina sanitary block",
+                "Sanitärblock Marina",
+              ),
               "SANITARY_WATER_01",
               "sanitary-water",
               d("0.84 m³/h"),
-              t("214 obiskov · 52 °C", "214 visits · 52 °C"),
+              t(
+                "214 obiskov · 52 °C",
+                "214 visits · 52 °C",
+                "214 Besuche · 52 °C",
+              ),
             ),
             row(
-              t("Prosta parkirna mesta", "Free parking spaces"),
+              t(
+                "Prosta parkirna mesta",
+                "Free parking spaces",
+                "Freie Parkplätze",
+              ),
               "PARKING_01",
               "parking",
               `${free} / ${parking.total}`,
-              t("58 uvozov danes", "58 in today"),
+              t("58 uvozov danes", "58 in today", "58 Einfahrten heute"),
             ),
             row(
-              t("Polnilnici EV", "EV chargers"),
+              t(
+                "Polnilnici EV",
+                "EV chargers",
+                "Ladestationen für E-Fahrzeuge",
+              ),
               "EV_01",
               "ev",
               d("11.0 kW"),
-              t("prosta 1 / 2 · danes 38 kWh", "1 / 2 free · 38 kWh today"),
+              t(
+                "prosta 1 / 2 · danes 38 kWh",
+                "1 / 2 free · 38 kWh today",
+                "1 / 2 frei · heute 38 kWh",
+              ),
             ),
             row(
-              t("Zabojnika za odpadke", "Waste containers"),
+              t("Zabojnika za odpadke", "Waste containers", "Abfallbehälter"),
               "WASTE_01",
               "waste",
               pct(64),
-              t("odvoz čez 2 dni", "collection in 2 days"),
+              t(
+                "odvoz čez 2 dni",
+                "collection in 2 days",
+                "Abholung in 2 Tagen",
+              ),
             ),
             row(
-              t("Zalivanje", "Irrigation"),
+              t("Zalivanje", "Irrigation", "Bewässerung"),
               "IRRIGATION_01",
               "irrigation",
               pct(31),
-              t("ventil zaprt", "valve closed"),
+              t("ventil zaprt", "valve closed", "Ventil zu"),
             ),
           ],
         },
         {
-          title: t("Varnost", "Safety"),
+          title: t("Varnost", "Safety", "Sicherheit"),
           tag: "SAFETY",
           in: "overview devices alarms",
           rows: [
             row(
-              t("Omarica pomola B1", "Pier B1 cabinet"),
+              t("Omarica pomola B1", "Pier B1 cabinet", "Schrank Steg B1"),
               "CABINET_B1",
               "cabinet",
               closed,
-              t("31 °C · suho · nagib 0°", "31 °C · dry · tilt 0°"),
+              t(
+                "31 °C · suho · nagib 0°",
+                "31 °C · dry · tilt 0°",
+                "31 °C · trocken · Neigung 0°",
+              ),
             ),
             row(
-              t("Svetilnika ob vhodu", "Harbour entrance lights"),
+              t(
+                "Svetilnika ob vhodu",
+                "Harbour entrance lights",
+                "Hafenfeuer an der Einfahrt",
+              ),
               "NAV_LIGHTS",
               "nav-lights",
-              t("Deluje", "Working"),
-              t("rdeča in zelena · 6 W", "red and green · 6 W"),
+              t("Deluje", "Working", "In Betrieb"),
+              t(
+                "rdeča in zelena · 6 W",
+                "red and green · 6 W",
+                "Rot und Grün · 6 W",
+              ),
             ),
             row(
-              t("Dim · kuhinja", "Smoke · kitchen"),
+              t("Dim · kuhinja", "Smoke · kitchen", "Rauch · Küche"),
               "SMOKE_01",
               "smoke",
               d("0.02 %/m"),
-              t("ni dima", "clear"),
+              t("ni dima", "clear", "kein Rauch"),
             ),
             row(
-              t("Dim, CO in plin · MH-02", "Smoke, CO and gas · MH-02"),
+              t(
+                "Dim, CO in plin · MH-02",
+                "Smoke, CO and gas · MH-02",
+                "Rauch, CO und Gas · MH-02",
+              ),
               "MH_02_SAFETY",
               "mh-safety",
               d("0.01 %/m"),
-              t("CO 0 ppm · plin 0 %", "CO 0 ppm · gas 0%"),
+              t(
+                "CO 0 ppm · plin 0 %",
+                "CO 0 ppm · gas 0%",
+                "CO 0 ppm · Gas 0 %",
+              ),
             ),
           ],
         },
         {
-          title: t("Obračun ob odhodu", "Billed at check-out"),
+          title: t(
+            "Obračun ob odhodu",
+            "Billed at check-out",
+            "Abrechnung beim Check-out",
+          ),
           tag: "INTEGRATION · PMS",
           in: "overview",
           rows: [
             row(
-              t("Jahta Mirta · A-04", "Yacht Mirta · A-04"),
-              t("4 noči", "4 nights"),
+              t(
+                "Jahta Mirta · A-04",
+                "Yacht Mirta · A-04",
+                "Yacht Mirta · A-04",
+              ),
+              t("4 noči", "4 nights", "4 Nächte"),
               "bill-1",
               d("61.2 kWh"),
-              t("0,84 m³ · poslano v PMS", "0.84 m³ · sent to the PMS"),
+              t(
+                "0,84 m³ · poslano v PMS",
+                "0.84 m³ · sent to the PMS",
+                "0,84 m³ · an das PMS gesendet",
+              ),
             ),
             row(
-              t("Parcela 07 · Novak", "Pitch 07 · Novak"),
-              t("6 noči", "6 nights"),
+              t(
+                "Parcela 07 · Novak",
+                "Pitch 07 · Novak",
+                "Stellplatz 07 · Novak",
+              ),
+              t("6 noči", "6 nights", "6 Nächte"),
               "bill-2",
               d("38.9 kWh"),
-              t("1,92 m³ · poslano v PMS", "1.92 m³ · sent to the PMS"),
+              t(
+                "1,92 m³ · poslano v PMS",
+                "1.92 m³ · sent to the PMS",
+                "1,92 m³ · an das PMS gesendet",
+              ),
             ),
             row(
-              t("Mobilna hišica MH-02 · Rossi", "Mobile home MH-02 · Rossi"),
-              t("5 noči", "5 nights"),
+              t(
+                "Mobilna hišica MH-02 · Rossi",
+                "Mobile home MH-02 · Rossi",
+                "Mobilheim MH-02 · Rossi",
+              ),
+              t("5 noči", "5 nights", "5 Nächte"),
               "bill-3",
               d("71.5 kWh"),
-              t("3,10 m³ · poslano v PMS", "3.10 m³ · sent to the PMS"),
+              t(
+                "3,10 m³ · poslano v PMS",
+                "3.10 m³ · sent to the PMS",
+                "3,10 m³ · an das PMS gesendet",
+              ),
             ),
             row(
-              t("Jadrnica Bura · B-09", "Sailboat Bura · B-09"),
-              t("2 noči", "2 nights"),
+              t(
+                "Jadrnica Bura · B-09",
+                "Sailboat Bura · B-09",
+                "Segelboot Bura · B-09",
+              ),
+              t("2 noči", "2 nights", "2 Nächte"),
               "bill-4",
               d("14.0 kWh"),
-              t("0,21 m³ · odhod ob 11:00", "0.21 m³ · leaves at 11:00"),
+              t(
+                "0,21 m³ · odhod ob 11:00",
+                "0.21 m³ · leaves at 11:00",
+                "0,21 m³ · Abreise um 11:00",
+              ),
             ),
           ],
         },
@@ -1398,79 +1991,112 @@ export function marinaTwin(en: boolean): Twin {
           title: t(
             "KAI · odstopanja in napovedi",
             "KAI · anomalies and forecasts",
+            "KAI · Anomalien und Prognosen",
           ),
           tag: "KAI",
           in: "overview alarms",
           rows: [
             row(
-              t("Privez B-07", "Berth B-07"),
+              t("Privez B-07", "Berth B-07", "Liegeplatz B-07"),
               "BERTH_OCC_A",
               "kai-berth",
-              t("Resno", "Serious"),
-              t("brez rezervacije · 36 h", "no booking · 36 h"),
+              t("Resno", "Serious", "Ernst"),
+              t(
+                "brez rezervacije · 36 h",
+                "no booking · 36 h",
+                "keine Buchung · 36 h",
+              ),
             ),
             row(
-              t("Mobilna hišica MH-02", "Mobile home MH-02"),
+              t("Mobilna hišica MH-02", "Mobile home MH-02", "Mobilheim MH-02"),
               "MH_02",
               "kai-mh",
-              t("Opozorilo", "Warning"),
-              t("okno odprto → klima stop", "window open → AC off"),
+              t("Opozorilo", "Warning", "Warnung"),
+              t(
+                "okno odprto → klima stop",
+                "window open → AC off",
+                "Fenster offen → Klima aus",
+              ),
             ),
             row(
-              t("Parcela 14 · voda", "Pitch 14 · water"),
+              t(
+                "Parcela 14 · voda",
+                "Pitch 14 · water",
+                "Stellplatz 14 · Wasser",
+              ),
               "PITCH_14_WATER",
               "kai-water",
-              t("Opozorilo", "Warning"),
-              t("0,2 m³/h ponoči", "0.2 m³/h at night"),
+              t("Opozorilo", "Warning", "Warnung"),
+              t("0,2 m³/h ponoči", "0.2 m³/h at night", "0,2 m³/h nachts"),
             ),
             row(
-              t("Napoved konice", "Peak forecast"),
-              t("danes", "today"),
+              t("Napoved konice", "Peak forecast", "Spitzenprognose"),
+              t("danes", "today", "heute"),
               "kai-peak",
               "232 kW",
-              t("predhlajenje ob 17:30", "pre-cool at 17:30"),
+              t(
+                "predhlajenje ob 17:30",
+                "pre-cool at 17:30",
+                "Vorkühlung um 17:30",
+              ),
             ),
             row(
-              t("Burja jutri", "Bora tomorrow"),
+              t("Burja jutri", "Bora tomorrow", "Bora morgen"),
               "WIND_01",
               "kai-bora",
               "06:00",
-              t("−6 hPa · 34 kn → SMS", "−6 hPa · 34 kn → SMS"),
+              t(
+                "−6 hPa · 34 kn → SMS",
+                "−6 hPa · 34 kn → SMS",
+                "−6 hPa · 34 kn → SMS",
+              ),
             ),
           ],
         },
         {
           title: "NOC",
-          tag: t("OPERATIVNI NADZOR", "OPERATIONS"),
+          tag: t("OPERATIVNI NADZOR", "OPERATIONS", "BETRIEB"),
           in: "overview gateways alarms",
           rows: [
             row(
-              t("Naprave", "Devices"),
-              t("senzorji, števci, luči", "sensors, meters, lights"),
+              t("Naprave", "Devices", "Geräte"),
+              t(
+                "senzorji, števci, luči",
+                "sensors, meters, lights",
+                "Sensoren, Zähler, Leuchten",
+              ),
               "noc-online",
               "40 / 40",
-              t("povezanih", "online"),
+              t("povezanih", "online", "online"),
             ),
             row(
-              t("Kakovost povezave", "Link quality"),
+              t("Kakovost povezave", "Link quality", "Verbindungsqualität"),
               "RSSI · SNR",
               "noc-rssi",
               "−78 dBm",
-              t("najšibkejša: PIER_04", "weakest: PIER_04"),
+              t(
+                "najšibkejša: PIER_04",
+                "weakest: PIER_04",
+                "schwächste: PIER_04",
+              ),
             ),
             row(
-              t("Baterije senzorjev", "Sensor batteries"),
-              t("najnižja", "lowest"),
+              t("Baterije senzorjev", "Sensor batteries", "Sensorbatterien"),
+              t("najnižja", "lowest", "niedrigste"),
               "noc-battery",
               pct(54),
               "BUOY_01",
             ),
             row(
-              t("Integracije", "Integrations"),
-              t("PMS · obračun · BMS", "PMS · billing · BMS"),
+              t("Integracije", "Integrations", "Integrationen"),
+              t(
+                "PMS · obračun · BMS",
+                "PMS · billing · BMS",
+                "PMS · Abrechnung · GLT",
+              ),
               "noc-links",
               "3 / 3",
-              t("povezane", "connected"),
+              t("povezane", "connected", "verbunden"),
             ),
           ],
         },

@@ -122,16 +122,20 @@ for (const file of walk(DIST).filter((path) => path.endsWith("index.html"))) {
 }
 pages.sort((a, b) => a.path.localeCompare(b.path));
 const english = (page) => page.path.startsWith("/en/");
+const german = (page) => page.path.startsWith("/de/");
+const slovenian = (page) => !english(page) && !german(page);
 
 // llms-full.txt: every page in full, Slovenian first (the default language).
 const full = [
   "# KUEM – full text of www.kuem.si",
   "",
-  `> Every page of ${SITE} as Markdown, in Slovenian and English. Each page starts with its title, description, address and language.`,
+  `> Every page of ${SITE} as Markdown, in Slovenian, English and German. Each page starts with its title, description, address and language.`,
   "",
-  ...[...pages.filter((page) => !english(page)), ...pages.filter(english)].map(
-    (page) => page.markdown.trim(),
-  ),
+  ...[
+    ...pages.filter(slovenian),
+    ...pages.filter(english),
+    ...pages.filter(german),
+  ].map((page) => page.markdown.trim()),
 ].join("\n\n");
 writeFileSync(join(DIST, "llms-full.txt"), `${full}\n`);
 
@@ -163,14 +167,12 @@ const section = (heading, list) =>
     : [];
 const llms = [
   described,
-  ...section(
-    "## Več strani (slovenščina)",
-    missing.filter((page) => !english(page)),
-  ),
+  ...section("## Več strani (slovenščina)", missing.filter(slovenian)),
   ...section("## More pages (English)", missing.filter(english)),
+  ...section("## Weitere Seiten (Deutsch)", missing.filter(german)),
   "",
   "## Optional",
-  `- [Full text of all pages](${SITE}/llms-full.txt): every page of the site as Markdown, Slovenian and English.`,
+  `- [Full text of all pages](${SITE}/llms-full.txt): every page of the site as Markdown, in Slovenian, English and German.`,
   "- Every page is also available as Markdown at its address followed by index.md, e.g. " +
     `${SITE}/en/nexavia/index.md.`,
 ];

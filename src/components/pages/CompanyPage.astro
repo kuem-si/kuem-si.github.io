@@ -4,6 +4,7 @@ import AboutIcon from "../AboutIcon.astro";
 import type { Locale } from "../../lib/i18n";
 import regionalMap from "../../assets/maps/kuem-regional-map.svg";
 import regionalMapEn from "../../assets/maps/kuem-regional-map-en.svg";
+import regionalMapDe from "../../assets/maps/kuem-regional-map-de.svg";
 import "../../styles/about.css";
 
 interface Props {
@@ -248,6 +249,126 @@ const copy = {
     contactHref: "/en/contact",
     companyLine: "KUEM d.o.o. · Kranj · Slovenia",
   },
+  de: {
+    title: "Über uns | KUEM",
+    description:
+      "KUEM ist ein slowenisches Technologieunternehmen, das Softwareentwicklung, Kommunikationstechnologien, Integrationen, Umsetzung vor Ort und Support verbindet.",
+    eyebrow: "ÜBER UNS",
+    h1: "Menschen, die Technologie zum Laufen bringen.",
+    heroP:
+      "KUEM ist ein slowenisches Technologieunternehmen. Unser Team vereint Softwareentwicklung, Kommunikationstechnologien, Integrationen, Umsetzung vor Ort und Support.",
+    factsId: "kuem-auf-einen-blick",
+    meetUs: "Lernen Sie uns kennen",
+    contactId: "kontakt",
+    contactLabel: "Kontakt",
+    graphicTagline: "VON DER IDEE ZUM BETRIEB.",
+    flow: [
+      ["FELD", "Wir verstehen die reale Umgebung und die konkrete Herausforderung."],
+      ["VERBINDUNG", "Wir verbinden Geräte, Systeme und Wissen."],
+      ["LÖSUNG", "Wir entwickeln Software, Integrationen und Automatisierung."],
+      ["BETRIEB", "Wir machen aus Daten Übersicht, Warnungen und bessere Entscheidungen."],
+    ],
+    factsEyebrow: "KUEM AUF EINEN BLICK",
+    factsH2: "Ein Unternehmen, das auf Wissen und Verantwortung baut.",
+    facts: [
+      ["location", "SITZ", "Kranj, Slowenien"],
+      ["presence", "PRÄSENZ", "Slowenien und die weitere Region"],
+      [
+        "knowledge",
+        "KOMPETENZEN",
+        "Entwicklung · Konnektivität · Integrationen · Umsetzung",
+      ],
+      ["people", "VORGEHEN", "Vom ersten Termin vor Ort bis zum langfristigen Support"],
+    ],
+    teamEyebrow: "UNSER TEAM",
+    teamH2: "Unterschiedliche Kompetenzen. Ein Team.",
+    teamP:
+      "Ein Team übernimmt die Verantwortung für die gesamte Lösung. Spezialisten für Feld, Konnektivität, Software, Integrationen und Support arbeiten als ein Team zusammen.",
+    expertise: [
+      [
+        "software",
+        "Softwareentwicklung",
+        "Plattformen, Benutzeroberflächen und Datenlösungen.",
+      ],
+      [
+        "connectivity",
+        "Kommunikationstechnologien",
+        "Planung eines zuverlässigen Wegs vom Feldgerät zum System.",
+      ],
+      [
+        "integration",
+        "Integrationen und Automatisierung",
+        "Verbindung bestehender Systeme, Daten und Prozesse.",
+      ],
+      [
+        "field",
+        "Umsetzung vor Ort und Support",
+        "Einführung, Betriebsüberwachung und Unterstützung nach dem Start.",
+      ],
+    ],
+    growthEyebrow: "UNSERE ENTWICKLUNG",
+    growthH2: "Wir sind an realen Projekten gewachsen.",
+    growthP: "Jeder nächste Schritt entstand aus einem konkreten Kundenbedarf.",
+    growth: [
+      [
+        "01",
+        "Lösungen im Feld",
+        "Wir haben im Feld begonnen und reale Herausforderungen der Infrastruktur verstanden.",
+      ],
+      [
+        "02",
+        "Vernetzte Systeme",
+        "Geräte, Kommunikation und bestehende Systeme wurden zu einem verbundenen Ganzen.",
+      ],
+      [
+        "03",
+        "Eigene Plattform Nexavia",
+        "Wir haben eine einheitliche Umgebung für die Übersicht und das Management von Daten entwickelt.",
+      ],
+      [
+        "04",
+        "Erweiterte Analytik mit KAI",
+        "Wir ergänzen Daten um Kontext und Entscheidungsunterstützung.",
+      ],
+    ],
+    principlesEyebrow: "SO ARBEITEN WIR",
+    principlesH2: "Direkt, verantwortungsvoll und langfristig.",
+    principles: [
+      [
+        "document",
+        "Wir verstehen die Umgebung",
+        "Wir schlagen erst etwas vor, wenn wir Feld, bestehende Systeme und Ziel kennen.",
+      ],
+      [
+        "dialog",
+        "Wir sprechen klar",
+        "Ohne unnötigen Fachjargon, versteckte Einschränkungen oder leere Versprechen.",
+      ],
+      [
+        "shield",
+        "Wir übernehmen Verantwortung",
+        "Wir betrachten die Lösung als Ganzes, nicht als Sammlung unverbundener Teile.",
+      ],
+      [
+        "infinity",
+        "Wir bleiben erreichbar",
+        "Die Zusammenarbeit endet nicht mit der Einführung der Lösung.",
+      ],
+    ],
+    regionEyebrow: "REGIONALE PRÄSENZ",
+    regionH2: "Wir entwickeln Wissen in Slowenien. Wir setzen Lösungen in der ganzen Region um.",
+    regionP:
+      "Wir arbeiten direkt mit Kunden und Partnern zusammen – vom ersten Termin vor Ort bis zum langfristigen Support.",
+    regionLink: "Erfolgsgeschichten ansehen",
+    referencesHref: "/de/referenzen/",
+    mapAlt:
+      "Regionale Präsenz von KUEM in Slowenien und den Ländern Südosteuropas",
+    contactH2: "Sprechen wir über Ihr nächstes Projekt.",
+    contactP: "Die besten Gespräche beginnen mit einer konkreten Herausforderung.",
+    contactCta: "Erstgespräch vereinbaren",
+    contactHref: "/de/kontakt",
+    companyLine: "KUEM d.o.o. · Kranj · Slowenien",
+  },
 }[locale];
 ---
 
@@ -406,7 +527,7 @@ const copy = {
         </div><div class="ab-map">
           <img
             class="regional-map"
-            src={(locale === "en" ? regionalMapEn : regionalMap).src}
+            src={{ sl: regionalMap, en: regionalMapEn, de: regionalMapDe }[locale].src}
             width="1100"
             height="700"
             alt={copy.mapAlt}

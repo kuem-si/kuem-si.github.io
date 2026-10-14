@@ -33,6 +33,19 @@ const metricsSl = [
   },
 ];
 
+const metricsDe = [
+  { value: "Ablesen", label: "Zählerfernauslesung" },
+  {
+    value: "Überwachen",
+    label: "Fernüberwachung von Geräten und Umweltparametern",
+  },
+  { value: "Alarmieren", label: "Alarmregeln und Ereignisbenachrichtigungen" },
+  {
+    value: "Verbinden",
+    label: "Berichte, APIs und Integrationen mit Geschäftssystemen",
+  },
+];
+
 const caseStudiesEn: CaseStudy[] = [
   {
     title: "DOMPLAN, d.d.",
@@ -170,7 +183,7 @@ export function getNavItems(locale: Locale) {
 }
 
 export function getMetrics(locale: Locale) {
-  return locale === "sl" ? metricsSl : metricsEn;
+  return { sl: metricsSl, en: metricsEn, de: metricsDe }[locale];
 }
 
 export function getCaseStudies(locale: Locale) {

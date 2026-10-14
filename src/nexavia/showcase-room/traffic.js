@@ -2507,7 +2507,7 @@ async function startTraffic(root, layer, map) {
   const counterPopover = root.querySelector(
     ".city-sensor-popover [data-reading=cyclists]",
   );
-  const en = document.documentElement.lang.startsWith("en");
+  const lang = document.documentElement.lang.slice(0, 2);
   let cyclistCount = 124;
   let counterPulse = 0;
   let inView = false;
@@ -2518,7 +2518,7 @@ async function startTraffic(root, layer, map) {
   function countCyclist() {
     cyclistCount += 1;
     if (counterPanel) {
-      counterPanel.textContent = `${cyclistCount} ${en ? "today" : "danes"}`;
+      counterPanel.textContent = `${cyclistCount} ${{ en: "today", de: "heute" }[lang] ?? "danes"}`;
       counterPanel.classList.remove("is-counted");
       // Reflow only on the infrequent sensor event so each pass can pulse.
       void counterPanel.offsetWidth;

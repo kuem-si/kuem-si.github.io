@@ -7,8 +7,10 @@ import Icon from "./ServiceIcon.astro";
 import type { Locale } from "../../lib/i18n";
 import {
   explorerBenefits,
+  explorerBenefitsDe,
   explorerBenefitsEn,
   explorerExamples,
+  explorerExamplesDe,
   explorerExamplesEn,
 } from "../../data/solutionExplorer";
 import "../../styles/flow-primitives.css";
@@ -41,6 +43,7 @@ const copy = {
     examplesH2: "Od podatka do konkretnega rezultata.",
     storiesEyebrow: "USPEŠNE ZGODBE",
     storiesHref: "/reference/",
+    storiesLink: "Poglejte uspešne zgodbe",
     closingH2: "Začnimo z enim konkretnim izzivom.",
     closingP:
       "Izberemo primer uporabe, preverimo razpoložljive podatke in predlagamo izvedljiv prvi korak.",
@@ -67,15 +70,51 @@ const copy = {
     examplesH2: "From data to a concrete result.",
     storiesEyebrow: "SUCCESS STORIES",
     storiesHref: "/en/references/",
+    storiesLink: "View success stories",
     closingH2: "Let’s start with one concrete challenge.",
     closingP:
       "We select a use case, review the available data and propose a feasible first step.",
     closingCta: "Book an introductory meeting",
     ctaHref: "/en/contact",
   },
+  de: {
+    seoTitle: "Lösungen | KUEM – Von der Datenerfassung zum Managed Service",
+    seoDescription:
+      "Entdecken Sie die gesamte KUEM-Lösung: von Geräten und bestehenden Systemen über Nexavia bis zu Entscheidungen und Managed Services.",
+    pathname: "/de/loesungen/",
+    eyebrow: "KUEM-LÖSUNGEN",
+    h1: "Von der Datenerfassung zum Managed Service.",
+    heroP:
+      "Wir verbinden Geräte, Kommunikationsnetze, bestehende Systeme und Daten zu einer Lösung, die als Ganzes funktioniert.",
+    cta: "Sprechen wir",
+    dataFlow: "Datenfluss ansehen",
+    trustAria: "Sie vertrauen uns",
+    trustEyebrow: "SIE VERTRAUEN UNS",
+    trustLabel: "Sie vertrauen uns",
+    benefitsEyebrow: "NUTZEN FÜR ANWENDER",
+    benefitsH2: "Weniger Suchen nach Daten. Mehr Zeit zum Handeln.",
+    examplesEyebrow: "BEISPIELE AUS DER PRAXIS",
+    examplesH2: "Von Daten zum konkreten Ergebnis.",
+    storiesEyebrow: "ERFOLGSGESCHICHTEN",
+    storiesHref: "/de/referenzen/",
+    storiesLink: "Erfolgsgeschichten ansehen",
+    closingH2: "Beginnen wir mit einer konkreten Herausforderung.",
+    closingP:
+      "Wir wählen einen Anwendungsfall, prüfen die verfügbaren Daten und schlagen einen machbaren ersten Schritt vor.",
+    closingCta: "Erstgespräch vereinbaren",
+    ctaHref: "/de/kontakt",
+  },
 }[locale];
-const benefits = locale === "sl" ? explorerBenefits : explorerBenefitsEn;
-const examples = locale === "sl" ? explorerExamples : explorerExamplesEn;
+const benefits = {
+  sl: explorerBenefits,
+  en: explorerBenefitsEn,
+  de: explorerBenefitsDe,
+}[locale];
+const examples = {
+  sl: explorerExamples,
+  en: explorerExamplesEn,
+  de: explorerExamplesDe,
+}[locale];
 const stories = ["Domplan", "Brezovica", "Adria Mobil", "Gradiška", "Novo mesto"];
 ---
 
@@ -203,7 +242,7 @@ const stories = ["Domplan", "Brezovica", "Adria Mobil", "Gradiška", "Novo mesto
             ))
           }
         </ul>
-        <a href={copy.storiesHref}>{locale === "sl" ? "Poglejte uspešne zgodbe" : "View success stories"} →</a>
+        <a href={copy.storiesHref}>{copy.storiesLink} →</a>
       </div>
     </div>
   </section>

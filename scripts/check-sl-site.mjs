@@ -21,20 +21,21 @@ const bad = [
 let pages = 0;
 for (const file of htmlFiles()) {
   const path = relative(dist, file).replaceAll("\\", "/");
-  if (path.startsWith("en/")) continue;
+  if (path.startsWith("en/") || path.startsWith("de/")) continue;
   const html = readFileSync(file, "utf8");
   const text = visibleText(html);
   for (const phrase of bad)
     assert(!text.includes(phrase), `${path}: ${phrase}`);
   pages++;
 }
-const { routePairs } = await loadSiteData("../src/lib/i18n.ts");
+const { routePairs, localizedPath } = await loadSiteData("../src/lib/i18n.ts");
 const sitemap = read("sitemap-0.xml");
-for (const [sl, en] of Object.entries(routePairs)) {
-  for (const [path, target, lang] of [
-    [sl, en, "sl"],
-    [en, sl, "en"],
-  ]) {
+for (const sl of Object.keys(routePairs)) {
+  const versions = ["sl", "en", "de"].map((lang) => [
+    lang,
+    localizedPath(sl, lang),
+  ]);
+  for (const [lang, path] of versions) {
     const html = read(
       `${path.replace(/^\//, "").replace(/\/$/, "")}${path === "/" ? "" : "/"}index.html`,
     );
@@ -44,16 +45,26 @@ for (const [sl, en] of Object.entries(routePairs)) {
       sitemap.includes(`<loc>https://www.kuem.si${canonicalPath}</loc>`),
       `${path}: current route missing from sitemap`,
     );
-    const normalized = target.replace(/\/$/, "") || "/";
-    assert(
-      [
-        ...html.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>\s*(SL|EN)\s*<\/a>/g),
-      ].some(([, href]) => (href.replace(/\/$/, "") || "/") === normalized),
-      `${path}: language switch`,
-    );
+    const switches = [
+      ...html.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>\s*(SL|EN|DE)\s*<\/a>/g),
+    ].map(([, href]) => href.replace(/\/$/, "") || "/");
+    for (const [other, target] of versions) {
+      if (other === lang) continue;
+      assert(
+        switches.includes(target.replace(/\/$/, "") || "/"),
+        `${path}: language switch to ${other}`,
+      );
+    }
   }
 }
-for (const path of ["zasebnost", "reference", "en/privacy", "en/references"]) {
+for (const path of [
+  "zasebnost",
+  "reference",
+  "en/privacy",
+  "en/references",
+  "de/datenschutz",
+  "de/referenzen",
+]) {
   assert(
     !read(`${path}/index.html`).includes('class="data-visual"'),
     `${path}: generic visual`,
@@ -66,6 +77,7 @@ assert(publishedSuccessStories.length >= 1, "No published stories");
 for (const [path, locale] of [
   ["reference", "sl"],
   ["en/references", "en"],
+  ["de/referenzen", "de"],
 ]) {
   const html = read(`${path}/index.html`);
   assert.equal(
@@ -94,12 +106,12 @@ for (const file of htmlFiles()) {
       `${file}: unavailable individual story ${href}`,
     );
     if (
-      /Poglejte uspešne zgodbe|Oglejte si uspešne zgodbe|View success stories/i.test(
+      /Poglejte uspešne zgodbe|Oglejte si uspešne zgodbe|View success stories|Erfolgsgeschichten ansehen/i.test(
         label,
       )
     ) {
       assert(
-        ["/reference/", "/en/references/"].includes(href),
+        ["/reference/", "/en/references/", "/de/referenzen/"].includes(href),
         `${file}: overview CTA ${href}`,
       );
     }
@@ -112,7 +124,7 @@ for (const file of htmlFiles()) {
   }
 }
 const kai = visibleText(read("kai/index.html"));
-for (const path of ["resitve", "en/solutions"]) {
+for (const path of ["resitve", "en/solutions", "de/loesungen"]) {
   const svg = read(`${path}/index.html`).match(
     /<svg\b[^>]*class="wires"[^>]*>/,
   )?.[0];
@@ -125,5 +137,5 @@ assert(kai.includes("Kako KAI deluje") && kai.includes("Deluje z Nexavio"));
 assert(!kai.includes("Funkcija je vezana na razpoložljive podatke"));
 checkPages();
 console.log(
-  `SL QA passed: ${pages} pages, ${Object.keys(routePairs).length} language pairs, ${publishedSuccessStories.length} bilingual stories, truthful CTAs, no redirect stubs.`,
+  `SL QA passed: ${pages} pages, ${Object.keys(routePairs).length} language pairs, ${publishedSuccessStories.length} trilingual stories, truthful CTAs, no redirect stubs.`,
 );

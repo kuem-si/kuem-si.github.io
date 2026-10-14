@@ -1,25 +1,39 @@
 ---
-const { locale = "sl", title, text } = Astro.props;
-const sl = locale === "sl";
+import type { Locale } from "../lib/i18n";
+const { locale = "sl", title, text } = Astro.props as {
+  locale?: Locale;
+  title?: string;
+  text?: string;
+};
+const copy = {
+  sl: {
+    title: "Povežimo podatke z odločitvami.",
+    text: "Povejte nam, kaj želite spremljati, povezati ali izboljšati. Skupaj bomo določili smiselno podatkovno pot in izvedbeni model.",
+    href: "/kontakt",
+    label: "Začnimo pogovor",
+  },
+  en: {
+    title: "Connect data with decisions.",
+    text: "Tell us what you need to monitor, connect or improve. Together, we will define a sensible data path and delivery model.",
+    href: "/en/contact",
+    label: "Start a conversation",
+  },
+  de: {
+    title: "Verbinden wir Daten mit Entscheidungen.",
+    text: "Sagen Sie uns, was Sie überwachen, verbinden oder verbessern möchten. Gemeinsam legen wir einen sinnvollen Datenpfad und ein passendes Umsetzungsmodell fest.",
+    href: "/de/kontakt",
+    label: "Gespräch beginnen",
+  },
+}[locale];
 ---
 
 <section class="cta" data-scheme="concrete">
   <div class="container">
     <h2>
-      {
-        title ??
-          (sl
-            ? "Povežimo podatke z odločitvami."
-            : "Connect data with decisions.")
-      }
+      {title ?? copy.title}
     </h2><p>
-      {
-        text ??
-          (sl
-            ? "Povejte nam, kaj želite spremljati, povezati ali izboljšati. Skupaj bomo določili smiselno podatkovno pot in izvedbeni model."
-            : "Tell us what you need to monitor, connect or improve. Together, we will define a sensible data path and delivery model.")
-      }
-    </p><a class="btn btn-primary" href={sl ? "/kontakt" : "/en/contact"}
-      >{sl ? "Začnimo pogovor" : "Start a conversation"}</a>
+      {text ?? copy.text}
+    </p><a class="btn btn-primary" href={copy.href}
+      >{copy.label}</a>
   </div>
 </section>

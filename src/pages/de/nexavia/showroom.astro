@@ -1,0 +1,48 @@
+---
+import MainLayout from "../../../layouts/MainLayout.astro";
+import "../../../styles/nexavia-showcase-room.css";
+import ShowcaseTwin from "../../../components/nexavia/ShowcaseTwin.astro";
+import { cityTwin } from "../../../components/nexavia/showcase/city";
+import { marinaTwin } from "../../../components/nexavia/showcase/marina";
+import { industryTwin } from "../../../components/nexavia/showcase/industry";
+import { datacenterTwin } from "../../../components/nexavia/showcase/datacenter";
+
+// Each tab is one maquette. The first tab starts on page load (or the tab
+// named in the URL hash, e.g. #marina); the others start the first time they
+// are opened (see src/nexavia/showcase-room/index.js).
+const twins = [cityTwin("de"), marinaTwin("de"), industryTwin("de"), datacenterTwin("de")];
+---
+
+<MainLayout
+  title="Nexavia-Showroom | KUEM"
+  description="Der Nexavia-Showroom: interaktive digitale Zwillinge einer Ministadt, einer smarten Marina mit Campingplatz, eines Industriestandorts und eines Rechenzentrums, verbunden mit einem Nexavia-Dashboard."
+>
+  <div class="twin-page" data-twin-root>
+    <div class="twin-intros">
+    {twins.map((twin, i) => (
+      <div class="twin-intro" data-twin-intro={twin.id} hidden={i !== 0}>
+        <div>
+          {/* One page heading: the breadcrumb's last step, in the first intro
+              (each intro carries the breadcrumb so it stays above its title). */}
+          <div class="twin-path">
+            <a href="/de/nexavia/">Nexavia</a> <span aria-hidden="true">/</span> {i === 0 ? <h1>Showroom</h1> : <span>Showroom</span>}
+          </div>
+          <h2>{twin.intro.title}</h2>
+          <p class="twin-lead">{twin.intro.lead}</p>
+        </div>
+      </div>
+    ))}
+    </div>
+
+    <div class="twin-tabs" role="tablist" aria-label="Modelle im Showroom">
+      {twins.map((twin, i) => (
+        <button type="button" role="tab" class="twin-tab" id={`twin-tab-${twin.id}`} aria-controls={`twin-panel-${twin.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1} data-twin-tab-trigger>
+          <span class="twin-tab-index">{String(i + 1).padStart(2, "0")}</span>
+          <span class="twin-tab-text"><b>{twin.tab.title}</b><small>{twin.tab.meta}</small></span>
+        </button>
+      ))}
+    </div>
+    {twins.map((twin, i) => <ShowcaseTwin locale="de" twin={twin} selected={i === 0} />)}
+  </div>
+  <script src="../../../nexavia/showcase-room/index.js"></script>
+</MainLayout>

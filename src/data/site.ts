@@ -75,6 +75,43 @@ export const solutions = {
       tech: ["NOC", "support", "monitoring", "improvement"],
     },
   ],
+  de: [
+    {
+      slug: "datenerfassung",
+      title: "Datenerfassung",
+      summary:
+        "Zuverlässige Erfassung aus Zählern, Sensoren, Maschinen und bestehenden Steuerungssystemen.",
+      tech: ["wM-Bus", "LoRaWAN", "NB-IoT", "Modbus TCP"],
+    },
+    {
+      slug: "konnektivitaet",
+      title: "Konnektivität",
+      summary:
+        "Ein Kommunikationsweg, ausgewählt nach Umgebung, Reichweite, Energieverbrauch und Verfügbarkeit.",
+      tech: ["LoRaWAN", "NB-IoT", "MQTT", "IP-Netze"],
+    },
+    {
+      slug: "integrationen",
+      title: "Integrationen und Automatisierung",
+      summary:
+        "Wir verbinden Daten mit bestehenden Geschäfts- und Betriebssystemen, ohne bewährte Investitionen zu ersetzen.",
+      tech: ["REST API", "MQTT", "SCADA", "ERP"],
+    },
+    {
+      slug: "erweiterte-analytik",
+      title: "Erweiterte Analytik",
+      summary:
+        "Aus Betriebsdaten machen wir nachvollziehbare Kennzahlen, Ereignisse und eine Grundlage zum Handeln.",
+      tech: ["KPIs", "Alarme", "Berichte", "Überwachung nahezu in Echtzeit"],
+    },
+    {
+      slug: "managed-services",
+      title: "Managed Services",
+      summary:
+        "Überwachung des Datenpfads, Anwenderunterstützung und kontinuierliche Verbesserung der Betriebsumgebung.",
+      tech: ["NOC", "Support", "Überwachung", "Verbesserung"],
+    },
+  ],
 } satisfies Record<
   Locale,
   { slug: string; title: string; summary: string; tech: string[] }[]
@@ -96,6 +133,14 @@ export const industries = {
     "Cities and environment",
     "Tourism, camps and marinas",
     "Distributed and remote infrastructure",
+  ],
+  de: [
+    "Energie und Versorgung",
+    "Industrie und Fertigung",
+    "Gebäude, Handel und Logistik",
+    "Städte und Umwelt",
+    "Tourismus, Campingplätze und Marinas",
+    "Verteilte und abgelegene Infrastruktur",
   ],
 } satisfies Record<Locale, string[]>;
 
@@ -180,6 +225,44 @@ export const homeIndustries = {
       summary:
         "We enable remote monitoring of devices and locations without a continuous on-site presence.",
       terms: ["Remote monitoring", "alarms", "connectivity"],
+    },
+  ],
+  de: [
+    {
+      title: "Energie und Versorgung",
+      summary:
+        "Wir führen Verbrauchsmessungen, Netzzustand, Alarme und Ereignisse in einer einheitlichen Betriebsübersicht zusammen.",
+      terms: ["Messungen", "Netz", "Abweichungen"],
+    },
+    {
+      title: "Industrie und Fertigung",
+      summary:
+        "Wir verbinden Maschinen, Prozesssignale und Energieverbrauch für eine zuverlässigere Produktionssteuerung.",
+      terms: ["Prozesse", "Energie", "Instandhaltung"],
+    },
+    {
+      title: "Gebäude, Handel und Logistik",
+      summary:
+        "Wir überwachen Energieverbrauch, Raumbedingungen und den Betrieb der Ausstattung an einem oder mehreren Standorten.",
+      terms: ["Energie", "Bedingungen", "Ausstattung"],
+    },
+    {
+      title: "Städte und Umwelt",
+      summary:
+        "Wir verbinden Umwelt-, Verkehrs- und Infrastrukturdaten für schnellere operative Reaktionen.",
+      terms: ["Umwelt", "Verkehr", "Infrastruktur"],
+    },
+    {
+      title: "Tourismus, Campingplätze und Marinas",
+      summary:
+        "Wir führen Verbrauch, Zugänge, Ausstattung und Services für ein effizienteres Standortmanagement zusammen.",
+      terms: ["Verbrauch", "Zugänge", "Services"],
+    },
+    {
+      title: "Verteilte und abgelegene Infrastruktur",
+      summary:
+        "Wir ermöglichen die Fernüberwachung von Geräten und Standorten ohne ständige Präsenz vor Ort.",
+      terms: ["Fernüberwachung", "Alarme", "Konnektivität"],
     },
   ],
 } satisfies Record<Locale, HomeIndustry[]>;
@@ -270,6 +353,46 @@ export const homeDataPath = {
         "We turn information into a clear next step, alert, approved action or automated process.",
       href: "/en/kai",
       label: "Operational outcome",
+    },
+  ],
+  de: [
+    {
+      title: "Erfassung",
+      summary:
+        "Wir erfassen Daten aus Geräten, Sensoren, Zählern und bestehenden Systemen im Feld.",
+      href: "/de/loesungen/datenerfassung",
+      label: "Dateneingang",
+    },
+    {
+      title: "Konnektivität",
+      summary:
+        "Für jede Umgebung wählen wir einen zuverlässigen Kommunikationsweg – unabhängig von einer einzelnen Technologie oder einem Hersteller.",
+      href: "/de/loesungen/konnektivitaet",
+    },
+    {
+      title: "Übertragung und Verarbeitung",
+      summary:
+        "Wir empfangen, prüfen und normalisieren Daten und bereiten sie mit geringer Verzögerung für die weitere Nutzung auf.",
+      href: "/de/nexavia",
+    },
+    {
+      title: "Integrationen",
+      summary:
+        "Wir verbinden den Datenpfad mit bestehenden Geschäfts-, Abrechnungs-, Leit- und weiteren Systemen.",
+      href: "/de/loesungen/integrationen",
+    },
+    {
+      title: "Erweiterte Analytik",
+      summary:
+        "Wir erkennen Abweichungen, vergleichen Verhalten und ergänzen Daten um Kontext, damit Ereignisse leichter verständlich sind.",
+      href: "/de/loesungen/erweiterte-analytik",
+    },
+    {
+      title: "Entscheidung und Maßnahme",
+      summary:
+        "Wir machen aus Informationen einen klaren nächsten Schritt, eine Warnung, eine bestätigte Aktion oder einen automatisierten Prozess.",
+      href: "/de/kai",
+      label: "Operatives Ergebnis",
     },
   ],
 } satisfies Record<Locale, HomeDataPathStep[]>;
@@ -412,6 +535,68 @@ export const homeCapabilityLayers = {
       ],
     },
   ],
+  de: [
+    {
+      label: "Feld",
+      title: "Feld und Geräte",
+      capabilities: [
+        {
+          title: "Datenerfassung",
+          summary:
+            "Wir verbinden Zähler, Sensoren, Maschinen und bestehende Steuerungssysteme zu einer zuverlässigen Quelle für Betriebsdaten.",
+          linkLabel: "Datenerfassung ansehen",
+          href: "/de/loesungen/datenerfassung",
+        },
+        {
+          title: "Konnektivität",
+          summary:
+            "Wir wählen den Kommunikationsweg nach Umgebung, Reichweite, Energieverbrauch und geforderter Verfügbarkeit.",
+          linkLabel: "Konnektivität ansehen",
+          href: "/de/loesungen/konnektivitaet",
+        },
+      ],
+    },
+    {
+      label: "Plattform",
+      title: "Plattform und Integrationen",
+      capabilities: [
+        {
+          title: "Nexavia Betriebsplattform",
+          summary:
+            "Nexavia vereint Übersicht, Ereignisse, Alarme, Berichtswesen und Feldarbeit in einer gemeinsamen Betriebsumgebung.",
+          linkLabel: "Nexavia entdecken",
+          href: "/de/nexavia",
+        },
+        {
+          title: "Integrationen und Automatisierung",
+          summary:
+            "Wir verbinden Daten mit Geschäfts-, Abrechnungs- und Leitsystemen und automatisieren vereinbarte Prozesse.",
+          linkLabel: "Integrationen ansehen",
+          href: "/de/loesungen/integrationen",
+        },
+      ],
+    },
+    {
+      label: "Betrieb",
+      title: "Analytik und Management",
+      capabilities: [
+        {
+          title: "Erweiterte Analytik",
+          summary:
+            "Wir machen aus Daten nachvollziehbare Kennzahlen, erkennen Abweichungen und schaffen die Grundlage für rechtzeitiges Handeln.",
+          linkLabel: "Analytik ansehen",
+          href: "/de/loesungen/erweiterte-analytik",
+        },
+        {
+          title: "NOC und Managed Services",
+          summary:
+            "Wir überwachen Geräte, Netze und den gesamten Datenpfad und bieten Support sowie operatives Management.",
+          linkLabel: "Managed Services ansehen",
+          href: "/de/loesungen/managed-services",
+        },
+      ],
+    },
+  ],
 } satisfies Record<Locale, HomeCapabilityLayer[]>;
 
 export type HomeNexaviaContent = {
@@ -468,6 +653,26 @@ export const homeNexavia = {
       "Nexavia Network Operations Center with a device map, gateway status, alarms and data quality",
     previewOpenLabel: "Open enlarged preview",
     previewCloseLabel: "Close enlarged preview",
+  },
+  de: {
+    title: "Alle Daten. Eine operative Übersicht.",
+    description:
+      "Nexavia verbindet Felddaten, Kommunikationsnetze, externe Systeme und Anwender in einer Umgebung für Überwachung, Analytik und operative Arbeit.",
+    emphasis: "NEXAVIA · BETRIEBSPLATTFORM",
+    primaryLabel: "Nexavia entdecken",
+    primaryHref: "/de/nexavia",
+    secondaryLabel: "Präsentation vereinbaren",
+    secondaryHref: "/de/kontakt",
+    capabilities: [
+      "Übersicht und KPIs",
+      "Alarme und Ereignisse",
+      "Gerätekarten",
+      "Berichte und Integrationen",
+    ],
+    previewAlt:
+      "Nexavia Network Operations Center mit Gerätekarte, Gateway-Status, Alarmen und Datenqualität",
+    previewOpenLabel: "Vergrößerte Vorschau öffnen",
+    previewCloseLabel: "Vergrößerte Vorschau schließen",
   },
 } satisfies Record<Locale, HomeNexaviaContent>;
 
@@ -567,6 +772,42 @@ export const homeKai = {
       "Check the gateway status and latest network events for the selected area.",
     approvalStatus: "User confirmation is required before execution.",
     reviewLabel: "Review suggestion",
+  },
+  de: {
+    slogan: "ASK. UNDERSTAND. ACT.",
+    title: "Analysiert. Erklärt. Empfiehlt.",
+    description:
+      "KAI verbindet eine Frage mit verfügbaren Daten, Dokumentation und betrieblichem Kontext. Er unterscheidet Beobachtungen von möglichen Schlussfolgerungen, zeigt unterstützende Informationen und schlägt den nächsten Schritt vor.",
+    confirmation:
+      "Bevor eine wichtige Maßnahme ausgeführt wird, verlangt KAI immer eine Bestätigung durch den Anwender.",
+    primaryLabel: "KAI entdecken",
+    primaryHref: "/de/kai",
+    secondaryLabel: "Präsentation vereinbaren",
+    secondaryHref: "/de/kontakt",
+    panelLabel: "BEISPIEL EINER OPERATIVEN ANTWORT",
+    integrationLabel: "Arbeitet mit Nexavia",
+    questionLabel: "FRAGE",
+    question: "Warum sind die Daten aus dem ausgewählten Gebiet unvollständig?",
+    observationLabel: "BEOBACHTUNG",
+    observationMeta: "Auf Basis der verfügbaren Daten",
+    observation:
+      "Ein Teil der Quellen hat im ausgewählten Zeitraum nicht die erwarteten Daten gesendet.",
+    inferenceLabel: "MÖGLICHE URSACHE",
+    inferenceMeta: "Mögliche Schlussfolgerung, keine bestätigte Tatsache",
+    inference:
+      "Das Muster deutet auf ein mögliches Problem im gemeinsamen Kommunikationsweg hin.",
+    supportLabel: "UNTERSTÜTZENDE INFORMATIONEN",
+    supportSources: [
+      "Zeitpunkt des letzten Empfangs",
+      "Status des Kommunikations-Gateways",
+      "Verlauf zugehöriger Ereignisse",
+    ],
+    recommendationLabel: "VORGESCHLAGENER SCHRITT",
+    recommendation:
+      "Prüfen Sie den Gateway-Status und die letzten Netzereignisse für das ausgewählte Gebiet.",
+    approvalStatus:
+      "Vor der Ausführung ist eine Bestätigung des Anwenders erforderlich.",
+    reviewLabel: "Vorschlag prüfen",
   },
 } satisfies Record<Locale, HomeKaiContent>;
 
@@ -699,6 +940,63 @@ export const homeDelivery = {
       },
     ],
   },
+  de: {
+    eyebrow: "UMSETZUNGSMODELL",
+    title:
+      "Von der operativen Herausforderung zur kontinuierlichen Verbesserung.",
+    introduction:
+      "Wir begleiten jedes Projekt vom Verständnis der Umgebung und der Wahl der Architektur über die Einführung und Prüfung bis zum langfristigen Betrieb.",
+    phases: [
+      {
+        label: "VERSTEHEN",
+        title: "Ziel und Architektur",
+        steps: [
+          {
+            title: "Operative Herausforderung",
+            description:
+              "Gemeinsam definieren wir Ziel, Anwender, Rahmenbedingungen und das erwartete operative Ergebnis.",
+          },
+          {
+            title: "Architektur und Umsetzungsmodell",
+            description:
+              "Wir legen Datenquellen, Kommunikationsweg, Integrationen, Sicherheit und den passendsten Einführungsweg fest.",
+          },
+        ],
+      },
+      {
+        label: "UMSETZEN",
+        title: "Anbindung und Einführung",
+        steps: [
+          {
+            title: "Erfassung und Konnektivität",
+            description:
+              "Wir richten Geräte, das Kommunikationsnetz und eine zuverlässige Datenübertragung vom Feld zur Plattform ein.",
+          },
+          {
+            title: "Integrationen und Automatisierung",
+            description:
+              "Wir verbinden die Plattform mit bestehenden Systemen und führen die vereinbarten Betriebsprozesse ein.",
+          },
+        ],
+      },
+      {
+        label: "BETREIBEN",
+        title: "Prüfung und Verbesserung",
+        steps: [
+          {
+            title: "Einführung und Prüfung",
+            description:
+              "Wir installieren, testen und dokumentieren das System und bereiten die Anwender auf den operativen Einsatz vor.",
+          },
+          {
+            title: "Betrieb und Verbesserung",
+            description:
+              "Wir überwachen den Betrieb, beheben Abweichungen und passen die Lösung an neue Anforderungen an.",
+          },
+        ],
+      },
+    ],
+  },
 } satisfies Record<Locale, HomeDeliveryContent>;
 
 export type HomeClosingCtaContent = {
@@ -722,6 +1020,13 @@ export const homeClosingCta = {
       "Tell us what you want to monitor, connect or improve. Together, we will define a meaningful data path and delivery model.",
     label: "Start a conversation",
     href: "/en/contact",
+  },
+  de: {
+    title: "Verbinden wir Daten mit Entscheidungen.",
+    description:
+      "Sagen Sie uns, was Sie überwachen, verbinden oder verbessern möchten. Gemeinsam legen wir einen sinnvollen Datenpfad und ein passendes Umsetzungsmodell fest.",
+    label: "Gespräch beginnen",
+    href: "/de/kontakt",
   },
 } satisfies Record<Locale, HomeClosingCtaContent>;
 
@@ -751,6 +1056,7 @@ export type FooterContent = {
   privacyHref: string;
   copyright: string;
   languageLabel: string;
+  socialLabel: string;
   homeLabel: string;
 };
 
@@ -798,6 +1104,7 @@ export const footerContent = {
     privacyHref: "/zasebnost",
     copyright: "Vse pravice pridržane.",
     languageLabel: "Izbira jezika",
+    socialLabel: "KUEM na družbenih omrežjih",
     homeLabel: "KUEM – domača stran",
   },
   en: {
@@ -843,6 +1150,53 @@ export const footerContent = {
     privacyHref: "/en/privacy",
     copyright: "All rights reserved.",
     languageLabel: "Language selection",
+    socialLabel: "KUEM on social media",
     homeLabel: "KUEM – home page",
+  },
+  de: {
+    slogan: "Vom Gerät zur Entscheidung.",
+    description:
+      "Digitalisierung und Management von Infrastruktur – von der Datenerfassung bis zur erweiterten Analytik.",
+    solutionsTitle: "LÖSUNGEN",
+    solutions: [
+      { label: "Datenerfassung", href: "/de/loesungen/datenerfassung" },
+      { label: "Konnektivität", href: "/de/loesungen/konnektivitaet" },
+      { label: "Integrationen", href: "/de/loesungen/integrationen" },
+      {
+        label: "Erweiterte Analytik",
+        href: "/de/loesungen/erweiterte-analytik",
+      },
+      { label: "Managed Services", href: "/de/loesungen/managed-services" },
+      { label: "Alle Lösungen", href: "/de/loesungen" },
+    ],
+    productsTitle: "PRODUKTE",
+    products: [
+      {
+        label: "Nexavia",
+        description: "Operative Datenplattform",
+        href: "/de/nexavia",
+      },
+      {
+        label: "KAI",
+        description: "Operativer Assistent",
+        href: "/de/kai",
+      },
+    ],
+    companyTitle: "UNTERNEHMEN",
+    company: [
+      { label: "Branchen", href: "/de/branchen" },
+      { label: "Über uns", href: "/de/unternehmen" },
+      { label: "Datenschutz", href: "/de/datenschutz" },
+    ],
+    contactTitle: "KONTAKT",
+    email: COMPANY_EMAIL,
+    contactLabel: "Kontaktieren Sie uns",
+    contactHref: "/de/kontakt",
+    privacyLabel: "Datenschutz",
+    privacyHref: "/de/datenschutz",
+    copyright: "Alle Rechte vorbehalten.",
+    languageLabel: "Sprachauswahl",
+    socialLabel: "KUEM in sozialen Netzwerken",
+    homeLabel: "KUEM – Startseite",
   },
 } satisfies Record<Locale, FooterContent>;

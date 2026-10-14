@@ -2,7 +2,7 @@
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SeoHead from "../components/SeoHead.astro";
-import { getLocaleFromPath } from "../lib/i18n";
+import { getLocaleFromPath, localeTags } from "../lib/i18n";
 const {
   title,
   description,
@@ -15,11 +15,17 @@ const locale = getLocaleFromPath(pathname);
 ---
 
 <!doctype html>
-<html lang={locale === "sl" ? "sl-SI" : "en-GB"}>
+<html lang={localeTags[locale]}>
   <head><SeoHead {title} {description} {pathname} {noindex} jsonLd={jsonLd} /><slot name="head" /></head><body
     class={bodyClass}
     ><a class="skip-link" href="#main"
-      >{locale === "sl" ? "Preskoči na vsebino" : "Skip to content"}</a
+      >{
+        {
+          sl: "Preskoči na vsebino",
+          en: "Skip to content",
+          de: "Zum Inhalt springen",
+        }[locale]
+      }</a
     ><Header {locale} pathname={pathname} /><main id="main">
       <slot />
     </main><Footer {locale} /><slot name="after" /></body>

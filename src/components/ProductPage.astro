@@ -11,69 +11,187 @@ const { locale, product } = Astro.props as {
   locale: Locale;
   product: "nexavia" | "kai";
 };
-const sl = locale === "sl";
 const isKai = product === "kai";
 const kaiCopy = kaiContent[locale];
+const copy = {
+  sl: {
+    nexaviaLead:
+      "Nexavia je operativna podatkovna platforma, ki poveže teren, sisteme in uporabnike v enoten pregled.",
+    kaiFeatures: [
+      "Primerja podatke infrastrukture",
+      "Loči opažanje od sklepa",
+      "Pokaže podporne vire",
+      "Priporoči naslednji korak",
+      "Pred ukrepom zahteva potrditev",
+      "Deluje z Nexavio",
+    ],
+    nexaviaFeatures: [
+      "Pregledi in KPI",
+      "Alarmi in dogodki",
+      "Zemljevidi naprav in prehodov",
+      "Analitika porabe in infrastrukture",
+      "Poročila in izvozi",
+      "Mobilni in terenski postopki",
+      "API in zunanje integracije",
+      "Lokalna ali oblačna postavitev",
+    ],
+    kaiDescriptions: [
+      "Podatke infrastrukture uporabi za razlago dogodkov v njihovem operativnem kontekstu.",
+      "Jasno loči, kaj kažejo podatki, od razlage ali sklepa, ki iz njih izhaja.",
+      "Pri razlagi ali priporočilu pokaže razpoložljive podatkovne vire, na katerih temelji.",
+      "Na podlagi razpoložljivih podatkov in konteksta predlaga naslednji operativni korak.",
+      "Človek ohrani nadzor, saj je pred izvedbo ukrepa potrebna njegova potrditev.",
+      "Za analizo, razlage in podporo odločanju uporablja podatke znotraj Nexavie.",
+    ],
+    worksWith: "Deluje z Nexavio",
+    kaiVisual: ["Vprašanje", "Dokazi", "Potrditev"],
+    nexaviaVisual: ["Teren", "Platforma", "Uporabnik"],
+    capabilities: "Zmogljivosti",
+    kaiHeading: "Analizira. Pojasni. Priporoči.",
+    nexaviaHeading: "Eno okolje za operativni pregled",
+    nexaviaFeatureText:
+      "Funkcija je vezana na razpoložljive podatke, uporabniške pravice in preverjen operativni kontekst.",
+    architectureTitle: "Razumljiva arhitektura",
+    architectureText:
+      "Viri in naprave se prek komunikacijske plasti povežejo z operativnim okoljem, integracijami in uporabniki. Postavitev se prilagodi obstoječi infrastrukturi.",
+    kaiPipeline: [
+      "Vprašanje",
+      "Kontekst",
+      "Primerjava",
+      "Dokazi",
+      "Predlog",
+      "Potrditev",
+    ],
+    nexaviaPipeline: [
+      "Naprave",
+      "Omrežje",
+      "Obdelava",
+      "Nexavia",
+      "Integracije",
+      "Uporabniki",
+    ],
+    kaiCta: "Preverite KAI na svojem primeru.",
+  },
+  en: {
+    nexaviaLead:
+      "Nexavia is an operational data platform connecting the field, systems and users into one unified view.",
+    kaiFeatures: [
+      "Compares infrastructure data",
+      "Separates observation from inference",
+      "Shows supporting sources",
+      "Recommends a next step",
+      "Requires confirmation before action",
+      "Works with Nexavia",
+    ],
+    nexaviaFeatures: [
+      "Dashboards and KPIs",
+      "Alarms and events",
+      "Device and gateway maps",
+      "Consumption and infrastructure analytics",
+      "Reports and exports",
+      "Mobile and field workflows",
+      "APIs and external integrations",
+      "On-premises or cloud deployment",
+    ],
+    kaiDescriptions: [
+      "Uses available infrastructure data to explain events in context.",
+      "Distinguishes what the data shows from conclusions drawn from it.",
+      "Identifies the available sources behind an explanation or recommendation.",
+      "Suggests a next step based on the available data and operational context.",
+      "Keeps people in control by asking for confirmation before taking action.",
+      "Uses data within Nexavia to support analysis, explanations and decisions.",
+    ],
+    worksWith: "Works with Nexavia",
+    kaiVisual: ["Question", "Evidence", "Confirmation"],
+    nexaviaVisual: ["Field", "Platform", "User"],
+    capabilities: "Capabilities",
+    kaiHeading: "Analyze. Explain. Recommend.",
+    nexaviaHeading: "One environment for operational overview",
+    nexaviaFeatureText:
+      "The capability depends on available data, user permissions and verified operational context.",
+    architectureTitle: "Understandable architecture",
+    architectureText:
+      "Sources and devices connect through a communication layer to the operational environment, integrations and users. Deployment adapts to existing infrastructure.",
+    kaiPipeline: [
+      "Question",
+      "Context",
+      "Comparison",
+      "Evidence",
+      "Next step",
+      "Confirmation",
+    ],
+    nexaviaPipeline: [
+      "Devices",
+      "Network",
+      "Processing",
+      "Nexavia",
+      "Integrations",
+      "Users",
+    ],
+    kaiCta: "Explore KAI with your use case.",
+  },
+  de: {
+    nexaviaLead:
+      "Nexavia ist eine operative Datenplattform, die Feld, Systeme und Anwender in einer einheitlichen Übersicht verbindet.",
+    kaiFeatures: [
+      "Vergleicht Infrastrukturdaten",
+      "Trennt Beobachtung von Schlussfolgerung",
+      "Zeigt unterstützende Quellen",
+      "Empfiehlt einen nächsten Schritt",
+      "Verlangt vor einer Maßnahme eine Bestätigung",
+      "Arbeitet mit Nexavia",
+    ],
+    nexaviaFeatures: [
+      "Dashboards und KPIs",
+      "Alarme und Ereignisse",
+      "Karten von Geräten und Gateways",
+      "Verbrauchs- und Infrastrukturanalytik",
+      "Berichte und Exporte",
+      "Mobile Abläufe und Feldprozesse",
+      "APIs und externe Integrationen",
+      "Lokale oder Cloud-Bereitstellung",
+    ],
+    kaiDescriptions: [
+      "Nutzt verfügbare Infrastrukturdaten, um Ereignisse in ihrem betrieblichen Kontext zu erklären.",
+      "Unterscheidet klar, was die Daten zeigen, von daraus abgeleiteten Erklärungen oder Schlüssen.",
+      "Zeigt bei einer Erklärung oder Empfehlung die verfügbaren Datenquellen, auf denen sie beruht.",
+      "Schlägt auf Basis der verfügbaren Daten und des Kontexts den nächsten operativen Schritt vor.",
+      "Der Mensch behält die Kontrolle, denn vor jeder Maßnahme ist seine Bestätigung erforderlich.",
+      "Nutzt Daten in Nexavia für Analysen, Erklärungen und Entscheidungsunterstützung.",
+    ],
+    worksWith: "Arbeitet mit Nexavia",
+    kaiVisual: ["Frage", "Belege", "Bestätigung"],
+    nexaviaVisual: ["Feld", "Plattform", "Anwender"],
+    capabilities: "Funktionen",
+    kaiHeading: "Analysiert. Erklärt. Empfiehlt.",
+    nexaviaHeading: "Eine Umgebung für die operative Übersicht",
+    nexaviaFeatureText:
+      "Die Funktion hängt von verfügbaren Daten, Benutzerrechten und dem geprüften betrieblichen Kontext ab.",
+    architectureTitle: "Verständliche Architektur",
+    architectureText:
+      "Quellen und Geräte werden über eine Kommunikationsschicht mit der Betriebsumgebung, Integrationen und Anwendern verbunden. Die Bereitstellung passt sich der vorhandenen Infrastruktur an.",
+    kaiPipeline: [
+      "Frage",
+      "Kontext",
+      "Vergleich",
+      "Belege",
+      "Vorschlag",
+      "Bestätigung",
+    ],
+    nexaviaPipeline: [
+      "Geräte",
+      "Netz",
+      "Verarbeitung",
+      "Nexavia",
+      "Integrationen",
+      "Anwender",
+    ],
+    kaiCta: "Testen Sie KAI mit Ihrem Anwendungsfall.",
+  },
+}[locale];
 const title = isKai ? kaiCopy.title : "Nexavia";
-const lead = isKai
-  ? kaiCopy.description
-  : sl
-    ? "Nexavia je operativna podatkovna platforma, ki poveže teren, sisteme in uporabnike v enoten pregled."
-    : "Nexavia is an operational data platform connecting the field, systems and users into one unified view.";
-const features = isKai
-  ? sl
-    ? [
-        "Primerja podatke infrastrukture",
-        "Loči opažanje od sklepa",
-        "Pokaže podporne vire",
-        "Priporoči naslednji korak",
-        "Pred ukrepom zahteva potrditev",
-        "Deluje z Nexavio",
-      ]
-    : [
-        "Compares infrastructure data",
-        "Separates observation from inference",
-        "Shows supporting sources",
-        "Recommends a next step",
-        "Requires confirmation before action",
-        "Works with Nexavia",
-      ]
-  : sl
-    ? [
-        "Pregledi in KPI",
-        "Alarmi in dogodki",
-        "Zemljevidi naprav in prehodov",
-        "Analitika porabe in infrastrukture",
-        "Poročila in izvozi",
-        "Mobilni in terenski postopki",
-        "API in zunanje integracije",
-        "Lokalna ali oblačna postavitev",
-      ]
-    : [
-        "Dashboards and KPIs",
-        "Alarms and events",
-        "Device and gateway maps",
-        "Consumption and infrastructure analytics",
-        "Reports and exports",
-        "Mobile and field workflows",
-        "APIs and external integrations",
-        "On-premises or cloud deployment",
-      ];
-const kaiDescriptions = sl ? [
-  "Podatke infrastrukture uporabi za razlago dogodkov v njihovem operativnem kontekstu.",
-  "Jasno loči, kaj kažejo podatki, od razlage ali sklepa, ki iz njih izhaja.",
-  "Pri razlagi ali priporočilu pokaže razpoložljive podatkovne vire, na katerih temelji.",
-  "Na podlagi razpoložljivih podatkov in konteksta predlaga naslednji operativni korak.",
-  "Človek ohrani nadzor, saj je pred izvedbo ukrepa potrebna njegova potrditev.",
-  "Za analizo, razlage in podporo odločanju uporablja podatke znotraj Nexavie.",
-] : [
-  "Uses available infrastructure data to explain events in context.",
-  "Distinguishes what the data shows from conclusions drawn from it.",
-  "Identifies the available sources behind an explanation or recommendation.",
-  "Suggests a next step based on the available data and operational context.",
-  "Keeps people in control by asking for confirmation before taking action.",
-  "Uses data within Nexavia to support analysis, explanations and decisions.",
-];
+const lead = isKai ? kaiCopy.description : copy.nexaviaLead;
+const features = isKai ? copy.kaiFeatures : copy.nexaviaFeatures;
 ---
 
 <MainLayout
@@ -91,31 +209,17 @@ const kaiDescriptions = sl ? [
           )}
           alt={isKai ? "KAI by KUEM" : "Nexavia"}
         /><h1>{title}</h1><p class="lead">{lead}</p>{
-          isKai && <p>{sl ? "Deluje z Nexavio" : "Works with Nexavia"}</p>
+          isKai && <p>{copy.worksWith}</p>
         }
       </div><DataVisual
-        labels={isKai
-          ? sl
-            ? ["Vprašanje", "Dokazi", "Potrditev"]
-            : ["Question", "Evidence", "Confirmation"]
-          : sl
-            ? ["Teren", "Platforma", "Uporabnik"]
-            : ["Field", "Platform", "User"]}
+        labels={isKai ? copy.kaiVisual : copy.nexaviaVisual}
       />
     </div>
   </section><section class="section">
     <div class="container">
       <div class="section-head">
-        <p class="eyebrow">{sl ? "Zmogljivosti" : "Capabilities"}</p><h2>
-          {
-            isKai
-              ? sl
-                ? "Analizira. Pojasni. Priporoči."
-                : "Analyze. Explain. Recommend."
-              : sl
-                ? "Eno okolje za operativni pregled"
-                : "One environment for operational overview"
-          }
+        <p class="eyebrow">{copy.capabilities}</p><h2>
+          {isKai ? copy.kaiHeading : copy.nexaviaHeading}
         </h2>
       </div><div class="grid-3">
         {
@@ -125,11 +229,7 @@ const kaiDescriptions = sl ? [
                 <span class="index">0{i + 1}</span>
                 <h3>{x}</h3>
                 <p>
-                  {isKai
-                    ? kaiDescriptions[i]
-                    : sl
-                      ? "Funkcija je vezana na razpoložljive podatke, uporabniške pravice in preverjen operativni kontekst."
-                      : "The capability depends on available data, user permissions and verified operational context."}
+                  {isKai ? copy.kaiDescriptions[i] : copy.nexaviaFeatureText}
                 </p>
               </>
             </article>
@@ -141,55 +241,14 @@ const kaiDescriptions = sl ? [
     <div class="container split">
       <div>
         <h2>
-          {isKai ? kaiCopy.processingTitle : (sl ? "Razumljiva arhitektura" : "Understandable architecture")}
+          {isKai ? kaiCopy.processingTitle : copy.architectureTitle}
         </h2><p>
-          {
-            isKai
-              ? kaiCopy.localProcessing
-              : sl
-                ? "Viri in naprave se prek komunikacijske plasti povežejo z operativnim okoljem, integracijami in uporabniki. Postavitev se prilagodi obstoječi infrastrukturi."
-                : "Sources and devices connect through a communication layer to the operational environment, integrations and users. Deployment adapts to existing infrastructure."
-          }
+          {isKai ? kaiCopy.localProcessing : copy.architectureText}
         </p>
         {isKai && <p>{kaiCopy.externalProcessing}</p>}
       </div><ol class:list={["pipeline", { "kai-pipeline": isKai }]}>
         {
-          (isKai
-            ? sl
-              ? [
-                  "Vprašanje",
-                  "Kontekst",
-                  "Primerjava",
-                  "Dokazi",
-                  "Predlog",
-                  "Potrditev",
-                ]
-              : [
-                  "Question",
-                  "Context",
-                  "Comparison",
-                  "Evidence",
-                  "Next step",
-                  "Confirmation",
-                ]
-            : sl
-              ? [
-                  "Naprave",
-                  "Omrežje",
-                  "Obdelava",
-                  "Nexavia",
-                  "Integracije",
-                  "Uporabniki",
-                ]
-              : [
-                  "Devices",
-                  "Network",
-                  "Processing",
-                  "Nexavia",
-                  "Integrations",
-                  "Users",
-                ]
-          ).map((x) => <li>{x}</li>)
+          (isKai ? copy.kaiPipeline : copy.nexaviaPipeline).map((x) => <li>{x}</li>)
         }
       </ol>
     </div>
@@ -209,11 +268,7 @@ const kaiDescriptions = sl ? [
   }
   <CTA
     {locale}
-    title={isKai
-      ? sl
-        ? "Preverite KAI na svojem primeru."
-        : "Explore KAI with your use case."
-      : undefined}
+    title={isKai ? copy.kaiCta : undefined}
   /></MainLayout
 >
 

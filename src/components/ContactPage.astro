@@ -5,28 +5,52 @@ import LeadForm from "./LeadForm.astro";
 import { COMPANY_EMAIL } from "../data/company";
 
 const { locale } = Astro.props as { locale: Locale };
-const sl = locale === "sl";
+const copy = {
+  sl: {
+    title: "Kontakt",
+    description:
+      "Pogovorite se s KUEM o podatkovni poti, integraciji ali operativnem izzivu.",
+    h1: "Začnimo pri vašem operativnem problemu.",
+    lead: "Opišite, kaj želite spremljati, povezati ali izboljšati.",
+    heading: "Pošljite povpraševanje",
+    submit: "Pošlji povpraševanje",
+    source: "kontakt",
+    direct: "Neposreden stik",
+  },
+  en: {
+    title: "Contact",
+    description:
+      "Talk to KUEM about a data path, integration or operational challenge.",
+    h1: "Start with your operational problem.",
+    lead: "Tell us what you need to monitor, connect or improve.",
+    heading: "Send an inquiry",
+    submit: "Send inquiry",
+    source: "contact",
+    direct: "Direct contact",
+  },
+  de: {
+    title: "Kontakt",
+    description:
+      "Sprechen Sie mit KUEM über einen Datenpfad, eine Integration oder eine operative Herausforderung.",
+    h1: "Beginnen wir bei Ihrem operativen Problem.",
+    lead: "Beschreiben Sie, was Sie überwachen, verbinden oder verbessern möchten.",
+    heading: "Anfrage senden",
+    submit: "Anfrage senden",
+    source: "kontakt-de",
+    direct: "Direkter Kontakt",
+  },
+}[locale];
 ---
 
 <MainLayout
-  title={sl ? "Kontakt" : "Contact"}
-  description={sl
-    ? "Pogovorite se s KUEM o podatkovni poti, integraciji ali operativnem izzivu."
-    : "Talk to KUEM about a data path, integration or operational challenge."}
+  title={copy.title}
+  description={copy.description}
   ><section class="hero contact-hero" data-scheme="carbon">
     <div class="container">
-      <p class="eyebrow">{sl ? "Kontakt" : "Contact"}</p><h1>
-        {
-          sl
-            ? "Začnimo pri vašem operativnem problemu."
-            : "Start with your operational problem."
-        }
+      <p class="eyebrow">{copy.title}</p><h1>
+        {copy.h1}
       </h1><p class="lead">
-        {
-          sl
-            ? "Opišite, kaj želite spremljati, povezati ali izboljšati."
-            : "Tell us what you need to monitor, connect or improve."
-        }
+        {copy.lead}
       </p>
     </div>
   </section><section class="section" id="demo-form">
@@ -34,11 +58,11 @@ const sl = locale === "sl";
       <LeadForm
         locale={locale}
         formId="contact-form"
-        heading={sl ? "Pošljite povpraševanje" : "Send an inquiry"}
-        submitLabel={sl ? "Pošlji povpraševanje" : "Send inquiry"}
-        sourcePage={sl ? "kontakt" : "contact"}
+        heading={copy.heading}
+        submitLabel={copy.submit}
+        sourcePage={copy.source}
       /><aside class="contact-direct">
-        <h2>{sl ? "Neposreden stik" : "Direct contact"}</h2><a
+        <h2>{copy.direct}</h2><a
           href={`mailto:${COMPANY_EMAIL}`}>{COMPANY_EMAIL}</a
         >
       </aside>

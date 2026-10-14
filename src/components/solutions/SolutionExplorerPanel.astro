@@ -1,5 +1,9 @@
 ---
-import { solutionSteps, solutionStepsEn } from "../../data/solutionExplorer";
+import {
+  solutionSteps,
+  solutionStepsDe,
+  solutionStepsEn,
+} from "../../data/solutionExplorer";
 import type { Locale } from "../../lib/i18n";
 import Content from "./SolutionStepContent.astro";
 
@@ -8,7 +12,9 @@ interface Props {
 }
 
 const { locale } = Astro.props;
-const steps = locale === "sl" ? solutionSteps : solutionStepsEn;
+const steps = { sl: solutionSteps, en: solutionStepsEn, de: solutionStepsDe }[
+  locale
+];
 const copy = {
   sl: {
     stepCountPrefix: "KORAK",
@@ -31,6 +37,17 @@ const copy = {
     nextPrefix: "Next:",
     cta: "Book a presentation",
     ctaHref: "/en/contact",
+  },
+  de: {
+    stepCountPrefix: "SCHRITT",
+    closeAria: "Details schließen",
+    progressAria: "Schritt wählen",
+    stepAriaPrefix: "Schritt",
+    backClose: "Schließen",
+    backPrev: "Zurück",
+    nextPrefix: "Weiter:",
+    cta: "Präsentation vereinbaren",
+    ctaHref: "/de/kontakt",
   },
 }[locale];
 const count = String(steps.length).padStart(2, "0");

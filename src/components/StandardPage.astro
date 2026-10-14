@@ -1,11 +1,62 @@
 ---
-import MainLayout from "../layouts/MainLayout.astro"; import CTA from "./CTA.astro"; import DataVisual from "./DataVisual.astro"; import { industries, solutions } from "../data/site"; import type { Locale } from "../lib/i18n"; import { COMPANY_EMAIL } from "../data/company"; import { withBase } from "../lib/paths";
-const {locale,type}=Astro.props as {locale:Locale;type:"solutions"|"industries"|"company"|"privacy"|"insights"}; const sl=locale==="sl"; const base=sl?"":"/en";
-const copy={solutions:[sl?"Rešitve":"Solutions",sl?"Celotna pot od zajema podatkov do operativnega ukrepa.":"The complete path from data acquisition to operational action."],industries:[sl?"Panoge":"Industries",sl?"Enake tehnične sposobnosti prilagodimo resničnemu operativnemu okolju.":"The same technical capabilities, adapted to the real operating environment."],company:[sl?"O podjetju":"Company",sl?"Tehnološki in izvedbeni partner za celotno podatkovno pot.":"A technology and delivery partner for the complete data path."],privacy:[sl?"Zasebnost":"Privacy",sl?"Osnovne informacije o ravnanju z osebnimi podatki.":"Basic information about personal-data handling."],insights:[sl?"Vpogledi":"Insights",sl?"Strokovni zapisi o podatkovnih poteh, integracijah in operativni analitiki.":"Technical notes on data paths, integrations and operational analytics."]}[type];
+import MainLayout from "../layouts/MainLayout.astro";
+import CTA from "./CTA.astro";
+import DataVisual from "./DataVisual.astro";
+import { industries, solutions } from "../data/site";
+import { localeHome, type Locale } from "../lib/i18n";
+import { COMPANY_EMAIL } from "../data/company";
+const { locale, type } = Astro.props as {
+  locale: Locale;
+  type: "solutions" | "industries" | "company" | "privacy" | "insights";
+};
+const tr = (sl: string, en: string, de: string) => ({ sl, en, de })[locale];
+const solutionsPath = `${localeHome[locale]}${tr("resitve", "solutions", "loesungen")}`;
+const copy = {
+  solutions: [
+    tr("Rešitve", "Solutions", "Lösungen"),
+    tr(
+      "Celotna pot od zajema podatkov do operativnega ukrepa.",
+      "The complete path from data acquisition to operational action.",
+      "Der gesamte Weg von der Datenerfassung bis zur operativen Maßnahme.",
+    ),
+  ],
+  industries: [
+    tr("Panoge", "Industries", "Branchen"),
+    tr(
+      "Enake tehnične sposobnosti prilagodimo resničnemu operativnemu okolju.",
+      "The same technical capabilities, adapted to the real operating environment.",
+      "Dieselben technischen Fähigkeiten, angepasst an die reale Betriebsumgebung.",
+    ),
+  ],
+  company: [
+    tr("O podjetju", "Company", "Unternehmen"),
+    tr(
+      "Tehnološki in izvedbeni partner za celotno podatkovno pot.",
+      "A technology and delivery partner for the complete data path.",
+      "Ein Technologie- und Umsetzungspartner für den gesamten Datenpfad.",
+    ),
+  ],
+  privacy: [
+    tr("Zasebnost", "Privacy", "Datenschutz"),
+    tr(
+      "Osnovne informacije o ravnanju z osebnimi podatki.",
+      "Basic information about personal-data handling.",
+      "Grundlegende Informationen zum Umgang mit personenbezogenen Daten.",
+    ),
+  ],
+  insights: [
+    tr("Vpogledi", "Insights", "Einblicke"),
+    tr(
+      "Strokovni zapisi o podatkovnih poteh, integracijah in operativni analitiki.",
+      "Technical notes on data paths, integrations and operational analytics.",
+      "Fachbeiträge zu Datenpfaden, Integrationen und operativer Analytik.",
+    ),
+  ],
+}[type];
 ---
-<MainLayout title={copy[0]} description={copy[1]}><section class="hero" data-scheme="carbon"><div class="container hero-grid"><div><p class="eyebrow">KUEM</p><h1>{copy[0]}</h1><p class="lead">{copy[1]}</p></div>{type!=="privacy" && <DataVisual labels={sl?["Problem","Pot","Rezultat"]:["Problem","Path","Outcome"]}/>}</div></section>
-{type==="solutions"&&<section class="section" id="solutions-overview"><div class="container"><div class="grid-3">{solutions[locale].map((x,i)=><article class="card"><span class="index">0{i+1}</span><h2>{x.title}</h2><p>{x.summary}</p><a href={`${base}/${sl?"resitve":"solutions"}/${x.slug}`}>{sl?"Podrobnosti →":"Details →"}</a></article>)}</div></div></section>}
-{type==="industries"&&<section class="section"><div class="container"><div class="filters" aria-label={sl?"Filtri panog":"Industry filters"}><button aria-pressed="true" data-filter="all">{sl?"Vse":"All"}</button>{industries[locale].slice(0,3).map((x,i)=><button aria-pressed="false" data-filter={String(i)}>{x}</button>)}</div><div class="grid-3">{industries[locale].map((x,i)=><article class="card" data-industry={String(i%3)}><h2>{x}</h2><p>{sl?"Izziv: razpršeni sistemi in omejen pregled. KUEM poveže zajem, integracije ter analitiko za hitrejše, utemeljene odločitve.":"Challenge: distributed systems and limited overview. KUEM connects acquisition, integrations and analytics for faster, evidence-based decisions."}</p><a href={`${base}/${sl?"resitve":"solutions"}`}>{sl?"Povezane rešitve →":"Related solutions →"}</a></article>)}</div></div><script>document.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-filter]").forEach(x=>x.setAttribute("aria-pressed","false"));b.setAttribute("aria-pressed","true");document.querySelectorAll<HTMLElement>("[data-industry]").forEach(c=>c.hidden=b.dataset.filter!=="all"&&c.dataset.industry!==b.dataset.filter)}));</script></section>}
-{type==="company"&&<section class="section"><div class="container split"><div><h2>{sl?"Neodvisni od enega proizvajalca ali protokola":"Independent of a single vendor or protocol"}</h2><p>{sl?"KUEM združuje terensko delo, komunikacijska omrežja, platforme, integracije, analitiko in podporo. Izhodišče je operativni problem, cilj pa uporabna in vzdržna podatkovna pot.":"KUEM combines field work, communication networks, platforms, integrations, analytics and support. We start from the operational problem and aim for a useful, maintainable data path."}</p></div><div class="logo-panel"><h3>{sl?"Ključne kompetence":"Core competencies"}</h3><ul><li>{sl?"Arhitektura in integracije":"Architecture and integrations"}</li><li>{sl?"Zajem in prenos podatkov":"Data acquisition and transfer"}</li><li>{sl?"Avtomatizacija in analitika":"Automation and analytics"}</li><li>{sl?"Izvedba in upravljanje":"Delivery and management"}</li></ul></div></div></section>}
-{type==="privacy"&&<section class="section"><div class="container legal"><h2>{sl?"Upravljavec in namen":"Controller and purpose"}</h2><p>{sl?"KUEM uporablja podatke, ki jih prostovoljno pošljete prek kontaktnega obrazca, izključno za obravnavo povpraševanja.":"KUEM uses data voluntarily submitted through the contact form solely to handle the inquiry."}</p><h2>{sl?"Piškotki":"Cookies"}</h2><p>{sl?"Ta različica spletnega mesta ne uporablja nenujnih piškotkov ali analitičnih sledilnikov.":"This website version uses no non-essential cookies or analytics trackers."}</p><h2>{sl?"Vaše pravice":"Your rights"}</h2><p>{sl?"Za vprašanja o osebnih podatkih pišite na info@kuem.si.":`For personal-data questions, contact ${COMPANY_EMAIL}.`}</p></div></section>}
-{type==="insights" &&<section class="section"><div class="container"><div class="section-head"><h2>{sl?"Raziščite naše rešitve":"Explore our expertise"}</h2><p>{sl?"Raziščite naše rešitve ali se pogovorite z našo ekipo o svojem operativnem izzivu.":"Explore our solutions or contact our team to discuss your operational challenge."}</p></div></div></section>}<CTA {locale}/></MainLayout>
+<MainLayout title={copy[0]} description={copy[1]}><section class="hero" data-scheme="carbon"><div class="container hero-grid"><div><p class="eyebrow">KUEM</p><h1>{copy[0]}</h1><p class="lead">{copy[1]}</p></div>{type!=="privacy" && <DataVisual labels={[tr("Problem","Problem","Problem"),tr("Pot","Path","Weg"),tr("Rezultat","Outcome","Ergebnis")]}/>}</div></section>
+{type==="solutions"&&<section class="section" id="solutions-overview"><div class="container"><div class="grid-3">{solutions[locale].map((x,i)=><article class="card"><span class="index">0{i+1}</span><h2>{x.title}</h2><p>{x.summary}</p><a href={`${solutionsPath}/${x.slug}`}>{tr("Podrobnosti →","Details →","Details →")}</a></article>)}</div></div></section>}
+{type==="industries"&&<section class="section"><div class="container"><div class="filters" aria-label={tr("Filtri panog","Industry filters","Branchenfilter")}><button aria-pressed="true" data-filter="all">{tr("Vse","All","Alle")}</button>{industries[locale].slice(0,3).map((x,i)=><button aria-pressed="false" data-filter={String(i)}>{x}</button>)}</div><div class="grid-3">{industries[locale].map((x,i)=><article class="card" data-industry={String(i%3)}><h2>{x}</h2><p>{tr("Izziv: razpršeni sistemi in omejen pregled. KUEM poveže zajem, integracije ter analitiko za hitrejše, utemeljene odločitve.","Challenge: distributed systems and limited overview. KUEM connects acquisition, integrations and analytics for faster, evidence-based decisions.","Herausforderung: verteilte Systeme und eingeschränkte Übersicht. KUEM verbindet Erfassung, Integrationen und Analytik für schnellere, fundierte Entscheidungen.")}</p><a href={solutionsPath}>{tr("Povezane rešitve →","Related solutions →","Passende Lösungen →")}</a></article>)}</div></div><script>document.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-filter]").forEach(x=>x.setAttribute("aria-pressed","false"));b.setAttribute("aria-pressed","true");document.querySelectorAll<HTMLElement>("[data-industry]").forEach(c=>c.hidden=b.dataset.filter!=="all"&&c.dataset.industry!==b.dataset.filter)}));</script></section>}
+{type==="company"&&<section class="section"><div class="container split"><div><h2>{tr("Neodvisni od enega proizvajalca ali protokola","Independent of a single vendor or protocol","Unabhängig von einem einzelnen Hersteller oder Protokoll")}</h2><p>{tr("KUEM združuje terensko delo, komunikacijska omrežja, platforme, integracije, analitiko in podporo. Izhodišče je operativni problem, cilj pa uporabna in vzdržna podatkovna pot.","KUEM combines field work, communication networks, platforms, integrations, analytics and support. We start from the operational problem and aim for a useful, maintainable data path.","KUEM vereint Feldarbeit, Kommunikationsnetze, Plattformen, Integrationen, Analytik und Support. Ausgangspunkt ist das operative Problem, Ziel ein nützlicher und nachhaltiger Datenpfad.")}</p></div><div class="logo-panel"><h3>{tr("Ključne kompetence","Core competencies","Kernkompetenzen")}</h3><ul><li>{tr("Arhitektura in integracije","Architecture and integrations","Architektur und Integrationen")}</li><li>{tr("Zajem in prenos podatkov","Data acquisition and transfer","Datenerfassung und -übertragung")}</li><li>{tr("Avtomatizacija in analitika","Automation and analytics","Automatisierung und Analytik")}</li><li>{tr("Izvedba in upravljanje","Delivery and management","Umsetzung und Betrieb")}</li></ul></div></div></section>}
+{type==="privacy"&&<section class="section"><div class="container legal"><h2>{tr("Upravljavec in namen","Controller and purpose","Verantwortlicher und Zweck")}</h2><p>{tr("KUEM uporablja podatke, ki jih prostovoljno pošljete prek kontaktnega obrazca, izključno za obravnavo povpraševanja.","KUEM uses data voluntarily submitted through the contact form solely to handle the inquiry.","KUEM verwendet die Daten, die Sie freiwillig über das Kontaktformular übermitteln, ausschließlich zur Bearbeitung Ihrer Anfrage.")}</p><h2>{tr("Piškotki","Cookies","Cookies")}</h2><p>{tr("Ta različica spletnega mesta ne uporablja nenujnih piškotkov ali analitičnih sledilnikov.","This website version uses no non-essential cookies or analytics trackers.","Diese Version der Website verwendet keine nicht notwendigen Cookies oder Analyse-Tracker.")}</p><h2>{tr("Vaše pravice","Your rights","Ihre Rechte")}</h2><p>{tr(`Za vprašanja o osebnih podatkih pišite na ${COMPANY_EMAIL}.`,`For personal-data questions, contact ${COMPANY_EMAIL}.`,`Bei Fragen zu personenbezogenen Daten schreiben Sie an ${COMPANY_EMAIL}.`)}</p></div></section>}
+{type==="insights" &&<section class="section"><div class="container"><div class="section-head"><h2>{tr("Raziščite naše rešitve","Explore our expertise","Entdecken Sie unsere Expertise")}</h2><p>{tr("Raziščite naše rešitve ali se pogovorite z našo ekipo o svojem operativnem izzivu.","Explore our solutions or contact our team to discuss your operational challenge.","Entdecken Sie unsere Lösungen oder sprechen Sie mit unserem Team über Ihre operative Herausforderung.")}</p></div></div></section>}<CTA {locale}/></MainLayout>

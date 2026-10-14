@@ -26,7 +26,7 @@ export const successStories: SuccessStory[] = [
   {
     slug: "domplan",
     customer: "Domplan",
-    industry: { sl: "Merjenje plina", en: "Gas metering" },
+    industry: { sl: "Merjenje plina", en: "Gas metering", de: "Gasmessung" },
     summary: homepageDetail("DOMPLAN, d.d."),
     published: true,
     source: {
@@ -38,10 +38,15 @@ export const successStories: SuccessStory[] = [
   {
     slug: "jkp-brezovica",
     customer: "JKP Brezovica",
-    industry: { sl: "Komunalna infrastruktura", en: "Utility infrastructure" },
+    industry: {
+      sl: "Komunalna infrastruktura",
+      en: "Utility infrastructure",
+      de: "Versorgungsinfrastruktur",
+    },
     summary: {
       sl: "Pregled vodomerov in komunalne infrastrukture.",
       en: "Overview of water meters and utility infrastructure.",
+      de: "Überblick über Wasserzähler und Versorgungsinfrastruktur.",
     },
     published: true,
     source: {
@@ -53,7 +58,7 @@ export const successStories: SuccessStory[] = [
   {
     slug: "sombor-gas",
     customer: "Sombor Gas",
-    industry: { sl: "Merjenje plina", en: "Gas metering" },
+    industry: { sl: "Merjenje plina", en: "Gas metering", de: "Gasmessung" },
     summary: homepageDetail("Sombor-gas d.o.o."),
     published: true,
     source: {
@@ -65,10 +70,11 @@ export const successStories: SuccessStory[] = [
   {
     slug: "adria-mobil",
     customer: "Adria Mobil",
-    industry: { sl: "Industrija", en: "Industry" },
+    industry: { sl: "Industrija", en: "Industry", de: "Industrie" },
     summary: {
       sl: "Energetski podatki proizvodnega okolja.",
       en: "Energy data from the production environment.",
+      de: "Energiedaten aus der Produktionsumgebung.",
     },
     published: true,
     source: {
@@ -80,10 +86,11 @@ export const successStories: SuccessStory[] = [
   {
     slug: "gradiska",
     customer: "Gradiška",
-    industry: { sl: "Okolje", en: "Environment" },
+    industry: { sl: "Okolje", en: "Environment", de: "Umwelt" },
     summary: {
       sl: "Kakovost zraka, hrup, promet in stanje okolja.",
       en: "Air quality, noise, traffic and environmental conditions.",
+      de: "Luftqualität, Lärm, Verkehr und Umweltbedingungen.",
     },
     published: true,
     source: {
@@ -95,7 +102,11 @@ export const successStories: SuccessStory[] = [
   {
     slug: "tropic",
     customer: "Tropic",
-    industry: { sl: "Spremljanje temperature", en: "Temperature monitoring" },
+    industry: {
+      sl: "Spremljanje temperature",
+      en: "Temperature monitoring",
+      de: "Temperaturüberwachung",
+    },
     summary: homepageDetail("Tropic Maloprodaja d.o.o."),
     published: true,
     source: {

@@ -313,3 +313,149 @@ export const industryExplorerEn: Industry[] = industryExplorer.map((item) => ({
   ) as Industry["metricValues"],
   ...englishIndustryCopy[item.id],
 }));
+
+const germanIndustryCopy: Record<
+  string,
+  Omit<Industry, "id" | "icon" | "metricValues">
+> = {
+  "komunala-in-energija": {
+    name: "Versorgung und Energie",
+    eyebrow: "WASSER · GAS · STROM",
+    description:
+      "Wir führen Wasser-, Gas- und Strommessungen zusammen und bieten den Verantwortlichen eine einheitliche Übersicht über Verbrauch, Netzzustand und wesentliche Abweichungen.",
+    watch: [
+      "Verbrauch",
+      "Durchfluss und Druck",
+      "Qualität",
+      "Gerätestatus",
+      "Alarme",
+    ],
+    gain: [
+      "Einheitliche Übersicht aller Medien",
+      "Rechtzeitig erkannte Abweichungen",
+      "Vergleich von Standorten und Zeiträumen",
+    ],
+    references: "Domplan · Brezovica · Sombor",
+    metrics: ["Wasser", "Gas", "Strom"],
+    events: "Verbrauchsabweichung",
+    map: "Netzzustand",
+  },
+  "javna-infrastruktura": {
+    name: "Öffentliche Infrastruktur",
+    eyebrow: "BELEUCHTUNG · STRASSEN · BRÜCKEN · GEBÄUDE",
+    description:
+      "Wir überwachen verteilte öffentliche Infrastruktur an einem Ort – von der öffentlichen Beleuchtung bis zu Straßen, Brücken, Gebäuden und weiteren Anlagen im Raum.",
+    watch: [
+      "Zustand von Geräten und Gebäuden",
+      "Energieverbrauch",
+      "Störungen und Alarme",
+      "Standorte und Ereignisse",
+      "Wartungseinsätze",
+    ],
+    gain: [
+      "Infrastrukturübersicht auf der Karte",
+      "Schnellere Priorisierung",
+      "Nachvollziehbare Ereignis- und Wartungshistorie",
+    ],
+    references: "Krk",
+    metrics: ["Leuchten", "Gebäude", "Ereignisse"],
+    events: "Offenes Ereignis",
+    map: "Infrastruktur auf der Karte",
+  },
+  okolje: {
+    name: "Umwelt",
+    eyebrow: "LUFT · LÄRM · TEMPERATUR · WASSERSTAND",
+    description:
+      "Wir bündeln Umweltmessungen in übersichtlichen Karten und Zeitverläufen, um den Zustand zu überwachen und Grenzwertüberschreitungen rechtzeitig zu erkennen.",
+    watch: [
+      "Luftqualität und Schadstoffe",
+      "Temperatur und Luftfeuchtigkeit",
+      "Lärm",
+      "Wasserstände",
+      "Trends nach Standort",
+    ],
+    gain: [
+      "Messwerte nach Standort",
+      "Warnungen bei Grenzwertüberschreitungen",
+      "Vergleich von Zeiträumen und Gebieten",
+    ],
+    references: "Gradiška",
+    metrics: ["Luftqualität", "Temperatur", "Lärm"],
+    events: "Grenzwert überschritten",
+    map: "Umweltmessstellen",
+  },
+  industrija: {
+    name: "Industrie",
+    eyebrow: "ENERGIE · PROZESSE · RAUMBEDINGUNGEN",
+    description:
+      "Wir führen Energie- und Prozessdaten aus der Produktion in einer Übersicht zusammen, die hilft, Abweichungen zu erkennen und den Verbrauch nach Standort, Abteilung oder Gerät zu verstehen.",
+    watch: [
+      "Strom, Gas und Wasser",
+      "Leistung und Lastspitzen",
+      "Temperatur und Luftfeuchtigkeit",
+      "Gerätestatus",
+      "Ungewöhnliche Abweichungen",
+    ],
+    gain: [
+      "Verbrauch nach Bereich",
+      "Rechtzeitige Warnungen",
+      "Daten für die Planung von Verbesserungen",
+    ],
+    references: "Adria Mobil",
+    metrics: ["Strom", "Gas", "Wasser"],
+    events: "Abweichung erkannt",
+    map: "Produktionsbereiche",
+  },
+  mobilnost: {
+    name: "Mobilität",
+    eyebrow: "RADFAHRENDE · FUSSGÄNGER · VERKEHRSSTRÖME",
+    description:
+      "Wir verbinden Zählerdaten, kommunale Systeme und externe Quellen zu einer Darstellung der Nutzung von Radwegen, Fußwegen und anderen Verkehrsverbindungen.",
+    watch: [
+      "Erfasste Durchgänge",
+      "Nutzungsintensität der Wege",
+      "Spitzenzeiten",
+      "Am stärksten belastete Abschnitte",
+      "Veränderungen zwischen Zeiträumen",
+    ],
+    gain: [
+      "Heatmaps der Nutzung",
+      "Bessere Grundlage für Prioritäten",
+      "Vorher-nachher-Vergleich von Maßnahmen",
+    ],
+    references: "Novo mesto",
+    metrics: ["Radfahrende", "Fußgänger", "Spitzenzeiten"],
+    events: "Änderung der Intensität",
+    map: "Nutzung der Verkehrswege",
+  },
+  turizem: {
+    name: "Tourismus",
+    eyebrow: "MARINAS · CAMPINGPLÄTZE",
+    description:
+      "In Marinas und auf Campingplätzen verbinden wir Verbrauchsmessungen, den Zustand von Anschlüssen und Umweltdaten zu einer Übersicht nach Stellplatz, Liegeplatz und Gemeinschaftseinrichtung.",
+    watch: [
+      "Wasser- und Stromverbrauch",
+      "Zustand der Anschlüsse",
+      "Alarme und Unregelmäßigkeiten",
+      "Umweltbedingungen",
+      "Gemeinsame technische Einrichtungen",
+    ],
+    gain: [
+      "Verbrauch nach Stell- oder Liegeplatz",
+      "Rechtzeitige Bearbeitung von Unregelmäßigkeiten",
+      "Weniger manuelle Kontrollen vor Ort",
+    ],
+    references: "ANWENDUNGSFALL · MARINAS UND CAMPINGPLÄTZE",
+    metrics: ["Wasser", "Strom", "Anschlüsse"],
+    events: "Technische Warnung",
+    map: "Marina und Campingplatz",
+  },
+};
+
+// German shares the Slovenian thousands separator, so values are reused as-is.
+export const industryExplorerDe: Industry[] = industryExplorer.map((item) => ({
+  id: item.id,
+  icon: item.icon,
+  metricValues: item.metricValues,
+  ...germanIndustryCopy[item.id],
+}));

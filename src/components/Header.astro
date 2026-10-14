@@ -1,6 +1,6 @@
 ---
 import wordmark from "../assets/brand/kuem/KUEM_Official_Wordmark.svg";
-import { type Locale } from "../lib/i18n";
+import { localeHome, type Locale } from "../lib/i18n";
 import { ensureTrailingSlash } from "../lib/paths";
 import LanguageSelector from "./LanguageSelector.astro";
 import { contactNavigation, primaryNavigation } from "../data/navigation";
@@ -8,7 +8,11 @@ const { locale, pathname } = Astro.props as {
   locale: Locale;
   pathname: string;
 };
-const sl = locale === "sl";
+const labels = {
+  sl: { home: "KUEM – domača stran", menu: "Meni", nav: "Glavna navigacija" },
+  en: { home: "KUEM – home page", menu: "Menu", nav: "Main navigation" },
+  de: { home: "KUEM – Startseite", menu: "Menü", nav: "Hauptnavigation" },
+}[locale];
 const currentPath = pathname.replace(/\/+$/, "") || "/";
 const nav = primaryNavigation[locale];
 const contact = contactNavigation[locale];
@@ -17,6 +21,7 @@ const isActive = (href: string) => {
   if (href === "/resitve")
     return currentPath.startsWith("/resitve/");
   if (href === "/en/solutions") return currentPath.startsWith("/en/solutions/");
+  if (href === "/de/loesungen") return currentPath.startsWith("/de/loesungen/");
   return false;
 };
 ---
@@ -25,8 +30,8 @@ const isActive = (href: string) => {
   <div class="container header-inner">
     <a
       class="brand"
-      href={sl ? "/" : "/en/"}
-      aria-label={sl ? "KUEM – domača stran" : "KUEM – home page"}
+      href={localeHome[locale]}
+      aria-label={labels.home}
       ><img src={wordmark.src} width="142" height="41" alt="KUEM" /></a
     ><button
       class="menu-toggle"
@@ -34,11 +39,11 @@ const isActive = (href: string) => {
       aria-expanded="false"
       aria-controls="site-nav"
       ><span></span><span></span><span></span><span class="sr-only"
-        >{sl ? "Meni" : "Menu"}</span
+        >{labels.menu}</span
       ></button
     ><nav
       id="site-nav"
-      aria-label={sl ? "Glavna navigacija" : "Main navigation"}
+      aria-label={labels.nav}
     >
       <ul class="nav-list">
         {

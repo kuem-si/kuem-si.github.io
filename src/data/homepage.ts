@@ -136,3 +136,72 @@ export const useCasesEn = [
     href: "/en/solutions/traffic-and-mobility",
   },
 ];
+export const benefitsDe = [
+  {
+    icon: "eye",
+    title: "Einheitliche Übersicht",
+    text: "Alle wichtigen Daten, Systeme und Standorte an einem Ort.",
+  },
+  {
+    icon: "bell",
+    title: "Warnungen nahezu in Echtzeit",
+    text: "Abweichungen und Ereignisse erreichen die verantwortliche Person rechtzeitig.",
+  },
+  {
+    icon: "chart",
+    title: "Daten für bessere Entscheidungen",
+    text: "Analytik unterstützt das Infrastrukturmanagement und die Maßnahmenplanung.",
+  },
+];
+export const industriesDe = [
+  {
+    icon: "water",
+    title: "Wasser und Versorgung",
+    text: "Überwachung von Netzen, Verbrauch, Verlusten, Druck und Qualität.",
+    reference: "Brezovica",
+  },
+  {
+    icon: "energy",
+    title: "Energie",
+    text: "Überwachung der Energieeffizienz und ungewöhnlicher Abweichungen.",
+    reference: "Adria Mobil",
+  },
+  {
+    icon: "leaf",
+    title: "Umwelt",
+    text: "Messung von Emissionen, Luftqualität, Umweltindikatoren und Lärm.",
+    reference: "Gradiška",
+  },
+  {
+    icon: "bike",
+    title: "Mobilität",
+    text: "Überwachung von Verkehrsströmen und Unterstützung einer nachhaltigen Mobilitätsplanung.",
+    reference: "Novo mesto",
+  },
+  {
+    icon: "building",
+    title: "Öffentliche Infrastruktur",
+    text: "Übersicht über verteilte Gebäude, Geräte und Wartung.",
+    reference: "Krk",
+  },
+];
+export const useCasesDe = [
+  {
+    icon: "water",
+    title: "Unerwarteter Wasserverbrauch",
+    text: "Nexavia erkennt die Abweichung und benachrichtigt die verantwortliche Person.",
+    href: "/de/loesungen/zaehlerfernauslesung",
+  },
+  {
+    icon: "energy",
+    title: "Energieabweichungen",
+    text: "Das System vergleicht den Verbrauch über die Zeit und hebt ungewöhnliche Veränderungen hervor.",
+    href: "/de/loesungen/erweiterte-analytik",
+  },
+  {
+    icon: "bike",
+    title: "Planung von Radverbindungen",
+    text: "Daten aus mehreren Quellen werden auf einer Nutzungskarte dargestellt und unterstützen die Infrastrukturplanung.",
+    href: "/de/loesungen/verkehr-und-mobilitaet",
+  },
+];

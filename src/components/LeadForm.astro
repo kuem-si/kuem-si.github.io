@@ -20,9 +20,8 @@ const {
 const statusId = `${formId || "lead"}-status`;
 const countryListId = `${formId || "lead"}-countries`;
 const endpoint = PUBLIC_CONTACT_ENDPOINT ?? null;
-const copy =
-  locale === "sl"
-    ? {
+const copy = {
+  sl: {
         firstName: "Ime",
         lastName: "Priimek",
         email: "E-pošta",
@@ -42,8 +41,8 @@ const copy =
         success: "Hvala. Kmalu vas bomo kontaktirali.",
         failed: `Oddaja ni uspela. Prosimo, pišite na ${COMPANY_EMAIL}.`,
         customRequired: "Vnesite prilagojeno zadevo.",
-      }
-    : {
+      },
+  en: {
         firstName: "First name",
         lastName: "Last name",
         email: "Email",
@@ -63,7 +62,29 @@ const copy =
         success: "Thank you. We will contact you shortly.",
         failed: `We could not submit the form. Please email ${COMPANY_EMAIL}.`,
         customRequired: "Please provide a custom subject.",
-      };
+      },
+  de: {
+        firstName: "Vorname",
+        lastName: "Nachname",
+        email: "E-Mail",
+        subject: "Betreff",
+        customSubject: "Eigener Betreff",
+        country: "Land",
+        message: "Nachricht",
+        consent:
+          "Ich willige ein, dass KUEM meine Daten zur Beantwortung dieser Anfrage gemäß DSGVO speichert.",
+        subjectPlaceholder: "Betreff auswählen",
+        subjectPartnership: "Partnerschaft",
+        subjectDemo: "Präsentation",
+        subjectInquiry: "Anfrage",
+        subjectCustom: "Sonstiges",
+        blocked: "Übermittlung blockiert.",
+        submitting: "Wird gesendet …",
+        success: "Vielen Dank. Wir melden uns in Kürze bei Ihnen.",
+        failed: `Das Formular konnte nicht gesendet werden. Bitte schreiben Sie an ${COMPANY_EMAIL}.`,
+        customRequired: "Bitte geben Sie einen eigenen Betreff ein.",
+      },
+}[locale];
 ---
 
 <form

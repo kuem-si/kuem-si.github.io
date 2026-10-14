@@ -5,7 +5,8 @@ import { htmlFiles, dist, read } from "./site-files.mjs";
 import { loadSiteData } from "./site-data.mjs";
 
 const origin = "https://www.kuem.si";
-const { routePairs, alternatePath } = await loadSiteData("../src/lib/i18n.ts");
+const { routePairs, getLocaleFromPath, localeAlternates, localeTags } =
+  await loadSiteData("../src/lib/i18n.ts");
 const { pageUrl, normalizePageUrls } = await loadSiteData(
   "../src/lib/page-urls.ts",
 );
@@ -91,28 +92,36 @@ if (!args.includes("--http-only")) {
       };
       walk(JSON.parse(json));
     }
-    const alternate = pageUrl(alternatePath(path));
-    if (!currentPaths.has(alternate)) continue;
-    check(
-      alternatePath(alternate) === path,
-      `${path}: reciprocal language switch`,
-    );
-    const other = path.startsWith("/en/") ? "sl-SI" : "en-GB";
-    if (!html.includes('name="robots" content="noindex,follow"')) {
-      check(
-        html.includes(`hreflang="${other}" href="${origin}${alternate}"`),
-        `${path}: alternate`,
-      );
-    }
+    const locale = getLocaleFromPath(path);
+    const alternates = Object.entries(localeAlternates(path))
+      .filter(([other]) => other !== locale)
+      .map(([other, href]) => [other, pageUrl(href)])
+      .filter(([, href]) => currentPaths.has(href));
+    if (!alternates.length) continue;
     check(
       sitemap.includes(`<loc>${origin}${path}</loc>`),
       `${path}: sitemap missing`,
     );
     const header = html.match(/<header\b[\s\S]*?<\/header>/)?.[0] ?? "";
-    check(
-      (header.match(new RegExp(`href="${alternate}"`, "g")) ?? []).length >= 2,
-      `${path}: desktop/mobile language links`,
-    );
+    for (const [other, alternate] of alternates) {
+      check(
+        localeAlternates(alternate)[locale] === path,
+        `${path}: reciprocal language switch (${other})`,
+      );
+      if (!html.includes('name="robots" content="noindex,follow"')) {
+        check(
+          html.includes(
+            `hreflang="${localeTags[other]}" href="${origin}${alternate}"`,
+          ),
+          `${path}: alternate ${other}`,
+        );
+      }
+      check(
+        (header.match(new RegExp(`href="${alternate}"`, "g")) ?? []).length >=
+          2,
+        `${path}: desktop/mobile language links (${other})`,
+      );
+    }
   }
   console.log(
     `Artifact checked: ${pages.length} pages; canonical, hreflang, desktop/mobile links, JSON-LD, sitemap.`,
@@ -167,7 +176,7 @@ if (base) {
     await q.arrayBuffer();
     check(queryOk, `${path}: query not preserved`);
     rows.push(
-      `| ${path.startsWith("/en/") ? "EN" : "SL"} | ${start} | ${first.status} | ${target.pathname} | ${final.status} | ${canonical(html) ?? "missing"} | ${loop ? "YES" : "no"} | ${queryOk ? "OK" : "FAIL"} |`,
+      `| ${getLocaleFromPath(path).toUpperCase()} | ${start} | ${first.status} | ${target.pathname} | ${final.status} | ${canonical(html) ?? "missing"} | ${loop ? "YES" : "no"} | ${queryOk ? "OK" : "FAIL"} |`,
     );
   }
   console.log(

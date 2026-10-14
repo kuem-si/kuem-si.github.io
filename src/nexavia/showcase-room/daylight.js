@@ -128,7 +128,7 @@ export function initDaylight(root, { t, onScrub }) {
   clock.innerHTML = `
     <span class="twin-clock-icon"></span>
     <span class="twin-clock-read"><b></b><small></small></span>
-    <span class="twin-clock-track"><input type="range" min="0" max="1435" step="5" aria-label="${t("Ura na maketi", "Time of day on the model")}"></span>`;
+    <span class="twin-clock-track"><input type="range" min="0" max="1435" step="5" aria-label="${t("Ura na maketi", "Time of day on the model", "Tageszeit am Modell")}"></span>`;
   wrapper.append(clock);
   const input = clock.querySelector("input");
   const read = {
@@ -159,10 +159,10 @@ export function initDaylight(root, { t, onScrub }) {
     );
 
   const phases = {
-    night: t("Noč", "Night"),
-    dawn: t("Zora", "Dawn"),
-    day: t("Dan", "Day"),
-    dusk: t("Mrak", "Dusk"),
+    night: t("Noč", "Night", "Nacht"),
+    dawn: t("Zora", "Dawn", "Morgendämmerung"),
+    day: t("Dan", "Day", "Tag"),
+    dusk: t("Mrak", "Dusk", "Abenddämmerung"),
   };
   const phaseOf = (hours) => {
     const light = daylight(hours);

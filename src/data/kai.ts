@@ -47,4 +47,22 @@ export const kaiContent: Record<Locale, KaiContent> = {
     configurationSummary:
       "Response speed and quality also depend on KAI's configuration. Most setup work happens during the initial rollout; later adjustments are usually smaller.",
   },
+  de: {
+    title: "KAI: zuerst lokale Verarbeitung.",
+    description:
+      "KAI hilft, Infrastrukturdaten zu analysieren, Ereignisse zu erklären und den nächsten Schritt vorzubereiten. Er ist so konzipiert, dass die Verarbeitung auf Ihren eigenen Servern Vorrang hat.",
+    processingTitle: "So arbeitet KAI auf Ihren eigenen Servern.",
+    localProcessing:
+      "Mit ausreichend Rechenleistung und Arbeitsspeicher können Server in Ihren Räumlichkeiten auch anspruchsvolle Analysen durchführen und große Sprachmodelle betreiben. Kompatible Hardwarebeschleuniger wie Grafikprozessoren (GPUs) können unterstützte Aufgaben deutlich beschleunigen. KAI ist so konzipiert, dass er zuerst diese lokalen Kapazitäten nutzt. Was lokal verarbeitet werden kann, hängt von Hardware, Modell und Aufgabe ab.",
+    externalProcessing:
+      "Nur für die anspruchsvollsten Aufgaben, die die lokale Umgebung übersteigen, kommen bei Bedarf externe Dienste wie OpenAI oder Anthropic infrage. In diesem Fall wird das leistungsfähigste Sprachmodell gewählt, das für die konkrete Aufgabe geeignet ist.",
+    configurationTitle:
+      "Die Konfiguration bestimmt Geschwindigkeit und Qualität der Antworten.",
+    configurationPerformance:
+      "Die Einstellungen in KAI beeinflussen die Antwortgeschwindigkeit und die Qualität der Antworten. Beides hängt auch von Hardware, Modellen und verfügbaren Daten ab.",
+    configurationRollout:
+      "Der größte Konfigurationsaufwand entsteht bei der Einführung von KAI in der Organisation, wenn er an deren Bedürfnisse angepasst und seine Antworten in der Praxis geprüft werden. Danach sind in der Regel nur kleinere Korrekturen auf Basis der täglichen Nutzung nötig.",
+    configurationSummary:
+      "Geschwindigkeit und Qualität der Antworten hängen auch von der Konfiguration von KAI ab. Der meiste Einrichtungsaufwand fällt bei der Einführung an; spätere Anpassungen sind in der Regel kleiner.",
+  },
 };

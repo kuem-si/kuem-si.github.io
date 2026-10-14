@@ -22,6 +22,11 @@ body {
   font-family: var(--kuem-font-text);
   font-size: var(--kuem-type-body-size);
 }
+/* German compounds are long: hyphenate them by language rather than
+   breaking mid-word in narrow cards and columns. */
+:lang(de) body {
+  hyphens: auto;
+}
 a {
   color: inherit;
   text-decoration: none;

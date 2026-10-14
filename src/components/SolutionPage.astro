@@ -2,13 +2,103 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import DataVisual from "./DataVisual.astro";
 import CTA from "./CTA.astro";
-import type { Locale } from "../lib/i18n";
+import { localeHome, localizedPath, type Locale } from "../lib/i18n";
 import { organization } from "../data/organization";
 const { locale, solution } = Astro.props as {
   locale: Locale;
   solution: { title: string; summary: string; tech: string[] };
 };
-const sl = locale === "sl";
+const copy = {
+  sl: {
+    country: "Slovenija",
+    home: "Domov",
+    solutions: "Rešitve",
+    uses: [
+      "Energetika: povezava razpršenih merilnih mest in pregled odstopanj.",
+      "Proizvodnja: združevanje signalov strojev z informacijami iz poslovnih sistemov.",
+      "Objekti in logistika: spremljanje porabe, pogojev in dogodkov na več lokacijah.",
+    ],
+    eyebrow: "Rešitev KUEM",
+    discuss: "Pogovor o projektu",
+    visual: ["Teren", "Integracija", "Rezultat"],
+    problemEyebrow: "Operativni problem",
+    problemTitle: "Podatki obstajajo. Pot do uporabne odločitve pogosto ne.",
+    problemText:
+      "Različne naprave, protokoli in sistemi ustvarjajo nepovezane podatkovne tokove. KUEM začne pri dejanskem procesu, določi arhitekturo in poveže zajem, prenos, obdelavo ter uporabo podatkov.",
+    approach: "Pristop",
+    approachTitle: "Razumljiva arhitektura od vira do uporabnika",
+    pipeline: [
+      "Razumevanje",
+      "Arhitektura",
+      "Zajem",
+      "Prenos",
+      "Integracija",
+      "Preverjanje",
+    ],
+    usesEyebrow: "Primeri uporabe",
+    usesTitle: "Ena sposobnost, več okolij",
+  },
+  en: {
+    country: "Slovenia",
+    home: "Home",
+    solutions: "Solutions",
+    uses: [
+      "Utilities: connect distributed metering points and review deviations.",
+      "Manufacturing: combine machine signals with information from business systems.",
+      "Buildings and logistics: monitor consumption, conditions and events across locations.",
+    ],
+    eyebrow: "KUEM solution",
+    discuss: "Discuss a project",
+    visual: ["Field", "Integration", "Outcome"],
+    problemEyebrow: "Operational problem",
+    problemTitle:
+      "Data exists. A reliable path to a useful decision often does not.",
+    problemText:
+      "Different devices, protocols and systems create fragmented data flows. KUEM starts with the operating process, defines the architecture and connects acquisition, transfer, processing and use.",
+    approach: "Approach",
+    approachTitle: "A clear architecture from source to user",
+    pipeline: [
+      "Understand",
+      "Architecture",
+      "Acquire",
+      "Transfer",
+      "Integrate",
+      "Verify",
+    ],
+    usesEyebrow: "Use cases",
+    usesTitle: "One capability, multiple environments",
+  },
+  de: {
+    country: "Slowenien",
+    home: "Startseite",
+    solutions: "Lösungen",
+    uses: [
+      "Versorgung: verteilte Messstellen verbinden und Abweichungen prüfen.",
+      "Fertigung: Maschinensignale mit Informationen aus Geschäftssystemen zusammenführen.",
+      "Gebäude und Logistik: Verbrauch, Bedingungen und Ereignisse an mehreren Standorten überwachen.",
+    ],
+    eyebrow: "KUEM-Lösung",
+    discuss: "Projekt besprechen",
+    visual: ["Feld", "Integration", "Ergebnis"],
+    problemEyebrow: "Operatives Problem",
+    problemTitle:
+      "Daten sind vorhanden. Ein verlässlicher Weg zur nützlichen Entscheidung oft nicht.",
+    problemText:
+      "Unterschiedliche Geräte, Protokolle und Systeme erzeugen unverbundene Datenströme. KUEM beginnt beim tatsächlichen Prozess, legt die Architektur fest und verbindet Erfassung, Übertragung, Verarbeitung und Nutzung der Daten.",
+    approach: "Vorgehen",
+    approachTitle: "Eine verständliche Architektur von der Quelle bis zum Anwender",
+    pipeline: [
+      "Verstehen",
+      "Architektur",
+      "Erfassen",
+      "Übertragen",
+      "Integrieren",
+      "Prüfen",
+    ],
+    usesEyebrow: "Anwendungsfälle",
+    usesTitle: "Eine Fähigkeit, viele Umgebungen",
+  },
+}[locale];
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const jsonLd = [
   {
@@ -18,7 +108,7 @@ const jsonLd = [
     serviceType: solution.title,
     url: canonical.href,
     provider: { "@id": organization["@id"] },
-    areaServed: { "@type": "Country", name: sl ? "Slovenija" : "Slovenia" },
+    areaServed: { "@type": "Country", name: copy.country },
   },
   {
     "@type": "BreadcrumbList",
@@ -26,14 +116,14 @@ const jsonLd = [
       {
         "@type": "ListItem",
         position: 1,
-        name: sl ? "Domov" : "Home",
-        item: new URL(sl ? "/" : "/en/", Astro.site).href,
+        name: copy.home,
+        item: new URL(localeHome[locale], Astro.site).href,
       },
       {
         "@type": "ListItem",
         position: 2,
-        name: sl ? "Rešitve" : "Solutions",
-        item: new URL(sl ? "/resitve" : "/en/solutions", Astro.site).href,
+        name: copy.solutions,
+        item: new URL(localizedPath("/resitve", locale), Astro.site).href,
       },
       {
         "@type": "ListItem",
@@ -44,17 +134,6 @@ const jsonLd = [
     ],
   },
 ];
-const uses = sl
-  ? [
-      "Energetika: povezava razpršenih merilnih mest in pregled odstopanj.",
-      "Proizvodnja: združevanje signalov strojev z informacijami iz poslovnih sistemov.",
-      "Objekti in logistika: spremljanje porabe, pogojev in dogodkov na več lokacijah.",
-    ]
-  : [
-      "Utilities: connect distributed metering points and review deviations.",
-      "Manufacturing: combine machine signals with information from business systems.",
-      "Buildings and logistics: monitor consumption, conditions and events across locations.",
-    ];
 ---
 
 <MainLayout
@@ -64,84 +143,45 @@ const uses = sl
   ><section class="hero" data-scheme="carbon">
     <div class="container hero-grid">
       <div>
-        <p class="eyebrow">{sl ? "Rešitev KUEM" : "KUEM solution"}</p><h1>
+        <p class="eyebrow">{copy.eyebrow}</p><h1>
           {solution.title}
         </h1><p class="lead">{solution.summary}</p><div class="actions">
-          <a class="btn btn-primary" href={sl ? "/kontakt" : "/en/contact"}
-            >{sl ? "Pogovor o projektu" : "Discuss a project"}</a>
+          <a class="btn btn-primary" href={localizedPath("/kontakt", locale)}
+            >{copy.discuss}</a>
         </div>
-      </div><DataVisual
-        labels={sl
-          ? ["Teren", "Integracija", "Rezultat"]
-          : ["Field", "Integration", "Outcome"]}
-      />
+      </div><DataVisual labels={copy.visual} />
     </div>
   </section><section class="section">
     <div class="container split">
       <div>
         <p class="eyebrow">
-          {sl ? "Operativni problem" : "Operational problem"}
+          {copy.problemEyebrow}
         </p><h2>
-          {
-            sl
-              ? "Podatki obstajajo. Pot do uporabne odločitve pogosto ne."
-              : "Data exists. A reliable path to a useful decision often does not."
-          }
+          {copy.problemTitle}
         </h2>
       </div><p>
-        {
-          sl
-            ? "Različne naprave, protokoli in sistemi ustvarjajo nepovezane podatkovne tokove. KUEM začne pri dejanskem procesu, določi arhitekturo in poveže zajem, prenos, obdelavo ter uporabo podatkov."
-            : "Different devices, protocols and systems create fragmented data flows. KUEM starts with the operating process, defines the architecture and connects acquisition, transfer, processing and use."
-        }
+        {copy.problemText}
       </p>
     </div>
   </section><section class="section" data-scheme="concrete">
     <div class="container">
       <div class="section-head">
-        <p class="eyebrow">{sl ? "Pristop" : "Approach"}</p><h2>
-          {
-            sl
-              ? "Razumljiva arhitektura od vira do uporabnika"
-              : "A clear architecture from source to user"
-          }
+        <p class="eyebrow">{copy.approach}</p><h2>
+          {copy.approachTitle}
         </h2>
       </div><ol class="pipeline">
-        {
-          (sl
-            ? [
-                "Razumevanje",
-                "Arhitektura",
-                "Zajem",
-                "Prenos",
-                "Integracija",
-                "Preverjanje",
-              ]
-            : [
-                "Understand",
-                "Architecture",
-                "Acquire",
-                "Transfer",
-                "Integrate",
-                "Verify",
-              ]
-          ).map((x) => <li>{x}</li>)
-        }
+        {copy.pipeline.map((x) => <li>{x}</li>)}
       </ol><ul class="tag-list">{solution.tech.map((x) => <li>{x}</li>)}</ul>
     </div>
   </section><section class="section">
     <div class="container">
       <div class="section-head">
-        <p class="eyebrow">{sl ? "Primeri uporabe" : "Use cases"}</p><h2>
-          {
-            sl
-              ? "Ena sposobnost, več okolij"
-              : "One capability, multiple environments"
-          }
+        <p class="eyebrow">{copy.usesEyebrow}</p><h2>
+          {copy.usesTitle}
         </h2>
       </div><div class="grid-3">
         {
-          uses.map((x, i) => (
+          copy.uses.map((x, i) => (
             <article class="card">
               <>
                 <span class="index">0{i + 1}</span>

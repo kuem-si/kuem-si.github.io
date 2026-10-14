@@ -5,11 +5,27 @@ import { publishedSuccessStories } from "../../data/successStories";
 import type { Locale } from "../../lib/i18n";
 
 const { locale } = Astro.props as { locale: Locale };
-const sl = locale === "sl";
-const title = sl ? "Uspešne zgodbe" : "Success Stories";
-const description = sl
-  ? "Kako KUEM povezuje naprave, sisteme in podatke v resničnih operativnih okoljih."
-  : "Explore how KUEM connects devices, systems and data across real operating environments.";
+const copy = {
+  sl: {
+    title: "Uspešne zgodbe",
+    description:
+      "Kako KUEM povezuje naprave, sisteme in podatke v resničnih operativnih okoljih.",
+    projects: "Projekti",
+  },
+  en: {
+    title: "Success Stories",
+    description:
+      "Explore how KUEM connects devices, systems and data across real operating environments.",
+    projects: "Projects",
+  },
+  de: {
+    title: "Erfolgsgeschichten",
+    description:
+      "Wie KUEM Geräte, Systeme und Daten in realen Betriebsumgebungen verbindet.",
+    projects: "Projekte",
+  },
+}[locale];
+const { title, description } = copy;
 ---
 
 <MainLayout {title} {description}>
@@ -19,7 +35,7 @@ const description = sl
       <p class="lead">{description}</p>
     </div>
   </section>
-  <section class="section" aria-label={sl ? "Projekti" : "Projects"}>
+  <section class="section" aria-label={copy.projects}>
     <div class="container grid-3">
       {publishedSuccessStories.map((story) => (
         <article class="card" id={story.slug} data-success-story={story.slug}>

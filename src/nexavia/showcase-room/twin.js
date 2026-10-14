@@ -30,7 +30,7 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 // Brings the maquette in. One scan line travels down the blueprint as the
 // model loads, then turns into the reveal edge and travels back up while the
 // model materialises from the base.
-async function loadMaquette(root, en) {
+async function loadMaquette(root, t) {
   const art = root.querySelector("[data-city-art]");
   const photo = art?.querySelector(".city-photo");
   const loader = art?.querySelector("[data-city-loader]");
@@ -54,15 +54,24 @@ async function loadMaquette(root, en) {
   const start = performance.now();
   let last = start;
   // Stage text follows the shown progress, so it always matches the sweep.
-  const stages = en
-    ? [
-        [0.86, "Loading the lighting"],
-        [0.95, "Starting the simulation"],
-      ]
-    : [
-        [0.86, "Nalaganje razsvetljave"],
-        [0.95, "Zagon simulacije"],
-      ];
+  const stages = [
+    [
+      0.86,
+      t(
+        "Nalaganje razsvetljave",
+        "Loading the lighting",
+        "Beleuchtung wird geladen",
+      ),
+    ],
+    [
+      0.95,
+      t(
+        "Zagon simulacije",
+        "Starting the simulation",
+        "Simulation wird gestartet",
+      ),
+    ],
+  ];
   const render = (value) => {
     art.style.setProperty("--load", value.toFixed(4));
     if (percent) percent.textContent = String(Math.round(value * 100));
@@ -131,10 +140,12 @@ async function loadMaquette(root, en) {
 
 export function initTwin(root, config) {
   config.effects?.forEach((init) => init(root));
-  const en = document.documentElement.lang.startsWith("en");
-  const t = (sl, english) => (en ? english : sl);
+  // The page language: Slovenian (default), English or German.
+  const lang = document.documentElement.lang.slice(0, 2);
+  const locale = lang === "en" || lang === "de" ? lang : "sl";
+  const t = (sl, en, de) => ({ sl, en, de })[locale];
   const n = (value, digits) =>
-    value.toFixed(digits).replace(".", en ? "." : ",");
+    value.toFixed(digits).replace(".", locale === "en" ? "." : ",");
   const cityWrap = root.querySelector(".twin-scene-wrap");
   const workspace = root.querySelector(".twin-workspace");
   const fullscreenButton = root.querySelector("[data-city-fullscreen]");
@@ -182,8 +193,16 @@ export function initTwin(root, config) {
       const active = document.fullscreenElement === workspace;
       fullscreenButton.setAttribute("aria-pressed", String(active));
       fullscreenButton.textContent = active
-        ? t("Zapri celozaslonski pogled", "Exit full screen")
-        : t("Odpri celozaslonski pogled", "Open full screen");
+        ? t(
+            "Zapri celozaslonski pogled",
+            "Exit full screen",
+            "Vollbild beenden",
+          )
+        : t(
+            "Odpri celozaslonski pogled",
+            "Open full screen",
+            "Vollbild öffnen",
+          );
     };
     fullscreenButton.addEventListener("click", async () => {
       try {
@@ -224,8 +243,16 @@ export function initTwin(root, config) {
       if (overlayToggle) {
         overlayToggle.setAttribute("aria-pressed", String(!minimized));
         overlayToggle.textContent = minimized
-          ? t("Prikaži nadzorno ploščo", "Show dashboard")
-          : t("Skrij nadzorno ploščo", "Hide dashboard");
+          ? t(
+              "Prikaži nadzorno ploščo",
+              "Show dashboard",
+              "Dashboard einblenden",
+            )
+          : t(
+              "Skrij nadzorno ploščo",
+              "Hide dashboard",
+              "Dashboard ausblenden",
+            );
       }
       if (!minimized) requestAnimationFrame(keepOverlayVisible);
     };
@@ -587,11 +614,19 @@ export function initTwin(root, config) {
   sky?.setMarks([
     [
       stepTimes[steps.findIndex((step) => step.at === "dusk")],
-      t("Pravilo prižge luči", "The rule switches the lights on"),
+      t(
+        "Pravilo prižge luči",
+        "The rule switches the lights on",
+        "Die Regel schaltet die Lichter ein",
+      ),
     ],
     [
       stepTimes[steps.findIndex((step) => step.at === "dawn")],
-      t("Pravilo ugasne luči", "The rule switches the lights off"),
+      t(
+        "Pravilo ugasne luči",
+        "The rule switches the lights off",
+        "Die Regel schaltet die Lichter aus",
+      ),
     ],
   ]);
   const flow = initDataFlow(root, { gateway: config.gateway });
@@ -659,12 +694,12 @@ export function initTwin(root, config) {
   };
   const readingNote = (key) =>
     $(`.twin-dashboard [data-reading="${key}"] small`)?.textContent ?? "";
-  const readingApi = { setReading, en, t, n };
+  const readingApi = { setReading, locale, t, n };
 
   function setDemoPill(count) {
     ui("alarm-count").textContent = String(count);
     $(".twin-demo-pill").innerHTML =
-      `<i></i> ${count} ${en ? "ALARMS" : "ALARMI"}`;
+      `<i></i> ${count} ${t("ALARMI", "ALARMS", "ALARME")}`;
     const badge = $("[data-alarm-badge]");
     if (badge) {
       badge.textContent = String(count);
@@ -712,12 +747,12 @@ export function initTwin(root, config) {
   const timeline = ui("timeline");
   const TIMELINE_LENGTH = 7;
   const kinds = {
-    reading: t("Meritev", "Reading"),
-    decision: t("Odločitev", "Decision"),
-    command: t("Ukaz", "Command"),
-    alarm: t("Alarm", "Alarm"),
-    notify: t("Obvestilo", "Notification"),
-    manual: t("Ročno", "Manual"),
+    reading: t("Meritev", "Reading", "Messwert"),
+    decision: t("Odločitev", "Decision", "Entscheidung"),
+    command: t("Ukaz", "Command", "Befehl"),
+    alarm: t("Alarm", "Alarm", "Alarm"),
+    notify: t("Obvestilo", "Notification", "Benachrichtigung"),
+    manual: t("Ročno", "Manual", "Manuell"),
     system: "Nexavia",
   };
   const targets = new Map([
@@ -741,7 +776,11 @@ export function initTwin(root, config) {
     if (target) {
       entry.type = "button";
       entry.dataset.target = target;
-      entry.title = t("Pokaži na maketi", "Show on the model");
+      entry.title = t(
+        "Pokaži na maketi",
+        "Show on the model",
+        "Am Modell zeigen",
+      );
     }
     const part = (tag, className, content) =>
       Object.assign(document.createElement(tag), {
@@ -806,15 +845,19 @@ export function initTwin(root, config) {
       const state = row.querySelector(".twin-state");
       row.classList.toggle("is-offline", !device.online);
       if (!device.online) {
-        state.textContent = t("Ni povezave", "Offline");
+        state.textContent = t("Ni povezave", "Offline", "Offline");
         state.dataset.state = "offline";
       } else {
         const percent = Math.round(device.state * 100);
         state.textContent = dimmed
-          ? t(`Zatemnjeno ${percent} %`, `Dimmed ${percent}%`)
+          ? t(
+              `Zatemnjeno ${percent} %`,
+              `Dimmed ${percent}%`,
+              `Gedimmt ${percent} %`,
+            )
           : on
-            ? t("Vklopljeno", "On")
-            : t("Izklopljeno", "Off");
+            ? t("Vklopljeno", "On", "Ein")
+            : t("Izklopljeno", "Off", "Aus");
         state.dataset.state = on ? "on" : "off";
       }
       row.querySelector(".twin-watts").textContent = `${watts} W`;
@@ -865,14 +908,18 @@ export function initTwin(root, config) {
   function setPaused(value) {
     paused = value;
     ui("pause").textContent = paused
-      ? t("Nadaljuj animacijo", "Resume animation")
-      : t("Začasno ustavi", "Pause");
+      ? t("Nadaljuj animacijo", "Resume animation", "Animation fortsetzen")
+      : t("Začasno ustavi", "Pause", "Pause");
     ui("pause").setAttribute("aria-pressed", String(paused));
     const status = $(".twin-live");
     status.classList.toggle("is-stopped", paused);
     status.lastChild.textContent = paused
-      ? t(" Simulacija ustavljena", " Simulation paused")
-      : t(" Simulacija teče", " Simulation running");
+      ? t(
+          " Simulacija ustavljena",
+          " Simulation paused",
+          " Simulation pausiert",
+        )
+      : t(" Simulacija teče", " Simulation running", " Simulation läuft");
     schedule();
   }
   ui("pause").addEventListener("click", () => setPaused(!paused));
@@ -918,7 +965,7 @@ export function initTwin(root, config) {
     const lost = () =>
       log &&
       logEvent(
-        `${id} · ${t("Meritev ni dostavljena – prehod brez povezave", "Reading not delivered – gateway offline")}`,
+        `${id} · ${t("Meritev ni dostavljena – prehod brez povezave", "Reading not delivered – gateway offline", "Messwert nicht zugestellt – Gateway offline")}`,
         undefined,
         "alarm",
       );
@@ -966,12 +1013,13 @@ export function initTwin(root, config) {
       seconds === null
         ? "–"
         : seconds < 2
-          ? t("pravkar", "just now")
+          ? t("pravkar", "just now", "gerade eben")
           : seconds < 60
-            ? t(`pred ${seconds} s`, `${seconds} s ago`)
+            ? t(`pred ${seconds} s`, `${seconds} s ago`, `vor ${seconds} s`)
             : t(
                 `pred ${Math.floor(seconds / 60)} min`,
                 `${Math.floor(seconds / 60)} min ago`,
+                `vor ${Math.floor(seconds / 60)} min`,
               );
   }
   setInterval(renderAge, 1000);
@@ -1103,17 +1151,20 @@ export function initTwin(root, config) {
     });
     renderDevices(ids);
     logEvent(
-      `${subject} · ${t("Ročni ukaz prek nadzorne plošče", "Command from the dashboard")}: ${on ? t("vklop", "on") : t("izklop", "off")}`,
+      `${subject} · ${t("Ročni ukaz prek nadzorne plošče", "Command from the dashboard", "Befehl aus dem Dashboard")}: ${on ? t("vklop", "on", "ein") : t("izklop", "off", "aus")}`,
       undefined,
       "manual",
     );
     const name = ids.length > 1 ? group.name : deviceById.get(ids[0]).name;
-    const result = on ? t("vklopljeno", "on") : t("izklopljeno", "off");
+    const result = on
+      ? t("vklopljeno", "on", "ein")
+      : t("izklopljeno", "off", "aus");
     ui("step").textContent =
-      `${name}: ${result} · ${t("ročni ukaz", "manual command")}`;
+      `${name}: ${result} · ${t("ročni ukaz", "manual command", "manueller Befehl")}`;
     ui("rule-status").textContent = t(
       "Ročno upravljanje · samodejno pravilo teh naprav ne preglasi",
       "Manual override · the lighting rule leaves these devices as set",
+      "Manuelle Übersteuerung · die Beleuchtungsregel lässt diese Geräte wie eingestellt",
     );
     commandShownUntil = performance.now() + 6000;
     root
@@ -1125,8 +1176,8 @@ export function initTwin(root, config) {
     if (!device) return;
     chip.querySelector("b").textContent = device.id;
     chip.querySelector("span").textContent = device.state
-      ? t("Vklopljeno", "On")
-      : t("Izklopljeno", "Off");
+      ? t("Vklopljeno", "On", "Ein")
+      : t("Izklopljeno", "Off", "Aus");
     chip.dataset.state = device.state ? "on" : "off";
   }
   function showChip(hotspot, linger) {
@@ -1231,9 +1282,11 @@ export function initTwin(root, config) {
     render(steps[index], { log: false });
     renderDevices(released.map((device) => device.id));
     logEvent(
-      en
-        ? `Automatic control restored · ${released.length} ${released.length === 1 ? "device" : "devices"}`
-        : `Samodejno upravljanje obnovljeno · naprav: ${released.length}`,
+      t(
+        `Samodejno upravljanje obnovljeno · naprav: ${released.length}`,
+        `Automatic control restored · ${released.length} ${released.length === 1 ? "device" : "devices"}`,
+        `Automatische Steuerung wiederhergestellt · ${released.length} ${released.length === 1 ? "Gerät" : "Geräte"}`,
+      ),
       undefined,
       "manual",
     );
@@ -1377,8 +1430,8 @@ export function initTwin(root, config) {
       const on = isOn();
       button.setAttribute("aria-pressed", String(on));
       button.textContent = on
-        ? t("Izklopi", "Switch off")
-        : t("Vklopi", "Switch on");
+        ? t("Izklopi", "Switch off", "Ausschalten")
+        : t("Vklopi", "Switch on", "Einschalten");
     };
     new MutationObserver(sync).observe(cell, {
       childList: true,
@@ -1396,7 +1449,7 @@ export function initTwin(root, config) {
         on ? button.dataset.switchOn : button.dataset.switchOff,
       );
       logEvent(
-        `${id} · ${t("Ročni ukaz prek nadzorne plošče", "Command from the dashboard")}: ${on ? t("vklop vtičnice", "socket on") : t("izklop vtičnice", "socket off")}`,
+        `${id} · ${t("Ročni ukaz prek nadzorne plošče", "Command from the dashboard", "Befehl aus dem Dashboard")}: ${on ? t("vklop vtičnice", "socket on", "Steckdose ein") : t("izklop vtičnice", "socket off", "Steckdose aus")}`,
         undefined,
         "manual",
       );
@@ -1417,7 +1470,7 @@ export function initTwin(root, config) {
   ];
   let saved = null;
   const direction = {
-    en,
+    locale,
     devices: deviceById,
     enter() {
       // A scenario frames the camera itself and may point at any pin.
@@ -1444,7 +1497,11 @@ export function initTwin(root, config) {
       const status = $(".twin-live");
       status.classList.remove("is-stopped");
       status.classList.add("is-directed");
-      status.lastChild.textContent = t(" Vodeni scenarij", " Guided scenario");
+      status.lastChild.textContent = t(
+        " Vodeni scenarij",
+        " Guided scenario",
+        " Geführtes Szenario",
+      );
     },
     exit() {
       if (!saved) return;
@@ -1541,15 +1598,19 @@ export function initTwin(root, config) {
       if (gateway) {
         gateway.dataset.state = ok ? "on" : "offline";
         gateway.textContent = ok
-          ? t("Povezan", "Online")
-          : t("Brez povezave", "Offline");
+          ? t("Povezan", "Online", "Online")
+          : t("Brez povezave", "Offline", "Offline");
       }
       const sync = $(".twin-sync");
       if (!sync) return;
       sync.classList.toggle("is-lost", !ok);
       sync.lastChild.textContent = ok
-        ? t(" Sinhronizirano", " Synchronised")
-        : t(" Povezava prekinjena", " Connection lost");
+        ? t(" Sinhronizirano", " Synchronised", " Synchronisiert")
+        : t(
+            " Povezava prekinjena",
+            " Connection lost",
+            " Verbindung unterbrochen",
+          );
     },
     setStale(stale) {
       root
@@ -1697,7 +1758,7 @@ export function initTwin(root, config) {
   render(steps[index]);
   setClock(clock);
   schedule();
-  const loaded = loadMaquette(root, en).then(() => {
+  const loaded = loadMaquette(root, t).then(() => {
     ready = true;
     schedule();
     scenarios?.enable();

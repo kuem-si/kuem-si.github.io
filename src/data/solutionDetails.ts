@@ -29,6 +29,7 @@ export type SolutionDetail = {
 const cta = {
   sl: { ctaText: "Dogovorite predstavitev", ctaHref: "/kontakt" },
   en: { ctaText: "Book a presentation", ctaHref: "/en/contact" },
+  de: { ctaText: "Präsentation vereinbaren", ctaHref: "/de/kontakt" },
 };
 
 export const solutionDetails: Record<
@@ -89,6 +90,33 @@ export const solutionDetails: Record<
       ],
       ctaTitle: "Do you want to digitalize meter reading?",
       ...cta.en,
+    },
+    de: {
+      seoTitle: "Zählerfernauslesung | KUEM",
+      metaDescription:
+        "Fernauslesung von Wasser-, Gas- und Energiezählern mit Alarmen, Verbrauchshistorie und Integration in Abrechnungssysteme.",
+      title: "Fernauslesung von Wasser-, Gas- und Energiezählern",
+      subtitle:
+        "Nexavia ermöglicht manuelle und automatische Zählerablesungen, Verbrauchsüberwachung, Alarme bei Unregelmäßigkeiten und die Anbindung der Daten an Abrechnungssysteme.",
+      keyMessage:
+        "Weniger manuelle Arbeit, weniger Fehler, schnelleres Erkennen von Unregelmäßigkeiten und bessere Daten für die Abrechnung.",
+      focus: [
+        "Gaszähler",
+        "Wasserzähler",
+        "Stromzähler",
+        "Industriezähler",
+        "Manuelle und automatische Ablesungen",
+        "Alarme",
+        "Verbrauchshistorie",
+        "Integration in Abrechnungssysteme",
+      ],
+      references: [
+        "DOMPLAN, d.d.",
+        "JKP Brezovica d.o.o.",
+        "Sombor-gas d.o.o.",
+      ],
+      ctaTitle: "Möchten Sie die Zählerablesung digitalisieren?",
+      ...cta.de,
     },
   },
   municipalInfrastructure: {
@@ -156,6 +184,38 @@ export const solutionDetails: Record<
       ctaTitle: "Start with one municipal pilot",
       ...cta.en,
     },
+    de: {
+      seoTitle: "Digitalisierung kommunaler Infrastruktur | KUEM",
+      metaDescription:
+        "Digitalisierung kommunaler Infrastruktur mit Nexavia zur Fernüberwachung von Zählern, öffentlicher Beleuchtung, Abfall, Umwelt, Verkehr und Gewässern.",
+      title: "Digitalisierung kommunaler Infrastruktur",
+      heroHeadline:
+        "Intelligenteres Management kommunaler Infrastruktur auf einer Plattform",
+      subtitle:
+        "Mit der eigenen Plattform Nexavia ermöglicht KUEM Gemeinden und öffentlichen Versorgern die Fernüberwachung von Zählern, öffentlicher Beleuchtung, Abfall, Luftqualität, Lärm, Verkehr, Gewässern sowie der Bedingungen in Schulen und Kindergärten.",
+      keyMessage:
+        "Eine Gemeinde kann mit einem Pilotprojekt beginnen und die Plattform später Modul für Modul erweitern.",
+      focus: [
+        "Wasser, Gas und Energie",
+        "Öffentliche Beleuchtung",
+        "Abfall",
+        "Schulen und Kindergärten",
+        "Verkehr und Mobilität",
+        "AQI und Lärm",
+        "Gewässer",
+        "Kommunale Infrastruktur",
+      ],
+      references: [
+        "JKP Brezovica d.o.o.",
+        "Krk / Callidus Grupa d.o.o.",
+        "Grad Gradiška",
+        "Mestna občina Novo mesto",
+        "DOMPLAN, d.d.",
+        "Sombor-gas d.o.o.",
+      ],
+      ctaTitle: "Beginnen Sie mit einem kommunalen Pilotprojekt",
+      ...cta.de,
+    },
   },
   publicLighting: {
     sl: {
@@ -197,6 +257,26 @@ export const solutionDetails: Record<
       references: ["Krk / Callidus Grupa d.o.o.", "JKP Brezovica d.o.o."],
       ctaTitle: "Do you need supervision of public lighting?",
       ...cta.en,
+    },
+    de: {
+      seoTitle: "Digitale Überwachung der öffentlichen Beleuchtung | KUEM",
+      metaDescription:
+        "Digitale Überwachung der öffentlichen Beleuchtung mit Leuchtenüberwachung, Verbrauchsmessung, Fehlererkennung, Betriebszeitplänen, Wartungsoptimierung und Nexavia-Integration.",
+      title: "Digitale Überwachung der öffentlichen Beleuchtung",
+      subtitle:
+        "KUEM ermöglicht die Überwachung der öffentlichen Beleuchtung über die Plattform Nexavia – einschließlich Leuchtenstatus, Verbrauch, Störungen, Betriebszeitplänen und Wartungsaktivitäten.",
+      focus: [
+        "Leuchtenüberwachung",
+        "Verbrauchsüberwachung",
+        "Fehlererkennung",
+        "Betriebszeitpläne",
+        "Wartungsoptimierung",
+        "LoRaWAN-Konnektivität",
+        "Integration mit Nexavia",
+      ],
+      references: ["Krk / Callidus Grupa d.o.o.", "JKP Brezovica d.o.o."],
+      ctaTitle: "Benötigen Sie eine Überwachung der öffentlichen Beleuchtung?",
+      ...cta.de,
     },
   },
   environmentalMonitoring: {
@@ -249,6 +329,30 @@ export const solutionDetails: Record<
       ctaTitle: "Do you want to monitor environmental parameters?",
       ...cta.en,
     },
+    de: {
+      seoTitle: "Umweltmonitoring für Gemeinden und öffentliche Räume | KUEM",
+      metaDescription:
+        "Umweltmonitoring für Gemeinden und öffentliche Räume mit AQI, Feinstaub (PM), Lärm, Temperatur, Luftfeuchtigkeit, CO₂, Wetterdaten, Flusspegel und Alarmen.",
+      title: "Umweltmonitoring für Gemeinden und öffentliche Räume",
+      subtitle:
+        "KUEM bindet Umweltsensoren an die Plattform Nexavia an, um Luftqualität, Lärm, Wetter, Wasserstände und weitere Parameter im öffentlichen Raum zu überwachen.",
+      keyMessage:
+        "Die Gemeinde erhält reale Daten über Lebensqualität und Umwelt – nicht nur gelegentliche Messungen.",
+      focus: [
+        "AQI",
+        "Feinstaub (PM)",
+        "Lärm",
+        "Temperatur",
+        "Luftfeuchtigkeit",
+        "CO₂",
+        "Wetterdaten",
+        "Flusspegel",
+        "Alarme",
+      ],
+      references: ["Grad Gradiška"],
+      ctaTitle: "Möchten Sie Umweltparameter überwachen?",
+      ...cta.de,
+    },
   },
   schoolsKindergartens: {
     sl: {
@@ -296,6 +400,30 @@ export const solutionDetails: Record<
       ctaTitle: "Do you want to monitor conditions in public buildings?",
       ...cta.en,
     },
+    de: {
+      seoTitle:
+        "Digitale Überwachung der Bedingungen in Schulen und Kindergärten | KUEM",
+      metaDescription:
+        "Digitale Überwachung der Bedingungen in Schulen und Kindergärten: CO₂, Temperatur, Luftfeuchtigkeit, offene Fenster, Heizkörper, Alarme und Berichte für Gemeinden.",
+      title: "Digitale Überwachung der Bedingungen in Schulen und Kindergärten",
+      subtitle:
+        "KUEM hilft Gemeinden und Gebäudeverwaltungen, die Bedingungen in Klassenzimmern, Gruppenräumen und Sanitärräumen zu überwachen und die Daten mit Alarmen und Berichten zu verknüpfen.",
+      focus: [
+        "CO₂",
+        "Temperatur",
+        "Luftfeuchtigkeit",
+        "Offene Fenster",
+        "Heizkörper",
+        "Heizungsoptimierung",
+        "Raucherkennung in Sanitärräumen",
+        "Alarme für Hausmeister oder Gebäudeverwaltung",
+        "Berichte für Gemeinden",
+      ],
+      references: [],
+      ctaTitle:
+        "Möchten Sie die Bedingungen in öffentlichen Gebäuden überwachen?",
+      ...cta.de,
+    },
   },
   waste: {
     sl: {
@@ -336,6 +464,27 @@ export const solutionDetails: Record<
       ctaTitle: "Do you want to optimize waste monitoring?",
       ...cta.en,
     },
+    de: {
+      seoTitle: "Digitale Füllstandsüberwachung von Abfallbehältern | KUEM",
+      metaDescription:
+        "Digitale Füllstandsüberwachung von Abfallbehältern, Alarme, Füllhistorie sowie Unterstützung bei der Optimierung von Leerungen und der Tourenplanung.",
+      title: "Digitale Füllstandsüberwachung von Abfallbehältern",
+      heroHeadline:
+        "Digitale Füllstands\u00adüberwachung von Abfall\u00adbehältern",
+      subtitle:
+        "Nexavia ermöglicht die Überwachung des Füllstands von Behältern und die Nutzung der Daten für eine bessere Leerungsplanung, Alarme und die Auswertung der Füllhistorie.",
+      focus: [
+        "Füllstand der Behälter",
+        "Unterflurbehälter",
+        "Optimierung der Leerungen",
+        "Alarme",
+        "Füllhistorie",
+        "Unterstützung der Tourenplanung",
+      ],
+      references: [],
+      ctaTitle: "Möchten Sie die Abfallüberwachung optimieren?",
+      ...cta.de,
+    },
   },
   trafficMobility: {
     sl: {
@@ -373,6 +522,24 @@ export const solutionDetails: Record<
       references: ["Mestna občina Novo mesto", "Grad Gradiška"],
       ctaTitle: "Do you need better insight into traffic flows?",
       ...cta.en,
+    },
+    de: {
+      seoTitle: "Verkehrszählung und Mobilitätsanalyse | KUEM",
+      metaDescription:
+        "Verkehrszählung und Mobilitätsanalyse für Fahrzeuge, Radfahrende, Verkehrsströme, standortbezogene Analysen und die Unterstützung der Verkehrsplanung.",
+      title: "Verkehrszählung und Mobilitätsanalyse",
+      subtitle:
+        "KUEM führt Verkehrs- und Mobilitätsdaten in digitalen Dashboards zusammen, die helfen, Verkehrsströme zu verstehen und die Verkehrsplanung zu unterstützen.",
+      focus: [
+        "Fahrzeugzählung",
+        "Radverkehrszählung",
+        "Verkehrsströme",
+        "Standortbezogene Analysen",
+        "Unterstützung der Verkehrsplanung",
+      ],
+      references: ["Mestna občina Novo mesto", "Grad Gradiška"],
+      ctaTitle: "Benötigen Sie bessere Einblicke in Verkehrsströme?",
+      ...cta.de,
     },
   },
   haccpTemperature: {
@@ -417,6 +584,28 @@ export const solutionDetails: Record<
       references: ["Tropic Maloprodaja d.o.o."],
       ctaTitle: "Do you want to digitalize HACCP temperature monitoring?",
       ...cta.en,
+    },
+    de: {
+      seoTitle: "HACCP-Temperaturüberwachung | KUEM",
+      metaDescription:
+        "HACCP-Temperaturüberwachung für Kühlschränke, Tiefkühlgeräte, Salatbars, beheizte Speisebereiche, mit Temperaturalarmen, Messhistorie und Berichten.",
+      title: "HACCP-Temperaturüberwachung",
+      heroHeadline: "HACCP-Temperatur\u00adüberwachung",
+      subtitle:
+        "KUEM ermöglicht die digitale Überwachung kritischer Temperaturpunkte, Alarme bei Abweichungen, eine Messhistorie und Berichte – mit weniger manueller Dokumentation.",
+      focus: [
+        "Kühlschränke",
+        "Tiefkühlgeräte",
+        "Salatbars",
+        "Beheizte Speisebereiche",
+        "Temperaturalarme",
+        "Messhistorie",
+        "Berichte",
+        "Weniger manuelle Dokumentation",
+      ],
+      references: ["Tropic Maloprodaja d.o.o."],
+      ctaTitle: "Möchten Sie die HACCP-Temperaturüberwachung digitalisieren?",
+      ...cta.de,
     },
   },
   tourismCampsMarinas: {
@@ -465,6 +654,32 @@ export const solutionDetails: Record<
       ctaTitle: "Do you want to monitor consumption at tourism sites?",
       ...cta.en,
     },
+    de: {
+      seoTitle:
+        "Digitale Verbrauchsüberwachung für Tourismus, Campingplätze und Marinas | KUEM",
+      metaDescription:
+        "Digitale Überwachung des Wasser- und Stromverbrauchs in Tourismus, Campingplätzen, Marinas und Mobilheimen mit Alarmen, Ventilen und verbrauchsbasierter Abrechnung.",
+      title:
+        "Digitale Verbrauchsüberwachung für Tourismus, Campingplätze, Marinas und Mobilheime",
+      heroHeadline:
+        "Digitale Verbrauchs\u00adüberwachung für Tourismus, Campingplätze, Marinas und Mobilheime",
+      subtitle:
+        "KUEM ermöglicht die Überwachung des Wasser- und Stromverbrauchs an touristischen Standorten, auf Stellplätzen, in Marinas und Mobilheimen – mit Daten, die an Alarme und Abrechnung angebunden sind.",
+      focus: [
+        "Wasserverbrauch",
+        "Stromverbrauch",
+        "Ventile",
+        "Alarme",
+        "Mobilheime",
+        "Stellplätze",
+        "Marinas",
+        "Verbrauchsbasierte Abrechnung",
+      ],
+      references: ["Marina Cloud d.o.o."],
+      ctaTitle:
+        "Möchten Sie den Verbrauch an touristischen Standorten überwachen?",
+      ...cta.de,
+    },
   },
   dataCenters: {
     sl: {
@@ -507,55 +722,92 @@ export const solutionDetails: Record<
       ctaTitle: "Do you want to monitor data-center conditions?",
       ...cta.en,
     },
+    de: {
+      seoTitle: "Umgebungsüberwachung in Rechenzentren | KUEM",
+      metaDescription:
+        "Umgebungsüberwachung in Rechenzentren: Temperatur auf Rack-Ebene, Luftfeuchtigkeit, Messung an Zu- und Abluft, Leckageerkennung, Alarme und Integrationen.",
+      title: "Umgebungsüberwachung in Rechenzentren",
+      heroHeadline: "Umgebungs\u00adüberwachung in Rechen\u00adzentren",
+      subtitle:
+        "KUEM ermöglicht die Überwachung der Umgebungsbedingungen in Rechenzentren mit Alarmen, lokaler Bereitstellung und Integration in bestehende Überwachungssysteme.",
+      focus: [
+        "Temperatur auf Rack-Ebene",
+        "Luftfeuchtigkeit",
+        "Messung an Zu- und Abluft",
+        "Leckageerkennung",
+        "Alarme",
+        "Lokale Bereitstellung",
+        "Integration in bestehende Überwachungssysteme",
+      ],
+      references: [],
+      ctaTitle: "Möchten Sie die Bedingungen im Rechenzentrum überwachen?",
+      ...cta.de,
+    },
   },
 };
 
 /**
  * Per-locale URL slugs for the detailed solution pages. The Slovenian pages
- * live at /resitve/{sl}/ and the English pages at /en/solutions/{en}/. Both
- * locales share the same SolutionDetailKey.
+ * live at /resitve/{sl}/, the English pages at /en/solutions/{en}/ and the
+ * German pages at /de/loesungen/{de}/. All locales share the same
+ * SolutionDetailKey.
  */
-export const solutionDetailSlugs: {
+export const solutionDetailSlugs: ({
   key: SolutionDetailKey;
-  sl: string;
-  en: string;
-}[] = [
+} & Record<Locale, string>)[] = [
   {
     key: "remoteMeterReading",
     sl: "daljinsko-odcitavanje-stevcev",
     en: "remote-meter-reading",
+    de: "zaehlerfernauslesung",
   },
   {
     key: "municipalInfrastructure",
     sl: "digitalizacija-obcinske-infrastrukture",
     en: "municipal-infrastructure-digitalization",
+    de: "digitalisierung-kommunaler-infrastruktur",
   },
-  { key: "publicLighting", sl: "javna-razsvetljava", en: "public-lighting" },
+  {
+    key: "publicLighting",
+    sl: "javna-razsvetljava",
+    en: "public-lighting",
+    de: "oeffentliche-beleuchtung",
+  },
   {
     key: "environmentalMonitoring",
     sl: "okoljski-monitoring",
     en: "environmental-monitoring",
+    de: "umweltmonitoring",
   },
   {
     key: "schoolsKindergartens",
     sl: "sole-in-vrtci",
     en: "schools-and-kindergartens",
+    de: "schulen-und-kindergaerten",
   },
-  { key: "waste", sl: "odpadki", en: "waste" },
+  { key: "waste", sl: "odpadki", en: "waste", de: "abfall" },
   {
     key: "trafficMobility",
     sl: "promet-in-mobilnost",
     en: "traffic-and-mobility",
+    de: "verkehr-und-mobilitaet",
   },
   {
     key: "haccpTemperature",
     sl: "haccp-temperaturni-monitoring",
     en: "haccp-temperature-monitoring",
+    de: "haccp-temperaturueberwachung",
   },
   {
     key: "tourismCampsMarinas",
     sl: "turizem-kampi-marine",
     en: "tourism-camps-marinas",
+    de: "tourismus-campingplaetze-marinas",
   },
-  { key: "dataCenters", sl: "data-centri", en: "data-centers" },
+  {
+    key: "dataCenters",
+    sl: "data-centri",
+    en: "data-centers",
+    de: "rechenzentren",
+  },
 ];

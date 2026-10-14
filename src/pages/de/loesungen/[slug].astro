@@ -1,0 +1,38 @@
+---
+import SolutionPage from "../../../components/SolutionPage.astro";
+import SolutionDetailPage from "../../../components/SolutionDetailPage.astro";
+import { solutions } from "../../../data/site";
+import {
+  solutionDetailSlugs,
+  type SolutionDetailKey,
+} from "../../../data/solutionDetails";
+
+interface Props {
+  kind: "category" | "detail";
+  solution?: (typeof solutions.de)[number];
+  solutionKey?: SolutionDetailKey;
+}
+
+export function getStaticPaths() {
+  return [
+    ...solutions.de.map((solution) => ({
+      params: { slug: solution.slug },
+      props: { kind: "category", solution } satisfies Props,
+    })),
+    ...solutionDetailSlugs.map(({ key, de }) => ({
+      params: { slug: de },
+      props: { kind: "detail", solutionKey: key } satisfies Props,
+    })),
+  ];
+}
+
+const { kind, solution, solutionKey } = Astro.props as Props;
+---
+
+{
+  kind === "detail" ? (
+    <SolutionDetailPage locale="de" solutionKey={solutionKey} />
+  ) : (
+    <SolutionPage locale="de" solution={solution!} />
+  )
+}

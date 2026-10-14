@@ -1,7 +1,11 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro";
 import type { Locale } from "../../lib/i18n";
-import { industryExplorer, industryExplorerEn } from "../../data/industry-explorer";
+import {
+  industryExplorer,
+  industryExplorerDe,
+  industryExplorerEn,
+} from "../../data/industry-explorer";
 import nexaviaLogo from "../../assets/brand/nexavia/official/NEXAVIA-web-Black.svg";
 import "../../styles/panoge.css";
 
@@ -10,7 +14,11 @@ interface Props {
 }
 
 const { locale } = Astro.props;
-const explorer = locale === "sl" ? industryExplorer : industryExplorerEn;
+const explorer = {
+  sl: industryExplorer,
+  en: industryExplorerEn,
+  de: industryExplorerDe,
+}[locale];
 const copy = {
   sl: {
     title: "Panoge | KUEM",
@@ -180,6 +188,91 @@ const copy = {
       mobilnost: "Mobility",
       overview: "Overview",
       default: "Consumption",
+    },
+  },
+  de: {
+    title: "Branchen | KUEM",
+    description:
+      "Daten für Umgebungen, die funktionieren müssen. Wählen Sie eine Branche und sehen Sie, welche Daten wir überwachen und was Sie davon haben.",
+    eyebrow: "BRANCHEN UND VERTIKALEN",
+    h1: "Daten für Umgebungen, die funktionieren müssen.",
+    heroP:
+      "Von Versorgungssystemen und öffentlicher Infrastruktur bis zu Industrie, Mobilität und Tourismus – wir passen Lösungen an die reale Umgebung und Arbeitsweise an.",
+    choose: "Wählen Sie Ihre Branche",
+    talk: "Sprechen wir",
+    contactHref: "/de/kontakt",
+    board1: "ANWENDUNGSBEREICHE",
+    board2: "SECHS BRANCHEN, EINE PLATTFORM",
+    referencesAria: "Erfahrung aus realen Umgebungen",
+    referencesEyebrow: "ERFAHRUNG AUS REALEN UMGEBUNGEN",
+    explorerEyebrow: "BEREICH WÄHLEN",
+    explorerH2: "Dieselbe Plattform. Unterschiedliche operative Herausforderungen.",
+    explorerLead:
+      "Wählen Sie eine Branche und sehen Sie, welche Daten wir überwachen und was der Anwender davon hat.",
+    tablistAria: "Branche wählen",
+    dashboardAria: "Nexavia-Demo für die ausgewählte Branche",
+    sidebar: ["Übersicht", "Betrieb", "Verbrauch", "Mobilität", "Konfiguration"],
+    headerTitle: "Bereichsübersicht",
+    headerDemo: "Gemeinde Kranj · Demo",
+    chartTitle: "Verbrauch im Zeitverlauf",
+    chartAria: "Beispiel eines Zeitdiagramms mit Demodaten",
+    mapAria: "Schematische Demokarte des Gebiets",
+    legend: "Normal · Warnung · Alarm",
+    alertSmall: "Demo-Warnung für den ausgewählten Bereich",
+    demoLabel: "DEMODATEN",
+    watchEyebrow: "WIR ÜBERWACHEN",
+    gainEyebrow: "NUTZEN FÜR ANWENDER",
+    examplesEyebrow: "BEISPIELE AUS DER PRAXIS",
+    examplesLink: "Erfolgsgeschichten ansehen",
+    referencesHref: "/de/referenzen/",
+    resultsEyebrow: "GEMEINSAME ERGEBNISSE",
+    resultsH2: "Unterschiedliche Umgebungen. Derselbe Bedarf an zuverlässigen Informationen.",
+    outcomes: [
+      [
+        "◎",
+        "Einheitliche Übersicht",
+        "Wichtige Daten aus verschiedenen Quellen sind an einem Ort verfügbar.",
+      ],
+      [
+        "♧",
+        "Rechtzeitige Benachrichtigung",
+        "Abweichungen und Ereignisse erreichen die verantwortliche Person ohne unnötiges Suchen.",
+      ],
+      [
+        "▥",
+        "Grundlage zum Handeln",
+        "Historie, Kontext und Vergleiche helfen, bessere Entscheidungen zu treffen.",
+      ],
+    ],
+    storiesEyebrow: "ERFOLGSGESCHICHTEN",
+    storiesH2: "Lösungen in realen Umgebungen.",
+    stories: [
+      [
+        "Brezovica",
+        "Überblick über Wasserzähler und Versorgungsinfrastruktur.",
+        "komunala-in-energija",
+      ],
+      [
+        "Gradiška",
+        "Luftqualität, Lärm, Verkehr und Umweltbedingungen.",
+        "okolje",
+      ],
+      ["Adria Mobil", "Energiedaten aus der Produktionsumgebung.", "industrija"],
+      ["Novo mesto", "Daten für eine nachhaltige Mobilitätsplanung.", "mobilnost"],
+    ],
+    closingH2: "Finden wir den richtigen ersten Schritt für Ihre Umgebung.",
+    closingP:
+      "Schildern Sie uns Ihre Herausforderung. Gemeinsam prüfen wir die Daten, die vorhandene Infrastruktur und einen machbaren Einführungsweg.",
+    closingCta: "Erstgespräch vereinbaren",
+    scriptChart: {
+      mobilnost: "Intensität im Zeitverlauf",
+      okolje: "Messwerte im Zeitverlauf",
+      default: "Verbrauch im Zeitverlauf",
+    },
+    scriptView: {
+      mobilnost: "Mobilität",
+      overview: "Übersicht",
+      default: "Verbrauch",
     },
   },
 }[locale];

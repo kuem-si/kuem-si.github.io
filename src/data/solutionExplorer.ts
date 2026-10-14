@@ -378,9 +378,175 @@ const englishSteps = [
   },
 ] as const;
 
-export const solutionStepsEn: SolutionStep[] = solutionSteps.map(
-  (step, index) => {
-    const copy = englishSteps[index];
+export const explorerBenefitsDe = [
+  {
+    icon: "eye",
+    title: "Einheitliche Übersicht",
+    text: "Alle wichtigen Daten an einem Ort.",
+    step: 3,
+  },
+  {
+    icon: "bell",
+    title: "Rechtzeitige Warnungen",
+    text: "Wichtige Veränderungen rechtzeitig erkennen.",
+    step: 4,
+  },
+  {
+    icon: "chart",
+    title: "Grundlage für bessere Entscheidungen",
+    text: "Zuverlässige Daten für wirksameres Handeln.",
+    step: 3,
+  },
+];
+export const explorerExamplesDe = [
+  {
+    icon: "water",
+    title: "Unerwarteter Wasserverbrauch",
+    text: "Die verantwortliche Person sieht die Abweichung, bevor daraus ein größeres Problem wird.",
+    step: 4,
+  },
+  {
+    icon: "energy",
+    title: "Energieabweichung",
+    text: "Der Verbrauchsvergleich über die Zeit macht eine ungewöhnliche Veränderung sichtbar.",
+    step: 3,
+  },
+  {
+    icon: "bike",
+    title: "Mobilitätsplanung",
+    text: "Daten aus mehreren Quellen zeigen, welche Verbindungen tatsächlich belastet sind.",
+    step: 2,
+  },
+];
+
+const germanSteps = [
+  {
+    name: "Geräte und Sensoren",
+    next: "Konnektivität",
+    title: "Daten beginnen im Feld.",
+    description:
+      "Wir binden Sensoren, Zähler und bestehende Feldausrüstung an und sorgen für eine zuverlässige Datenerfassung.",
+    heading: "Was wir leisten",
+    items: [
+      [
+        "Auswahl geeigneter Geräte",
+        "Wir beraten und wählen Geräte, die zu Ihren Anforderungen und Ihrer Umgebung passen.",
+      ],
+      [
+        "Einbindung vorhandener Ausrüstung",
+        "Wir verbinden und integrieren vorhandene Zähler, Sensoren und Feldgeräte.",
+      ],
+      [
+        "Konfiguration und Prüfung der Messungen",
+        "Wir konfigurieren die Geräte, prüfen den Betrieb und stellen zuverlässige Daten sicher.",
+      ],
+    ],
+    tagLabel: "Geeignet für",
+    tags: ["Wasser und Gas", "Energie", "Umwelt", "Infrastruktur"],
+  },
+  {
+    name: "Konnektivität",
+    next: "Integrationen",
+    title: "Für jeden Standort wählen wir den passenden Datenweg.",
+    description:
+      "Wir setzen nicht auf eine Technologie für alle Fälle. Die Verbindung wählen wir nach Standort, Reichweite, Energieverbrauch und Datenmenge.",
+    heading: "Was wir leisten",
+    items: [
+      [
+        "Abdeckungsplanung",
+        "Wir prüfen Standort, Umgebung und Nutzungsanforderungen.",
+      ],
+      [
+        "Installation und Konfiguration",
+        "Wir sorgen für die korrekte Einführung der Kommunikationsinfrastruktur.",
+      ],
+      [
+        "Überwachung der Verbindungsqualität",
+        "Wir überwachen den Betrieb und erkennen Abweichungen rechtzeitig.",
+      ],
+    ],
+    tagLabel: "Unterstützte Wege",
+    tags: ["LoRaWAN", "NB-IoT", "wM-Bus", "LAN"],
+  },
+  {
+    name: "Integrationen",
+    next: "Nexavia",
+    title: "Bestehende Systeme bleiben. Wir verbinden die Daten.",
+    description:
+      "Nexavia verbindet sich über Standardschnittstellen mit den Lösungen, die Sie bereits nutzen. Wir vermeiden unnötige Datenduplizierung und verlangen keinen Austausch funktionierender Infrastruktur.",
+    heading: "Was wir verbinden können",
+    items: [
+      ["Geschäftssysteme", "ERP, Abrechnung und weitere Fachlösungen."],
+      ["Betriebssysteme", "SCADA, Leitsysteme und Gerätedaten."],
+      [
+        "Räumliche und externe Quellen",
+        "GIS, offene Daten, Wetter und weitere Plattformen.",
+      ],
+    ],
+    tagLabel: "Unterstützte Wege",
+    tags: ["API", "ERP", "SCADA", "GIS"],
+  },
+  {
+    name: "Nexavia + KAI",
+    next: "Entscheidung",
+    title: "Aus Daten wird eine nützliche Übersicht.",
+    description:
+      "Nexavia führt verschiedene Quellen an einem Ort zusammen. KAI analysiert die Daten, weist auf Abweichungen hin und hilft der verantwortlichen Person zu verstehen, wo Handlungsbedarf besteht.",
+    heading: "Was der Anwender erhält",
+    items: [
+      ["Einheitliche Übersicht", "Die wichtigsten Daten an einem Ort."],
+      [
+        "Rechtzeitige Warnungen",
+        "Abweichungen erkennen, bevor sie zu einem größeren Problem werden.",
+      ],
+      [
+        "Entscheidungsunterstützung",
+        "KAI hebt hervor, was Aufmerksamkeit erfordert.",
+      ],
+    ],
+    note: "KAI ist der Analyseassistent in Nexavia.",
+  },
+  {
+    name: "Entscheidung und Maßnahme",
+    next: "NOC",
+    title: "Die richtige Information erreicht die richtige Person.",
+    description:
+      "Verantwortliche erhalten eine klare Warnung, Kontext und einen Vorschlag für den nächsten Schritt. Die Maßnahme kann ein Mensch bestätigen oder nach vereinbarten Regeln eine Automatisierung ausführen.",
+    heading: "Beispiele für Maßnahmen",
+    items: [
+      [
+        "Arbeitsauftrag",
+        "Die Störung wird an die Instandhaltung weitergeleitet.",
+      ],
+      ["Betriebsanpassung", "Eine Einstellung wird nach Bestätigung geändert."],
+      [
+        "Bericht für die Leitung",
+        "Die Entscheidung beruht auf nachvollziehbaren Daten.",
+      ],
+    ],
+    note: "Der Mensch behält die Kontrolle über die Entscheidung.",
+  },
+  {
+    name: "NOC und Managed Services",
+    title: "Wir überwachen Lösungen auch nach der Einführung.",
+    description:
+      "Kontinuierliche Überwachung, Reaktion, Wartung und fachliche Unterstützung sorgen dafür, dass die gesamte Lösung langfristig zuverlässig funktioniert.",
+    heading: "Was wir überwachen",
+    items: [
+      ["Geräte", "Erreichbarkeit und Plausibilität der Messungen."],
+      ["Konnektivität", "Qualität des Kommunikationswegs."],
+      ["Alarme", "Bearbeitung von Abweichungen und Benachrichtigungen."],
+      ["Support", "Wartung und Unterstützung der Anwender."],
+    ],
+    note: "Ein Partner für den Betrieb der gesamten Lösung.",
+  },
+] as const;
+
+type StepCopy = (typeof englishSteps)[number] | (typeof germanSteps)[number];
+
+const localizeSteps = (copies: readonly StepCopy[]): SolutionStep[] =>
+  solutionSteps.map((step, index) => {
+    const copy = copies[index];
     return {
       ...step,
       ...copy,
@@ -391,5 +557,7 @@ export const solutionStepsEn: SolutionStep[] = solutionSteps.map(
       })),
       tags: "tags" in copy ? [...copy.tags] : step.tags,
     };
-  },
-);
+  });
+
+export const solutionStepsEn = localizeSteps(englishSteps);
+export const solutionStepsDe = localizeSteps(germanSteps);

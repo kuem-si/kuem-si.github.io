@@ -3,7 +3,7 @@
  * Used by `SeoHead`/`JsonLd` components and by the generated `llms.txt`.
  */
 
-import { COMPANY_EMAIL } from "./company";
+import { COMPANY_EMAIL, COMPANY_SOCIAL } from "./company";
 import { kaiContent } from "./kai";
 
 const SITE = "https://www.kuem.si";
@@ -16,6 +16,7 @@ export const organization = {
   url: `${SITE}/`,
   logo: `${SITE}/favicon.svg`,
   email: COMPANY_EMAIL,
+  sameAs: COMPANY_SOCIAL.map((profile) => profile.href),
   address: {
     "@type": "PostalAddress",
     addressLocality: "Kranj",
@@ -53,7 +54,7 @@ export const nexaviaSoftware = {
   applicationCategory: "BusinessApplication",
   applicationSubCategory: "IoT data platform",
   operatingSystem: "Web",
-  inLanguage: ["sl-SI", "en-GB"],
+  inLanguage: ["sl-SI", "en-GB", "de-DE"],
   description:
     "Nexavia is a modular platform for collecting, processing, visualizing, alarming and integrating data from meters, sensors, devices and external systems.",
   keywords:
@@ -90,7 +91,7 @@ export const kaiSoftware = {
   applicationCategory: "BusinessApplication",
   applicationSubCategory: "Operational data analysis assistant",
   operatingSystem: "Web",
-  inLanguage: ["sl-SI", "en-GB"],
+  inLanguage: ["sl-SI", "en-GB", "de-DE"],
   description: kaiContent.en.description,
   keywords:
     "anomaly detection, operational assistant, alarms, data analysis, recommendations",

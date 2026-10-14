@@ -1,6 +1,6 @@
 # KUEM corporate website
 
-Production-oriented bilingual Astro website. Slovenian is the default language; English routes use `/en/`.
+Production-oriented trilingual Astro website. Slovenian is the default language; English routes use `/en/` and German routes use `/de/`. Each locale has its own slugs, paired in `src/lib/i18n.ts`.
 
 ## Local development
 

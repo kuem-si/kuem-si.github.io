@@ -13,10 +13,13 @@ import type { Locale } from "../../lib/i18n";
 import { withBase } from "../../lib/paths";
 import {
   benefits,
+  benefitsDe,
   benefitsEn,
   industries,
+  industriesDe,
   industriesEn,
   useCases,
+  useCasesDe,
   useCasesEn,
 } from "../../data/homepage";
 import { references } from "../../data/references";
@@ -175,10 +178,85 @@ const copy = {
     dialogClose: "Close ×",
     dialogImgAlt: "Enlarged original Nexavia dashboard",
   },
+  de: {
+    seoTitle: "KUEM | Vom Gerät zur Entscheidung",
+    seoDescription:
+      "KUEM verbindet Geräte, bestehende Systeme und Daten in der Plattform Nexavia für ein effizienteres Infrastrukturmanagement.",
+    heroEyebrow: "Digitalisierung von Infrastruktur und Prozessen",
+    heroH1: "Vom Gerät zur Entscheidung.",
+    heroIntro:
+      "Wir verbinden Feldgeräte, bestehende Systeme und Daten in der Plattform Nexavia – für eine übersichtliche Überwachung, rechtzeitige Warnungen und bessere Entscheidungen.",
+    heroCtaHref: "/de/nexavia",
+    heroCta: "Nexavia entdecken",
+    heroCtaOutline: "Sprechen wir",
+    flowCaption: ["Daten verbinden", "bessere Gemeinschaften"],
+    trustAria: "Sie vertrauen uns",
+    trustEyebrow: "Sie vertrauen uns",
+    trustLabel: "Sie vertrauen uns",
+    productP:
+      "Nexavia führt Daten aus Feldgeräten, Messungen und bestehenden Informationssystemen zusammen. Sie bietet eine einheitliche Übersicht über den Zustand der Infrastruktur, schnelleres Erkennen von Abweichungen und wirksameres Handeln.",
+    productCtaHref: "/de/nexavia",
+    productCta: "Nexavia kennenlernen",
+    dashLinkAria: "Original-Dashboard von Nexavia vergrößern",
+    dashImgAlt:
+      "Original Nexavia Network Operations Center: Gerätekarte, Netzstatus, Alarme und Datenqualität",
+    enlarge: "Ansicht vergrößern",
+    howEyebrow: "So funktioniert es",
+    howH2: "Wir ersetzen bestehende Infrastruktur nicht. Wir verbinden sie.",
+    sourcesH3: "Bestehende Systeme und externe Quellen",
+    sources: [
+      "ERP",
+      "SCADA",
+      "GIS",
+      "Wetter und öffentliche Daten",
+      "Weitere Fachplattformen",
+    ],
+    industriesH2: "Eine Plattform. Unterschiedliche Herausforderungen der Infrastruktur.",
+    industriesEyebrow: "Lösungen für Gemeinden, Versorger und Industrie",
+    reference: "Referenz",
+    kaiEyebrow: "KAI · Analyseschicht von Nexavia",
+    kaiH2: "Daten, die warnen, bevor ein Problem größer wird.",
+    kaiP:
+      "KAI ist so konzipiert, dass die Verarbeitung auf Ihren eigenen Servern Vorrang hat. Mit ausreichend Rechenleistung und Arbeitsspeicher können auch anspruchsvolle Analysen lokal bleiben. Kompatible Grafikprozessoren (GPUs) können unterstützte Aufgaben deutlich beschleunigen. KAI hilft, Abweichungen zu erkennen, Ereignisse zu erklären und den nächsten Schritt vorzubereiten.",
+    kaiEmphasis:
+      "Externe Sprachmodell-Dienste kommen nur für die anspruchsvollsten Aufgaben infrage, die die lokalen Kapazitäten übersteigen. Der Mensch behält die Kontrolle über die Entscheidungen.",
+    kaiCtaHref: "/de/kai",
+    kaiCta: "Mehr über KAI",
+    exampleLabel: "Beispiel einer Abweichungserkennung",
+    alertTitle: "Warnung",
+    alertH3: "Ungewöhnlich hoher Wasserverbrauch",
+    alertP:
+      "Der Verbrauch weicht vom üblichen Muster ab. Prüfen Sie die Messstelle und den Netzzustand.",
+    alertCtaHref: "/de/kai",
+    alertCta: "So funktioniert die Erkennung",
+    chartCaption: "Muster des Wasserverbrauchs",
+    chartLegend: ["Übliches Muster", "Abweichung"],
+    chartAria:
+      "Schematisches Diagramm: Der Wasserverbrauch überschreitet das übliche Muster und kehrt dann in den normalen Bereich zurück.",
+    usecasesH2: "Von Daten zur konkreten Maßnahme.",
+    usecasesEyebrow: "Reale Herausforderungen. Konkrete Lösungen.",
+    usecaseCta: "Lösung ansehen",
+    storiesEyebrow: "Erfolgsgeschichten",
+    storiesSrOnly: " – Projektdetails",
+    storiesAllHref: "/de/referenzen/",
+    storiesAllText: "Alle Erfolgsgeschichten",
+    closingH2: "Beginnen wir mit einer konkreten Herausforderung.",
+    closingP:
+      "Sie müssen nicht alles auf einmal digitalisieren. Wir wählen einen Anwendungsfall, verbinden die verfügbaren Daten und prüfen die Lösung zunächst in begrenztem Umfang.",
+    closingCta: "Erstgespräch vereinbaren",
+    demoCta: "Ich möchte eine Nexavia-Präsentation",
+    subjectBooking: "Vereinbarung%20eines%20Erstgespr%C3%A4chs",
+    subjectDemo: "Pr%C3%A4sentation%20der%20Plattform%20Nexavia",
+    dialogCloseAria: "Vergrößerte Ansicht schließen",
+    dialogClose: "Schließen ×",
+    dialogImgAlt: "Vergrößertes Original-Dashboard von Nexavia",
+  },
 }[locale];
-const benefitList = locale === "sl" ? benefits : benefitsEn;
-const industryList = locale === "sl" ? industries : industriesEn;
-const useCaseList = locale === "sl" ? useCases : useCasesEn;
+const benefitList = { sl: benefits, en: benefitsEn, de: benefitsDe }[locale];
+const industryList = { sl: industries, en: industriesEn, de: industriesDe }[
+  locale
+];
+const useCaseList = { sl: useCases, en: useCasesEn, de: useCasesDe }[locale];
 const stories = [
   { name: "Domplan", source: "DOMPLAN, d.d." },
   { name: "Sombor", source: "Sombor-gas d.o.o." },

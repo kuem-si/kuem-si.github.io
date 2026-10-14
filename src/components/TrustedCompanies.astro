@@ -1,7 +1,11 @@
 ---
 import { trustedCompanies } from "../data/trustedCompanies";
 import { getLocaleFromPath } from "../lib/i18n";
-const en = getLocaleFromPath(Astro.url.pathname) === "en";
+const pauseLabel = {
+  sl: "Ustavi premikanje seznama",
+  en: "Pause the moving list",
+  de: "Bewegte Liste anhalten",
+}[getLocaleFromPath(Astro.url.pathname)];
 ---
 
 <div class="trusted">
@@ -15,7 +19,7 @@ const en = getLocaleFromPath(Astro.url.pathname) === "en";
     </div>
   </div>
   {/* WCAG 2.2.2: anything that moves for more than five seconds can be paused. Shown by the script. */}
-  <button class="trusted-toggle" type="button" aria-pressed="false" aria-label={en ? "Pause the moving list" : "Ustavi premikanje seznama"} hidden>
+  <button class="trusted-toggle" type="button" aria-pressed="false" aria-label={pauseLabel} hidden>
     <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
       <path class="trusted-pause" d="M4 3h3v10H4zM9 3h3v10H9z" />
       <path class="trusted-play" d="M5 3l8 5-8 5z" />

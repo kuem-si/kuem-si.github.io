@@ -1,6 +1,6 @@
 ---
 import { withBase } from "../lib/paths";
-import type { Locale } from "../lib/i18n";
+import { localizedPath, type Locale } from "../lib/i18n";
 
 const {
   title = "Start with a focused pilot",
@@ -16,7 +16,7 @@ const {
   locale?: Locale;
 };
 const href =
-  ctaHref ?? `${locale === "sl" ? "/kontakt" : "/en/contact"}#demo-form`;
+  ctaHref ?? `${localizedPath("/kontakt", locale)}#demo-form`;
 ---
 
 <section class="cta-strip">

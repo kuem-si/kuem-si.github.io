@@ -1,43 +1,39 @@
 ---
-import { alternatePath, type Locale } from "../lib/i18n";
-import { ensureTrailingSlash } from "../lib/paths";
+import { localeAlternates, locales, type Locale } from "../lib/i18n";
 const { locale, pathname = Astro.url.pathname } = Astro.props as {
   locale: Locale;
   pathname?: string;
 };
-const alternate = ensureTrailingSlash(alternatePath(pathname));
+const alternates = localeAlternates(pathname);
+const groupLabel = { sl: "Jezik", en: "Language", de: "Sprache" }[locale];
+// Each link is labelled in its own language, so a reader finds theirs.
+const viewIn: Record<Locale, string> = {
+  sl: "Ogled strani v slovenščini",
+  en: "View site in English",
+  de: "Website auf Deutsch ansehen",
+};
 ---
 
-<span
-  class="language-selector"
-  role="group"
-  aria-label={locale === "sl" ? "Jezik" : "Language"}
->
-  {locale === "sl" ? (
-    <span aria-current="true">SL</span>
-  ) : (
-    <a
-      href={alternate}
-      lang="sl"
-      hreflang="sl"
-      aria-label="View site in Slovenian"
-    >
-      SL
-    </a>
-  )}
-  <span aria-hidden="true">|</span>
-  {locale === "en" ? (
-    <span aria-current="true">EN</span>
-  ) : (
-    <a
-      href={alternate}
-      lang="en"
-      hreflang="en"
-      aria-label="View site in English"
-    >
-      EN
-    </a>
-  )}
+<span class="language-selector" role="group" aria-label={groupLabel}>
+  {
+    locales.map((code, index) => (
+      <>
+        {index > 0 && <span aria-hidden="true">|</span>}
+        {code === locale ? (
+          <span aria-current="true">{code.toUpperCase()}</span>
+        ) : (
+          <a
+            href={alternates[code]}
+            lang={code}
+            hreflang={code}
+            aria-label={viewIn[code]}
+          >
+            {code.toUpperCase()}
+          </a>
+        )}
+      </>
+    ))
+  }
 </span>
 
 <style>

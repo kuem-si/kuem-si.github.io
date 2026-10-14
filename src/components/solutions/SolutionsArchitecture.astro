@@ -47,6 +47,27 @@ const copy = {
     nocSub: "Device · connectivity · alarm monitoring · support",
     nocSmall: "CONTINUOUS MONITORING<br>OF THE ENTIRE SOLUTION",
   },
+  de: {
+    sectionAria: "Lösungsarchitektur: von Daten zur Entscheidung",
+    intro: "WÄHLEN SIE EINEN TEIL DER LÖSUNG",
+    introHint: "Klicken Sie auf einen Schritt für Details.",
+    micro: "VON DATEN ZUR ENTSCHEIDUNG",
+    srOnly:
+      "Geräte und Sensoren gelangen über die Konnektivität zu Nexavia. Getrennter Weg: Bestehende Systeme gelangen über API-Integrationen zu Nexavia. KAI ist die Analyseschicht von Nexavia. Von Nexavia zur Entscheidung und Maßnahme. Das NOC überwacht alle Schichten und ist keine Station des Datenflusses.",
+    cards: [
+      { id: "devices", icon: "devices", title: "Geräte und Sensoren", sub: "Zähler · Sensoren · Telemetrie" },
+      { id: "radio", icon: "radio", title: "Konnektivität", sub: "LoRaWAN · NB-IoT · wM-Bus · LAN" },
+      { id: "systems", icon: "systems", title: "Bestehende Systeme", sub: "ERP · SCADA · GIS · externe Quellen" },
+      { id: "api", icon: "api", title: "API-Integrationen", sub: "Standardschnittstellen" },
+    ],
+    platformSub: "Erfassung · Verarbeitung · Darstellung",
+    kaiSub: "Analytik · Warnungen · Empfehlungen",
+    action: "Entscheidung und Maßnahme",
+    actionSub: "Mensch oder Automatisierung",
+    noc: "NOC und Managed Services",
+    nocSub: "Überwachung von Geräten · Konnektivität · Alarmen · Support",
+    nocSmall: "KONTINUIERLICHE ÜBERWACHUNG<br>DER GESAMTEN LÖSUNG",
+  },
 }[locale];
 const cards = copy.cards;
 ---

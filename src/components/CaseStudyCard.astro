@@ -6,21 +6,26 @@ const { item, locale = "en" } = Astro.props as {
   item: CaseStudy;
   locale?: Locale;
 };
+const labels = {
+  sl: ["Izziv:", "Rešitev:", "Uvedba:"],
+  en: ["Challenge:", "Solution:", "Deployment:"],
+  de: ["Herausforderung:", "Lösung:", "Umsetzung:"],
+}[locale];
 ---
 
 <article class="card">
   <p class="eyebrow">{item.vertical}</p>
   <h3>{item.title}</h3>
   <p>
-    <strong>{locale === "sl" ? "Izziv:" : "Challenge:"}</strong>
+    <strong>{labels[0]}</strong>
     {item.challenge}
   </p>
   <p>
-    <strong>{locale === "sl" ? "Resitev:" : "Solution:"}</strong>
+    <strong>{labels[1]}</strong>
     {item.solution}
   </p>
   <p>
-    <strong>{locale === "sl" ? "Uvedba:" : "Deployment:"}</strong>
+    <strong>{labels[2]}</strong>
     {item.deployment}
   </p>
   <ul>

@@ -3,20 +3,25 @@ import MainLayout from "../layouts/MainLayout.astro";
 ---
 
 <MainLayout
-  title="404 – Stran ni najdena / Page not found"
-  description="Zahtevana stran ne obstaja. The requested page does not exist."
+  title="404 – Stran ni najdena / Page not found / Seite nicht gefunden"
+  description="Zahtevana stran ne obstaja. The requested page does not exist. Die angeforderte Seite existiert nicht."
   noindex={true}
   ><section class="hero" data-scheme="carbon">
     <div class="container">
       <p class="eyebrow">404</p><h1>
-        Pot se tu prekine.<br />The path ends here.
+        Pot se tu prekine.<br />The path ends here.<br /><span lang="de"
+          >Hier endet der Weg.</span
+        >
       </h1><p class="lead">
         Stran ne obstaja ali je bila premaknjena. The page does not exist or has
-        moved.
+        moved. <span lang="de"
+          >Die Seite existiert nicht oder wurde verschoben.</span
+        >
       </p><div class="actions">
         <a class="btn btn-primary" href="/">Slovensko</a><a
           class="btn btn-secondary"
-          href="/en/">English</a>
+          href="/en/">English</a
+        ><a class="btn btn-secondary" href="/de/" lang="de">Deutsch</a>
       </div>
     </div>
   </section></MainLayout

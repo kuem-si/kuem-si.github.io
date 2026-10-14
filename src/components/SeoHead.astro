@@ -1,7 +1,13 @@
 ---
 import JsonLd from "./JsonLd.astro";
 import { PUBLIC_CONTACT_ENDPOINT } from "astro:env/client";
-import { alternatePath, getLocaleFromPath } from "../lib/i18n";
+import {
+  getLocaleFromPath,
+  localeAlternates,
+  localeTags,
+  locales,
+  ogLocales,
+} from "../lib/i18n";
 import { ensureTrailingSlash } from "../lib/paths";
 import { organization, website } from "../data/organization";
 import sourceSansLatin from "../assets/brand/fonts/SourceSans3-latin-variable.woff2";
@@ -21,13 +27,17 @@ const {
 } = Astro.props;
 const locale = getLocaleFromPath(pathname);
 const canonical = new URL(ensureTrailingSlash(pathname), Astro.site);
-const alternate = new URL(ensureTrailingSlash(alternatePath(pathname)), Astro.site);
+const alternatePaths = localeAlternates(pathname);
+const alternates = locales
+  .filter((other) => other !== locale)
+  .map((other) => ({
+    locale: other,
+    href: new URL(alternatePaths[other], Astro.site),
+  }));
 const fullTitle = title.includes("KUEM") ? title : `${title} | KUEM`;
-const otherLocale = locale === "sl" ? "en" : "sl";
-const langTag = locale === "sl" ? "sl-SI" : "en-GB";
-const otherLangTag = otherLocale === "sl" ? "sl-SI" : "en-GB";
+const langTag = localeTags[locale];
 // x-default is this page in the default language (Slovenian), not the home page.
-const defaultVersion = locale === "sl" ? canonical : alternate;
+const defaultVersion = new URL(alternatePaths.sl, Astro.site);
 // Each family ships as the two @fontsource-variable 5.3.0 subsets: Latin
 // (a–z, digits, punctuation) and Latin Extended (č, š, ž). The unicode-range
 // values are fontsource's, so a browser downloads a subset only for pages
@@ -99,11 +109,11 @@ if (firstEntity?.["@id"]) {
 }
 const structuredData = [
   organization,
-  // One site in two languages: the same node on every page.
+  // One site in three languages: the same node on every page.
   {
     ...website,
     url: new URL("/", Astro.site).href,
-    inLanguage: ["sl-SI", "en-GB"],
+    inLanguage: locales.map((code) => localeTags[code]),
   },
   pageNode,
   ...jsonLd,
@@ -131,7 +141,13 @@ const structuredData = [
       rel="alternate"
       hreflang={langTag}
       href={canonical}
-    /><link rel="alternate" hreflang={otherLangTag} href={alternate} /><link
+    />{alternates.map((alternate) => (
+      <link
+        rel="alternate"
+        hreflang={localeTags[alternate.locale]}
+        href={alternate.href}
+      />
+    ))}<link
       rel="alternate"
       hreflang="x-default"
       href={defaultVersion}
@@ -159,11 +175,10 @@ const structuredData = [
   content="image/png"
 /><meta
   property="og:locale"
-  content={locale === "sl" ? "sl_SI" : "en_GB"}
-/><meta
-  property="og:locale:alternate"
-  content={otherLocale === "sl" ? "sl_SI" : "en_GB"}
-/><meta name="twitter:card" content="summary_large_image" /><meta
+  content={ogLocales[locale]}
+/>{alternates.map((alternate) => (
+  <meta property="og:locale:alternate" content={ogLocales[alternate.locale]} />
+))}<meta name="twitter:card" content="summary_large_image" /><meta
   name="twitter:title"
   content={fullTitle}
 /><meta name="twitter:description" content={description} /><meta

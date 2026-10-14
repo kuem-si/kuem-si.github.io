@@ -37,6 +37,24 @@ export const commonLabels: Record<Locale, Record<string, string>> = {
     detailedReference: "Podrobna referenca",
     nameOnlyReference: "Referenca",
   },
+  de: {
+    home: "Startseite",
+    mainNavigation: "Hauptnavigation",
+    openMenu: "Menü öffnen",
+    closeMenu: "Menü schließen",
+    language: "Sprache",
+    switchLanguage: "Sprache wechseln",
+    theme: "Design",
+    toggleTheme: "Design wechseln",
+    light: "Hell",
+    dark: "Dunkel",
+    requestDemo: "Demo anfragen",
+    contactUs: "Kontaktieren Sie uns",
+    learnMore: "Mehr erfahren",
+    references: "Referenzen",
+    detailedReference: "Ausführliche Referenz",
+    nameOnlyReference: "Referenz",
+  },
 };
 
 export function t(locale: Locale, key: keyof typeof commonLabels.en): string {

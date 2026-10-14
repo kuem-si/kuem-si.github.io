@@ -12,11 +12,13 @@ export type Solution = {
 export const positioning: Record<Locale, string> = {
   sl: "KUEM razvija in implementira rešitve za digitalizacijo infrastrukture, daljinsko odčitavanje števcev, nadzor naprav, spremljanje okoljskih parametrov, alarmiranje in povezovanje podatkov z obstoječimi poslovnimi sistemi.",
   en: "KUEM develops and implements solutions for infrastructure digitalization, remote meter reading, remote monitoring of devices and environmental parameters, alarms, and integration of field data with existing business systems.",
+  de: "KUEM entwickelt und implementiert Lösungen für die Digitalisierung von Infrastruktur, die Zählerfernauslesung, die Fernüberwachung von Geräten und Umweltparametern, Alarmierung sowie die Integration von Felddaten in bestehende Geschäftssysteme.",
 };
 
 export const nexaviaPositioning: Record<Locale, string> = {
   sl: "Nexavia je modularna platforma za zbiranje, obdelavo, prikaz, alarmiranje in integracijo podatkov iz števcev, senzorjev, naprav in zunanjih sistemov.",
   en: "Nexavia is a modular platform for collecting, processing, visualizing, alarming and integrating data from meters, sensors, devices and external systems.",
+  de: "Nexavia ist eine modulare Plattform zum Erfassen, Verarbeiten, Visualisieren, Alarmieren und Integrieren von Daten aus Zählern, Sensoren, Geräten und externen Systemen.",
 };
 
 const solutionTitles = {
@@ -50,6 +52,24 @@ const solutionTitles = {
     ["tourism-camps-marinas", "Tourism, camps and marinas"],
     ["data-centers", "Data centers"],
   ],
+  de: [
+    ["zaehlerfernauslesung", "Zählerfernauslesung"],
+    [
+      "digitalisierung-kommunaler-infrastruktur",
+      "Digitalisierung kommunaler Infrastruktur",
+    ],
+    ["oeffentliche-beleuchtung", "Öffentliche Beleuchtung"],
+    ["umweltmonitoring", "Umweltmonitoring"],
+    ["schulen-und-kindergaerten", "Schulen und Kindergärten"],
+    ["abfall", "Abfall"],
+    ["verkehr-und-mobilitaet", "Verkehr und Mobilität"],
+    ["haccp-temperaturueberwachung", "HACCP-Temperaturüberwachung"],
+    [
+      "tourismus-campingplaetze-marinas",
+      "Tourismus, Campingplätze und Marinas",
+    ],
+    ["rechenzentren", "Rechenzentren"],
+  ],
 } satisfies Record<Locale, string[][]>;
 
 // URL slugs are single-sourced in solutionDetails.ts; titles are mapped per
@@ -75,6 +95,11 @@ export const homepageSolutions: Record<Locale, Solution[]> = {
     id: en,
     title: requireTitle(titleBySlug("en"), en),
     href: `/en/solutions/${en}`,
+  })),
+  de: solutionDetailSlugs.map(({ de }) => ({
+    id: de,
+    title: requireTitle(titleBySlug("de"), de),
+    href: `/de/loesungen/${de}`,
   })),
 };
 

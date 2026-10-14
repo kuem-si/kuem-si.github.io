@@ -34,8 +34,8 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
   const panel = root.querySelector(".twin-city-panel");
   const wrap = root.querySelector(".twin-scene-wrap");
   if (!panel || !wrap) return null;
-  const { en } = api;
-  const t = (sl, english) => (en ? english : sl);
+  const { locale } = api;
+  const t = (sl, en, de) => ({ sl, en, de })[locale];
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const format = (ms) =>
     `${Math.floor(ms / 60000)}:${String(Math.round((ms % 60000) / 1000)).padStart(2, "0")}`;
@@ -59,11 +59,11 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
   launcher.setAttribute("role", "group");
   launcher.setAttribute(
     "aria-label",
-    t("Vodeni scenariji", "Guided scenarios"),
+    t("Vodeni scenariji", "Guided scenarios", "Geführte Szenarien"),
   );
   // The introduction (`intro: true`) comes first, marked as the place to
   // start, ahead of the numbered scenarios.
-  const label = `<span class="twin-scenarios-label">${t("Vodeni scenariji", "Guided scenarios")}</span>`;
+  const label = `<span class="twin-scenarios-label">${t("Vodeni scenariji", "Guided scenarios", "Geführte Szenarien")}</span>`;
   launcher.innerHTML = scenarios.some((scenario) => scenario.intro)
     ? ""
     : label;
@@ -87,7 +87,7 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
       button.classList.add("is-intro");
       button.insertAdjacentHTML(
         "afterbegin",
-        `<span class="twin-scenario-start">${t("Začnite tukaj", "Start here")}</span>`,
+        `<span class="twin-scenario-start">${t("Začnite tukaj", "Start here", "Hier starten")}</span>`,
       );
       launcher.prepend(button);
       button.insertAdjacentHTML("afterend", label);
@@ -102,15 +102,18 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
   player.hidden = true;
   player.tabIndex = -1;
   player.setAttribute("role", "region");
-  player.setAttribute("aria-label", t("Vodeni scenarij", "Guided scenario"));
+  player.setAttribute(
+    "aria-label",
+    t("Vodeni scenarij", "Guided scenario", "Geführtes Szenario"),
+  );
   player.innerHTML = `
-    <header><span class="scenario-kicker"></span><span class="scenario-tools"><button type="button" class="scenario-share" aria-label="${t("Kopiraj povezavo do tega koraka", "Copy a link to this step")}" title="${t("Kopiraj povezavo do tega koraka", "Copy a link to this step")}">${icons.link}</button><button type="button" class="scenario-close" aria-label="${t("Zapri scenarij", "Close scenario")}">${icons.close}</button></span></header>
+    <header><span class="scenario-kicker"></span><span class="scenario-tools"><button type="button" class="scenario-share" aria-label="${t("Kopiraj povezavo do tega koraka", "Copy a link to this step", "Link zu diesem Schritt kopieren")}" title="${t("Kopiraj povezavo do tega koraka", "Copy a link to this step", "Link zu diesem Schritt kopieren")}">${icons.link}</button><button type="button" class="scenario-close" aria-label="${t("Zapri scenarij", "Close scenario", "Szenario schließen")}">${icons.close}</button></span></header>
     <div class="scenario-body" aria-live="polite"><p class="scenario-time"></p><div><h3 class="scenario-title"></h3><p class="scenario-text"></p></div></div>
     <div class="scenario-progress" aria-hidden="true"></div>
     <footer>
-      <button type="button" class="scenario-prev" aria-label="${t("Prejšnji korak", "Previous step")}">${icons.prev}</button>
+      <button type="button" class="scenario-prev" aria-label="${t("Prejšnji korak", "Previous step", "Vorheriger Schritt")}">${icons.prev}</button>
       <button type="button" class="scenario-play"></button>
-      <button type="button" class="scenario-next" aria-label="${t("Naslednji korak", "Next step")}">${icons.next}</button>
+      <button type="button" class="scenario-next" aria-label="${t("Naslednji korak", "Next step", "Nächster Schritt")}">${icons.next}</button>
       <span class="scenario-count"></span>
     </footer>`;
   wrap.append(player);
@@ -175,10 +178,10 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
   function setPlayButton() {
     const icon = finished ? icons.replay : playing ? icons.pause : icons.play;
     const label = finished
-      ? t("Ponovi scenarij", "Replay scenario")
+      ? t("Ponovi scenarij", "Replay scenario", "Szenario wiederholen")
       : playing
-        ? t("Premor", "Pause")
-        : t("Nadaljuj", "Play");
+        ? t("Premor", "Pause", "Pause")
+        : t("Nadaljuj", "Play", "Abspielen");
     ui.play.innerHTML = icon;
     ui.play.setAttribute("aria-label", label);
     player.classList.toggle("is-paused", !playing);
@@ -215,7 +218,11 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
       playing = false;
       renderProgress();
       setPlayButton();
-      ui.count.textContent = t("Scenarij končan", "Scenario complete");
+      ui.count.textContent = t(
+        "Scenarij končan",
+        "Scenario complete",
+        "Szenario abgeschlossen",
+      );
     }
   }
 
@@ -255,6 +262,7 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
     ui.count.textContent = t(
       `Korak ${current + 1} / ${active.steps.length}`,
       `Step ${current + 1} of ${active.steps.length}`,
+      `Schritt ${current + 1} von ${active.steps.length}`,
     );
     api.narrate({ text: `${active.title} · ${step.title}` });
     renderProgress();
@@ -279,7 +287,7 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
     api.enter();
     player.hidden = false;
     wrap.classList.add("has-scenario");
-    ui.kicker.textContent = `${t("Scenarij", "Scenario")} · ${scenario.title}`;
+    ui.kicker.textContent = `${t("Scenarij", "Scenario", "Szenario")} · ${scenario.title}`;
     playing = autoplay;
     goTo(index);
     player.focus({ preventScroll: true });
@@ -316,8 +324,12 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
       copied = false;
     }
     const label = copied
-      ? t("Povezava kopirana", "Link copied")
-      : t("Kopiranje ni uspelo", "Could not copy the link");
+      ? t("Povezava kopirana", "Link copied", "Link kopiert")
+      : t(
+          "Kopiranje ni uspelo",
+          "Could not copy the link",
+          "Link konnte nicht kopiert werden",
+        );
     share.innerHTML = copied ? icons.done : icons.link;
     share.dataset.status = label;
     share.setAttribute("aria-label", label);
@@ -327,7 +339,11 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
       delete share.dataset.status;
       share.setAttribute(
         "aria-label",
-        t("Kopiraj povezavo do tega koraka", "Copy a link to this step"),
+        t(
+          "Kopiraj povezavo do tega koraka",
+          "Copy a link to this step",
+          "Link zu diesem Schritt kopieren",
+        ),
       );
     }, 2200);
   });
