@@ -60,7 +60,9 @@ const YARD_LAMPS = {
   LAMP_04: [536, 464],
 };
 
-// Sensor pins, the light sensor and the gateway (world points).
+// Sensor pins, the light sensor and the gateway (world points). In the plant
+// they follow the utilities from the yard into the hall and watch every line;
+// in the store the cold chain, the shoppers and the car park.
 export const SENSORS = {
   lux: [150, 45, 39],
   gateway: [262, 45, 48],
@@ -73,6 +75,33 @@ export const SENSORS = {
   freezer: [542, 135, 7],
   "freezer-wall": [581, 175, 12],
   "market-power": [582, 330, 13],
+  // Plant: supply and utilities.
+  "main-power": [267, 488, 18],
+  air: [260, 446, 15],
+  gas: [164, 354, 10],
+  water: [149.5, 354, 9],
+  silo: [30, 398, 36],
+  // Plant: machines and production.
+  "line-cnc": [96, 62, 17.5],
+  "line-robot": [179, 121, 12],
+  "robot-vib": [142, 116, 6],
+  "line-mould": [106, 191, 16],
+  terminal: [102, 229.5, 13.5],
+  ahu: [144, 333, 15],
+  forklift: [262, 232, 12],
+  dock: [241, 353, 12],
+  smoke: [40, 330, 30],
+  "gas-detect": [108.5, 333, 13],
+  // Store: cold chain, shoppers and the car park.
+  refrig: [592.5, 277, 12],
+  deli: [322, 266, 11],
+  people: [338, 353, 13],
+  queue: [440, 310, 21.5],
+  flood: [583, 344, 4],
+  ev: [382, 378.4, 12],
+  parking: [310, 523, 17],
+  waste: [592.5, 319, 10],
+  weather: [304, 296, 32],
 };
 
 // ---------------------------------------------------------------------------
@@ -221,6 +250,24 @@ export function buildScene() {
       userData: { scale: 55 },
     }),
     markings: plain("#dedbd2", 0.8),
+    plinth: plain("#bdb9b0", 0.9),
+    cable: plain("#1f2224", 0.6),
+    air: plain("#4f8fc0", 0.45, 0.2),
+  };
+  // The status light of a sensor or meter.
+  const sensorLamp = new THREE.MeshStandardMaterial({
+    color: "#20241f",
+    emissive: "#39e06a",
+    emissiveIntensity: 2.2,
+  });
+  // A sensor's housing with its status light on the face towards the viewer.
+  const sensorBox = (group, x0, y0, x1, y1, z0, z1) => {
+    part(group, x0, y0, x1, y1, z0, z1, X.chilled);
+    const x = (x0 + x1) / 2;
+    const z = (z0 + z1) / 2;
+    part(group, x - 0.4, y1, x + 0.4, y1 + 0.15, z - 0.4, z + 0.4, sensorLamp, {
+      cast: false,
+    });
   };
 
   // --- Ground ---------------------------------------------------------------
@@ -574,7 +621,10 @@ export function buildScene() {
         flat,
       );
     };
-    for (const x of [36, 74, 112, 150]) {
+    // Their stack lights show the state the dashboard reports: two running,
+    // one idle, one stopped.
+    const states = ["#39e06a", "#39e06a", "#ffb020", "#ff3b30"];
+    [36, 74, 112, 150].forEach((x, index) => {
       const group = new THREE.Group();
       part(group, x, 50, x + 30, 74, 0, 15, X.machine);
       part(group, x, 73.9, x + 30, 74.2, 11.5, 13, X.accent, flat);
@@ -582,9 +632,11 @@ export function buildScene() {
       // Control panel on a swing arm, and the chip conveyor's bin.
       part(group, x + 22, 74, x + 27, 76, 5, 11, X.machineDark);
       part(group, x + 30.5, 56, x + 34, 66, 0, 5, X.machineDark);
-      tower(group, x + 27, 54, 15, random() < 0.8 ? "#39e06a" : "#ffb020");
+      // The draw keeps the rest of the model's random sequence unchanged.
+      random();
+      tower(group, x + 27, 54, 15, states[index]);
       fixture(group);
-    }
+    });
     // Switchgear on the side wall.
     {
       const group = new THREE.Group();
@@ -601,6 +653,9 @@ export function buildScene() {
       part(group, 40.6, 122.6, 177.4, 129.4, 4.4, 4.9, X.belt, flat);
       for (let x = 48; x < 174; x += rand(9, 15))
         part(group, x, 124, x + 4.5, 128, 4.9, 4.9 + rand(2, 3.4), X.cardboard);
+      // Photo eye at the end of the line: it counts the finished pieces.
+      part(group, 178.5, 120, 180, 121.5, 0, 7.5, X.machineDark);
+      sensorBox(group, 178, 119.4, 180.4, 121.8, 7.5, 9.4);
       fixture(group);
       for (const x of [74, 142]) {
         const robot = new THREE.Group();
@@ -623,6 +678,9 @@ export function buildScene() {
         arm(8, 0, 3, 0.25);
         arm(8.5, 2, 10.4, 1.25);
         robot.add(box(-0.9, 9.4, 0.9, 11, 11.6, 13.4, X.machineDark));
+        // The second robot carries a vibration and temperature sensor on its
+        // base.
+        if (x === 142) sensorBox(robot, -0.9, 2.6, 0.9, 3.4, 0.8, 2.6);
         fixture(place(robot, x, 113, 0));
       }
       for (let x = 44; x < 176; x += 22)
@@ -661,6 +719,8 @@ export function buildScene() {
       );
       part(group, x + 38, 198, x + 42, 201, 0, 9, X.machineDark);
       tower(group, x + 40, 186, 6, "#39e06a");
+      // Energy meter and piece counter on the machine's side.
+      sensorBox(group, x + 20, 198, x + 24, 198.6, 1.5, 4.5);
       fixture(group);
     }
     // Packing tables and the pallets the finished boxes are stacked on.
@@ -676,6 +736,28 @@ export function buildScene() {
         part(group, px, py, px + 0.5, py + 0.5, 0, 3.6, X.machineDark, flat);
       for (let b = x + 1; b < x + 13; b += rand(3.6, 5.4))
         part(group, b, 227.5, b + 3, 231, 4.4, 4.4 + rand(1.6, 3), X.cardboard);
+      fixture(group);
+    }
+    // Terminal where the operators log the reason for a stop.
+    {
+      const group = new THREE.Group();
+      part(group, 101.4, 229, 102.6, 230, 0, 7.5, X.machineDark);
+      part(group, 100, 228.6, 104, 231, 7.5, 10.5, X.machineDark);
+      part(
+        group,
+        100.4,
+        231,
+        103.6,
+        231.15,
+        7.9,
+        10.1,
+        new THREE.MeshStandardMaterial({
+          color: "#0e1a24",
+          emissive: "#4fa8e0",
+          emissiveIntensity: 1.4,
+        }),
+        flat,
+      );
       fixture(group);
     }
     const stack = (x, y, levels = 3) => {
@@ -759,6 +841,33 @@ export function buildScene() {
       const duct = new THREE.CylinderGeometry(3.4, 3.4, 12, 16);
       group.add(place(mesh(duct, M.metal), 126, 332, 17));
       fixture(group);
+    }
+    // Gas detector beside the unit's gas-fired heater.
+    {
+      const group = new THREE.Group();
+      part(group, 108, 332.5, 109, 333.5, 0, 8, X.machineDark);
+      sensorBox(group, 107, 332, 110, 334, 8, 10.4);
+      fixture(group);
+    }
+    // Smoke and CO detector under the frame above the office.
+    {
+      const [sx, sy] = SENSORS.smoke;
+      add(
+        place(
+          mesh(new THREE.CylinderGeometry(1.6, 2.1, 1.2, 18), X.chilled),
+          sx,
+          sy,
+          F.h - 3.4,
+        ),
+      );
+      add(
+        place(
+          mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.3, 10), sensorLamp, flat),
+          sx,
+          sy,
+          F.h - 4.1,
+        ),
+      );
     }
     // Warehouse: pallet racking along the building.
     const rack = (x0, x1) => {
@@ -1074,6 +1183,46 @@ export function buildScene() {
     crates(K.x0 + WALL, 72, 323, 248, 3.6);
     crates(350, 284, 368, 292, 3.6);
     crates(350, 296, 368, 304, 3.6);
+    // Hot deli counter with a core-temperature probe: food under heat lamps
+    // behind a glass hood.
+    {
+      const group = new THREE.Group();
+      part(group, 317, 254, 327, 278, 0, 5, plain("#8b5a3c", 0.7));
+      part(
+        group,
+        318,
+        255,
+        326,
+        277,
+        5,
+        5.6,
+        new THREE.MeshStandardMaterial({
+          color: "#c9772f",
+          emissive: "#ff9a3a",
+          emissiveIntensity: 0.55,
+          roughness: 0.6,
+        }),
+        flat,
+      );
+      part(
+        group,
+        317.4,
+        254.4,
+        326.6,
+        277.6,
+        5.6,
+        8.4,
+        new THREE.MeshStandardMaterial({
+          color: "#ffe3c2",
+          roughness: 0.1,
+          transparent: true,
+          opacity: 0.3,
+        }),
+        flat,
+      );
+      sensorBox(group, 326.6, 263, 327.4, 269, 2, 4);
+      fixture(group);
+    }
     // Checkouts: a counter with its belt and till.
     for (const x of [392, 424, 456, 488, 520]) {
       const group = new THREE.Group();
@@ -1087,7 +1236,33 @@ export function buildScene() {
       const group = new THREE.Group();
       part(group, 580, 320, kx1, 340, 0, 10, X.machine);
       part(group, 579.85, 322, 580, 338, 1, 9, X.machineDark, flat);
+      // Flood sensor on the floor in front of it.
+      const [fx, fy] = SENSORS.flood;
+      group.add(
+        place(
+          mesh(new THREE.CylinderGeometry(1.2, 1.3, 0.8, 14), X.chilled),
+          fx,
+          fy,
+          0.4,
+        ),
+      );
+      group.add(
+        place(
+          mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.1, 8), sensorLamp, flat),
+          fx,
+          fy,
+          0.85,
+        ),
+      );
       fixture(group);
+    }
+    // Queue sensor hanging from the frame above the checkouts.
+    {
+      const [qx, qy] = SENSORS.queue;
+      add(box(qx - 0.2, qy - 0.2, qx + 0.2, qy + 0.2, 23, K.h - 2.8, M.metal));
+      const group = new THREE.Group();
+      sensorBox(group, qx - 1.6, qy - 1, qx + 1.6, qy + 1, 21.6, 23);
+      add(group);
     }
     // Entrance canopy with the shop's sign, and the trolley shelter.
     const sign = painted(256, 64, (g, w, h) => {
@@ -1124,6 +1299,8 @@ export function buildScene() {
         faces({ front: signGlow, rest: X.cut }),
         flat,
       );
+      // People counter above the entrance.
+      sensorBox(group, 335, 352.4, 341, 354, 9.6, 11);
       add(group);
       occluder(group, "canopy");
     }
@@ -1345,6 +1522,206 @@ export function buildScene() {
     }
     part(group, 150, 520.4, 184, 520.8, 1.6, 6, X.accent, flat);
     add(group);
+  }
+
+  // --- Utilities and the sensors outdoors --------------------------------------
+  // The plant's transformer and main low-voltage board in the yard's corner,
+  // with the cable duct along the plant to its front wall.
+  {
+    const group = new THREE.Group();
+    part(group, 228, 474, 284, 502, 1.1, 2, X.plinth);
+    part(group, 232, 478, 250, 497, 2, 14, plain("#6f7a72", 0.55, 0.3));
+    for (let x = 233; x < 250; x += 2.2)
+      part(group, x, 497, x + 0.8, 499, 3, 12, plain("#5d6862", 0.6, 0.3));
+    for (const x of [236, 241, 246])
+      group.add(
+        place(
+          mesh(
+            new THREE.CylinderGeometry(0.7, 0.95, 3, 10),
+            plain("#8a5a3c", 0.4),
+          ),
+          x,
+          484,
+          15.5,
+        ),
+      );
+    part(group, 254, 480, 280, 496, 2, 17, X.machine);
+    for (const x of [262.6, 270.6])
+      part(group, x, 496, x + 0.4, 496.15, 2.5, 16.5, X.machineDark, flat);
+    sensorBox(group, 256, 496, 260, 496.3, 11, 14);
+    add(group);
+    occluder(group, "fixture");
+    add(box(287, 356, 290, 490, 1.1, 2.4, X.cable));
+    add(box(280, 486, 290, 490, 1.1, 2.4, X.cable));
+  }
+  // Compressor station: the compressors' house and the air receiver, with the
+  // compressed-air main on posts into the plant.
+  {
+    const group = new THREE.Group();
+    part(group, 240, 434, 280, 458, 1.1, 13, X.machine);
+    part(group, 239.5, 433.5, 280.5, 458.5, 13, 14, X.accent);
+    for (let x = 244; x < 276; x += 4)
+      part(group, x, 458, x + 2.6, 458.2, 4, 10, X.machineDark, flat);
+    group.add(
+      place(
+        mesh(new THREE.CylinderGeometry(3.2, 3.2, 14, 18), M.metal),
+        234,
+        446,
+        8.1,
+      ),
+    );
+    sensorBox(group, 266, 458, 272, 458.4, 6, 9);
+    part(group, 283.4, 352, 284.6, 436, 9, 10.2, X.air);
+    part(group, 280, 435, 284.6, 437, 9, 10.2, X.air);
+    for (const y of [380, 410])
+      part(group, 283.6, y - 0.4, 284.4, y + 0.4, 1.1, 9, X.machineDark);
+    add(group);
+    occluder(group, "fixture");
+  }
+  // Gas and water meters on the plant's front wall, their pipes into the
+  // ground.
+  for (const [x0, x1, door, pipe] of [
+    [160, 168, X.yellow, X.yellow],
+    [146, 153, X.accent, X.air],
+  ]) {
+    const group = new THREE.Group();
+    part(group, x0, 352.2, x1, 355.4, 2, 8, X.machine);
+    part(group, x0 + 0.6, 355.4, x1 - 0.6, 355.6, 2.6, 7.4, door, flat);
+    part(group, x0 + 1, 352.4, x0 + 2, 353.4, 1, 2, pipe);
+    sensorBox(group, x1 - 2.4, 355.6, x1 - 0.8, 355.9, 6.2, 7.2);
+    add(group);
+    occluder(group, "fixture");
+  }
+  // Level radar on the first silo's roof.
+  {
+    const group = new THREE.Group();
+    sensorBox(group, 29, 397, 31, 399, 33.6, 35.4);
+    add(group);
+  }
+  // Contact on the frame of the dock the lorry is backed up to.
+  {
+    const group = new THREE.Group();
+    sensorBox(group, 240.6, 352, 242, 352.8, FLOOR + 6, FLOOR + 8);
+    add(group);
+  }
+  // Two chargers at the head of the car park's first bays, their bays marked
+  // green.
+  for (const x of [373.5, 390.5]) {
+    const group = new THREE.Group();
+    part(group, x - 1.5, 377.4, x + 1.5, 379.4, 1, 10.5, X.machine);
+    part(group, x - 1.5, 379.4, x + 1.5, 379.55, 7.6, 9.6, X.green, flat);
+    part(group, x - 0.5, 379.55, x + 0.5, 379.7, 8.2, 9, sensorLamp, flat);
+    part(group, x - 7.5, 387, x + 7.5, 409, 1.12, 1.13, plain("#3f9a6a"), flat);
+    add(group);
+    occluder(group, "lamp");
+  }
+  // On the strip of lawn beside the store: the refrigeration plant's two
+  // condensing units, their pipes through the wall, and two waste containers
+  // with fill-level sensors in their lids.
+  for (const y of [262, 278]) {
+    const group = new THREE.Group();
+    part(group, 589.4, y, 595.6, y + 14, 1.6, 9.4, X.machine);
+    group.add(
+      place(
+        mesh(new THREE.CylinderGeometry(2.6, 2.6, 0.3, 20), X.machineDark),
+        592.5,
+        y + 7,
+        9.5,
+      ),
+    );
+    part(group, 586, y + 6, 589.4, y + 8, 3.5, 4.6, M.metal);
+    if (y === 278) sensorBox(group, 589, y + 2, 589.4, y + 6, 4, 7);
+    add(group);
+    occluder(group, "fixture");
+  }
+  for (const [y, color] of [
+    [300, "#3f7a5a"],
+    [314, "#4a5056"],
+  ]) {
+    const group = new THREE.Group();
+    part(group, 589.6, y, 595.4, y + 12, 1.6, 7.6, plain(color, 0.6, 0.2));
+    part(group, 589.4, y - 0.2, 595.6, y + 12.2, 7.6, 8.3, X.machineDark);
+    if (y === 314) sensorBox(group, 591.5, y + 4, 593.5, y + 6, 8.3, 9);
+    add(group);
+    occluder(group, "fixture");
+  }
+  // Weather station on the lawn between the buildings: temperature,
+  // humidity, wind and particulates.
+  {
+    const [wx, wy] = SENSORS.weather;
+    const group = new THREE.Group();
+    group.add(
+      place(
+        mesh(new THREE.CylinderGeometry(0.35, 0.45, 30, 8), M.darkMetal),
+        wx,
+        wy,
+        16.4,
+      ),
+    );
+    for (let z = 22; z < 25.4; z += 0.85)
+      group.add(
+        place(
+          mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.5, 14), X.chilled),
+          wx + 1.2,
+          wy,
+          z,
+        ),
+      );
+    for (const [dx, dy] of [
+      [2.4, 0],
+      [-2.4, 0],
+      [0, 2.4],
+      [0, -2.4],
+    ])
+      part(
+        group,
+        wx + Math.min(0, dx) - 0.15,
+        wy + Math.min(0, dy) - 0.15,
+        wx + Math.max(0, dx) + 0.15,
+        wy + Math.max(0, dy) + 0.15,
+        31.4,
+        31.7,
+        M.darkMetal,
+      );
+    sensorBox(group, wx - 1.2, wy - 0.6, wx - 0.2, wy + 0.6, 18, 20);
+    add(group);
+    occluder(group, "lamp");
+  }
+  // The car park's free bays, shown on the pylon below the shop's sign.
+  {
+    const free = parking.total - parking.parked;
+    const screen = painted(160, 96, (g, w, h) => {
+      g.fillStyle = "#0e1418";
+      g.fillRect(0, 0, w, h);
+      g.fillStyle = "#2f6fd0";
+      g.fillRect(10, 18, 60, 60);
+      g.fillStyle = "#ffffff";
+      g.font = "bold 50px Arial, sans-serif";
+      g.textAlign = "center";
+      g.textBaseline = "middle";
+      g.fillText("P", 40, 50);
+      g.fillStyle = "#4cdc7a";
+      g.fillText(String(free), 116, 50);
+    });
+    const display = new THREE.MeshStandardMaterial({
+      map: screen,
+      emissive: "#ffffff",
+      emissiveMap: screen,
+      emissiveIntensity: 0.9,
+      roughness: 0.4,
+    });
+    add(
+      box(
+        305,
+        522.4,
+        315,
+        522.6,
+        11,
+        17,
+        faces({ front: display, rest: X.cut }),
+        flat,
+      ),
+    );
   }
 
   // Yard and car park lamps.

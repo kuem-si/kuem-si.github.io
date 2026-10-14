@@ -2,9 +2,11 @@ import { initTraffic } from "./traffic.js";
 import geometry from "../../components/nexavia/showcase/industry-geometry.json";
 
 // The industry twin: a manufacturing plant and a supermarket, both shown in
-// section, with their lighting under one rule, climate sensors in the plant
-// and temperature sensors on the store's refrigeration. Driven by twin.js; the
-// maquette and its geometry come from scripts/generate-industry-maquette.mjs.
+// section, with their lighting under one rule. In the plant the meters follow
+// electricity, compressed air, gas and water to every line and the machines
+// report for OEE; in the store the sensors watch the cold chain, the shoppers
+// and the car park. Driven by twin.js; the maquette and its geometry come from
+// scripts/generate-industry-maquette.mjs.
 
 const LAMPS = ["LAMP_01", "LAMP_02", "LAMP_03", "LAMP_04"];
 const ALL = ["FACTORY_01", "MARKET_01", "SIGN_01", ...LAMPS];
@@ -13,10 +15,13 @@ const off = () => Array(ALL.length).fill(0);
 const VIEW = {
   plant: { x: 480, y: 250, zoom: 1.5, radius: 0.34 },
   hall: { x: 440, y: 210, zoom: 1.5, radius: 0.3 },
+  line: { x: 540, y: 170, zoom: 1.7, radius: 0.24 },
   warehouse: { x: 680, y: 210, zoom: 1.5, radius: 0.28 },
+  yard: { x: 650, y: 480, zoom: 1.6, radius: 0.3 },
   store: { x: 1060, y: 240, zoom: 1.5, radius: 0.34 },
   chillers: { x: 940, y: 160, zoom: 1.5, radius: 0.28 },
   freezers: { x: 1170, y: 220, zoom: 1.5, radius: 0.28 },
+  coldroom: { x: 1180, y: 190, zoom: 1.7, radius: 0.24 },
   outdoors: { x: 768, y: 500, zoom: 1.2, radius: 0.45 },
 };
 
@@ -70,7 +75,8 @@ export const industry = {
     subject: "LAMP_01–LAMP_04",
     name: (t) => t("Zunanje svetilke", "Outdoor lamps"),
   },
-  counters: [],
+  // Pieces, visitors and minutes of downtime only ever count up.
+  counters: ["line-robot", "line-mould", "people", "terminal"],
   steps: (t) => [
     {
       at: "day",
@@ -281,6 +287,62 @@ export const industry = {
       "market-power",
       `${n(64.2 + [0, 0.8, 1.9, 2.4, 1.1, -0.6, -1.2][i], 1)} kW`,
     );
+
+    // The plant's supply: the main board carries the hall, the compressors
+    // and the rest of the site; the peak KPI follows it.
+    const main = 371.2 + [0, 4.2, 9.6, 6.1, -3.8, -10.4, -4.6][i];
+    setReading("main-power", `${n(main, 1)} kW`);
+    const share = Math.round((main / 400) * 100);
+    setReading(
+      "kpi-peak",
+      t(`${share} %`, `${share}%`),
+      t(`${Math.round(main)} od 400 kW`, `${Math.round(main)} of 400 kW`),
+    );
+    const air = 540 + [0, 12, 26, 18, -8, -22, -10][i];
+    setReading("air", `${air} Nm³/h`);
+    setReading(
+      "air-bar",
+      `${n(7.1 - [0, 0.05, 0.1, 0.05, 0, -0.05, 0][i], 1)} bar`,
+    );
+    setReading("air-kw", `${n(air * 0.097, 1)} kW`);
+    setReading(
+      "gas",
+      `${n(14.2 + [0, 0.4, 0.9, 0.6, -0.3, -0.8, -0.2][i], 1)} m³/h`,
+    );
+    setReading(
+      "water",
+      `${n(1.8 + [0, 0.1, 0.3, 0.2, -0.1, -0.2, 0][i], 1)} m³/h`,
+    );
+    // The lines: pieces count up, the robot's vibration drifts on its slow
+    // rise.
+    const step = index + 1;
+    setReading("line-robot", String(1284 + step * 3));
+    setReading(
+      "line-robot-cycle",
+      `${n(22.4 + [0, 0.1, -0.1, 0.2, 0, -0.1, 0.1][i], 1)} s`,
+    );
+    setReading("line-mould", String(2316 + step * 6));
+    setReading("line-cnc-pcs", String(412 + step));
+    setReading(
+      "robot-vib",
+      `${n(3.4 + [0, 0.05, 0.1, 0.05, 0, 0.1, 0.05][i], 1)} mm/s`,
+    );
+    // The store: chillers and shoppers.
+    setReading(
+      "refrig",
+      `${n(26.3 + [0, 0.6, 1.4, 1.1, 0.3, -0.5, -0.8][i], 1)} kW`,
+    );
+    setReading(
+      "deli",
+      `${n(71.2 + [0, -0.4, -0.9, -0.3, 0.4, 0.8, 0.2][i], 1)} °C`,
+    );
+    setReading("people", String(1412 + step * 4));
+    const waiting = [5, 6, 4, 7, 5, 3, 4][i];
+    setReading("queue", String(waiting));
+    setReading(
+      "weather",
+      `${n(24.8 + [0, 0.2, 0.4, 0.3, 0.1, -0.2, -0.3][i], 1)} °C`,
+    );
   },
   scenarios,
 };
@@ -290,6 +352,8 @@ export const industry = {
 function scenarios(t, n) {
   const celsius = (v) => `${n(v, 1)} °C`;
   const percent = (v) => t(`${Math.round(v)} %`, `${Math.round(v)}%`);
+  const kw = (v) => `${Math.round(v)} kW`;
+  const mms = (v) => `${n(v, 1)} mm/s`;
   return [
     {
       // One reading followed from the sensor to the command it leads to.
@@ -951,6 +1015,488 @@ function scenarios(t, n) {
                 "HALL_TH_01 · 27.2 °C · alarm closed",
               ),
               "15:10",
+              "alarm",
+            );
+          },
+        },
+      ],
+    },
+    {
+      id: "peak",
+      title: t("Konica moči", "Peak demand"),
+      setup(api) {
+        api.setReading("main-power", kw(352));
+        api.setReading(
+          "kpi-peak",
+          percent(88),
+          t("352 od 400 kW", "352 of 400 kW"),
+        );
+        api.setReading("kai-peak", "425 kW", t("ob 18:00", "at 18:00"));
+        api.setReading("air", "540 Nm³/h");
+        api.setReading(
+          "ev",
+          kw(11),
+          t("danes 96 kWh · 7 sej", "today 96 kWh · 7 sessions"),
+        );
+        api.setAlarms([]);
+        api.pin("main-power");
+        api.narrate({
+          rule: t(
+            "Pravilo: napoved konice > 400 kW",
+            "Rule: peak forecast > 400 kW",
+          ),
+        });
+      },
+      steps: [
+        {
+          time: "16:30",
+          focus: VIEW.yard,
+          title: t("Pogodbena moč 400 kW", "400 kW contracted"),
+          text: t(
+            "Števec MAIN_LV_01 na glavnem razdelilniku meri moč celotne proizvodnje vsako minuto. Vsak kilovat nad pogodbeno močjo 400 kW se pozna na računu za ves mesec.",
+            "Meter MAIN_LV_01 on the main switchboard measures the whole plant's load every minute. Every kilowatt over the contracted 400 kW shows on the bill for the whole month.",
+          ),
+          run(api) {
+            api.spotlight(api.$reading("main-power"));
+          },
+        },
+        {
+          time: "16:45",
+          title: t("KAI napove konico", "KAI forecasts a peak"),
+          text: t(
+            "KAI iz poteka dneva, plana izmene in vremena napove, da bo ob 18:00, ko se zažene druga izmena in se polnita obe polnilnici, moč dosegla 425 kW.",
+            "From the day so far, the shift plan and the weather, KAI forecasts that at 18:00 – when the second shift starts and both chargers are busy – the load will reach 425 kW.",
+          ),
+          run(api, play) {
+            play.count("main-power", 352, 374, kw);
+            api.setReading(
+              "kpi-peak",
+              percent(94),
+              t("374 od 400 kW", "374 of 400 kW"),
+            );
+            api.spotlight(api.$reading("kai-peak"));
+            api.log(
+              t(
+                "KAI · Napoved konice 425 kW ob 18:00",
+                "KAI · Peak forecast 425 kW at 18:00",
+              ),
+              "16:45",
+              "decision",
+            );
+          },
+        },
+        {
+          time: "16:46",
+          title: t("Pravilo zamakne porabnike", "The rule shifts the loads"),
+          text: t(
+            "Nexavia drugemu kompresorju zamakne zagon za 30 minut – rezervoar zraka zdrži – in polnilnici EV omeji na 7 kW. Proizvodnja tega ne opazi.",
+            "Nexavia delays compressor 2 by 30 minutes – the air receiver bridges the gap – and limits the EV chargers to 7 kW. Production notices nothing.",
+          ),
+          run(api) {
+            api.setReading(
+              "ev",
+              kw(7),
+              t("omejeno ob konici", "limited at the peak"),
+            );
+            api.spotlight(api.$reading("ev"));
+            api.log(
+              t(
+                "COMP_01 · Kompresor 2 zamaknjen za 30 min · EV_01–02 omejeni na 7 kW",
+                "COMP_01 · Compressor 2 delayed 30 min · EV_01–02 limited to 7 kW",
+              ),
+              "16:46",
+              "command",
+            );
+          },
+        },
+        {
+          time: "18:00",
+          title: t("Konica ostane pod mejo", "The peak stays under the limit"),
+          text: t(
+            "Druga izmena se zažene, moč doseže 392 kW in ostane pod pogodbeno mejo. Prihranek se pokaže na mesečnem računu, dogodek pa v poročilu o konicah.",
+            "The second shift starts, the load reaches 392 kW and stays under the contracted limit. The saving shows on the monthly bill, the event in the peak report.",
+          ),
+          run(api, play) {
+            play.count("main-power", 374, 392, kw);
+            api.setReading(
+              "kpi-peak",
+              percent(98),
+              t("392 od 400 kW", "392 of 400 kW"),
+            );
+            api.spotlight(api.$reading("kpi-peak"));
+            api.log(
+              t(
+                "MAIN_LV_01 · Konica 392 kW · pod pogodbeno močjo",
+                "MAIN_LV_01 · Peak 392 kW · under the contracted power",
+              ),
+              "18:00",
+              "reading",
+            );
+          },
+        },
+        {
+          time: "18:30",
+          title: t("Vse spet teče normalno", "Back to normal"),
+          text: t(
+            "Po konici se kompresor 2 zažene, polnilnici dobita polno moč. Brez napovedi bi isti dan prinesel 25 kW preseženja in višjo omrežnino za ves mesec.",
+            "After the peak, compressor 2 starts and the chargers get full power again. Without the forecast, the same day would have cost 25 kW over the limit and a higher network fee for the whole month.",
+          ),
+          run(api, play) {
+            play.count("main-power", 392, 378, kw);
+            api.setReading("ev", kw(11), t("polna moč", "full power"));
+            api.log(
+              t(
+                "COMP_01 · Kompresor 2 zagnan · EV_01–02 polna moč",
+                "COMP_01 · Compressor 2 started · EV_01–02 full power",
+              ),
+              "18:30",
+              "command",
+            );
+          },
+        },
+      ],
+    },
+    {
+      id: "air-leak",
+      title: t("Puščanje zraka ob vikendu", "Air leaks over the weekend"),
+      setup(api) {
+        api.setReading("line-cnc", "0 / 4", t("vikend", "weekend"));
+        api.setReading("air", "540 Nm³/h");
+        api.setReading("air-kw", kw(52));
+        api.setReading("air-leak", percent(18));
+        api.setReading(
+          "kpi-leak",
+          percent(18),
+          t("≈ 6.900 € na leto", "≈ €6,900 a year"),
+        );
+        api.setLevel("FACTORY_01", 0);
+        api.setAlarms([]);
+        api.pin("air");
+        api.narrate({
+          rule: t(
+            "KAI: pretok zraka brez proizvodnje",
+            "KAI: air flow with no production",
+          ),
+        });
+      },
+      steps: [
+        {
+          time: "02:00",
+          focus: VIEW.yard,
+          title: t("Nedelja, hala miruje", "Sunday, the hall is still"),
+          text: t(
+            "Vsi stroji stojijo, a kompresorska postaja vzdržuje tlak v omrežju. Merilnik COMP_01 meri pretok vsako minuto – tudi ko nihče ne dela.",
+            "Every machine is off, but the compressor station keeps the network under pressure. Meter COMP_01 measures the flow every minute – even when nobody is working.",
+          ),
+          run(api, play) {
+            play.count("air", 540, 96, (v) => `${Math.round(v)} Nm³/h`);
+            api.setReading("air-kw", kw(10));
+            api.spotlight(api.$reading("line-cnc"));
+          },
+        },
+        {
+          time: "02:00",
+          title: t("Pretok bi moral biti nič", "The flow should be zero"),
+          text: t(
+            "Brez porabnikov kompresorja še vedno dovajata 96 Nm³/h. Ves ta zrak uhaja skozi netesne spojke, ventile in cevi.",
+            "With nothing using it, the compressors still deliver 96 Nm³/h. All of that air escapes through leaking couplings, valves and hoses.",
+          ),
+          run(api) {
+            api.spotlight(api.$reading("air"));
+            api.log(
+              t(
+                "COMP_01 · 96 Nm³/h ob mirujočih strojih",
+                "COMP_01 · 96 Nm³/h with the machines off",
+              ),
+              "02:00",
+              "reading",
+            );
+          },
+        },
+        {
+          time: "06:00",
+          title: t("KAI izračuna izgubo", "KAI works out the loss"),
+          text: t(
+            "KAI primerja vikend z delovnim tednom: 18 % vsega zraka je puščanje. Pri 0,10 kWh na Nm³ to stane okoli 6.900 € na leto. Vzdrževanje dobi delovni nalog.",
+            "KAI compares the weekend with the working week: 18% of all the air is leaks. At 0.10 kWh per Nm³ that costs about €6,900 a year. Maintenance gets a work order.",
+          ),
+          run(api, play) {
+            api.spotlight(api.$reading("kpi-leak"));
+            play.toast(
+              t("KAI: puščanje zraka", "KAI: air leaks"),
+              t("18 % · ≈ 6.900 € na leto", "18% · ≈ €6,900 a year"),
+              "06:00",
+            );
+            api.log(
+              t(
+                "KAI · Puščanje komprimiranega zraka 18 % → delovni nalog",
+                "KAI · Compressed-air leaks 18% → work order",
+              ),
+              "06:00",
+              "notify",
+            );
+          },
+        },
+        {
+          time: "08:00",
+          title: t(
+            "Vzdrževanje poišče netesnosti",
+            "Maintenance finds the leaks",
+          ),
+          text: t(
+            "Z ultrazvočnim detektorjem najdejo 14 netesnih mest in jih zatesnijo. Naslednji vikend merilnik pokaže, ali je bilo delo opravljeno dobro.",
+            "With an ultrasonic detector they find 14 leaks and seal them. The next weekend the meter shows whether the job was done well.",
+          ),
+          run(api) {
+            api.log(
+              t(
+                "COMP_01 · 14 netesnih mest zatesnjenih",
+                "COMP_01 · 14 leaks sealed",
+              ),
+              "08:00",
+              "command",
+            );
+          },
+        },
+        {
+          time: "02:00",
+          title: t("Teden pozneje", "A week later"),
+          text: t(
+            "Nočni pretok ob vikendu pade na 22 Nm³/h, puščanje na 4 %. Prihranek je vsak teden viden na števcu – in na računu za elektriko.",
+            "Weekend night flow falls to 22 Nm³/h and leaks to 4%. The saving shows on the meter every week – and on the electricity bill.",
+          ),
+          run(api, play) {
+            play.count("air", 96, 22, (v) => `${Math.round(v)} Nm³/h`);
+            api.setReading("air-kw", kw(3));
+            api.setReading("air-leak", percent(4));
+            api.setReading(
+              "kpi-leak",
+              percent(4),
+              t("≈ 1.500 € na leto", "≈ €1,500 a year"),
+            );
+            api.spotlight(api.$reading("kpi-leak"));
+            api.log(
+              t("COMP_01 · Puščanje 4 %", "COMP_01 · Leaks 4%"),
+              "02:00",
+              "reading",
+            );
+          },
+        },
+      ],
+    },
+    {
+      id: "robot",
+      title: t("KAI napove okvaro robota", "KAI predicts a robot failure"),
+      setup(api) {
+        api.setReading("robot-vib", mms(2.5));
+        api.setReading(
+          "kai-robot",
+          t("V redu", "Healthy"),
+          t("v mejah vzorca", "within the learned pattern"),
+        );
+        api.setLevel("FACTORY_01", 1);
+        api.setAlarms([]);
+        api.pin("robot-vib");
+        api.narrate({
+          rule: t(
+            "KAI: trend vibracij in temperature ležaja",
+            "KAI: vibration and bearing temperature trend",
+          ),
+        });
+      },
+      steps: [
+        {
+          time: "09:00",
+          focus: VIEW.line,
+          title: t("Robot dela kot vedno", "The robot works as always"),
+          text: t(
+            "Senzor na podnožju robota 2 vsako minuto meri vibracije, temperaturo ležaja in tok motorja. Vrednosti so daleč pod mejo 4,5 mm/s.",
+            "The sensor on robot 2's base measures vibration, bearing temperature and motor current every minute. The values are far below the 4.5 mm/s limit.",
+          ),
+          run(api) {
+            api.spotlight(api.$reading("robot-vib"));
+          },
+        },
+        {
+          time: "09:00",
+          title: t("Devet dni pozneje", "Nine days later"),
+          text: t(
+            "Vibracije počasi naraščajo – za 34 % v devetih dneh – ležaj je toplejši za 6 °C. Klasičen alarm se še ne bi sprožil, ker je vrednost še pod mejo.",
+            "The vibration creeps up – 34% in nine days – and the bearing runs 6 °C warmer. A classic alarm would not fire yet: the value is still under the limit.",
+          ),
+          run(api, play) {
+            play.count("robot-vib", 2.5, 3.4, mms);
+            api.log(
+              t(
+                "ROBOT_02 · Vibracije 3,4 mm/s · ležaj 47 °C",
+                "ROBOT_02 · Vibration 3.4 mm/s · bearing 47 °C",
+              ),
+              "09:00",
+              "reading",
+            );
+          },
+        },
+        {
+          time: "09:05",
+          title: t("KAI prepozna obrabo", "KAI recognises wear"),
+          text: t(
+            "KAI pozna normalni vzorec robota in prepozna obrabo ležaja. Napove, da bo vibracija mejo dosegla čez približno 12 dni.",
+            "KAI knows the robot's normal pattern and recognises bearing wear. It forecasts that the vibration will reach the limit in about 12 days.",
+          ),
+          run(api, play) {
+            api.setReading(
+              "kai-robot",
+              t("Obraba", "Wear"),
+              t("servis čez ~12 dni", "service in ~12 days"),
+            );
+            api.spotlight(api.$reading("kai-robot"));
+            play.toast(
+              t("KAI: robot 2", "KAI: robot 2"),
+              t(
+                "Obraba ležaja · servis čez ~12 dni",
+                "Bearing wear · service in ~12 days",
+              ),
+              "09:05",
+            );
+            api.log(
+              t(
+                "KAI · ROBOT_02 obraba ležaja → nalog za servis",
+                "KAI · ROBOT_02 bearing wear → service order",
+              ),
+              "09:05",
+              "decision",
+            );
+          },
+        },
+        {
+          time: "06:00",
+          title: t("Servis v načrtovanem terminu", "Service when it suits"),
+          text: t(
+            "Vzdrževanje naroči ležaj in ga zamenja v soboto, ko linija ne dela. Brez napovedi bi se robot ustavil sredi izmene – z linijo vred.",
+            "Maintenance orders the bearing and fits it on Saturday, when the line is idle. Without the forecast the robot would have stopped mid-shift – and the line with it.",
+          ),
+          run(api, play) {
+            play.count("robot-vib", 3.4, 1.9, mms);
+            api.setReading(
+              "kai-robot",
+              t("V redu", "Healthy"),
+              t("ležaj zamenjan", "bearing replaced"),
+            );
+            api.spotlight(api.$reading("robot-vib"));
+            api.log(
+              t(
+                "ROBOT_02 · Ležaj zamenjan · 1,9 mm/s",
+                "ROBOT_02 · Bearing replaced · 1.9 mm/s",
+              ),
+              "06:00",
+              "command",
+            );
+          },
+        },
+      ],
+    },
+    {
+      id: "coldroom-door",
+      title: t("Odprta vrata hladilnice", "The cold room door left open"),
+      setup(api) {
+        api.setReading("coldroom", celsius(2.1));
+        api.setReading("coldroom-door", t("Zaprta", "Closed"));
+        api.setLevel("MARKET_01", 1);
+        api.setAlarms([]);
+        api.pin("coldroom");
+        api.narrate({
+          rule: t(
+            "Pravilo: vrata hladilnice odprta > 5 min",
+            "Rule: cold room door open > 5 min",
+          ),
+        });
+      },
+      steps: [
+        {
+          time: "07:10",
+          focus: VIEW.coldroom,
+          title: t("Jutranja dostava", "The morning delivery"),
+          text: t(
+            "Osebje zlaga dostavo v hladilnico. Kontakt na vratih in senzor temperature COLDROOM_01 poročata vsako spremembo.",
+            "Staff stack the delivery into the cold room. The door contact and temperature sensor COLDROOM_01 report every change.",
+          ),
+          run(api) {
+            api.setReading("coldroom-door", t("Odprta", "Open"));
+            api.spotlight(api.$reading("coldroom"));
+            api.log(
+              t("COLDROOM_01 · Vrata odprta", "COLDROOM_01 · Door open"),
+              "07:10",
+              "reading",
+            );
+          },
+        },
+        {
+          time: "07:16",
+          title: t("Vrata ostanejo odprta", "The door stays open"),
+          text: t(
+            "Paleta je zagozdila vrata. Topel zrak vdira v hladilnico, temperatura naraste nad 5 °C.",
+            "A pallet has wedged the door. Warm air pours in and the temperature climbs past 5 °C.",
+          ),
+          run(api, play) {
+            play.count("coldroom", 2.1, 5.6, celsius);
+            api.setAlarms([
+              [
+                "COLDROOM_01",
+                t("Vrata odprta 6 min · 5,6 °C", "Door open 6 min · 5.6 °C"),
+              ],
+            ]);
+            api.spotlight(".twin-alerts");
+            api.log(
+              t(
+                "COLDROOM_01 · Alarm: vrata odprta 6 min",
+                "COLDROOM_01 · Alarm: door open 6 min",
+              ),
+              "07:16",
+              "alarm",
+            );
+          },
+        },
+        {
+          time: "07:17",
+          title: t("Vodja izmene je obveščen", "The shift lead is alerted"),
+          text: t(
+            "Vodja izmene dobi obvestilo na telefon in vrata zapre. Nexavia zabeleži, koliko časa so bila odprta in koliko energije je odteklo.",
+            "The shift lead gets a phone notification and closes the door. Nexavia records how long it was open and how much energy was lost.",
+          ),
+          run(api, play) {
+            play.toast(
+              t("Alarm: hladilnica", "Alarm: cold room"),
+              t("Vrata odprta · 5,6 °C", "Door open · 5.6 °C"),
+              "07:17",
+            );
+            api.setReading("coldroom-door", t("Zaprta", "Closed"));
+            api.log(
+              t(
+                "COLDROOM_01 · Vrata zaprta · 7 min · ≈ 3 kWh",
+                "COLDROOM_01 · Door closed · 7 min · ≈ 3 kWh",
+              ),
+              "07:17",
+              "notify",
+            );
+          },
+        },
+        {
+          time: "07:40",
+          title: t("Zapis za HACCP", "On the HACCP record"),
+          text: t(
+            "Temperatura se vrne na 2,3 °C in alarm se zapre. Odstopanje s časom, trajanjem in ukrepom je samodejno v evidenci HACCP – brez ročnega vpisa.",
+            "The temperature returns to 2.3 °C and the alarm closes. The excursion, with its time, duration and action, is on the HACCP record automatically – nothing written by hand.",
+          ),
+          run(api, play) {
+            play.count("coldroom", 5.6, 2.3, celsius);
+            api.setAlarms([]);
+            api.spotlight(api.$reading("kpi-haccp"));
+            api.log(
+              t(
+                "COLDROOM_01 · 2,3 °C · alarm zaprt · zapis HACCP",
+                "COLDROOM_01 · 2.3 °C · alarm closed · HACCP record",
+              ),
+              "07:40",
               "alarm",
             );
           },
