@@ -158,7 +158,7 @@ const defaultUse = (kind: "sensor" | "meter") =>
   </div>
   <div class="city-sensors" role="group" aria-label={en ? "Sensors and meters on the model" : "Senzorji in merilniki na maketi"}>
     {scene.sensors.map((sensor, i) => (
-      <button class="city-sensor" type="button" data-sensor-pin={sensor.key} data-sensor-id={sensor.id} data-at={sensor.at.join(" ")} data-sensor-name={sensor.label} data-sensor-event={sensor.event} data-sensor-event-note={sensor.eventNote ? "" : undefined} data-tone={sensor.tone} aria-label={`${sensor.label}, ${sensor.id}`} aria-expanded="false" aria-controls={id(`popover-${sensor.key}`)} style={`${at(sensor.at)};--i:${i}`}>
+      <button class="city-sensor" type="button" data-sensor-pin={sensor.key} data-sensor-id={sensor.id} data-at={sensor.at.join(" ")} data-sensor-name={sensor.label} data-sensor-event={sensor.event} data-sensor-event-note={sensor.eventNote ? "" : undefined} data-tone={sensor.tone} data-layer={sensor.layer} data-site={sensor.site} aria-label={`${sensor.label}, ${sensor.id}`} aria-expanded="false" aria-controls={id(`popover-${sensor.key}`)} style={`${at(sensor.at)};--i:${i}`}>
         <span class="city-sensor-dot"></span>
         <span class="city-sensor-tag" aria-hidden="true"><b>{sensor.tag}</b><span data-sensor-tag></span></span>
       </button>
@@ -174,7 +174,7 @@ const defaultUse = (kind: "sensor" | "meter") =>
       <div class="city-popover-top"><i></i>{kindLabel(sensor.card.kind)}<span>{sensor.id}</span></div>
       <strong>{sensor.card.title}</strong>
       {sensor.card.grid ? (
-        <div class="city-popover-grid">
+        <div class="city-popover-grid" data-cols={sensor.card.columns}>
           {sensor.card.grid.map((cell, i) => (
             <span>{cell.label}<b data-reading={cell.key} data-sensor-value={i === 0 ? "" : undefined}>{cell.value}</b></span>
           ))}
@@ -194,6 +194,17 @@ const defaultUse = (kind: "sensor" | "meter") =>
         <div><dt>{en ? "Used for" : "Uporaba"}</dt><dd>{sensor.uses ?? defaultUse(sensor.card.kind)}</dd></div>
       </dl>
       <button type="button" class="city-popover-send" data-sensor-send={sensor.key}><i aria-hidden="true"></i>{en ? "Send reading now" : "Pošlji meritev zdaj"}</button>
+      {/* Cards on a multi-site model (the marina and camp) also switch their
+          socket and point at their dashboard row. */}
+      {(sensor.switchable || scene.sites) && (
+        <div class="city-popover-actions">
+          {sensor.switchable && (
+            <button type="button" data-sensor-switch={sensor.key} data-switch-key={sensor.switchable.key} data-switch-on={sensor.switchable.on} data-switch-off={sensor.switchable.off} aria-pressed="true">{en ? "Switch off" : "Izklopi"}</button>
+          )}
+          {/* Shown by twin.js when the dashboard has a row for this reading. */}
+          <button type="button" data-sensor-locate={sensor.key} hidden>{en ? "Show in dashboard" : "Pokaži na nadzorni plošči"}</button>
+        </div>
+      )}
     </div>
   ))}
 

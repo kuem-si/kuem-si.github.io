@@ -1247,17 +1247,182 @@ export function initTwin(root, config) {
   });
   observer.observe(workspace);
   reducedMotion.addEventListener("change", schedule);
+  // Sites and pin layers, on a model with several sites (the marina and
+  // camp). The site frames the camera on it and filters the dashboard to it;
+  // a layer shows one network's pins. A guided scenario shows everything.
+  const sitePicks = [...root.querySelectorAll("[data-site-pick]")];
+  const layerPicks = [...root.querySelectorAll("[data-layer-pick]")];
+  const allPins = [...root.querySelectorAll("[data-sensor-pin]")];
+  let site = "all";
+  let layer = "all";
+  function applyFilters() {
+    allPins.forEach((pin) => {
+      const shown =
+        (layer === "all" || pin.dataset.layer === layer) &&
+        (site === "all" || !pin.dataset.site || pin.dataset.site === site);
+      pin.classList.toggle("is-filtered", !shown);
+      pin.tabIndex = shown ? 0 : -1;
+      if (!shown && pin.getAttribute("aria-expanded") === "true") pinCard(null);
+    });
+  }
+  const siteFocus = () => {
+    const pick = sitePicks.find((button) => button.dataset.sitePick === site);
+    const [x, y, zoom] = pick?.dataset.siteFocus?.split(" ").map(Number) ?? [];
+    return zoom ? { x, y, zoom, spot: false } : null;
+  };
+  function setSite(id, { frame = true } = {}) {
+    site = id;
+    sitePicks.forEach((button) =>
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset.sitePick === id),
+      ),
+    );
+    if (workspace) workspace.dataset.site = id;
+    if (frame) direction.focus(siteFocus());
+    applyFilters();
+  }
+  function setLayer(id) {
+    layer = id;
+    layerPicks.forEach((button) =>
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset.layerPick === id),
+      ),
+    );
+    applyFilters();
+  }
+  sitePicks.forEach((button) =>
+    button.addEventListener("click", () => setSite(button.dataset.sitePick)),
+  );
+  layerPicks.forEach((button) => {
+    const count = button.querySelector("[data-layer-count]");
+    const id = button.dataset.layerPick;
+    if (count)
+      count.textContent = String(
+        id === "all"
+          ? allPins.length
+          : allPins.filter((pin) => pin.dataset.layer === id).length,
+      );
+    button.addEventListener("click", () => setLayer(id));
+  });
+  window.addEventListener(
+    "resize",
+    () => site !== "all" && !directed && direction.focus(siteFocus()),
+    { passive: true },
+  );
+  if (sitePicks.length || layerPicks.length) {
+    // A dashboard row and its pin point at each other on hover: the row of a
+    // reading shown on a pin's card (its own value or one of its cells).
+    const pinFor = (key) => {
+      const own = $(`[data-sensor-pin="${key}"]`);
+      if (own) return own;
+      const card = $(`.city-sensor-popover [data-reading="${key}"]`)?.closest(
+        "[data-sensor-popover]",
+      );
+      return card && $(`[data-sensor-pin="${card.dataset.sensorPopover}"]`);
+    };
+    root.querySelectorAll(".twin-dashboard [data-reading]").forEach((value) => {
+      const row = value.parentElement;
+      const pin = pinFor(value.dataset.reading);
+      if (!row || !pin) return;
+      row.addEventListener("pointerenter", () =>
+        pin.classList.add("is-linked"),
+      );
+      row.addEventListener("pointerleave", () =>
+        pin.classList.remove("is-linked"),
+      );
+      pin.addEventListener("pointerenter", () =>
+        row.classList.add("is-linked"),
+      );
+      pin.addEventListener("pointerleave", () =>
+        row.classList.remove("is-linked"),
+      );
+    });
+    // A card points at its readings on the dashboard.
+    root.querySelectorAll("[data-sensor-locate]").forEach((button) => {
+      const card = button.closest("[data-sensor-popover]");
+      const keys = [
+        button.dataset.sensorLocate,
+        ...[...card.querySelectorAll("[data-reading]")].map(
+          (cell) => cell.dataset.reading,
+        ),
+      ];
+      const target = () =>
+        keys
+          .map((key) => $(`.twin-dashboard [data-reading="${key}"]`))
+          .find(Boolean)?.parentElement;
+      if (!target()) return;
+      button.hidden = false;
+      button.addEventListener("click", () => {
+        if (screenOverlay?.classList.contains("is-minimized"))
+          overlayToggle?.click();
+        const row = target();
+        direction.spotlight(row);
+        setTimeout(() => row.classList.remove("is-spotlit"), 2600);
+      });
+    });
+  }
+  // Sockets a card switches remotely: a command travels down to the pedestal
+  // and its state cell follows. The button follows the cell, which scenarios
+  // set like any reading.
+  root.querySelectorAll("[data-sensor-switch]").forEach((button) => {
+    const card = button.closest("[data-sensor-popover]");
+    const cell = card.querySelector(
+      `[data-reading="${button.dataset.switchKey}"]`,
+    );
+    if (!cell) return;
+    const isOn = () => cell.textContent !== button.dataset.switchOff;
+    const sync = () => {
+      const on = isOn();
+      button.setAttribute("aria-pressed", String(on));
+      button.textContent = on
+        ? t("Izklopi", "Switch off")
+        : t("Vklopi", "Switch on");
+    };
+    new MutationObserver(sync).observe(cell, {
+      childList: true,
+      characterData: true,
+      subtree: true,
+    });
+    sync();
+    button.addEventListener("click", () => {
+      const on = !isOn();
+      const key = card.dataset.sensorPopover;
+      const id = $(`[data-sensor-pin="${key}"]`)?.dataset.sensorId ?? key;
+      flow?.downlink(`sensor:${key}`);
+      setReading(
+        button.dataset.switchKey,
+        on ? button.dataset.switchOn : button.dataset.switchOff,
+      );
+      logEvent(
+        `${id} · ${t("Ročni ukaz prek nadzorne plošče", "Command from the dashboard")}: ${on ? t("vklop vtičnice", "socket on") : t("izklop vtičnice", "socket off")}`,
+        undefined,
+        "manual",
+      );
+    });
+  });
+
   // Scene direction for guided scenarios (scenarios.js). Scenarios drive the
   // same devices and dashboard as everything else; entering saves the scene
   // and leaving puts it back exactly as it was, manual overrides included.
   const art = root.querySelector("[data-city-art]");
   const focusLayer = art?.querySelector(".city-focus");
-  const controls = [ui("pause"), ui("next"), $("[data-devices-auto]")];
+  const controls = [
+    ui("pause"),
+    ui("next"),
+    $("[data-devices-auto]"),
+    ...sitePicks,
+    ...layerPicks,
+  ];
   let saved = null;
   const direction = {
     en,
     devices: deviceById,
     enter() {
+      // A scenario frames the camera itself and may point at any pin.
+      if (site !== "all") setSite("all", { frame: false });
+      if (layer !== "all") setLayer("all");
       saved = {
         paused,
         clock,

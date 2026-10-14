@@ -271,11 +271,12 @@ export function initDataFlow(root, { gateway }) {
     return true;
   }
 
-  // A command for a device. Returns how long it takes to arrive, so the
-  // maquette can show the light switching as it does.
+  // A command for a device, or for a sensor's own socket ("sensor:key").
+  // Returns how long it takes to arrive, so the maquette can show the light
+  // switching as it does.
   function downlink(id, deviceOnline = true) {
     if (!on || reducedMotion.matches) return 0;
-    const end = ends.get(`device:${id}`);
+    const end = ends.get(id.includes(":") ? id : `device:${id}`);
     if (!end) return 0;
     beam("down", COMMAND);
     const fail = !online || !deviceOnline;

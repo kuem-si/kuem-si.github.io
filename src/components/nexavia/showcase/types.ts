@@ -38,6 +38,12 @@ export interface Sensor {
   every?: string;
   // What Nexavia does with the readings, e.g. the rule they feed.
   uses?: string;
+  // The scene's layer and site the pin belongs to (Scene.layers, sites).
+  layer?: string;
+  site?: string;
+  // A socket the card can switch remotely: the reading key of its state
+  // cell and that cell's text when on and off.
+  switchable?: { key: string; on: string; off: string };
   card: {
     kind: "sensor" | "meter";
     title: string;
@@ -45,6 +51,8 @@ export interface Sensor {
     note?: string;
     // Several readings side by side; the first one is the tracked value.
     grid?: { label: string; key: string; value: string }[];
+    // Grid columns, for readings too long to sit three abreast (default 3).
+    columns?: 2 | 3;
   };
 }
 
@@ -75,6 +83,15 @@ export interface Scene {
   // light's reflection on it [x, y, width, height].
   water?: string;
   glints?: { id: string; box: number[] }[];
+  // Pin layers a visitor can pick (one network at a time), and the sites of
+  // a model with more than one: the camera framing for each (scene px) and
+  // the dashboard filtered to it.
+  layers?: { id: string; label: string }[];
+  sites?: {
+    id: string;
+    label: string;
+    focus?: { x: number; y: number; zoom: number };
+  }[];
   loader: { subject: string; stage: string };
 }
 
@@ -86,6 +103,14 @@ export interface ReadingRow {
   note?: string;
 }
 
+// A block of reading rows on the dashboard; `site` shows it only with that
+// site (or every site) selected.
+export interface ReadingBlock {
+  title: string;
+  rows: ReadingRow[];
+  site?: string;
+}
+
 export interface Twin {
   id: string;
   tab: { title: string; meta: string };
@@ -95,16 +120,24 @@ export interface Twin {
   dashboard: {
     title: string;
     subtitle: string;
-    kpis: { key: string; label: string; value: string; note: string }[];
+    // `reading` lets scenarios update a tile like any reading (setReading).
+    kpis: {
+      key: string;
+      label: string;
+      value: string;
+      note: string;
+      reading?: string;
+      site?: string;
+    }[];
     rule: string;
     ruleStatus: string;
-    devices: { id: string; name: string }[];
+    devices: { id: string; name: string; site?: string }[];
     group: string;
     alarms: { id: string; text: string }[];
-    meters: { title: string; rows: ReadingRow[] };
-    sensors: { title: string; rows: ReadingRow[] };
+    meters: ReadingBlock;
+    sensors: ReadingBlock;
     // Further blocks of readings, each with a tag beside its title and the
     // sections that show it (data-in; "overview devices" unless given).
-    panels?: { title: string; tag: string; in?: string; rows: ReadingRow[] }[];
+    panels?: (ReadingBlock & { tag: string; in?: string })[];
   };
 }

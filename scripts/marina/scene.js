@@ -63,7 +63,8 @@ export const LAYOUT = {
   },
 };
 
-// Devices: switchable lighting.
+// Devices: switchable lighting. The camp's two mobile homes and its sanitary
+// block are switched by the reception's booking system and by occupancy.
 export const DEVICES = [
   "HOTEL_01",
   "RESTAURANT_01",
@@ -72,6 +73,9 @@ export const DEVICES = [
   "PIER_02",
   "PIER_03",
   "PIER_04",
+  "MOBILE_HOME_01",
+  "MOBILE_HOME_02",
+  "CAMP_SANITARY_01",
 ];
 const PIER_LAMPS = {
   PIER_01: [257, LAYOUT.piers[0] - 3],
@@ -82,14 +86,38 @@ const PIER_LAMPS = {
 
 // Sensor pins (world points).
 export const SENSORS = {
+  // Marina: berths, pedestals and the harbour.
   "sea-level": [300, 239, 1.5],
   berths: [214, 372, 1.5],
   "shore-power": [382, 372, 7],
+  "pedestal-a": [240, 292, 6.5],
+  "pedestal-b": [400, 452, 6.5],
+  "berth-water": [200, 452, 6.5],
+  cabinet: [360, 292, 6.5],
   fuel: [432, 508, 10],
+  pumpout: [433, 529, 9],
+  buoy: [272, 512, 7],
+  "nav-lights": [344, 538, 27],
+  "pms-marina": [58, 526, 8],
+  wind: [104, 520, 66],
+  // Shared services on the quays.
   "sanitary-water": [522, 372, 8],
   "hotel-power": [150, 300, 9],
+  pool: [52, 313, 2.5],
+  haccp: [470, 288, 10],
+  smoke: [536, 262, 22],
   parking: [70, 366, 1],
-  wind: [104, 520, 66],
+  waste: [445, 383, 8],
+  ev: [591, 391, 9],
+  irrigation: [530, 512, 1],
+  // Camp.
+  "camp-pedestal": [466, 116, 5.5],
+  "camp-water": [78, 116, 5.5],
+  "mobile-home": [170, 131, 9],
+  "mh-safety": [238, 131, 9],
+  "camp-sanitary": [236, 78, 10],
+  "pms-camp": [355, 134, 12],
+  "camp-feeder": [318, 106, 10],
 };
 
 // ---------------------------------------------------------------------------
@@ -2046,7 +2074,8 @@ export function buildScene() {
     for (const x of [72, 458, 520]) shrubRow(x, 110, x, 144, 3, "#3f5a2e");
 
     // Mobile homes: clad cabins under shallow metal roofs, each with a deck.
-    const mobileHome = (x0, x1, wall) => {
+    // Their windows and porch light are a device, switched by the booking.
+    const mobileHome = (x0, x1, wall, device) => {
       const y0 = 114;
       const y1 = 131;
       house({
@@ -2060,6 +2089,7 @@ export function buildScene() {
         roofType: "gable",
         roofH: 3.2,
         floors: 1,
+        device,
         lit: 1,
         shutters: false,
         chimney: false,
@@ -2104,10 +2134,80 @@ export function buildScene() {
       ground(d1 + 3, y1 + 2, x1 + 2, y1 + 6, gravel);
       const porch = new THREE.PointLight("#ffcf8f", 220, 36, 2);
       add(place(porch, (d0 + d1) / 2, y1 + 5, 8));
-      world.staticLights.push(porch);
+      world.devices[device].lights.push(porch);
     };
-    mobileHome(146, 194, "#e3e6dc");
-    mobileHome(214, 262, "#ead9c0");
+    mobileHome(146, 194, "#e3e6dc", "MOBILE_HOME_01");
+    mobileHome(214, 262, "#ead9c0", "MOBILE_HOME_02");
+
+    // Camp sanitary block on the empty back pitch: clad walls, frosted
+    // windows lit by occupancy, solar collectors and a hot-water tank on the
+    // flat roof. Built without the camp's random sequence.
+    {
+      const x0 = 220;
+      const x1 = 252;
+      const y0 = 50;
+      const y1 = 76;
+      const h = 11;
+      const group = new THREE.Group();
+      group.add(box(x0, y0, x1, y1, 0.85, h, M.cladding));
+      group.add(
+        box(x0 - 1, y0 - 1, x1 + 1, y1 + 1, h, h + 1, M.concrete, {
+          cast: false,
+        }),
+      );
+      const frosted = litGlass("#f3f0e0", 1.6, "CAMP_SANITARY_01");
+      for (const cx of [226, 236, 246])
+        group.add(
+          box(cx - 3, y1 - 0.05, cx + 3, y1 + 0.25, 7.4, 9.8, frosted, {
+            cast: false,
+          }),
+        );
+      for (const cx of [231, 241])
+        group.add(
+          box(cx - 2, y1 - 0.05, cx + 2, y1 + 0.3, 0.85, 7.6, M.frameDark, {
+            cast: false,
+          }),
+        );
+      group.add(
+        box(x1 - 0.05, y0 + 5, x1 + 0.25, y1 - 5, 7.4, 9.8, frosted, {
+          cast: false,
+        }),
+      );
+      // Solar collectors tilted to the south, and the tank behind them.
+      const collector = new THREE.MeshStandardMaterial({
+        color: "#1d2a3a",
+        roughness: 0.25,
+        metalness: 0.6,
+      });
+      for (const cx of [228, 244]) {
+        const panel = box(cx - 6, -4, cx + 6, 4, -0.3, 0.3, collector);
+        panel.position.set(cx, h + 3.2, (y0 + y1) / 2 + 2);
+        panel.rotation.x = -0.55;
+        group.add(panel);
+      }
+      const tank = mesh(new THREE.CylinderGeometry(2.4, 2.4, 9, 12), M.white);
+      tank.rotation.z = Math.PI / 2;
+      tank.position.set(236, h + 3.6, y0 + 4);
+      group.add(tank);
+      add(group);
+      occluder(group, "building");
+      world.devices.CAMP_SANITARY_01.meshes.push(group);
+      const light = new THREE.PointLight("#fff2d6", 260, 40, 2);
+      add(place(light, 236, y1 + 6, 9));
+      world.devices.CAMP_SANITARY_01.lights.push(light);
+    }
+
+    // Feeder cabinet for the camp's pitches, beside the entrance drive.
+    {
+      const group = new THREE.Group();
+      group.add(box(315, 104.5, 321, 108, 0.85, 9, M.stucco("#c9ccc8")));
+      group.add(box(314.6, 104.1, 321.4, 108.4, 9, 9.8, M.frameDark));
+      group.add(
+        box(316, 107.95, 320, 108.15, 3, 8, M.frameDark, { cast: false }),
+      );
+      add(group);
+      occluder(group, "building");
+    }
     ground(140, 139.5, DRIVE[0], 143.5, gravel);
     shrubRow(204, 112, 204, 138, 3, "#3f5a2e");
 
@@ -3690,6 +3790,139 @@ export function buildScene() {
       new THREE.MeshStandardMaterial({ color: "#e0572f", roughness: 0.6 }),
     );
     add(place(buoy, x, 233.4, 9));
+  }
+
+  // --- Smart-site additions: water-quality buoy, pump-out station, waste
+  // containers and EV chargers. Built without the board's random sequence,
+  // so nothing placed before them moves.
+  {
+    // Water-quality buoy inside the west breakwater: a yellow float, a
+    // lattice mast with a solar panel and an amber light.
+    const group = new THREE.Group();
+    const yellow = new THREE.MeshStandardMaterial({
+      color: "#f2c230",
+      roughness: 0.45,
+    });
+    group.add(
+      place(
+        mesh(new THREE.CylinderGeometry(3.4, 3, 3.4, 18), yellow),
+        0,
+        0,
+        Z + 1,
+      ),
+    );
+    group.add(
+      place(
+        mesh(new THREE.CylinderGeometry(3.5, 3.5, 0.6, 18), M.darkMetal),
+        0,
+        0,
+        Z + 2.9,
+      ),
+    );
+    group.add(
+      place(
+        mesh(new THREE.CylinderGeometry(0.5, 1.6, 7, 8), yellow),
+        0,
+        0,
+        Z + 6.6,
+      ),
+    );
+    const panel = box(
+      -2.2,
+      -1.6,
+      2.2,
+      1.6,
+      -0.2,
+      0.2,
+      new THREE.MeshStandardMaterial({
+        color: "#1d2a3a",
+        roughness: 0.25,
+        metalness: 0.6,
+      }),
+    );
+    panel.position.set(0, Z + 8.6, 1.4);
+    panel.rotation.x = -0.6;
+    group.add(panel);
+    group.add(
+      place(
+        mesh(
+          new THREE.CylinderGeometry(0.7, 0.7, 1.4, 10),
+          litGlass("#ffb347", 3),
+        ),
+        0,
+        0,
+        Z + 11,
+      ),
+    );
+    group.add(
+      place(
+        mesh(new THREE.ConeGeometry(1, 0.8, 10), M.darkMetal),
+        0,
+        0,
+        Z + 12.1,
+      ),
+    );
+    add(place(group, 272, 512, 0));
+    occluder(group, "lamp");
+
+    // Pump-out station for the boats' holding tanks, on the quay south of
+    // the fuel kiosk: a cabinet with a hose reel and a blue sign.
+    const pump = new THREE.Group();
+    const blue = new THREE.MeshStandardMaterial({
+      color: "#2f6fa8",
+      roughness: 0.5,
+    });
+    pump.add(box(430, 526, 436, 532, 0, 8, M.stucco("#d9dcd8")));
+    pump.add(box(429.6, 525.6, 436.4, 532.4, 8, 8.8, blue));
+    pump.add(box(430.5, 531.95, 435.5, 532.2, 4.5, 7.4, blue, { cast: false }));
+    const reel = mesh(new THREE.TorusGeometry(1.5, 0.55, 8, 18), M.tyre);
+    reel.position.set(433, 3.2, 532.6);
+    pump.add(reel);
+    add(pump);
+    occluder(pump, "building");
+
+    // Two waste containers at the west end of the east car park.
+    const lid = new THREE.MeshStandardMaterial({
+      color: "#2b2f33",
+      roughness: 0.6,
+    });
+    for (const [x, color] of [
+      [438.5, "#2f6b45"],
+      [445.5, "#5d6670"],
+    ]) {
+      const bin = new THREE.Group();
+      bin.add(
+        box(
+          x,
+          380,
+          x + 6,
+          387,
+          1,
+          7,
+          new THREE.MeshStandardMaterial({ color, roughness: 0.55 }),
+        ),
+      );
+      bin.add(box(x - 0.2, 379.8, x + 6.2, 387.2, 7, 7.7, lid));
+      add(bin);
+      occluder(bin, "building");
+    }
+
+    // Two EV chargers at the east end of the car park's back row.
+    const charge = litGlass("#5dff9a", 1.8);
+    for (const y of [384, 398]) {
+      const post = new THREE.Group();
+      post.add(box(590, y - 1.2, 592.6, y + 1.2, 1, 9.5, M.white));
+      post.add(
+        box(589.95, y - 0.8, 590.05, y + 0.8, 6, 8, M.glassDark, {
+          cast: false,
+        }),
+      );
+      post.add(
+        box(589.95, y - 1, 590.05, y + 1, 4.6, 5.2, charge, { cast: false }),
+      );
+      add(post);
+      occluder(post, "lamp");
+    }
   }
 
   // --- Finish trees: world UVs, placement, shadows. ------------------------

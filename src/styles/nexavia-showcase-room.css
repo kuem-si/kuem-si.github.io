@@ -6783,3 +6783,146 @@ button.twin-timeline-entry:focus-visible {
     transition: none;
   }
 }
+
+/* Marina and camp: the site switch and the sensor layers (twin.js). The
+   site frames the camera and filters the dashboard; a layer leaves one
+   network's pins on the model. */
+.twin-layers {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  padding: 0 1.5rem 0.9rem;
+}
+.twin-site-switch {
+  display: inline-flex;
+  flex: none;
+  border: 1px solid var(--kuem-border);
+  border-radius: var(--kuem-radius-control);
+  background: var(--kuem-surface-2);
+  overflow: hidden;
+}
+.twin-site-switch button {
+  min-height: 32px;
+  padding: 0.3rem 0.85rem;
+  border: 0;
+  background: none;
+  color: var(--kuem-text-secondary);
+  font: var(--kuem-weight-semibold) var(--kuem-type-label-size)/1
+    var(--kuem-font-text);
+  cursor: pointer;
+  transition:
+    background var(--kuem-duration-base) var(--kuem-ease-standard),
+    color var(--kuem-duration-base) var(--kuem-ease-standard);
+}
+.twin-site-switch button + button {
+  border-left: 1px solid var(--kuem-border);
+}
+.twin-site-switch button:hover:not(:disabled):not([aria-pressed="true"]) {
+  background: var(--kuem-border);
+}
+.twin-site-switch button[aria-pressed="true"] {
+  background: var(--kuem-concrete);
+  color: var(--kuem-carbon);
+}
+.twin-site-switch button:focus-visible {
+  outline: var(--kuem-focus-width) solid var(--kuem-focus);
+  outline-offset: calc(var(--kuem-focus-width) * -1);
+}
+.twin-site-switch button:disabled,
+.twin-layer-chips button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.twin-layer-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.twin-layer-chips .twin-scenario-chip {
+  gap: 0.4rem;
+  min-height: 32px;
+  padding: 0.3rem 0.75rem;
+}
+@container (max-width: 560px) {
+  .twin-layers {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .twin-layer-chips {
+    flex-wrap: nowrap;
+  }
+}
+.city-sensor.is-filtered {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+/* A pin and its dashboard row point at each other on hover. */
+.city-sensor.is-linked {
+  z-index: 1;
+}
+.city-sensor.is-linked .city-sensor-dot {
+  scale: 1.5;
+}
+.city-sensor.is-linked .city-sensor-tag {
+  opacity: 1;
+  translate: -50% 0;
+}
+.twin-meter-readings > div.is-linked,
+.twin-sensor-readings > div.is-linked {
+  background: color-mix(in srgb, var(--kuem-data) 12%, transparent);
+  box-shadow:
+    -6px 0 0 color-mix(in srgb, var(--kuem-data) 12%, transparent),
+    6px 0 0 color-mix(in srgb, var(--kuem-data) 12%, transparent);
+}
+.twin-workspace[data-site="marina"] .twin-dashboard [data-site="camp"],
+.twin-workspace[data-site="camp"] .twin-dashboard [data-site="marina"] {
+  display: none;
+}
+/* Readings too long to sit three abreast: two columns, values may wrap. */
+.city-popover-grid[data-cols="2"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.city-popover-grid[data-cols="2"] b {
+  white-space: normal;
+}
+/* A pedestal's card: switch the socket, find the dashboard row. */
+.city-popover-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+.city-popover-actions button {
+  flex: 1;
+  min-height: 28px;
+  padding: 5px 8px;
+  border: 1px solid color-mix(in srgb, var(--kuem-white) 22%, transparent);
+  border-radius: var(--kuem-radius-card);
+  background: none;
+  color: var(--kuem-text-secondary);
+  font: var(--kuem-weight-semibold) var(--kuem-type-label-size)/1
+    var(--kuem-font-text);
+  cursor: pointer;
+  transition: background var(--kuem-duration-base) var(--kuem-ease-standard);
+}
+.city-popover-actions button:hover {
+  background: color-mix(in srgb, var(--kuem-white) 10%, transparent);
+}
+.city-popover-actions button:focus-visible {
+  outline: var(--kuem-focus-width) solid var(--kuem-focus);
+  outline-offset: var(--kuem-focus-offset);
+}
+.city-popover-actions [data-sensor-switch][aria-pressed="false"] {
+  border-color: color-mix(in srgb, var(--kuem-data) 55%, transparent);
+  color: var(--kuem-text-primary);
+}
+@media (prefers-reduced-motion: reduce) {
+  .twin-site-switch button,
+  .city-popover-actions button {
+    transition: none;
+  }
+}

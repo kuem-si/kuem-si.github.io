@@ -17,6 +17,7 @@ const { locale, twin, selected } = Astro.props;
 const en = locale === "en";
 const t = (sl: string, english: string) => (en ? english : sl);
 const { dashboard } = twin;
+const { sites, layers } = twin.scene;
 // The app's sections. Overview shows every panel; the others show the panels
 // that name them in data-in.
 const views = [
@@ -43,6 +44,27 @@ const views = [
           <small class="twin-timescale" title={t("Čas na maketi je simuliran in pospešen", "Time on the model is simulated and sped up")}>{t("Simuliran čas · dan ≈ 40 s", "Simulated time · 1 day ≈ 40 s")}</small>
         </span>
       </div>
+      {/* A model with several sites and many pins: pick a site (camera and
+          dashboard follow) and one network of pins at a time. twin.js. */}
+      {(sites || layers) && (
+        <div class="twin-layers">
+          {sites && (
+            <div class="twin-site-switch" role="group" aria-label={t("Lokacija", "Site")}>
+              {sites.map((site, i) => (
+                <button type="button" data-site-pick={site.id} data-site-focus={site.focus && `${site.focus.x} ${site.focus.y} ${site.focus.zoom}`} aria-pressed={i === 0 ? "true" : "false"}>{site.label}</button>
+              ))}
+            </div>
+          )}
+          {layers && (
+            <div class="twin-layer-chips" role="group" aria-label={t("Plasti senzorjev", "Sensor layers")}>
+              <span class="twin-scenarios-label">{t("Plasti", "Layers")}</span>
+              {[{ id: "all", label: t("Vse", "All") }, ...layers].map((layer, i) => (
+                <button type="button" class="twin-scenario-chip" data-layer-pick={layer.id} aria-pressed={i === 0 ? "true" : "false"}><b>{layer.label}</b><small data-layer-count={layer.id}></small></button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       <div class="twin-scene-wrap">
         <ShowcaseRoomMaquette locale={locale} twin={twin.id} scene={twin.scene} />
       </div>
@@ -92,9 +114,9 @@ const views = [
               </div>
               <div class="twin-kpis" data-in="overview">
                 {dashboard.kpis.map((kpi) => (
-                  <div>
+                  <div data-site={kpi.site}>
                     <span>{kpi.label}</span>
-                    <strong data-ui={kpi.key} data-reading={kpi.key === "lux" ? "lux" : undefined}>{kpi.value}</strong>
+                    <strong data-ui={kpi.key} data-reading={kpi.reading ?? (kpi.key === "lux" ? "lux" : undefined)}>{kpi.value}</strong>
                     <small>{kpi.note}</small>
                   </div>
                 ))}
@@ -119,7 +141,7 @@ const views = [
                     <span role="columnheader">{t("Moč", "Power")}</span>
                   </div>
                   {dashboard.devices.map((device) => (
-                    <div class="twin-tr" role="row" data-row={device.id}>
+                    <div class="twin-tr" role="row" data-row={device.id} data-site={device.site}>
                       <span role="cell">
                         <b>{device.name}</b>
                         <small>{device.id}<span class="twin-mode" data-mode-tag hidden>{t(" · ročno", " · manual")}</span></small>
@@ -144,20 +166,20 @@ const views = [
                     <p data-alarm={alarm.id}><strong>{alarm.id}</strong><span>{alarm.text}</span></p>
                   ))}
                 </div>
-                <div class="twin-meter-readings" data-in="overview devices">
+                <div class="twin-meter-readings" data-in="overview devices" data-site={dashboard.meters.site}>
                   <div class="twin-meter-heading"><h3>{dashboard.meters.title}</h3><span>{t("Telemetrija v živo", "Live telemetry")}</span></div>
                   {dashboard.meters.rows.map((row) => (
                     <div><span>{row.label}<small>{row.id}</small></span><strong data-reading={row.key}>{row.value}{row.note && <small>{row.note}</small>}</strong></div>
                   ))}
                 </div>
-                <div class="twin-sensor-readings" data-in="overview devices">
+                <div class="twin-sensor-readings" data-in="overview devices" data-site={dashboard.sensors.site}>
                   <div class="twin-meter-heading"><h3>{dashboard.sensors.title}</h3><span>{t("Meritve v živo", "Live readings")}</span></div>
                   {dashboard.sensors.rows.map((row) => (
                     <div><span>{row.label}<small>{row.id}</small></span><strong data-reading={row.key}>{row.value}{row.note && <small>{row.note}</small>}</strong></div>
                   ))}
                 </div>
                 {dashboard.panels?.map((panel) => (
-                  <div class="twin-meter-readings" data-in={panel.in ?? "overview devices"}>
+                  <div class="twin-meter-readings" data-in={panel.in ?? "overview devices"} data-site={panel.site}>
                     <div class="twin-meter-heading"><h3>{panel.title}</h3><span>{panel.tag}</span></div>
                     {panel.rows.map((row) => (
                       <div><span>{row.label}<small>{row.id}</small></span><strong data-reading={row.key}>{row.value}{row.note && <small>{row.note}</small>}</strong></div>
