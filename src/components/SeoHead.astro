@@ -26,6 +26,8 @@ const fullTitle = title.includes("KUEM") ? title : `${title} | KUEM`;
 const otherLocale = locale === "sl" ? "en" : "sl";
 const langTag = locale === "sl" ? "sl-SI" : "en-GB";
 const otherLangTag = otherLocale === "sl" ? "sl-SI" : "en-GB";
+// x-default is this page in the default language (Slovenian), not the home page.
+const defaultVersion = locale === "sl" ? canonical : alternate;
 // Each family ships as the two @fontsource-variable 5.3.0 subsets: Latin
 // (a–z, digits, punctuation) and Latin Extended (č, š, ž). The unicode-range
 // values are fontsource's, so a browser downloads a subset only for pages
@@ -97,10 +99,11 @@ if (firstEntity?.["@id"]) {
 }
 const structuredData = [
   organization,
+  // One site in two languages: the same node on every page.
   {
     ...website,
-    url: canonical.href,
-    inLanguage: langTag,
+    url: new URL("/", Astro.site).href,
+    inLanguage: ["sl-SI", "en-GB"],
   },
   pageNode,
   ...jsonLd,
@@ -121,15 +124,21 @@ const structuredData = [
   content={noindex
     ? "noindex,follow"
     : "index,follow,max-image-preview:large,max-snippet:-1"}
-/><link
-  rel="canonical"
-  href={canonical}
-/><link rel="alternate" hreflang={langTag} href={canonical} />{
+/>{
+  // A page kept out of the index (the 404) names no canonical or alternates.
   !noindex && (
-    <><link rel="alternate" hreflang={otherLangTag} href={alternate} /><link
+    <><link rel="canonical" href={canonical} /><link
+      rel="alternate"
+      hreflang={langTag}
+      href={canonical}
+    /><link rel="alternate" hreflang={otherLangTag} href={alternate} /><link
       rel="alternate"
       hreflang="x-default"
-      href={new URL("/", Astro.site)}
+      href={defaultVersion}
+    /><link
+      rel="alternate"
+      type="text/markdown"
+      href={new URL("index.md", canonical)}
     /></>
   )
 }

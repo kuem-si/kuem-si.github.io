@@ -16,7 +16,7 @@ const currentYear = new Date().getFullYear();
   <div class="container footer-shell">
     <span class="footer-data-node" aria-hidden="true"></span>
 
-    <div class="footer-main" aria-label={content.navigationLabel}>
+    <div class="footer-main">
       <div class="footer-identity">
         <a
           class="footer-logo"
@@ -64,15 +64,18 @@ const currentYear = new Date().getFullYear();
         </ul>
       </nav>
 
-      <address class="footer-column footer-contact">
+      {/* <address> holds only the contact details; its heading sits outside. */}
+      <div class="footer-column footer-contact">
         <h2>{content.contactTitle}</h2>
-        <a class="footer-email" href={`mailto:${content.email}`}
-          >{content.email}</a
-        >
-        <a class="footer-contact-link" href={ensureTrailingSlash(content.contactHref)}>
-          {content.contactLabel}<span aria-hidden="true">→</span>
-        </a>
-      </address>
+        <address>
+          <a class="footer-email" href={`mailto:${content.email}`}
+            >{content.email}</a
+          >
+          <a class="footer-contact-link" href={ensureTrailingSlash(content.contactHref)}>
+            {content.contactLabel}<span aria-hidden="true">→</span>
+          </a>
+        </address>
+      </div>
     </div>
 
     <div class="footer-legal">
@@ -236,10 +239,15 @@ const currentYear = new Date().getFullYear();
     font-weight: 600;
   }
 
-  .footer-contact {
+  .footer-contact,
+  .footer-contact address {
     display: flex;
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .footer-contact address {
+    font-style: normal;
   }
 
   .footer-contact-link {

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node .tools/minify-inline-svg.mjs",
+    "build": "astro build && node .tools/minify-inline-svg.mjs && node .tools/llms.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "check:en": "node scripts/check-en-site.mjs",
@@ -20,9 +20,11 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "node-html-parser": "^9.0.4",
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^1.0.0",
     "svgo": "^4.1.0",
+    "turndown": "^7.2.4",
     "typescript": "^6.0.3"
   }
 }

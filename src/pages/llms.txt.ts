@@ -5,6 +5,8 @@ import { kaiContent } from "../data/kai";
 
 const SITE = "https://www.kuem.si";
 
+// The curated part of llms.txt. After the build, .tools/llms.mjs adds each
+// listed page's description and appends every indexable page not listed here.
 export const GET: APIRoute = () => {
   const lines = [
     "# KUEM",
@@ -15,9 +17,9 @@ export const GET: APIRoute = () => {
     "",
     "## Products",
     `- [Nexavia](${SITE}/en/nexavia/): ${nexaviaPositioning.en}`,
-    `- [KAI](${SITE}/en/kai/): ${kaiContent.en.description} ${kaiContent.en.localProcessing} ${kaiContent.en.externalProcessing} ${kaiContent.en.configurationSummary}`,
+    `- [KAI](${SITE}/en/kai/): ${kaiContent.en.description}`,
     `- [Nexavia (slovensko)](${SITE}/nexavia/): ${nexaviaPositioning.sl}`,
-    `- [KAI (slovensko)](${SITE}/kai/): ${kaiContent.sl.description} ${kaiContent.sl.localProcessing} ${kaiContent.sl.externalProcessing} ${kaiContent.sl.configurationSummary}`,
+    `- [KAI (slovensko)](${SITE}/kai/): ${kaiContent.sl.description}`,
     "",
     "## Solutions (English)",
     ...solutions.en.map(({ title, href }) => `- [${title}](${SITE}${href}/)`),

@@ -14,8 +14,6 @@ const { locale = "en", solutionKey } = Astro.props as {
   solutionKey: SolutionDetailKey;
 };
 const page = solutionDetails[solutionKey][locale];
-const singleCoverage = locale === "en" &&
-  ["remoteMeterReading", "trafficMobility"].includes(solutionKey);
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const solutionsHref = locale === "sl" ? "/resitve" : "/en/solutions";
 const jsonLd = [
@@ -89,19 +87,16 @@ const labels =
         <h1>{page.heroHeadline ?? page.title}</h1>
         <p>{page.subtitle}</p>
       </div>
+      {/* What the solution covers, listed once and in full. */}
       <aside class="panel">
         <h2>{labels.focus}</h2>
-        <FeatureList items={singleCoverage ? page.focus : page.focus.slice(0, 6)} />
+        <FeatureList items={page.focus} />
       </aside>
     </div>
   </section>
 
   <section>
-    <div class="container split">
-      {!singleCoverage && <article class="card">
-        <h2>{labels.focus}</h2>
-        <FeatureList items={page.focus} />
-      </article>}
+    <div class="container">
       <article class="card">
         <h2>{labels.platform}</h2>
         <p>{labels.platformText}</p>

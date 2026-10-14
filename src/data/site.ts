@@ -750,7 +750,6 @@ export type FooterContent = {
   privacyLabel: string;
   privacyHref: string;
   copyright: string;
-  navigationLabel: string;
   languageLabel: string;
   homeLabel: string;
 };
@@ -798,7 +797,6 @@ export const footerContent = {
     privacyLabel: "Zasebnost",
     privacyHref: "/zasebnost",
     copyright: "Vse pravice pridržane.",
-    navigationLabel: "Navigacija v nogi strani",
     languageLabel: "Izbira jezika",
     homeLabel: "KUEM – domača stran",
   },
@@ -844,7 +842,6 @@ export const footerContent = {
     privacyLabel: "Privacy",
     privacyHref: "/en/privacy",
     copyright: "All rights reserved.",
-    navigationLabel: "Footer navigation",
     languageLabel: "Language selection",
     homeLabel: "KUEM – home page",
   },

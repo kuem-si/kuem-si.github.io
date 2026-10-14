@@ -66,32 +66,6 @@ assert.match(visibleText(read("en/index.html")), /4,000 LoRaWAN adapters/);
 assert.match(visibleText(read("en/industries/index.html")), /12,480/);
 assert.match(visibleText(read("en/industries/index.html")), /1,124/);
 assert.match(visibleText(read("en/nexavia/index.html")), /1,248/);
-const redirects = {
-  about: "company",
-  services: "solutions",
-  "services/software-development": "solutions",
-  "services/software-architecture-and-consulting": "solutions",
-  "services/devops-and-platform-engineering": "solutions",
-  "solutions/nexavia": "nexavia",
-  "solutions/nexavia/nexavia-enterprise": "nexavia",
-  "nexavia-platform": "nexavia",
-  "platform/nexavia": "nexavia",
-  "case-studies": "references",
-  "industrial-iot": "industries",
-  utilities: "solutions/remote-meter-reading",
-  "partner-program": "contact",
-};
-const sitemap = read("sitemap-0.xml");
-for (const [source, target] of Object.entries(redirects)) {
-  const html = read(`en/${source}/index.html`);
-  assert(html.includes(`content="0;url=/en/${target}/"`), source);
-  assert(html.includes(`href="https://www.kuem.si/en/${target}/"`), source);
-  assert(html.includes('content="noindex,follow"'), source);
-  assert(
-    !sitemap.includes(`<loc>https://www.kuem.si/en/${source}/</loc>`),
-    source,
-  );
-}
 let links = 0;
 for (const page of pages) {
   const html = readFileSync(page, "utf8");
@@ -108,5 +82,5 @@ for (const page of pages) {
   }
 }
 console.log(
-  `EN QA passed: ${redesigned.length} core pages, 2 coverage sections, ${Object.keys(redirects).length} redirects, ${links} internal links.`,
+  `EN QA passed: ${redesigned.length} core pages, 2 coverage sections, ${links} internal links.`,
 );

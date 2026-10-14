@@ -1,13 +1,6 @@
 import { defineConfig, envField } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import { alternatePath, getLocaleFromPath } from "./src/lib/i18n";
-import { legacyEnglishRedirects } from "./src/data/legacyEnglishRedirects";
-import { legacySlovenianRedirects } from "./src/data/legacySlovenianRedirects";
-
-const legacyPaths = new Set([
-  ...Object.keys(legacyEnglishRedirects).map((path) => `/en/${path}/`),
-  ...Object.keys(legacySlovenianRedirects).map((path) => `/${path}/`),
-]);
 
 export default defineConfig({
   site: "https://www.kuem.si",
@@ -95,22 +88,21 @@ export default defineConfig({
     css: {
       // Modern-only pipeline: transform CSS with Lightning CSS instead of
       // PostCSS. No polyfills or legacy vendor prefixes are emitted for the
-      // target browsers below (Chrome/Edge 116+, Firefox 115+, Safari 18+).
+      // target browsers below (Chrome/Edge 153+, Firefox 156+, Safari 27+).
       transformer: "lightningcss",
       lightningcss: {
         targets: {
-          chrome: 116 << 16,
-          edge: 116 << 16,
-          firefox: 115 << 16,
-          safari: 18 << 16,
-          ios_saf: 18 << 16,
+          chrome: 153 << 16,
+          edge: 153 << 16,
+          firefox: 156 << 16,
+          safari: 27 << 16,
+          ios_saf: 27 << 16,
         },
       },
     },
   },
   integrations: [
     sitemap({
-      filter: (page) => !legacyPaths.has(new URL(page).pathname),
       // Every included URL is canonical; emit
       // hreflang alternates for both locales.
       serialize: (item) => {

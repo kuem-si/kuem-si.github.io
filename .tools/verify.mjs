@@ -4,7 +4,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { checkFonts } from "../scripts/check-fonts.mjs";
-import { checkRedirects } from "../scripts/check-redirects.mjs";
+import { checkPages } from "../scripts/site-files.mjs";
 
 let ok = true;
 const check = (label, cond) => {
@@ -55,8 +55,8 @@ check(
   !htmlFiles.some((p) => read(p).includes("import.meta")),
 );
 
-// 4. Legacy URLs contain only static redirects to canonical pages.
-check("legacy redirects, canonical targets and sitemap", checkRedirects() > 0);
+// 4. Every built page is a real page (no redirect stubs) and the 404 is kept.
+check("real pages only, custom 404", checkPages() > 0);
 
 // 5. homepage head
 const head =

@@ -2,12 +2,12 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { relative } from "node:path";
 import {
-  checkRedirects,
+  checkPages,
   dist,
   htmlFiles,
   read,
   visibleText,
-} from "./check-redirects.mjs";
+} from "./site-files.mjs";
 import { loadSiteData } from "./site-data.mjs";
 
 const bad = [
@@ -123,7 +123,7 @@ for (const path of ["resitve", "en/solutions"]) {
 }
 assert(kai.includes("Kako KAI deluje") && kai.includes("Deluje z Nexavio"));
 assert(!kai.includes("Funkcija je vezana na razpoložljive podatke"));
-const count = checkRedirects();
+checkPages();
 console.log(
-  `SL QA passed: ${pages} pages, ${Object.keys(routePairs).length} language pairs, ${publishedSuccessStories.length} bilingual stories, truthful CTAs and ${count} static redirects.`,
+  `SL QA passed: ${pages} pages, ${Object.keys(routePairs).length} language pairs, ${publishedSuccessStories.length} bilingual stories, truthful CTAs, no redirect stubs.`,
 );

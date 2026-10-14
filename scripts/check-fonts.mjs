@@ -9,7 +9,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { brotliDecompressSync } from "node:zlib";
-import { dist, htmlFiles, visibleText } from "./check-redirects.mjs";
+import { dist, htmlFiles, visibleText } from "./site-files.mjs";
 
 // Code points of the font's cmap (formats 4 and 12) that map to a glyph.
 function woff2Characters(file) {

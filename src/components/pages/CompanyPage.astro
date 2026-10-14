@@ -274,7 +274,7 @@ const copy = {
             {copy.flow.map(([title, description], index) => (
               <li>
                 <span class="ab-flow-node" aria-hidden="true" />
-                <h3><span>{String(index + 1).padStart(2, "0")} · </span>{title}</h3>
+                <p class="ab-flow-step"><span>{String(index + 1).padStart(2, "0")} · </span>{title}</p>
                 <p>{description}</p>
               </li>
             ))}

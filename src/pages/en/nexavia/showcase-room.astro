@@ -16,17 +16,18 @@ const twins = [cityTwin(true), marinaTwin(true), industryTwin(true), datacenterT
 <MainLayout
   title="Nexavia showcase room | KUEM"
   description="The Nexavia showcase room: interactive digital twins of a mini city, a smart marina with a camp, an industrial site and a datacenter, connected to a Nexavia dashboard."
-  noindex
 >
   <div class="twin-page" data-twin-root>
     <div class="twin-intros">
     {twins.map((twin, i) => (
       <div class="twin-intro" data-twin-intro={twin.id} hidden={i !== 0}>
         <div>
-          <p class="twin-path">
-            <a href="/en/nexavia/">Nexavia</a> <span aria-hidden="true">/</span> Showcase room
-          </p>
-          <h1>{twin.intro.title}</h1>
+          {/* One page heading: the breadcrumb's last step, in the first intro
+              (each intro carries the breadcrumb so it stays above its title). */}
+          <div class="twin-path">
+            <a href="/en/nexavia/">Nexavia</a> <span aria-hidden="true">/</span> {i === 0 ? <h1>Showcase room</h1> : <span>Showcase room</span>}
+          </div>
+          <h2>{twin.intro.title}</h2>
           <p class="twin-lead">{twin.intro.lead}</p>
         </div>
       </div>

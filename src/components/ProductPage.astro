@@ -86,6 +86,9 @@ const kaiDescriptions = sl ? [
         <img
           src={(isKai ? kai : nexavia).src}
           width="300"
+          height={Math.round(
+            (300 * (isKai ? kai : nexavia).height) / (isKai ? kai : nexavia).width,
+          )}
           alt={isKai ? "KAI by KUEM" : "Nexavia"}
         /><h1>{title}</h1><p class="lead">{lead}</p>{
           isKai && <p>{sl ? "Deluje z Nexavio" : "Works with Nexavia"}</p>

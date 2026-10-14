@@ -24,7 +24,7 @@ const copy = {
     actionSub: "Človek ali avtomatizacija",
     noc: "NOC in upravljane storitve",
     nocSub: "Nadzor naprav · povezljivosti · alarmov · podpora",
-    nocSmall: "STALEN NADZOR<br />CELOTNE REŠITVE",
+    nocSmall: "STALEN NADZOR<br>CELOTNE REŠITVE",
   },
   en: {
     sectionAria: "Solution architecture: from data to decision",
@@ -45,7 +45,7 @@ const copy = {
     actionSub: "Person or automation",
     noc: "NOC and managed services",
     nocSub: "Device · connectivity · alarm monitoring · support",
-    nocSmall: "CONTINUOUS MONITORING<br />OF THE ENTIRE SOLUTION",
+    nocSmall: "CONTINUOUS MONITORING<br>OF THE ENTIRE SOLUTION",
   },
 }[locale];
 const cards = copy.cards;
@@ -160,9 +160,9 @@ const cards = copy.cards;
       aria-expanded="false"
       aria-haspopup="dialog"
     >
-      <Icon name="noc" /><div>
+      <Icon name="noc" /><span class="noc-text">
         <strong>{copy.noc}</strong><span>{copy.nocSub}</span>
-      </div><svg class="network" viewBox="0 0 260 40" aria-hidden="true"
+      </span><svg class="network" viewBox="0 0 260 40" aria-hidden="true"
         ><path class="network-line" d="M12 20h236"></path><g class="network-node"
           ><rect x="9" y="17" width="6" height="6"></rect><rect
             x="87"
@@ -325,6 +325,12 @@ const cards = copy.cards;
   .noc span {
     color: var(--kuem-text-secondary);
   }
+  /* The label block inside the button (a button holds only phrasing content). */
+  .architecture .noc-text {
+    display: block;
+    margin: 0;
+    color: inherit;
+  }
   .network-line {
     stroke: var(--kuem-data);
     stroke-width: 2;
@@ -434,7 +440,7 @@ const cards = copy.cards;
       padding: 18px 12px;
       gap: 12px;
     }
-    .noc > div {
+    .noc > .noc-text {
       flex: 1;
     }
     .network {
@@ -737,6 +743,57 @@ const cards = copy.cards;
       parent.append(el);
       return el;
     };
+    // The data markers: each travels its route twice and stops, inside the
+    // 5 s autoplay limit. One pass takes 2.4 s (duration.marker), a route a
+    // third of that. Played from script rather than SVG (SMIL) animation, and
+    // only while the diagram is on screen.
+    const markerPass = 2.4;
+    const segment = markerPass / 3;
+    let markers: {
+      rect: SVGRectElement;
+      path: SVGPathElement;
+      length: number;
+      delay: number;
+    }[] = [];
+    let elapsed = 0;
+    let last = 0;
+    let frame = 0;
+    const end = () =>
+      Math.max(0, ...markers.map((m) => m.delay)) + markerPass + segment;
+    const paint = () => {
+      markers.forEach(({ rect, path, length, delay }) => {
+        let t = -1;
+        for (const start of [delay, delay + markerPass]) {
+          const k = (elapsed - start) / segment;
+          if (k >= 0 && k <= 1) t = k;
+        }
+        if (t < 0) {
+          rect.setAttribute("opacity", "0");
+          return;
+        }
+        const point = path.getPointAtLength(length * t);
+        rect.setAttribute("transform", `translate(${point.x} ${point.y})`);
+        rect.setAttribute(
+          "opacity",
+          String(t < 0.1 ? t / 0.1 : t > 0.9 ? (1 - t) / 0.1 : 1),
+        );
+      });
+    };
+    const tick = (now: number) => {
+      elapsed += (now - last) / 1000;
+      last = now;
+      paint();
+      frame = elapsed < end() ? requestAnimationFrame(tick) : 0;
+    };
+    const play = () => {
+      if (frame || elapsed >= end()) return;
+      last = performance.now();
+      frame = requestAnimationFrame(tick);
+    };
+    const pause = () => {
+      cancelAnimationFrame(frame);
+      frame = 0;
+    };
     const draw = () => {
       const bounds = grid.getBoundingClientRect();
       const mobile = root.clientWidth <= 480;
@@ -757,6 +814,8 @@ const cards = copy.cards;
       links.replaceChildren();
       packets.replaceChildren();
       monitors.replaceChildren();
+      pause();
+      markers = [];
       const routes = [
         ["devices", "radio", 0],
         ["radio", "platform", 0.8],
@@ -764,10 +823,6 @@ const cards = copy.cards;
         ["api", "platform", 0.8],
         ["platform", "action", 1.6],
       ] as const;
-      // One pass of the data marker takes 2.4 s (duration.marker); it runs
-      // twice and stops, inside the 5 s autoplay limit.
-      const markerPass = 2.4;
-      const segment = markerPass / 3;
       routes.forEach(([from, to, delay]) => {
         const a = box(from),
           b = box(to);
@@ -818,39 +873,19 @@ const cards = copy.cards;
             style: "fill: var(--kuem-event)",
           },
           packets,
-        );
+        ) as SVGRectElement;
+        // The route's geometry, measured off-screen.
+        const path = make(
+          "path",
+          { d },
+          document.createElementNS(ns, "g"),
+        ) as SVGPathElement;
+        const length = path.getTotalLength();
         if (motion.matches) {
-          const p = make(
-            "path",
-            { d },
-            document.createElementNS(ns, "g"),
-          ) as SVGPathElement;
-          const point = p.getPointAtLength(p.getTotalLength() * 0.5);
+          // Reduced motion: each marker rests halfway along its route.
+          const point = path.getPointAtLength(length * 0.5);
           rect.setAttribute("transform", `translate(${point.x} ${point.y})`);
-        } else {
-          rect.setAttribute("opacity", "0");
-          make(
-            "animateMotion",
-            {
-              path: d,
-              dur: `${segment}s`,
-              begin: `${delay}s;${delay + markerPass}s`,
-              calcMode: "linear",
-            },
-            rect,
-          );
-          make(
-            "animate",
-            {
-              attributeName: "opacity",
-              values: "0;1;1;0",
-              keyTimes: "0;0.1;0.9;1",
-              dur: `${segment}s`,
-              begin: `${delay}s;${delay + markerPass}s`,
-            },
-            rect,
-          );
-        }
+        } else markers.push({ rect, path, length, delay });
       });
       const noc = box("noc");
       ["devices", "radio", "api", "platform"].forEach((id) => {
@@ -877,15 +912,16 @@ const cards = copy.cards;
         );
       });
       highlight();
-      svg.setCurrentTime(0);
-      if (visible && !motion.matches) svg.unpauseAnimations();
-      else svg.pauseAnimations();
+      // Every redraw starts the markers over.
+      elapsed = 0;
+      paint();
+      if (visible) play();
     };
     new ResizeObserver(draw).observe(grid);
     new IntersectionObserver((entries) => {
       visible = entries[0].isIntersecting;
-      if (visible && !motion.matches) svg.unpauseAnimations();
-      else svg.pauseAnimations();
+      if (visible) play();
+      else pause();
     }).observe(root);
     motion.addEventListener("change", draw);
     document.fonts.ready.then(draw);

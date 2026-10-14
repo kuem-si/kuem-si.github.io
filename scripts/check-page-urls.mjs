@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { relative } from "node:path";
-import { htmlFiles, dist, read, redirects } from "./check-redirects.mjs";
+import { htmlFiles, dist, read } from "./site-files.mjs";
 import { loadSiteData } from "./site-data.mjs";
 
 const origin = "https://www.kuem.si";
@@ -22,7 +22,6 @@ const pages = files
     html: readFileSync(file, "utf8"),
   }))
   .sort((a, b) => a.path.localeCompare(b.path));
-const current = pages.filter(({ path }) => !redirects[path]);
 const args = process.argv.slice(2);
 const option = (name) =>
   args.includes(name) ? args[args.indexOf(name) + 1] : undefined;
@@ -67,7 +66,7 @@ if (!args.includes("--http-only")) {
   )) {
     check(pageUrl(url) === url, `sitemap: noncanonical ${url}`);
   }
-  const currentPaths = new Set(current.map(({ path }) => path));
+  const currentPaths = new Set(pages.map(({ path }) => path));
   for (const [sl, en] of Object.entries(routePairs)) {
     const slPath = pageUrl(sl);
     const enPath = pageUrl(en);
@@ -78,10 +77,7 @@ if (!args.includes("--http-only")) {
     // Only assert their reciprocity when both destinations are generated.
   }
   for (const { path, html } of pages) {
-    check(
-      canonical(html) === origin + (redirects[path] ?? path),
-      `${path}: canonical`,
-    );
+    check(canonical(html) === origin + path, `${path}: canonical`);
     for (const [, href] of html.matchAll(/\bhref="([^"]+)"/g))
       check(pageUrl(href) === href, `${path}: href ${href}`);
     for (const [, json] of html.matchAll(
@@ -95,7 +91,6 @@ if (!args.includes("--http-only")) {
       };
       walk(JSON.parse(json));
     }
-    if (redirects[path]) continue;
     const alternate = pageUrl(alternatePath(path));
     if (!currentPaths.has(alternate)) continue;
     check(
@@ -120,13 +115,13 @@ if (!args.includes("--http-only")) {
     );
   }
   console.log(
-    `Artifact checked: ${current.length} current pages, ${pages.length - current.length} legacy aliases; canonical, hreflang, desktop/mobile links, JSON-LD, sitemap.`,
+    `Artifact checked: ${pages.length} pages; canonical, hreflang, desktop/mobile links, JSON-LD, sitemap.`,
   );
 }
 
 const rows = [];
 if (base) {
-  const testedPages = args.includes("--current-only") ? current : pages;
+  const testedPages = pages;
   // Sequential bounded requests avoid hammering the production CDN.
   for (const { path } of testedPages) {
     const start = path === "/" ? "/" : path.slice(0, -1);
@@ -155,7 +150,7 @@ if (base) {
       `${base}${start}: ${first.status} -> ${target.pathname} -> ${final.status}`,
     );
     check(
-      canonical(html) === origin + (redirects[path] ?? path),
+      canonical(html) === origin + path,
       `${base}${path}: live canonical ${canonical(html)}`,
     );
     const query = "?utm_source=slash-test&value=a%2Fb&repeat=1&repeat=2";
@@ -172,7 +167,7 @@ if (base) {
     await q.arrayBuffer();
     check(queryOk, `${path}: query not preserved`);
     rows.push(
-      `| ${redirects[path] ? "legacy" : path.startsWith("/en/") ? "EN" : "SL"} | ${start} | ${first.status} | ${target.pathname} | ${final.status} | ${canonical(html) ?? "missing"} | ${loop ? "YES" : "no"} | ${queryOk ? "OK" : "FAIL"} |`,
+      `| ${path.startsWith("/en/") ? "EN" : "SL"} | ${start} | ${first.status} | ${target.pathname} | ${final.status} | ${canonical(html) ?? "missing"} | ${loop ? "YES" : "no"} | ${queryOk ? "OK" : "FAIL"} |`,
     );
   }
   console.log(
@@ -182,7 +177,7 @@ if (base) {
 if (report)
   writeFileSync(
     report,
-    `# URL audit\n\nDate: ${new Date().toISOString()}\n\nHTTP environment: ${base ?? "not tested"}. Canonical origin: ${origin}.\n\nLegacy rows test the directory HTTP redirect only; existing HTML refresh aliases are not HTTP redirects to their canonical targets.\n\n| Type | Input | HTTP | Final HTTP URL | Final status | Canonical | Loop | Query |\n|---|---|---|---|---|---|---|---|\n${rows.join("\n")}\n\nErrors (${errors.length}):\n${errors.length ? errors.map((error) => `- ${error}`).join("\n") : "None."}\n`,
+    `# URL audit\n\nDate: ${new Date().toISOString()}\n\nHTTP environment: ${base ?? "not tested"}. Canonical origin: ${origin}.\n\n| Type | Input | HTTP | Final HTTP URL | Final status | Canonical | Loop | Query |\n|---|---|---|---|---|---|---|---|\n${rows.join("\n")}\n\nErrors (${errors.length}):\n${errors.length ? errors.map((error) => `- ${error}`).join("\n") : "None."}\n`,
   );
 if (errors.length) {
   console.error(errors.join("\n"));

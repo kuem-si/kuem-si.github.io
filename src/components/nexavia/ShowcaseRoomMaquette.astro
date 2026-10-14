@@ -44,15 +44,17 @@ const defaultUse = (kind: "sensor" | "meter") =>
   {/* The photo is fetched by the inline script at the end, so the loader can show real progress. */}
   <img
     class="city-photo"
+    src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
     data-src={scene.photo}
     width={scene.width}
     height={scene.height}
     alt={scene.alt}
     decoding="async"
   />
+  {/* Without scripts the photo shows at once and the loader stays hidden
+      (styled by .city-art:not(.has-js)). */}
   <noscript>
     <img class="city-photo" src={scene.photo} width={scene.width} height={scene.height} alt={scene.alt} />
-    <style>.city-loader,.city-loader-edge{display:none}.city-art.is-loading{scale:1}.city-art.is-loading .engrave-wipe{transform:none}</style>
   </noscript>
   <svg class="city-lighting" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
     {scene.lighting.map(({ id: device, off: [x, y, width, height] }) => (
@@ -252,6 +254,7 @@ const defaultUse = (kind: "sensor" | "meter") =>
     // A maquette on a tab that is not shown yet waits until it is opened.
     (() => {
       const art = document.currentScript.parentElement;
+      art.classList.add("has-js");
       const src = art.querySelector(".city-photo").dataset.src;
       const state = { loaded: 0, total: 0, listeners: new Set() };
       art.twinPhoto = state;

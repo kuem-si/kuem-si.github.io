@@ -127,24 +127,28 @@ const stories = ["Domplan", "Brezovica", "Adria Mobil", "Gradiška", "Novo mesto
         {copy.benefitsH2}
       </h2><div class="explorer-cards">
         {
+          // A card is an article with a heading; the heading's button covers
+          // the whole card, so all of it opens the step.
           benefits.map((item) => (
-            <button
-              type="button"
-              class="hp-card"
-              data-solution-step={item.step}
-              aria-controls="solution-panel"
-              aria-haspopup="dialog"
-              aria-expanded="false"
-            >
-              <>
-                <Icon name={item.icon} />
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-                <span class="card-chevron" aria-hidden="true">
-                  ›
-                </span>
-              </>
-            </button>
+            <article class="hp-card">
+              <Icon name={item.icon} />
+              <h3>
+                <button
+                  type="button"
+                  class="card-open"
+                  data-solution-step={item.step}
+                  aria-controls="solution-panel"
+                  aria-haspopup="dialog"
+                  aria-expanded="false"
+                >
+                  {item.title}
+                </button>
+              </h3>
+              <p>{item.text}</p>
+              <span class="card-chevron" aria-hidden="true">
+                ›
+              </span>
+            </article>
           ))
         }
       </div>
@@ -157,36 +161,36 @@ const stories = ["Domplan", "Brezovica", "Adria Mobil", "Gradiška", "Novo mesto
       </h2><div class="explorer-cards">
         {
           examples.map((item) => (
-            <button
-              type="button"
-              class="hp-card example-card"
-              data-solution-step={item.step}
-              aria-controls="solution-panel"
-              aria-haspopup="dialog"
-              aria-expanded="false"
-            >
-              <>
-                <div class="example-drawing">
-                  <>
-                    <Icon name={item.icon} />
-                    <svg
-                      viewBox="0 0 180 64"
-                      aria-hidden="true"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.2"
-                    >
-                      <path d="M2 60h176M14 60V34h22v26M44 60V15h24v45M80 60V28h23v32M116 60V5l28-4v59M153 60V39h18v21M20 40h8v7h-8zM50 22h9v8h-9zM50 37h9v8h-9zM86 36h9v7h-9zM122 12h8v8h-8zM132 30h7v7h-7zM159 45h6v6h-6z" />
-                    </svg>
-                  </>
-                </div>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-                <span class="card-chevron" aria-hidden="true">
-                  ›
-                </span>
-              </>
-            </button>
+            <article class="hp-card example-card">
+              <div class="example-drawing">
+                <Icon name={item.icon} />
+                <svg
+                  viewBox="0 0 180 64"
+                  aria-hidden="true"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                >
+                  <path d="M2 60h176M14 60V34h22v26M44 60V15h24v45M80 60V28h23v32M116 60V5l28-4v59M153 60V39h18v21M20 40h8v7h-8zM50 22h9v8h-9zM50 37h9v8h-9zM86 36h9v7h-9zM122 12h8v8h-8zM132 30h7v7h-7zM159 45h6v6h-6z" />
+                </svg>
+              </div>
+              <h3>
+                <button
+                  type="button"
+                  class="card-open"
+                  data-solution-step={item.step}
+                  aria-controls="solution-panel"
+                  aria-haspopup="dialog"
+                  aria-expanded="false"
+                >
+                  {item.title}
+                </button>
+              </h3>
+              <p>{item.text}</p>
+              <span class="card-chevron" aria-hidden="true">
+                ›
+              </span>
+            </article>
           ))
         }
       </div><div class="explorer-stories">

@@ -310,7 +310,7 @@ const scriptData = explorer.map(({ icon: _icon, ...rest }) => rest);
                 </p>
               </div>
             </div>
-            <div class="pi-dashboard" aria-label={copy.dashboardAria}>
+            <div class="pi-dashboard" role="region" aria-label={copy.dashboardAria}>
               <div class="pi-app-sidebar">
                 <img
                   src={nexaviaLogo.src}
@@ -493,7 +493,6 @@ const scriptData = explorer.map(({ icon: _icon, ...rest }) => rest);
       </div>
     </section>
   </div>
-</MainLayout>
 <script define:vars={{ data: scriptData, chart: copy.scriptChart, view: copy.scriptView }}>
   const tabs = [
     ...document.querySelectorAll(".pi-tabs [role='tab']"),
@@ -616,3 +615,4 @@ const scriptData = explorer.map(({ icon: _icon, ...rest }) => rest);
   addEventListener("hashchange", fromHash);
   fromHash();
 </script>
+</MainLayout>

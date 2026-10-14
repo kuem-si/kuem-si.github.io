@@ -95,6 +95,29 @@
   padding: var(--kuem-space-24) var(--kuem-space-24) var(--kuem-space-32);
   min-width: 0;
 }
+/* The heading's button opens the step; its ::after covers the whole card. */
+.explorer-cards .card-open {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: inherit;
+}
+.explorer-cards .card-open::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.explorer-cards .card-open:focus-visible {
+  outline: none;
+}
+.explorer-cards > .hp-card:has(.card-open:focus-visible) {
+  outline: var(--kuem-focus-width) solid var(--kuem-focus);
+  outline-offset: var(--kuem-focus-offset);
+}
 .explorer-cards .hp-icon {
   width: 44px;
   height: 44px;

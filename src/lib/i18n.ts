@@ -30,15 +30,12 @@ export const routePairs: Record<string, string> = {
   "/kai": "/en/kai",
   "/panoge": "/en/industries",
   "/reference": "/en/references",
-  "/vpogledi": "/en/insights",
+  // "/vpogledi": "/en/insights" returns with those pages (restore
+  // src/pages/vpogledi.astro and src/pages/en/insights.astro from git history).
   "/o-nas": "/en/company",
   "/kontakt": "/en/contact",
   "/zasebnost": "/en/privacy",
   "/nexavia/razstavni-prostor": "/en/nexavia/showcase-room",
-  "/industrial-iot": "/en/industrial-iot",
-  "/partner-program": "/en/partner-program",
-  "/utilities": "/en/utilities",
-  "/nexavia-platform": "/en/nexavia-platform",
 };
 const reversePairs = Object.fromEntries(
   Object.entries(routePairs).map(([sl, en]) => [

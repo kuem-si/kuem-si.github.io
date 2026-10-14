@@ -133,7 +133,7 @@
 .ab-flow li:last-child .ab-flow-node {
   background: var(--kuem-copper);
 }
-.ab-page .ab-flow h3 {
+.ab-page .ab-flow .ab-flow-step {
   min-height: 48px;
   margin: 0 0 var(--kuem-space-16);
   color: var(--kuem-white);
@@ -142,7 +142,7 @@
     sans-serif;
   letter-spacing: var(--kuem-type-h3-tracking);
 }
-.ab-flow h3 span {
+.ab-flow .ab-flow-step span {
   display: block;
   font-family: var(--kuem-font-text);
   font-weight: 400;
@@ -190,11 +190,11 @@
     right: auto;
     transform: rotate(135deg);
   }
-  .ab-page .ab-flow h3 {
+  .ab-page .ab-flow .ab-flow-step {
     min-height: 0;
     margin-bottom: var(--kuem-space-8);
   }
-  .ab-flow h3 span {
+  .ab-flow .ab-flow-step span {
     display: inline;
   }
 }

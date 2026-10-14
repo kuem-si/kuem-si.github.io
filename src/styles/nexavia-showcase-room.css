@@ -27,10 +27,30 @@
   color: var(--kuem-data);
   text-underline-offset: 3px;
 }
-.twin-path span {
+.twin-path span[aria-hidden] {
   margin: 0 0.5rem;
 }
-.twin-intro h1 {
+/* Without scripts (no .has-js from the maquette's inline script) the photo
+   shows at once: no loader and no reveal. */
+.city-art:not(.has-js) .city-loader,
+.city-art:not(.has-js) .city-loader-edge {
+  display: none;
+}
+.city-art.is-loading:not(.has-js) {
+  scale: 1;
+}
+.city-art.is-loading:not(.has-js) .engrave-wipe {
+  transform: none;
+}
+/* The page heading is the breadcrumb's last step, set like the breadcrumb. */
+.twin-path h1 {
+  display: inline;
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+.twin-intro h2 {
   font-size: var(--kuem-type-h1-size);
   letter-spacing: var(--kuem-type-h1-tracking);
   line-height: 1.08;
@@ -771,7 +791,6 @@
   background: none;
   pointer-events: auto;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
   transition: opacity var(--kuem-duration-slow) var(--kuem-ease-standard);
 }
 .city-sensor:hover,
@@ -3882,10 +3901,6 @@
   overflow-y: auto !important;
   scrollbar-width: thin;
 }
-.twin-workspace .xdr-screen::-webkit-scrollbar:horizontal {
-  display: none !important;
-  height: 0 !important;
-}
 .twin-workspace .xdr-display:before {
   content: none !important;
 }
@@ -4099,7 +4114,13 @@
   outline: none;
   cursor: pointer;
   pointer-events: auto;
-  -webkit-tap-highlight-color: transparent;
+}
+/* No grey flash on tap (WebKit and Blink only). */
+@supports (-webkit-tap-highlight-color: transparent) {
+  .city-sensor,
+  .city-device {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 .city-device path {
   pointer-events: all;
@@ -4361,9 +4382,6 @@
   background: var(--kuem-background);
   box-shadow: none;
   scrollbar-width: none;
-}
-.twin-tabs::-webkit-scrollbar {
-  display: none;
 }
 .twin-tab {
   display: flex;
@@ -4894,9 +4912,6 @@
   padding: 0 1.5rem 0.9rem;
   overflow-x: auto;
   scrollbar-width: none;
-}
-.twin-scenarios::-webkit-scrollbar {
-  display: none;
 }
 .twin-scenarios-label {
   flex: none;
@@ -5634,60 +5649,64 @@
   margin: 0;
   background: none;
   cursor: pointer;
-  -webkit-appearance: none;
   appearance: none;
 }
 .twin-clock input:disabled {
   cursor: not-allowed;
 }
-.twin-clock input::-webkit-slider-runnable-track {
-  height: 22px;
-  background: none;
-}
-.twin-clock input::-moz-range-track {
-  height: 22px;
-  background: none;
-}
-.twin-clock input::-webkit-slider-thumb {
-  width: 16px;
-  height: 16px;
-  margin-top: 3px;
-  border: 2px solid var(--kuem-carbon);
-  border-radius: 50%;
-  background: var(--kuem-white);
-  box-shadow:
-    0 0 0 1.5px color-mix(in srgb, var(--kuem-white) 70%, transparent),
-    0 2px 6px color-mix(in srgb, var(--kuem-background) 67%, transparent);
-  -webkit-appearance: none;
-  appearance: none;
-  transition: scale var(--kuem-duration-fast) var(--kuem-ease-standard);
-}
-.twin-clock input::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
-  border: 2px solid var(--kuem-carbon);
-  border-radius: 50%;
-  background: var(--kuem-white);
-  box-shadow:
-    0 0 0 1.5px color-mix(in srgb, var(--kuem-white) 70%, transparent),
-    0 2px 6px color-mix(in srgb, var(--kuem-background) 67%, transparent);
-}
-.twin-clock input:hover::-webkit-slider-thumb,
-.twin-clock input:active::-webkit-slider-thumb {
-  scale: 1.15;
-}
 .twin-clock input:focus-visible {
   outline: none;
 }
-.twin-clock input:focus-visible::-webkit-slider-thumb {
-  box-shadow:
-    0 0 0 2px var(--kuem-white),
-    0 0 0 5px color-mix(in srgb, var(--kuem-white) 33%, transparent);
+/* The slider's parts per engine, each behind its own support check so the
+   other engines skip them without a stylesheet warning. */
+@supports selector(::-webkit-slider-thumb) {
+  .twin-clock input::-webkit-slider-runnable-track {
+    height: 22px;
+    background: none;
+  }
+  .twin-clock input::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+    margin-top: 3px;
+    border: 2px solid var(--kuem-carbon);
+    border-radius: 50%;
+    background: var(--kuem-white);
+    box-shadow:
+      0 0 0 1.5px color-mix(in srgb, var(--kuem-white) 70%, transparent),
+      0 2px 6px color-mix(in srgb, var(--kuem-background) 67%, transparent);
+    appearance: none;
+    transition: scale var(--kuem-duration-fast) var(--kuem-ease-standard);
+  }
+  .twin-clock input:hover::-webkit-slider-thumb,
+  .twin-clock input:active::-webkit-slider-thumb {
+    scale: 1.15;
+  }
+  .twin-clock input:focus-visible::-webkit-slider-thumb {
+    box-shadow:
+      0 0 0 2px var(--kuem-white),
+      0 0 0 5px color-mix(in srgb, var(--kuem-white) 33%, transparent);
+  }
 }
-.twin-clock input:focus-visible::-moz-range-thumb {
-  box-shadow:
-    0 0 0 2px var(--kuem-white),
-    0 0 0 5px color-mix(in srgb, var(--kuem-white) 33%, transparent);
+@supports selector(::-moz-range-thumb) {
+  .twin-clock input::-moz-range-track {
+    height: 22px;
+    background: none;
+  }
+  .twin-clock input::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--kuem-carbon);
+    border-radius: 50%;
+    background: var(--kuem-white);
+    box-shadow:
+      0 0 0 1.5px color-mix(in srgb, var(--kuem-white) 70%, transparent),
+      0 2px 6px color-mix(in srgb, var(--kuem-background) 67%, transparent);
+  }
+  .twin-clock input:focus-visible::-moz-range-thumb {
+    box-shadow:
+      0 0 0 2px var(--kuem-white),
+      0 0 0 5px color-mix(in srgb, var(--kuem-white) 33%, transparent);
+  }
 }
 .twin-workspace:fullscreen .twin-clock {
   top: 14px;
