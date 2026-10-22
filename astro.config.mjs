@@ -27,12 +27,12 @@ export default defineConfig({
         access: "public",
         optional: true,
       }),
-      // Base URL of the Odoo instance (e.g. https://kuem.odoo.com). When set,
-      // form submissions create CRM leads via Odoo's /website/form/crm.lead.
+      // Base URL of the Odoo instance. Form submissions create CRM leads via
+      // Odoo's /website/form/crm.lead. Not a secret; override in .env.
       PUBLIC_ODOO_URL: envField.string({
         context: "client",
         access: "public",
-        optional: true,
+        default: "https://kuem-doo.odoo.com",
       }),
     },
   },
