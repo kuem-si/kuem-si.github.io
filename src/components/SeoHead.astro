@@ -1,6 +1,6 @@
 ---
 import JsonLd from "./JsonLd.astro";
-import { PUBLIC_CONTACT_ENDPOINT } from "astro:env/client";
+import { PUBLIC_CONTACT_ENDPOINT, PUBLIC_ODOO_URL } from "astro:env/client";
 import {
   getLocaleFromPath,
   localeAlternates,
@@ -82,13 +82,15 @@ const criticalStyle = fontFaces + tokens + criticalCss;
 const endpointOrigin = PUBLIC_CONTACT_ENDPOINT
   ? new URL(PUBLIC_CONTACT_ENDPOINT).origin
   : null;
+const odooOrigin = PUBLIC_ODOO_URL ? new URL(PUBLIC_ODOO_URL.trim()).origin : null;
+const connectOrigins = [endpointOrigin, odooOrigin].filter(Boolean).join(" ");
 const csp = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data:",
   "font-src 'self'",
-  `connect-src 'self'${endpointOrigin ? ` ${endpointOrigin}` : ""}`,
+  `connect-src 'self'${connectOrigins ? ` ${connectOrigins}` : ""}`,
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

@@ -1,5 +1,5 @@
 ---
-import { PUBLIC_CONTACT_ENDPOINT } from "astro:env/client";
+import { PUBLIC_CONTACT_ENDPOINT, PUBLIC_ODOO_URL } from "astro:env/client";
 import type { Locale } from "../lib/i18n";
 import { countries } from "../lib/countries";
 import { COMPANY_EMAIL } from "../data/company";
@@ -20,6 +20,10 @@ const {
 const statusId = `${formId || "lead"}-status`;
 const countryListId = `${formId || "lead"}-countries`;
 const endpoint = PUBLIC_CONTACT_ENDPOINT ?? null;
+// Odoo's public website form route creates a crm.lead without an API key.
+const odooFormUrl = PUBLIC_ODOO_URL
+  ? `${new URL(PUBLIC_ODOO_URL.trim()).origin}/website/form/crm.lead`
+  : null;
 const copy = {
   sl: {
         firstName: "Ime",
@@ -154,7 +158,7 @@ const copy = {
   <p id={statusId} class="form-status" role="status" aria-live="polite"></p>
 </form>
 
-<script is:inline define:vars={{ copy, endpoint }}>
+<script is:inline define:vars={{ copy, endpoint, odooFormUrl }}>
   const forms = document.querySelectorAll("[data-lead-form]");
 
   forms.forEach((form) => {
@@ -191,6 +195,39 @@ const copy = {
       };
 
       if (status) status.textContent = copy.submitting;
+
+      if (odooFormUrl) {
+        const subjectSelect = target.querySelector('select[name="subject"]');
+        const subjectLabel =
+          subject === "custom"
+            ? customSubject
+            : subjectSelect?.selectedOptions[0]?.text || subject;
+        // Whitelisted crm.lead fields; any other field is appended by Odoo
+        // to the lead description.
+        const odooData = new FormData();
+        odooData.append("name", `${subjectLabel} – ${payload.firstName} ${payload.lastName}`);
+        odooData.append("contact_name", `${payload.firstName} ${payload.lastName}`);
+        odooData.append("email_from", payload.email);
+        odooData.append("description", payload.message);
+        if (payload.country) odooData.append("Country", payload.country);
+        odooData.append("Source page", payload.sourcePage || "");
+        odooData.append("GDPR consent", payload.consent ? "yes" : "no");
+
+        try {
+          // Odoo sends no CORS headers, so the response is opaque; a network
+          // error is the only failure that can be detected here.
+          await fetch(odooFormUrl, {
+            method: "POST",
+            mode: "no-cors",
+            body: odooData,
+          });
+          if (status) status.textContent = copy.success;
+          target.reset();
+        } catch (error) {
+          if (status) status.textContent = copy.failed;
+        }
+        return;
+      }
 
       if (!endpoint) {
         if (status) status.textContent = copy.failed;
