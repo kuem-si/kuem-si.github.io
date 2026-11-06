@@ -105,7 +105,9 @@
   transform: translateY(-2px);
 }
 .pi-hero-card[aria-pressed="true"] {
-  border-color: var(--kuem-copper);
+  /* Selected: a 2 px Petrol edge. Copper stays for the hero's one action. */
+  border-color: var(--kuem-petrol);
+  box-shadow: inset 0 0 0 1px var(--kuem-petrol);
   background: var(--kuem-white);
 }
 .pi-hero-card img {
@@ -196,7 +198,8 @@
   border-color: var(--kuem-petrol);
 }
 .pi-tabs button[aria-selected="true"] {
-  border-color: var(--kuem-copper);
+  border-color: var(--kuem-petrol);
+  box-shadow: inset 0 0 0 1px var(--kuem-petrol);
   background: var(--kuem-white);
   color: var(--kuem-text-primary);
 }

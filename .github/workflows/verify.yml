@@ -61,6 +61,11 @@ jobs:
         run: |
           npx -y http-server dist -p 4173 --silent &
           npx -y wait-on http://localhost:4173
-          npx -y lighthouse http://localhost:4173/ --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=.lh-home.json --chrome-flags="--headless=new --no-sandbox" --quiet
-          npx -y lighthouse http://localhost:4173/en/ --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=.lh-en.json --chrome-flags="--headless=new --no-sandbox" --quiet
-          node .tools/lighthouse-assert.mjs .lh-home.json .lh-en.json
+          # Three runs per page; the gate reads the median run (Lighthouse's
+          # own advice for variable hardware). The first run on a cold runner
+          # used to report ~1 s of blocking time the page doesn't have.
+          for i in 1 2 3; do
+            npx -y lighthouse http://localhost:4173/ --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=.lh-home-$i.json --chrome-flags="--headless=new --no-sandbox" --quiet
+            npx -y lighthouse http://localhost:4173/en/ --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=.lh-en-$i.json --chrome-flags="--headless=new --no-sandbox" --quiet
+          done
+          node .tools/lighthouse-assert.mjs .lh-home-1.json,.lh-home-2.json,.lh-home-3.json .lh-en-1.json,.lh-en-2.json,.lh-en-3.json

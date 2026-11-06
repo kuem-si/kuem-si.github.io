@@ -1,21 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 144" role="img" aria-labelledby="title desc">
   <title id="title">Javna infrastruktura</title>
-  <desc id="desc">Cesta, most in javna razsvetljava v vizualnem slogu KUEM.</desc>
-  <g stroke="#161a1d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M61 42h99v14H61z" fill="#FFFFFF"/>
-    <path d="M68 56v54M153 56v54" fill="none"/>
-    <path d="M69 108c4-29 18-44 41-44s38 15 42 44" fill="#4FA3AD"/>
-    <path d="M82 104c5-19 14-28 28-28s24 9 29 28" fill="#FFFFFF"/>
-    <path d="M75 42V31h71v11" fill="#E8E6E1"/>
-    <path d="M23 110V34c0-14 10-24 24-24h13" fill="none" stroke-width="5"/>
-    <path d="M55 6h25v14H58c-6 0-10-4-10-10V6h7Z" fill="#FFFFFF"/>
-    <rect x="16" y="58" width="14" height="20" rx="3" fill="#FFFFFF"/>
-    <rect x="20" y="64" width="6" height="6" fill="#F06432" stroke="none"/>
+  <desc id="desc">Most in javna razsvetljava v vizualnem slogu KUEM.</desc>
+  <g fill="none" stroke="#161A1D" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter">
+<path d="M28 120V24H60V30"/><rect x="50" y="30" width="22" height="8" fill="#FFFFFF"/>
+<rect x="20" y="64" width="16" height="20" fill="#FFFFFF"/><rect x="25" y="70" width="6" height="6" fill="#4FA3AD" stroke="none"/>
+<path d="M84 68V120M148 68V120"/>
+<path d="M80 44H144M80 44V60M144 44V60M80 60L96 44L112 60L128 44L144 60M96 44V60M112 44V60M128 44V60"/>
+<rect x="72" y="60" width="88" height="8" fill="#4FA3AD"/>
+<path d="M96 96H136M96 108H136" stroke="#E8E6E1"/>
+<path d="M8 128H48L56 120H120L128 128H168" stroke="#156B75" stroke-width="2.5"/><rect x="53" y="117" width="6" height="6" fill="#156B75" stroke="none"/><rect x="125" y="125" width="6" height="6" fill="#156B75" stroke="none"/>
   </g>
-  <path d="M47 116 78 54h49l30 62H47Z" fill="#161a1d"/>
-  <path d="M86 65 77 89h9l-6 20M119 65l9 24h-9l6 20" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
-  <path d="M10 125h42l9-9h51l9 9h45" fill="none" stroke="#156B75" stroke-width="2.5"/>
-  <path d="M10 132h42l9-9h51l9 9h45" fill="none" stroke="#F06432" stroke-width="2"/>
-  <rect x="49" y="122" width="6" height="6" fill="#156B75"/>
-  <rect x="109" y="120" width="6" height="6" fill="#F06432"/>
 </svg>

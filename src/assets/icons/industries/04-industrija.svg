@@ -1,24 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 144" role="img" aria-labelledby="title desc">
   <title id="title">Industrija</title>
   <desc id="desc">Proizvodni objekt z operativnim prikazom v vizualnem slogu KUEM.</desc>
-  <g stroke="#161a1d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M15 112V56l34 20V56l34 20V45h35v67H15Z" fill="#E8E6E1"/>
-    <path d="M15 56 49 76V56l34 20V65H15v-9Z" fill="#4FA3AD"/>
-    <path d="M92 45V12h19v33" fill="#FFFFFF"/>
-    <path d="M96 23h11M96 31h11"/>
-    <rect x="26" y="88" width="13" height="14" rx="1" fill="#FFFFFF"/>
-    <rect x="47" y="88" width="13" height="14" rx="1" fill="#FFFFFF"/>
-    <path d="M15 112h112" stroke-width="5"/>
-    <rect x="105" y="59" width="57" height="49" rx="5" fill="#FFFFFF"/>
-    <path d="M105 72h57"/>
-    <rect x="113" y="80" width="41" height="20" rx="2" fill="#E8E6E1"/>
-    <path d="m118 95 8-7 7 4 8-10 8 5" fill="none" stroke="#156B75"/>
+  <g fill="none" stroke="#161A1D" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter">
+<rect x="72" y="24" width="12" height="40" fill="#FFFFFF"/>
+<path d="M20 112V64L36 48V64L52 48V64L68 48V64H92V112Z" fill="#E8E6E1"/>
+<rect x="30" y="80" width="12" height="12" fill="#FFFFFF"/><rect x="54" y="80" width="12" height="12" fill="#FFFFFF"/>
+<rect x="104" y="48" width="52" height="40" fill="#FFFFFF"/><path d="M104 56H156"/>
+<path d="M112 80L120 72H128L136 64H148" stroke="#156B75"/>
+<path d="M130 88V112M120 112H140"/><path d="M20 112H120"/>
+<path d="M8 128H48L56 120H120L128 128H168" stroke="#156B75" stroke-width="2.5"/><rect x="53" y="117" width="6" height="6" fill="#156B75" stroke="none"/><rect x="125" y="125" width="6" height="6" fill="#156B75" stroke="none"/>
   </g>
-  <circle cx="116" cy="66" r="3" fill="#4FA3AD"/>
-  <rect x="126" y="63" width="6" height="6" fill="#F06432"/>
-  <path d="M120 13c8-8 17-7 22-1M127 5c7-6 14-4 18 0" fill="none" stroke="#4FA3AD" stroke-width="2.5" stroke-linecap="round"/>
-  <path d="M10 125h42l9-9h51l9 9h45" fill="none" stroke="#156B75" stroke-width="2.5"/>
-  <path d="M10 132h42l9-9h51l9 9h45" fill="none" stroke="#F06432" stroke-width="2"/>
-  <rect x="49" y="122" width="6" height="6" fill="#156B75"/>
-  <rect x="109" y="120" width="6" height="6" fill="#F06432"/>
 </svg>
