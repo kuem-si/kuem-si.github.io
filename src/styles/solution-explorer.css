@@ -207,7 +207,7 @@
 .solution-panel {
   position: fixed;
   inset: 0 0 0 auto;
-  z-index: 200;
+  z-index: var(--kuem-layer-dialog);
   width: var(--panel-width);
   height: 100dvh;
   background: var(--kuem-white);
@@ -518,7 +518,7 @@
 .solution-modal {
   overflow: hidden;
 }
-@media (min-width: 1400px) {
+@media (min-width: 1201px) {
   .solutions-page main {
     transition: margin-right var(--kuem-duration-slow) var(--kuem-ease-standard);
   }
@@ -546,7 +546,7 @@
     font-size: var(--kuem-type-body-size);
   }
 }
-@media (max-width: 1199px) {
+@media (max-width: 1200px) {
   .explorer-hero-grid {
     grid-template-columns: 1fr;
   }
@@ -569,7 +569,7 @@
     font-size: var(--kuem-type-body-size);
   }
 }
-@media (max-width: 767px) {
+@media (max-width: 980px) {
   .solution-panel {
     inset: auto 0 0;
     width: 100%;
@@ -588,7 +588,7 @@
     position: fixed;
     inset: 0;
     background: color-mix(in srgb, var(--kuem-carbon) 13.3%, transparent);
-    z-index: 150;
+    z-index: calc(var(--kuem-layer-dialog) - 1);
   }
   .panel-header {
     padding: var(--kuem-space-16) var(--kuem-space-64) var(--kuem-space-16)

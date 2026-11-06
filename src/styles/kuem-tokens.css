@@ -1,6 +1,7 @@
 /*
  * Copied unchanged from kuem-si/kuem-visual-identity dist/kuem-tokens.css
- * (main @86134a8). Update it by copying that file again; do not edit here.
+ * (branch claude/project-thread-b6446k @b11886c, identity PR #16). Update it by
+ * copying that file again; do not edit here.
  * SeoHead.astro inlines it in every page head, ahead of critical.css.
  */
 /*
@@ -96,10 +97,23 @@
   --kuem-gutter: 1.5rem;
   --kuem-margin: clamp(1.5rem, 0.5rem + 4.4444vw, 4.5rem);
   --kuem-container: 75rem;
+  --kuem-breakpoint-phone: 600px;
+  --kuem-breakpoint-tablet: 980px;
+  --kuem-breakpoint-desktop: 1200px;
 
   /* Targets and controls */
   --kuem-target-min: 1.5rem;
   --kuem-control-height: 3rem;
+
+  /* Shadow, only for floating layers */
+  --kuem-shadow-overlay: 0 8px 24px 0 rgb(22 26 29 / 0.16);
+
+  /* Stacking order (z-index) */
+  --kuem-layer-raised: 1;
+  --kuem-layer-header: 30;
+  --kuem-layer-menu: 50;
+  --kuem-layer-dialog: 80;
+  --kuem-layer-skip-link: 100;
 
   /* Radii */
   --kuem-radius-none: 0;

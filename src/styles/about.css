@@ -54,6 +54,11 @@
   background: var(--kuem-copper);
   color: var(--kuem-carbon);
 }
+.ab-actions .btn-primary:hover,
+.ab-contact .btn-primary:hover {
+  border-color: var(--kuem-action-hover);
+  background: var(--kuem-action-hover);
+}
 .ab-actions .btn-secondary {
   border-color: var(--kuem-petrol);
   color: var(--kuem-petrol);
@@ -66,7 +71,6 @@
   border-radius: var(--kuem-radius-control);
   background: var(--kuem-carbon);
   color: var(--kuem-white);
-  box-shadow: 0 12px 28px rgba(22, 26, 29, 0.14);
 }
 .ab-hero-graphic::before {
   content: "";
@@ -330,7 +334,7 @@
 .ab-step-node {
   display: block;
   position: relative;
-  z-index: 1;
+  z-index: var(--kuem-layer-raised);
   width: 10px;
   height: 10px;
   margin: 0 0 var(--kuem-space-8);
@@ -552,7 +556,7 @@ body:has(.ab-page) .site-header .nav-list > li > a[aria-current]:after {
     position: fixed !important;
     right: 16px !important;
     top: 17px !important;
-    z-index: 100 !important;
+    z-index: var(--kuem-layer-menu) !important;
     width: 44px;
     height: 44px;
     border: 1px solid var(--kuem-petrol);
@@ -618,4 +622,10 @@ body:has(.ab-page) .site-header .nav-list > li > a[aria-current]:after {
 .ab-region[data-scheme] a {
   color: var(--kuem-text-primary);
   border-bottom-color: var(--kuem-copper-deep);
+}
+
+/* Every link target is at least 24 px tall (decision 0016). */
+.ab-fact-grid a {
+  display: inline-block;
+  padding-block: 1px;
 }

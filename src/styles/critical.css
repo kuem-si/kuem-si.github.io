@@ -79,7 +79,7 @@ p {
   position: fixed;
   top: -5rem;
   left: 1rem;
-  z-index: 100;
+  z-index: var(--kuem-layer-skip-link);
   background: var(--kuem-copper);
   padding: var(--kuem-space-16);
   color: var(--kuem-carbon);
@@ -105,7 +105,7 @@ p {
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 30;
+  z-index: var(--kuem-layer-header);
   background: color-mix(in srgb, var(--kuem-carbon) 78%, transparent);
   color: var(--kuem-white);
   border-bottom: 1px solid var(--kuem-border);
@@ -113,7 +113,6 @@ p {
 }
 .site-header.is-scrolled {
   background: color-mix(in srgb, var(--kuem-carbon) 96%, transparent);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
 }
 .header-inner {
   min-height: 76px;
@@ -157,6 +156,8 @@ nav {
 .mobile-only {
   display: none !important;
 }
+/* Buttons and their states (identity DIGITAL-EXPERIENCE.md, decision 0012):
+   hover and pressed change colour only; disabled and busy share one look. */
 .btn {
   display: inline-flex;
   justify-content: center;
@@ -164,19 +165,44 @@ nav {
   min-height: 48px;
   padding: var(--kuem-space-8) var(--kuem-space-16);
   border: 1px solid currentColor;
+  border-radius: var(--kuem-radius-control);
   font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color var(--kuem-duration-fast) var(--kuem-ease-standard),
+    border-color var(--kuem-duration-fast) var(--kuem-ease-standard);
 }
 .btn-primary {
   background: var(--kuem-copper);
   border-color: var(--kuem-copper);
   color: var(--kuem-carbon);
 }
+.btn-primary:hover,
+.btn-primary:active {
+  background: var(--kuem-action-hover);
+  border-color: var(--kuem-action-hover);
+}
+.btn-primary:active {
+  box-shadow: inset 0 0 0 1px var(--kuem-on-action);
+}
 .btn-secondary {
   background: transparent;
   color: inherit;
 }
-.btn:hover {
-  transform: translateY(-2px);
+.btn-secondary:hover,
+.btn-secondary:active {
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+.btn-secondary:active {
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  background: transparent;
+  border-color: var(--kuem-border);
+  color: var(--kuem-text-muted);
+  box-shadow: none;
+  cursor: not-allowed;
 }
 .hero,
 .dark {
