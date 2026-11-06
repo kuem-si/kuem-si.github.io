@@ -13,13 +13,14 @@ const { labels = ["Naprava", "Podatkovna pot", "Odločitev"] } = Astro.props;
       fill="none"
       stroke="#156B75"
       stroke-width="2"
-      opacity=".6"></path><g fill="#F06432"
+      opacity=".6"></path><g fill="#4FA3AD"
       ><rect x="34" y="84" width="12" height="12"></rect><rect
         x="174"
         y="204"
         width="12"
         height="12"></rect><rect x="334" y="324" width="12" height="12"
-      ></rect><rect x="554" y="324" width="12" height="12"></rect></g
+      ></rect></g
+    ><rect x="554" y="324" width="12" height="12" fill="#F06432"></rect
     ></svg
   >{labels.map((label: string) => <span class="node-label">{label}</span>)}
 </div>
