@@ -1087,18 +1087,20 @@ html body:has(main) .site-header.site-header .nav-list > li > a[aria-current] {
 .site-header .nav-list > li > a[aria-current]:after {
   height: 2px;
 }
-/* The contact call to action: copper with Carbon text (CGP p9, p19). */
+/* The header contact link: outlined, with a copper arrow. Copper fill is kept
+   for each page's own primary action, so a view has one copper button
+   (decision 0011). */
 .site-header .header-contact {
   padding: var(--kuem-space-8) var(--kuem-space-16);
-  border: 1px solid var(--kuem-copper);
+  border: 1px solid var(--kuem-border-strong);
   border-radius: var(--kuem-radius-control);
-  background: var(--kuem-copper);
+  background: transparent;
   color: var(--kuem-carbon);
 }
 .site-header .header-contact:hover,
 .site-header .header-contact:focus-visible {
-  border-color: var(--kuem-copper-light);
-  background: var(--kuem-copper-light);
+  border-color: var(--kuem-carbon);
+  background: var(--kuem-concrete);
   color: var(--kuem-carbon);
 }
 html body:has(main) .site-header.site-header .nav-list > li > a.header-contact {
@@ -1109,7 +1111,7 @@ html body:has(main) .site-header.site-header .nav-list > li > a.header-contact {
   height: auto;
   border: 0;
   background: none;
-  color: inherit;
+  color: var(--kuem-copper-deep);
 }
 .site-header .menu-toggle {
   border-color: var(--kuem-border);

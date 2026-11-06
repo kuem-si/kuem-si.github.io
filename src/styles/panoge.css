@@ -525,12 +525,6 @@ body:has(.pi-page) .site-header .nav-list > li > a[aria-current]:after {
   background: var(--kuem-petrol) !important;
   height: 2px;
 }
-body:has(.pi-page) .site-header .header-contact {
-  background: var(--kuem-copper) !important;
-  border-color: var(--kuem-copper) !important;
-  color: var(--kuem-carbon) !important;
-  border-radius: var(--kuem-radius-control);
-}
 @media (max-width: 1100px) {
   .pi-hero-grid {
     grid-template-columns: 1fr;
