@@ -4443,7 +4443,8 @@
   display: block;
   margin-top: 2px;
   font-size: var(--kuem-type-label-size);
-  opacity: 0.68;
+  /* No opacity: Muted grey at 68 % fell to 3.1:1 on white. The full token
+     keeps 6.3:1, and size and weight still set it below the title. */
 }
 .twin-tab-panel[hidden] {
   display: none;
