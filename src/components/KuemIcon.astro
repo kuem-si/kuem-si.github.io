@@ -1,0 +1,24 @@
+---
+// One KUEM domain icon (decision 0005 in kuem-visual-identity). The stroke
+// stays 2 px on screen at every size (non-scaling), so a 26 px list icon and a
+// 56 px architecture node have the same line weight as the type around them.
+import { KUEM_ICONS } from "../data/kuemIcons";
+const { name, class: className } = Astro.props as { name: string; class?: string };
+const body = KUEM_ICONS[name] ?? KUEM_ICONS.platform;
+---
+
+<svg
+  class:list={["kuem-icon", className]}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="square"
+  stroke-linejoin="miter"
+  aria-hidden="true"
+  set:html={body}
+/>
+
+<style is:global>
+  .kuem-icon * { vector-effect: non-scaling-stroke; }
+</style>
