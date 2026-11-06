@@ -21,7 +21,7 @@ function walk(directory) {
 }
 walk(fileURLToPath(root));
 const bad = [
-  "Somobor",
+  "Sombor",
   "How it works zaznava",
   "Analyses available context",
   "Problem Path Outcome",
