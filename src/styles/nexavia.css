@@ -119,7 +119,7 @@ abbr[title] {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--kuem-copper);
+  background: var(--kuem-border);
 }
 .nx-dots i:nth-child(2) {
   background: var(--kuem-border);
@@ -753,12 +753,6 @@ html:not(.js) .nx-role-panel[hidden] {
   background: var(--kuem-petrol);
   height: 2px;
 }
-.site-header:has(+ main .nx-hero) .header-contact {
-  background: var(--kuem-copper);
-  border-color: var(--kuem-copper);
-  border-radius: var(--kuem-radius-control);
-  color: var(--kuem-carbon);
-}
 .site-header:has(+ main .nx-hero).is-scrolled {
   background: color-mix(in srgb, var(--kuem-white) 98%, transparent);
 }
@@ -788,12 +782,17 @@ body:has(.nx-hero) .site-header .nav-list > li > a[aria-current] {
 body:has(.nx-hero) .site-header .nav-list > li > a[aria-current]:after {
   background: var(--kuem-petrol) !important;
 }
+/* One copper action per view: the hero button. The header link stays a
+   text link with the site-wide arrow, as on every other page. */
 .site-header:has(~ main .nx-hero) .header-contact,
 body:has(.nx-hero) .site-header .header-contact {
-  background: var(--kuem-copper) !important;
-  border-color: var(--kuem-copper) !important;
-  border-radius: var(--kuem-radius-control);
-  color: var(--kuem-carbon) !important;
+  color: var(--kuem-text-primary) !important;
+}
+.site-header:has(~ main .nx-hero) .header-contact:hover,
+.site-header:has(~ main .nx-hero) .header-contact:focus-visible,
+body:has(.nx-hero) .site-header .header-contact:hover,
+body:has(.nx-hero) .site-header .header-contact:focus-visible {
+  background: var(--kuem-concrete) !important;
 }
 @media (min-width: 1101px) {
   .nx-hero-grid {
