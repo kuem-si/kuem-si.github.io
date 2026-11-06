@@ -1,48 +1,80 @@
 // Generated from kuem-visual-identity assets/icons/svg (decision 0005, commit a246a7e).
 // 24 x 24 grid, 2 px stroke, square caps, mitre joins. Do not edit by hand: redraw in the identity repo.
 export const KUEM_ICONS: Record<string, string> = {
-  "air": "<path d=\"M4 8H15M4 12H20M4 16H12\"/><rect x=\"18\" y=\"7\" width=\"2\" height=\"2\" fill=\"currentColor\" stroke=\"none\"/><rect x=\"15\" y=\"15\" width=\"2\" height=\"2\" fill=\"currentColor\" stroke=\"none\"/>",
-  "alarm": "<path d=\"M7 17V11A5 5 0 0 1 17 11V17\"/><path d=\"M5 17H19\"/><path d=\"M11 20H13\"/>",
-  "analytics": "<circle cx=\"10\" cy=\"10\" r=\"6\"/><path d=\"M14.5 14.5L20 20\"/>",
-  "battery": "<rect x=\"3\" y=\"7\" width=\"16\" height=\"10\"/><path d=\"M21 10V14\"/><path d=\"M7 12H13\"/>",
-  "building": "<path d=\"M5 20V4H15V20\"/><path d=\"M15 10H19V20\"/><path d=\"M3 20H21\"/><path d=\"M8 8H12M8 12H12M8 16H12\"/>",
-  "cellular": "<path d=\"M5 20V17M9.67 20V13.67M14.33 20V10.33M19 20V7\"/>",
-  "chart": "<rect x=\"5\" y=\"13\" width=\"3\" height=\"7\"/><rect x=\"10.5\" y=\"7\" width=\"3\" height=\"13\"/><rect x=\"16\" y=\"10\" width=\"3\" height=\"10\"/>",
-  "check": "<rect x=\"3\" y=\"3\" width=\"18\" height=\"18\"/><path d=\"M7 12L10 15L17 8\"/>",
-  "code": "<path d=\"M9 7L4 12L9 17M15 7L20 12L15 17\"/>",
-  "continuity": "<path d=\"M12 12L9.17 9.17A4 4 0 1 0 9.17 14.83L14.83 9.17A4 4 0 1 1 14.83 14.83Z\"/>",
-  "dashboard": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\"/><path d=\"M3 8H21\"/><path d=\"M7 17V13M11 17V11M15 17V14\"/>",
-  "database": "<ellipse cx=\"12\" cy=\"6.5\" rx=\"7\" ry=\"2.5\"/><path d=\"M5 6.5V17.5A7 2.5 0 0 0 19 17.5V6.5\"/><path d=\"M5 12A7 2.5 0 0 0 19 12\"/>",
-  "decision": "<path d=\"M3 17H8L14 11H17\"/><rect class=\"signal\" x=\"17\" y=\"9\" width=\"4\" height=\"4\" fill=\"currentColor\" stroke=\"none\"/>",
-  "dialog": "<path d=\"M4 5H20V15H11L7 19V15H4Z\"/>",
-  "document": "<path d=\"M6 3H14L18 7V21H6Z\"/><path d=\"M14 3V7H18\"/><path d=\"M9 12H15M9 16H15\"/>",
-  "electricity-meter": "<circle cx=\"12\" cy=\"12\" r=\"8\"/><path d=\"M13.5 7.5L10 11H14L10.5 14.5\"/>",
-  "energy": "<path d=\"M15 4L8 11H16L8 19\"/>",
-  "environment": "<path d=\"M5 19V9L9 5H19V15L15 19Z\"/><path d=\"M5 19L14 10\"/>",
-  "gas-meter": "<circle cx=\"12\" cy=\"12\" r=\"8\"/><path d=\"M12 7.5L14.5 10V13.5A2.5 2.5 0 0 1 9.5 13.5V10Z\"/><path d=\"M12 12.5V14\"/>",
-  "gateway": "<rect x=\"4\" y=\"13\" width=\"16\" height=\"7\"/><path d=\"M8 13V5M16 13V5\"/><path d=\"M7 16.5H9M11 16.5H13\"/>",
-  "heat-meter": "<circle cx=\"12\" cy=\"12\" r=\"8\"/><path d=\"M9 9V15M12 9V15M15 9V15\"/>",
-  "integration": "<rect x=\"3\" y=\"7\" width=\"7\" height=\"10\"/><rect x=\"14\" y=\"7\" width=\"7\" height=\"10\"/><path d=\"M10 12H14\"/>",
-  "knowledge": "<path d=\"M3 5H9L12 8L15 5H21V18H15L12 21L9 18H3Z\"/><path d=\"M12 8V21\"/>",
-  "leak": "<path d=\"M12 4L16.24 8.24A6 6 0 1 1 7.76 8.24Z\"/><path d=\"M4 21H20\"/>",
-  "lighting": "<path d=\"M8 21V4H16V6\"/><rect x=\"13\" y=\"6\" width=\"6\" height=\"3\"/><path d=\"M5 21H11\"/>",
-  "location": "<path d=\"M12 16.07L8.46 12.54A5 5 0 1 1 15.54 12.54Z\"/><rect x=\"11\" y=\"8\" width=\"2\" height=\"2\" fill=\"currentColor\" stroke=\"none\"/><path d=\"M7 20H17\"/>",
-  "maintenance": "<path d=\"M16 4L17 5L15 7L17 9L19 7L20 8L16 12L12 8Z\"/><path d=\"M14 10L5 19\"/>",
-  "mobility": "<circle cx=\"6.5\" cy=\"16\" r=\"3.5\"/><circle cx=\"17.5\" cy=\"16\" r=\"3.5\"/><path d=\"M6.5 16L10.5 12H13.5L17.5 16\"/><path d=\"M10.5 12V9M9 9H12M13.5 12V8H16\"/>",
-  "monitoring": "<path d=\"M3 12L8 7H16L21 12L16 17H8Z\"/><circle cx=\"12\" cy=\"12\" r=\"2.5\"/>",
-  "municipality": "<path d=\"M6 9L12 3L18 9Z\"/><path d=\"M8 12V18M12 12V18M16 12V18\"/><path d=\"M4 20H20\"/>",
-  "network": "<rect x=\"10\" y=\"10\" width=\"4\" height=\"4\"/><rect x=\"3\" y=\"3\" width=\"4\" height=\"4\"/><rect x=\"17\" y=\"3\" width=\"4\" height=\"4\"/><rect x=\"3\" y=\"17\" width=\"4\" height=\"4\"/><rect x=\"17\" y=\"17\" width=\"4\" height=\"4\"/><path d=\"M10 10L7 7M14 10L17 7M10 14L7 17M14 14L17 17\"/>",
-  "noise": "<path d=\"M4 9H8L13 4V20L8 15H4Z\"/><path d=\"M16.5 9V15M19.5 6V18\"/>",
-  "people": "<circle cx=\"7\" cy=\"8\" r=\"2.5\"/><circle cx=\"17\" cy=\"8\" r=\"2.5\"/><path d=\"M3 20V17L5 15H9L11 17V20M13 20V17L15 15H19L21 17V20\"/>",
-  "platform": "<rect x=\"4\" y=\"4\" width=\"16\" height=\"4\"/><rect x=\"4\" y=\"10\" width=\"16\" height=\"4\"/><rect x=\"4\" y=\"16\" width=\"16\" height=\"4\"/>",
-  "presence": "<path d=\"M6 21V4H18L15 7L18 10H6\"/>",
-  "sensor": "<rect x=\"6\" y=\"13\" width=\"12\" height=\"7\"/><path d=\"M10 10L12 8L14 10\"/><path d=\"M7 9L12 4L17 9\"/><path d=\"M10 16.5H14\"/>",
-  "settings": "<path d=\"M4 7H20M4 12H20M4 17H20\"/><rect x=\"14\" y=\"5\" width=\"3\" height=\"4\" fill=\"currentColor\" stroke=\"none\"/><rect x=\"7\" y=\"10\" width=\"3\" height=\"4\" fill=\"currentColor\" stroke=\"none\"/><rect x=\"11\" y=\"15\" width=\"3\" height=\"4\" fill=\"currentColor\" stroke=\"none\"/>",
-  "sewerage": "<circle cx=\"12\" cy=\"12\" r=\"8\"/><path d=\"M9 9H15M8 12H16M9 15H15\"/>",
-  "shield": "<path d=\"M5 6H19V13L12 20L5 13Z\"/><path d=\"M9 12L11 14L15 10\"/>",
-  "software": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\"/><path d=\"M3 8H21\"/><path d=\"M9 11L7 13L9 15M15 11L17 13L15 15\"/>",
-  "temperature": "<path d=\"M10 13V5A2 2 0 0 1 14 5V13A4 4 0 1 1 10 13Z\"/><path d=\"M12 9V16\"/>",
-  "valve": "<path d=\"M6 8V16L10 12ZM18 8V16L14 12Z\"/><path d=\"M10 12H14M12 12V5M9 5H15\"/><path d=\"M3 12H6M18 12H21\"/>",
-  "water-meter": "<circle cx=\"12\" cy=\"12\" r=\"8\"/><path d=\"M12 8.5L14.12 10.62A3 3 0 1 1 9.88 10.62Z\"/>",
-  "water": "<path d=\"M12 3L16.95 7.95A7 7 0 1 1 7.05 7.95Z\"/>",
+  air: '<path d="M4 8H15M4 12H20M4 16H12"/><rect x="18" y="7" width="2" height="2" fill="currentColor" stroke="none"/><rect x="15" y="15" width="2" height="2" fill="currentColor" stroke="none"/>',
+  alarm:
+    '<path d="M7 17V11A5 5 0 0 1 17 11V17"/><path d="M5 17H19"/><path d="M11 20H13"/>',
+  analytics: '<circle cx="10" cy="10" r="6"/><path d="M14.5 14.5L20 20"/>',
+  battery:
+    '<rect x="3" y="7" width="16" height="10"/><path d="M21 10V14"/><path d="M7 12H13"/>',
+  building:
+    '<path d="M5 20V4H15V20"/><path d="M15 10H19V20"/><path d="M3 20H21"/><path d="M8 8H12M8 12H12M8 16H12"/>',
+  cellular: '<path d="M5 20V17M9.67 20V13.67M14.33 20V10.33M19 20V7"/>',
+  chart:
+    '<rect x="5" y="13" width="3" height="7"/><rect x="10.5" y="7" width="3" height="13"/><rect x="16" y="10" width="3" height="10"/>',
+  check:
+    '<rect x="3" y="3" width="18" height="18"/><path d="M7 12L10 15L17 8"/>',
+  code: '<path d="M9 7L4 12L9 17M15 7L20 12L15 17"/>',
+  continuity:
+    '<path d="M12 12L9.17 9.17A4 4 0 1 0 9.17 14.83L14.83 9.17A4 4 0 1 1 14.83 14.83Z"/>',
+  dashboard:
+    '<rect x="3" y="4" width="18" height="16"/><path d="M3 8H21"/><path d="M7 17V13M11 17V11M15 17V14"/>',
+  database:
+    '<ellipse cx="12" cy="6.5" rx="7" ry="2.5"/><path d="M5 6.5V17.5A7 2.5 0 0 0 19 17.5V6.5"/><path d="M5 12A7 2.5 0 0 0 19 12"/>',
+  decision:
+    '<path d="M3 17H8L14 11H17"/><rect class="signal" x="17" y="9" width="4" height="4" fill="currentColor" stroke="none"/>',
+  dialog: '<path d="M4 5H20V15H11L7 19V15H4Z"/>',
+  document:
+    '<path d="M6 3H14L18 7V21H6Z"/><path d="M14 3V7H18"/><path d="M9 12H15M9 16H15"/>',
+  "electricity-meter":
+    '<circle cx="12" cy="12" r="8"/><path d="M13.5 7.5L10 11H14L10.5 14.5"/>',
+  energy: '<path d="M15 4L8 11H16L8 19"/>',
+  environment: '<path d="M5 19V9L9 5H19V15L15 19Z"/><path d="M5 19L14 10"/>',
+  "gas-meter":
+    '<circle cx="12" cy="12" r="8"/><path d="M12 7.5L14.5 10V13.5A2.5 2.5 0 0 1 9.5 13.5V10Z"/><path d="M12 12.5V14"/>',
+  gateway:
+    '<rect x="4" y="13" width="16" height="7"/><path d="M8 13V5M16 13V5"/><path d="M7 16.5H9M11 16.5H13"/>',
+  "heat-meter":
+    '<circle cx="12" cy="12" r="8"/><path d="M9 9V15M12 9V15M15 9V15"/>',
+  integration:
+    '<rect x="3" y="7" width="7" height="10"/><rect x="14" y="7" width="7" height="10"/><path d="M10 12H14"/>',
+  knowledge:
+    '<path d="M3 5H9L12 8L15 5H21V18H15L12 21L9 18H3Z"/><path d="M12 8V21"/>',
+  leak: '<path d="M12 4L16.24 8.24A6 6 0 1 1 7.76 8.24Z"/><path d="M4 21H20"/>',
+  lighting:
+    '<path d="M8 21V4H16V6"/><rect x="13" y="6" width="6" height="3"/><path d="M5 21H11"/>',
+  location:
+    '<path d="M12 16.07L8.46 12.54A5 5 0 1 1 15.54 12.54Z"/><rect x="11" y="8" width="2" height="2" fill="currentColor" stroke="none"/><path d="M7 20H17"/>',
+  maintenance:
+    '<path d="M16 4L17 5L15 7L17 9L19 7L20 8L16 12L12 8Z"/><path d="M14 10L5 19"/>',
+  mobility:
+    '<circle cx="6.5" cy="16" r="3.5"/><circle cx="17.5" cy="16" r="3.5"/><path d="M6.5 16L10.5 12H13.5L17.5 16"/><path d="M10.5 12V9M9 9H12M13.5 12V8H16"/>',
+  monitoring:
+    '<path d="M3 12L8 7H16L21 12L16 17H8Z"/><circle cx="12" cy="12" r="2.5"/>',
+  municipality:
+    '<path d="M6 9L12 3L18 9Z"/><path d="M8 12V18M12 12V18M16 12V18"/><path d="M4 20H20"/>',
+  network:
+    '<rect x="10" y="10" width="4" height="4"/><rect x="3" y="3" width="4" height="4"/><rect x="17" y="3" width="4" height="4"/><rect x="3" y="17" width="4" height="4"/><rect x="17" y="17" width="4" height="4"/><path d="M10 10L7 7M14 10L17 7M10 14L7 17M14 14L17 17"/>',
+  noise: '<path d="M4 9H8L13 4V20L8 15H4Z"/><path d="M16.5 9V15M19.5 6V18"/>',
+  people:
+    '<circle cx="7" cy="8" r="2.5"/><circle cx="17" cy="8" r="2.5"/><path d="M3 20V17L5 15H9L11 17V20M13 20V17L15 15H19L21 17V20"/>',
+  platform:
+    '<rect x="4" y="4" width="16" height="4"/><rect x="4" y="10" width="16" height="4"/><rect x="4" y="16" width="16" height="4"/>',
+  presence: '<path d="M6 21V4H18L15 7L18 10H6"/>',
+  sensor:
+    '<rect x="6" y="13" width="12" height="7"/><path d="M10 10L12 8L14 10"/><path d="M7 9L12 4L17 9"/><path d="M10 16.5H14"/>',
+  settings:
+    '<path d="M4 7H20M4 12H20M4 17H20"/><rect x="14" y="5" width="3" height="4" fill="currentColor" stroke="none"/><rect x="7" y="10" width="3" height="4" fill="currentColor" stroke="none"/><rect x="11" y="15" width="3" height="4" fill="currentColor" stroke="none"/>',
+  sewerage:
+    '<circle cx="12" cy="12" r="8"/><path d="M9 9H15M8 12H16M9 15H15"/>',
+  shield: '<path d="M5 6H19V13L12 20L5 13Z"/><path d="M9 12L11 14L15 10"/>',
+  software:
+    '<rect x="3" y="4" width="18" height="16"/><path d="M3 8H21"/><path d="M9 11L7 13L9 15M15 11L17 13L15 15"/>',
+  temperature:
+    '<path d="M10 13V5A2 2 0 0 1 14 5V13A4 4 0 1 1 10 13Z"/><path d="M12 9V16"/>',
+  valve:
+    '<path d="M6 8V16L10 12ZM18 8V16L14 12Z"/><path d="M10 12H14M12 12V5M9 5H15"/><path d="M3 12H6M18 12H21"/>',
+  "water-meter":
+    '<circle cx="12" cy="12" r="8"/><path d="M12 8.5L14.12 10.62A3 3 0 1 1 9.88 10.62Z"/>',
+  water: '<path d="M12 3L16.95 7.95A7 7 0 1 1 7.05 7.95Z"/>',
 };
