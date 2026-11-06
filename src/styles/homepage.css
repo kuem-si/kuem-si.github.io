@@ -81,18 +81,16 @@
   border: 1px solid var(--hp-orange);
   border-radius: var(--kuem-radius-control);
   background: var(--hp-orange);
-  color: var(--kuem-white);
+  color: var(--kuem-on-action);
   font-size: var(--kuem-type-body-size);
   font-weight: 600;
   line-height: 1.35;
   text-align: center;
-  transition:
-    background var(--kuem-duration-fast),
-    box-shadow var(--kuem-duration-fast);
+  transition: background var(--kuem-duration-fast);
 }
 .hp-button:hover {
-  background: var(--kuem-copper-deep);
-  box-shadow: 0 4px 14px #161a1d14;
+  border-color: var(--kuem-action-hover);
+  background: var(--kuem-action-hover);
 }
 .hp-button span {
   font-size: var(--kuem-type-lead-size);
@@ -336,13 +334,10 @@
   background: var(--kuem-white);
   border: 1px solid var(--hp-line);
   border-radius: var(--kuem-radius-card);
-  transition:
-    border-color var(--kuem-duration-fast),
-    box-shadow var(--kuem-duration-fast);
+  transition: border-color var(--kuem-duration-fast);
 }
 .hp-card:hover {
-  border-color: var(--kuem-border);
-  box-shadow: 0 6px 20px #161a1d08;
+  border-color: var(--kuem-border-strong);
 }
 .hp-benefits .hp-card {
   padding: var(--kuem-space-16) var(--kuem-space-8) var(--kuem-space-16);
@@ -764,7 +759,7 @@
     stroke-dashoffset: -234;
   }
 }
-@media (min-width: 1500px) {
+@media (min-width: 1201px) {
   .hp-hero {
     padding-block: var(--kuem-space-64);
   }
@@ -772,7 +767,7 @@
     padding-block: var(--kuem-space-48);
   }
 }
-@media (max-width: 1100px) {
+@media (max-width: 980px) {
   .hp-wrap {
     width: calc(100% - 48px);
   }
@@ -881,7 +876,7 @@
     max-width: 285px;
   }
 }
-@media (max-width: 850px) {
+@media (max-width: 980px) {
   .hp-hero-grid {
     grid-template-columns: 1fr;
   }
@@ -1032,7 +1027,7 @@
     max-width: none;
   }
 }
-@media (max-width: 580px) {
+@media (max-width: 600px) {
   .hp-wrap {
     width: calc(100% - 36px);
   }
@@ -1703,7 +1698,7 @@
     opacity: 0;
   }
 }
-@media (max-width: 1400px) and (min-width: 1201px) {
+@media (min-width: 1201px) {
   .hp-node {
     padding-inline: var(--kuem-space-8);
   }
@@ -1855,7 +1850,7 @@
     align-items: flex-start;
   }
 }
-@media (max-width: 850px) {
+@media (max-width: 980px) {
   .hp-wrap {
     width: calc(100% - 48px);
   }
@@ -1914,7 +1909,7 @@
     font-size: var(--kuem-type-lead-size);
   }
 }
-@media (max-width: 580px) {
+@media (max-width: 600px) {
   .hp-wrap {
     width: calc(100% - 36px);
   }
