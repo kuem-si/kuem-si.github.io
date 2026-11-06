@@ -736,12 +736,14 @@
   flex-shrink: 0;
   min-height: 54px;
 }
+/* Sections below the fold rise 16 px into place. They stay fully opaque:
+   the old 15 % fade left unread sections failing text contrast. */
 .hp-reveal {
-  opacity: 0.15;
-  transition: opacity var(--kuem-duration-slow) var(--kuem-ease-standard);
+  transform: translateY(16px);
+  transition: transform var(--kuem-duration-slow) var(--kuem-ease-standard);
 }
 .hp-reveal.hp-visible {
-  opacity: 1;
+  transform: none;
 }
 @keyframes hp-travel {
   0% {
@@ -1336,7 +1338,7 @@
     scroll-behavior: auto !important;
   }
   .hp-reveal {
-    opacity: 1;
+    transform: none;
   }
 }
 /* Homepage scale: keep the existing composition readable through ultrawide screens. */
@@ -2114,7 +2116,7 @@
     transition: none !important;
   }
   .hp-reveal {
-    opacity: 1;
+    transform: none;
   }
 }
 @media print {
@@ -2123,7 +2125,7 @@
     display: none;
   }
   .hp-reveal {
-    opacity: 1;
+    transform: none;
   }
   .hp-kai,
   .hp-closing {
