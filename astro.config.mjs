@@ -28,11 +28,14 @@ export default defineConfig({
         optional: true,
       }),
       // Base URL of the Odoo instance. Form submissions create CRM leads via
-      // Odoo's /website/form/crm.lead. Not a secret; override in .env.
+      // Odoo's /website/form/crm.lead. Uses the kuem.si CNAME to the Odoo
+      // instance (always HTTPS). Not a secret; override in .env.
       PUBLIC_ODOO_URL: envField.string({
         context: "client",
         access: "public",
-        default: "https://kuem-doo.odoo.com",
+        default: "https://contactform.kuem.si",
+        url: true,
+        startsWith: "https://",
       }),
     },
   },
