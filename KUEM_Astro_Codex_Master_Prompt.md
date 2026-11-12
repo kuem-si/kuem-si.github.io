@@ -1,5 +1,13 @@
 # KUEM Astro Website — Codex Master Prompt
 
+> **DEPRECATED (2026-11-12).** This is the prompt the site was first built from. Do not use it for new work. The brand rules, colours and assets it names have since been replaced by approved, released sources:
+>
+> - KUEM: `kuem-si/kuem-visual-identity` (tokens, wordmark, website component rules); public files in `kuem-si/kuem-brand-assets`.
+> - Nexavia: released v1.4.1; public files in `kuem-si/nexavia-brand-assets`.
+> - KAI: released identity-v1.5.0; public files in `kuem-si/kai-brand-assets`. The August 2026 "KAI CGP" package this prompt refers to was never an approved KAI identity.
+>
+> The text below is kept unchanged as a record.
+
 Use this prompt in Codex inside Visual Studio Code. Open the root folder of the KUEM Astro project, place `KUEM_CGP_Complete_Package.zip` or the extracted CGP assets in the repository, and then paste the prompt below into Codex.
 
 ---
