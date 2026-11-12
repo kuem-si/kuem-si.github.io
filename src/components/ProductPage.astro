@@ -4,7 +4,7 @@ import CTA from "./CTA.astro";
 import DataVisual from "./DataVisual.astro";
 import type { Locale } from "../lib/i18n";
 import nexavia from "../assets/brand/nexavia/official/NEXAVIA-web-White.svg";
-import kai from "../assets/brand/kai/KAI_by_KUEM_Dark.svg";
+import kai from "../assets/brand/kai/kai-lockup-endorsed-on-dark.svg";
 import { nexaviaSoftware, kaiSoftware } from "../data/organization";
 import { kaiContent } from "../data/kai";
 const { locale, product } = Astro.props as {
@@ -203,10 +203,12 @@ const features = isKai ? copy.kaiFeatures : copy.nexaviaFeatures;
       <div>
         <img
           src={(isKai ? kai : nexavia).src}
-          width="300"
+          width={isKai ? 200 : 300}
           height={Math.round(
-            (300 * (isKai ? kai : nexavia).height) / (isKai ? kai : nexavia).width,
+            ((isKai ? 200 : 300) * (isKai ? kai : nexavia).height) /
+              (isKai ? kai : nexavia).width,
           )}
+          style={isKai ? "display:block;margin-block-end:24px" : undefined}
           alt={isKai ? "KAI by KUEM" : "Nexavia"}
         /><h1>{title}</h1><p class="lead">{lead}</p>{
           isKai && <p>{copy.worksWith}</p>
