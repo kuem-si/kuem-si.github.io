@@ -61,6 +61,9 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
     "aria-label",
     t("Vodeni scenariji", "Guided scenarios", "Geführte Szenarien"),
   );
+  // The chips stay disabled until the scene is ready; until then the strip
+  // itself takes focus so a keyboard can still scroll it on a phone (WCAG 2.1.1).
+  launcher.tabIndex = 0;
   // The introduction (`intro: true`) comes first, marked as the place to
   // start, ahead of the numbered scenarios.
   const label = `<span class="twin-scenarios-label">${t("Vodeni scenariji", "Guided scenarios", "Geführte Szenarien")}</span>`;
@@ -409,6 +412,7 @@ export function initScenarios(root, api, scenarios, { onChange } = {}) {
       launcher
         .querySelectorAll("[data-scenario]")
         .forEach((button) => (button.disabled = false));
+      launcher.removeAttribute("tabindex");
     },
     // Opens a scenario from a link: from the start, or held on one step.
     open(id, step = 0, hold = false) {
