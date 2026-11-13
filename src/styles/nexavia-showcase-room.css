@@ -4290,6 +4290,14 @@
   fill: transparent;
   stroke: none;
 }
+/* Keyboard focus outlines the asset itself with the Kuem focus ring
+   (governance universal.focus-visible); the chip alone is not enough. */
+.city-device:focus-visible .city-device-shape {
+  stroke: var(--kuem-focus);
+  stroke-width: var(--kuem-focus-width);
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
 /* Hover/focus callout: a small state label joined by a hairline to a dot on the asset itself. */
 .city-device-chip {
   --lead: 14px;
@@ -4366,9 +4374,9 @@
   transform: translate(-50%, 50%);
 }
 .city-device-chip.is-focus {
-  border-color: var(--kuem-white);
+  border-color: var(--kuem-focus);
   box-shadow:
-    0 0 0 2px color-mix(in srgb, var(--kuem-white) 35%, transparent),
+    0 0 0 1px var(--kuem-focus),
     0 6px 16px color-mix(in srgb, var(--kuem-background) 30%, transparent);
 }
 .city-device-chip b {
