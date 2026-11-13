@@ -443,11 +443,11 @@ const scriptData = explorer.map(({ icon: _icon, ...rest }) => rest);
                         stroke="#e8e6e1"></path><polyline
                         points="0,142 20,135 40,142 60,124 80,130 100,120 120,125 140,108 160,116 180,100 200,110 220,93 240,103 260,84 280,94 300,74 320,90 340,72 360,85 380,57 400,65 420,42 440,52"
                         fill="none"
-                        stroke="#4fa3ad"
+                        class="pi-line"
                         stroke-width="3"></polyline><polyline
                         points="0,154 20,149 40,151 60,145 80,143 100,142 120,137 140,135 160,139 180,131 200,129 220,130 240,125 260,121 280,125 300,115 320,111 340,116 360,107 380,98 400,102 420,90 440,94"
                         fill="none"
-                        stroke="#4fa3ad"
+                        class="pi-line pi-line--compare"
                         stroke-width="2"></polyline></svg
                     >
                   </div><div class="pi-app-map">
@@ -468,23 +468,32 @@ const scriptData = explorer.map(({ icon: _icon, ...rest }) => rest);
                         d="M40 0 90 190M190 0 245 190M315 0 270 190"
                         stroke="#c9c7c1"
                         stroke-width="3"></path><circle
+                        class="pi-marker pi-marker--ok"
                         cx="76"
                         cy="97"
-                        r="6"
-                        fill="#00c896"></circle><circle
-                        cx="166"
-                        cy="124"
-                        r="6"
-                        fill="#f06432"></circle><circle
+                        r="6"></circle><path
+                        class="pi-marker pi-marker--critical"
+                        d="M166 116 174 124 166 132 158 124Z"></path><circle
+                        class="pi-marker pi-marker--ok"
                         cx="230"
                         cy="76"
-                        r="6"
-                        fill="#00c896"></circle><circle
-                        cx="308"
-                        cy="103"
-                        r="6"
-                        fill="#ffb020"></circle></svg
-                    ><small>{copy.legend}</small>
+                        r="6"></circle><path
+                        class="pi-marker pi-marker--warning"
+                        d="M308 95 316 109H300Z"></path></svg
+                    ><ul class="pi-legend">
+                      {
+                        copy.legend.split(" · ").map((label, index) => (
+                          <li>
+                            <svg viewBox="0 0 16 16" aria-hidden="true">
+                              {index === 0 && <circle class="pi-marker pi-marker--ok" cx="8" cy="8" r="6" />}
+                              {index === 1 && <path class="pi-marker pi-marker--warning" d="M8 1 15 14H1Z" />}
+                              {index === 2 && <path class="pi-marker pi-marker--critical" d="M8 0 16 8 8 16 0 8Z" />}
+                            </svg>
+                            {label}
+                          </li>
+                        ))
+                      }
+                    </ul>
                   </div>
                 </div><div class="pi-app-alert">
                   <span aria-hidden="true">△</span><span

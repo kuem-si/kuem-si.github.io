@@ -496,25 +496,39 @@ html:not(.js) .nx-role-panel[hidden] {
   padding-top: var(--kuem-space-16);
   font-size: var(--kuem-type-small-size);
 }
+/* The KAI panel is drawn in KAI's own light tokens (kai-brand-assets
+   identity-v1.5.0, tokens/kai.tokens.light.json), not in Kuem colours: Kuem
+   DESIGN-SYSTEM.md shows products "as they really look", and KAI never uses
+   brand colour for priority. Flat, per Kuem ADR 0014. */
 .nx-kai-panel {
-  background: var(--kuem-white);
-  color: var(--kuem-text-primary);
+  --kai-surface: #ffffff;
+  --kai-border-subtle: #d3d8dc;
+  --kai-text-default: #151a1e;
+  --kai-text-muted: #5d646a;
+  --kai-warning-fg: #8d5e00;
+  --kai-warning-bg: #fff5e8;
+  --kai-warning-border: #fbc77c;
+  --kai-series-1: #005c86;
+  --kai-grid: #e3e9ed;
+  --kai-recommendation-border: #004869;
+  background: var(--kai-surface);
+  color: var(--kai-text-default);
+  border: 1px solid var(--kai-border-subtle);
   border-radius: var(--kuem-radius-card);
   padding: var(--kuem-space-16);
-  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.15);
 }
 .nx-kai-panel-head {
   display: flex;
   justify-content: space-between;
   gap: var(--kuem-space-8);
-  border-bottom: 1px solid var(--kuem-concrete);
+  border-bottom: 1px solid var(--kai-border-subtle);
   padding-bottom: var(--kuem-space-16);
   font-size: var(--kuem-type-small-size);
 }
-.nx-kai-panel-head span {
-  color: var(--kuem-text-primary);
-  background: var(--kuem-surface-1);
-  box-shadow: inset 3px 0 0 var(--kuem-copper-deep);
+.nx-kai-panel-head > span {
+  color: var(--kai-warning-fg);
+  background: var(--kai-warning-bg);
+  border: 1px solid var(--kai-warning-border);
   padding: var(--kuem-space-4) var(--kuem-space-8);
   border-radius: var(--kuem-radius-control);
 }
@@ -525,12 +539,23 @@ html:not(.js) .nx-role-panel[hidden] {
   margin: var(--kuem-space-16) 0;
 }
 .nx-alert > span {
-  color: var(--kuem-copper);
+  color: var(--kai-warning-fg);
   font-size: 2rem;
 }
 .nx-alert small {
   display: block;
-  color: var(--kuem-text-muted);
+  color: var(--kai-text-muted);
+}
+.nx-kai-grid-line {
+  stroke: var(--kai-grid);
+}
+.nx-kai-series {
+  stroke: var(--kai-series-1);
+}
+.nx-kai-point {
+  fill: var(--kai-warning-fg);
+  stroke: var(--kai-surface);
+  stroke-width: 3;
 }
 .nx-kai-panel > p {
   font-size: var(--kuem-type-label-size);
@@ -541,12 +566,12 @@ html:not(.js) .nx-role-panel[hidden] {
 }
 .nx-recommendation {
   padding: var(--kuem-space-16);
-  border: 1px solid var(--kuem-concrete);
+  border: 1px solid var(--kai-recommendation-border);
   border-radius: var(--kuem-radius-control);
 }
 .nx-recommendation p {
   margin: var(--kuem-space-4) 0;
-  color: var(--kuem-text-muted);
+  color: var(--kai-text-muted);
 }
 .nx-integrations {
   background: var(--kuem-white);
