@@ -497,7 +497,8 @@ html:not(.js) .nx-role-panel[hidden] {
   font-size: var(--kuem-type-small-size);
 }
 /* The KAI panel is drawn in KAI's own light tokens (kai-brand-assets
-   identity-v1.5.0, tokens/kai.tokens.light.json), not in Kuem colours: Kuem
+   identity-v1.5.0, tokens/kai.tokens.light.json), not in Kuem colours, except
+   status colours, which follow the Nexavia host (governance ADR 0004). Kuem
    DESIGN-SYSTEM.md shows products "as they really look", and KAI never uses
    brand colour for priority. Flat, per Kuem ADR 0014. */
 .nx-kai-panel {
@@ -505,9 +506,11 @@ html:not(.js) .nx-role-panel[hidden] {
   --kai-border-subtle: #d3d8dc;
   --kai-text-default: #151a1e;
   --kai-text-muted: #5d646a;
-  --kai-warning-fg: #8d5e00;
-  --kai-warning-bg: #fff5e8;
-  --kai-warning-border: #fbc77c;
+  /* Status colours come from the host (governance ADR 0004): Nexavia
+     --nx-color-status-warning, nexavia-visual-identity v1.4.1
+     dist/web/nexavia.tokens.css. Nexavia defines no warning surface, so the
+     pill keeps the panel surface with a warning border, icon and label. */
+  --host-status-warning: #8a5a00;
   --kai-series-1: #005c86;
   --kai-grid: #e3e9ed;
   --kai-recommendation-border: #004869;
@@ -526,9 +529,9 @@ html:not(.js) .nx-role-panel[hidden] {
   font-size: var(--kuem-type-small-size);
 }
 .nx-kai-panel-head > span {
-  color: var(--kai-warning-fg);
-  background: var(--kai-warning-bg);
-  border: 1px solid var(--kai-warning-border);
+  color: var(--host-status-warning);
+  background: var(--kai-surface);
+  border: 1px solid var(--host-status-warning);
   padding: var(--kuem-space-4) var(--kuem-space-8);
   border-radius: var(--kuem-radius-control);
 }
@@ -539,7 +542,7 @@ html:not(.js) .nx-role-panel[hidden] {
   margin: var(--kuem-space-16) 0;
 }
 .nx-alert > span {
-  color: var(--kai-warning-fg);
+  color: var(--host-status-warning);
   font-size: 2rem;
 }
 .nx-alert small {
@@ -553,7 +556,7 @@ html:not(.js) .nx-role-panel[hidden] {
   stroke: var(--kai-series-1);
 }
 .nx-kai-point {
-  fill: var(--kai-warning-fg);
+  fill: var(--host-status-warning);
   stroke: var(--kai-surface);
   stroke-width: 3;
 }
