@@ -1,7 +1,7 @@
 /*
  * Copied unchanged from kuem-si/kuem-visual-identity dist/kuem-tokens.css
- * (branch claude/project-thread-b6446k @b11886c, identity PR #16). Update it by
- * copying that file again; do not edit here.
+ * (release v1.1.0 @6826d96487f0b0a4ebf3cd2b475893bc91c0bb62, sha256 ed018ac45c0686c1c95e2bded6766c8a8be9aeaa87ae158faa4dbd489934abca).
+ * Update it only by copying that file again from a newer release tag; do not edit here.
  * SeoHead.astro inlines it in every page head, ahead of critical.css.
  */
 /*
