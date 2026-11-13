@@ -5938,6 +5938,32 @@
     gap: 4px;
   }
 }
+/* Phones (inline view): the clock and the toggles sit in a band above the
+   model instead of over it, so no hotspot or sensor is covered (owner card,
+   2026-11-13). Row 1: the clock; row 2: the toggles. Full screen keeps the
+   overlay layout. */
+@media (max-width: 600px) {
+  .twin-workspace:not(:fullscreen) .twin-scene-wrap {
+    padding-top: 88px;
+    background: var(--kuem-surface-1);
+  }
+  .twin-workspace:not(:fullscreen) .city-art {
+    overflow: visible;
+  }
+  /* A third toggle (the data-centre heat map) wraps to a second row. */
+  .twin-workspace:not(:fullscreen)
+    .twin-scene-wrap:has(.city-art-tools > :nth-child(3)) {
+    padding-top: 116px;
+  }
+  .twin-workspace:not(:fullscreen) .city-art-tools {
+    top: auto;
+    bottom: calc(100% + 8px);
+    right: 8px;
+    left: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
 
 /* Data flow (dataflow.js): radio links, packets and the gateway. */
 .city-flow {
