@@ -349,9 +349,46 @@
   height: 140px;
   margin-top: var(--kuem-space-8);
 }
-.pi-app-map small {
+/* Status markers use the light-scheme status tokens and a shape per state, so
+   state never depends on colour alone (universal.not-colour-alone). */
+.pi-line {
+  stroke: var(--kuem-data);
+}
+.pi-line--compare {
+  stroke-dasharray: 6 4;
+}
+.pi-marker {
+  stroke: var(--kuem-white);
+  stroke-width: 2;
+}
+.pi-marker--ok {
+  fill: var(--kuem-status-ok);
+}
+.pi-marker--warning {
+  fill: var(--kuem-status-warning);
+}
+.pi-marker--critical {
+  fill: var(--kuem-status-critical);
+}
+.pi-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kuem-space-4) var(--kuem-space-16);
+  margin: var(--kuem-space-8) 0 0;
+  padding: 0;
+  list-style: none;
   color: var(--kuem-text-muted);
   font-size: var(--kuem-type-label-size);
+}
+.pi-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kuem-space-4);
+}
+.pi-app-map .pi-legend svg {
+  width: 12px;
+  height: 12px;
+  margin: 0;
 }
 .pi-app-alert {
   display: flex;

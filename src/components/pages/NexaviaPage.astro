@@ -467,7 +467,7 @@ const moduleIcons = [
       </figure>
     </div>
   </section>
-  <section class="nx-trust" aria-label={copy.trustAria}>
+  <section class="nx-trust">
     <div class="container">
       <p class="nx-eyebrow">{copy.trustEyebrow}</p
       ><TrustedCompanies label={copy.trustLabel} />
@@ -671,7 +671,9 @@ const moduleIcons = [
         </ul><p class="nx-human">{copy.kaiHuman}</p>
       </div><div class="nx-kai-panel">
         <div class="nx-kai-panel-head">
-          <strong>{copy.kaiPanelHead}</strong><span>{copy.kaiPriority}</span>
+          <strong>{copy.kaiPanelHead}</strong><span
+            ><span aria-hidden="true">△</span> {copy.kaiPriority}</span
+          >
         </div><div class="nx-alert">
           <span aria-hidden="true">△</span><div>
             <strong>{copy.kaiAlert}</strong><small>{copy.kaiAlertSmall}</small>
@@ -680,16 +682,16 @@ const moduleIcons = [
           viewBox="0 0 460 150"
           role="img"
           aria-label={copy.kaiChartAria}
-          ><path d="M0 125H460M0 90H460M0 55H460M0 20H460" stroke="#e8e6e1"
+          ><path d="M0 125H460M0 90H460M0 55H460M0 20H460" class="nx-kai-grid-line"
           ></path><polyline
             points="0,104 25,95 50,105 75,98 100,106 125,91 150,97 175,88 200,96 225,89 250,98 275,94 300,102 325,92 350,100 375,94 400,37 415,90 440,94 460,89"
             fill="none"
-            stroke="#4fa3ad"
+            class="nx-kai-series"
             stroke-width="3"></polyline><circle
             cx="400"
             cy="37"
             r="7"
-            fill="#f06432"></circle></svg
+            class="nx-kai-point"></circle></svg
         ><div class="nx-recommendation">
           <strong>{copy.kaiRecommendation}</strong><p>
             {copy.kaiRecommendationP}
