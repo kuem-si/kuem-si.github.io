@@ -956,8 +956,11 @@
 .city-sensor[aria-expanded="true"] {
   z-index: 1;
 }
+/* Keyboard focus uses the Kuem focus ring (governance universal.focus-visible),
+   never the sensor's status tone. */
 .city-sensor:focus-visible {
-  outline: none;
+  outline: var(--kuem-focus-width) solid var(--kuem-focus);
+  outline-offset: var(--kuem-focus-offset);
 }
 .city-sensor-dot {
   position: absolute;
@@ -988,12 +991,6 @@
 .city-sensor:hover .city-sensor-dot,
 .city-sensor:focus-visible .city-sensor-dot {
   scale: 1.25;
-}
-.city-sensor:focus-visible .city-sensor-dot {
-  box-shadow:
-    0 0 0 1.5px var(--kuem-white),
-    0 0 0 5px var(--tone),
-    0 3px 8px color-mix(in srgb, var(--kuem-background) 65%, transparent);
 }
 .city-sensor[aria-expanded="true"] .city-sensor-dot {
   scale: 1.35;
