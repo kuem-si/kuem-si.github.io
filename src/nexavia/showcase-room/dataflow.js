@@ -9,7 +9,11 @@ const UPLINK_GAP = 1500;
 // One packet trip takes one pass of the data marker (2.4 s).
 const TRIP = 2400;
 const BEAM = 300;
-const COMMAND = "#f06432";
+// KUEM copper (--kuem-copper), read from the token so a token release reaches the canvas.
+const COMMAND =
+  getComputedStyle(document.documentElement)
+    .getPropertyValue("--kuem-copper")
+    .trim() || "#f06432";
 const FAILED = "#fe5c58";
 
 // The point a fraction s of the way along a polyline.
@@ -250,7 +254,7 @@ export function initDataFlow(root, { gateway }) {
       return false;
     lastUplink.set(key, time);
     const color =
-      getComputedStyle(end.pin).getPropertyValue("--tone").trim() || "#4fa3ad";
+      getComputedStyle(end.pin).getPropertyValue("--tone").trim() || "#4fa3ad"; // --kuem-petrol-light
     // Readings that change together leave their sensors a moment apart.
     send(end, {
       color,
