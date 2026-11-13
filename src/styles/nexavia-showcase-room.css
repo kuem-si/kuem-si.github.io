@@ -431,7 +431,7 @@
     align-items: start;
   }
 }
-@media (max-width: 640px) {
+@media (max-width: 600px) {
   .twin-page {
     padding: 2rem 1rem 3rem;
   }
@@ -620,7 +620,7 @@
 .twin-controls span {
   color: var(--kuem-text-secondary);
 }
-@media (max-width: 640px) {
+@media (max-width: 600px) {
   .twin-scene-wrap {
     overflow-x: auto;
     overscroll-behavior-inline: contain;
@@ -1910,7 +1910,7 @@
   margin-top: 11px;
   padding-top: 9px;
 }
-@media (max-width: 1100px) {
+@media (max-width: 980px) {
   .twin-workspace {
     grid-template-columns: 1fr;
   }
@@ -1922,7 +1922,7 @@
     max-height: none;
   }
 }
-@media (max-width: 640px) {
+@media (max-width: 600px) {
   .xdr-bezel {
     padding: 7px;
     border-radius: var(--kuem-radius-card);
@@ -2183,7 +2183,7 @@
   font-size: var(--kuem-type-label-size);
   color: var(--kuem-text-muted);
 }
-@media (max-width: 640px) {
+@media (max-width: 600px) {
   .xdr-display .twin-brand {
     gap: 7px;
   }
@@ -2252,7 +2252,7 @@
 .twin-workspace:fullscreen .xdr-display .twin-dashboard {
   max-height: none;
 }
-@media (max-width: 900px) {
+@media (max-width: 980px) {
   .twin-workspace:fullscreen {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr) minmax(0, 0.9fr);
@@ -2381,7 +2381,7 @@
 .twin-workspace:fullscreen .xdr-display .twin-dashboard {
   max-height: none;
 }
-@media (max-width: 700px) {
+@media (max-width: 600px) {
   .twin-workspace:fullscreen .xdr-display {
     top: 64px;
     right: 10px;
@@ -2401,7 +2401,7 @@
 .xdr-overlay-tools {
   display: none;
 }
-@media (max-width: 700px) {
+@media (max-width: 600px) {
   .twin-workspace:fullscreen .xdr-screen {
     max-height: calc(70dvh - 70px);
   }
@@ -2469,7 +2469,7 @@
 .twin-workspace:not(:fullscreen) .xdr-display .twin-dashboard {
   max-height: none;
 }
-@media (max-width: 700px) {
+@media (max-width: 600px) {
   .twin-workspace:not(:fullscreen) .xdr-display {
     top: 5%;
     right: 3%;
@@ -3404,7 +3404,7 @@
 .twin-workspace .xdr-restore[hidden] {
   display: none;
 }
-@media (max-width: 700px) {
+@media (max-width: 600px) {
   .twin-workspace .xdr-restore {
     top: 10px;
     right: 10px;
@@ -4468,7 +4468,7 @@
   display: flex;
   visibility: hidden;
 }
-@media (max-width: 640px) {
+@media (max-width: 600px) {
   .twin-intros > .twin-intro[hidden] {
     display: block;
   }
@@ -5328,7 +5328,7 @@
   background: var(--kuem-data);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--kuem-data) 16%, transparent);
 }
-@media (max-width: 700px) {
+@media (max-width: 600px) {
   /* On a phone the strip stays one row and scrolls sideways. */
   .twin-scenarios {
     flex-wrap: nowrap;
@@ -5720,7 +5720,7 @@
   bottom: auto;
   left: 14px;
 }
-@media (max-width: 700px) {
+@media (max-width: 600px) {
   .twin-clock {
     top: 8px;
     bottom: auto;
@@ -6035,7 +6035,7 @@
   white-space: nowrap;
   cursor: help;
 }
-@media (max-width: 640px) {
+@media (max-width: 600px) {
   .twin-status {
     align-items: flex-start;
     margin-top: 0.6rem;

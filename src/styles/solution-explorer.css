@@ -211,7 +211,7 @@
   width: var(--panel-width);
   height: 100dvh;
   background: var(--kuem-white);
-  box-shadow: -12px 0 40px #161a1d12;
+  box-shadow: var(--kuem-shadow-overlay);
   border-left: 1px solid var(--kuem-concrete);
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
@@ -578,7 +578,7 @@
     border-left: 0;
     border-top: 1px solid var(--kuem-concrete);
     transform: translateY(100%);
-    box-shadow: 0 -12px 50px #161a1d30;
+    box-shadow: var(--kuem-shadow-overlay);
   }
   .solution-panel.is-open {
     transform: translateY(0);

@@ -389,7 +389,7 @@ html:not(.js) .nx-role-panel[hidden] {
   grid-template-columns: repeat(4, 1fr);
   gap: var(--kuem-space-16);
 }
-@media (max-width: 1100px) {
+@media (max-width: 980px) {
   .nx-showroom-twins {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -448,7 +448,7 @@ html:not(.js) .nx-role-panel[hidden] {
   font-weight: 700;
   margin-top: var(--kuem-space-4);
 }
-@media (max-width: 760px) {
+@media (max-width: 600px) {
   .nx-showroom-twins {
     grid-template-columns: 1fr;
   }
@@ -625,7 +625,7 @@ html:not(.js) .nx-role-panel[hidden] {
 .nx-closing .btn {
   flex: none;
 }
-@media (max-width: 1100px) {
+@media (max-width: 980px) {
   .nx-hero-grid {
     grid-template-columns: minmax(250px, 0.85fr) minmax(0, 1.25fr);
     gap: var(--kuem-space-24);
@@ -638,7 +638,7 @@ html:not(.js) .nx-role-panel[hidden] {
     flex-direction: column;
   }
 }
-@media (max-width: 760px) {
+@media (max-width: 600px) {
   .nx-hero-grid,
   .nx-role-panel,
   .nx-kai-grid {
@@ -668,7 +668,7 @@ html:not(.js) .nx-role-panel[hidden] {
     flex-direction: column;
   }
 }
-@media (max-width: 500px) {
+@media (max-width: 600px) {
   .nx-actions {
     flex-direction: column;
     align-items: stretch;
@@ -819,7 +819,7 @@ body:has(.nx-hero) .site-header .header-contact:hover,
 body:has(.nx-hero) .site-header .header-contact:focus-visible {
   background: var(--kuem-concrete) !important;
 }
-@media (min-width: 1101px) {
+@media (min-width: 981px) {
   .nx-hero-grid {
     grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.55fr);
   }
@@ -858,7 +858,7 @@ body:has(.nx-hero) .site-header .header-contact:focus-visible {
   body:has(.nx-hero) .site-header nav.open {
     background: var(--kuem-white);
     color: var(--kuem-text-primary);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--kuem-shadow-overlay);
   }
   body:has(.nx-hero) .site-header .header-actions {
     display: none !important;
