@@ -79,21 +79,21 @@ const defaultUse = (kind: "sensor" | "meter") =>
       {/* An incised cut lit from above: darker floor, shadowed upper wall,
           light catching the lower wall, and a fine chamfer on the surface. */}
       <filter id={id("engrave-cut")} x="-4%" y="-12%" width="108%" height="124%" color-interpolation-filters="sRGB">
-        <feFlood flood-color="#17191b" result="floorColor" />
+        <feFlood style="flood-color: var(--sr-maquette-floor)" result="floorColor" />
         <feComposite in="floorColor" in2="SourceAlpha" operator="in" result="floor" />
         <feOffset in="SourceAlpha" dy="3.2" result="down" />
         <feComposite in="SourceAlpha" in2="down" operator="out" result="upperWallArea" />
         <feGaussianBlur in="upperWallArea" stdDeviation="0.9" result="upperWallSoft" />
-        <feFlood flood-color="#040505" flood-opacity=".95" />
+        <feFlood style="flood-color: var(--sr-maquette-shadow)" flood-opacity=".95" />
         <feComposite in2="upperWallSoft" operator="in" result="upperWall" />
         <feOffset in="SourceAlpha" dy="-2.4" result="up" />
         <feComposite in="SourceAlpha" in2="up" operator="out" result="lowerWallArea" />
-        <feFlood flood-color="#9aa6ab" flood-opacity=".5" />
+        <feFlood style="flood-color: var(--sr-maquette-edge-light)" flood-opacity=".5" />
         <feComposite in2="lowerWallArea" operator="in" result="lowerWall" />
         <feMerge result="cut"><feMergeNode in="floor" /><feMergeNode in="upperWall" /><feMergeNode in="lowerWall" /></feMerge>
         <feComposite in="cut" in2="SourceAlpha" operator="in" result="inside" />
         <feComposite in="up" in2="SourceAlpha" operator="out" result="chamferArea" />
-        <feFlood flood-color="#6d777c" flood-opacity=".32" />
+        <feFlood style="flood-color: var(--sr-maquette-edge-dark)" flood-opacity=".32" />
         <feComposite in2="chamferArea" operator="in" result="chamfer" />
         <feMerge><feMergeNode in="chamfer" /><feMergeNode in="inside" /></feMerge>
       </filter>
@@ -104,25 +104,25 @@ const defaultUse = (kind: "sensor" | "meter") =>
         <rect class="engrave-wipe" x="60" y="55" width="305" height="100" />
       </clipPath>
       <linearGradient id={id("engrave-heat-fill")}>
-        <stop offset="0" stop-color="#ff5a14" stop-opacity="0" />
-        <stop offset=".62" stop-color="#ff7a24" stop-opacity=".6" />
-        <stop offset=".9" stop-color="#ffc56a" stop-opacity=".95" />
-        <stop offset="1" stop-color="#fff6de" />
+        <stop offset="0" style="stop-color: var(--sr-maquette-glow-1)" stop-opacity="0" />
+        <stop offset=".62" style="stop-color: var(--sr-maquette-glow-2)" stop-opacity=".6" />
+        <stop offset=".9" style="stop-color: var(--sr-maquette-glow-3)" stop-opacity=".95" />
+        <stop offset="1" style="stop-color: var(--sr-maquette-glow-4)" />
       </linearGradient>
       <radialGradient id={id("engrave-spot-fill")}>
-        <stop offset="0" stop-color="#fff" />
-        <stop offset=".22" stop-color="#fff3d2" />
-        <stop offset=".5" stop-color="#ff9b3d" stop-opacity=".55" />
-        <stop offset="1" stop-color="#ff6a1a" stop-opacity="0" />
+        <stop offset="0" style="stop-color: var(--kuem-white)" />
+        <stop offset=".22" style="stop-color: var(--sr-maquette-core-2)" />
+        <stop offset=".5" style="stop-color: var(--sr-maquette-core-3)" stop-opacity=".55" />
+        <stop offset="1" style="stop-color: var(--sr-maquette-core-4)" stop-opacity="0" />
       </radialGradient>
       <radialGradient id={id("engrave-glow-fill")}>
-        <stop offset="0" stop-color="#ffb566" stop-opacity=".5" />
-        <stop offset="1" stop-color="#ff8a33" stop-opacity="0" />
+        <stop offset="0" style="stop-color: var(--sr-maquette-halo-1)" stop-opacity=".5" />
+        <stop offset="1" style="stop-color: var(--sr-maquette-halo-2)" stop-opacity="0" />
       </radialGradient>
       <linearGradient id={id("engrave-sheen-fill")} x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" stop-color="#fff" stop-opacity="0" />
-        <stop offset=".5" stop-color="#fff" stop-opacity=".5" />
-        <stop offset="1" stop-color="#fff" stop-opacity="0" />
+        <stop offset="0" style="stop-color: var(--kuem-white)" stop-opacity="0" />
+        <stop offset=".5" style="stop-color: var(--kuem-white)" stop-opacity=".5" />
+        <stop offset="1" style="stop-color: var(--kuem-white)" stop-opacity="0" />
       </linearGradient>
     </defs>
     <g clip-path={`url(#${id("engrave-progress")})`}>
@@ -143,7 +143,7 @@ const defaultUse = (kind: "sensor" | "meter") =>
           <ellipse class="engrave-glow" cx="60" cy="106" rx="90" ry="62" fill={`url(#${id("engrave-glow-fill")})`} />
           <g class="engrave-raster">
             <circle cx="60" cy="71" r="16" fill={`url(#${id("engrave-spot-fill")})`} />
-            <circle class="engrave-core" cx="60" cy="71" r="2.6" fill="#fff" />
+            <circle class="engrave-core" cx="60" cy="71" r="2.6" style="fill: var(--kuem-white)" />
           </g>
         </g>
       </g>
