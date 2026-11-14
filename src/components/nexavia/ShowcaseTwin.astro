@@ -70,6 +70,14 @@ const views = [
       <div class="twin-scene-wrap">
         <ShowcaseRoomMaquette locale={locale} twin={twin.id} scene={twin.scene} />
       </div>
+      {/* Phones only: some pins sit too close together to tap, so the same
+          sensors are listed here; each entry opens its pin's card. */}
+      <div class="twin-sensor-list" role="group" aria-label={t("Senzorji in merilniki", "Sensors and meters", "Sensoren und Zähler")}>
+        <span class="twin-scenarios-label">{t("Senzorji", "Sensors", "Sensoren")}</span>
+        {twin.scene.sensors.map((sensor) => (
+          <button type="button" data-sensor-list={sensor.key} aria-expanded="false" aria-controls={`${twin.id}-popover-${sensor.key}`}><b>{sensor.tag}</b>{sensor.label}</button>
+        ))}
+      </div>
       <div class="twin-controls">
         <button type="button" data-city-fullscreen aria-pressed="false">{t("Odpri celozaslonski pogled", "Open full screen", "Vollbild öffnen")}</button>
         <button type="button" data-overlay-toggle aria-pressed="true">{t("Skrij nadzorno ploščo", "Hide dashboard", "Dashboard ausblenden")}</button>

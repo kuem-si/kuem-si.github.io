@@ -930,11 +930,11 @@ export function initTwin(root, config) {
       .querySelectorAll(".city-sensor-popover[data-pinned='true']")
       .forEach((item) => (item.dataset.pinned = "false"));
     root
-      .querySelectorAll("[data-sensor-pin]")
+      .querySelectorAll("[data-sensor-pin], [data-sensor-list]")
       .forEach((pin) =>
         pin.setAttribute(
           "aria-expanded",
-          String(pin.dataset.sensorPin === name),
+          String((pin.dataset.sensorPin ?? pin.dataset.sensorList) === name),
         ),
       );
     const popover =
@@ -990,6 +990,15 @@ export function initTwin(root, config) {
         .forEach((hint) => hint.classList.add("is-quiet"));
     });
   });
+  // The phone sensor list opens a pin's card through the pin itself.
+  root.querySelectorAll("[data-sensor-list]").forEach((entry) => {
+    entry.addEventListener("click", () => {
+      const pin = $(`[data-sensor-pin="${entry.dataset.sensorList}"]`);
+      if (!pin) return;
+      pin.click();
+      pin.closest("[data-city-art]")?.scrollIntoView({ block: "nearest" });
+    });
+  });
   root
     .querySelectorAll("[data-sensor-send]")
     .forEach((control) =>
@@ -1042,7 +1051,7 @@ export function initTwin(root, config) {
     if (directed || !openCard()) return;
     if (
       event.target.closest(
-        "[data-sensor-pin], .city-sensor-popover, .twin-timeline [data-target]",
+        "[data-sensor-pin], [data-sensor-list], .city-sensor-popover, .twin-timeline [data-target]",
       )
     )
       return;
@@ -1315,6 +1324,10 @@ export function initTwin(root, config) {
         (site === "all" || !pin.dataset.site || pin.dataset.site === site);
       pin.classList.toggle("is-filtered", !shown);
       pin.tabIndex = shown ? 0 : -1;
+      const entry = root.querySelector(
+        `[data-sensor-list="${pin.dataset.sensorPin}"]`,
+      );
+      if (entry) entry.hidden = !shown;
       if (!shown && pin.getAttribute("aria-expanded") === "true") pinCard(null);
     });
   }

@@ -154,6 +154,7 @@ const defaultUse = (kind: "sensor" | "meter") =>
     {scene.lighting.map(({ id: device, label, shape, hit, anchor }) => (
       <g class="city-device" data-device={device} data-anchor={anchor.join(" ")} role="button" tabindex="0" aria-pressed="false" aria-label={`${label}, ${device}`}>
         {hit && <path class="city-device-hit" d={hit} />}
+        {hit && <circle class="city-device-hit city-device-hit--phone" cx={anchor[0]} cy={anchor[1]} r="56" />}
         <path class="city-device-shape" d={shape} />
       </g>
     ))}

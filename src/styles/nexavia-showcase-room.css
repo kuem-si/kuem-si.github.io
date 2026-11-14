@@ -4282,8 +4282,64 @@
     -webkit-tap-highlight-color: transparent;
   }
 }
-.city-device path {
+.city-device path,
+.city-device circle {
   pointer-events: all;
+}
+/* Lamp heads shrink to about 11 px on phones. Below 600 px each lamp also gets
+   a 112-unit circle around its head (about 27 CSS px at 390 px, no overlap between
+   neighbouring lamps; governance universal.target-size, WCAG 2.5.8). */
+.city-device-hit--phone {
+  display: none;
+}
+@media (max-width: 600px) {
+  .city-device-hit--phone {
+    display: inline;
+  }
+}
+/* Phone sensor list (ShowcaseTwin.astro). Below 600 px some pins sit 13 to
+   23 px apart, so every sensor is also listed under the model as a full-size
+   button that opens the same card (WCAG 2.5.8 equivalent-control exception). */
+.twin-sensor-list {
+  display: none;
+}
+@media (max-width: 600px) {
+  .twin-sensor-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1rem 0;
+    background: var(--kuem-surface-1);
+  }
+  .twin-sensor-list .twin-scenarios-label {
+    width: 100%;
+  }
+  .twin-sensor-list button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    padding: 0 0.8rem;
+    font: inherit;
+    font-size: var(--kuem-type-small-size);
+    color: var(--kuem-text-secondary);
+    background: var(--kuem-border);
+    border: 1px solid var(--kuem-border-strong);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .twin-sensor-list button[hidden] {
+    display: none;
+  }
+  .twin-sensor-list button[aria-expanded="true"] {
+    color: var(--kuem-text-primary);
+    border-color: var(--kuem-text-primary);
+  }
+  .twin-sensor-list button:focus-visible {
+    outline: 2px solid var(--kuem-focus);
+    outline-offset: 2px;
+  }
 }
 .city-device-hit,
 .city-device-shape {

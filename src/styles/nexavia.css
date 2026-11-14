@@ -275,6 +275,10 @@ html:not(.js) .nx-role-panel[hidden] {
   font-size: 1.6rem;
 }
 .nx-text-link {
+  /* At least 24 px tall at every width (Kuem decision 0016; governance universal.target-size). */
+  display: inline-block;
+  min-height: 24px;
+  padding-block: 2px;
   color: var(--kuem-text-primary);
   text-decoration: underline var(--kuem-copper-deep);
   text-underline-offset: 5px;
