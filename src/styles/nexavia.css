@@ -501,7 +501,7 @@ html:not(.js) .nx-role-panel[hidden] {
   font-size: var(--kuem-type-small-size);
 }
 /* The KAI panel is drawn in KAI's own light tokens (kai-brand-assets
-   identity-v1.5.0, tokens/kai.tokens.light.json), not in Kuem colours, except
+   identity-v1.6.0, tokens/kai.tokens.light.json), not in Kuem colours, except
    status colours, which follow the Nexavia host (governance ADR 0004). Kuem
    DESIGN-SYSTEM.md shows products "as they really look", and KAI never uses
    brand colour for priority. Flat, per Kuem ADR 0014. */
@@ -511,8 +511,8 @@ html:not(.js) .nx-role-panel[hidden] {
   --kai-text-default: #151a1e;
   --kai-text-muted: #5d646a;
   /* Status colours come from the host (governance ADR 0004): Nexavia
-     --nx-color-status-warning, nexavia-visual-identity v1.4.1
-     dist/web/nexavia.tokens.css. Nexavia defines no warning surface, so the
+     --nx-color-status-warning, nexavia-brand-assets v1.6.0
+     tokens/nexavia.tokens.css (Enterprise light). Nexavia defines no warning surface, so the
      pill keeps the panel surface with a warning border, icon and label. */
   --host-status-warning: #8a5a00;
   --kai-series-1: #005c86;
