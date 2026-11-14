@@ -4282,8 +4282,20 @@
     -webkit-tap-highlight-color: transparent;
   }
 }
-.city-device path {
+.city-device path,
+.city-device circle {
   pointer-events: all;
+}
+/* Lamp heads shrink to about 11 px on phones. Below 600 px each lamp also gets
+   a 112-unit circle around its head (about 27 CSS px at 390 px, no overlap between
+   neighbouring lamps; governance universal.target-size, WCAG 2.5.8). */
+.city-device-hit--phone {
+  display: none;
+}
+@media (max-width: 600px) {
+  .city-device-hit--phone {
+    display: inline;
+  }
 }
 .city-device-hit,
 .city-device-shape {
