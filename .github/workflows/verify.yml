@@ -57,6 +57,15 @@ jobs:
       - name: Format check
         run: npm run format:check
 
+      # Rendered contrast, keyboard focus, status cues and target size, as the
+      # governance contracts ask (kuem-design-governance
+      # policies/conformance-evidence.md). Fails on any failure; the committed
+      # conformance/evidence.json is regenerated with npm run conformance.
+      - name: Rendered conformance
+        run: |
+          npx playwright install --with-deps chromium
+          npm run conformance -- --check
+
       - name: Serve and Lighthouse audit
         run: |
           npx -y http-server dist -p 4173 --silent &

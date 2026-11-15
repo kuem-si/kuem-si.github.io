@@ -1648,6 +1648,21 @@
   font-variant-numeric: tabular-nums;
   letter-spacing: 0;
 }
+/* Alarm state: text and the KUEM alarm icon, so colour is never the only cue. */
+.city-popover-alarm {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--kuem-status-critical);
+  font: inherit;
+}
+.city-popover-alarm[hidden] {
+  display: none;
+}
+.city-popover-alarm .kuem-icon {
+  width: 12px;
+  height: 12px;
+}
 .city-sensor-popover > strong {
   display: block;
   margin-bottom: 8px;
@@ -2974,6 +2989,9 @@
 }
 .twin-workspace .xdr-screen {
   overflow: auto !important;
+  /* Keyboard focus never lands under the sticky app bar (46 px) or the
+     section bar (51 px) of the dashboard (WCAG 2.4.11). */
+  scroll-padding-block: 54px 59px;
 }
 .twin-workspace .xdr-display .twin-dashboard {
   overflow: visible !important;
@@ -3508,6 +3526,11 @@
 /* Dashboard can be tucked away, with a clear restore control on compact screens. */
 .twin-workspace .xdr-display.is-minimized {
   display: none;
+}
+/* A model control under the dashboard has keyboard focus (twin.js, WCAG 2.4.11). */
+.twin-workspace .xdr-display.is-yielding {
+  opacity: 0.2;
+  pointer-events: none;
 }
 .twin-workspace .xdr-overlay-tools [data-overlay-close] {
   display: grid;
@@ -4297,49 +4320,45 @@
     display: inline;
   }
 }
-/* Phone sensor list (ShowcaseTwin.astro). Below 600 px some pins sit 13 to
-   23 px apart, so every sensor is also listed under the model as a full-size
+/* Sensor list (ShowcaseTwin.astro). Below 600 px some pins sit 13 to 23 px
+   apart, and on wider screens the floating Nexavia dashboard can cover a few
+   of them, so every sensor is also listed under the model as a full-size
    button that opens the same card (WCAG 2.5.8 equivalent-control exception). */
 .twin-sensor-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1rem 0;
+  background: var(--kuem-surface-1);
+}
+.twin-sensor-list .twin-scenarios-label {
+  width: 100%;
+}
+.twin-sensor-list button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  padding: 0 0.8rem;
+  font: inherit;
+  font-size: var(--kuem-type-small-size);
+  color: var(--kuem-text-secondary);
+  background: var(--kuem-border);
+  border: 1px solid var(--kuem-border-strong);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.twin-sensor-list button[hidden] {
   display: none;
 }
-@media (max-width: 600px) {
-  .twin-sensor-list {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1rem 1rem 0;
-    background: var(--kuem-surface-1);
-  }
-  .twin-sensor-list .twin-scenarios-label {
-    width: 100%;
-  }
-  .twin-sensor-list button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    min-height: 44px;
-    padding: 0 0.8rem;
-    font: inherit;
-    font-size: var(--kuem-type-small-size);
-    color: var(--kuem-text-secondary);
-    background: var(--kuem-border);
-    border: 1px solid var(--kuem-border-strong);
-    border-radius: 999px;
-    cursor: pointer;
-  }
-  .twin-sensor-list button[hidden] {
-    display: none;
-  }
-  .twin-sensor-list button[aria-expanded="true"] {
-    color: var(--kuem-text-primary);
-    border-color: var(--kuem-text-primary);
-  }
-  .twin-sensor-list button:focus-visible {
-    outline: 2px solid var(--kuem-focus);
-    outline-offset: 2px;
-  }
+.twin-sensor-list button[aria-expanded="true"] {
+  color: var(--kuem-text-primary);
+  border-color: var(--kuem-text-primary);
+}
+.twin-sensor-list button:focus-visible {
+  outline: 2px solid var(--kuem-focus);
+  outline-offset: 2px;
 }
 .city-device-hit,
 .city-device-shape {

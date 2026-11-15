@@ -1,6 +1,7 @@
 ---
 import type { Locale } from "../../lib/i18n";
 import type { Scene } from "./showcase/types";
+import KuemIcon from "../KuemIcon.astro";
 
 interface Props {
   locale: Locale;
@@ -180,7 +181,7 @@ const defaultUse = (kind: "sensor" | "meter") =>
 
   {scene.sensors.map((sensor) => (
     <div class="city-sensor-popover" id={id(`popover-${sensor.key}`)} role="group" aria-label={sensor.card.title} data-sensor-popover={sensor.key} data-side={sensor.side} data-align={sensor.align} data-tone={sensor.tone} data-alert={sensor.alert} style={at(sensor.at)}>
-      <div class="city-popover-top"><i></i>{kindLabel(sensor.card.kind)}<span>{sensor.id}</span></div>
+      <div class="city-popover-top"><i></i>{kindLabel(sensor.card.kind)}<b class="city-popover-alarm" data-alarm-label hidden><KuemIcon name="alarm" />{t("Alarm", "Alarm", "Alarm")}</b><span>{sensor.id}</span></div>
       <strong>{sensor.card.title}</strong>
       {sensor.card.grid ? (
         <div class="city-popover-grid" data-cols={sensor.card.columns}>
