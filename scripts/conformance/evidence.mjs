@@ -283,7 +283,7 @@ for (const viewport of VIEWPORTS) {
         const el = document.querySelector(sel);
         if (!el) return { gone: true };
         // Pointer criterion: scrolled into view (scroll-padding respected), not focused.
-        el.scrollIntoView({ block: "nearest", inline: "nearest" });
+        el.scrollIntoView({ block: "center", inline: "nearest" });
         await new Promise((r) =>
           requestAnimationFrame(() => requestAnimationFrame(r)),
         );
