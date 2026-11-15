@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "application": "kuem-website",
+  "generator": {
+    "script": "npm run build && npm run conformance (scripts/conformance/evidence.mjs)",
+    "tools": {
+      "axe-core": "4.10.3",
+      "playwright": "1.63.0"
+    }
+  },
+  "source": {
+    "algorithm": "git-tree-sha256-v1",
+    "digest": "5a780e65172f768ab30bde676c12e3d885be3a32b6eeb6216a93bf340b0bbad1",
+    "exclude": [
+      "conformance"
+    ]
+  },
+  "appearances": [
+    "light"
+  ],
+  "viewports": [
+    1440,
+    1024,
+    390
+  ],
+  "pages": 75,
+  "checks": {
+    "rendered-contrast": {
+      "result": "pass",
+      "method": "axe-core color-contrast (WCAG 2.2 AA) on every page at every viewport",
+      "tested": 13749,
+      "failures": []
+    },
+    "rendered-focus-visible": {
+      "result": "pass",
+      "method": "keyboard walk (Tab) through every focus stop; each stop shows an outline or box-shadow of at least 2 CSS px, on the element or its focus-within container",
+      "tested": 5914,
+      "failures": []
+    },
+    "rendered-status-not-colour-alone": {
+      "result": "pass",
+      "method": "every visible status element ([data-state=\"alert\"], [data-state=\"offline\"], .is-offline, [aria-invalid=\"true\"]) carries text or an accessible name, after driving each showroom sensor past its alarm threshold; axe-core link-in-text-block",
+      "tested": 258,
+      "failures": []
+    },
+    "rendered-target-size": {
+      "result": "pass",
+      "method": "axe-core target-size (WCAG 2.5.8) at every viewport; a target reported as obscured is measured again after scrolling it into view",
+      "tested": 5775,
+      "failures": [],
+      "exceptions": [
+        {
+          "page": "/en/nexavia/showcase-room/",
+          "viewport": 390,
+          "target": "button[data-sensor-pin=\"office-water\"]",
+          "equivalent": "[data-sensor-list=\"office-water\"]",
+          "reason": "WCAG 2.5.8 equivalent control: the sensor list entry opens the same card"
+        },
+        {
+          "page": "/en/nexavia/showcase-room/",
+          "viewport": 390,
+          "target": "button[data-sensor-pin=\"vibration\"]",
+          "equivalent": "[data-sensor-list=\"vibration\"]",
+          "reason": "WCAG 2.5.8 equivalent control: the sensor list entry opens the same card"
+        }
+      ]
+    }
+  }
+}
