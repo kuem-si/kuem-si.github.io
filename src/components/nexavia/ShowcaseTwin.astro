@@ -70,8 +70,9 @@ const views = [
       <div class="twin-scene-wrap">
         <ShowcaseRoomMaquette locale={locale} twin={twin.id} scene={twin.scene} />
       </div>
-      {/* Phones only: some pins sit too close together to tap, so the same
-          sensors are listed here; each entry opens its pin's card. */}
+      {/* Some pins sit too close together to tap on phones, and the floating
+          dashboard can cover a few on wider screens, so the same sensors are
+          listed here; each entry opens its pin's card. */}
       <div class="twin-sensor-list" role="group" aria-label={t("Senzorji in merilniki", "Sensors and meters", "Sensoren und Zähler")}>
         <span class="twin-scenarios-label">{t("Senzorji", "Sensors", "Sensoren")}</span>
         {twin.scene.sensors.map((sensor) => (

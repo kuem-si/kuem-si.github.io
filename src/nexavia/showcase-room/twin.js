@@ -320,6 +320,31 @@ export function initTwin(root, config) {
         String(Number(overlayOpacity.value) / 100),
       );
     });
+    // WCAG 2.4.11: a model control that the floating dashboard covers stays
+    // visible while it has keyboard focus. The dashboard fades and lets
+    // pointer input through until focus moves on.
+    const yieldFor = (target) => {
+      const covered =
+        target instanceof Element &&
+        !screenOverlay.contains(target) &&
+        !screenOverlay.classList.contains("is-minimized") &&
+        (() => {
+          const a = target.getBoundingClientRect();
+          const b = screenOverlay.getBoundingClientRect();
+          return (
+            a.width > 0 &&
+            a.right > b.left &&
+            a.left < b.right &&
+            a.bottom > b.top &&
+            a.top < b.bottom
+          );
+        })();
+      screenOverlay.classList.toggle("is-yielding", covered);
+    };
+    workspace.addEventListener("focusin", (event) => yieldFor(event.target));
+    workspace.addEventListener("focusout", (event) => {
+      if (!workspace.contains(event.relatedTarget)) yieldFor(null);
+    });
     resizeEdges.forEach((edge) =>
       edge.addEventListener("pointerdown", (event) => {
         screenOverlay.dataset.placed = "visitor";
@@ -1082,6 +1107,8 @@ export function initTwin(root, config) {
       `[data-sensor-pin="${card.dataset.sensorPopover}"]`,
     );
     const tag = pin?.querySelector("[data-sensor-tag]");
+    const alarmLabel = card.querySelector("[data-alarm-label]");
+    const pinLabel = pin?.getAttribute("aria-label") ?? "";
     const alert = Number(card.dataset.alert) || Infinity;
     const read = () => parseFloat(value.textContent.replace(",", "."));
     // Seed a plausible recent history so the sparkline is never empty;
@@ -1131,8 +1158,17 @@ export function initTwin(root, config) {
       draw();
       const state = v >= alert ? "alert" : "normal";
       card.dataset.state = state;
+      // Colour is never the only cue: the card shows the word Alarm with the
+      // KUEM alarm icon, and the pin's accessible name says it too.
+      if (alarmLabel) alarmLabel.hidden = state !== "alert";
       if (!pin) return;
       pin.dataset.state = state;
+      pin.setAttribute(
+        "aria-label",
+        state === "alert"
+          ? `${pinLabel}, ${t("alarm", "alarm", "Alarm")}`
+          : pinLabel,
+      );
       if (tag) tag.textContent = value.textContent;
       if (!pin.classList.contains("is-tick")) pin.classList.add("is-tick");
     };
