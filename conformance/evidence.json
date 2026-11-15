@@ -10,7 +10,7 @@
   },
   "source": {
     "algorithm": "git-tree-sha256-v1",
-    "digest": "5a780e65172f768ab30bde676c12e3d885be3a32b6eeb6216a93bf340b0bbad1",
+    "digest": "91a244515f3ea240cf54720fdb78b31d24c10fe91ef2c2dd4a671368172ee4c3",
     "exclude": [
       "conformance"
     ]
@@ -28,7 +28,7 @@
     "rendered-contrast": {
       "result": "pass",
       "method": "axe-core color-contrast (WCAG 2.2 AA) on every page at every viewport",
-      "tested": 13749,
+      "tested": 13801,
       "failures": []
     },
     "rendered-focus-visible": {
@@ -46,18 +46,18 @@
     "rendered-target-size": {
       "result": "pass",
       "method": "axe-core target-size (WCAG 2.5.8) at every viewport; a target reported as obscured is measured again after scrolling it into view",
-      "tested": 5775,
+      "tested": 5781,
       "failures": [],
       "exceptions": [
         {
-          "page": "/en/nexavia/showcase-room/",
+          "page": "/nexavia/razstavni-prostor/",
           "viewport": 390,
           "target": "button[data-sensor-pin=\"office-water\"]",
           "equivalent": "[data-sensor-list=\"office-water\"]",
           "reason": "WCAG 2.5.8 equivalent control: the sensor list entry opens the same card"
         },
         {
-          "page": "/en/nexavia/showcase-room/",
+          "page": "/nexavia/razstavni-prostor/",
           "viewport": 390,
           "target": "button[data-sensor-pin=\"vibration\"]",
           "equivalent": "[data-sensor-list=\"vibration\"]",
